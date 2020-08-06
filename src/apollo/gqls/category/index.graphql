@@ -1,0 +1,80 @@
+query categoriesQuery($filter: CategoryFilter, $count: Int, $page: Int) {
+    categories(filter: $filter, count: $count, page: $page) {
+        data {
+            id
+            logo
+            name
+            count_articles
+        }
+    }
+}
+
+query categoryQuery($id: Int!) {
+    category(id: $id) {
+        id
+        logo
+        name
+        description
+        count_articles
+        followed
+    }
+}
+
+query categoryArticlesQuery($category_id: Int, $page: Int, $count: Int) {
+    articles(
+        submit: SUBMITTED_SUBMIT
+        category_id: $category_id
+        page: $page
+        count: $count
+        orderBy: [{ field: "id", order: DESC }]
+    ) {
+        paginatorInfo {
+            hasMorePages
+            currentPage
+        }
+        data {
+            id
+            type
+            body
+            description
+            time_ago
+            cover
+            hits
+            count_likes
+            count_replies
+            count_tips
+            liked
+            submit
+            remark
+
+            user {
+                avatar
+                name
+                id
+            }
+            categories {
+                id
+                name
+                logo
+            }
+            images {
+                id
+                url
+                width
+                height
+            }
+            video {
+                id
+                url
+                duration
+                info {
+                    width
+                    height
+                    rotate
+                    covers
+                }
+                cover_url
+            }
+        }
+    }
+}

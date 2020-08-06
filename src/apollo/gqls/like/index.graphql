@@ -1,0 +1,109 @@
+#import './mutation.graphql'
+
+query userLikedArticlesQuery($user_id: Int!, $page: Int) {
+    likes(user_id: $user_id, page: $page, liked_type: "articles") {
+        paginatorInfo {
+            currentPage
+            hasMorePages
+        }
+        data {
+            article {
+                id
+                type
+                body
+                description
+                time_ago
+                cover
+                hits
+                count_likes
+                count_replies
+                count_tips
+                liked
+
+                user {
+                    avatar
+                    name
+                    id
+                }
+                category {
+                    id
+                    name
+                    logo
+                }
+                images {
+                    id
+                    url
+                    width
+                    height
+                }
+                video {
+                    id
+                    url
+                    duration
+                    info {
+                        width
+                        height
+                        rotate
+                        covers
+                    }
+                    cover_url
+                }
+            }
+        }
+    }
+}
+
+# 我的收藏
+query userFavoriteArticlesQuery($user_id: Int!, $page: Int) {
+    favorites(user_id: $user_id, page: $page) {
+        paginatorInfo {
+            currentPage
+            hasMorePages
+        }
+        data {
+            article {
+                id
+                type
+                body
+                description
+                time_ago
+                cover
+                hits
+                count_likes
+                count_replies
+                count_tips
+                liked
+                favorited
+
+                user {
+                    avatar
+                    name
+                    id
+                }
+                category {
+                    id
+                    name
+                    logo
+                }
+                images {
+                    id
+                    url
+                    width
+                    height
+                }
+                video {
+                    id
+                    url
+                    duration
+                    info {
+                        width
+                        height
+                        rotate
+                        covers
+                    }
+                    cover_url
+                }
+            }
+        }
+    }
+}

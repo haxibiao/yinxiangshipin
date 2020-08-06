@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">印象视频（内测）</string>
+    <string moduleConfig="true" name="CodePushDeploymentKey">BMrDVMGk3rIQs-DmioO78F2G5g2jCBNVTWIuO</string>
+    <string name="appCenterCrashes_whenToSendCrashes" moduleConfig="true" translatable="false">ALWAYS_SEND</string>
+	<string name="appCenterAnalytics_whenToEnableAnalytics" moduleConfig="true" translatable="false">ALWAYS_SEND</string>
+</resources>

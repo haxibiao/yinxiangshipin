@@ -1,0 +1,152 @@
+# 发布动态
+# body:文字描述
+# images:图片base64
+# video_id:视频ID
+# qcvod_fileid:腾讯云上传成功后的视频ID
+# category_ids:分类IDs
+# type:内容的类型
+mutation createPostContent(
+    $body: String!
+    $images: [String!]
+    $video_id: Int
+    $qcvod_fileid: String
+    $category_ids: [Int!]
+) {
+    createPostContent(
+        body: $body
+        images: $images
+        video_id: $video_id
+        qcvod_fileid: $qcvod_fileid
+        category_ids: $category_ids
+    ) {
+        id
+        spider {
+            id
+        }
+        content
+        description
+        status
+        liked
+        count_likes
+        count_comments
+        review_id
+        review_day
+        is_ad
+        created_at
+        user {
+            avatar
+            name
+            id
+        }
+        categories {
+            id
+            name
+            logo
+        }
+        images {
+            id
+            url
+            width
+            height
+        }
+        video {
+            id
+            url
+            cover
+            duration
+            width
+            height
+        }
+    }
+}
+
+# 采集视频
+mutation resolveDouyinVideo($share_link: String!) {
+    resolveDouyinVideo(share_link: $share_link) {
+        id
+    }
+}
+
+# 编辑动态
+# {
+#   "post_id": 1,
+#   "content": '这是动态详情',
+#   "description": '动态描述',
+#   "tag_names": ['战争','历史']
+# }
+mutation updatePostMutation($id: Int!, $content: String, $description: String, $tag_names: [String]) {
+    updatePost(post_id: $id, content: $content, description: $description, tag_names: $tag_names) {
+        id
+        content
+        description
+        tags {
+            data {
+                id
+                name
+            }
+        }
+    }
+}
+
+#添加标签
+# {
+#   "taggable_id": 1,
+#   "taggable_type": "posts",
+#   "tag_ids": [1,2,3,5]
+# }
+
+# {
+#  "taggable_id": 1,
+#   "taggable_type": "posts",
+#    "name": "我推荐的电影"
+# }
+
+# {
+#  "taggable_id": 1,
+#  "taggable_type": "posts",
+#  "name": "我推荐的电影,我最近看的电影"
+# }
+mutation addTagMutation($taggable_id: Int!, $taggable_type: tagType!, $name: String, $tag_ids: [Int]) {
+    addTag(taggable_id: $taggable_id, taggable_type: $taggable_type, name: $name, tag_ids: $tag_ids)
+}
+
+# 删除
+mutation deletePost($id: Int!) {
+    deletePost(id: $id) {
+        id
+    }
+}
+
+# 喜欢
+# enum LikeType {
+# VIDEO
+# ARTICLE（旧）
+# COMMENT
+# POST（新）
+# }
+mutation toggleLike($id: Int!, $type: LikeType!) {
+    toggleLike(liked_id: $id, liked_type: $type) {
+        id
+        isLiked
+    }
+}
+
+#举报
+# enum ReportType {
+# articles（旧）
+# comments
+# users
+# user
+# post（新）
+# }
+mutation createReport($id: Int, $reason: String, $type: ReportType = post) {
+    createReport(id: $id, reason: $reason, type: $type) {
+        id
+        reason
+        created_at
+        user {
+            id
+            name
+        }
+    }
+}

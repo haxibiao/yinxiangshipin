@@ -1,0 +1,32 @@
+{
+    "name": "yinxiangshipin",
+    "AppID": "com.yinxiangshipin",
+    "DisplayName": "印象视频",
+    "ServerRoot": "http://yxsp.haxifang.cn",
+    "UploadServer": "http://yxsp.haxifang.cn",
+    "AppSlogan": "专注短视频，知识变现的app",
+    "Version": "1.0.0",
+    "VersionCode": 1,
+    "Build": 1,
+    "SocketServer": "ws://socket.yinxiangshipin.com:6004",
+
+    "goldAlias": "印象分",
+    "limitAlias": "贡献值",
+    "qqGroup": "1036821462",
+    "WechatAppId": "wx4a953352ba5e5aee",
+
+    "TTAppID": "5031409",
+    "TTAppIDIOS": "5016582",
+    "CodeIdBanner": "",
+    "CodeIdBannerIOS": "916582063",
+    "CodeIdFeed": "931409671",
+    "CodeIdFeedIOS": "916582887",
+    "CodeIdSplash": "831409137",
+    "CodeIdSplashIOS": "816582039",
+    "CodeIdDrawFeed": "931409417",
+    "CodeIdDrawFeedIOS": "916582757",
+    "CodeIdFullVideo": "943671839",
+    "CodeIdFullVideoIOS": "945294087",
+    "CodeIdRewardVideo": "931409105",
+    "CodeIdRewardVideoIOS": "945294086"
+}

@@ -1,0 +1,248 @@
+# 登录功能
+mutation signInMutation($account: String!, $password: String!, $uuid: String) {
+    signIn(account: $account, password: $password, uuid: $uuid) {
+        id
+        name
+        avatar
+        token
+        uuid
+        phone
+        title_phone
+        birthday_msg
+        introduction
+        gender
+        balance
+        gold
+        reward
+        total_contributes
+        today_contributes
+        exchangeRate
+        wallet {
+            id
+            type
+            balance
+            pay_account
+            real_name
+            total_withdraw_amount
+            available_balance
+            today_withdraw_left
+            bind_platforms {
+                alipay
+                wechat
+            }
+            platforms {
+                alipay
+                wechat
+            }
+        }
+        count_articles
+        count_production
+        count_likes
+        count_follows
+        count_followers
+        count_followings
+        count_favorites
+    }
+}
+
+#静默登录
+mutation autoSignInMutation($UUID: String!, $PHONE: String) {
+    autoSignIn(uuid: $UUID, phone: $PHONE) {
+        id
+        name
+        avatar
+        token
+        uuid
+        phone
+        title_phone
+        birthday_msg
+        introduction
+        gender
+        balance
+        gold
+        reward
+        total_contributes
+        today_contributes
+        exchangeRate
+        wallet {
+            id
+            type
+            balance
+            pay_account
+            real_name
+            total_withdraw_amount
+            available_balance
+            today_withdraw_left
+            bind_platforms {
+                alipay
+                wechat
+            }
+            platforms {
+                alipay
+                wechat
+            }
+        }
+        count_articles
+        count_production
+        count_likes
+        count_follows
+        count_followers
+        count_followings
+        count_favorites
+    }
+}
+
+# 注册功能
+# 为了统一接口后端会优先用account，但是老版本email是必传的，所以这里email默认给个值，后端会忽略掉
+mutation signUpMutation($account: String, $password: String!, $name: String, $uuid: String) {
+    signUp(email: "123", account: $account, password: $password, name: $name, uuid: $uuid) {
+        id
+        name
+        avatar
+        token
+        uuid
+        phone
+        title_phone
+        birthday_msg
+        introduction
+        gender
+        balance
+        gold
+        reward
+        total_contributes
+        today_contributes
+        exchangeRate
+        wallet {
+            id
+            type
+            balance
+            pay_account
+            real_name
+            total_withdraw_amount
+            available_balance
+            today_withdraw_left
+            bind_platforms {
+                alipay
+                wechat
+            }
+            platforms {
+                alipay
+                wechat
+            }
+        }
+        count_articles
+        count_production
+        count_likes
+        count_follows
+        count_followers
+        count_followings
+        count_favorites
+    }
+}
+
+#删除查询日志
+#id：查询日志的ID,如果不传参则删除该用户所有的查询记录
+mutation deleteQueryLogMutation($id: Int) {
+    deleteQueryLog(id: $id) {
+        id
+        query
+    }
+}
+
+mutation submitArticleMutation($article_id: Int!, $category_id: Int!) {
+    submitArticle(article_id: $article_id, category_id: $category_id) {
+        id
+        submit_status
+    }
+}
+
+mutation approveArticleMutation($article_id: Int!, $category_id: Int!, $is_reject: Boolean!) {
+    approveArticle(article_id: $article_id, category_id: $category_id, is_reject: $is_reject) {
+        id
+        pivot_status
+    }
+}
+
+mutation updateUserProfile($id: Int!, $data: updateUserInfo!) {
+    updateUserInfo(id: $id, input: $data) {
+        id
+        name
+        gender
+        birthday_msg
+        introduction
+        phone
+        password
+    }
+}
+
+# 修改用户名
+mutation updateUserName($id: Int!, $input: updateUserInfo!) {
+    updateUserInfo(id: $id, input: $input) {
+        name
+    }
+}
+
+mutation updateUserGender($id: Int!, $gender: String!) {
+    updateUserInfo(id: $id, input: { gender: $gender }) {
+        id
+        name
+        gender
+        introduction
+    }
+}
+
+# 修改生日
+mutation updateUserBirthday($id: Int!, $input: updateUserInfo!) {
+    updateUserInfo(id: $id, input: $input) {
+        birthday_msg
+    }
+}
+
+# 修改签名
+mutation updateUserIntroduction($id: Int!, $input: updateUserInfo!) {
+    updateUserInfo(id: $id, input: $input) {
+        introduction
+    }
+}
+
+mutation updateUserPasswordMutation($oldpassword: String!, $password: String!) {
+    updateUserPassword(oldpassword: $oldpassword, password: $password) {
+        id
+        name
+    }
+}
+#静默注册用户绑定手机号，设置初始密码
+mutation updateUserInfoSecurity($id: Int!, $phone: String!, $password: String!) {
+    updateUserInfo(id: $id, input: { phone: $phone, password: $password }) {
+        id
+        name
+        phone
+    }
+}
+
+#找回密码
+mutation retrievePasswordMutation($code: String!, $phone: String, $newPassword: String!) {
+    retrievePassword(code: $code, phone: $phone, newPassword: $newPassword) {
+        id
+        name
+        token
+        phone
+    }
+}
+
+#注销账号
+mutation destoryUserMutation {
+    destoryUser
+}
+
+#拉黑用户
+mutation addUserBlockMutation($id: Int!) {
+    addUserBlock(id: $id) {
+        id
+    }
+}
+
+# 取消拉黑用户
+mutation removeUserBlockMutation($id: Int!) {
+    removeUserBlock(id: $id)
+}

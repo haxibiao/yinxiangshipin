@@ -1,0 +1,103 @@
+#import './CheckIns.gql'
+#import './mutation.graphql'
+#import './RewardMutation.gql'
+
+# 获取全部任务列表
+query tasksQuery {
+    tasks(type: All) {
+        id
+        name
+        icon
+        group
+        review_flow {
+            id
+            name
+        }
+        assignment_status
+        assignment_progress
+        progress_details
+        next_reward_video_time
+        type
+        details
+        reward_info {
+            gold
+            ticket
+            contribute
+        }
+        resolve {
+            submit_name
+        }
+    }
+}
+
+# 获取新人任务列表
+query userTasksQuery {
+    tasks(type: NEW_USER_TASK) {
+        id
+        name
+        icon
+        review_flow {
+            id
+            name
+        }
+        assignment_status
+        assignment_progress
+        progress_details
+        next_reward_video_time
+        type
+        details
+        reward_info {
+            gold
+            ticket
+            contribute
+        }
+    }
+}
+
+# 获取每日任务列表
+query dailyTasksQuery {
+    tasks(type: DAILY_TASK) {
+        id
+        name
+        icon
+        review_flow {
+            id
+            name
+        }
+        assignment_status
+        assignment_progress
+        progress_details
+        next_reward_video_time
+        type
+        details
+        reward_info {
+            gold
+            ticket
+            contribute
+        }
+    }
+}
+
+# 获取精彩任务列表
+query customTasksQuery {
+    tasks(type: CUSTOM_TASK) {
+        id
+        name
+        icon
+        review_flow {
+            id
+            name
+        }
+        assignment_status
+        assignment_progress
+        progress_details
+        next_reward_video_time
+        type
+        details
+        reward_info {
+            gold
+            ticket
+            contribute
+        }
+    }
+}

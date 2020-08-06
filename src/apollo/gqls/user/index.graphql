@@ -1,0 +1,126 @@
+#import './mutation.graphql'
+# 个人状态
+query MeMetaQuery {
+    me {
+        id
+        balance
+        gold
+        total_contributes
+        today_contributes
+        exchangeRate
+        phone
+        title_phone
+        wallet {
+            id
+            type
+            balance
+            pay_account
+            real_name
+            total_withdraw_amount
+            available_balance
+            today_withdraw_left
+            bind_platforms {
+                alipay
+                wechat
+            }
+            platforms {
+                alipay
+                wechat
+            }
+        }
+        count_articles
+        count_production
+        count_likes
+        count_follows
+        count_followers
+        count_followings
+        count_favorites
+    }
+}
+
+# 用户主页
+query userQuery($id: Int!) {
+    user(id: $id) {
+        id
+        name
+        avatar
+        age
+        gender
+        background
+        total_contributes
+        today_contributes
+        introduction
+        count_articles
+        count_likes
+        count_followers
+        count_followings
+        count_favorites
+        followed_status
+    }
+}
+
+# 个人主页
+query userProfileQuery($id: Int!) {
+    user(id: $id) {
+        id
+        name
+        avatar
+        token
+        uuid
+        phone
+        title_phone
+        birthday_msg
+        introduction
+        gender
+        balance
+        gold
+        reward
+        total_contributes
+        today_contributes
+        exchangeRate
+        wallet {
+            id
+            type
+            balance
+            pay_account
+            real_name
+            total_withdraw_amount
+            available_balance
+            today_withdraw_left
+            bind_platforms {
+                alipay
+                wechat
+            }
+            platforms {
+                alipay
+                wechat
+            }
+        }
+        count_articles
+        count_production
+        count_likes
+        count_follows
+        count_followers
+        count_followings
+        count_favorites
+    }
+}
+
+# 黑名单列表
+query showUserBlockQuery($user_id: Int!) {
+    showUserBlock(user_id: $user_id, count: 5, page: 1) {
+        paginatorInfo {
+            currentPage
+            hasMorePages
+        }
+        data {
+            id
+            name
+            avatar
+            count_articles
+            count_likes
+            introduction
+            followed_status
+        }
+    }
+}

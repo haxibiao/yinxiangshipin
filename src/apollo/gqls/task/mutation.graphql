@@ -1,0 +1,43 @@
+# 喝水任务上报打卡接口
+mutation drinkWaterMutation($id: Int!) {
+    DrinkWater(task_id: $id) {
+        id
+        task_status
+        start_time
+        task_progress
+    }
+}
+
+# 喝水打卡任务获取奖励接口
+mutation drinkWaterRewardMutation {
+    DrinkWaterReward {
+        id
+        content
+        task {
+            reward_info {
+                gold
+                contribute
+            }
+        }
+        status
+    }
+}
+
+# 睡觉打卡奖励接口
+mutation sleepRewardMutation($id: Int!) {
+    SleepReward(task_id: $id) {
+        id
+        content
+        task {
+            reward_info {
+                gold
+                contribute
+            }
+        }
+    }
+}
+
+# 应用商店好评任务接口
+mutation highPraiseTaskMutation($id: ID, $content: String) {
+    highPraiseTask(id: $id, content: $content)
+}

@@ -1,0 +1,285 @@
+#import './mutation.graphql'
+
+#视频列表（新）
+query recommendPostsQuery {
+    recommendPosts {
+        id
+        spider {
+            id
+        }
+        content
+        description
+        status
+        liked
+        count_likes
+        count_comments
+        review_id
+        review_day
+        is_ad
+        created_at
+        user {
+            avatar
+            name
+            id
+        }
+        categories {
+            id
+            name
+            logo
+        }
+        images {
+            id
+            url
+            width
+            height
+        }
+        video {
+            id
+            url
+            cover
+            duration
+            width
+            height
+        }
+    }
+}
+
+#动态广场
+query publicPostsQuery($user_id: Int, $count: Int, $page: Int) {
+    publicPosts(user_id: $user_id, count: $count, page: $page) {
+        paginatorInfo {
+            hasMorePages
+            currentPage
+        }
+        data {
+            id
+            spider {
+                id
+            }
+            content
+            description
+            status
+            liked
+            count_likes
+            count_comments
+            review_id
+            review_day
+            is_ad
+            created_at
+            user {
+                id
+                name
+                avatar
+                followed_status
+            }
+            categories {
+                id
+                name
+                logo
+            }
+            images {
+                id
+                url
+                width
+                height
+            }
+            video {
+                id
+                url
+                cover
+                duration
+                width
+                height
+            }
+        }
+    }
+}
+
+#个人动态
+query postsQuery($user_id: Int!, $count: Int, $page: Int) {
+    posts(user_id: $user_id, count: $count, page: $page) {
+        paginatorInfo {
+            hasMorePages
+            currentPage
+        }
+        data {
+            id
+            spider {
+                id
+            }
+            content
+            description
+            status
+            liked
+            count_likes
+            count_comments
+            review_id
+            review_day
+            is_ad
+            created_at
+            user {
+                id
+                name
+                avatar
+                followed_status
+            }
+            categories {
+                id
+                name
+                logo
+            }
+            images {
+                id
+                url
+                width
+                height
+            }
+            video {
+                id
+                url
+                cover
+                duration
+                width
+                height
+            }
+        }
+    }
+}
+
+# 视频收藏夹
+query colllectionPosts($user_id: Int!, $count: Int, $page: Int) {
+    colllectionPosts(user_id: $user_id, count: $count, page: $page) {
+        paginatorInfo {
+            hasMorePages
+            currentPage
+        }
+        data {
+            id
+            spider {
+                id
+            }
+            content
+            description
+            status
+            liked
+            count_likes
+            count_comments
+            review_id
+            review_day
+            is_ad
+            created_at
+            user {
+                id
+                name
+                avatar
+                followed_status
+            }
+            tags {
+                data {
+                    id
+                    name
+                }
+            }
+            categories {
+                id
+                name
+                logo
+            }
+            images {
+                id
+                url
+                width
+                height
+            }
+            video {
+                id
+                url
+                cover
+                duration
+                width
+                height
+            }
+        }
+    }
+}
+
+#文章详情
+query articleQuery($id: Int!) {
+    article(id: $id) {
+        id
+        type
+        body
+        description
+        body
+        cover
+        video_url
+        time_ago
+        hits
+        liked_id
+        favorited
+        count_words
+        count_likes
+        count_tips
+        count_replies
+        count_comments
+        user {
+            id
+            name
+            avatar
+            introduction
+            count_articles
+            count_likes
+            followed_status
+        }
+        video {
+            id
+            info {
+                height
+                width
+                rotate
+            }
+        }
+        images {
+            id
+            url
+            width
+            height
+        }
+        categories {
+            id
+            name
+            logo
+            count_articles
+            count_follows
+            followed
+        }
+        tips {
+            id
+            user {
+                id
+                name
+                avatar
+            }
+        }
+    }
+}
+#复制视频链接
+query shareQuery($id: ID!) {
+    sharePost(id: $id)
+}
+
+# 用户已经拥有的标签
+query userTags($id: Int!, $page: Int) {
+    user(id: $id) {
+        tags(page: $page) {
+            paginatorInfo {
+                total
+                count
+            }
+            data {
+                id
+                name
+            }
+        }
+    }
+}

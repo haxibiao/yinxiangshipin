@@ -1,0 +1,53 @@
+# 浏览记录
+query userVisitsQuery($user_id: Int!, $page: Int) {
+    visits(user_id: $user_id, page: $page) {
+        paginatorInfo {
+            currentPage
+            hasMorePages
+        }
+        data {
+            article {
+                id
+                type
+                body
+                description
+                time_ago
+                cover
+                hits
+                count_likes
+                count_replies
+                count_tips
+                liked
+
+                user {
+                    avatar
+                    name
+                    id
+                }
+                category {
+                    id
+                    name
+                    logo
+                }
+                images {
+                    id
+                    url
+                    width
+                    height
+                }
+                video {
+                    id
+                    url
+                    duration
+                    info {
+                        width
+                        height
+                        rotate
+                        covers
+                    }
+                    cover_url
+                }
+            }
+        }
+    }
+}

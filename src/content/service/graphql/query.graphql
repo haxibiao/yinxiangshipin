@@ -1,0 +1,301 @@
+#视频列表（旧）
+query recommendVideosQuery($page: Int, $count: Int) {
+    recommendVideos(page: $page, count: $count) {
+        paginatorInfo {
+            hasMorePages
+            currentPage
+        }
+        data {
+            id
+            body
+            isAdPosition
+            liked
+            count_likes
+            count_comments
+            time_ago
+            cover
+            user {
+                id
+                name
+                avatar
+                followed_status
+            }
+            categories {
+                id
+                name
+                logo
+            }
+            video {
+                id
+                url
+                cover
+                duration
+                width
+                height
+            }
+        }
+    }
+}
+
+#视频列表（新）
+query recommendPostsQuery {
+    recommendPosts {
+        id
+        spider {
+            id
+        }
+        content
+        description
+        status
+        liked
+        count_likes
+        count_comments
+        review_id
+        review_day
+        is_ad
+        created_at
+        user {
+            avatar
+            name
+            id
+        }
+        categories {
+            id
+            name
+            logo
+        }
+        images {
+            id
+            url
+            width
+            height
+        }
+        video {
+            id
+            url
+            cover
+            duration
+            width
+            height
+        }
+        product {
+            id
+            name
+            description
+            price
+            cover {
+                id
+                url
+            }
+        }
+    }
+}
+
+#动态广场
+query publicPostsQuery($user_id: Int, $count: Int, $page: Int) {
+    publicPosts(user_id: $user_id, count: $count, page: $page) {
+        paginatorInfo {
+            hasMorePages
+            currentPage
+        }
+        data {
+            id
+            spider {
+                id
+            }
+            content
+            description
+            status
+            liked
+            count_likes
+            count_comments
+            review_id
+            review_day
+            is_ad
+            created_at
+            user {
+                id
+                name
+                avatar
+                followed_status
+            }
+            categories {
+                id
+                name
+                logo
+            }
+            images {
+                id
+                url
+                width
+                height
+            }
+            video {
+                id
+                url
+                cover
+                duration
+                width
+                height
+            }
+        }
+    }
+}
+
+#个人动态
+query postsQuery($user_id: Int!, $count: Int, $page: Int) {
+    posts(user_id: $user_id, count: $count, page: $page) {
+        paginatorInfo {
+            hasMorePages
+            currentPage
+        }
+        data {
+            id
+            spider {
+                id
+            }
+            content
+            description
+            status
+            liked
+            count_likes
+            count_comments
+            review_id
+            review_day
+            is_ad
+            created_at
+            user {
+                id
+                name
+                avatar
+                followed_status
+            }
+            categories {
+                id
+                name
+                logo
+            }
+            images {
+                id
+                url
+                width
+                height
+            }
+            video {
+                id
+                url
+                cover
+                duration
+                width
+                height
+            }
+        }
+    }
+}
+
+# 视频收藏夹
+query colllectionPosts($user_id: Int!, $count: Int, $page: Int) {
+    colllectionPosts(user_id: $user_id, count: $count, page: $page) {
+        paginatorInfo {
+            hasMorePages
+            currentPage
+        }
+        data {
+            id
+            spider {
+                id
+            }
+            content
+            description
+            status
+            liked
+            count_likes
+            count_comments
+            review_id
+            review_day
+            is_ad
+            created_at
+            user {
+                id
+                name
+                avatar
+                followed_status
+            }
+            tags {
+                data {
+                    id
+                    name
+                }
+            }
+            categories {
+                id
+                name
+                logo
+            }
+            images {
+                id
+                url
+                width
+                height
+            }
+            video {
+                id
+                url
+                cover
+                duration
+                width
+                height
+            }
+        }
+    }
+}
+
+# 搜索动态
+query searchPostQuery($query: String!, $page: Int) {
+    searchPosts(query: $query, page: $page) {
+        paginatorInfo {
+            total
+        }
+        data {
+            id
+            spider {
+                id
+            }
+            content
+            description
+            status
+            liked
+            count_likes
+            count_comments
+            review_id
+            review_day
+            is_ad
+            created_at
+            user {
+                id
+                name
+                avatar
+                followed_status
+            }
+            categories {
+                id
+                name
+                logo
+            }
+            images {
+                id
+                url
+                width
+                height
+            }
+            video {
+                id
+                url
+                cover
+                duration
+                width
+                height
+            }
+        }
+    }
+}

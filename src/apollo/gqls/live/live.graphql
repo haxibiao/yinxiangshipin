@@ -1,0 +1,70 @@
+#加入直播间   is_followed (TODO: 后端待添加)
+mutation EnterLiveRoom($id: ID!) {
+  joinLiveRoom(live_room_id: $id){
+    id
+    title
+    pull_url
+    cover
+    count_audience
+    streamer{
+      id
+      name
+      avatar
+      followed_status
+    }
+  }
+}
+
+#用户离开直播间
+mutation LeaveLiveRoom($roomid:ID!){
+  leaveLiveRoom(live_room_id:$roomid){
+    id
+  }
+}
+
+#直播列表
+query RecommendLiveRoom($page: Int){
+  recommendLiveRoom(count:10,page: $page){
+    paginatorInfo{
+      currentPage
+      hasMorePages
+    }
+    data{
+      id
+      title
+      cover
+      count_audience
+    }
+  }
+}
+#在线观众列表
+query GetOnlinePeople($roomid:Int!) {
+  getLiveRoomUsers(live_room_id: $roomid) {
+    id
+    name
+    avatar
+  }
+}
+#获取直播推流地址
+mutation GetLivePushURL($title: String){
+  createLiveRoom(title: $title){
+    id
+    title
+    push_url
+  }
+}
+
+#下播
+mutation CloseLiveRoom($roomid: ID!){
+  closeLiveRoom(live_room_id: $roomid)
+}
+
+#直播间发表评论
+mutation CommentLive($id: ID!, $message: String!) {
+  commentLiveRoom(live_room_id: $id, message: $message)
+}
+
+#主播直播间异常下播
+mutation ExceptionLiveReport($roomid:ID!){
+  ExceptionLiveRoom(live_room_id:$roomid)
+}
