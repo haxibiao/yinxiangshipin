@@ -4,7 +4,6 @@ import { PageContainer, Iconfont, Row, HxfModal, HxfButton, PopOverlay, StatusVi
 import { authNavigate, useNavigation } from '@src/router';
 import { observer, appStore, userStore } from '@src/store';
 import { GQL, useMutation, useQuery } from '@src/apollo';
-import { AppUtil } from '@src/native';
 import AttendanceBook from './attendance/AttendanceBook';
 import TaskList from './components/TaskList';
 

@@ -142,7 +142,7 @@ query publicPostsQuery($user_id: Int, $count: Int, $page: Int) {
     }
 }
 
-#个人动态
+# 动态
 query postsQuery($user_id: Int!, $count: Int, $page: Int) {
     posts(user_id: $user_id, count: $count, page: $page) {
         paginatorInfo {
@@ -193,9 +193,18 @@ query postsQuery($user_id: Int!, $count: Int, $page: Int) {
     }
 }
 
-# 视频收藏夹
-query colllectionPosts($user_id: Int!, $count: Int, $page: Int) {
-    colllectionPosts(user_id: $user_id, count: $count, page: $page) {
+# 个人动态
+# filter 筛选动态类型
+# enum PostFilter {
+# spider
+# 用户爬取的动态
+# normal
+# 用户发布的动态
+# all
+# 全部
+# }
+query userPostsQuery($user_id: Int!, $filter: PostFilter, $count: Int, $page: Int) {
+    userPosts(user_id: $user_id, filter: $filter, count: $count, page: $page) {
         paginatorInfo {
             hasMorePages
             currentPage
@@ -277,6 +286,12 @@ query searchPostQuery($query: String!, $page: Int) {
                 avatar
                 followed_status
             }
+            tags {
+                data {
+                    id
+                    name
+                }
+            }
             categories {
                 id
                 name
@@ -295,6 +310,54 @@ query searchPostQuery($query: String!, $page: Int) {
                 duration
                 width
                 height
+            }
+        }
+    }
+}
+
+# 用户喜欢的动态
+query userLikedArticlesQuery($user_id: Int!, $page: Int) {
+    likes(user_id: $user_id, page: $page, liked_type: "articles") {
+        paginatorInfo {
+            currentPage
+            hasMorePages
+        }
+        data {
+            article {
+                id
+                type
+                body
+                description
+                created_at
+                liked
+                cover
+                count_likes
+                count_comments
+                count_tips
+                user {
+                    avatar
+                    name
+                    id
+                }
+                category {
+                    id
+                    name
+                    logo
+                }
+                images {
+                    id
+                    url
+                    width
+                    height
+                }
+                video {
+                    id
+                    url
+                    duration
+                    width
+                    height
+                    cover
+                }
             }
         }
     }

@@ -1,5 +1,6 @@
 #import './mutation.graphql'
 
+# 用户喜欢的动态
 query userLikedArticlesQuery($user_id: Int!, $page: Int) {
     likes(user_id: $user_id, page: $page, liked_type: "articles") {
         paginatorInfo {
@@ -12,14 +13,12 @@ query userLikedArticlesQuery($user_id: Int!, $page: Int) {
                 type
                 body
                 description
-                time_ago
-                cover
-                hits
-                count_likes
-                count_replies
-                count_tips
+                created_at
                 liked
-
+                cover
+                count_likes
+                count_comments
+                count_tips
                 user {
                     avatar
                     name
@@ -40,20 +39,16 @@ query userLikedArticlesQuery($user_id: Int!, $page: Int) {
                     id
                     url
                     duration
-                    info {
-                        width
-                        height
-                        rotate
-                        covers
-                    }
-                    cover_url
+                    width
+                    height
+                    cover
                 }
             }
         }
     }
 }
 
-# 我的收藏
+# 用户收藏的动态
 query userFavoriteArticlesQuery($user_id: Int!, $page: Int) {
     favorites(user_id: $user_id, page: $page) {
         paginatorInfo {
