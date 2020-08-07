@@ -1,10 +1,9 @@
 import React, { Component, useState, useRef, useCallback, useEffect, useMemo } from 'react';
-import { StyleSheet, View, ScrollView, Image, Text } from 'react-native';
-import { videoPicker, videoUpload, imagePicker } from '@src/native';
+import { StyleSheet, View, ScrollView, Image, Text, TouchableOpacity } from 'react-native';
+import { openImagePicker, videoUploadUtil } from '@src/native';
 import Video from 'react-native-video';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import Iconfont from '../Iconfont';
-import TouchFeedback from '../Basic/TouchFeedback';
 import OverlayViewer from '../Popup/OverlayViewer';
 import ProgressOverlay from '../Popup/ProgressOverlay';
 import PullChooser from '../Popup/PullChooser';
@@ -57,29 +56,23 @@ const VideoUploadView = (props: Props) => {
     }, [video, images]);
 
     const imagePickerHandler = useCallback(() => {
-        imagePicker(
-            (images) => {
-                let imagesPath;
-                if (maximum > 1) {
-                    imagesPath = images.map((image) => `data:${image.mime};base64,${image.data}`);
-                } else {
-                    imagesPath = [`data:${images.mime};base64,${images.data}`];
+        openImagePicker({ mediaType: 'photo', multiple: maximum > 1, includeBase64: true }).then((images) => {
+            let imagesPath;
+            if (maximum > 1) {
+                imagesPath = images.map((image) => `data:${image.mime};base64,${image.data}`);
+            } else {
+                imagesPath = [`data:${images.mime};base64,${images.data}`];
+            }
+            setImages((prevImages) => {
+                const newImages = prevImages.concat(imagesPath);
+                if (newImages.length > maximum) {
+                    newImages.splice(maximum);
+                    Toast.show({ content: `最多上传${maximum}张图片` });
                 }
-                setImages((prevImages) => {
-                    const newImages = prevImages.concat(imagesPath);
-                    if (newImages.length > maximum) {
-                        newImages.splice(maximum);
-                        Toast.show({ content: `最多上传${maximum}张图片` });
-                    }
-                    return newImages;
-                });
-            },
-            {
-                multiple: maximum > 1,
-                includeBase64: true,
-            },
-        );
-    }, []);
+                return newImages;
+            });
+        });
+    }, [maximum]);
 
     const removeImage = useCallback((ImageIndex) => {
         setImages((prevImages) => {
@@ -133,42 +126,32 @@ const VideoUploadView = (props: Props) => {
     }, [video]);
 
     const videoUploadHandler = useCallback(() => {
-        videoPicker(
-            (uploadVideo) => {
-                setVideo(uploadVideo);
-            },
-            {
-                onBeforeUpload: (metadata) => {
-                    if (metadata.duration > 60) {
-                        setVideo(null);
-                        Toast.show({
-                            content: `视频时长需在${60}秒以内`,
-                        });
-                        throw Error(`视频时长需在${60}秒以内`);
-                    }
-                },
-                onStarted: (uploadId) => {
-                    ProgressOverlay.show('正在上传...');
-                },
-                onProcess: (progress: number) => {
-                    // 设置上传进度回调方法
-                    ProgressOverlay.progress(progress);
-                },
-                onCompleted: (data: any) => {
-                    // console.log("测试vod返回",data);
-                    if (data.video_id) {
-                        ProgressOverlay.hide();
-                        Toast.show({
-                            content: '视频上传成功',
-                        });
-                        onResponse(data);
-                    } else {
-                        onUploadError();
-                    }
-                },
-                onError: () => onUploadError(),
-            },
-        );
+        openImagePicker({ mediaType: 'video', multiple: false })
+            .then((video) => {
+                setVideo(video);
+                videoUploadUtil({
+                    videoPath: video.uploadPath,
+                    onStarted: () => ProgressOverlay.show('正在准备上传'),
+                    onProcess: (progress: number) => ProgressOverlay.progress(progress),
+                    onCompleted: (data: any) => {
+                        if (data.video_id) {
+                            ProgressOverlay.hide();
+                            Toast.show({
+                                content: '视频上传成功',
+                            });
+                            onResponse(data);
+                        } else {
+                            onUploadError(data);
+                        }
+                    },
+                    onError: (error: any) => onUploadError(error),
+                });
+            })
+            .catch((err) => {
+                Toast.show({
+                    content: '视频上传出错',
+                });
+            });
     }, []);
 
     const onUploadError = useCallback(() => {
@@ -186,16 +169,16 @@ const VideoUploadView = (props: Props) => {
     const Album = useMemo(() => {
         return images.map((path, index) => {
             return (
-                <TouchFeedback
+                <TouchableOpacity
                     activeOpacity={1}
                     key={index}
                     onPress={() => showImage(index)}
                     style={[styles.uploadView, style]}>
                     <Image source={{ uri: path }} style={styles.imageItem} />
-                    <TouchFeedback style={styles.close} onPress={() => removeImage(index)}>
+                    <TouchableOpacity style={styles.close} onPress={() => removeImage(index)}>
                         <Iconfont name="guanbi1" size={pixel(12)} color="#fff" />
-                    </TouchFeedback>
-                </TouchFeedback>
+                    </TouchableOpacity>
+                </TouchableOpacity>
             );
         });
     }, [images]);
@@ -203,7 +186,7 @@ const VideoUploadView = (props: Props) => {
     if (video) {
         return (
             <View style={{ flexDirection: 'row' }}>
-                <TouchFeedback activeOpacity={1} onPress={() => showVideo(video.path)}>
+                <TouchableOpacity activeOpacity={1} onPress={() => showVideo(video.path)}>
                     <Video
                         muted={true}
                         repeat={true}
@@ -214,11 +197,11 @@ const VideoUploadView = (props: Props) => {
                         }}
                     />
                     <View style={styles.playMark}>
-                        <TouchFeedback style={styles.close} onPress={deleteVideo}>
+                        <TouchableOpacity style={styles.close} onPress={deleteVideo}>
                             <Iconfont name="guanbi1" size={pixel(12)} color="#fff" />
-                        </TouchFeedback>
+                        </TouchableOpacity>
                     </View>
-                </TouchFeedback>
+                </TouchableOpacity>
             </View>
         );
     } else if (images.length > 0) {
@@ -226,21 +209,24 @@ const VideoUploadView = (props: Props) => {
             <View style={styles.albumContainer}>
                 {Album}
                 {images.length < maximum && (
-                    <TouchFeedback activeOpacity={0.8} onPress={imagePickerHandler} style={[styles.uploadView, style]}>
+                    <TouchableOpacity
+                        activeOpacity={0.8}
+                        onPress={imagePickerHandler}
+                        style={[styles.uploadView, style]}>
                         <Iconfont
                             name={type === 'image' ? 'tupian' : 'iconfontadd'}
                             size={pixel(30)}
                             color={Theme.slateGray1}
                         />
-                    </TouchFeedback>
+                    </TouchableOpacity>
                 )}
             </View>
         );
     }
     return (
-        <TouchFeedback activeOpacity={0.8} onPress={onPressHandler} style={[styles.uploadView, style]}>
+        <TouchableOpacity activeOpacity={0.8} onPress={onPressHandler} style={[styles.uploadView, style]}>
             <Iconfont name={type === 'image' ? 'tupian' : 'iconfontadd'} size={pixel(30)} color={Theme.slateGray1} />
-        </TouchFeedback>
+        </TouchableOpacity>
     );
 };
 

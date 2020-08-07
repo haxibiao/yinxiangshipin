@@ -88,14 +88,14 @@ class ChatStore {
                     id: user_id,
                 },
             })
-            .then(result => {
+            .then((result) => {
                 const chat = result.data.createChat;
                 this.chatId = chat.id;
                 console.log('id', chat);
                 this.listenChat(chat.id);
                 // this.fetchMessages(chat.id);
             })
-            .catch(err => {
+            .catch((err) => {
                 console.log('err', err);
             });
     }
@@ -109,10 +109,10 @@ class ChatStore {
                 mutation: GQL.sendMessageMutation,
                 variables: payload,
             })
-            .then(data => {
+            .then((data) => {
                 console.log('Data', data);
             })
-            .catch(err => {
+            .catch((err) => {
                 console.log('err', err);
             });
     }
@@ -138,16 +138,16 @@ class ChatStore {
         if (appStore?.echo?.join) {
             appStore.echo
                 .join(`chat.${chat_id}`)
-                .here(users => {
+                .here((users) => {
                     console.log('echo join here users:', users);
                 })
-                .joining(user => {
+                .joining((user) => {
                     console.log(user.name);
                 })
-                .leaving(user => {
+                .leaving((user) => {
                     console.log(user.name);
                 })
-                .listen('NewMessage', message => {
+                .listen('NewMessage', (message) => {
                     console.log('new message e', message);
                     console.log('e.user_id', message.user_id, Number(userStore.me.id));
                     if (message.user_id !== Number(userStore.me.id)) {
@@ -237,26 +237,26 @@ class ChatStore {
             Toast('最多6张图片哦');
             return;
         }
-        Api.imagePicker(images => {
-            this.viewState = this.viewsName.image;
-            images.map((image, index) => {
-                if (this.pickedImages.size > 5) {
-                    Toast('最多6张图片哦');
-                    return;
-                }
-                this.pickedImages.add(image);
-            });
-        }, option);
+        // Api.imagePicker(images => {
+        //     this.viewState = this.viewsName.image;
+        //     images.map((image, index) => {
+        //         if (this.pickedImages.size > 5) {
+        //             Toast('最多6张图片哦');
+        //             return;
+        //         }
+        //         this.pickedImages.add(image);
+        //     });
+        // }, option);
     }
 
     @action.bound
     openVideoPicker() {
         let option = { multiple: false, mediaType: 'video' };
-        Api.imagePicker(video => {
-            this.viewState = this.viewsName.video;
-            let path = video.path.substr(7);
-            this.pickedVideo = path;
-        }, option);
+        // Api.imagePicker(video => {
+        //     this.viewState = this.viewsName.video;
+        //     let path = video.path.substr(7);
+        //     this.pickedVideo = path;
+        // }, option);
     }
 
     @action.bound
@@ -353,11 +353,11 @@ class ChatStore {
             };
             console.log('config', config);
             fetch(Config.ServerRoot + '/api/messages', config)
-                .then(response => response.json())
-                .then(data => {
+                .then((response) => response.json())
+                .then((data) => {
                     console.log('data', data);
                 })
-                .catch(err => {
+                .catch((err) => {
                     console.log('err', err);
                 });
         });
@@ -397,11 +397,11 @@ class ChatStore {
         };
         console.log('config', config);
         fetch(Config.ServerRoot + '/api/messages', config)
-            .then(response => response.json())
-            .then(data => {
+            .then((response) => response.json())
+            .then((data) => {
                 console.log('data', data);
             })
-            .catch(err => {
+            .catch((err) => {
                 console.log('err', err);
             });
     }
