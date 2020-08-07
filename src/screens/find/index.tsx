@@ -38,8 +38,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     searchIcon: {
-        height: pixel(21),
+        height: pixel(22),
         resizeMode: 'cover',
-        width: pixel(21),
+        width: pixel(22),
     },
 });
