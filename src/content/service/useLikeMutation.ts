@@ -30,6 +30,7 @@ export const useLikeMutation = (props: Props) => {
             toValue: 2,
             friction: 10,
             tension: 10,
+            useNativeDriver: true,
         }).start();
     }, []);
 

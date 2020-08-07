@@ -28,14 +28,21 @@ export default (props: any) => {
     const navigation = useNavigation();
     const client = useApolloClient();
     const [categories, setCategories] = useState(() => (category ? [category] : []));
-    const [formData, setFormData] = useState({ body: '', qcvod_fileid: '', images: [], category_ids: [], product: '' });
+    const [formData, setFormData] = useState({ body: '', qcvod_fileid: '', images: [], category_ids: [] });
+
+    const isDisableButton = useMemo(() => {
+        if (formData.body && (formData.qcvod_fileid || formData.images.length > 0)) {
+            return false;
+        }
+        return true;
+    }, [formData]);
+
     const [createPost, { data, loading }] = useMutation(GQL.createPostContent, {
         variables: {
             body: formData.body,
             images: formData.images,
             qcvod_fileid: formData.qcvod_fileid,
             category_ids: categories.map((c) => c.id),
-            product_id: formData?.product?.id,
             type: 'POST',
         },
         onError: (error: any) => {
@@ -129,10 +136,10 @@ export default (props: any) => {
             }
             rightView={
                 <TouchableOpacity
-                    disabled={!formData.body}
-                    style={[styles.publishButton, !formData.body && styles.disabledButton]}
+                    disabled={isDisableButton}
+                    style={[styles.publishButton, isDisableButton && styles.disabledButton]}
                     onPress={createPost}>
-                    <Text style={[styles.publishText, !formData.body && styles.disabledPublishText]}>立即发布</Text>
+                    <Text style={[styles.publishText, isDisableButton && styles.disabledPublishText]}>发布动态</Text>
                 </TouchableOpacity>
             }>
             <View style={styles.container}>

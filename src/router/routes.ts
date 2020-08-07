@@ -31,7 +31,6 @@ import SocietyScreen from '../screens/user/Society';
 import WorksScreen from '../screens/user/WorksScreen';
 import LikedArticlesScreen from '../screens/user/LikedArticlesScreen';
 import UserBlockScreen from '../screens/user/UserBlock';
-import PostNews from '../screens/user/components/PostNews';
 
 // my
 import BrowsingHistoryScreen from '../screens/my/HistoryScreen';
@@ -209,9 +208,6 @@ export default {
     },
     UserBlockcomponent: {
         component: UserBlockScreen,
-    },
-    PostNews: {
-        component: PostNews,
     },
     Search: {
         component: SearchScreen,

@@ -5,8 +5,6 @@ import { QueryList, PostItem, GQL } from '@src/content';
 import { userStore } from '@src/store';
 
 export default (props: any) => {
-    // variables: { user_id: userStore.me.id }, likes.data
-
     const renderItem = useCallback(({ item }) => {
         return <PostItem data={item?.article} />;
     }, []);

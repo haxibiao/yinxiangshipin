@@ -19,7 +19,7 @@ export default observer(() => {
             if (!isShow) {
                 isShow = true;
                 Overlay.show(
-                    <Overlay.PopView modal={true} style={styles.overlay} ref={(ref) => (popViewRef = ref)}>
+                    <Overlay.PopView style={styles.overlay} ref={(ref) => (popViewRef = ref)}>
                         <CollectionContent client={appStore.client} onClose={onClose} {...params} />
                     </Overlay.PopView>,
                 );

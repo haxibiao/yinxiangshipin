@@ -43,12 +43,15 @@ export default observer((props: any) => {
             },
             body: data,
         };
+
         fetch(Config.ServerRoot + '/api/user/save-avatar?api_token=' + token, config)
             .then((response) => response.text())
             .then((res) => {
                 userStore.changeProfile({ avatar: res });
             })
-            .catch((err) => {});
+            .catch((err) => {
+                console.warn('err', err);
+            });
     };
 
     const _changeAvatar = () => {
@@ -162,22 +165,6 @@ export default observer((props: any) => {
                     <TouchableOpacity onPress={_changeAvatar}>
                         <SettingItem itemName="更改头像" rightComponent={<Avatar source={user.avatar} size={34} />} />
                     </TouchableOpacity>
-
-                    {/* <TouchableOpacity onPress={_changeAvatar}>
-                        <SettingItem
-                            itemName="主页背景图"
-                            rightComponent={
-                                <Image
-                                    source={
-                                        user.background
-                                            ? { uri: user.background }
-                                            : require('@app/assets/images/blue_purple.png')
-                                    }
-                                    style={{ width: 60, height: 40, borderRadius: 5 }}
-                                />
-                            }
-                        />
-                    </TouchableOpacity> */}
 
                     <TouchableOpacity onPress={setNameModal}>
                         <View style={styles.settingItem}>
