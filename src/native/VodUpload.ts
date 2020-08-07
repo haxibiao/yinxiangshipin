@@ -2,10 +2,7 @@
  * created by wyk
  */
 import { NativeModules, DeviceEventEmitter, NativeEventEmitter, Platform } from 'react-native';
-
-const module = Platform.OS === 'android' ? NativeModules.VodVideoUploader : NativeModules.VodUploader;
-const eventPrefix = 'VodUploader-';
-const deviceEmitter = Platform.OS === 'android' ? DeviceEventEmitter : module ? new NativeEventEmitter(module) : null;
+import VodUpload from 'react-native-vod';
 
 type UploadEvent = 'resultVideo' | 'videoProgress';
 
@@ -18,49 +15,39 @@ type UploadOption = {
     onError?: Function;
 };
 
-export const vodStartUpload = (signature: string, videoPath: string): Promise<string> =>
-    module.beginUpload(signature, videoPath);
-
-export const vodAddListener = (eventType: UploadEvent, listener: Function) => {
-    if (!deviceEmitter) {
-        throw new Error('上传失败');
-    }
-    return deviceEmitter.addListener(eventPrefix + eventType, (data: any) => {
-        if (data) {
-            listener(data);
-        }
-    });
-};
-
 export function videoUploadUtil(props: UploadOption) {
     const { videoPath, onStarted, onProcess, onCompleted, onError } = props;
 
     fetch(Config.ServerRoot + '/api/signature/vod-' + Config.Name, { method: 'GET' })
         .then((response) => {
-            vodAddListener('videoProgress', (data: any) => {
-                const progress = (data.upload_bytes / data.total_bytes) * 100;
-                if (onProcess instanceof Function) {
-                    onProcess(progress || 0);
-                }
-            });
-            vodAddListener('resultVideo', (data: any) => {
-                if (onCompleted instanceof Function) {
-                    onCompleted(data);
-                }
-            });
-            return response.text();
+            if (response.status < 200 || response.status > 300) {
+                throw new Error('签名获取失败');
+            } else {
+                return response.text();
+            }
         })
         .then((res) => {
             if (onStarted instanceof Function) {
                 onStarted(res);
             }
-            vodStartUpload(res, videoPath).then((publishCode: any) => {
-                if (publishCode != 0) {
-                    // vod上传失败
+            VodUpload({
+                signature: res,
+                videoPath,
+                onError: (error) => {
                     if (onError instanceof Function) {
-                        onError(publishCode);
+                        onError(error);
                     }
-                }
+                },
+                onProcess: (progress: number) => {
+                    if (onProcess instanceof Function) {
+                        onProcess(progress);
+                    }
+                },
+                onCompleted: (data: any) => {
+                    if (onCompleted instanceof Function) {
+                        onCompleted(data);
+                    }
+                },
             });
         })
         .catch((error) => {

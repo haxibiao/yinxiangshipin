@@ -18,14 +18,11 @@ class TransferProgress extends React.Component<Props> {
     };
 
     setProgress = (val: number) => {
-        // FIXME:这里能拿到进度值，但是设置到组件无效
-        console.log('progress', val / 100);
-        this.state = { progress: val / 100 };
+        this.state = { progress: val };
     };
 
     render() {
         const { message, type } = this.props;
-
         return (
             <View style={styles.progress}>
                 {type == 'progress' ? (
@@ -57,7 +54,7 @@ class ProgressOverlay {
     };
 
     static progress = (progress: number) => {
-        this.progressRef.setProgress(progress);
+        this.progressRef.setProgress(progress / 100);
     };
 
     static hide = () => {

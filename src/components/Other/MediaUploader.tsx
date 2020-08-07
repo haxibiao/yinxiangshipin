@@ -1,13 +1,12 @@
 import React, { Component, useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import { StyleSheet, View, ScrollView, Image, Text, TouchableOpacity } from 'react-native';
-import { openImagePicker } from './RNImageCropPicker';
+import { openImagePicker, videoUploadUtil } from '@src/native';
 import Video from 'react-native-video';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import Iconfont from '../Iconfont';
 import OverlayViewer from '../Popup/OverlayViewer';
-import ProgressOverlay from '../Popup/ProgressOverlay';
+import Loading from '../Popup/Loading';
 import PullChooser from '../Popup/PullChooser';
-import videoPicker from './videoPicker';
 
 const maxMediaWidth = Device.WIDTH - Theme.itemSpace * 4;
 const mediaWidth = maxMediaWidth / 3;
@@ -129,49 +128,30 @@ const VideoUploadView = (props: Props) => {
     }, [video]);
 
     const videoUploadHandler = useCallback(() => {
-        videoPicker(
-            {
-                onBeforeUpload: (metadata: any) => {
-                    if (metadata.duration > 60) {
-                        setVideo(null);
-                        Toast.show({
-                            content: `视频时长需在${60}秒以内`,
-                        });
-                        throw Error(`视频时长需在${60}秒以内`);
-                    }
-                },
-                onStarted: () => {
-                    ProgressOverlay.show('正在上传...');
-                },
-                onProcess: (progress: number) => {
-                    // 设置上传进度回调方法
-                    ProgressOverlay.progress(progress);
-                },
+        openImagePicker({ mediaType: 'video', multiple: false }).then((video) => {
+            setVideo(video);
+            videoUploadUtil({
+                videoPath: video.uploadPath,
+                onStarted: () => Loading.show('loading'),
+                onProcess: (progress: number) => {},
                 onCompleted: (data: any) => {
-                    // console.log('测试vod返回', data);
-
                     if (data.video_id) {
-                        ProgressOverlay.hide();
+                        Loading.hide();
                         Toast.show({
                             content: '视频上传成功',
                         });
                         onResponse(data);
                     } else {
-                        onUploadError();
+                        onUploadError(data);
                     }
                 },
-                onError: () => {
-                    onUploadError();
-                },
-            },
-            (uploadVideo: any) => {
-                setVideo(uploadVideo);
-            },
-        );
+                onError: (error: any) => onUploadError(error),
+            });
+        });
     }, []);
 
     const onUploadError = useCallback(() => {
-        ProgressOverlay.hide();
+        Loading.hide();
         Toast.show({
             content: '上传失败',
         });
