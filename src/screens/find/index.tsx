@@ -21,7 +21,7 @@ export default observer(() => {
             rightView={
                 <TouchableWithoutFeedback onPress={searchHandle}>
                     <View style={styles.search}>
-                        <Image source={require('@app/assets/images/search_black.png')} style={styles.searchIcon} />
+                        <Image source={require('@app/assets/images/icons/ic_search_b.png')} style={styles.searchIcon} />
                     </View>
                 </TouchableWithoutFeedback>
             }>

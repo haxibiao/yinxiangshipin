@@ -16,7 +16,7 @@ class AboutUs extends Component {
                         <View style={{ marginTop: pixel(30) }}>
                             <View style={{ alignItems: 'center', paddingVertical: pixel(15) }}>
                                 <Image
-                                    source={require('@app/Logo1.png')}
+                                    source={require('@app/Logo.png')}
                                     style={{
                                         width: pixel(150),
                                         height: pixel(150),

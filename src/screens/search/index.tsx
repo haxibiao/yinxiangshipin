@@ -131,7 +131,7 @@ const Search = () => {
                     <Iconfont name="zuojiantou" color={Theme.primaryTextColor} size={pixel(21)} />
                 </TouchableOpacity>
                 <View style={styles.inputContainer}>
-                    <Image style={styles.searchImage} source={require('@app/assets/images/search.png')} />
+                    <Image style={styles.searchImage} source={require('@app/assets/images/icons/ic_search_g.png')} />
                     <View style={styles.inputWrap}>
                         <HxfTextInput
                             value={textValue}

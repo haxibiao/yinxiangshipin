@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import { View, Text, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
-import { StatusView, DynamicItem } from '@src/components';
+import { StatusView, PostItem } from '@src/components';
 import { GQL, useQuery } from '@src/apollo';
 import { observer } from '@src/store';
 import { observable } from 'mobx';
@@ -59,7 +59,7 @@ const index = observer(({ keyword }) => {
                 showsVerticalScrollIndicator={false}
                 data={articles}
                 keyExtractor={(item, i) => String(item.id || i)}
-                renderItem={({ item }) => <DynamicItem post={item} />}
+                renderItem={({ item }) => <PostItem post={item} />}
                 ItemSeparatorComponent={() => <View style={styles.separator} />}
                 onEndReachedThreshold={0.1}
                 onEndReached={fetchMoreArticles}
