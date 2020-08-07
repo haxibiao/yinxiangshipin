@@ -8,8 +8,9 @@ import { Share } from '@src/native';
 import * as WeChat from 'react-native-wechat-lib';
 import useReport from './useReport';
 import TouchFeedback from '../Basic/TouchFeedback';
+import ShareIOS from 'react-native-share';
 
-const MoreOperation = (props) => {
+const MoreOperation = (props: any) => {
     const shareLink = useRef();
     const client = useClientBuilder(syncGetter('me.token', userStore));
     const {
@@ -30,13 +31,13 @@ const MoreOperation = (props) => {
         variables: {
             id: target.id,
         },
-        onCompleted: (data) => {
+        onCompleted: (data: any) => {
             deleteCallback();
             Toast.show({
                 content: '删除成功',
             });
         },
-        onError: (error) => {
+        onError: (error: any) => {
             Toast.show({
                 content: error.message.replace('GraphQL error: ', '') || '删除失败',
             });
@@ -96,10 +97,10 @@ const MoreOperation = (props) => {
                         id: target.id,
                     },
                 })
-                .then((result) => {
+                .then((result: any) => {
                     Toast.show({ content: '操作成功，将减少此类型内容的推荐！' });
                 })
-                .catch((error) => {
+                .catch((error: any) => {
                     // 查询接口，服务器返回错误后
                     Toast.show({ content: error.message.replace('GraphQL error: ', '') });
                 });
@@ -170,7 +171,7 @@ const MoreOperation = (props) => {
     );
 
     const optionsView = useMemo(() => {
-        return options.map((option, index) => {
+        return options.map((option: any, index: number) => {
             if (option === '下载' && !downloadUrl) {
                 return;
             }
@@ -189,6 +190,14 @@ const MoreOperation = (props) => {
     const shareToWechat = useCallback(async () => {
         onPressIn();
         const link = await fetchShareLink();
+
+        if (Device.IOS) {
+            ShareIOS.open({
+                title: '分享给朋友',
+                url: Config.ServerRoot + `/share/post/${target.id}?user_id=${userStore.me.id}`,
+            });
+            return;
+        }
 
         // WeChat.ShareVideo({
         //     title: '我发现一个很好看的小视频，分享给你',
@@ -212,10 +221,19 @@ const MoreOperation = (props) => {
     const shareToTimeline = useCallback(async () => {
         onPressIn();
         const link = await fetchShareLink();
+
+        if (Device.IOS) {
+            ShareIOS.open({
+                title: '分享给朋友',
+                url: Config.ServerRoot + `/share/post/${target.id}?user_id=${userStore.me.id}`,
+            });
+            return;
+        }
+
         try {
             await WeChat.shareWebpage({
                 title: target.body,
-                webpageUrl: link,
+                webpageUrl: link || '',
                 thumbImageUrl: Config.ServerRoot + `/logo/${Config.Name}.com.png`,
                 scene: 1,
             });
@@ -233,6 +251,14 @@ const MoreOperation = (props) => {
         // const openUrl = "mqqapi://share/to_fri?file_type=news&src_type=web&version=1&generalpastboard=1&share_id=1107845270&url="+ baseurl +"&previewimageUrl=" + baseimage + "&image_url=" + baseimage + "&title=" + basetitle + "&description=" + basedesc + "&callback_type=scheme&thirdAppDisplayName=UVE=&app_name=UVE=&cflag=0&shareType=0";
         // Linking.openURL(openUrl);
         const link = await fetchShareLink();
+        if (Device.IOS) {
+            ShareIOS.open({
+                title: '分享给朋友',
+                url: Config.ServerRoot + `/share/post/${target.id}?user_id=${userStore.me.id}`,
+            });
+            return;
+        }
+
         const callback = await Share.shareTextToQQ(link);
 
         if (!callback) {
@@ -245,7 +271,16 @@ const MoreOperation = (props) => {
     const shareToWeiBo = useCallback(async () => {
         onPressIn();
         const link = await fetchShareLink();
-        Clipboard.setString(link);
+        // Clipboard.setString(link);
+
+        if (Device.IOS) {
+            ShareIOS.open({
+                title: '分享给朋友',
+                url: Config.ServerRoot + `/share/post/${target.id}?user_id=${userStore.me.id}`,
+            });
+            return;
+        }
+
         const callback = await Share.shareToSinaFriends(link);
 
         if (!callback) {
@@ -258,7 +293,17 @@ const MoreOperation = (props) => {
     const shareToQQZone = useCallback(async () => {
         onPressIn();
         const link = await fetchShareLink();
-        Clipboard.setString(link);
+        // Clipboard.setString(link);
+
+        // 先简单拦截一下 IOS 的分享操作
+        if (Device.IOS) {
+            ShareIOS.open({
+                title: '分享给朋友',
+                url: Config.ServerRoot + `/share/post/${target.id}?user_id=${userStore.me.id}`,
+            });
+            return;
+        }
+
         const callback = await Share.shareImageToQQZone(link);
 
         if (!callback) {
