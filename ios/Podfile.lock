@@ -282,7 +282,7 @@ PODS:
     - React
   - react-native-orientation (3.1.3):
     - React
-  - react-native-safe-area-context (3.1.1):
+  - react-native-safe-area-context (3.1.3):
     - React
   - react-native-slider (3.0.3):
     - React
@@ -297,7 +297,7 @@ PODS:
     - React
   - react-native-vod (1.0.1):
     - React
-  - react-native-webview (10.3.3):
+  - react-native-webview (10.4.0):
     - React
   - React-RCTActionSheet (0.63.2):
     - React-Core/RCTActionSheetHeaders (= 0.63.2)
@@ -382,7 +382,7 @@ PODS:
     - React-Core
     - React-RCTImage
     - TOCropViewController
-  - RNScreens (2.9.0):
+  - RNScreens (2.10.1):
     - React
   - RNSentry (1.7.1):
     - React
@@ -671,13 +671,13 @@ SPEC CHECKSUMS:
   react-native-config: 9a061347e0136fdb32d43a34d60999297d672361
   react-native-netinfo: a53b00d949b6456913aaf507d9dba90c4008c611
   react-native-orientation: f1caf84d65f1a4fd4511a18f2b924e634ad7a628
-  react-native-safe-area-context: 344b969c45af3d8464d36e8dea264942992ef033
+  react-native-safe-area-context: b0bdaac4c56a861b06aaf1569efd1121c6a2427e
   react-native-slider: e99fc201cefe81270fc9d81714a7a0f5e566b168
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
   react-native-video: d01ed7ff1e38fa7dcc6c15c94cf505e661b7bfd0
   react-native-viewpager: 88f4269c19d626d2ccd5f7c7f5f7f76422ddb9e3
   react-native-vod: 5c71e84bd6f6104ce6bdee91f21f5ed300cf70fb
-  react-native-webview: 136107c8fc07efc95be59e519710cdc05822ad40
+  react-native-webview: 1ad70b21fb9e44811e33a99e43a4b68b94806a6d
   React-RCTActionSheet: 910163b6b09685a35c4ebbc52b66d1bfbbe39fc5
   React-RCTAnimation: 9a883bbe1e9d2e158d4fb53765ed64c8dc2200c6
   React-RCTBlob: 39cf0ece1927996c4466510e25d2105f67010e13
@@ -696,7 +696,7 @@ SPEC CHECKSUMS:
   RNDeviceInfo: 5be12a5bfbb8da3528c43ee4373abd9c30d04616
   RNGestureHandler: b6b359bb800ae399a9c8b27032bdbf7c18f08a08
   RNImageCropPicker: f0557a908758c4a3f83978894ec7227651529b45
-  RNScreens: c526239bbe0e957b988dacc8d75ac94ec9cb19da
+  RNScreens: b748efec66e095134c7166ca333b628cd7e6f3e2
   RNSentry: 2bae4ffee2e66376ef42cb845a494c3bde17bc56
   RNShare: a1d5064df7a0ebe778d001869b3f0a124bf0a491
   RNSVG: 8ba35cbeb385a52fd960fd28db9d7d18b4c2974f

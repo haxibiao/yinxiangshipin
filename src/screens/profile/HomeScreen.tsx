@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, ScrollView, TouchableOpacity, Text } from 'react-native';
+import { StyleSheet, View, ScrollView, TouchableOpacity, Text, Platform } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import { Avatar, PageContainer, SettingItem, WriteModal, Iconfont, WheelPicker, Toast } from '@src/components';
 import { Mutation, GQL, useApolloClient, useQuery } from '@src/apollo';
@@ -28,6 +28,9 @@ export default observer((props: any) => {
     };
 
     const saveAvatar = (imagePath: any) => {
+        if (Platform.OS === 'ios') {
+            return userStore.changeProfile({ avatar: imagePath });
+        }
         const { token } = userStore.me;
         const data = new FormData();
         data.append('avatar', {
@@ -43,15 +46,12 @@ export default observer((props: any) => {
             },
             body: data,
         };
-
         fetch(Config.ServerRoot + '/api/user/save-avatar?api_token=' + token, config)
             .then((response) => response.text())
             .then((res) => {
                 userStore.changeProfile({ avatar: res });
             })
-            .catch((err) => {
-                console.warn('err', err);
-            });
+            .catch((err) => {});
     };
 
     const _changeAvatar = () => {
