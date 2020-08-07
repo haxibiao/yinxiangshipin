@@ -5,7 +5,6 @@ import Avatar from '../Basic/Avatar';
 import PlaceholderImage from '../Basic/PlaceholderImage';
 import Row from '../Basic/Row';
 import SafeText from '../Basic/SafeText';
-import ItemSeparator from '../Form/ItemSeparator';
 import Iconfont from '../Iconfont';
 import GridImage from './GridImage';
 import Like from './Like';
@@ -98,7 +97,7 @@ const PostItem: React.FC<Props> = observer((props: Props) => {
                 </View>
             );
         } else if (cover && !showComment) {
-            const isLandscape = video && video.info && video.info.width && video.info.width >= video.info.height;
+            const isLandscape = video?.width > video?.height;
             return (
                 <View style={styles.contentBottom}>
                     <PlaceholderImage
@@ -243,7 +242,6 @@ const PostItem: React.FC<Props> = observer((props: Props) => {
                     </View>
                 </View>
             </TouchableWithoutFeedback>
-            {showSeparator && <ItemSeparator height={pixel(8)} />}
             {showComment && (
                 <View style={styles.commentsHeader}>
                     <Text style={{ color: '#CBD8E1' }}>{`所有评论(${count_replies || 0})`}</Text>

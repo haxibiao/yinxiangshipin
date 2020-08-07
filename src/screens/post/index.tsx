@@ -193,15 +193,15 @@ export default observer((props) => {
         let isFixedNavBar = false;
         if (video) {
             const playerContainer = (() => {
-                const proportion =
-                    Helper.syncGetter('info.width', video) / Helper.syncGetter('info.height', video) || 1;
+                const proportion = video?.width / video?.height || 0.5614;
+                const h = Math.ceil(Device.WIDTH / proportion);
                 if (proportion > 1) {
                     return {
-                        height: Device.WIDTH / proportion,
+                        height: h,
                     };
                 } else {
                     return {
-                        height: Math.min(Device.WIDTH / proportion, Device.HEIGHT),
+                        height: Math.min(Math.ceil(h), Device.HEIGHT),
                     };
                 }
             })();
@@ -252,7 +252,7 @@ export default observer((props) => {
         }
         return (
             <StatusView.EmptyView
-                style={{ minHeight: percent(40), marginVertical: pixel(20), backgroundColor: '#fff' }}
+                style={{ minHeight: percent(45), paddingVertical: pixel(20), backgroundColor: '#fff' }}
                 imageSource={require('@app/assets/images/default_comment.png')}
             />
         );

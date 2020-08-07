@@ -52,7 +52,7 @@ export default observer(
             if (images?.length > 0) {
                 return <GridImage images={images} />;
             } else if (cover) {
-                const isLandscape = video?.width >= video?.height;
+                const isLandscape = video?.width > video?.height;
                 return (
                     <PlaceholderImage
                         source={{ uri: cover }}

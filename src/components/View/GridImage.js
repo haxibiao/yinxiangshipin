@@ -32,7 +32,7 @@ class GridImage extends Component<Props> {
         gridWidth: 0,
     };
 
-    _onLayout = e => {
+    _onLayout = (e) => {
         const { width } = e.nativeEvent.layout;
         this.setState({ gridWidth: width });
     };
@@ -44,7 +44,7 @@ class GridImage extends Component<Props> {
             const { width, height } = images[0];
             const style = Helper.ResponseMedia(width, height, gridWidth);
             gridStyle = {
-                borderRadius: 4,
+                borderRadius: pixel(4),
                 ...style,
                 ...gridStyle,
             };
@@ -57,13 +57,13 @@ class GridImage extends Component<Props> {
                 </TouchFeedback>
             );
         } else {
-            const size = (gridWidth - gap * 2) / 3;
+            const size = Math.ceil((gridWidth - gap * 2) / 3);
             gridStyle = {
                 width: size,
                 height: size,
                 marginRight: gap,
                 marginTop: gap,
-                borderRadius: 4,
+                borderRadius: pixel(4),
                 ...gridStyle,
             };
             if (images.length === 4) {
@@ -111,7 +111,7 @@ class GridImage extends Component<Props> {
         }
     }
 
-    showPicture = initIndex => {
+    showPicture = (initIndex) => {
         const overlayView = (
             <ImageViewer
                 onSwipeDown={() => OverlayViewer.hide()}

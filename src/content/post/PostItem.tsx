@@ -20,7 +20,13 @@ export default observer(
     (props: Props): JSX.Element => {
         const { data = {}, onPress, onLongPress } = props;
         const navigation = useNavigation();
-        const post = useMemo(() => observable(data), [data]);
+        const post = useMemo(() => {
+            // 适配老字段
+            if (!data?.content) {
+                data.content = data.body;
+            }
+            return observable(data);
+        }, [data]);
 
         const touchHandler = useCallback(() => {
             if (onPress instanceof Function) {

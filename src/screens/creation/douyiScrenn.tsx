@@ -12,7 +12,6 @@ import {
     ProgressOverlay,
     OverlayViewer,
     KeyboardSpacer,
-    MediaUploader,
     HxfRadio,
 } from '@src/components';
 import { observer, userStore, appStore } from '@src/store';
@@ -33,11 +32,11 @@ const douyiScreen = (props: any) => {
 
     const [contentType, setContentType] = useState(false);
 
-    const changeBody = useCallback(value => {
+    const changeBody = useCallback((value) => {
         setFormData(value);
     }, []);
 
-    const changeContentType = useCallback(isIssue => {
+    const changeContentType = useCallback((isIssue) => {
         if (isIssue) {
             setContentType(true);
         } else {

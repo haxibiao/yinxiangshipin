@@ -13,6 +13,11 @@ const videoWidth = WINDOW_WIDTH * 0.6;
 const videoHeight = videoWidth * 1.33;
 const COVER_WIDTH = WINDOW_WIDTH - pixel(14) * 2;
 
+const HeartIcon = {
+    liked: require('@app/assets/images/icons/ic_heart_red.png'),
+    unlike: require('@app/assets/images/icons/ic_heart_normal.png'),
+};
+
 interface Props {
     post: any;
     fadeOut?: () => void;
@@ -33,7 +38,7 @@ export default observer(
             if (images?.length > 0) {
                 return <GridImage images={images} />;
             } else if (cover) {
-                const isLandscape = video?.width >= video?.height;
+                const isLandscape = video?.width > video?.height;
                 return (
                     <PlaceholderImage
                         source={{ uri: cover }}
@@ -133,10 +138,9 @@ export default observer(
                 <View style={styles.footer}>
                     <View style={styles.metaList}>
                         <AnimationLike content={post} style={styles.metaItem}>
-                            <Iconfont
-                                size={font(22)}
-                                name="xihuanfill"
-                                color={post.liked ? Theme.watermelon : '#CCD5E0'}
+                            <Image
+                                style={{ width: pixel(22), height: pixel(22) }}
+                                source={post.liked ? HeartIcon.liked : HeartIcon.unlike}
                             />
                             <SafeText style={styles.countText}>{post?.count_likes || 0}</SafeText>
                         </AnimationLike>
@@ -144,12 +148,18 @@ export default observer(
                             style={styles.metaItem}
                             activeOpacity={0.6}
                             onPress={() => navigation.navigate('PostDetail', { post })}>
-                            <Iconfont name="liuyanfill" size={font(22)} color={'#CCD5E0'} />
+                            <Image
+                                style={{ width: pixel(22), height: pixel(22) }}
+                                source={require('@app/assets/images/icons/ic_comment_normal.png')}
+                            />
                             <SafeText style={styles.countText}>{post?.count_comments || 0}</SafeText>
                         </TouchableOpacity>
                     </View>
                     <TouchableOpacity activeOpacity={0.6} onPress={showMoreOperation}>
-                        <Iconfont name="qita1" size={font(22)} color={'#CCD5E0'} />
+                        <Image
+                            style={{ width: pixel(22), height: pixel(22) }}
+                            source={require('@app/assets/images/icons/ic_share_normal.png')}
+                        />
                     </TouchableOpacity>
                 </View>
             </>
@@ -188,12 +198,12 @@ const styles = StyleSheet.create({
     landscape: {
         width: COVER_WIDTH,
         height: (COVER_WIDTH * 9) / 16,
-        borderRadius: pixel(6),
+        borderRadius: pixel(4),
     },
     portrait: {
-        width: COVER_WIDTH * 0.5,
-        height: COVER_WIDTH * 0.8,
-        borderRadius: pixel(6),
+        width: COVER_WIDTH * 0.4,
+        height: COVER_WIDTH * 0.64,
+        borderRadius: pixel(4),
     },
     categories: {
         flexDirection: 'row',
@@ -242,11 +252,11 @@ const styles = StyleSheet.create({
     metaItem: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginRight: pixel(24),
+        marginRight: pixel(30),
     },
     countText: {
-        color: '#CCD5E0',
+        color: '#2b2b2b',
         fontSize: font(14),
-        marginLeft: pixel(12),
+        marginLeft: pixel(8),
     },
 });
