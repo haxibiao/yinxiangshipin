@@ -56,22 +56,24 @@ const VideoUploadView = (props: Props) => {
     }, [video, images]);
 
     const imagePickerHandler = useCallback(() => {
-        openImagePicker({ mediaType: 'photo', multiple: maximum > 1, includeBase64: true }).then((images) => {
-            let imagesPath;
-            if (maximum > 1) {
-                imagesPath = images.map((image) => `data:${image.mime};base64,${image.data}`);
-            } else {
-                imagesPath = [`data:${images.mime};base64,${images.data}`];
-            }
-            setImages((prevImages) => {
-                const newImages = prevImages.concat(imagesPath);
-                if (newImages.length > maximum) {
-                    newImages.splice(maximum);
-                    Toast.show({ content: `最多上传${maximum}张图片` });
+        openImagePicker({ mediaType: 'photo', multiple: maximum > 1, includeBase64: true })
+            .then((images) => {
+                let imagesPath;
+                if (maximum > 1) {
+                    imagesPath = images.map((image) => `data:${image.mime};base64,${image.data}`);
+                } else {
+                    imagesPath = [`data:${images.mime};base64,${images.data}`];
                 }
-                return newImages;
-            });
-        });
+                setImages((prevImages) => {
+                    const newImages = prevImages.concat(imagesPath);
+                    if (newImages.length > maximum) {
+                        newImages.splice(maximum);
+                        Toast.show({ content: `最多上传${maximum}张图片` });
+                    }
+                    return newImages;
+                });
+            })
+            .catch((err) => {});
     }, [maximum]);
 
     const removeImage = useCallback((ImageIndex) => {
