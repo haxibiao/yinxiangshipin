@@ -3,10 +3,10 @@
     "version": "0.0.1",
     "private": true,
     "scripts": {
-        "android": "react-native run-android",
+        "ad": "react-native run-android",
         "ios": "react-native run-ios",
         "start": "react-native start",
-        "restart:babel-cache": "rm -rf ./node_modules/.cache/babel-loader/* && yarn start",
+        "restart": "yarn start -- --reset-cache",
         "test": "jest",
         "lint": "eslint ."
     },
@@ -48,7 +48,7 @@
         "react-native-config": "^1.3.1",
         "react-native-device-info": "^5.6.1",
         "react-native-gesture-handler": "^1.6.1",
-        "react-native-image-crop-picker": "^0.25.0",
+        "react-native-image-crop-picker": "^0.32.2",
         "react-native-image-zoom-viewer": "^2.2.26",
         "react-native-linear-gradient": "^2.5.6",
         "react-native-modal": "^11.5.6",

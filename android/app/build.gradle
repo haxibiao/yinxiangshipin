@@ -123,6 +123,7 @@ def enableHermes = project.ext.react.get("enableHermes", false);
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -138,6 +139,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode appConfigJson.VersionCode
         versionName appConfigJson.Version
+        vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
     }
     splits {

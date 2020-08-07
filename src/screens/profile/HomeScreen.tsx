@@ -43,13 +43,12 @@ export default observer((props: any) => {
             },
             body: data,
         };
-
         fetch(Config.ServerRoot + '/api/user/save-avatar?api_token=' + token, config)
-            .then(response => response.text())
-            .then(res => {
+            .then((response) => response.text())
+            .then((res) => {
                 userStore.changeProfile({ avatar: res });
             })
-            .catch(err => {});
+            .catch((err) => {});
     };
 
     const _changeAvatar = () => {
@@ -62,10 +61,12 @@ export default observer((props: any) => {
             showCropGuidelines: false,
             enableRotationGesture: true,
         })
-            .then(image => {
+            .then((image) => {
                 saveAvatar(image.path);
             })
-            .catch(error => {});
+            .catch((error) => {
+                console.warn('error', error);
+            });
     };
 
     const parseBirthday = () => {
@@ -103,12 +104,12 @@ export default observer((props: any) => {
                     ],
                 },
             })
-            .then(result => {
+            .then((result) => {
                 setUserBirthday(date);
                 // 更新 store 里的 me
                 userStore.changeProfile({ birthday_msg: date });
             })
-            .catch(error => {
+            .catch((error) => {
                 Toast.show({ content: '生日修改失败,服务器内部错误' });
             });
     };
@@ -131,13 +132,13 @@ export default observer((props: any) => {
                 mutation: GQL.updateUserGender,
                 variables: { id: user.id, gender: Gender },
             })
-            .then(result => {
+            .then((result) => {
                 const gender = Helper.syncGetter('data.updateUserInfo.gender', result);
                 setUserGender(gender);
                 // 更新store里的me
                 userStore.changeProfile({ gender });
             })
-            .catch(error => {
+            .catch((error) => {
                 Toast.show({ content: '性别修改失败,服务器内部错误' });
                 if (userGender === '女') {
                     // 用户性别是女 ，改成男
