@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, TextInput } from 'react-native';
-import { HxfButton, PageContainer } from '@src/components';
-import { compose, graphql, GQL } from '@src/apollo';
-import { useNavigation } from '@react-navigation/native';
+import { PageContainer, HxfButton, Loading } from '@src/components';
+import { GQL, errorMessage } from '@src/apollo';
 import { useMutation } from '@apollo/react-hooks';
+import { useNavigation } from '@react-navigation/native';
 
 const VerificationScreen = (props: any) => {
     const navigation = useNavigation();
-    const [phone, setphone] = React.useState('');
-    const [submitting, setsubmitting] = React.useState(false);
+    const [phone, setPhoneNumber] = React.useState('');
 
     const [SendVerifyCodeMutation] = useMutation(GQL.SendVerifyCodeMutation, {
         variables: {
@@ -16,22 +15,22 @@ const VerificationScreen = (props: any) => {
             action: 'RESET_PASSWORD',
         },
         onCompleted: (result: any) => {
-            setsubmitting(false);
+            Loading.hide();
             navigation.navigate('RetrievePassword', {
                 time: new Date().getTime(),
                 phone,
             });
         },
         onError: (error: any) => {
-            setsubmitting(false);
-            Toast.show({ content: error });
+            Loading.hide();
+            Toast.show({ content: errorMessage(error) });
         },
         errorPolicy: 'all',
     });
 
     const sendVerificationCode = async () => {
         if (phone) {
-            setsubmitting(true);
+            Loading.show('loading');
             SendVerifyCodeMutation();
         } else {
             Toast.show({ content: '账号获取失败，请重新登录' });
@@ -39,11 +38,9 @@ const VerificationScreen = (props: any) => {
     };
 
     return (
-        <PageContainer title="找回密码" white submitting={submitting}>
+        <PageContainer title="找回密码" white>
             <View style={styles.container}>
-                <View style={{ marginTop: 50, paddingHorizontal: 25 }}>
-                    <Text style={{ color: Theme.black, fontSize: 20, fontWeight: '600' }}>获取验证码</Text>
-                </View>
+                <Text style={styles.title}>获取验证码</Text>
                 <View style={styles.textWrap}>
                     <TextInput
                         placeholder="请输入手机号"
@@ -51,10 +48,9 @@ const VerificationScreen = (props: any) => {
                         maxLength={48}
                         keyboardType="numeric"
                         style={styles.textInput}
-                        onChangeText={(value) => setphone(value)}
+                        onChangeText={(value) => setPhoneNumber(value)}
                     />
                 </View>
-
                 <HxfButton title="获取验证码" gradient={true} style={styles.button} onPress={sendVerificationCode} />
             </View>
         </PageContainer>
@@ -64,28 +60,32 @@ const VerificationScreen = (props: any) => {
 export default VerificationScreen;
 
 const styles = StyleSheet.create({
-    button: {
-        borderRadius: pixel(5),
-        height: pixel(40),
-        marginHorizontal: pixel(15),
-        marginTop: pixel(35),
-    },
     container: {
-        backgroundColor: Theme.white || '#FFF',
         flex: 1,
-        paddingHorizontal: pixel(20),
+        backgroundColor: '#FFF',
+        paddingHorizontal: pixel(25),
+        paddingTop: pixel(20),
     },
-    textInput: {
-        color: Theme.primaryFont,
-        fontSize: font(16),
-        height: pixel(50),
-        padding: 0,
+    title: {
+        color: '#2b2b2b',
+        fontSize: font(20),
+        fontWeight: 'bold',
     },
     textWrap: {
-        borderBottomColor: Theme.lightBorder,
-        borderBottomWidth: pixel(0.5),
-        marginHorizontal: pixel(25),
-        marginTop: pixel(40),
-        paddingHorizontal: 0,
+        borderBottomColor: '#f0f0f0',
+        borderBottomWidth: pixel(1),
+        marginTop: pixel(20),
+    },
+    textInput: {
+        color: '#2b2b2b',
+        fontSize: font(16),
+        height: pixel(50),
+        paddingTop: 0,
+        paddingVertical: pixel(5),
+    },
+    button: {
+        borderRadius: pixel(5),
+        height: pixel(42),
+        marginTop: pixel(25),
     },
 });
