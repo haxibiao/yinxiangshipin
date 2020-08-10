@@ -29,7 +29,7 @@ class KeyboardSpacer extends Component<Props> {
     componentDidMount() {
         if (!this.showListener) {
             const name = Device.IOS ? 'keyboardWillShow' : 'keyboardDidShow';
-            this.showListener = Keyboard.addListener(name, e => this.onKeyboardShow(e));
+            this.showListener = Keyboard.addListener(name, (e) => this.onKeyboardShow(e));
         }
         if (!this.hideListener) {
             const name = Device.IOS ? 'keyboardWillHide' : 'keyboardDidHide';
@@ -70,7 +70,7 @@ class KeyboardSpacer extends Component<Props> {
         let height = e.endCoordinates.height + (this.props.topInsets || 0);
         let FixTopInsets = appStore.viewportHeight - Dimensions.get('window').height || 0;
         // 适配安卓全面屏
-        if (Device.Android && Device.FullScreenDevice) {
+        if (Device.Android && Device.isFullScreenDevice) {
             FixTopInsets += 40;
         }
         height += FixTopInsets;
