@@ -69,7 +69,7 @@
         "react-native-video": "^5.0.0",
         "react-native-vod": "git+http://auto:hxb332211@code.haxibiao.cn/packages/react-native-voduploader.git",
         "react-native-webview": "^10.3.3",
-        "react-native-wechat-lib": "^1.1.19",
+        "react-native-wechat-lib": "^1.1.21",
         "rn-fetch-blob": "^0.12.0",
         "socket.io-client": "^2.3.0",
         "teaset": "^0.7.4"

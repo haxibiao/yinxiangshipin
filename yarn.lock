@@ -7339,7 +7339,7 @@ react-native-webview@^10.3.3:
     escape-string-regexp "2.0.0"
     invariant "2.2.4"
 
-react-native-wechat-lib@^1.1.19:
+react-native-wechat-lib@^1.1.21:
   version "1.1.21"
   resolved "https://registry.yarnpkg.com/react-native-wechat-lib/-/react-native-wechat-lib-1.1.21.tgz#e888ef62d0cc1e0e62336b3093a3400d45293b22"
   integrity sha512-W+x/wYgj8tJqGVaZLbUXgRo/TwOptVOxFDxSWMPvx3FGhDFqK71uDy3CSUd9z2kzv7GtEm0aRX7L3c9RI8Odvw==
