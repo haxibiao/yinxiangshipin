@@ -1,11 +1,11 @@
 import { Dimensions, Platform, StatusBar, PixelRatio } from 'react-native';
-import ProgressOverlay from '../../components/Popup/ProgressOverlay';
+import Loading from '../../components/Popup/Loading';
 import RNFetchBlob from 'rn-fetch-blob';
 
 export function download({ url, title, onSuccess, onFailed }) {
     return new Promise((resolve, reject) => {
         const dirs = RNFetchBlob.fs.dirs;
-        ProgressOverlay.show('正在下载...');
+        Loading.show('正在下载...');
         RNFetchBlob.config({
             // useDownloadManager: true,
             path: dirs.DCIMDir + '/' + title + '.mp4',
@@ -17,22 +17,23 @@ export function download({ url, title, onSuccess, onFailed }) {
             })
             // listen to download progress event
             .progress((received, total) => {
-                ProgressOverlay.progress((received / total) * 100);
+                // (received / total) * 100
+                Loading.hide();
             })
-            .then(res => {
+            .then((res) => {
                 if (Platform.OS === 'android') {
                     RNFetchBlob.fs.scanFile([{ path: res.path(), mime: 'video/mp4' }]);
                 }
                 // the temp file path
                 console.log('The file saved to ', res.path());
-                ProgressOverlay.hide();
+                Loading.hide();
                 Toast.show({
                     content: '下载成功',
                 });
                 resolve(res.path());
             })
-            .catch(error => {
-                ProgressOverlay.hide();
+            .catch((error) => {
+                Loading.hide();
                 Toast.show({
                     content: '下载失败',
                 });
