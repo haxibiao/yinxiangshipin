@@ -12,6 +12,7 @@ const HFlatList = HPageViewHoc(FlatList);
 export default (props: any) => {
     const { loading, error, data, refetch, fetchMore } = useQuery(GQL.postsQuery, {
         variables: { user_id: props.user.id },
+        fetchPolicy: 'network-only',
     });
     const posts = useMemo(() => Helper.syncGetter('posts.data', data), [data]);
     const hasMorePages = useMemo(() => Helper.syncGetter('posts.paginatorInfo.hasMorePages', data), [data]);
@@ -30,6 +31,7 @@ export default (props: any) => {
             refreshControl={<CustomRefreshControl onRefresh={refetch} />}
             keyExtractor={(item: any, index: number) => String(index || item.id)}
             renderItem={renderItem}
+            ItemSeparatorComponent={() => <View style={styles.separator} />}
             ListEmptyComponent={
                 !loading &&
                 posts && (
@@ -62,3 +64,11 @@ export default (props: any) => {
         />
     );
 };
+
+const styles = StyleSheet.create({
+    separator: {
+        marginHorizontal: pixel(14),
+        height: pixel(1),
+        backgroundColor: '#f4f4f4',
+    },
+});

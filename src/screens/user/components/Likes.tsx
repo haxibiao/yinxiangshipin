@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
-import { View, Text, FlatList } from 'react-native';
+import { StyleSheet, View, Text, FlatList } from 'react-native';
 import { HPageViewHoc } from 'components/ScrollHeaderTabView';
-import { PostItem, StatusView, Placeholder, CustomRefreshControl, SpinnerLoading } from '@src/components';
+import { StatusView, Placeholder, CustomRefreshControl, SpinnerLoading } from '@src/components';
+import { PostItem } from '@src/content';
 import { observer, userStore } from '@src/store';
 import { Query, useQuery, GQL } from '@src/apollo';
 import { observable } from 'mobx';
@@ -9,25 +10,17 @@ import { observable } from 'mobx';
 const HFlatList = HPageViewHoc(FlatList);
 
 export default (props: any) => {
-    const [observableArticles, setArticles] = useState(null);
-
     const { loading, error, data, refetch, fetchMore } = useQuery(GQL.userLikedArticlesQuery, {
         variables: { user_id: props.user.id },
         fetchPolicy: 'network-only',
     });
-    const articles = useMemo(() => Helper.syncGetter('likes.data', data), [data]);
+    const likesData = useMemo(() => Helper.syncGetter('likes.data', data), [data]);
     const hasMorePages = useMemo(() => Helper.syncGetter('likes.paginatorInfo.hasMorePages', data), [data]);
     const currentPage = useMemo(() => Helper.syncGetter('likes.paginatorInfo.currentPage', data), [data]);
 
-    useEffect(() => {
-        if (Array.isArray(articles)) {
-            setArticles(observable(articles));
-        }
-    }, [articles]);
-
     const renderItem = useCallback(({ item }) => {
         if (Helper.syncGetter('article', item)) {
-            return <PostItem post={item.article} />;
+            return <PostItem data={item.article} />;
         }
     }, []);
 
@@ -35,14 +28,15 @@ export default (props: any) => {
         <HFlatList
             {...props}
             bounces={false}
-            data={observableArticles}
+            data={likesData}
             refreshing={loading}
             refreshControl={<CustomRefreshControl onRefresh={refetch} />}
             keyExtractor={(item, index) => String(item.id || index)}
             renderItem={renderItem}
+            ItemSeparatorComponent={() => <View style={styles.separator} />}
             ListEmptyComponent={
                 !loading &&
-                observableArticles && (
+                likesData && (
                     <StatusView.EmptyView
                         title="TA还没有作品"
                         imageSource={require('@app/assets/images/default_empty.png')}
@@ -56,11 +50,11 @@ export default (props: any) => {
                             page: currentPage + 1,
                         },
                         updateQuery: (prev: any, { fetchMoreResult: more }) => {
-                            if (more && more.articles) {
+                            if (more && more.likes) {
                                 return {
-                                    articles: {
-                                        ...more.articles,
-                                        data: [...prev.articles.data, ...more.articles.data],
+                                    likes: {
+                                        ...more.likes,
+                                        data: [...prev.likes.data, ...more.likes.data],
                                     },
                                 };
                             }
@@ -72,3 +66,11 @@ export default (props: any) => {
         />
     );
 };
+
+const styles = StyleSheet.create({
+    separator: {
+        marginHorizontal: pixel(14),
+        height: pixel(1),
+        backgroundColor: '#f4f4f4',
+    },
+});
