@@ -2,8 +2,6 @@
 
 echo "打包时记得修改这里的路径..."
 pwd
-# coderoot="/data/app/yinxiangshipin"
-
 
 # Bundle React Native app's code and image assets.
 # This script is supposed to be invoked as part of Xcode build process
