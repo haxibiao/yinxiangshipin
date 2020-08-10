@@ -71,7 +71,7 @@ const AccountLogin = () => {
                             style={styles.textCenter}
                             onPress={() => {
                                 // TODO: 这里可实现判断用户有无输入账号，有的话将其带入找回密码的输入框提升用户体验
-                                navigation.navigate('RetrievePassword');
+                                navigation.navigate('获取验证码');
                             }}>
                             <Text style={styles.aColor}>忘记密码？</Text>
                         </TouchableOpacity>

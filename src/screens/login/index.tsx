@@ -199,7 +199,7 @@ export default observer((props: any) => {
                                 <Text style={styles.grayText}>一键登录</Text>
                             </Row>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => navigation.navigate('RetrievePassword')}>
+                        <TouchableOpacity onPress={() => navigation.navigate('获取验证码')}>
                             <Text style={styles.grayText}>找回密码？</Text>
                         </TouchableOpacity>
                     </View>
