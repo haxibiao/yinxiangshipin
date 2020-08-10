@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
         borderBottomColor: Theme.lightBorderColor,
     },
     textInput: {
-        fontSize: font(16),
+        fontSize: 16,
         color: Theme.primaryFontColor,
         padding: 0,
         height: 50,

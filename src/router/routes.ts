@@ -6,6 +6,9 @@ import EditPost from '../screens/creation/EditPost';
 import LoginScreen from '../screens/login';
 import RetrievePasswordScreen from '../screens/login/RetrievePasswordScreen';
 import VerificationScreen from '../screens/login/VerificationScreen';
+import AccountLoginScreen from '../screens/login/AccountLogin';
+import LoginHelpScreen from '../screens/login/loginHelp';
+import MobileLoginScreen from '../screens/login/MobileLogin';
 
 // wallet
 import Wallet from '../screens/wallet';
@@ -72,6 +75,15 @@ import CommonQuestionScreen from '../screens/settings/CommonQuestionScreen'; // 
 export default {
     Login: {
         component: LoginScreen,
+    },
+    AccountLogin: {
+        component: AccountLoginScreen,
+    },
+    MobileLogin: {
+        component: MobileLoginScreen,
+    },
+    LoginHelp: {
+        component: LoginHelpScreen,
     },
     CreatePost: {
         component: CreationScreen,

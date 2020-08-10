@@ -21,10 +21,6 @@ mutation setWalletPaymentInfoMutation($input: walletInput!) {
 mutation SendVerifyCodeMutation($phone: String!, $action: verifyType!) {
     sendVerifyCode(phone: $phone, action: $action) {
         id
-        user {
-            id
-            name
-        }
         code
         channel
     }

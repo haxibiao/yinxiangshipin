@@ -7,7 +7,7 @@ import { useMutation } from '@apollo/react-hooks';
 
 const RetrievePasswordScreen = (props: any) => {
     const route = useRoute();
-    const { phone } = route.params;
+    const { phone = '' } = route?.params || {};
     const navigation = useNavigation();
 
     const time = 59;
