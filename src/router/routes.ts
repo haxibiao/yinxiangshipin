@@ -67,6 +67,7 @@ import LogoutAccount from '../screens/settings/LogoutAccount';
 import CancellationAgreement from '../screens/settings/CancellationAgreement';
 import PhoneVerification from '../screens/settings/PhoneVerification';
 import VersionInformation from '../screens/settings/VersionInformation'; // 版本信息
+import CommonQuestionScreen from '../screens/settings/CommonQuestionScreen'; // 版本信息
 
 export default {
     Login: {
@@ -101,6 +102,9 @@ export default {
     },
     VersionInformation: {
         component: VersionInformation,
+    },
+    CommonQuestion: {
+        component: CommonQuestionScreen,
     },
     CommentNotification: {
         component: CommentsScreen,
@@ -166,7 +170,7 @@ export default {
     喜欢: {
         component: LikedArticlesScreen,
     },
-    找回密码: {
+    RetrievePassword: {
         component: RetrievePasswordScreen,
     },
     获取验证码: {
@@ -206,7 +210,7 @@ export default {
     PhoneVerification: {
         component: PhoneVerification,
     },
-    UserBlockcomponent: {
+    UserBlockList: {
         component: UserBlockScreen,
     },
     Search: {

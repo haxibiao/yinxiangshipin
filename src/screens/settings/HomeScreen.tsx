@@ -83,7 +83,7 @@ const index = (props: any) => {
                         />
                         <ItemSeparator />
                         <ListItem
-                            onPress={() => navigation.navigate('UserBlockScreen')}
+                            onPress={() => navigation.navigate('UserBlockList')}
                             style={styles.listItem}
                             leftComponent={<Text style={styles.itemText}> 黑名单 </Text>}
                             rightComponent={<Iconfont name="right" size={pixel(14)} color={Theme.subTextColor} />}
