@@ -10,7 +10,7 @@ import { Commodity } from '../../widget';
 import { font, pixel } from '../../helper';
 
 // 109
-export default observer(props => {
+export default observer((props) => {
     const { media, index, store } = props;
     const viewable = index === store.viewableItemIndex;
     const navigation = useNavigation();
@@ -23,9 +23,9 @@ export default observer(props => {
     }, []);
 
     const resizeMode = useMemo(() => {
-        const videoHeight = media?.video.width;
-        const videoWidth = media?.video.height;
-        return videoHeight < videoWidth ? 'contain' : 'cover';
+        const videoHeight = media?.width;
+        const videoWidth = media?.height;
+        return videoWidth / videoHeight < 1 ? 'cover' : 'contain';
     }, [media]);
 
     const videoCover = useMemo(() => {

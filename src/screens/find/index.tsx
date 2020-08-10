@@ -16,7 +16,7 @@ export default observer(() => {
 
     return (
         <PageContainer
-            title="动态广场"
+            title="动态"
             isTopNavigator={true}
             rightView={
                 <TouchableWithoutFeedback onPress={searchHandle}>

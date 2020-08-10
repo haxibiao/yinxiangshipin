@@ -23,7 +23,7 @@ const FollowButton = (props: Props) => {
     if (followed) {
         title = '已关注';
         textColor = activeColor;
-        backgroundColor = '#888888';
+        backgroundColor = '#b2b2b2';
     } else {
         title = '关注';
         textColor = tintColor;
@@ -90,7 +90,7 @@ const FollowButton = (props: Props) => {
 
 FollowButton.defaultProps = {
     activeOpacity: 0.6,
-    activeColor: Theme.subTextColor,
+    activeColor: '#fff',
     tintColor: '#fff',
 };
 
