@@ -9,6 +9,7 @@ import * as WeChat from 'react-native-wechat-lib';
 import useReport from './useReport';
 import TouchFeedback from '../Basic/TouchFeedback';
 import ShareIOS from 'react-native-share';
+import * as QQAPI from 'react-native-qq';
 
 const MoreOperation = (props: any) => {
     const shareLink = useRef();
@@ -259,13 +260,29 @@ const MoreOperation = (props: any) => {
             return;
         }
 
-        const callback = await Share.shareTextToQQ(link);
+        QQAPI.shareToQQ({
+            type: 'news',
+            title: (Config.AppName ? '我在' + Config.AppName : '') + '发现一个很有意思的内容，分享给你看看',
+            description: target.description,
+            webpageUrl: Config.ServerRoot + `/share/post/${target.id}?user_id=${userStore.me.id}`,
+            imageUrl: Config.ServerRoot + `/logo/${Config.Name}.com.png`,
+        }).then((data: any) => {
+            console.log('data', data);
+        });
 
-        if (!callback) {
-            Toast.show({
-                content: '请先安装QQ客户端',
-            });
-        }
+        // const callback = await QQAPI.shareToQQ({
+        //     type: 'news',
+        //     title: '',
+        //     description: target.body,
+        //     webpageUrl: Config.ServerRoot + `/share/post/${target.id}?user_id=${userStore.me.id}`,
+        //     imageUrl: Config.ServerRoot + `/logo/${Config.Name}.com.png`,
+        // });
+
+        // if (!callback) {
+        //     Toast.show({
+        //         content: '请先安装QQ客户端',
+        //     });
+        // }
     }, []);
 
     const shareToWeiBo = useCallback(async () => {
@@ -273,21 +290,19 @@ const MoreOperation = (props: any) => {
         const link = await fetchShareLink();
         // Clipboard.setString(link);
 
-        if (Device.IOS) {
-            ShareIOS.open({
-                title: '分享给朋友',
-                url: Config.ServerRoot + `/share/post/${target.id}?user_id=${userStore.me.id}`,
-            });
-            return;
-        }
+        // 微博分享先用系统分享方案代替
+        ShareIOS.open({
+            title: '分享给朋友',
+            url: Config.ServerRoot + `/share/post/${target.id}?user_id=${userStore.me.id}`,
+        });
 
-        const callback = await Share.shareToSinaFriends(link);
+        // const callback = await Share.shareToSinaFriends(link);
 
-        if (!callback) {
-            Toast.show({
-                content: '请先安装微博客户端',
-            });
-        }
+        // if (!callback) {
+        //     Toast.show({
+        //         content: '请先安装微博客户端',
+        //     });
+        // }
     }, []);
 
     const shareToQQZone = useCallback(async () => {
@@ -304,13 +319,23 @@ const MoreOperation = (props: any) => {
             return;
         }
 
-        const callback = await Share.shareImageToQQZone(link);
+        QQAPI.shareToQzone({
+            type: 'news',
+            title: target.description,
+            description: (Config.AppName ? '我在' + Config.AppName : '') + '发现一个很有意思的内容，分享给你看看',
+            webpageUrl: Config.ServerRoot + `/share/post/${target.id}?user_id=${userStore.me.id}`,
+            imageUrl: Config.ServerRoot + `/logo/${Config.Name}.com.png`,
+        }).then((data: any) => {
+            console.log('data', data);
+        });
 
-        if (!callback) {
-            Toast.show({
-                content: '请先安装QQ空间客户端',
-            });
-        }
+        // const callback = await Share.shareImageToQQZone(link);
+
+        // if (!callback) {
+        //     Toast.show({
+        //         content: '请先安装QQ空间客户端',
+        //     });
+        // }
     }, []);
 
     const share = useMemo(
