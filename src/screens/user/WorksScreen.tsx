@@ -14,9 +14,9 @@ export default () => {
     return (
         <PageContainer title="个人动态">
             <QueryList
-                gqlDocument={GQL.userPostsQuery}
-                dataOptionChain="userPosts.data"
-                paginateOptionChain="userPosts.paginatorInfo"
+                gqlDocument={GQL.postsQuery}
+                dataOptionChain="posts.data"
+                paginateOptionChain="posts.paginatorInfo"
                 options={{
                     variables: {
                         user_id: route?.params?.user?.id,
@@ -35,7 +35,7 @@ export default () => {
 const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
-        paddingBottom: Theme.BOTTOM_HEIGHT,
+        paddingBottom: Theme.HOME_INDICATOR_HEIGHT,
     },
     separator: {
         marginHorizontal: pixel(14),
