@@ -13,6 +13,7 @@ export default function MainTabNavigator() {
     return (
         <Tab.Navigator
             initialRouteName="Home"
+            lazy={false}
             tabBar={(props: any) => (
                 <BottomTabBar {...props} safeAreaInsets={{ bottom: Theme.HOME_INDICATOR_HEIGHT }} />
             )}>

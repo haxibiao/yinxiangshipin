@@ -2,12 +2,9 @@
 query unreadsQuery {
     me {
         id
-        unread_chat
         unread_comments
         unread_likes
         unread_follows
-        unread_requests
-        unread_tips
         unread_others
     }
 }
@@ -22,18 +19,17 @@ query commentNotificationQuery($page: Int) {
         data {
             id
             type
-            time_ago
             created_at
             article {
                 id
                 type
                 body
                 description
-                time_ago
+                created_at
                 cover
                 hits
                 count_likes
-                count_replies
+                count_comments
                 count_tips
                 liked
                 user {
@@ -69,7 +65,7 @@ query commentNotificationQuery($page: Int) {
                 id
                 body
                 lou
-                time_ago
+                created_at
                 user {
                     id
                     avatar
@@ -96,17 +92,17 @@ query likeNotificationsQuery($page: Int) {
         data {
             id
             type
-            time_ago
+            created_at
             article {
                 id
                 type
                 body
                 description
-                time_ago
+                created_at
                 cover
                 hits
                 count_likes
-                count_replies
+                count_comments
                 count_tips
                 liked
                 user {
@@ -142,7 +138,7 @@ query likeNotificationsQuery($page: Int) {
                 id
                 body
                 lou
-                time_ago
+                created_at
                 user {
                     id
                     avatar
@@ -169,87 +165,12 @@ query followersNotificationsQuery($page: Int) {
         data {
             id
             type
-            time_ago
             created_at
             comment {
                 id
                 body
                 lou
-                time_ago
-                user {
-                    id
-                    avatar
-                    name
-                }
-            }
-            user {
-                id
-                name
-                avatar
-                followed_status
-            }
-        }
-    }
-}
-
-# 打赏通知
-query tipNotificationsQuery($page: Int) {
-    notifications(type: ARTICLE_TIPED, page: $page) {
-        paginatorInfo {
-            currentPage
-            hasMorePages
-        }
-        data {
-            id
-            type
-            time_ago
-            created_at
-            article {
-                id
-                type
-                body
-                description
-                time_ago
-                cover
-                hits
-                count_likes
-                count_replies
-                count_tips
-                liked
-                user {
-                    avatar
-                    name
-                    id
-                }
-                category {
-                    id
-                    name
-                    logo
-                }
-                images {
-                    id
-                    url
-                    width
-                    height
-                }
-                video {
-                    id
-                    url
-                    duration
-                    info {
-                        width
-                        height
-                        rotate
-                        covers
-                    }
-                    cover_url
-                }
-            }
-            comment {
-                id
-                body
-                lou
-                time_ago
+                created_at
                 user {
                     id
                     avatar
@@ -276,18 +197,17 @@ query otherNotificationsQuery($page: Int) {
         data {
             id
             type
-            time_ago
             created_at
             article {
                 id
                 type
                 body
                 description
-                time_ago
+                created_at
                 cover
                 hits
                 count_likes
-                count_replies
+                count_comments
                 count_tips
                 liked
                 user {
@@ -323,7 +243,7 @@ query otherNotificationsQuery($page: Int) {
                 id
                 body
                 lou
-                time_ago
+                created_at
                 user {
                     id
                     avatar

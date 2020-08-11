@@ -242,12 +242,10 @@ export default observer(
                             activeTintColor={activeTintColor}
                             inactiveTintColor={inactiveTintColor}
                         />
-                        {/* <Text style={[styles.label, { color }]}>{tabBarLabel}</Text> */}
-                        {route.tabBarLabel === '通知' && (
-                            <View style={styles.pstBadge}>
-                                <Badge count={appStore.unreadMessages} />
-                            </View>
-                        )}
+                        <Text style={[styles.label, { color: state.index === 0 ? '#fff' : '#2b2b2b' }]}>
+                            {tabBarLabel}
+                        </Text>
+                        {tabBarLabel === '通知' && appStore.unreadMessages > 0 && <View style={styles.pstBadge} />}
                     </TouchableOpacity>
                 );
             });
@@ -390,5 +388,14 @@ const styles = StyleSheet.create({
     label: {
         fontSize: font(10),
         marginTop: pixel(2),
+    },
+    pstBadge: {
+        position: 'absolute',
+        top: pixel(5),
+        right: pixel(20),
+        width: pixel(4),
+        height: pixel(4),
+        borderRadius: pixel(2),
+        backgroundColor: '#FE1966',
     },
 });
