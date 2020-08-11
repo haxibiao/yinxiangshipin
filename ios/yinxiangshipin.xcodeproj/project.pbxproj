@@ -20,7 +20,6 @@
 		6F42A43FDD70761D546D9EA6 /* libPods-yinxiangshipin-yinxiangshipinTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B09FDEAD5F1389DC298854C /* libPods-yinxiangshipin-yinxiangshipinTests.a */; };
 		A7909FB724D98C6800AFF6B4 /* iconfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A7909FB524D9854500AFF6B4 /* iconfont.ttf */; };
 		B8412254E36DF95A131B3435 /* libPods-yinxiangshipin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B3A7EB732C95F811D978C605 /* libPods-yinxiangshipin.a */; };
-		DBAAD32082B945709D44690B /* libRCTQQAPI.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84FA438D2CEB4C0FA9B17A2A /* libRCTQQAPI.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,8 +54,10 @@
 		2D02E47B1E0B4A5D006451C7 /* yinxiangshipin-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "yinxiangshipin-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* yinxiangshipin-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "yinxiangshipin-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4266E84C428B718FC7D27182 /* libPods-yinxiangshipin-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-yinxiangshipin-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6DF29F8D65624224A7C1D9D7 /* RCTQQAPI.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RCTQQAPI.xcodeproj; path = "../node_modules/react-native-qq/ios/RCTQQAPI.xcodeproj"; sourceTree = "<group>"; };
 		70902B8BFA0ED943F4246EDD /* Pods-yinxiangshipin-yinxiangshipinTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-yinxiangshipin-yinxiangshipinTests.release.xcconfig"; path = "Target Support Files/Pods-yinxiangshipin-yinxiangshipinTests/Pods-yinxiangshipin-yinxiangshipinTests.release.xcconfig"; sourceTree = "<group>"; };
 		8118178E613FA60C67EAC289 /* Pods-yinxiangshipin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-yinxiangshipin.release.xcconfig"; path = "Target Support Files/Pods-yinxiangshipin/Pods-yinxiangshipin.release.xcconfig"; sourceTree = "<group>"; };
+		84FA438D2CEB4C0FA9B17A2A /* libRCTQQAPI.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRCTQQAPI.a; sourceTree = "<group>"; };
 		89C7653939B73E81ABFACB3D /* Pods-yinxiangshipin-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-yinxiangshipin-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-yinxiangshipin-tvOSTests/Pods-yinxiangshipin-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		9272FB4D2B61A6ED08482763 /* Pods-yinxiangshipin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-yinxiangshipin.debug.xcconfig"; path = "Target Support Files/Pods-yinxiangshipin/Pods-yinxiangshipin.debug.xcconfig"; sourceTree = "<group>"; };
 		9CB38DC422BD6C3CCBD99722 /* Pods-yinxiangshipin-yinxiangshipinTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-yinxiangshipin-yinxiangshipinTests.debug.xcconfig"; path = "Target Support Files/Pods-yinxiangshipin-yinxiangshipinTests/Pods-yinxiangshipin-yinxiangshipinTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -67,8 +68,6 @@
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		FB0B8EA03E0ABB6373E5CCCE /* Pods-yinxiangshipin-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-yinxiangshipin-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-yinxiangshipin-tvOSTests/Pods-yinxiangshipin-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
-		6DF29F8D65624224A7C1D9D7 /* RCTQQAPI.xcodeproj */ = {isa = PBXFileReference; name = "RCTQQAPI.xcodeproj"; path = "../node_modules/react-native-qq/ios/RCTQQAPI.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
-		84FA438D2CEB4C0FA9B17A2A /* libRCTQQAPI.a */ = {isa = PBXFileReference; name = "libRCTQQAPI.a"; path = "libRCTQQAPI.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,7 +84,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				B8412254E36DF95A131B3435 /* libPods-yinxiangshipin.a in Frameworks */,
-				DBAAD32082B945709D44690B /* libRCTQQAPI.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -153,6 +151,7 @@
 		3486266024DD582D00BB46EE /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
+				84FA438D2CEB4C0FA9B17A2A /* libRCTQQAPI.a */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -484,7 +483,6 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-yinxiangshipin-yinxiangshipinTests/Pods-yinxiangshipin-yinxiangshipinTests-resources.sh",
-				"${PODS_ROOT}/Bytedance-UnionAD/Bytedance-UnionAd/Frameworks/BUAdSDK.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/RNImageCropPicker/QBImagePicker.bundle",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
@@ -507,7 +505,6 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/BUAdSDK.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/QBImagePicker.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AntDesign.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Entypo.ttf",
@@ -540,7 +537,6 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-yinxiangshipin/Pods-yinxiangshipin-resources.sh",
-				"${PODS_ROOT}/Bytedance-UnionAD/Bytedance-UnionAd/Frameworks/BUAdSDK.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/RNImageCropPicker/QBImagePicker.bundle",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
@@ -563,7 +559,6 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/BUAdSDK.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/QBImagePicker.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AntDesign.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Entypo.ttf",
@@ -773,10 +768,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = X85LW9Z5T4;
 				ENABLE_BITCODE = NO;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(SRCROOT)/../node_modules/react-native-qq/ios/RCTQQAPI/**",
-				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = yinxiangshipin/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -804,10 +796,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = X85LW9Z5T4;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(SRCROOT)/../node_modules/react-native-qq/ios/RCTQQAPI/**",
-				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = yinxiangshipin/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (

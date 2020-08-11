@@ -9,7 +9,7 @@ import * as WeChat from 'react-native-wechat-lib';
 import useReport from './useReport';
 import TouchFeedback from '../Basic/TouchFeedback';
 import ShareIOS from 'react-native-share';
-import * as QQAPI from 'react-native-qq';
+// import * as QQAPI from 'react-native-qq';
 
 const MoreOperation = (props: any) => {
     const shareLink = useRef();
@@ -252,23 +252,24 @@ const MoreOperation = (props: any) => {
         // const openUrl = "mqqapi://share/to_fri?file_type=news&src_type=web&version=1&generalpastboard=1&share_id=1107845270&url="+ baseurl +"&previewimageUrl=" + baseimage + "&image_url=" + baseimage + "&title=" + basetitle + "&description=" + basedesc + "&callback_type=scheme&thirdAppDisplayName=UVE=&app_name=UVE=&cflag=0&shareType=0";
         // Linking.openURL(openUrl);
         const link = await fetchShareLink();
-        if (Device.IOS) {
-            ShareIOS.open({
-                title: '分享给朋友',
-                url: Config.ServerRoot + `/share/post/${target.id}?user_id=${userStore.me.id}`,
-            });
-            return;
-        }
 
-        QQAPI.shareToQQ({
-            type: 'news',
-            title: (Config.AppName ? '我在' + Config.AppName : '') + '发现一个很有意思的内容，分享给你看看',
-            description: target.description,
-            webpageUrl: Config.ServerRoot + `/share/post/${target.id}?user_id=${userStore.me.id}`,
-            imageUrl: Config.ServerRoot + `/logo/${Config.Name}.com.png`,
-        }).then((data: any) => {
-            console.log('data', data);
+        // if (Device.IOS) {
+        ShareIOS.open({
+            title: '分享给朋友',
+            url: Config.ServerRoot + `/share/post/${target.id}?user_id=${userStore.me.id}`,
         });
+        return;
+        // }
+
+        // QQAPI.shareToQQ({
+        //     type: 'news',
+        //     title: (Config.AppName ? '我在' + Config.AppName : '') + '发现一个很有意思的内容，分享给你看看',
+        //     description: target.description,
+        //     webpageUrl: Config.ServerRoot + `/share/post/${target.id}?user_id=${userStore.me.id}`,
+        //     imageUrl: Config.ServerRoot + `/logo/${Config.Name}.com.png`,
+        // }).then((data: any) => {
+        //     console.log('data', data);
+        // });
 
         // const callback = await QQAPI.shareToQQ({
         //     type: 'news',
@@ -311,23 +312,23 @@ const MoreOperation = (props: any) => {
         // Clipboard.setString(link);
 
         // 先简单拦截一下 IOS 的分享操作
-        if (Device.IOS) {
-            ShareIOS.open({
-                title: '分享给朋友',
-                url: Config.ServerRoot + `/share/post/${target.id}?user_id=${userStore.me.id}`,
-            });
-            return;
-        }
-
-        QQAPI.shareToQzone({
-            type: 'news',
-            title: target.description,
-            description: (Config.AppName ? '我在' + Config.AppName : '') + '发现一个很有意思的内容，分享给你看看',
-            webpageUrl: Config.ServerRoot + `/share/post/${target.id}?user_id=${userStore.me.id}`,
-            imageUrl: Config.ServerRoot + `/logo/${Config.Name}.com.png`,
-        }).then((data: any) => {
-            console.log('data', data);
+        // if (Device.IOS) {
+        ShareIOS.open({
+            title: '分享给朋友',
+            url: Config.ServerRoot + `/share/post/${target.id}?user_id=${userStore.me.id}`,
         });
+        return;
+        // }
+
+        // QQAPI.shareToQzone({
+        //     type: 'news',
+        //     title: target.description,
+        //     description: (Config.AppName ? '我在' + Config.AppName : '') + '发现一个很有意思的内容，分享给你看看',
+        //     webpageUrl: Config.ServerRoot + `/share/post/${target.id}?user_id=${userStore.me.id}`,
+        //     imageUrl: Config.ServerRoot + `/logo/${Config.Name}.com.png`,
+        // }).then((data: any) => {
+        //     console.log('data', data);
+        // });
 
         // const callback = await Share.shareImageToQQZone(link);
 

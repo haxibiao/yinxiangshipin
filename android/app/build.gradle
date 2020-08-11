@@ -141,9 +141,6 @@ android {
         versionName appConfigJson.Version
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
-        manifestPlaceholders = [
-            QQ_APPID: "1110791376"
-        ]
     }
     splits {
         abi {
