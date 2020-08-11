@@ -28,9 +28,9 @@ export default observer((props: any) => {
     };
 
     const saveAvatar = (imagePath: any) => {
-        if (Platform.OS === 'ios') {
-            return userStore.changeProfile({ avatar: imagePath });
-        }
+        // if (Platform.OS === 'ios') {
+        //     return userStore.changeProfile({ avatar: imagePath });
+        // }
         const { token } = userStore.me;
         const data = new FormData();
         data.append('avatar', {
@@ -51,7 +51,9 @@ export default observer((props: any) => {
             .then((res) => {
                 userStore.changeProfile({ avatar: res });
             })
-            .catch((err) => {});
+            .catch((err) => {
+                console.warn('err', err);
+            });
     };
 
     const _changeAvatar = () => {
