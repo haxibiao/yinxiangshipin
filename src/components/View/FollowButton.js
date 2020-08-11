@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { useCallback } from 'react';
 import { StyleSheet, View, Text, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { GQL, useMutation } from '@src/apollo';
+import { GQL, useFollowMutation, errorMessage } from '@src/apollo';
 import { userStore } from '@src/store';
 import Iconfont from '../Iconfont';
 
@@ -15,10 +15,9 @@ type Props = {
 };
 
 const FollowButton = (props: Props) => {
+    const { id, activeColor, tintColor, followedStatus, ...others } = props;
     const navigation = useNavigation();
-    const [followed, setfollowed] = React.useState(props.followedStatus ? true : false);
-    const { id, activeColor, tintColor, ...others } = props;
-    let { style, titleStyle } = props;
+    const [followed, setFollowed] = React.useState(!!followedStatus);
     let title, backgroundColor, textColor;
     if (followed) {
         title = '已关注';
@@ -29,34 +28,22 @@ const FollowButton = (props: Props) => {
         textColor = tintColor;
         backgroundColor = Theme.secondaryColor;
     }
-
-    style = {
+    const style = {
         backgroundColor,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        ...style,
+        ...props.style,
     };
 
-    titleStyle = {
+    const titleStyle = {
         fontSize: font(13),
         color: textColor,
         overflow: 'hidden',
-        ...titleStyle,
+        ...props.titleStyle,
     };
 
-    const onFollowHandler = () => {
-        // console.log('触发');
-        if (!userStore.login) {
-            navigation.navigate('Login');
-        } else {
-            // console.log('true');
-            setfollowed(!followed);
-            follow();
-        }
-    };
-
-    const [follow] = useMutation(GQL.followUserMutation, {
+    const followUser = useFollowMutation({
         variables: {
             id,
         },
@@ -71,9 +58,18 @@ const FollowButton = (props: Props) => {
             },
         ],
         onError: (error: any) => {
-            Toast.show({ content: '操作失败', layout: 'top' });
+            Toast.show({ content: errorMessage(error) || '关注失败', layout: 'top' });
         },
     });
+
+    const onFollowHandler = useCallback(() => {
+        if (!userStore.login) {
+            navigation.navigate('Login');
+        } else {
+            setFollowed((f) => !f);
+            followUser();
+        }
+    }, [followUser]);
 
     if (userStore.me.id === props.id) {
         return null;
@@ -81,6 +77,14 @@ const FollowButton = (props: Props) => {
 
     return (
         <TouchableOpacity {...others} style={style} onPress={onFollowHandler}>
+            {!followed && (
+                <Iconfont
+                    name="iconfontadd"
+                    size={titleStyle.fontSize}
+                    color={titleStyle.color}
+                    style={{ marginRight: titleStyle.fontSize / 2 }}
+                />
+            )}
             <Text style={titleStyle} numberOfLines={1}>
                 {title}
             </Text>

@@ -11,8 +11,7 @@ import {
     TextStyle,
     ViewStyle,
 } from 'react-native';
-
-import { HxfButton, FollowButton, Row, Iconfont, NavigatorBar, MoreOperation, GenderLabel } from '@src/components';
+import { FollowButton, Row, Iconfont, MoreOperation, GenderLabel } from '@src/components';
 import { GQL, useQuery, useApolloClient, ApolloProvider } from '@src/apollo';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { userStore, observer } from '@src/store';
@@ -25,10 +24,8 @@ export default observer((props: { user: any; titleStyle: TextStyle; contentStyle
     const { data: userQueryResult } = useQuery(GQL.userQuery, {
         variables: { id: user.id },
     });
-    const isSelf = userStore.me.id === user.id;
-    const profile = useMemo(() => Helper.syncGetter('user', userQueryResult), [userQueryResult]);
-
-    const userData = profile || user;
+    const isSelf = useMemo(() => userStore.me.id === user.id, []);
+    const userProfile = useMemo(() => userQueryResult?.user || user, [userQueryResult]);
 
     const showMoreOperation = useCallback(() => {
         let overlayRef: any;
@@ -42,16 +39,27 @@ export default observer((props: { user: any; titleStyle: TextStyle; contentStyle
                     <MoreOperation
                         onPressIn={() => overlayRef.close()}
                         navigation={navigation}
-                        target={user}
+                        target={userProfile}
                         options={['举报', '拉黑']}
                         type="user"
-                        // deleteCallback={() => startAnimation(1, 0)}
                     />
                 </ApolloProvider>
             </Overlay.PullView>
         );
         Overlay.show(MoreOperationOverlay);
-    }, [client, user]);
+    }, [client, userProfile]);
+
+    const withChat = useCallback(() => {
+        if (TOKEN) {
+            navigation.navigate('Chat', {
+                chat: {
+                    withUser: { ...userProfile },
+                },
+            });
+        } else {
+            navigation.navigate('Login');
+        }
+    }, [userProfile]);
 
     useEffect(() => {
         DeviceEventEmitter.addListener('userOperation', showMoreOperation);
@@ -68,55 +76,50 @@ export default observer((props: { user: any; titleStyle: TextStyle; contentStyle
                 style={styles.userProfileBg}>
                 <View style={styles.mask} />
                 <View style={styles.content}>
-                    <View style={{ flex: 1 }}>
-                        <View style={{ marginTop: 5, flexDirection: 'row', alignItems: 'center' }}>
-                            <View>
-                                <Text style={styles.userName} numberOfLines={1}>
-                                    {userData.name}
-                                </Text>
-                            </View>
-                            {isSelf && (
-                                <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}>
-                                    <View
-                                        style={{
-                                            borderRadius: 8,
-                                            backgroundColor: '#FFF',
-                                            justifyContent: 'center',
-                                            alignContent: 'center',
-                                            alignItems: 'center',
-                                            paddingHorizontal: 10,
-                                            paddingVertical: 3,
-                                        }}>
-                                        <Text style={{ color: '#05F' }}>编辑</Text>
-                                    </View>
-                                </TouchableOpacity>
-                            )}
-                        </View>
-                        <View style={{ marginTop: 15, marginRight: 20 }}>
-                            <Text style={styles.introduction} numberOfLines={2}>
-                                {userData.introduction ? userData.introduction : '这个人不是很勤快的亚子，啥也没留下…'}
-                            </Text>
-                        </View>
-                    </View>
-
-                    <View
-                        style={{
-                            paddingBottom: 15,
-                            justifyContent: 'center',
-                            alignContent: 'center',
-                            alignItems: 'center',
-                        }}>
+                    <View style={styles.userAvatar}>
                         <Image
                             source={{
-                                uri: userData.avatar,
+                                uri: userProfile.avatar,
                             }}
-                            style={[styles.avatar, { marginBottom: 10 }]}
+                            style={styles.avatar}
                         />
-                        <GenderLabel user={userData} />
+                        {isSelf ? (
+                            <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}>
+                                <View style={[styles.hollowButton, { borderRadius: pixel(5) }]}>
+                                    <Text style={styles.hollowButtonText}>编辑</Text>
+                                </View>
+                            </TouchableOpacity>
+                        ) : (
+                            <Row>
+                                <TouchableOpacity
+                                    style={[styles.hollowButton, { marginRight: pixel(15) }]}
+                                    onPress={withChat}>
+                                    <Text style={styles.hollowButtonText}>聊天</Text>
+                                </TouchableOpacity>
+                                <FollowButton
+                                    id={userProfile.id}
+                                    followedStatus={userProfile.followed_status}
+                                    style={styles.hollowButton}
+                                    titleStyle={styles.hollowButtonText}
+                                />
+                            </Row>
+                        )}
+                    </View>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <Text style={styles.userName} numberOfLines={1}>
+                            {userProfile.name}
+                        </Text>
+                        <GenderLabel user={userProfile} />
+                    </View>
+                    <View style={{ marginTop: pixel(15) }}>
+                        <Text style={styles.introduction} numberOfLines={2}>
+                            {userProfile.introduction
+                                ? userProfile.introduction
+                                : '这个人不是很勤快的亚子，啥也没留下…'}
+                        </Text>
                     </View>
                 </View>
             </ImageBackground>
-
             {/* 用户页面顶部操作栏 */}
             <View style={styles.navBarStyle}>
                 <TouchableOpacity
@@ -127,11 +130,11 @@ export default observer((props: { user: any; titleStyle: TextStyle; contentStyle
                     style={styles.navBarButton}>
                     <Iconfont name="zuojiantou" color={'#fff'} size={pixel(22)} />
                 </TouchableOpacity>
-                <Animated.View style={[styles.navBarTitle, titleStyle]}>
-                    {/* <Text style={styles.titleText} numberOfLines={1}>
-                        {userData.name}
+                {/* <Animated.View style={[styles.navBarTitle, titleStyle]}> */}
+                {/* <Text style={styles.titleText} numberOfLines={1}>
+                        {userProfile.name}
                     </Text> */}
-                </Animated.View>
+                {/* </Animated.View> */}
                 {isSelf ? (
                     <View style={[styles.navBarButton, { opacity: 0 }]}>
                         <Iconfont name="qita1" size={pixel(21)} color={'#fff'} />
@@ -145,23 +148,6 @@ export default observer((props: { user: any; titleStyle: TextStyle; contentStyle
         </View>
     );
 });
-
-{
-    /* <Iconfont
-    name={userData.gender === '男' ? 'nan1' : 'nv'}
-    size={font(17)}
-    color={user.gender === '男' ? Theme.boy : Theme.girl}
-    style={{
-        backgroundColor: '#FFF',
-        borderRadius: pixel(24),
-        position: 'absolute',
-        right: 0,
-        left: 0,
-        bottom: 0,
-        top: 0,
-    }}
-/> */
-}
 
 const styles = StyleSheet.create({
     profileContainer: {
@@ -178,19 +164,65 @@ const styles = StyleSheet.create({
     },
     content: {
         flex: 1,
-        flexDirection: 'row',
-        paddingHorizontal: pixel(Theme.itemSpace),
+        paddingHorizontal: pixel(15),
         paddingTop: pixel(Theme.NAVBAR_HEIGHT + Theme.statusBarHeight + 10),
+        paddingBottom: pixel(15),
     },
-    contentTop: {
+    userAvatar: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+        marginBottom: pixel(15),
     },
-    contentBottom: {
-        flex: 1,
-        justifyContent: 'space-between',
-        paddingVertical: pixel(Theme.itemSpace),
+    avatar: {
+        width: pixel(70),
+        height: pixel(70),
+        borderColor: '#FFF',
+        borderRadius: pixel(84),
+        borderWidth: pixel(2),
+    },
+    hollowButton: {
+        paddingHorizontal: pixel(22),
+        height: pixel(36),
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: pixel(1),
+        borderRadius: pixel(18),
+        borderColor: '#fff',
+        backgroundColor: 'transparent',
+    },
+    hollowButtonText: {
+        color: '#fff',
+        fontSize: font(15),
+        lineHeight: font(18),
+    },
+    userName: {
+        marginRight: pixel(10),
+        color: '#fff',
+        fontSize: font(20),
+        fontWeight: 'bold',
+    },
+    introduction: {
+        color: '#fff',
+        fontSize: font(15),
+    },
+    metaList: {
+        flexDirection: 'row',
+    },
+    metaItem: {
+        alignItems: 'baseline',
+        flexDirection: 'row',
+        marginRight: pixel(Theme.itemSpace),
+    },
+    metaText: {
+        color: '#fff',
+        fontSize: font(12),
+    },
+    metaCountText: {
+        color: '#fff',
+        fontSize: font(16),
+        fontWeight: 'bold',
+        marginRight: pixel(5),
     },
     navBarStyle: {
         position: 'absolute',
@@ -209,50 +241,10 @@ const styles = StyleSheet.create({
         paddingHorizontal: pixel(Theme.itemSpace),
         justifyContent: 'center',
     },
-    avatar: {
-        width: pixel(70),
-        height: pixel(70),
-        borderColor: '#FFF',
-        borderRadius: pixel(84),
-        borderWidth: pixel(2),
-    },
-    editButton: {
-        borderRadius: pixel(5),
-        paddingHorizontal: pixel(16),
-        paddingVertical: pixel(8),
-    },
     followButton: {
         borderRadius: pixel(5),
         paddingHorizontal: pixel(16),
         paddingVertical: pixel(8),
-    },
-    introduction: {
-        color: '#fff',
-        fontSize: font(14),
-    },
-    metaCountText: {
-        color: '#fff',
-        fontSize: font(16),
-        fontWeight: 'bold',
-        marginRight: pixel(5),
-    },
-    metaItem: {
-        alignItems: 'baseline',
-        flexDirection: 'row',
-        marginRight: pixel(Theme.itemSpace),
-    },
-    metaList: {
-        flexDirection: 'row',
-    },
-    metaText: {
-        color: '#fff',
-        fontSize: font(12),
-    },
-    userName: {
-        color: '#fff',
-        fontSize: font(24),
-        marginRight: pixel(10),
-        fontWeight: 'bold',
     },
     navBarTitle: {
         alignSelf: 'center',

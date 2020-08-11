@@ -31,7 +31,7 @@ class GenderLabel extends Component {
 }
 
 const styles = StyleSheet.create({
-    image: { width: pixel(36), height: pixel(18), flexDirection: 'row' },
+    image: { width: pixel(40), height: pixel(20), flexDirection: 'row' },
 });
 
 export default GenderLabel;

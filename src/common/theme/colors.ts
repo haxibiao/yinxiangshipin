@@ -1,9 +1,9 @@
 // primary color
 const primaryColor = '#FE1966';
-const primaryColorRgb = '217,106,5';
+const primaryColorRgb = '254,25,102';
 // secondary color
 const secondaryColor = '#F76D64';
-const secondaryColorRgb = '217,106,5';
+const secondaryColorRgb = '247,109,100';
 // default text color
 const defaultTextColor = '#200706';
 

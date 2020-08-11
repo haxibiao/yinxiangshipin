@@ -1,17 +1,18 @@
 import { useMemo, useCallback } from 'react';
 import { GQL } from './gqls';
+import { errorMessage } from './errorMessage';
 import { useMutation } from '@apollo/react-hooks';
 interface Props {
-    variables: any;
+    options: any;
 }
 
-export const useFollowMutation = ({ variables }: Props) => {
-    const [followUser] = useMutation(GQL.followUserMutation, { variables });
+export const useFollowMutation = (options: Props) => {
+    const [followUser] = useMutation(GQL.followUserMutation, { ...options });
     const followHandler = useMemo(() => {
-        return __.debounce(async function() {
+        return __.debounce(async function () {
             const [error, result] = await Helper.exceptionCapture(followUser);
             if (error) {
-                Toast.show({ content: '操作失败' });
+                Toast.show({ content: errorMessage(error) || '操作失败' });
             }
         }, 500);
     }, [followUser]);

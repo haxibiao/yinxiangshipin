@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import {
     TouchableOpacity,
     Image,
@@ -15,7 +15,6 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { Iconfont, ScrollTabBar } from '@src/components';
 import { TabView } from '@src/components/ScrollHeaderTabView';
 import UserProfile from './components/UserProfile';
-import BottomBar from './components/BottomBar';
 import Posts from './components/Posts';
 import Likes from './components/Likes';
 
@@ -24,23 +23,28 @@ interface Props {
 }
 
 const index = (props: Props) => {
-    const [headerHeight, setHeaderHeight] = React.useState(pixel(200));
+    const [headerHeight, setHeaderHeight] = useState(pixel(250));
+    const [activeTabIndex, setActiveTabIndex] = useState(0);
     const navigation = useNavigation();
     const route = useRoute();
     const user = route.params?.user || {};
 
-    const headerOnLayout = (event: any) => {
+    const headerOnLayout = useCallback((event: any) => {
         const { height } = event.nativeEvent.layout;
         setHeaderHeight(height);
-    };
+    }, []);
 
-    const _renderScrollHeader = () => {
+    const _onChangeTab = useCallback((e: { from: number; curIndex: number }) => {
+        setActiveTabIndex(e.curIndex);
+    }, []);
+
+    const _renderScrollHeader = useCallback(() => {
         return (
             <View onLayout={headerOnLayout}>
                 <UserProfile user={user} />
             </View>
         );
-    };
+    }, []);
 
     const _renderNavBar = (animation: any): React.ReactElement => {
         const headerOpacity = animation.interpolate({
@@ -73,8 +77,6 @@ const index = (props: Props) => {
         );
     };
 
-    const _onChangeTab = (e: { from: number; curIndex: number }) => {};
-
     return (
         <View style={styles.container}>
             <View style={{ flex: 1, backgroundColor: '#FFF' }}>
@@ -88,11 +90,12 @@ const index = (props: Props) => {
                     renderTabBar={(tabBarProps: any) => (
                         <ScrollTabBar
                             {...tabBarProps}
-                            // hiddenUnderLine={true}
-                            tabWidth={pixel(64)}
+                            activeTab={activeTabIndex}
+                            style={styles.tabStyle}
+                            tabStyle={styles.tabBarStyle}
+                            tabWidth={tabWidth}
+                            tabUnderlineWidth={tabUnderlineWidth}
                             underlineStyle={styles.underlineStyle}
-                            tabStyle={styles.tabStyle}
-                            style={styles.tabBarStyle}
                             activeTextStyle={styles.activeTextStyle}
                             tintTextStyle={styles.tintTextStyle}
                         />
@@ -100,11 +103,10 @@ const index = (props: Props) => {
                     renderNavBar={_renderNavBar}
                     renderScrollHeader={_renderScrollHeader}
                     onChangeTab={_onChangeTab}>
-                    <Posts user={user} label="发布" style={{ flex: 1, backgroundColor: '#FFF' }} />
-                    <Likes user={user} label="喜欢" style={{ flex: 1, backgroundColor: '#FFF' }} />
+                    <Posts user={user} label="发布" style={styles.listContainer} />
+                    <Likes user={user} label="喜欢" style={styles.listContainer} />
                 </TabView>
             </View>
-            <BottomBar user={user} />
         </View>
     );
 };
@@ -112,7 +114,9 @@ const index = (props: Props) => {
 export default index;
 
 const NAV_BAR_HEIGHT = pixel(Theme.NAVBAR_HEIGHT + Theme.statusBarHeight);
-const RIGHT_VIEW_WIDTH = pixel(50);
+
+const tabWidth = Device.WIDTH / 2;
+const tabUnderlineWidth = pixel(20);
 
 const styles = StyleSheet.create({
     container: {
@@ -140,29 +144,34 @@ const styles = StyleSheet.create({
         color: '#000',
         fontSize: font(15),
     },
-    tabBarStyle: {
-        borderWidth: 0,
-        height: pixel(40),
-        backgroundColor: '#FFF',
-    },
     tabStyle: {
-        // marginRight: 0,
-        // marginRight: pixel(20),
+        height: pixel(40),
+        backgroundColor: 'rgba(255,255,255,1)',
+        borderBottomWidth: pixel(0.5),
+        borderColor: '#f0f0f0',
+        justifyContent: 'center',
+    },
+    tabBarStyle: {
+        flex: 1,
     },
     activeTextStyle: {
         color: '#212121',
-        fontSize: font(19),
+        fontSize: font(18),
         fontWeight: 'bold',
     },
     tintTextStyle: {
-        color: '#323232',
+        color: '#212121',
         fontSize: font(16),
     },
     underlineStyle: {
-        bottom: pixel(10),
-        // marginLeft: pixel(Theme.itemSpace),
-        height: pixel(7),
-        borderRadius: pixel(4),
-        backgroundColor: 'rgba(5,132,255,0.8)',
+        left: (tabWidth - tabUnderlineWidth) / 2,
+        bottom: pixel(1),
+        height: pixel(2),
+        borderRadius: pixel(1),
+        backgroundColor: 'rgba(254,25,102,0.8)',
+    },
+    listContainer: {
+        flex: 1,
+        backgroundColor: '#FFF',
     },
 });

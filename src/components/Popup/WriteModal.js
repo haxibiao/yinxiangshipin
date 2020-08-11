@@ -21,7 +21,7 @@ class WriteModal extends Component {
                         placeholder={placeholder}
                         placeholderText={Theme.tintFontColor}
                         onChangeText={changeVaule}
-                        maxLength={20}
+                        maxLength={18}
                         defaultValue={value + ''}
                     />
                     <View style={styles.modalFooter}>
