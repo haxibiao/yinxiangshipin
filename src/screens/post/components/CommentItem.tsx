@@ -124,7 +124,7 @@ const CommentItem = observer((props: Props) => {
 
         if (Array.isArray(replies) && replies.length > 0) {
             countReplies += replies.length;
-            repliesContent = replies.slice(0, 3).map(item => {
+            repliesContent = replies.slice(0, 3).map((item) => {
                 return (
                     <Text style={styles.replyText} key={item.id}>
                         <SafeText style={styles.replyUserName}>{Helper.syncGetter('user.name', item)} : </SafeText>
@@ -215,6 +215,7 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
         flexDirection: 'row',
         paddingVertical: pixel(15),
+        backgroundColor: '#fff',
     },
     avatarWrap: {
         paddingHorizontal: pixel(10),

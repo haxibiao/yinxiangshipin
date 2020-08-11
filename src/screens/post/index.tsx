@@ -352,7 +352,7 @@ const styles = StyleSheet.create({
     contentContainer: {
         flexGrow: 1,
         backgroundColor: '#fff',
-        paddingBottom: bottomInputHeight,
+        paddingBottom: bottomInputHeight - 1,
     },
     headerWrap: {
         paddingBottom: pixel(5),
@@ -366,12 +366,13 @@ const styles = StyleSheet.create({
         backgroundColor: '#f0f0f0',
     },
     listFooter: {
-        borderTopWidth: pixel(1),
-        borderTopColor: '#f0f0f0',
         paddingVertical: pixel(15),
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
+        borderTopWidth: pixel(1),
+        borderTopColor: '#f0f0f0',
+        backgroundColor: '#ffffff',
     },
     listFooterText: {
         fontSize: font(13),

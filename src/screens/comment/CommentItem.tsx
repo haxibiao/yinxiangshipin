@@ -1,6 +1,15 @@
 import React, { useCallback, useState, useRef } from 'react';
-import { StyleSheet, View, Text, Animated, Keyboard, Image } from 'react-native';
-import { TouchFeedback, Iconfont, SafeText, Avatar, PullChooser, ItemSeparator } from '@src/components';
+import {
+    StyleSheet,
+    View,
+    Text,
+    Animated,
+    Keyboard,
+    Image,
+    TouchableOpacity,
+    TouchableWithoutFeedback,
+} from 'react-native';
+import { Iconfont, SafeText, Avatar, PullChooser, ItemSeparator } from '@src/components';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { exceptionCapture, useLinearAnimation } from '@src/common';
 import { useMutation, GQL } from '@src/apollo';
@@ -153,11 +162,15 @@ const CommentItem = (props: Props) => {
 
     return (
         <Animated.View style={animateStyles}>
-            <TouchFeedback style={styles.comment} onPress={() => replyHandler(comment)} onLongPress={onLongPress}>
-                <TouchFeedback
+            <TouchableOpacity
+                style={styles.comment}
+                activeOpacity={0.9}
+                onPress={() => replyHandler(comment)}
+                onLongPress={onLongPress}>
+                <TouchableWithoutFeedback
                     onPress={() => navigation.navigate('User', { user: Helper.syncGetter('user', comment) })}>
                     <Avatar source={Helper.syncGetter('user.avatar', comment)} size={pixel(40)} />
-                </TouchFeedback>
+                </TouchableWithoutFeedback>
                 <View style={styles.commentRight}>
                     <View style={styles.commentedUser}>
                         <View style={styles.userName}>
@@ -173,7 +186,7 @@ const CommentItem = (props: Props) => {
                     {showReplyComment && <ReplyComments comment={comment} />}
                     <SafeText style={styles.timeAgoText}>{comment.time_ago}</SafeText>
                 </View>
-            </TouchFeedback>
+            </TouchableOpacity>
             {showSeparator && <ItemSeparator height={separatorHeight} />}
         </Animated.View>
     );
@@ -211,6 +224,7 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
         flexDirection: 'row',
         padding: pixel(Theme.itemSpace),
+        backgroundColor: '#fff',
     },
     commentBody: {
         marginTop: pixel(10),

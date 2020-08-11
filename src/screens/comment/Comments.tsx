@@ -115,6 +115,7 @@ const styles = StyleSheet.create({
     },
     contentContainerStyle: {
         flexGrow: 1,
+        backgroundColor: '#fff',
     },
 });
 
