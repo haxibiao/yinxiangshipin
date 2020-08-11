@@ -117,10 +117,6 @@ const CommentItem = (props: Props) => {
         }
         Keyboard.dismiss();
         const operations = [
-            // {
-            //     title: '举报',
-            //     onPress: () => navigation.navigate('Report', {}),
-            // },
             {
                 title: '回复',
                 onPress: () => replyHandler(comment),
@@ -131,12 +127,10 @@ const CommentItem = (props: Props) => {
                 title: '删除',
                 onPress: deleteComment,
             });
-        }
-        // 我是提问者，但不是自己的评论，且没有被采纳的状态
-        if (isQuestioner && userStore.me.id !== comment.user.id && !comment.is_accept) {
+        } else {
             operations.push({
-                title: '采纳',
-                onPress: acceptComment,
+                title: '举报',
+                onPress: Toast.show({ content: '举报成功' }),
             });
         }
         PullChooser.show(operations);
