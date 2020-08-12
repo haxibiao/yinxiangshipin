@@ -68,9 +68,11 @@ class KeyboardSpacer extends Component<Props> {
     onKeyboardShow(e) {
         if (!e || !e.endCoordinates || !e.endCoordinates.height) return;
         let height = e.endCoordinates.height + (this.props.topInsets || 0);
-        let FixTopInsets = appStore.viewportHeight - Dimensions.get('window').height || 0;
+        let FixTopInsets = Math.round(appStore.viewportHeight - Dimensions.get('window').height);
         // 适配安卓全面屏
         if (Device.Android && Device.isFullScreenDevice) {
+            FixTopInsets += 40;
+        } else if (DeviceInfo.getBrand() === 'Xiaomi') {
             FixTopInsets += 40;
         }
         height += FixTopInsets;
