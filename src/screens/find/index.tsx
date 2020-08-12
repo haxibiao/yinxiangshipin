@@ -1,9 +1,10 @@
 import React, { useCallback } from 'react';
-import { StyleSheet, View, TouchableWithoutFeedback, Image, StatusBar } from 'react-native';
+import { StyleSheet, View, TouchableWithoutFeedback, Image } from 'react-native';
 import { observer } from 'mobx-react';
 import { PageContainer, ScrollTabBar } from '@src/components';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { FocusAwareStatusBar } from '@src/router';
 import PostList from './PostList';
 import Following from './Following';
 
@@ -25,6 +26,7 @@ export default observer(() => {
                     </View>
                 </TouchableWithoutFeedback>
             }>
+            <FocusAwareStatusBar barStyle="dark-content" />
             <PostList tabLabel="推荐" />
         </PageContainer>
     );

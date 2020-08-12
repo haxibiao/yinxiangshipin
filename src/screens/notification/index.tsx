@@ -1,8 +1,9 @@
 import React, { useContext, useState, useCallback, useEffect, useMemo } from 'react';
-import { ScrollView, StyleSheet, Text, View, Image, TouchableOpacity, StatusBar } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { PageContainer, Avatar, Badge, Row, SafeText, StatusView } from '@src/components';
 import { GQL, useQuery } from '@src/apollo';
 import { observer, userStore, appStore } from '@src/store';
+import { FocusAwareStatusBar } from '@src/router';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import Chats from './components/Chats';
 
@@ -94,6 +95,7 @@ export default observer((props: any) => {
         <PageContainer
             isTopNavigator={true}
             title={<Text style={{ fontSize: font(19), color: '#212121', fontWeight: 'bold' }}>消息</Text>}>
+            <FocusAwareStatusBar barStyle="dark-content" />
             <ScrollView contentContainerStyle={styles.contentContainer}>
                 <View style={styles.notifyList}>
                     <TouchableOpacity

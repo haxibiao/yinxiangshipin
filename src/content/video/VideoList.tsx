@@ -8,9 +8,8 @@ import {
     StatusBar,
     ImageBackground,
     TouchableOpacity,
-    ActivityIndicator,
     DeviceEventEmitter,
-    TouchableWithoutFeedback,
+    BackHandler,
 } from 'react-native';
 import { Iconfont } from '@src/components';
 import LottieView from 'lottie-react-native';
@@ -37,7 +36,7 @@ export default observer(() => {
     const isTopScreen = useMemo(() => route?.name === 'Home', [route]);
     const client = useApolloClient();
     const commentRef = useRef();
-    const onLayout = useCallback(event => {
+    const onLayout = useCallback((event) => {
         const { height } = event.nativeEvent.layout;
         videoStore.viewportHeight = height;
     }, []);
@@ -51,7 +50,7 @@ export default observer(() => {
         [],
     );
 
-    const getVisibleRows = useCallback(info => {
+    const getVisibleRows = useCallback((info) => {
         if (info.viewableItems[0]) {
             videoStore.viewableItemIndex = info.viewableItems[0].index;
         }
@@ -64,15 +63,28 @@ export default observer(() => {
     }, [userStore.launched]);
 
     useEffect(() => {
+        const hardwareBackPress = BackHandler.addEventListener('hardwareBackPress', () => {
+            commentRef.current?.slideDown();
+            return false;
+        });
         DeviceEventEmitter.addListener('showCommentModal', () => {
             commentRef.current?.slideUp();
         });
         DeviceEventEmitter.addListener('hideCommentModal', () => {
             commentRef.current?.slideDown();
         });
+        const navFocusListener = navigation.addListener('focus', () => {
+            StatusBar.setBarStyle('light-content');
+        });
+        const navBlurListener = navigation.addListener('blur', () => {
+            StatusBar.setBarStyle('dark-content');
+        });
         return () => {
+            hardwareBackPress.remove();
             DeviceEventEmitter.removeListener('showCommentModal');
             DeviceEventEmitter.removeListener('hideCommentModal');
+            navFocusListener();
+            navBlurListener();
         };
     }, []);
 
@@ -99,7 +111,6 @@ export default observer(() => {
     return (
         <View style={styles.container}>
             <View style={styles.navBar}>
-                <StatusBar barStyle="light-content" />
                 {!isTopScreen && (
                     <TouchableOpacity
                         onPress={() => {

@@ -87,11 +87,7 @@ class PageContainer extends Component<Props> {
         const marginBottom = safeView ? Theme.HOME_INDICATOR_HEIGHT : 0;
         return (
             <View style={[styles.container, style]} {...props}>
-                {hiddenNavBar ? (
-                    <StatusBar translucent={true} backgroundColor="rgba(0,0,0,0)" barStyle="light-content" />
-                ) : (
-                    this.renderNavBar()
-                )}
+                {!hiddenNavBar && this.renderNavBar()}
                 <View style={[styles.contentView, { marginTop, marginBottom }, contentViewStyle]}>
                     {this.renderContent()}
                 </View>

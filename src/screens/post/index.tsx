@@ -227,7 +227,11 @@ export default observer((props) => {
         }
         return (
             <View style={[styles.headerWrap, { marginTop: isFixedNavBar ? navBarHeight : 0 }]}>
-                <StatusBar translucent={true} backgroundColor={'rgba(0,0,0,0)'} barStyle={'light-content'} />
+                <StatusBar
+                    translucent={true}
+                    backgroundColor={'rgba(0,0,0,0)'}
+                    barStyle={isFixedNavBar ? 'dark-content' : 'light-content'}
+                />
                 <View onLayout={measurementHeader}>{medium}</View>
                 <Content media={media} />
             </View>

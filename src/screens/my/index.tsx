@@ -1,17 +1,8 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
-import {
-    StyleSheet,
-    View,
-    ScrollView,
-    Text,
-    Image,
-    TouchableWithoutFeedback,
-    TouchableOpacity,
-    StatusBar,
-} from 'react-native';
+import { StyleSheet, View, ScrollView, Text, Image, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
 import { observer, appStore, userStore, Keys, Storage } from '@src/store';
 import { PageContainer, Iconfont, Row, Avatar } from '@src/components';
-import { authNavigate, useNavigation } from '@src/router';
+import { FocusAwareStatusBar, authNavigate, useNavigation } from '@src/router';
 import { GQL, useQuery, useApolloClient } from '@src/apollo';
 import { useBeginner } from '@src/common';
 
@@ -70,22 +61,18 @@ export default observer((props: any) => {
     }, [userStore.login, userStore.firstInstall]);
 
     useEffect(() => {
-        const navFocusListener = props.navigation.addListener('focus', () => {
-            StatusBar.setBarStyle('light-content');
+        const navFocusListener = navigation.addListener('focus', () => {
             refetch();
-        });
-        const navBlurListener = props.navigation.addListener('blur', () => {
-            StatusBar.setBarStyle('dark-content');
         });
 
         return () => {
             navFocusListener();
-            navBlurListener();
         };
     }, []);
 
     return (
         <View style={styles.container}>
+            <FocusAwareStatusBar barStyle="light-content" />
             <View style={styles.parallaxHeader}>
                 <Image
                     style={styles.parallaxHeaderBg}
