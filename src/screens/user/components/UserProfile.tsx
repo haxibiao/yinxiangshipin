@@ -84,7 +84,7 @@ export default observer((props: { user: any; titleStyle: TextStyle; contentStyle
                     <View style={styles.userAvatar}>
                         <Image
                             source={{
-                                uri: `${userProfile.avatar}?${new Date().getTime()}`,
+                                uri: userProfile?.avatar,
                             }}
                             style={styles.avatar}
                         />

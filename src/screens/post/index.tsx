@@ -74,7 +74,7 @@ export default observer((props) => {
         (comment) => {
             // 不是回复评论
             if (!comment) {
-                media.count_replies++;
+                media.count_comments++;
             }
         },
         [media],
@@ -85,7 +85,7 @@ export default observer((props) => {
 
     // 删除评论
     const deleteComment = useCallback((comment) => {
-        comment.count_replies--;
+        comment.count_comments--;
     }, []);
 
     // 添加评论
@@ -252,7 +252,7 @@ export default observer((props) => {
         }
         return (
             <StatusView.EmptyView
-                style={{ minHeight: percent(45), paddingVertical: pixel(20), backgroundColor: '#fff' }}
+                style={{ minHeight: percent(50), paddingVertical: pixel(20), backgroundColor: '#fff' }}
                 imageSource={require('@app/assets/images/default_comment.png')}
             />
         );
@@ -268,10 +268,9 @@ export default observer((props) => {
                     <NavBar lightModal={false} media={media} navigation={navigation} />
                 </Animated.View>
             </View>
-            <View style={{ flex: 1, backgroundColor: '#fff' }}>
+            <View style={{ flex: 1 }}>
                 <FlatList
                     keyboardDismissMode="none"
-                    style={{ flex: 1, backgroundColor: '#fff' }}
                     contentContainerStyle={styles.contentContainer}
                     showsVerticalScrollIndicator={false}
                     onScroll={onScroll}
@@ -351,8 +350,8 @@ const styles = StyleSheet.create({
     },
     contentContainer: {
         flexGrow: 1,
-        backgroundColor: '#fff',
         paddingBottom: bottomInputHeight - 1,
+        backgroundColor: '#fff',
     },
     headerWrap: {
         paddingBottom: pixel(5),

@@ -15,7 +15,7 @@ query userVisitsQuery($user_id: Int!, $page: Int) {
                 cover
                 hits
                 count_likes
-                count_replies
+                count_comments
                 count_tips
                 liked
 

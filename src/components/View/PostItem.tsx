@@ -69,7 +69,7 @@ const PostItem: React.FC<Props> = observer((props: Props) => {
         submit,
         remark,
         count_likes,
-        count_replies,
+        count_comments,
         id,
         video,
         images,
@@ -228,9 +228,9 @@ const PostItem: React.FC<Props> = observer((props: Props) => {
                                 onPress={() => navigation.navigate('PostDetail', { post })}>
                                 <Iconfont name="liuyanfill" size={font(22)} color={'#CCD5E0'} />
                             </TouchableOpacity>
-                            {count_replies >= 0 && (
+                            {count_comments >= 0 && (
                                 <Text style={{ color: '#bfbfbf', fontSize: font(14), marginStart: 15, marginEnd: 23 }}>
-                                    {count_replies || 0}
+                                    {count_comments || 0}
                                 </Text>
                             )}
                         </Row>
@@ -244,7 +244,7 @@ const PostItem: React.FC<Props> = observer((props: Props) => {
             </TouchableWithoutFeedback>
             {showComment && (
                 <View style={styles.commentsHeader}>
-                    <Text style={{ color: '#CBD8E1' }}>{`所有评论(${count_replies || 0})`}</Text>
+                    <Text style={{ color: '#CBD8E1' }}>{`所有评论(${count_comments || 0})`}</Text>
                 </View>
             )}
         </Animated.View>

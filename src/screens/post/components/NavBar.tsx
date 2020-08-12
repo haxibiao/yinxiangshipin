@@ -187,5 +187,6 @@ const styles = StyleSheet.create({
         height: pixel(34),
         borderRadius: pixel(20),
         zIndex: 2,
+        backgroundColor: 'rgba(255,255,255,0.5)',
     },
 });

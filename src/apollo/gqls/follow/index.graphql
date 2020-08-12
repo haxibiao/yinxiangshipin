@@ -61,7 +61,7 @@ query followedArticlesQuery($page: Int, $user_id: Int!) {
             cover
             hits
             count_likes
-            count_replies
+            count_comments
             count_tips
             liked
 

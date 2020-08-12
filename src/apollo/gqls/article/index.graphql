@@ -229,7 +229,6 @@ query articleQuery($id: Int!) {
         count_words
         count_likes
         count_tips
-        count_replies
         count_comments
         user {
             id

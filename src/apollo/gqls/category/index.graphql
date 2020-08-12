@@ -41,7 +41,7 @@ query categoryArticlesQuery($category_id: Int, $page: Int, $count: Int) {
             cover
             hits
             count_likes
-            count_replies
+            count_comments
             count_tips
             liked
             submit

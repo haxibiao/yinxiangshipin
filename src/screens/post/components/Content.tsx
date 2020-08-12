@@ -10,7 +10,6 @@ const Content = observer(({ media }) => {
         count_tips,
         count_likes,
         count_comments,
-        count_replies,
         categories,
         content,
         description,

@@ -41,10 +41,10 @@ const NoteItem = (props: any) => {
         cover,
         hits,
         count_likes,
-        count_replies,
+        count_comments,
     } = post;
 
-    const _renderFooter = (category: any, hits: any, count_replies: any, count_likes: any) => {
+    const _renderFooter = (category: any, hits: any, count_comments: any, count_likes: any) => {
         const { navigation } = props;
         return (
             <View style={styles.noteFooter}>
@@ -55,7 +55,7 @@ const NoteItem = (props: any) => {
                     </View>
                     <View style={styles.meta}>
                         <Iconfont name={'comment'} size={14} color={Theme.lightFontColor} />
-                        <Text style={styles.count}>{count_replies || 0}</Text>
+                        <Text style={styles.count}>{count_comments || 0}</Text>
                     </View>
                     <View style={styles.meta}>
                         <Iconfont name={'like'} size={14} color={Theme.lightFontColor} />
@@ -74,7 +74,7 @@ const NoteItem = (props: any) => {
         } else if (images.length >= 1) {
             return (
                 <View style={[styles.gridView, styles.layoutFlexRow]}>
-                    {images.slice(0, 3).map(function(img: any, i: number) {
+                    {images.slice(0, 3).map(function (img: any, i: number) {
                         if (img) return <Image style={styles.gridImage} source={{ uri: img }} key={i} />;
                     })}
                 </View>
@@ -122,7 +122,7 @@ const NoteItem = (props: any) => {
                     </View>
                 )}
                 <View>{has_image && renderImage(type, images, cover)}</View>
-                {_renderFooter(category, hits, count_replies, count_likes)}
+                {_renderFooter(category, hits, count_comments, count_likes)}
             </View>
         </TouchableOpacity>
     );
