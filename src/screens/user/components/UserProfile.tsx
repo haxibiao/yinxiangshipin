@@ -21,8 +21,9 @@ export default observer((props: { user: any; titleStyle: TextStyle; contentStyle
     const { user, titleStyle, contentStyle } = props;
     const navigation = useNavigation();
     const client = useApolloClient();
-    const { data: userQueryResult } = useQuery(GQL.userQuery, {
+    const { data: userQueryResult, refetch } = useQuery(GQL.userQuery, {
         variables: { id: user.id },
+        fetchPolicy: 'network-only',
     });
     const isSelf = useMemo(() => userStore.me.id === user.id, []);
     const userProfile = useMemo(() => userQueryResult?.user || user, [userQueryResult]);
@@ -62,8 +63,12 @@ export default observer((props: { user: any; titleStyle: TextStyle; contentStyle
     }, [userProfile]);
 
     useEffect(() => {
+        const navigationFocus = navigation.addListener('focus', () => {
+            refetch();
+        });
         DeviceEventEmitter.addListener('userOperation', showMoreOperation);
         return () => {
+            navigationFocus();
             DeviceEventEmitter.removeListener('userOperation', showMoreOperation);
         };
     }, [showMoreOperation]);
@@ -79,7 +84,7 @@ export default observer((props: { user: any; titleStyle: TextStyle; contentStyle
                     <View style={styles.userAvatar}>
                         <Image
                             source={{
-                                uri: userProfile.avatar,
+                                uri: `${userProfile.avatar}?${new Date().getTime()}`,
                             }}
                             style={styles.avatar}
                         />
@@ -180,6 +185,7 @@ const styles = StyleSheet.create({
         borderColor: '#FFF',
         borderRadius: pixel(84),
         borderWidth: pixel(2),
+        backgroundColor: 'rgba(255,255,255,0.5)',
     },
     hollowButton: {
         paddingHorizontal: pixel(22),

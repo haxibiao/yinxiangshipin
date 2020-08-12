@@ -5,6 +5,7 @@ import { Avatar, PageContainer, SettingItem, WriteModal, Iconfont, WheelPicker, 
 import { Mutation, GQL, useApolloClient, useQuery } from '@src/apollo';
 import { observer } from 'mobx-react';
 import { userStore } from '@src/store';
+import RNFetchBlob from 'rn-fetch-blob';
 
 export default observer((props: any) => {
     const client = useApolloClient();
@@ -27,17 +28,10 @@ export default observer((props: any) => {
         setQianModalVisible(!qianModalVisible);
     };
 
-    const saveAvatar = (imagePath: any) => {
-        // if (Platform.OS === 'ios') {
-        //     return userStore.changeProfile({ avatar: imagePath });
-        // }
+    const saveAvatar = (image: any) => {
         const { token } = userStore.me;
-        const data = new FormData();
-        data.append('avatar', {
-            uri: imagePath,
-            name: 'avatar.jpg',
-            type: 'image/jpg',
-        });
+        var data = new FormData();
+        data.append('avatar', image);
         const config = {
             method: 'POST',
             headers: {
@@ -46,13 +40,14 @@ export default observer((props: any) => {
             },
             body: data,
         };
+
         fetch(Config.ServerRoot + '/api/user/save-avatar?api_token=' + token, config)
             .then((response) => response.text())
             .then((res) => {
-                userStore.changeProfile({ avatar: res });
+                userStore.changeAvatar(`${res}?${new Date().getTime()}`);
             })
             .catch((err) => {
-                console.warn('err', err);
+                console.log('err', err);
             });
     };
 
@@ -61,13 +56,10 @@ export default observer((props: any) => {
             width: 400,
             height: 400,
             cropping: true,
-            cropperCircleOverlay: true,
-            useFrontCamera: true,
-            showCropGuidelines: false,
-            enableRotationGesture: true,
+            includeBase64: true,
         })
             .then((image) => {
-                saveAvatar(image.path);
+                saveAvatar(`data:${image.mime};base64,${image.data}`);
             })
             .catch((error) => {
                 console.warn('error', error);
