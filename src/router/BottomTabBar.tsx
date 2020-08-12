@@ -350,7 +350,7 @@ const styles = StyleSheet.create({
         right: 0,
         bottom: 0,
         borderTopWidth: StyleSheet.hairlineWidth,
-        elevation: 8,
+        // elevation: 8,
     },
     hidden: {
         zIndex: -2,

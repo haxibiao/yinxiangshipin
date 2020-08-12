@@ -13,7 +13,7 @@ const Global = global || window || {};
 const device = {
     WIDTH: width,
     HEIGHT: height,
-    isFullScreenDevice: height / width >= 16 / 9,
+    isFullScreenDevice: height / width >= 18 / 9,
     INNER_HEIGHT: height - theme.HOME_INDICATOR_HEIGHT - theme.NAVBAR_HEIGHT - theme.statusBarHeight,
     OS: Platform.OS,
     IOS: Platform.OS === 'ios',

@@ -100,7 +100,7 @@ export default observer((props: any) => {
                     animated={true}
                     ref={(ref: any) => (popViewRef = ref)}>
                     <View style={{ paddingHorizontal: 20 }}>
-                        <UuidLoginView navigation={navigation} client={client} onClose={() => popViewRef.close()} />
+                        <UuidLoginView navigation={navigation} client={client} onClose={() => popViewRef?.close()} />
                     </View>
                 </Overlay.PopView>
             );

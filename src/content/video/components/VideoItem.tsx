@@ -23,9 +23,9 @@ export default observer((props) => {
     }, []);
 
     const resizeMode = useMemo(() => {
-        const videoHeight = media?.width;
-        const videoWidth = media?.height;
-        return videoWidth / videoHeight < 1 ? 'cover' : 'contain';
+        const videoHeight = media?.video?.height;
+        const videoWidth = media?.video?.width;
+        return videoWidth / videoHeight > 1 ? 'contain' : 'cover';
     }, [media]);
 
     const videoCover = useMemo(() => {
