@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useCallback } from 'react';
 import { StyleSheet, View, Text, StatusBar } from 'react-native';
 import { observer, appStore, userStore } from '@src/store';
 import { VideoList, useClipboardLink, CollectionContent } from '@src/content';
@@ -33,8 +33,13 @@ export default observer(() => {
         }
     }, [userStore, shareContent]);
 
+    const onLayout = useCallback((event) => {
+        const { height } = event.nativeEvent.layout;
+        appStore.viewportHeight = height;
+    }, []);
+
     return (
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1 }} onLayout={onLayout}>
             <VideoList />
         </View>
     );

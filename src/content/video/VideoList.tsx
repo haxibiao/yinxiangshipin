@@ -38,7 +38,7 @@ export default observer(() => {
     const commentRef = useRef();
     const onLayout = useCallback((event) => {
         const { height } = event.nativeEvent.layout;
-        videoStore.viewportHeight = height;
+        videoStore.fullVideoHeight = height;
     }, []);
 
     const onMomentumScrollEnd = useCallback(
@@ -134,8 +134,8 @@ export default observer(() => {
                     keyExtractor={(item, index) => String(item.id || index)}
                     renderItem={({ item, index }) => <VideoItem store={videoStore} media={item} index={index} />}
                     getItemLayout={(data, index) => ({
-                        length: videoStore.viewportHeight,
-                        offset: videoStore.viewportHeight * index,
+                        length: videoStore.fullVideoHeight,
+                        offset: videoStore.fullVideoHeight * index,
                         index,
                     })}
                     ListEmptyComponent={

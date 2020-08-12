@@ -39,7 +39,7 @@ class DrawVideoStore {
     private instance: DrawVideoStore = null;
     readonly rewardLimit: number = 30; // 奖励频率
     public playedVideoIds: number[] = []; // 记录用户浏览的视频
-    @observable public viewportHeight: number = calculateHeight;
+    @observable public fullVideoHeight: number = calculateHeight;
 
     @observable public data: VideoItem[] = [];
     @observable public loaded: boolean = true;
@@ -108,7 +108,7 @@ class DrawVideoStore {
 
     @action.bound
     public addSource(source: VideoItem[]) {
-        const newData = source.filter(item => {
+        const newData = source.filter((item) => {
             unique[item?.id] = unique[item?.id] + 1 || 1;
             return unique[item?.id] <= 1;
         });

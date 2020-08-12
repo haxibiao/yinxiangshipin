@@ -14,16 +14,12 @@ interface Props {
 export default observer(({ content, style, children }: Props) => {
     const navigation = useNavigation();
 
-    // hack：修复点赞数据错误（替后端擦屁股）
-    if (content.liked && content.count_likes === 0) {
-        content.count_likes++;
-    }
-
     const change = useCallback(() => {
         content.liked ? content.count_likes-- : content.count_likes++;
         content.liked = !content.liked;
-    }, []);
-    const failure = useCallback(err => {
+    }, [content]);
+
+    const failure = useCallback((err) => {
         change();
         Toast.show({ content: err || '点赞失败' });
     }, []);
@@ -42,7 +38,7 @@ export default observer(({ content, style, children }: Props) => {
         } else {
             navigation.navigate('Login');
         }
-    }, []);
+    }, [change]);
 
     const scale = animateValue.interpolate({
         inputRange: [1, 1.5, 2],

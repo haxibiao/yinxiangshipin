@@ -68,14 +68,13 @@ class KeyboardSpacer extends Component<Props> {
     onKeyboardShow(e) {
         if (!e || !e.endCoordinates || !e.endCoordinates.height) return;
         let height = e.endCoordinates.height + (this.props.topInsets || 0);
-        let FixTopInsets = Math.round(appStore.viewportHeight - Dimensions.get('window').height);
+        const difference = Math.round(appStore.viewportHeight - Dimensions.get('window').height);
         // 适配安卓全面屏
-        if (Device.Android && Device.isFullScreenDevice) {
-            FixTopInsets += 40;
-        } else if (DeviceInfo.getBrand() === 'Xiaomi') {
-            FixTopInsets += 40;
+        if (difference > 0) {
+            height += difference;
+        } else if ((Device.Android && Device.isFullScreenDevice) || DeviceInfo.getBrand() === 'Xiaomi') {
+            height += 40;
         }
-        height += FixTopInsets;
         this.setState({ keyboardHeight: height });
         if (this.props.onKeyboardShow instanceof Function) {
             this.props.onKeyboardShow();

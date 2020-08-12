@@ -56,7 +56,7 @@ export default observer((props) => {
     return (
         <View
             style={{
-                height: store.viewportHeight,
+                height: store.fullVideoHeight,
             }}>
             {videoCover}
             <View style={styles.positionContainer}>
