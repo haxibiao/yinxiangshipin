@@ -7,7 +7,6 @@ module.exports = {
         Toast: true,
         font: true,
         pixel: true,
-        Toast: true,
     },
     extends: ['prettier', 'prettier/@typescript-eslint', '@react-native-community'],
     parser: '@typescript-eslint/parser', // 解析器
