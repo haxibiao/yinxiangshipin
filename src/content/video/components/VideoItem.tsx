@@ -1,9 +1,10 @@
 import React, { useRef, useMemo, useState, useCallback } from 'react';
 import { StyleSheet, Text, View, Image, TouchableWithoutFeedback, DeviceEventEmitter } from 'react-native';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { useApolloClient } from '@apollo/react-hooks';
+import LinearGradient from 'react-native-linear-gradient';
 import { SafeText } from '@src/components';
 import { observer } from '@src/store';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import LinearGradient from 'react-native-linear-gradient';
 import Player from './Player';
 import SideBar from './SideBar';
 import { Commodity } from '../../widget';
@@ -13,6 +14,7 @@ import { font, pixel } from '../../helper';
 export default observer((props) => {
     const { media, index, store } = props;
     const viewable = index === store.viewableItemIndex;
+    const client = useApolloClient();
     const navigation = useNavigation();
 
     const playerRef = useRef();
@@ -60,7 +62,14 @@ export default observer((props) => {
             }}>
             {videoCover}
             <View style={styles.positionContainer}>
-                <Player ref={playerRef} store={store} media={media} resizeMode={resizeMode} viewable={viewable} />
+                <Player
+                    ref={playerRef}
+                    store={store}
+                    media={media}
+                    resizeMode={resizeMode}
+                    viewable={viewable}
+                    client={client}
+                />
             </View>
             <TouchableWithoutFeedback onPress={togglePause}>
                 <LinearGradient
@@ -86,7 +95,7 @@ export default observer((props) => {
                             </SafeText>
                         </View>
                     </View>
-                    <SideBar media={media} store={store} />
+                    <SideBar media={media} store={store} client={client} />
                 </LinearGradient>
             </TouchableWithoutFeedback>
         </View>

@@ -1,8 +1,8 @@
-import React, { Component, useCallback } from 'react';
+import React, { useRef, useMemo, useCallback } from 'react';
 import { StyleSheet, View, Image, Animated, TouchableOpacity, DeviceEventEmitter } from 'react-native';
 import { Avatar, SafeText, MoreOperation } from '@src/components';
-import { useApolloClient, ApolloProvider } from '@src/apollo';
 import { useNavigation } from '@react-navigation/native';
+import { ApolloProvider } from 'react-apollo';
 import { observer } from '@src/store';
 import { Overlay } from 'teaset';
 import { font, pixel, count } from '../../helper';
@@ -13,37 +13,43 @@ const imageSource = {
     unlike: require('@app/assets/images/ic_like.png'),
 };
 
-export default observer(({ media, store }) => {
+export default observer(({ media, store, client }) => {
     const navigation = useNavigation();
-    const client = useApolloClient();
 
     const showComment = useCallback(() => {
         DeviceEventEmitter.emit('showCommentModal');
     }, []);
 
+    const overlayRef = useRef();
+
+    const moreOperation = useMemo(() => {
+        return (
+            <ApolloProvider client={client}>
+                <MoreOperation
+                    navigation={navigation}
+                    onPressIn={() => overlayRef.current?.close()}
+                    target={media}
+                    showShare={true}
+                    downloadUrl={media?.video?.url}
+                    downloadUrlTitle={media?.body}
+                    options={['举报', '不感兴趣', '下载', '复制链接']}
+                />
+            </ApolloProvider>
+        );
+    }, [client, media]);
+
     const showMoreOperation = useCallback(() => {
-        let overlayRef: any;
         const MoreOperationOverlay = (
             <Overlay.PullView
                 style={{ flexDirection: 'column', justifyContent: 'flex-end' }}
                 containerStyle={{ backgroundColor: 'transparent' }}
                 animated={true}
-                ref={(ref: any) => (overlayRef = ref)}>
-                <ApolloProvider client={client}>
-                    <MoreOperation
-                        navigation={navigation}
-                        onPressIn={() => overlayRef.close()}
-                        target={media}
-                        showShare={true}
-                        downloadUrl={media?.video?.url}
-                        downloadUrlTitle={media?.body}
-                        options={['下载', '不感兴趣', '举报', '复制链接']}
-                    />
-                </ApolloProvider>
+                ref={(ref: any) => (overlayRef.current = ref)}>
+                {moreOperation}
             </Overlay.PullView>
         );
         Overlay.show(MoreOperationOverlay);
-    }, [client, media]);
+    }, [moreOperation]);
 
     return (
         <View style={styles.sideBar}>

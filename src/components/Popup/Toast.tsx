@@ -1,18 +1,18 @@
-import React, { Component } from 'react';
-import { StyleSheet, View, Text, Animated, Easing } from 'react-native';
+import React, { Component, ReactChild } from 'react';
+import { StyleSheet, View, Text, Animated, Easing, ViewStyle, TextStyle } from 'react-native';
 
 type positionValue = 'top' | 'center' | 'bottom';
 
 interface Option {
-    content: any;
+    content: ReactChild;
     layout?: positionValue;
     duration?: number;
     callback?: () => void;
 }
 
 interface Props {
-    style?: any;
-    textStyle?: any;
+    style?: ViewStyle;
+    textStyle?: TextStyle;
     fadeInDuration?: number;
     fadeOutDuration?: number;
     showDuration?: number;

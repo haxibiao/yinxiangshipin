@@ -3,8 +3,11 @@ import { StyleSheet, View, TouchableWithoutFeedback, DeviceEventEmitter } from '
 import { Iconfont } from '@src/components';
 import { useNavigation } from '@react-navigation/native';
 import Video from 'react-native-video';
-import BufferingVideo from './BufferingVideo';
+import { Overlay } from 'teaset';
+import { ApolloProvider } from 'react-apollo';
 import { font, pixel } from '../../helper';
+import BufferingVideo from './BufferingVideo';
+import VideoOperation from './VideoOperation';
 
 interface Props {
     store: any;
@@ -14,7 +17,7 @@ interface Props {
 }
 
 export default React.forwardRef((props: Props, ref) => {
-    const { store, media, viewable, resizeMode } = props;
+    const { client, store, media, viewable, resizeMode } = props;
     const navigation = useNavigation();
     const [loading, setLoaded] = useState(true);
     const [progress, setProgress] = useState(0);
@@ -22,8 +25,12 @@ export default React.forwardRef((props: Props, ref) => {
     const currentTime = useRef(0);
     const duration = useRef(20);
 
+    const source = useMemo(() => {
+        return media?.video?.url;
+    }, [media]);
+
     const togglePause = useCallback(() => {
-        setPause(v => !v);
+        setPause((v) => !v);
     }, []);
 
     useImperativeHandle(
@@ -34,9 +41,35 @@ export default React.forwardRef((props: Props, ref) => {
         [togglePause],
     );
 
-    const source = useMemo(() => {
-        return media?.video?.url;
-    }, [media]);
+    const overlayRef = useRef();
+
+    const operation = useMemo(() => {
+        return (
+            <ApolloProvider client={client}>
+                <VideoOperation
+                    client={client}
+                    navigation={navigation}
+                    target={media}
+                    downloadUrl={media?.video?.url}
+                    downloadUrlTitle={media?.body}
+                    options={['下载', '不感兴趣', '举报']}
+                    onPressIn={() => overlayRef.current?.close()}
+                />
+            </ApolloProvider>
+        );
+    }, [client, media]);
+
+    const showOperation = useCallback(() => {
+        const MoreOperationOverlay = (
+            <Overlay.PopView
+                style={styles.overlay}
+                ref={(ref) => (overlayRef.current = ref)}
+                containerStyle={{ backgroundColor: 'rgba(0,0,0,0.6)' }}>
+                {operation}
+            </Overlay.PopView>
+        );
+        Overlay.show(MoreOperationOverlay);
+    }, [operation]);
 
     // const onPress = useDoubleHandler({ doubleClick: likePost, singleClick: togglePause });
 
@@ -101,7 +134,7 @@ export default React.forwardRef((props: Props, ref) => {
     }, [viewable]);
 
     return (
-        <TouchableWithoutFeedback onPress={togglePause}>
+        <TouchableWithoutFeedback onPress={togglePause} onLongPress={showOperation}>
             <View style={styles.playerContainer}>
                 <Video
                     resizeMode={resizeMode}

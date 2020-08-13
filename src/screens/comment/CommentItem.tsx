@@ -130,7 +130,7 @@ const CommentItem = (props: Props) => {
         } else {
             operations.push({
                 title: '举报',
-                onPress: Toast.show({ content: '举报成功' }),
+                onPress: () => Toast.show({ content: '举报成功' }),
             });
         }
         PullChooser.show(operations);

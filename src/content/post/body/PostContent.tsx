@@ -93,7 +93,7 @@ export default observer(
                         showShare={true}
                         downloadUrl={post?.video?.url}
                         downloadUrlTitle={post?.body}
-                        options={isMe ? ['删除', '下载', '复制链接'] : ['下载', '举报', '不感兴趣', '复制链接']}
+                        options={isMe ? ['删除', '下载', '复制链接'] : ['举报', '不感兴趣', '下载', '复制链接']}
                         deleteCallback={fadeOut}
                     />
                 </ApolloProvider>
