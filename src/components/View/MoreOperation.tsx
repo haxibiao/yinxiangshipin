@@ -200,17 +200,12 @@ const MoreOperation = (props: any) => {
             return;
         }
 
-        // WeChat.ShareVideo({
-        //     title: '我发现一个很好看的小视频，分享给你',
-        //     videoUrl: Config.ServerRoot + `/s/p/${target.id}?user_id=${userStore.me.id}`,
-        //     thumbImageUrl: Config.ServerRoot + `/logo/${Config.Name}.com.png`,
-        //     scene: 0,
-        // });
-
         try {
             await WeChat.shareWebpage({
-                title: target.body || '一个很有意思的内容，分享给你看看',
-                webpageUrl: Config.ServerRoot + `/s/p/${target.id}?user_id=${userStore.me.id}`,
+                title: target.description,
+                description:
+                    (Config.AppName ? '我在' + Config.AppName + '发现' : '') + '一个很有意思的内容，分享给你看看',
+                webpageUrl: Config.ServerRoot + `/share/post/${target.id}?user_id=${userStore.me.id}`,
                 thumbImageUrl: Config.ServerRoot + `/logo/${Config.Name}.com.png`,
                 scene: 0,
             });
@@ -233,8 +228,10 @@ const MoreOperation = (props: any) => {
 
         try {
             await WeChat.shareWebpage({
-                title: target.body,
-                webpageUrl: link || '',
+                title: target.description,
+                description:
+                    (Config.AppName ? '我在' + Config.AppName + '发现' : '') + '一个很有意思的内容，分享给你看看',
+                webpageUrl: Config.ServerRoot + `/share/post/${target.id}?user_id=${userStore.me.id}`,
                 thumbImageUrl: Config.ServerRoot + `/logo/${Config.Name}.com.png`,
                 scene: 1,
             });
