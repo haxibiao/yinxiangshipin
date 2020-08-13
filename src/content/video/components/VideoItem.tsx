@@ -1,28 +1,63 @@
 import React, { useRef, useMemo, useState, useCallback } from 'react';
 import { StyleSheet, Text, View, Image, TouchableWithoutFeedback, DeviceEventEmitter } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+import { Overlay } from 'teaset';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useApolloClient } from '@apollo/react-hooks';
-import LinearGradient from 'react-native-linear-gradient';
+import { ApolloProvider } from 'react-apollo';
 import { SafeText } from '@src/components';
 import { observer } from '@src/store';
-import Player from './Player';
-import SideBar from './SideBar';
 import { Commodity } from '../../widget';
 import { font, pixel } from '../../helper';
+import Player from './Player';
+import SideBar from './SideBar';
+import VideoOperation from './VideoOperation';
 
-// 109
 export default observer((props) => {
     const { media, index, store } = props;
     const viewable = index === store.viewableItemIndex;
     const client = useApolloClient();
     const navigation = useNavigation();
-
+    // 获取播放器实例，控制视频播放状态
     const playerRef = useRef();
     const togglePause = useCallback(() => {
         if (playerRef.current?.togglePause instanceof Function) {
             playerRef.current.togglePause();
         }
     }, []);
+    // 删除/不感兴趣 操作回调
+    const removeMedia = useCallback(() => {
+        store.removeItem(media);
+    }, [media]);
+    // 长按操作
+    const overlayRef = useRef();
+    const operation = useMemo(() => {
+        return (
+            <ApolloProvider client={client}>
+                <VideoOperation
+                    client={client}
+                    navigation={navigation}
+                    target={media}
+                    videoUrl={media?.video?.url}
+                    videoTitle={media?.body}
+                    options={['下载', '不感兴趣', '举报']}
+                    closeOverlay={() => overlayRef.current?.close()}
+                    onRemove={removeMedia}
+                />
+            </ApolloProvider>
+        );
+    }, [client, media, removeMedia]);
+    const showOperation = useCallback(() => {
+        const MoreOperationOverlay = (
+            <Overlay.PopView
+                style={styles.overlay}
+                ref={(ref) => (overlayRef.current = ref)}
+                containerStyle={{ backgroundColor: 'rgba(0,0,0,0.6)' }}>
+                {operation}
+            </Overlay.PopView>
+        );
+        Overlay.show(MoreOperationOverlay);
+    }, [operation]);
 
     const resizeMode = useMemo(() => {
         const videoHeight = media?.video?.height;
@@ -68,10 +103,10 @@ export default observer((props) => {
                     media={media}
                     resizeMode={resizeMode}
                     viewable={viewable}
-                    client={client}
+                    showOperation={showOperation}
                 />
             </View>
-            <TouchableWithoutFeedback onPress={togglePause}>
+            <TouchableWithoutFeedback onPress={togglePause} onLongPress={showOperation}>
                 <LinearGradient
                     style={styles.blackContainer}
                     pointerEvents="box-none"
@@ -95,7 +130,7 @@ export default observer((props) => {
                             </SafeText>
                         </View>
                     </View>
-                    <SideBar media={media} store={store} client={client} />
+                    <SideBar media={media} store={store} client={client} removeMedia={removeMedia} />
                 </LinearGradient>
             </TouchableWithoutFeedback>
         </View>

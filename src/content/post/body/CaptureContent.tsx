@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { View, StyleSheet, Image, Text, TouchableOpacity, Animated } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { Avatar, Iconfont, SafeText, PlaceholderImage, GridImage, MoreOperation } from '@src/components';
+import { Avatar, Iconfont, SafeText, PlaceholderImage, GridImage } from '@src/components';
 import { observer, userStore } from '@src/store';
-import { useApolloClient, ApolloProvider } from '@apollo/react-hooks';
+import { useApolloClient } from '@apollo/react-hooks';
+import { ApolloProvider } from 'react-apollo';
 import { font, pixel, percent, WINDOW_WIDTH } from '../../helper';
 import { GQL, useLikeMutation } from '../../service';
-import { AnimationLike, Commodity } from '../../widget';
+import { AnimationLike, Commodity, MoreOperation } from '../../widget';
 import { Overlay } from 'teaset';
 
 const videoWidth = WINDOW_WIDTH * 0.6;
@@ -101,18 +102,18 @@ export default observer(
             return (
                 <ApolloProvider client={client}>
                     <MoreOperation
-                        navigation={navigation}
-                        onPressIn={hideMoreOperation}
                         target={post}
-                        showShare={true}
-                        downloadUrl={post?.video?.url}
-                        downloadUrlTitle={post?.body}
                         options={['删除', '下载', '复制链接']}
-                        deleteCallback={fadeOut}
+                        videoUrl={post?.video?.url}
+                        videoTitle={post?.body}
+                        closeOverlay={hideMoreOperation}
+                        onRemove={fadeOut}
+                        client={client}
+                        navigation={navigation}
                     />
                 </ApolloProvider>
             );
-        }, [post, fadeOut]);
+        }, [post, fadeOut, client]);
 
         const showMoreOperation = useCallback(() => {
             const Operation = (

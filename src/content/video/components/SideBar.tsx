@@ -1,19 +1,19 @@
 import React, { useRef, useMemo, useCallback } from 'react';
 import { StyleSheet, View, Image, Animated, TouchableOpacity, DeviceEventEmitter } from 'react-native';
-import { Avatar, SafeText, MoreOperation } from '@src/components';
+import { Avatar, SafeText } from '@src/components';
 import { useNavigation } from '@react-navigation/native';
 import { ApolloProvider } from 'react-apollo';
 import { observer } from '@src/store';
 import { Overlay } from 'teaset';
 import { font, pixel, count } from '../../helper';
-import { AnimationLike } from '../../widget';
+import { AnimationLike, MoreOperation } from '../../widget';
 
 const imageSource = {
     liked: require('@app/assets/images/ic_liked.png'),
     unlike: require('@app/assets/images/ic_like.png'),
 };
 
-export default observer(({ media, store, client }) => {
+export default observer(({ media, store, client, removeMedia }) => {
     const navigation = useNavigation();
 
     const showComment = useCallback(() => {
@@ -26,17 +26,18 @@ export default observer(({ media, store, client }) => {
         return (
             <ApolloProvider client={client}>
                 <MoreOperation
-                    navigation={navigation}
-                    onPressIn={() => overlayRef.current?.close()}
                     target={media}
-                    showShare={true}
-                    downloadUrl={media?.video?.url}
-                    downloadUrlTitle={media?.body}
                     options={['举报', '不感兴趣', '下载', '复制链接']}
+                    videoUrl={media?.video?.url}
+                    videoTitle={media?.body}
+                    closeOverlay={() => overlayRef.current?.close()}
+                    onRemove={removeMedia}
+                    client={client}
+                    navigation={navigation}
                 />
             </ApolloProvider>
         );
-    }, [client, media]);
+    }, [client, media, removeMedia]);
 
     const showMoreOperation = useCallback(() => {
         const MoreOperationOverlay = (

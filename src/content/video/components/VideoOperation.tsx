@@ -1,56 +1,49 @@
 import React, { useMemo, useCallback } from 'react';
 import { StyleSheet, View, Text, Image, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
-import { GQL, useMutation } from '@src/apollo';
+import { useMutation } from '@apollo/react-hooks';
 import { download } from '@src/common';
-import { useReport } from '@src/components';
+import { GQL, errorMessage, useReport } from '../../service';
+import { percent, pixel, font } from '../../helper';
 
 const VideoOperation = (props) => {
-    const {
-        client,
-        options,
-        target,
-        type,
-        downloadUrl,
-        downloadUrlTitle,
-        onPressIn,
-        deleteCallback,
-        navigation,
-    } = props;
+    const { options, type, target, videoUrl, videoTitle, closeOverlay, onRemove, client, navigation } = props;
     const report = useReport({ target, type });
     const [deleteArticleMutation] = useMutation(GQL.deleteArticle, {
         variables: {
             id: target.id,
         },
         onCompleted: (data) => {
-            deleteCallback();
+            if (onRemove instanceof Function) {
+                onRemove();
+            }
             Toast.show({
                 content: '删除成功',
             });
         },
         onError: (error) => {
             Toast.show({
-                content: error.message.replace('GraphQL error: ', '') || '删除失败',
+                content: errorMessage(error) || '删除失败',
             });
         },
     });
 
     const deleteArticle = useCallback(() => {
-        onPressIn();
+        closeOverlay();
         deleteArticleMutation();
     }, [deleteArticleMutation]);
 
     const reportArticle = useCallback(() => {
-        onPressIn();
+        closeOverlay();
         report();
     }, [report]);
 
     const downloadVideo = useCallback(() => {
-        onPressIn();
-        download({ url: downloadUrl, title: downloadUrlTitle });
-    }, [downloadUrl]);
+        closeOverlay();
+        download({ url: videoUrl, title: videoTitle });
+    }, [videoUrl]);
 
     const dislike = useCallback(() => {
-        onPressIn();
+        closeOverlay();
         if (TOKEN) {
             client
                 .mutate({
@@ -60,11 +53,14 @@ const VideoOperation = (props) => {
                     },
                 })
                 .then((result) => {
+                    if (onRemove instanceof Function) {
+                        onRemove();
+                    }
                     Toast.show({ content: '操作成功，将减少此类型内容的推荐！' });
                 })
                 .catch((error) => {
                     //查询接口，服务器返回错误后
-                    Toast.show({ content: error.message });
+                    Toast.show({ content: errorMessage(error) || '操作失败' });
                 });
         } else {
             navigation.navigate('Login');
@@ -105,7 +101,7 @@ const VideoOperation = (props) => {
     }, [options]);
 
     return (
-        <TouchableWithoutFeedback onPress={onPressIn}>
+        <TouchableWithoutFeedback onPress={closeOverlay}>
             <View style={styles.optionsContainer}>
                 <Text style={styles.title}>请选择你要进行的操作</Text>
                 <View style={styles.body}>{optionsView}</View>
@@ -123,7 +119,6 @@ const styles = StyleSheet.create({
     body: {
         flexDirection: 'row',
         justifyContent: 'center',
-        paddingVertical: pixel(30),
     },
     optionIcon: {
         height: pixel(50),
@@ -140,15 +135,16 @@ const styles = StyleSheet.create({
         marginTop: pixel(10),
     },
     optionsContainer: {
-        height: Device.HEIGHT,
-        justifyContent: 'flex-end',
-        paddingBottom: Device.HEIGHT / 2,
-        width: Device.WIDTH,
+        width: percent(100),
+        height: percent(100, 'height'),
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     title: {
-        color: '#fff',
+        marginBottom: font(20),
         fontSize: font(20),
         textAlign: 'center',
+        color: '#fff',
     },
 });
 

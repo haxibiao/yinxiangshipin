@@ -29,7 +29,7 @@ interface VideoItem {
     is_ad: boolean;
 }
 
-const unique = {};
+const uniqueIds = {};
 
 const calculateHeight = Device.isFullScreenDevice
     ? Device.HEIGHT - Theme.statusBarHeight - Theme.BOTTOM_HEIGHT
@@ -109,10 +109,15 @@ class DrawVideoStore {
     @action.bound
     public addSource(source: VideoItem[]) {
         const newData = source.filter((item) => {
-            unique[item?.id] = unique[item?.id] + 1 || 1;
-            return unique[item?.id] <= 1;
+            uniqueIds[item?.id] = uniqueIds[item?.id] + 1 || 1;
+            return uniqueIds[item?.id] <= 1;
         });
         this.data = this.data.concat(newData);
+    }
+
+    @action.bound
+    public removeItem(source: VideoItem) {
+        this.data.splice(this.data.indexOf(source), 1);
     }
 
     @action.bound
