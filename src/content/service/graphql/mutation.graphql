@@ -88,31 +88,30 @@ mutation updatePostMutation($id: Int!, $content: String, $description: String, $
     }
 }
 
-#添加标签
-# {
-#   "taggable_id": 1,
-#   "taggable_type": "posts",
-#   "tag_ids": [1,2,3,5]
-# }
-
-# {
-#  "taggable_id": 1,
-#   "taggable_type": "posts",
-#    "name": "我推荐的电影"
-# }
-
-# {
-#  "taggable_id": 1,
-#  "taggable_type": "posts",
-#  "name": "我推荐的电影,我最近看的电影"
-# }
-mutation addTagMutation($taggable_id: Int!, $taggable_type: tagType!, $name: String, $tag_ids: [Int]) {
-    addTag(taggable_id: $taggable_id, taggable_type: $taggable_type, name: $name, tag_ids: $tag_ids)
-}
-
 # 删除
 mutation deletePost($id: Int!) {
     deletePost(id: $id) {
+        id
+    }
+}
+
+# 删除
+mutation deleteArticle($id: Int!) {
+    deleteArticle(id: $id) {
+        id
+    }
+}
+
+# 不感兴趣
+mutation addArticleBlockMutation($id: Int!) {
+    addArticleBlock(id: $id) {
+        id
+    }
+}
+
+#拉黑用户
+mutation addUserBlockMutation($id: Int!) {
+    addUserBlock(id: $id) {
         id
     }
 }

@@ -362,3 +362,8 @@ query userLikedArticlesQuery($user_id: Int!, $page: Int) {
         }
     }
 }
+
+#复制视频链接
+query shareQuery($id: ID!) {
+    sharePost(id: $id)
+}
