@@ -82,11 +82,26 @@ const MoreOperation = (props: any) => {
         closeOverlay();
         // Android 保存文件权限检查
         if (Platform.OS === 'android') {
-            check(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE).then((result: any) => {
+
+            // FIXME: By Bin 这里之前是申请了读取权限，但是没有写入权限导致闪退问题
+            // // 外部储存读取权限获取
+            // check(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE).then((result: any) => {
+            //     console.log('测试', result);
+            //     if (result === RESULTS.GRANTED) {
+            //         // 获取权限成功
+            //     } else {
+            //         request(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE).then((result: any) => {
+            //             // 申请权限之后
+            //         });
+            //     }
+            // });
+
+            // 外部储存写入权限获取
+            check(PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE).then((result: any) => {
                 if (result === RESULTS.GRANTED) {
                     toDownloadVideo();
                 } else {
-                    request(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE).then((result: any) => {
+                    request(PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE).then((result: any) => {
                         downloadVideo();
                     });
                 }

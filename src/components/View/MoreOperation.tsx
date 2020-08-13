@@ -91,13 +91,14 @@ const MoreOperation = (props: any) => {
     const downloadVideo = useCallback(() => {
         onPressIn();
 
-        // Android 保存文件权限检查
+        // TODO: 之后这里的权限判断代码要迁移到下载函数中实现
         if (Platform.OS === 'android') {
-            check(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE).then((result: any) => {
+            // 外部储存写入权限获取
+            check(PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE).then((result: any) => {
                 if (result === RESULTS.GRANTED) {
                     toDownloadVideo();
                 } else {
-                    request(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE).then((result: any) => {
+                    request(PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE).then((result: any) => {
                         downloadVideo();
                     });
                 }
