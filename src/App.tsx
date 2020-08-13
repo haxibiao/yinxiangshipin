@@ -14,7 +14,6 @@ import ApolloApp from './ApolloApp';
 function App() {
     const { appStore } = store;
     const appLunch = useRef(true);
-    SplashScreen.hide();
     if (appLunch.current) {
         Orientation.lockToPortrait();
         SplashScreen.hide();

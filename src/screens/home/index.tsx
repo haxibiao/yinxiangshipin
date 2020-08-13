@@ -3,9 +3,12 @@ import { StyleSheet, View, Text, StatusBar } from 'react-native';
 import { observer, appStore, userStore } from '@src/store';
 import { VideoList, useClipboardLink, CollectionContent } from '@src/content';
 import { useApolloClient } from '@apollo/react-hooks';
+import { useBeginner } from '@src/common';
 import { Overlay } from 'teaset';
 
 export default observer(() => {
+    useBeginner();
+
     const [shareContent] = useClipboardLink();
 
     const showShareContentModal = useMemo(() => {

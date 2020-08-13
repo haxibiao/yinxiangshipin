@@ -4,7 +4,6 @@ import { observer, appStore, userStore, Keys, Storage } from '@src/store';
 import { PageContainer, Iconfont, Row, Avatar } from '@src/components';
 import { FocusAwareStatusBar, authNavigate, useNavigation } from '@src/router';
 import { GQL, useQuery, useApolloClient } from '@src/apollo';
-import { useBeginner } from '@src/common';
 
 export default observer((props: any) => {
     const client = useApolloClient();

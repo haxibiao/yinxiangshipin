@@ -12,7 +12,7 @@ export const useBeginner = () => {
     const navigation = useNavigation();
 
     useEffect(() => {
-        (async function() {
+        (async function () {
             isAgreed.current = await Storage.getItem(UserAgreementGuide);
             addBackListener();
             onFocus();
@@ -33,7 +33,7 @@ export const useBeginner = () => {
         }
     }, []);
 
-    const navigate = useCallback(routeName => {
+    const navigate = useCallback((routeName) => {
         onBlur();
         removeBackListener();
         navigation.navigate(routeName);
@@ -59,7 +59,7 @@ export const useBeginner = () => {
                     <ScrollView contentContainerStyle={styles.agreementContent} showsVerticalScrollIndicator={false}>
                         <Text style={styles.title}>个人信息保护指引</Text>
                         <View>
-                            <Text style={styles.tintFont}>&nbsp; &nbsp;感谢您信任并使用{Config.AppName}</Text>
+                            <Text style={styles.tintFont}>感谢您信任并使用{Config.AppName}</Text>
                         </View>
                         <View>
                             <Text style={styles.tintFont}>
@@ -135,7 +135,7 @@ export const useBeginner = () => {
         return () => {
             navFocusListener();
         };
-    }, [onFocus, onBlur]);
+    }, [onFocus]);
 };
 
 const styles = StyleSheet.create({
