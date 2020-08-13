@@ -1,5 +1,5 @@
 import React, { useRef, useMemo, useCallback } from 'react';
-import { StyleSheet, View, Text, Image, ScrollView, Linking } from 'react-native';
+import { StyleSheet, View, Text, Image, ScrollView, Linking, Platform } from 'react-native';
 import Clipboard from '@react-native-community/clipboard';
 import { GQL, useMutation, useClientBuilder } from '@src/apollo';
 import { download, exceptionCapture, syncGetter } from '@src/common';
@@ -9,6 +9,7 @@ import * as WeChat from 'react-native-wechat-lib';
 import useReport from './useReport';
 import TouchFeedback from '../Basic/TouchFeedback';
 import ShareIOS from 'react-native-share';
+import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 // import * as QQAPI from 'react-native-qq';
 
 const MoreOperation = (props: any) => {
@@ -83,9 +84,27 @@ const MoreOperation = (props: any) => {
         report();
     }, [report]);
 
+    const toDownloadVideo = () => {
+        download({ url: downloadUrl, title: downloadUrlTitle || Config.AppID + '_' + target.id });
+    };
+
     const downloadVideo = useCallback(() => {
         onPressIn();
-        download({ url: downloadUrl, title: downloadUrlTitle });
+
+        // Android 保存文件权限检查
+        if (Platform.OS === 'android') {
+            check(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE).then((result: any) => {
+                if (result === RESULTS.GRANTED) {
+                    toDownloadVideo();
+                } else {
+                    request(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE).then((result: any) => {
+                        downloadVideo();
+                    });
+                }
+            });
+        } else {
+            toDownloadVideo();
+        }
     }, [downloadUrl]);
 
     const dislike = useCallback(() => {
