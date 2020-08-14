@@ -117,7 +117,7 @@ export default observer(
             <>
                 <View style={styles.header}>
                     <View style={styles.creator}>
-                        <TouchableOpacity onPress={() => navigation.navigate('User', { user })}>
+                        <TouchableOpacity onPress={() => navigation.navigate('User', { user: post?.user })}>
                             <Avatar source={user?.avatar} size={pixel(38)} />
                         </TouchableOpacity>
                         <View style={styles.userInfo}>

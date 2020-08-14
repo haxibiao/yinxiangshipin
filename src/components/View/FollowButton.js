@@ -3,11 +3,10 @@ import { StyleSheet, View, Text, TouchableWithoutFeedback, TouchableOpacity } fr
 import { useNavigation } from '@react-navigation/native';
 import { GQL, useFollowMutation, errorMessage } from '@src/apollo';
 import { userStore } from '@src/store';
+import { exceptionCapture } from '@src/common';
 import Iconfont from '../Iconfont';
 
 type Props = {
-    id: number,
-    followedStatus: boolean | number,
     style?: any,
     titleStyle?: any,
     activeColor?: any,
@@ -15,11 +14,10 @@ type Props = {
 };
 
 const FollowButton = (props: Props) => {
-    const { id, activeColor, tintColor, followedStatus, ...others } = props;
+    const { user, activeColor, tintColor, ...others } = props;
     const navigation = useNavigation();
-    const [followed, setFollowed] = React.useState(!!followedStatus);
     let title, backgroundColor, textColor;
-    if (followed) {
+    if (user?.followed_status > 0) {
         title = '已关注';
         textColor = activeColor;
         backgroundColor = '#b2b2b2';
@@ -45,39 +43,41 @@ const FollowButton = (props: Props) => {
 
     const followUser = useFollowMutation({
         variables: {
-            id,
+            id: user?.id,
         },
         refetchQueries: () => [
             {
                 query: GQL.followedUsersQuery,
-                variables: { user_id: userStore.me.id },
+                variables: { user_id: userStore.me?.id },
             },
-            {
-                query: GQL.userQuery,
-                variables: { id },
-            },
+            // {
+            //     query: GQL.userQuery,
+            //     variables: { id: user?.id },
+            // },
         ],
-        onError: (error: any) => {
-            Toast.show({ content: errorMessage(error) || '关注失败', layout: 'top' });
-        },
     });
 
-    const onFollowHandler = useCallback(() => {
+    const onFollowHandler = useCallback(async () => {
         if (!userStore.login) {
             navigation.navigate('Login');
         } else {
-            setFollowed((f) => !f);
-            followUser();
+            user.followed_status = user?.followed_status > 0 ? null : user?.id;
+            const [error, res] = await exceptionCapture(followUser);
+            console.log('res', res);
+            if (error) {
+                user.followed_status = user?.followed_status > 0 ? null : user?.id;
+                Toast.show({ content: errorMessage(error) || '关注失败', layout: 'top' });
+            }
         }
-    }, [followUser]);
+    }, [user, followUser]);
 
-    if (userStore.me.id === props.id) {
+    if (userStore.me.id === user?.id) {
         return null;
     }
-
+    console.log('user.followed_status', user.followed_status);
     return (
         <TouchableOpacity {...others} style={style} onPress={onFollowHandler}>
-            {!followed && (
+            {!user?.followed_status > 0 && (
                 <Iconfont
                     name="iconfontadd"
                     size={titleStyle.fontSize}

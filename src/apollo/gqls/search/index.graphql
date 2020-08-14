@@ -93,6 +93,9 @@ query searchPostQuery($query: String!, $page: Int) {
                 name
                 avatar
                 followed_status
+                gender
+                age
+                introduction
             }
             categories {
                 id

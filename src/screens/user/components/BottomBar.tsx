@@ -22,12 +22,7 @@ const BottomBar = observer((props: any) => {
             start={{ x: 0, y: 1 }}
             end={{ x: 0, y: 0 }}
             colors={['rgba(255,255,255,1)', 'rgba(255,255,255,0)']}>
-            <FollowButton
-                id={user.id}
-                followedStatus={user.followed_status}
-                style={styles.button}
-                titleStyle={styles.titleStyle}
-            />
+            <FollowButton user={user} style={styles.button} titleStyle={styles.titleStyle} />
             <TouchFeedback
                 style={[styles.button, { backgroundColor: Theme.watermelon }]}
                 onPress={() => {

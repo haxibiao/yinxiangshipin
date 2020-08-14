@@ -19,6 +19,9 @@ query recommendVideosQuery($page: Int, $count: Int) {
                 name
                 avatar
                 followed_status
+                gender
+                age
+                introduction
             }
             categories {
                 id
@@ -55,9 +58,13 @@ query recommendPostsQuery {
         is_ad
         created_at
         user {
-            avatar
-            name
             id
+            name
+            avatar
+            followed_status
+            gender
+            age
+            introduction
         }
         categories {
             id
@@ -118,6 +125,9 @@ query publicPostsQuery($user_id: Int, $count: Int, $page: Int) {
                 name
                 avatar
                 followed_status
+                gender
+                age
+                introduction
             }
             categories {
                 id
@@ -169,6 +179,9 @@ query postsQuery($user_id: Int!, $count: Int, $page: Int) {
                 name
                 avatar
                 followed_status
+                gender
+                age
+                introduction
             }
             categories {
                 id
@@ -229,6 +242,9 @@ query userPostsQuery($user_id: Int!, $filter: PostFilter, $count: Int, $page: In
                 name
                 avatar
                 followed_status
+                gender
+                age
+                introduction
             }
             tags {
                 data {
@@ -285,6 +301,9 @@ query searchPostQuery($query: String!, $page: Int) {
                 name
                 avatar
                 followed_status
+                gender
+                age
+                introduction
             }
             tags {
                 data {

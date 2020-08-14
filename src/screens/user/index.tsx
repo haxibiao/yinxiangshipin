@@ -27,7 +27,7 @@ const index = (props: Props) => {
     const [activeTabIndex, setActiveTabIndex] = useState(0);
     const navigation = useNavigation();
     const route = useRoute();
-    const user = route.params?.user || {};
+    const user = route.params?.user;
 
     const headerOnLayout = useCallback((event: any) => {
         const { height } = event.nativeEvent.layout;
@@ -44,7 +44,7 @@ const index = (props: Props) => {
                 <UserProfile user={user} />
             </View>
         );
-    }, []);
+    }, [user]);
 
     const _renderNavBar = (animation: any): React.ReactElement => {
         const headerOpacity = animation.interpolate({
@@ -63,7 +63,7 @@ const index = (props: Props) => {
                 </TouchableOpacity>
                 <Animated.View style={styles.navBarTitle}>
                     <Text style={styles.titleText} numberOfLines={1}>
-                        {user.name}
+                        {user?.name}
                     </Text>
                 </Animated.View>
 

@@ -26,7 +26,7 @@ export default observer((props: { user: any; titleStyle: TextStyle; contentStyle
         fetchPolicy: 'network-only',
     });
     const isSelf = useMemo(() => userStore.me.id === user.id, []);
-    const userProfile = useMemo(() => userQueryResult?.user || user, [userQueryResult]);
+    const userProfile = useMemo(() => Object.assign(user, userQueryResult?.user), [userQueryResult]);
 
     const showMoreOperation = useCallback(() => {
         let overlayRef: any;
@@ -102,8 +102,7 @@ export default observer((props: { user: any; titleStyle: TextStyle; contentStyle
                                     <Text style={styles.hollowButtonText}>聊天</Text>
                                 </TouchableOpacity>
                                 <FollowButton
-                                    id={userProfile.id}
-                                    followedStatus={userProfile.followed_status}
+                                    user={userProfile}
                                     style={styles.hollowButton}
                                     titleStyle={styles.hollowButtonText}
                                 />

@@ -34,9 +34,12 @@ mutation createPostContent(
         is_ad
         created_at
         user {
-            avatar
-            name
             id
+            name
+            avatar
+            gender
+            age
+            introduction
         }
         categories {
             id

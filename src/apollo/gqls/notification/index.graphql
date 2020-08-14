@@ -77,6 +77,9 @@ query commentNotificationQuery($page: Int) {
                 name
                 avatar
                 followed_status
+                gender
+                age
+                introduction
             }
         }
     }
@@ -150,6 +153,9 @@ query likeNotificationsQuery($page: Int) {
                 name
                 avatar
                 followed_status
+                gender
+                age
+                introduction
             }
         }
     }
@@ -182,6 +188,9 @@ query followersNotificationsQuery($page: Int) {
                 name
                 avatar
                 followed_status
+                gender
+                age
+                introduction
             }
         }
     }
@@ -255,6 +264,9 @@ query otherNotificationsQuery($page: Int) {
                 name
                 avatar
                 followed_status
+                gender
+                age
+                introduction
             }
         }
     }

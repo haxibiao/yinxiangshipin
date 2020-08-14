@@ -28,27 +28,25 @@ type Props = {
 class UserItem extends Component<Props> {
     render() {
         const { user, style, navigation } = this.props;
-        const { id = 1, avatar, name, followed_status, introduction } = user;
 
         return (
             <TouchableOpacity style={[styles.item, style]} onPress={() => navigation.navigate('User', { user })}>
-                <Avatar source={avatar} size={pixel(50)} />
+                <Avatar source={user?.avatar} size={pixel(50)} />
                 <View style={styles.right}>
                     <View style={styles.info}>
                         <SafeText style={styles.nameText} numberOfLines={1}>
-                            {name}
+                            {user?.name}
                         </SafeText>
-                        {!!introduction && (
+                        {!!user?.introduction && (
                             <View style={{ flex: 1 }}>
                                 <SafeText style={styles.introduction} numberOfLines={1}>
-                                    {introduction}
+                                    {user?.introduction}
                                 </SafeText>
                             </View>
                         )}
                     </View>
                     <FollowButton
-                        id={id}
-                        followedStatus={followed_status}
+                        user={user}
                         style={{
                             width: pixel(70),
                             height: pixel(30),
