@@ -6,7 +6,7 @@
     "UploadServer": "http://yxsp.haxifang.cn",
     "AppSlogan": "专注短视频，知识变现的app",
     "Version": "1.0.0",
-    "VersionCode": 1,
+    "VersionCode": 2,
     "Build": 1,
     "SocketServer": "ws://socket.yinxiangshipin.com:6004",
 
