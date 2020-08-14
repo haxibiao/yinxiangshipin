@@ -116,8 +116,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     toast: {
-        maxWidth: '50%',
-        backgroundColor: 'rgba(32,30,51,0.7)',
+        maxWidth: '70%',
+        backgroundColor: 'rgba(0,0,0,0.8)',
         borderRadius: pixel(5),
         paddingVertical: pixel(8),
         paddingHorizontal: pixel(10),

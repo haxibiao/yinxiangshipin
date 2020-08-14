@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, ScrollView, TouchableOpacity, BackHandler } fro
 import { Overlay } from 'teaset';
 import { Storage } from '@src/store';
 import { useNavigation, useRoute } from '@react-navigation/native';
-const UserAgreementGuide = 'UserAgreementGuide2.9.7';
+const UserAgreementGuide = 'UserAgreementGuide' + Config.Version;
 
 export const useBeginner = () => {
     const backListener = useRef();

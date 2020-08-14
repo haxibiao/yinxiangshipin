@@ -44,7 +44,7 @@ export default observer((props: any) => {
         fetch(Config.ServerRoot + '/api/user/save-avatar?api_token=' + token, config)
             .then((response) => response.text())
             .then((res) => {
-                userStore.changeAvatar(`${res}?${new Date().getTime()}`);
+                userStore.changeAvatar(res);
             })
             .catch((err) => {
                 console.log('err', err);

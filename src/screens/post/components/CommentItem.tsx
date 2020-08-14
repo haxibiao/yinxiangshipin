@@ -110,7 +110,7 @@ const CommentItem = observer((props: Props) => {
         } else {
             operations.push({
                 title: '举报评论',
-                onPress: () => navigation.navigate('Report', {}),
+                onPress: () => Toast.show({ content: '举报成功' }),
             });
         }
 
