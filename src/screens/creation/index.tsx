@@ -18,6 +18,7 @@ import { useApolloClient, ApolloProvider } from '@apollo/react-hooks';
 import { observable } from 'mobx';
 import { Overlay } from 'teaset';
 import Video from 'react-native-video';
+import { Badge, UserAgreementOverlay } from '@src/components';
 
 const contentGap = pixel(20);
 const MediaItemWidth = (Device.WIDTH - pixel(60)) / 3;
@@ -122,6 +123,16 @@ export default (props: any) => {
         } else {
             setFormData((prevFormData) => {
                 return { ...prevFormData, qcvod_fileid: response ? response.video_id : null };
+            });
+        }
+    }, []);
+
+    useEffect(() => {
+        if (!appStore.createUserAgreement) {
+            UserAgreementOverlay(() => {
+                navigation.navigate('CreatePost');
+            }, () => {
+                navigation.goBack();
             });
         }
     }, []);

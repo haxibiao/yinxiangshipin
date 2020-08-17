@@ -17,7 +17,6 @@ import { CommonActions, useTheme } from '@react-navigation/native';
 import { useSafeArea } from 'react-native-safe-area-context';
 import { BoxShadow } from 'react-native-shadow';
 import { observer, userStore, appStore } from '@src/store';
-import { Badge, UserAgreementOverlay } from '@src/components';
 import { Overlay } from 'teaset';
 import PublishMenu from './PublishMenu';
 
@@ -321,13 +320,7 @@ function PublishButton({ navigation }) {
 
     const onPublishPress = React.useCallback(() => {
         if (userStore.login) {
-            if (!appStore.createUserAgreement) {
-                UserAgreementOverlay(() => {
-                    navigation.navigate('CreatePost');
-                });
-            } else {
-                navigation.navigate('CreatePost');
-            }
+            navigation.navigate('CreatePost');
         } else {
             navigation.navigate('Login');
         }

@@ -13,7 +13,7 @@ type multipleChoiceProps = {
 };
 
 const UserAgreementOverlayView = (props: any) => {
-    const { hide } = props;
+    const { hide, refused } = props;
     const [IsChoice, setIsChoice] = useState(true);
     const [isAgr, setisAgr] = useState(true);
 
@@ -88,11 +88,11 @@ i.怂恿、诱导他人参与可能会造成人身伤害或导致死亡的危险
             </ScrollView>
 
             <View style={styles.footer}>
-                {/* <TouchableOpacity
-                            style={[styles.bottomBtn, { borderColor: '#EAEAEA', borderRightWidth: pixel(0.5) }]}
-                            onPress={refused}>
-                            <Text style={{ marginRight: 5, color: '#191919', fontWeight: 'bold' }}>不同意</Text>
-                        </TouchableOpacity> */}
+                <TouchableOpacity
+                    style={[styles.bottomBtn, { borderColor: '#EAEAEA', borderRightWidth: pixel(0.5) }]}
+                    onPress={refused}>
+                    <Text style={{ marginRight: 5, color: '#191919', fontWeight: 'bold' }}>不同意</Text>
+                </TouchableOpacity>
                 <TouchableOpacity style={styles.bottomBtn} onPress={hide}>
                     <Text style={{ marginRight: 5, color: Theme.primaryColor, fontWeight: 'bold' }}>我同意</Text>
                 </TouchableOpacity>
@@ -102,7 +102,7 @@ i.怂恿、诱导他人参与可能会造成人身伤害或导致死亡的危险
 };
 
 var isShow: any = null;
-const UserAgreementOverlay = (onHide?: () => void) => {
+const UserAgreementOverlay = (onHide?: () => void, onRefused?: () => void) => {
     let overlayRef: any;
     if (!isShow) {
         isShow = Overlay.show(
@@ -118,6 +118,11 @@ const UserAgreementOverlay = (onHide?: () => void) => {
                         Storage.setItem(Keys.createUserAgreement, true);
                         overlayRef.close();
                         onHide && onHide();
+                        isShow = null;
+                    }}
+                    refused={() => {
+                        overlayRef.close();
+                        onRefused && onRefused();
                         isShow = null;
                     }}
                 />
