@@ -11,6 +11,8 @@ interface ItemKeys {
     notFirstInstall: string;
     viewedVersion: any;
     createPostGuidance: string;
+    createUserAgreement: string,
+
     ShowSplash: string;
     searchRecord: string;
 }
@@ -22,6 +24,7 @@ const Keys = {
     notFirstInstall: 'notFirstInstall',
     viewedVersion: 'viewedVersion',
     createPostGuidance: 'createPostGuidance',
+    createUserAgreement: 'createUserAgreement',
     ShowSplash: 'ShowSplash',
     searchRecord: 'searchRecord',
 } as const;

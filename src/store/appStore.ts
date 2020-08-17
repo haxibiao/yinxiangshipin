@@ -57,8 +57,10 @@ class App {
     @observable enableAd: boolean = false; // 广告开关
     @observable enableWallet: boolean = false; // 钱包相关业务开关
     @observable timeForLastAdvert: number = 0; // 最后一次广告播放事件
-
+    
     @observable createPostGuidance: boolean = true; // 用户引导,现在默认关闭
+    @observable public createUserAgreement: boolean = true; // 用户协议观看记录,默认已看
+
 
     constructor() {
         NetInfo.addEventListener(this.handleConnectivityChange);
@@ -69,6 +71,7 @@ class App {
     async recall() {
         // 现在默认关闭
         // this.createPostGuidance = await Storage.getItem(Keys.createPostGuidance);
+        this.createUserAgreement = await Storage.getItem(Keys.createUserAgreement) || false;
     }
 
     @action.bound
