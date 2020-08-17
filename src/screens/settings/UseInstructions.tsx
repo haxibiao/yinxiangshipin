@@ -2,31 +2,28 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { PageContainer } from '@src/components';
 import { useNavigation, useRoute } from '@react-navigation/native';
-// 健康分使用说明
+// 积分使用说明
 const UseInstructions = () => {
     const navigation = useNavigation();
     return (
         <PageContainer title="使用说明" white>
             <View style={styles.container}>
                 <View>
-                    <Text style={styles.title}>印象视频健康分使用说明</Text>
+                    <Text style={styles.title}>印象视频积分使用说明</Text>
                 </View>
                 <View style={styles.fontWrap}>
                     <Text style={styles.tintFont}>目的：制定一个比较完善的健康分作为一个可视化文档,供用户参考。</Text>
                 </View>
                 <View style={styles.fontWrap}>
-                    <Text style={styles.tintFont}>什么是健康分？ </Text>
-                    <Text style={styles.tintFont}>
-                        {' '}
-                        健康分作为一个虚拟的货币，只能通过印象视频软件才能获取并兑换。{' '}
-                    </Text>
+                    <Text style={styles.tintFont}>什么是积分？ </Text>
+                    <Text style={styles.tintFont}> 积分作为一个虚拟的货币，只能通过印象视频软件才能获取并兑换。 </Text>
                 </View>
 
                 <View style={styles.fontWrap}>
                     <Text style={styles.tintFont}>如何获取？</Text>
                     <View>
                         <Text style={styles.tintFont}>
-                            用户可以通过回答问题发布问题或者写文章来获取健康分，也可通过《价值池》瓜分健康分/金钱。详情请见
+                            用户可以通过回答问题发布问题或者写文章来获取积分，也可通过《价值池》瓜分积分/金钱。详情请见
                         </Text>
 
                         {/* <TouchableOpacity onPress={() => navigation.navigate('价值池')}>
@@ -38,9 +35,9 @@ const UseInstructions = () => {
                 </View>
 
                 <View style={styles.fontWrap}>
-                    <Text style={styles.tintFont}>健康分能做什么？</Text>
+                    <Text style={styles.tintFont}>积分能做什么？</Text>
                     <Text style={styles.tintFont}>
-                        健康分作为平台唯一的虚拟货币，健康分可以兑换成余额进行提现。 每日每人都会被限制获取健康分额度。
+                        积分作为平台唯一的虚拟货币，积分可以兑换成余额进行提现。 每日每人都会被限制获取积分额度。
                     </Text>
                 </View>
                 <View style={styles.fontWrap}>
@@ -50,8 +47,8 @@ const UseInstructions = () => {
                     </Text>
                 </View>
                 <View style={styles.fontWrap}>
-                    <Text style={styles.tintFont}>怎么提高获取健康分每日额度？ </Text>
-                    <Text style={styles.tintFont}> 账号活跃度越高，每日获得的健康分额度也会越高。</Text>
+                    <Text style={styles.tintFont}>怎么提高获取积分每日额度？ </Text>
+                    <Text style={styles.tintFont}> 账号活跃度越高，每日获得的积分额度也会越高。</Text>
                 </View>
                 <View style={styles.fontWrap}>
                     <Text style={styles.tintFont}>怎么才能提高日活跃度呢？ </Text>

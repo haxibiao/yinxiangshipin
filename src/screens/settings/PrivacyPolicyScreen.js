@@ -285,7 +285,7 @@ class PrivacyPolicyScreen extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#FFF',
     },
     fontWrap: {
         marginTop: 10,
@@ -299,12 +299,12 @@ const styles = StyleSheet.create({
     },
     darkFont: {
         fontSize: font(15),
-        lineHeight: 20,
+        lineHeight: font(22),
         color: Theme.subTextColor,
     },
     tintFont: {
         fontSize: font(15),
-        lineHeight: 20,
+        lineHeight: font(22),
         color: Theme.subTextColor,
     },
 });
