@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     body: {
         width: SCREEN_WIDTH / 4,
         height: SCREEN_WIDTH / 4,
-        backgroundColor: 'rgba(32,30,51,0.7)',
+        backgroundColor: 'rgba(0,0,0,0.8)',
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 5,

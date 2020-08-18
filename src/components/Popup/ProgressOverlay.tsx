@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: pixel(120),
         minHeight: pixel(90),
-        backgroundColor: 'rgba(32,30,51,0.7)',
+        backgroundColor: 'rgba(0,0,0,0.8)',
         borderRadius: pixel(10),
     },
     message: {
