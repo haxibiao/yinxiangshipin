@@ -54,6 +54,7 @@ query MyFeedbackQuery($id: Int!, $count: Int, $page: Int) {
         data {
             id
             user {
+                id
                 name
                 avatar
                 gender
@@ -89,6 +90,7 @@ query FeedbacksQuery($page: Int, $count: Int) {
         data {
             id
             user {
+                id
                 name
                 avatar
                 gender
