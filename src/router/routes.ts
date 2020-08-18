@@ -37,7 +37,7 @@ import UserBlockScreen from '../screens/user/UserBlock';
 
 // my
 import BrowsingHistoryScreen from '../screens/my/HistoryScreen';
-import CollectionsScreen from '../screens/my/Collections';
+import GathersScreen from '../screens/my/Gathers';
 import EditProfileScreen from '../screens/profile/HomeScreen';
 
 // content
@@ -188,8 +188,8 @@ export default {
     获取验证码: {
         component: VerificationScreen,
     },
-    我的收藏: {
-        component: CollectionsScreen,
+    我的采集: {
+        component: GathersScreen,
     },
     浏览记录: {
         component: BrowsingHistoryScreen,

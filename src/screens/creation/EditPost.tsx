@@ -3,7 +3,7 @@ import { StyleSheet, View, Image, ScrollView, Text, Keyboard, StatusBar, Touchab
 import { PageContainer, HxfTextInput, Iconfont } from '@src/components';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { observer, userStore, appStore } from '@src/store';
-import { useMutation, useQuery, GQL } from '@src/apollo';
+import { useMutation, useQuery, GQL, errorMessage } from '@src/apollo';
 import { Overlay } from 'teaset';
 import Video from 'react-native-video';
 import AddTags from './AddTags';
@@ -28,9 +28,9 @@ export default (props: any) => {
     const [tagsName, setTagsName] = useState([...postTags]);
 
     const [formData, setFormData] = useState({
-        id: post.id,
-        content: post.content,
-        description: post.description,
+        id: post?.id,
+        content: post?.content,
+        description: post?.description,
     });
 
     const isDisableButton = useMemo(() => {
@@ -64,7 +64,7 @@ export default (props: any) => {
         ],
         onError: (error: any) => {
             Toast.show({
-                content: error.message.replace('GraphQL error: ', '') || '保存失败',
+                content: errorMessage(error) || '保存失败',
             });
         },
         onCompleted: (mutationResult: any) => {
@@ -173,13 +173,13 @@ export default (props: any) => {
                                 <View style={styles.label}>
                                     <Text style={styles.labelName}>标题</Text>
                                 </View>
-                                <Text style={styles.countText}>{`${formData.description.length}/40`}</Text>
+                                <Text style={styles.countText}>{`${formData?.description?.length}/40`}</Text>
                             </View>
                             <HxfTextInput
                                 style={styles.descriptionTextInput}
                                 placeholderTextColor={Theme.slateGray1}
                                 onChangeText={changeDescription}
-                                value={formData.description}
+                                value={formData?.description}
                                 multiline={true}
                                 maxLength={40}
                                 textAlignVertical="top"
@@ -190,13 +190,13 @@ export default (props: any) => {
                                 <View style={styles.label}>
                                     <Text style={styles.labelName}>内容</Text>
                                 </View>
-                                <Text style={styles.countText}>{`${formData.content.length}/200`}</Text>
+                                <Text style={styles.countText}>{`${formData?.content?.length}/200`}</Text>
                             </View>
                             <HxfTextInput
                                 style={styles.contentTextInput}
                                 placeholderTextColor={Theme.slateGray1}
                                 onChangeText={changeContent}
-                                value={formData.content}
+                                value={formData?.content}
                                 multiline={true}
                                 maxLength={200}
                                 textAlignVertical="top"

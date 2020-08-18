@@ -28,7 +28,7 @@ export const CollectionContent = ({ client, shareLink, content, onClose }: Props
                 <Text style={styles.title}>{content?.title}</Text>
             </View>
             <TouchableOpacity style={styles.shareBtn} onPress={shareContent}>
-                <Text style={styles.shareBtnText}>收藏视频</Text>
+                <Text style={styles.shareBtnText}>采集视频</Text>
             </TouchableOpacity>
             <Text style={styles.tips}>来自您复制的分享链接</Text>
         </View>
