@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { Iconfont, SafeText, Avatar, PullChooser, ItemSeparator } from '@src/components';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { exceptionCapture, useLinearAnimation } from '@src/common';
+import { exceptionCapture, useLinearAnimation, useReport } from '@src/common';
 import { useMutation, GQL } from '@src/apollo';
 import { userStore } from '@src/store';
 
@@ -88,12 +88,6 @@ const CommentItem = (props: Props) => {
         },
     });
 
-    const [acceptCommentMutation] = useMutation(GQL.acceptCommentMutation, {
-        variables: {
-            comment_ids: [comment.id],
-        },
-    });
-
     const deleteComment = useCallback(async () => {
         startAnimation(1, 0);
         const [error] = await exceptionCapture(deleteCommentMutation);
@@ -104,12 +98,11 @@ const CommentItem = (props: Props) => {
         }
     }, []);
 
-    const acceptComment = useCallback(async () => {
-        const [error] = await exceptionCapture(acceptCommentMutation);
-        if (error) {
-            Toast.show({ content: error.message || '采纳失败', layout: 'top' });
-        }
-    }, []);
+    const report = useReport({ target: comment, type: 'comments' });
+
+    const reportComment = useCallback(() => {
+        report();
+    }, [report]);
 
     const onLongPress = useCallback(() => {
         if (disableLongPress) {
@@ -130,7 +123,7 @@ const CommentItem = (props: Props) => {
         } else {
             operations.push({
                 title: '举报',
-                onPress: () => Toast.show({ content: '举报成功' }),
+                onPress: reportComment,
             });
         }
         PullChooser.show(operations);

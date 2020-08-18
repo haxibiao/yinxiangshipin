@@ -16,90 +16,89 @@ type ChooserItem = {
 
 type AnimateType = 'slide' | 'pop';
 
-class PullChooser {
-    static show(Choose: Array<ChooserItem>, animateType: AnimateType = 'slide') {
-        let overlayView;
-        if (animateType === 'pop') {
-            overlayView = (
-                <Overlay.PopView
-                    containerStyle={{ backgroundColor: 'transparent' }}
-                    style={{ flexDirection: 'column', justifyContent: 'center' }}
-                    animated
-                    ref={ref => (this.popViewRef = ref)}>
-                    <View style={styles.popSheetView}>
-                        <FlatList
-                            bounces={false}
-                            scrollEnabled={false}
-                            contentContainerStyle={styles.chooseContainer}
-                            data={Choose}
-                            renderItem={({ item, index }) => {
-                                return (
-                                    <TouchableOpacity
-                                        key={index}
-                                        style={styles.chooserItem}
-                                        onPress={() => {
-                                            item.onPress();
-                                            this.popViewRef.close();
-                                        }}>
-                                        <SafeText style={styles.chooserItemText}>{item.title}</SafeText>
-                                    </TouchableOpacity>
-                                );
-                            }}
-                            ItemSeparatorComponent={() => <ItemSeparator height={pixel(1)} />}
-                            keyExtractor={(item, index) => 'key_' + (item.id ? item.id : index)}
-                        />
-                    </View>
-                </Overlay.PopView>
-            );
-        } else {
-            overlayView = (
-                <Overlay.PullView
-                    containerStyle={{ backgroundColor: 'transparent' }}
-                    style={{ flexDirection: 'column', justifyContent: 'flex-end' }}
-                    animated
-                    ref={ref => (this.popViewRef = ref)}>
-                    <View style={styles.actionSheetView}>
-                        <FlatList
-                            bounces={false}
-                            scrollEnabled={false}
-                            contentContainerStyle={styles.chooseContainer}
-                            data={Choose}
-                            renderItem={({ item, index }) => {
-                                return (
-                                    <TouchableOpacity
-                                        activeOpacity={0.8}
-                                        key={index}
-                                        style={styles.chooserItem}
-                                        onPress={() => {
-                                            item.onPress();
-                                            this.popViewRef.close();
-                                        }}>
-                                        <SafeText style={styles.chooserItemText}>{item.title}</SafeText>
-                                    </TouchableOpacity>
-                                );
-                            }}
-                            ItemSeparatorComponent={() => <ItemSeparator height={pixel(1)} />}
-                            keyExtractor={(item, index) => 'key_' + (item.id ? item.id : index)}
-                        />
-                        <TouchableOpacity
-                            activeOpacity={0.8}
-                            style={styles.closeItem}
-                            onPress={() => {
-                                this.popViewRef.close();
-                            }}>
-                            <Text style={styles.headerText}>取消</Text>
-                        </TouchableOpacity>
-                    </View>
-                </Overlay.PullView>
-            );
-        }
-        this.OverlayKey = Overlay.show(overlayView);
+let OverlayKey: any = null;
+
+const show = (Choose: Array<ChooserItem>, animateType: AnimateType = 'slide') => {
+    let overlayView;
+    if (animateType === 'pop') {
+        overlayView = (
+            <Overlay.PopView
+                containerStyle={{ backgroundColor: 'transparent' }}
+                style={{ flexDirection: 'column', justifyContent: 'center' }}
+                animated>
+                <View style={styles.popSheetView}>
+                    <FlatList
+                        bounces={false}
+                        scrollEnabled={false}
+                        contentContainerStyle={styles.chooseContainer}
+                        data={Choose}
+                        renderItem={({ item, index }) => {
+                            return (
+                                <TouchableOpacity
+                                    key={index}
+                                    style={styles.chooserItem}
+                                    onPress={() => {
+                                        hide();
+                                        item.onPress();
+                                    }}>
+                                    <SafeText style={styles.chooserItemText}>{item.title}</SafeText>
+                                </TouchableOpacity>
+                            );
+                        }}
+                        ItemSeparatorComponent={() => <ItemSeparator height={pixel(1)} />}
+                        keyExtractor={(item, index) => 'key_' + (item.id ? item.id : index)}
+                    />
+                </View>
+            </Overlay.PopView>
+        );
+    } else {
+        overlayView = (
+            <Overlay.PullView
+                containerStyle={{ backgroundColor: 'transparent' }}
+                style={{ flexDirection: 'column', justifyContent: 'flex-end' }}
+                animated>
+                <View style={styles.actionSheetView}>
+                    <FlatList
+                        bounces={false}
+                        scrollEnabled={false}
+                        contentContainerStyle={styles.chooseContainer}
+                        data={Choose}
+                        renderItem={({ item, index }) => {
+                            return (
+                                <TouchableOpacity
+                                    activeOpacity={0.8}
+                                    key={index}
+                                    style={styles.chooserItem}
+                                    onPress={() => {
+                                        hide();
+                                        item.onPress();
+                                    }}>
+                                    <SafeText style={styles.chooserItemText}>{item.title}</SafeText>
+                                </TouchableOpacity>
+                            );
+                        }}
+                        ItemSeparatorComponent={() => <ItemSeparator height={pixel(1)} />}
+                        keyExtractor={(item, index) => 'key_' + (item.id ? item.id : index)}
+                    />
+                    <TouchableOpacity
+                        activeOpacity={0.8}
+                        style={styles.closeItem}
+                        onPress={() => {
+                            hide();
+                        }}>
+                        <Text style={styles.headerText}>取消</Text>
+                    </TouchableOpacity>
+                </View>
+            </Overlay.PullView>
+        );
     }
 
-    static hide() {
-        Overlay.hide(this.OverlayKey);
-    }
-}
+    OverlayKey = Overlay.show(overlayView);
+};
+
+const hide = () => {
+    Overlay.hide(OverlayKey);
+};
 
 const styles = StyleSheet.create({
     actionSheetView: {
@@ -139,4 +138,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default PullChooser;
+export default { show, hide };

@@ -1,21 +1,21 @@
-import React, { useCallback, useState, useRef } from 'react';
-import PullChooser from '../Popup/PullChooser';
-import { useApolloClient, useMutation, GQL } from '@src/apollo';
+import React, { useCallback, useRef } from 'react';
+import { PullChooser } from '@src/components';
+import { useMutation, GQL } from '@src/apollo';
 
-const useReport = props => {
+export const useReport = (props) => {
     const reason = useRef();
-    const [reportMutation] = useMutation(GQL.addReportMutation, {
+    const [reportMutation] = useMutation(GQL.createReport, {
         variables: {
             type: props.type,
             id: props.target.id,
             reason: reason.current,
         },
-        onCompleted: data => {
+        onCompleted: (data) => {
             Toast.show({
                 content: '举报成功，感谢您的反馈',
             });
         },
-        onError: error => {
+        onError: (error) => {
             Toast.show({
                 content: error.message.replace('GraphQL error: ', '') || '举报失败',
             });
@@ -23,7 +23,7 @@ const useReport = props => {
     });
 
     const reportAction = useCallback(
-        content => {
+        (content) => {
             reason.current = content;
             reportMutation();
         },
@@ -62,5 +62,3 @@ const useReport = props => {
 useReport.defaultProps = {
     type: 'articles',
 };
-
-export default useReport;

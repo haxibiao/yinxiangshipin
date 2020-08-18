@@ -4,7 +4,7 @@ import { useMutation, GQL } from '@src/apollo';
 
 export const useReport = (props) => {
     const reason = useRef();
-    const [reportMutation] = useMutation(GQL.addReportMutation, {
+    const [reportMutation] = useMutation(GQL.createReport, {
         variables: {
             type: props.type,
             id: props.target.id,

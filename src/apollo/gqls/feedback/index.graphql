@@ -30,7 +30,15 @@ mutation createFeedbackMutation($content: String!, $images: [String], $contact: 
     }
 }
 
-mutation addReportMutation($id: Int!, $reason: String, $type: ReportType) {
+#举报
+# enum ReportType {
+# articles（旧）
+# comments
+# users
+# user
+# post（新）
+# }
+mutation createReport($id: Int!, $reason: String, $type: ReportType) {
     createReport(id: $id, reason: $reason, type: $type) {
         id
     }

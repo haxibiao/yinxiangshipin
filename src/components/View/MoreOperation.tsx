@@ -2,11 +2,10 @@ import React, { useRef, useMemo, useCallback } from 'react';
 import { StyleSheet, View, Text, Image, ScrollView, Linking, Platform } from 'react-native';
 import Clipboard from '@react-native-community/clipboard';
 import { GQL, useMutation, useClientBuilder } from '@src/apollo';
-import { download, exceptionCapture, syncGetter } from '@src/common';
+import { download, exceptionCapture, syncGetter, useReport } from '@src/common';
 import { userStore } from '@src/store';
 import { Share } from '@src/native';
 import * as WeChat from 'react-native-wechat-lib';
-import useReport from './useReport';
 import TouchFeedback from '../Basic/TouchFeedback';
 import ShareIOS from 'react-native-share';
 import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
@@ -193,7 +192,7 @@ const MoreOperation = (props: any) => {
 
     const optionsView = useMemo(() => {
         return options.map((option: any, index: number) => {
-            if (option === '下载' && !downloadUrl) {
+            if ((option === '下载' || option === '复制链接') && !downloadUrl) {
                 return;
             }
             return (

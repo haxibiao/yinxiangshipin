@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useRef, useMemo } from 'react';
 import { StyleSheet, View, Text, Animated, Keyboard, Image, DeviceEventEmitter, TouchableOpacity } from 'react-native';
 import { Iconfont, Avatar, PullChooser, SafeText } from '@src/components';
-import { exceptionCapture, useLinearAnimation } from '@src/common';
+import { exceptionCapture, useLinearAnimation, useReport } from '@src/common';
 import { GQL, useMutation, useLikeMutation } from '@src/apollo';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { userStore } from '@src/store';
@@ -94,6 +94,12 @@ const CommentItem = observer((props: Props) => {
         }
     }, [deleteCommentMutation, comment, onDelete]);
 
+    const report = useReport({ target: comment, type: 'comments' });
+
+    const reportComment = useCallback(() => {
+        report();
+    }, [report]);
+
     const onLongPress = useCallback(() => {
         Keyboard.dismiss();
         const operations = [
@@ -110,7 +116,7 @@ const CommentItem = observer((props: Props) => {
         } else {
             operations.push({
                 title: '举报评论',
-                onPress: () => Toast.show({ content: '举报成功' }),
+                onPress: reportComment,
             });
         }
 

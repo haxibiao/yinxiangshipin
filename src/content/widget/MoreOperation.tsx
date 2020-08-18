@@ -82,7 +82,6 @@ const MoreOperation = (props: any) => {
         closeOverlay();
         // Android 保存文件权限检查
         if (Platform.OS === 'android') {
-
             // FIXME: By Bin 这里之前是申请了读取权限，但是没有写入权限导致闪退问题
             // // 外部储存读取权限获取
             // check(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE).then((result: any) => {
@@ -199,9 +198,10 @@ const MoreOperation = (props: any) => {
 
     const optionsView = useMemo(() => {
         return options.map((option: any, index: number) => {
-            if (option === '下载' && !videoUrl) {
+            if ((option === '下载' || option === '复制链接') && !videoUrl) {
                 return;
             }
+
             return (
                 <TouchableOpacity
                     style={[styles.optionItem, options.length < 5 && { width: Device.WIDTH / 4 }]}
