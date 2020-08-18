@@ -1,14 +1,14 @@
 import React, { useState, useMemo, useCallback, useContext, useEffect } from 'react';
 import { StyleSheet, ScrollView, Image, View, Text, TextInput, TouchableOpacity, Platform } from 'react-native';
 import { PageContainer, HxfButton, Iconfont, KeyboardSpacer, MediaUploader, HxfTextInput } from '@src/components';
-import { observer, userStore } from '@src/store';
+import { observer, userStore, errorMessage } from '@src/store';
 import { GQL, useMutation } from '@src/apollo';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 const contentGap = pixel(20);
 const MediaItemWidth = (Device.WIDTH - pixel(60)) / 3;
 let result = {};
-export default observer(props => {
+export default observer((props) => {
     const navigation = useNavigation();
     const [formData, setFormData] = useState({ content: '', images: [] });
     const [createFeedback, { data, loading }] = useMutation(GQL.createFeedbackMutation, {
@@ -16,35 +16,30 @@ export default observer(props => {
             content: formData.content,
             images: formData.images,
         },
-        onError: error => {
+        onError: (error) => {
             Toast.show({
-                content: error.message.replace('GraphQL error: ', '') || '发布失败',
+                content: errorMessage(error) || '发布失败',
             });
         },
-        onCompleted: mutationResult => {
+        onCompleted: (mutationResult) => {
             Toast.show({
                 content: '发布成功',
             });
-            console.log('data', mutationResult);
-            // navigation.navigate('FeedbackHistory');
+            setFormData({ content: '', images: [] });
             navigation.navigate('FeedbackDetail', {
                 feedback: mutationResult.createFeedback,
             });
-            // setFormData({ content: '', images: [] });
-            // navigation.replace('PostDetail', {
-            //     post: mutationResult.createContent,
-            // });
         },
     });
 
-    const changeBody = useCallback(value => {
-        setFormData(prevFormData => {
+    const changeBody = useCallback((value) => {
+        setFormData((prevFormData) => {
             return { ...prevFormData, content: value };
         });
     }, []);
 
-    const uploadResponse = useCallback(response => {
-        setFormData(prevFormData => {
+    const uploadResponse = useCallback((response) => {
+        setFormData((prevFormData) => {
             return { ...prevFormData, images: response };
         });
     }, []);

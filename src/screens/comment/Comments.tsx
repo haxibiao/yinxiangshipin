@@ -28,7 +28,7 @@ const Comments = observer((props: Props) => {
     }, [media]);
 
     const updateScrollOffset = useCallback(() => {
-        flatListRef.current.scrollToOffset({ y: 0 });
+        flatListRef.current?.scrollToOffset({ y: 0 });
     }, [flatListRef]);
 
     const replyHandler = useCallback(

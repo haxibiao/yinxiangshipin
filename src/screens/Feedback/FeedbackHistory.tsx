@@ -7,12 +7,12 @@ import StoreContext, { observer, userStore } from '@src/store';
 
 import FeedbackItem from './FeedbackItem';
 
-export default observer(props => {
+export default observer((props) => {
     const store = useContext(StoreContext);
     const { loading, error, data, fetchMore, refetch } = useQuery(GQL.MyFeedbackQuery, {
         variables: { id: userStore.me.id },
+        fetchPolicy: 'network-only',
     });
-
     let feedback = useMemo(() => Helper.syncGetter('feedback.data', data), [data]);
     const currentPage = useMemo(() => Helper.syncGetter('feedback.paginatorInfo.currentPage', data), [data]);
     const hasMorePages = useMemo(() => Helper.syncGetter('feedback.paginatorInfo.hasMorePages', data), [data]);
