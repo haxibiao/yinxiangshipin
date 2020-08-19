@@ -9,7 +9,7 @@ interface Props {
     onClick: (p?: any) => any;
 }
 
-export const CollectionSuccess = ({ cover, title, onClose, onClick }: Props) => {
+export const CaptureSuccess = ({ cover, title, onClose, onClick }: Props) => {
     return (
         <View style={styles.overlayWrap}>
             <ImageBackground style={styles.overlayImage} source={require('@app/assets/images/capture_video_cover.png')}>

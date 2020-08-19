@@ -11,7 +11,7 @@ interface Props {
     onClose: (p?: any) => any;
 }
 
-export const CollectionContent = ({ client, shareLink, content, onClose }: Props) => {
+export const VideoCaptureData = ({ client, shareLink, content, onClose }: Props) => {
     const shareContent = useResolveContent({ client, shareLink, onSuccess: onClose, onFailed: onClose });
     return (
         <View style={styles.card}>

@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useCallback } from 'react';
 import { StyleSheet, View, Text, StatusBar } from 'react-native';
 import { observer, appStore, userStore } from '@src/store';
-import { VideoList, useClipboardLink, CollectionContent } from '@src/content';
+import { VideoList, useClipboardLink, VideoCaptureData } from '@src/content';
 import { useApolloClient } from '@apollo/react-hooks';
 import { useBeginner } from '@src/common';
 import { Overlay } from 'teaset';
@@ -23,7 +23,7 @@ export default observer(() => {
                 isShow = true;
                 Overlay.show(
                     <Overlay.PopView style={styles.overlay} ref={(ref) => (popViewRef = ref)}>
-                        <CollectionContent client={appStore.client} onClose={onClose} {...params} />
+                        <VideoCaptureData client={appStore.client} onClose={onClose} {...params} />
                     </Overlay.PopView>,
                 );
             }

@@ -5,4 +5,4 @@ export { AnimationLike, Commodity } from './widget';
 export { Body } from './article';
 export { VideoList } from './video';
 export { PostContent, PostItem, CaptureContent } from './post';
-export { CollectionContent, useClipboardLink } from './publish';
+export { VideoCaptureData, useClipboardLink } from './creation';
