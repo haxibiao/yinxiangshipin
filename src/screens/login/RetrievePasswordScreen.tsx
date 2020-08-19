@@ -1,14 +1,15 @@
-import React, { Component } from 'react';
+import React, { useCallback } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, TextInput } from 'react-native';
 import { PageContainer, HxfButton, Loading } from 'components';
-import { compose, graphql, GQL } from '@src/apollo';
+import { compose, graphql, GQL, errorMessage } from '@src/apollo';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useMutation } from '@apollo/react-hooks';
 
 const RetrievePasswordScreen = (props: any) => {
-    const route = useRoute();
-    const { phone = '' } = route?.params || {};
     const navigation = useNavigation();
+    const route = useRoute();
+    const phone = route?.params?.phone;
+    const verifyCode = route?.params?.verifyCode;
 
     const time = 59;
     let timer: any;
@@ -43,7 +44,7 @@ const RetrievePasswordScreen = (props: any) => {
         },
         onError: (error: any) => {
             Loading.hide();
-            Toast.show({ content: error });
+            Toast.show({ content: errorMessage(error) });
         },
         errorPolicy: 'all',
     });
@@ -77,16 +78,20 @@ const RetrievePasswordScreen = (props: any) => {
     };
 
     // 重新获取验证码
-    const resendVerificationCode = async () => {
+    const resendVerificationCode = useCallback(async () => {
         Loading.show('loading');
         SendVerifyCodeMutation();
-    };
+    }, []);
 
     // 重置密码
-    const resetPassword = () => {
-        Loading.show('loading');
-        retrievePasswordMutation();
-    };
+    const resetPassword = useCallback(() => {
+        if (verifyCode === code) {
+            Loading.show('loading');
+            retrievePasswordMutation();
+        } else {
+            Toast.show({ content: '验证码错误' });
+        }
+    }, [verifyCode, code]);
 
     return (
         <PageContainer title="重置密码" white>
@@ -96,9 +101,10 @@ const RetrievePasswordScreen = (props: any) => {
                     <TextInput
                         placeholder="请输入验证码"
                         selectionColor={'#2b2b2b'}
-                        maxLength={48}
+                        maxLength={6}
                         style={styles.textInput}
                         onChangeText={(value) => setCode(value)}
+                        keyboardType="numeric"
                     />
                 </View>
                 <View style={styles.textWrap}>
@@ -122,7 +128,7 @@ const RetrievePasswordScreen = (props: any) => {
                     title="完成"
                     gradient={true}
                     onPress={resetPassword}
-                    disabled={code && password ? false : true}
+                    disabled={code?.length < 4 || password?.length < 4}
                     style={styles.button}
                 />
             </View>

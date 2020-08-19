@@ -17,8 +17,9 @@ const VerificationScreen = (props: any) => {
         onCompleted: (result: any) => {
             Loading.hide();
             navigation.navigate('RetrievePassword', {
-                time: new Date().getTime(),
                 phone,
+                verifyCode: result?.sendVerifyCode?.code,
+                time: new Date().getTime(),
             });
         },
         onError: (error: any) => {
