@@ -16,7 +16,7 @@ export default () => {
     }, []);
 
     return (
-        <PageContainer title="我的采集">
+        <PageContainer title="我的收藏">
             <QueryList
                 gqlDocument={GQL.userPostsQuery}
                 dataOptionChain="userPosts.data"

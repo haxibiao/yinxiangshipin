@@ -44,6 +44,7 @@ import EditProfileScreen from '../screens/profile/HomeScreen';
 import ArticleDetailScreen from '../screens/article/DetailScreen';
 import CommentScreen from '../screens/comment/CommentScreen';
 import PostDetailScreen from '../screens/post';
+import TagDetailScreen from '../screens/tagDetail';
 
 // category
 import CategoryScreen from '../screens/category';
@@ -167,6 +168,9 @@ export default {
     PostDetail: {
         component: PostDetailScreen,
     },
+    TagDetail: {
+        component: TagDetailScreen,
+    },
     Chat: {
         component: ChatScreen,
     },
@@ -188,7 +192,7 @@ export default {
     获取验证码: {
         component: VerificationScreen,
     },
-    我的采集: {
+    我的收藏: {
         component: GathersScreen,
     },
     浏览记录: {

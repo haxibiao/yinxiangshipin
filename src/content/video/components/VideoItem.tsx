@@ -62,7 +62,10 @@ export default observer((props) => {
     const resizeMode = useMemo(() => {
         const videoHeight = media?.video?.height;
         const videoWidth = media?.video?.width;
-        return videoWidth / videoHeight > 1 ? 'contain' : 'cover';
+        // 1080/720
+        // 720/1280
+        // return videoWidth / videoHeight > 0.6 ? 'contain' : 'cover';
+        return 'contain';
     }, [media]);
 
     const videoCover = useMemo(() => {
@@ -70,20 +73,17 @@ export default observer((props) => {
         const source = cover ? { uri: cover } : require('@app/assets/images/curtain.png');
         return (
             <View style={styles.contentCover}>
-                <Image style={styles.curtain} source={source} resizeMode="cover" blurRadius={4} />
+                <Image style={styles.curtain} source={source} resizeMode="cover" blurRadius={2} />
                 <View style={styles.blackMask} />
             </View>
         );
     }, [media]);
 
-    const mediaCategories = useMemo(() => {
-        if (media?.categories?.length > 0) {
-            return media.categories.map((category: any) => (
-                <Text
-                    key={category.id}
-                    style={styles.categoryName}
-                    onPress={() => navigation.navigate('Category', { category })}>
-                    {`#${category.name} `}
+    const mediaTags = useMemo(() => {
+        if (media?.tags?.data?.length > 0) {
+            return media.tags?.data?.map((tag: any) => (
+                <Text key={tag.id} style={styles.tagName} onPress={() => navigation.navigate('TagDetail', { tag })}>
+                    {`#${tag.name} `}
                 </Text>
             ));
         }
@@ -125,8 +125,8 @@ export default observer((props) => {
                         </View>
                         <View>
                             <SafeText style={styles.content} numberOfLines={3}>
-                                {mediaCategories}
                                 {media?.description}
+                                {mediaTags}
                             </SafeText>
                         </View>
                     </View>
@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
         fontSize: font(15),
     },
     content: { color: 'rgba(255,255,255,0.9)', fontSize: font(15), paddingTop: pixel(10) },
-    categoryName: {
+    tagName: {
         fontWeight: 'bold',
     },
     footer: {

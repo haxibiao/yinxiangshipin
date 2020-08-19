@@ -158,13 +158,13 @@ export default observer((props: any) => {
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.columnItem}
-                        onPress={() => authNavigator('我的采集', { user: userProfile })}>
+                        onPress={() => authNavigator('我的收藏', { user: userProfile })}>
                         <View style={styles.columnItemLeft}>
                             <Image
                                 style={styles.columnIcon}
                                 source={require('@app/assets/images/icons/ic_mine_collect.png')}
                             />
-                            <Text style={styles.columnName}>我的采集</Text>
+                            <Text style={styles.columnName}>我的收藏</Text>
                         </View>
                         <Iconfont name="right" size={pixel(16)} color="#969696" />
                     </TouchableOpacity>

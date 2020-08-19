@@ -10,6 +10,5 @@ export default {
     找回密码: true,
     获取验证码: true,
     我的收藏: true,
-    我的采集: true,
     Feedback: true,
 };

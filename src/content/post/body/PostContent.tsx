@@ -51,23 +51,23 @@ export default observer(
             }
         }, [post]);
 
-        const renderCategories = useMemo(() => {
-            const categories = post?.categories;
-            if (categories?.length > 0) {
+        const renderTags = useMemo(() => {
+            const tags = post?.tags?.data;
+            if (tags?.length > 0) {
                 return (
-                    <View style={styles.categories}>
-                        {categories.map((category, index) => (
+                    <View style={styles.tags}>
+                        {tags.map((tag, index) => (
                             <TouchableOpacity
                                 activeOpacity={1}
-                                key={category?.id}
-                                style={styles.categoryItem}
-                                onPress={() => navigation.navigate('Category', { category })}>
-                                <View style={styles.categoryLeft}>
-                                    <Text style={styles.categoryLabel}>#</Text>
+                                key={tag?.id}
+                                style={styles.tagItem}
+                                onPress={() => navigation.navigate('TagDetail', { tag })}>
+                                <View style={styles.tagLeft}>
+                                    <Text style={styles.tagLabel}>#</Text>
                                 </View>
                                 <View style={{ maxWidth: pixel(100) }}>
-                                    <Text style={styles.categoryName} numberOfLines={1}>
-                                        {category?.name}
+                                    <Text style={styles.tagName} numberOfLines={1}>
+                                        {tag?.name}
                                     </Text>
                                 </View>
                             </TouchableOpacity>
@@ -132,7 +132,7 @@ export default observer(
                     {post?.description}
                 </SafeText>
                 {renderCover}
-                {renderCategories}
+                {renderTags}
                 {post?.product && (
                     <Commodity style={styles.productWrap} product={post?.product} navigation={navigation} />
                 )}
@@ -206,11 +206,11 @@ const styles = StyleSheet.create({
         height: COVER_WIDTH * 0.64,
         borderRadius: pixel(4),
     },
-    categories: {
+    tags: {
         flexDirection: 'row',
         marginTop: pixel(12),
     },
-    categoryItem: {
+    tagItem: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
@@ -220,19 +220,19 @@ const styles = StyleSheet.create({
         borderRadius: pixel(4),
         backgroundColor: '#EDF3FF',
     },
-    categoryLeft: {
+    tagLeft: {
         alignSelf: 'stretch',
         justifyContent: 'center',
         alignItems: 'center',
         width: pixel(27),
         backgroundColor: '#4085FF',
     },
-    categoryLabel: {
+    tagLabel: {
         color: '#fff',
         fontSize: font(15),
         fontWeight: 'bold',
     },
-    categoryName: {
+    tagName: {
         paddingHorizontal: pixel(6),
         color: '#4085FF',
         fontSize: font(13),

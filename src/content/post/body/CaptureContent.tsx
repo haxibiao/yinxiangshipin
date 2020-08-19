@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
-import { View, StyleSheet, Image, Text, TouchableOpacity, Animated } from 'react-native';
+import { View, StyleSheet, Image, Text, TouchableOpacity, Animated, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Avatar, Iconfont, SafeText, PlaceholderImage, GridImage } from '@src/components';
 import { observer, userStore } from '@src/store';
@@ -72,19 +72,21 @@ export default observer(
                     <View style={styles.tagList}>
                         {data.slice(0, 3).map((tag, index) => {
                             return (
-                                <View key={tag.id} style={styles.tagItem}>
-                                    <Iconfont
-                                        name="biaoqian"
-                                        size={font(15)}
-                                        color="#0584FF"
-                                        style={{ marginRight: pixel(4) }}
-                                    />
-                                    <View style={{ maxWidth: pixel(100) }}>
-                                        <Text style={styles.tagName} numberOfLines={1}>
-                                            {tag.name}
-                                        </Text>
+                                <TouchableWithoutFeedback onPress={() => navigation.navigate('TagDetail', { tag })}>
+                                    <View key={tag.id} style={styles.tagItem}>
+                                        <Iconfont
+                                            name="biaoqian"
+                                            size={font(15)}
+                                            color="#0584FF"
+                                            style={{ marginRight: pixel(4) }}
+                                        />
+                                        <View style={{ maxWidth: pixel(100) }}>
+                                            <Text style={styles.tagName} numberOfLines={1}>
+                                                {tag.name}
+                                            </Text>
+                                        </View>
                                     </View>
-                                </View>
+                                </TouchableWithoutFeedback>
                             );
                         })}
                     </View>
