@@ -3,9 +3,10 @@ import { StyleSheet, View, Text, Image, TouchableWithoutFeedback } from 'react-n
 import { useNavigation } from '@react-navigation/native';
 
 export default function MediaItem({ media, ...params }) {
+    console.log('params', params);
     const navigation = useNavigation();
     return (
-        <TouchableWithoutFeedback onPress={() => navigation.navigate('VideoList', { media, ...params })}>
+        <TouchableWithoutFeedback onPress={() => navigation.navigate('VideoList', { ...params })}>
             <Image style={styles.videoCover} source={{ uri: media?.video?.cover }} />
         </TouchableWithoutFeedback>
     );

@@ -1,8 +1,10 @@
 import React, { useContext, useState, useCallback, useEffect, useMemo, useRef, Fragment } from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, Animated } from 'react-native';
+import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity, Animated } from 'react-native';
+import { useQuery } from '@apollo/react-hooks';
 import { observer, appStore } from '@src/store';
 import { Header } from '@src/components';
-import { GQL, QueryList, MediaItem } from '@src/content';
+import { syncGetter } from '@src/common';
+import { GQL, MediaItem, ContentStatus, mergeProperty } from '@src/content';
 import { observable } from 'mobx';
 import { useRoute } from '@react-navigation/native';
 
@@ -10,6 +12,58 @@ export default observer((props: any) => {
     const route = useRoute();
     const tag = route?.params?.tag;
     const [hot, setHot] = useState(false);
+
+    const scrollAnimateValue = useRef(new Animated.Value(0));
+
+    const onScroll = useMemo(() => {
+        return Animated.event([{ nativeEvent: { contentOffset: { y: scrollAnimateValue.current } } }], {
+            useNativeDriver: false,
+        });
+    }, []);
+
+    const titleOpacity = scrollAnimateValue.current.interpolate({
+        inputRange: [pixel(50), percent(50)],
+        outputRange: [0, 1],
+        extrapolate: 'clamp',
+    });
+    //
+    const { loading, error, data, fetchMore, refetch } = useQuery(GQL.tagPostsQuery, {
+        variables: {
+            tag_id: 24 || tag?.id,
+            count: 10,
+            visibility: 'all',
+        },
+    });
+    const listData = useMemo(() => syncGetter('tag.posts.data', data), [data]);
+    const nextPage = useMemo(() => syncGetter('tag.posts.paginatorInfo.currentPage', data) + 1 || 2, [data]);
+    const hasMore = useMemo(() => syncGetter('tag.posts.paginatorInfo.hasMorePages', data), [data]);
+    const isLoading = useRef(false);
+    const onEndReached = useCallback(() => {
+        if (!isLoading.current && hasMore) {
+            isLoading.current = true;
+            fetchMore({
+                variables: {
+                    page: nextPage,
+                },
+                updateQuery: (prev: any, { fetchMoreResult }) => {
+                    isLoading.current = false;
+                    if (!fetchMoreResult) return prev;
+                    return mergeProperty(prev, fetchMoreResult);
+                },
+            });
+        }
+    }, [nextPage, hasMore, fetchMore]);
+
+    const renderItem = useCallback(
+        ({ item, index }) => {
+            return (
+                <View style={styles.itemWrap}>
+                    <MediaItem media={item} tag={tag} initData={listData} itemIndex={index} page={nextPage} />
+                </View>
+            );
+        },
+        [tag, listData, nextPage],
+    );
 
     const header = useMemo(() => {
         return (
@@ -20,7 +74,9 @@ export default observer((props: any) => {
                 <View style={styles.tagData}>
                     <View style={styles.tagInfo}>
                         <Text style={styles.tagName}>#{tag?.name}</Text>
-                        <Text style={styles.tagCountHits}>{`${tag?.count_hits || Math.random() * 10}w播放`}</Text>
+                        <Text style={styles.tagCountHits}>{`${
+                            tag?.count_hits || Number(Math.random() * 10).toFixed(2)
+                        }w播放`}</Text>
                     </View>
                     {/* <TouchableOpacity style={styles.filterBtn} onPress={() => setHot((h) => !h)} activeOpacity={1}>
                         <Image
@@ -38,25 +94,42 @@ export default observer((props: any) => {
         );
     }, [hot, tag]);
 
-    const renderItem = useCallback(({ item, index }) => {
-        return (
-            <View style={styles.itemWrap}>
-                <MediaItem media={item} />
-            </View>
-        );
-    }, []);
+    const listFooter = useCallback(() => {
+        let footer = null;
+        if (!loading && hasMore) {
+            footer = <ContentStatus status="loadMore" />;
+        }
+        if (listData?.length > 0 && !hasMore) {
+            footer = (
+                <View style={styles.listFooter}>
+                    <Text style={styles.listFooterText}>底都被你看光了</Text>
+                </View>
+            );
+        }
+        return footer;
+    }, [loading, listData, hasMore]);
 
-    const scrollAnimateValue = useRef(new Animated.Value(0));
-
-    const onScroll = useMemo(() => {
-        return Animated.event([{ nativeEvent: { contentOffset: { y: scrollAnimateValue.current } } }]);
-    }, []);
-
-    const titleOpacity = scrollAnimateValue.current.interpolate({
-        inputRange: [pixel(50), percent(50)],
-        outputRange: [0, 1],
-        extrapolate: 'clamp',
-    });
+    const listEmpty = useCallback(() => {
+        let status = '';
+        switch (true) {
+            case error:
+                status = 'error';
+                break;
+            case loading:
+                status = 'loading';
+                break;
+            case listData?.length === 0:
+                status = 'empty';
+                break;
+            default:
+                break;
+        }
+        if (status) {
+            return <ContentStatus status={status} refetch={status === 'error' ? refetch : undefined} />;
+        } else {
+            return null;
+        }
+    }, [loading, listData, error, refetch]);
 
     return (
         <View style={styles.container}>
@@ -68,23 +141,19 @@ export default observer((props: any) => {
                     </Animated.View>
                 }
             />
-            <QueryList
-                gqlDocument={GQL.tagPostsQuery}
-                dataOptionChain="tag.posts.data"
-                paginateOptionChain="tag.posts.paginatorInfo"
-                options={{
-                    variables: {
-                        tag_id: 24 || tag?.id,
-                        count: 10,
-                        visibility: 'all',
-                    },
-                }}
+            <FlatList
+                data={listData}
                 onScroll={onScroll}
-                numColumns={3}
-                columnWrapperStyle={styles.columnWrapperStyle}
-                ListHeaderComponent={header}
-                renderItem={renderItem}
                 contentContainerStyle={styles.contentContainer}
+                columnWrapperStyle={styles.columnWrapperStyle}
+                numColumns={3}
+                renderItem={renderItem}
+                keyExtractor={(item, index) => String(item.id || index)}
+                ListHeaderComponent={header}
+                ListFooterComponent={listFooter}
+                ListEmptyComponent={listEmpty}
+                onEndReached={onEndReached}
+                onEndReachedThreshold={0.1}
             />
         </View>
     );
@@ -166,5 +235,15 @@ const styles = StyleSheet.create({
     },
     columnWrapperStyle: {
         borderWidth: StyleSheet.hairlineWidth,
+    },
+    listFooter: {
+        paddingVertical: pixel(15),
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    listFooterText: {
+        fontSize: font(13),
+        color: '#b4b4b4',
     },
 });

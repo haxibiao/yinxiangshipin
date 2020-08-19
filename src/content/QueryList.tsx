@@ -1,12 +1,12 @@
 import React, { useCallback, useMemo, useRef } from 'react';
-import { StyleSheet, View, Text, FlatList, FlatListProps, ViewStyle, RefreshControl } from 'react-native';
+import { StyleSheet, View, Text, FlatList, FlatListProperties, ViewStyle, RefreshControl } from 'react-native';
 import { useQuery, QueryHookOptions } from '@apollo/react-hooks';
 import { DocumentNode } from 'graphql';
 import { GQL } from './service';
 import { pixel, font, syncGetter, mergeProperty } from './helper';
 import ContentStatus from './ContentStatus';
 
-interface Props extends FlatListProps {
+interface Props extends FlatListProperties {
     gqlDocument?: DocumentNode;
     dataOptionChain?: string;
     paginateOptionChain?: string;
@@ -88,7 +88,7 @@ export default React.forwardRef(function ContentList(
             return null;
         }
     }, [ListEmptyComponent, loading, listData, error, refetch]);
-
+    // console.log('listData,', data, listData);
     return (
         <FlatList
             contentContainerStyle={styles.container}

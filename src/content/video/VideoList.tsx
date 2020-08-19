@@ -14,6 +14,7 @@ import {
 import { Iconfont } from '@src/components';
 import LottieView from 'lottie-react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { FocusAwareStatusBar } from '@src/router';
 import { observer, userStore, appStore } from '@src/store';
 import { GQL, useApolloClient } from '@src/apollo';
 import CommentOverlay from '@src/screens/comment/CommentOverlay';
@@ -31,9 +32,9 @@ const config = {
 export default observer(() => {
     const route = useRoute();
     const initVideo = useMemo(() => route?.params?.Video, []);
+    const hasGoBack = useMemo(() => route?.params?.hasGoBack, []);
     const videoStore = useMemo(() => new DrawVideoStore(initVideo), []);
     const navigation = useNavigation();
-    const isTopScreen = useMemo(() => route?.name === 'Home', [route]);
     const client = useApolloClient();
     const commentRef = useRef();
     const onLayout = useCallback((event) => {
@@ -64,7 +65,10 @@ export default observer(() => {
 
     useEffect(() => {
         const hardwareBackPress = BackHandler.addEventListener('hardwareBackPress', () => {
-            commentRef.current?.slideDown();
+            if (commentRef.current?.state?.visible) {
+                commentRef.current?.slideDown();
+                return true;
+            }
             return false;
         });
         DeviceEventEmitter.addListener('showCommentModal', () => {
@@ -73,18 +77,10 @@ export default observer(() => {
         DeviceEventEmitter.addListener('hideCommentModal', () => {
             commentRef.current?.slideDown();
         });
-        const navFocusListener = navigation.addListener('focus', () => {
-            StatusBar.setBarStyle('light-content');
-        });
-        const navBlurListener = navigation.addListener('blur', () => {
-            StatusBar.setBarStyle('dark-content');
-        });
         return () => {
             hardwareBackPress.remove();
             DeviceEventEmitter.removeListener('showCommentModal');
             DeviceEventEmitter.removeListener('hideCommentModal');
-            navFocusListener();
-            navBlurListener();
         };
     }, []);
 
@@ -110,8 +106,9 @@ export default observer(() => {
 
     return (
         <View style={styles.container}>
+            <FocusAwareStatusBar barStyle="light-content" />
             <View style={styles.navBar}>
-                {!isTopScreen && (
+                {hasGoBack && (
                     <TouchableOpacity
                         onPress={() => {
                             navigation.goBack();

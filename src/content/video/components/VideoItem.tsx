@@ -16,6 +16,12 @@ import VideoOperation from './VideoOperation';
 export default observer((props) => {
     const { media, index, store } = props;
     const viewable = index === store.viewableItemIndex;
+    const shown = useMemo(() => {
+        if (store.viewableItemIndex > index + 2 || store.viewableItemIndex < index - 2 || viewable) {
+            return true;
+        }
+        return false;
+    }, [index, store.viewableItemIndex, viewable]);
     const client = useApolloClient();
     const navigation = useNavigation();
     // 获取播放器实例，控制视频播放状态
@@ -97,14 +103,16 @@ export default observer((props) => {
             }}>
             {videoCover}
             <View style={styles.positionContainer}>
-                <Player
-                    ref={playerRef}
-                    store={store}
-                    media={media}
-                    resizeMode={resizeMode}
-                    viewable={viewable}
-                    showOperation={showOperation}
-                />
+                {shown && (
+                    <Player
+                        ref={playerRef}
+                        store={store}
+                        media={media}
+                        resizeMode={resizeMode}
+                        viewable={viewable}
+                        showOperation={showOperation}
+                    />
+                )}
             </View>
             <TouchableWithoutFeedback onPress={togglePause} onLongPress={showOperation}>
                 <LinearGradient

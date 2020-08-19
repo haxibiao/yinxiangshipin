@@ -37,10 +37,8 @@ const calculateHeight = Device.isFullScreenDevice
 
 class DrawVideoStore {
     private instance: DrawVideoStore = null;
-    readonly rewardLimit: number = 30; // 奖励频率
     public playedVideoIds: number[] = []; // 记录用户浏览的视频
     @observable public fullVideoHeight: number = calculateHeight;
-
     @observable public data: VideoItem[] = [];
     @observable public loaded: boolean = true;
     @observable public error: boolean = false;
@@ -48,6 +46,9 @@ class DrawVideoStore {
     @observable public hasMore: boolean = true;
     @observable public refreshing: boolean = false;
     @observable public viewableItemIndex: number = 0;
+    @observable public commentBody = '';
+    // 激励视频逻辑
+    readonly rewardLimit: number = 30; // 奖励频率
     @observable public rewardProgress: number = 0;
     @observable public getReward = [];
 
@@ -75,6 +76,7 @@ class DrawVideoStore {
         this.hasMore = true;
         this.refreshing = false;
         this.viewableItemIndex = 0;
+        this.commentBody = '';
         this.rewardProgress = 0;
         this.getReward = [];
     }
@@ -118,6 +120,11 @@ class DrawVideoStore {
     @action.bound
     public removeItem(source: VideoItem) {
         this.data.splice(this.data.indexOf(source), 1);
+    }
+
+    @action.bound
+    public inputComment(value: any) {
+        this.commentBody = value;
     }
 
     @action.bound
