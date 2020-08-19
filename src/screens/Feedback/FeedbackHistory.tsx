@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        paddingBottom: pixel(Theme.BOTTOM_HEIGHT),
+        paddingBottom: pixel(Theme.HOME_INDICATOR_HEIGHT),
     },
     ad: {
         minHeight: pixel(200),

@@ -16,6 +16,13 @@ export default observer((props) => {
             content: formData.content,
             images: formData.images,
         },
+        refetchQueries: () => [
+            {
+                query: GQL.MyFeedbackQuery,
+                variables: { id: userStore.me.id },
+                fetchPolicy: 'network-only',
+            },
+        ],
         onError: (error) => {
             Toast.show({
                 content: errorMessage(error) || '发布失败',

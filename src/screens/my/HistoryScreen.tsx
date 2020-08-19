@@ -31,8 +31,6 @@ export default (props: any) => {
         userVisitsQueryResult,
     ]);
 
-    console.log('浏览记录：', userVisitsQueryResult);
-
     useEffect(() => {
         if (Array.isArray(articles)) {
             setArticles(observable(articles));
@@ -60,6 +58,7 @@ export default (props: any) => {
                             return <PostItem post={item.item.article} />;
                         }
                     }}
+                    ItemSeparatorComponent={() => <View style={styles.separator} />}
                     ListEmptyComponent={
                         <StatusView.EmptyView imageSource={require('@app/assets/images/default_empty.png')} />
                     }
@@ -96,5 +95,11 @@ const styles = StyleSheet.create({
     },
     contentContainer: {
         flexGrow: 1,
+        paddingBottom: Theme.HOME_INDICATOR_HEIGHT,
+    },
+    separator: {
+        marginHorizontal: pixel(14),
+        height: pixel(1),
+        backgroundColor: '#f4f4f4',
     },
 });
