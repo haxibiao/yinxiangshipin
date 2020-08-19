@@ -23,15 +23,15 @@ const NavBar = observer(({ lightModal, media, navigation }) => {
     const images = useMemo(() => {
         return {
             back: lightModal
-                ? require('@app/assets/images/icon_back_w.png')
-                : require('@app/assets/images/icon_back_g.png'),
-            liked: require('@app/assets/images/icon_like_r.png'),
+                ? require('@app/assets/images/icons/ic_back_white.png')
+                : require('@app/assets/images/icons/ic_back_black.png'),
+            liked: require('@app/assets/images/icons/ic_like_red.png'),
             like: lightModal
-                ? require('@app/assets/images/icon_like_w.png')
-                : require('@app/assets/images/icon_like_g.png'),
+                ? require('@app/assets/images/icons/ic_like_white.png')
+                : require('@app/assets/images/icons/ic_like_black.png'),
             forward: lightModal
-                ? require('@app/assets/images/icon_forward_w.png')
-                : require('@app/assets/images/icon_forward_g.png'),
+                ? require('@app/assets/images/icons/ic_more_white.png')
+                : require('@app/assets/images/icons/ic_more_black.png'),
         };
     }, [lightModal]);
 

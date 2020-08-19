@@ -331,7 +331,7 @@ function PublishButton({ navigation }) {
         <TouchableWithoutFeedback key="publish" onPress={onPublishPress}>
             <View style={styles.tabItem}>
                 <Image
-                    source={require('@app/assets/images/icons/icon_publish_red.png')}
+                    source={require('@app/assets/images/icons/ic_publish_red.png')}
                     style={{
                         width: pixel(43),
                         height: pixel(36),
