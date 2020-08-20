@@ -1,7 +1,7 @@
 export function count(value: any) {
     const num: number = parseFloat(value);
     if (num >= 1000) {
-        return Math.round(Number((num / 1000).toFixed(2)) * 10) / 10 + 'k';
+        return Number((num / 1000).toFixed(2)) + 'k';
     } else {
         return num || 0;
     }

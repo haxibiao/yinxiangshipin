@@ -69,7 +69,6 @@ query userFavoriteArticlesQuery($user_id: Int!, $page: Int) {
                 count_tips
                 liked
                 favorited
-
                 user {
                     avatar
                     name

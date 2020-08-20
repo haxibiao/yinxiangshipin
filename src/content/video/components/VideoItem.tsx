@@ -17,11 +17,13 @@ export default observer((props) => {
     const { media, index, store } = props;
     const viewable = index === store.viewableItemIndex;
     const shown = useMemo(() => {
-        if (store.viewableItemIndex > index + 2 || store.viewableItemIndex < index - 2 || viewable) {
+        // 播放器的显示区间
+        if ((store.viewableItemIndex > index - 2 && store.viewableItemIndex < index + 3) || viewable) {
             return true;
         }
         return false;
     }, [index, store.viewableItemIndex, viewable]);
+
     const client = useApolloClient();
     const navigation = useNavigation();
     // 获取播放器实例，控制视频播放状态

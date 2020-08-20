@@ -32,41 +32,6 @@ query SearchCategoriesQuery($keyword: String!, $offset: Int) {
     }
 }
 
-#查询文章 用户 专题 文集
-#keyword:搜索的关键字
-#type   :VIDEO代表视频,ARTICLE代表文章.默认查询查询所有
-#order  :文章排序规则。 HOT：按热度排序 ,默认是按照时间排序
-query SearchResultQueries($keyword: String!, $type: ArticleType, $order: ArticleOrder, $offset: Int) {
-    articles(keyword: $keyword, type: $type, order: $order, offset: $offset, limit: 10) {
-        id
-        title
-        type
-        user {
-            id
-            name
-        }
-        description
-        cover
-    }
-    users(keyword: $keyword, offset: $offset, limit: 10) {
-        id
-        name
-        avatar
-    }
-    categories(keyword: $keyword, offset: $offset, limit: 10) {
-        id
-        name
-        logo
-        count_articles
-        count_follows
-        followed
-        user {
-            id
-            name
-        }
-    }
-}
-
 # 搜索动态
 query searchPostQuery($query: String!, $page: Int) {
     searchPosts(query: $query, page: $page) {
@@ -97,10 +62,11 @@ query searchPostQuery($query: String!, $page: Int) {
                 age
                 introduction
             }
-            categories {
-                id
-                name
-                logo
+            tags {
+                data {
+                    id
+                    name
+                }
             }
             images {
                 id

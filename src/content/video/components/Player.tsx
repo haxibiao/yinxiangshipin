@@ -44,7 +44,7 @@ export default React.forwardRef((props: Props, ref) => {
         return {
             onLoadStart() {
                 setProgress(0);
-                store.playedVideoIds.push(media.id);
+                // store.playedVideoIds.push(media.id);
                 currentTime.current = 0;
             },
 

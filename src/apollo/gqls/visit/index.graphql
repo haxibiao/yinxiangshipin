@@ -18,7 +18,6 @@ query userVisitsQuery($user_id: Int!, $page: Int) {
                 count_comments
                 count_tips
                 liked
-
                 user {
                     avatar
                     name

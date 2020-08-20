@@ -30,11 +30,6 @@ query recommendPostsQuery {
                 name
             }
         }
-        categories {
-            id
-            name
-            logo
-        }
         images {
             id
             url
@@ -48,16 +43,6 @@ query recommendPostsQuery {
             duration
             width
             height
-        }
-        product {
-            id
-            name
-            description
-            price
-            cover {
-                id
-                url
-            }
         }
     }
 }
@@ -98,11 +83,6 @@ query publicPostsQuery($user_id: Int, $count: Int, $page: Int) {
                     id
                     name
                 }
-            }
-            categories {
-                id
-                name
-                logo
             }
             images {
                 id
@@ -158,11 +138,6 @@ query postsQuery($user_id: Int!, $count: Int, $page: Int) {
                     id
                     name
                 }
-            }
-            categories {
-                id
-                name
-                logo
             }
             images {
                 id
@@ -228,11 +203,6 @@ query userPostsQuery($user_id: Int!, $filter: PostFilter, $count: Int, $page: In
                     name
                 }
             }
-            categories {
-                id
-                name
-                logo
-            }
             images {
                 id
                 url
@@ -286,11 +256,6 @@ query searchPostQuery($query: String!, $page: Int) {
                     id
                     name
                 }
-            }
-            categories {
-                id
-                name
-                logo
             }
             images {
                 id
@@ -378,7 +343,6 @@ query userVisitsQuery($user_id: Int!, $page: Int) {
                 count_comments
                 count_tips
                 liked
-
                 user {
                     avatar
                     name
@@ -444,16 +408,17 @@ query userTags($id: Int!, $page: Int) {
 }
 
 # 标签下的内容
-query tagPostsQuery($tag_id: Int!, $page: Int, $count: Int, $visibility: TagVisibilityEnum) {
+query tagPostsQuery($tag_id: Int!, $page: Int, $count: Int, $order: PostOrderEnum, $visibility: TagVisibilityEnum) {
     tag(id: $tag_id) {
         id
         name
-        posts(visibility: $visibility, page: $page, count: $count) {
+        count_posts
+        count_plays
+        posts(visibility: $visibility, page: $page, count: $count, order: $order) {
             paginatorInfo {
                 total
                 currentPage
                 lastPage
-                hasMorePages
             }
             data {
                 id
@@ -485,11 +450,6 @@ query tagPostsQuery($tag_id: Int!, $page: Int, $count: Int, $visibility: TagVisi
                         name
                     }
                 }
-                categories {
-                    id
-                    name
-                    logo
-                }
                 images {
                     id
                     url
@@ -503,16 +463,6 @@ query tagPostsQuery($tag_id: Int!, $page: Int, $count: Int, $visibility: TagVisi
                     duration
                     width
                     height
-                }
-                product {
-                    id
-                    name
-                    description
-                    price
-                    cover {
-                        id
-                        url
-                    }
                 }
             }
         }

@@ -247,20 +247,6 @@ mutation deleteQueryLogMutation($id: Int) {
     }
 }
 
-mutation submitArticleMutation($article_id: Int!, $category_id: Int!) {
-    submitArticle(article_id: $article_id, category_id: $category_id) {
-        id
-        submit_status
-    }
-}
-
-mutation approveArticleMutation($article_id: Int!, $category_id: Int!, $is_reject: Boolean!) {
-    approveArticle(article_id: $article_id, category_id: $category_id, is_reject: $is_reject) {
-        id
-        pivot_status
-    }
-}
-
 mutation updateUserProfile($id: Int!, $data: updateUserInfo!) {
     updateUserInfo(id: $id, input: $data) {
         id

@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity, Animated } f
 import { useQuery } from '@apollo/react-hooks';
 import { observer, appStore } from '@src/store';
 import { Header } from '@src/components';
-import { syncGetter } from '@src/common';
+import { syncGetter, count } from '@src/common';
 import { GQL, MediaItem, ContentStatus, mergeProperty } from '@src/content';
 import { observable } from 'mobx';
 import { useRoute } from '@react-navigation/native';
@@ -30,13 +30,16 @@ export default observer((props: any) => {
     const { loading, error, data, fetchMore, refetch } = useQuery(GQL.tagPostsQuery, {
         variables: {
             tag_id: 24 || tag?.id,
-            count: 10,
+            count: 12,
+            order: hot ? 'HOT' : 'LATEST',
             visibility: 'all',
+            fetchPolicy: 'network-only',
         },
     });
-    const listData = useMemo(() => syncGetter('tag.posts.data', data), [data]);
-    const nextPage = useMemo(() => syncGetter('tag.posts.paginatorInfo.currentPage', data) + 1 || 2, [data]);
-    const hasMore = useMemo(() => syncGetter('tag.posts.paginatorInfo.hasMorePages', data), [data]);
+    const tagData = useMemo(() => data?.tag || tag, [data]);
+    const listData = useMemo(() => data?.tag?.posts?.data, [data]);
+    const nextPage = useMemo(() => data?.tag?.posts?.paginatorInfo?.currentPage + 1 || 2, [data]);
+    const hasMore = useMemo(() => data?.tag?.posts?.paginatorInfo?.hasMorePages, [data]);
     const isLoading = useRef(false);
     const onEndReached = useCallback(() => {
         if (!isLoading.current && hasMore) {
@@ -71,20 +74,30 @@ export default observer((props: any) => {
                 <View style={styles.tagLogoWrap}>
                     <Image style={styles.tagLogo} source={require('@app/assets/images/icons/ic_tag_red.png')} />
                 </View>
-                <View style={styles.tagData}>
-                    <View style={styles.tagInfo}>
-                        <Text style={styles.tagName}>#{tag?.name}</Text>
-                        <Text style={styles.tagCountHits}>{`${
-                            tag?.count_hits || Number(Math.random() * 10).toFixed(2)
-                        }w播放`}</Text>
+                <View style={styles.tagInfo}>
+                    <View style={styles.tagInfoTop}>
+                        <Text style={styles.tagName}>#{tagData?.name}</Text>
+                        <Text style={styles.tagCountHits}>{`${count(tagData?.count_plays || 0.0)}次播放`}</Text>
                     </View>
-                    {/* <TouchableOpacity style={styles.filterBtn} onPress={() => setHot((h) => !h)} activeOpacity={1}>
-                        <Image
-                            style={styles.filterIcon}
-                            source={require('@app/assets/images/icons/ic_order_gray.png')}
-                        />
-                        <Text style={styles.filterBtnName}>{hot ? '最多点赞' : '最新发布'}</Text>
-                    </TouchableOpacity> */}
+                    <View style={styles.tagInfoBottom}>
+                        <Text style={styles.tagCountHits}>{`${
+                            tagData?.count_posts > 0 ? count(tagData?.count_posts) : '0.0'
+                        }个视频`}</Text>
+                        <TouchableOpacity
+                            style={styles.filterBtn}
+                            onPress={() =>
+                                setHot((h) => {
+                                    return !h;
+                                })
+                            }
+                            activeOpacity={1}>
+                            <Image
+                                style={styles.filterIcon}
+                                source={require('@app/assets/images/icons/ic_order_gray.png')}
+                            />
+                            <Text style={styles.filterBtnName}>{hot ? '最多点赞' : '最新发布'}</Text>
+                        </TouchableOpacity>
+                    </View>
                     {/* <TouchableOpacity style={styles.favoriteBtn}>
                         <Iconfont name="favorite" size={font(18)} color={tag?.favorite ? '#FE1966' : '#fff'} />
                         <Text style={styles.favoriteBtnName}>{tag?.favorite ? '取消收藏' : '收藏'}</Text>
@@ -92,7 +105,7 @@ export default observer((props: any) => {
                 </View>
             </View>
         );
-    }, [hot, tag]);
+    }, [hot, tagData]);
 
     const listFooter = useCallback(() => {
         let footer = null;
@@ -102,7 +115,7 @@ export default observer((props: any) => {
         if (listData?.length > 0 && !hasMore) {
             footer = (
                 <View style={styles.listFooter}>
-                    <Text style={styles.listFooterText}>底都被你看光了</Text>
+                    <Text style={styles.listFooterText}>-- end --</Text>
                 </View>
             );
         }
@@ -196,13 +209,19 @@ const styles = StyleSheet.create({
         width: '50%',
         height: '50%',
     },
-    tagData: {
+    tagInfo: {
         flex: 1,
         marginLeft: pixel(15),
         // justifyContent: 'center',
         justifyContent: 'space-between',
     },
-    tagInfo: {},
+
+    tagInfoTop: {},
+    tagInfoBottom: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
     tagName: {
         fontSize: font(20),
         fontWeight: 'bold',
@@ -220,7 +239,7 @@ const styles = StyleSheet.create({
     filterIcon: {
         width: pixel(15),
         height: pixel(15),
-        marginRight: pixel(4),
+        marginRight: pixel(2),
     },
     filterBtnName: {
         fontSize: font(14),

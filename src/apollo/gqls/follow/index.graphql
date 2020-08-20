@@ -45,7 +45,7 @@ query userFollowersQuery($user_id: Int!, $page: Int) {
     }
 }
 
-# 用户关注的用户发布的动态
+# 关注的用户动态
 query followedArticlesQuery($page: Int, $user_id: Int!) {
     followedArticles(user_id: $user_id, count: 10, page: $page) {
         paginatorInfo {
@@ -64,7 +64,6 @@ query followedArticlesQuery($page: Int, $user_id: Int!) {
             count_comments
             count_tips
             liked
-
             user {
                 avatar
                 name

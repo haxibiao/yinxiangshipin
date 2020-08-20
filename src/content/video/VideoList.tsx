@@ -44,7 +44,7 @@ export default observer(() => {
 
     const onMomentumScrollEnd = useCallback(
         debounce(() => {
-            if (videoStore.data.length - videoStore.viewableItemIndex <= 2) {
+            if (videoStore.data.length - videoStore.viewableItemIndex <= 3) {
                 videoStore.fetchData();
             }
         }),

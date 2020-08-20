@@ -26,10 +26,11 @@ query recommendPostsQuery {
             age
             introduction
         }
-        categories {
-            id
-            name
-            logo
+        tags {
+            data {
+                id
+                name
+            }
         }
         images {
             id
@@ -79,10 +80,11 @@ query publicPostsQuery($user_id: Int, $count: Int, $page: Int) {
                 age
                 introduction
             }
-            categories {
-                id
-                name
-                logo
+            tags {
+                data {
+                    id
+                    name
+                }
             }
             images {
                 id
@@ -133,10 +135,11 @@ query postsQuery($user_id: Int!, $count: Int, $page: Int) {
                 age
                 introduction
             }
-            categories {
-                id
-                name
-                logo
+            tags {
+                data {
+                    id
+                    name
+                }
             }
             images {
                 id
@@ -202,11 +205,6 @@ query userPostsQuery($user_id: Int!, $filter: PostFilter, $count: Int, $page: In
                     name
                 }
             }
-            categories {
-                id
-                name
-                logo
-            }
             images {
                 id
                 url
@@ -265,22 +263,6 @@ query articleQuery($id: Int!) {
             url
             width
             height
-        }
-        categories {
-            id
-            name
-            logo
-            count_articles
-            count_follows
-            followed
-        }
-        tips {
-            id
-            user {
-                id
-                name
-                avatar
-            }
         }
     }
 }
