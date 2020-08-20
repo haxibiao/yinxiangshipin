@@ -11,20 +11,26 @@ interface Props {
     onSend: () => void;
 }
 
-export default observer(({ style, color, placeholderColor = '#b2b2b2', onSend, editable, value, onChange }: Props) => {
+export default observer(({ style, onSend, editable, value, onChange }: Props) => {
     return (
         <View style={[styles.commentInput, style]}>
             <View style={styles.inputWrap}>
-                <TextInput
-                    editable={editable}
-                    value={value}
-                    onChange={onChange}
-                    style={[styles.textInput, { color }]}
-                    placeholder="请把想说的娓娓道来..."
-                    underlineColorAndroid="transparent"
-                    textAlignVertical="center"
-                    placeholderTextColor={placeholderColor}
-                />
+                {!editable ? (
+                    <View style={styles.placeholder}>
+                        <Text style={styles.placeholderText}>请把想说的娓娓道来...</Text>
+                    </View>
+                ) : (
+                    <TextInput
+                        editable={editable}
+                        value={value}
+                        onChange={onChange}
+                        style={styles.textInput}
+                        placeholder="请把想说的娓娓道来..."
+                        underlineColorAndroid="transparent"
+                        textAlignVertical="center"
+                        placeholderTextColor={'#b2b2b2'}
+                    />
+                )}
             </View>
             <TouchableOpacity style={styles.sendButton} onPress={onSend}>
                 <Image
@@ -58,6 +64,15 @@ const styles = StyleSheet.create({
         padding: pixel(10),
         fontSize: font(15),
         color: '#2b2b2b',
+    },
+    placeholder: {
+        flex: 1,
+        padding: pixel(10),
+        justifyContent: 'center',
+    },
+    placeholderText: {
+        fontSize: font(15),
+        color: '#fff',
     },
     sendButton: {
         alignSelf: 'stretch',

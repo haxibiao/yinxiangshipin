@@ -64,7 +64,7 @@ export default observer(({ store, initialIndex, getVisibleItem, fetchData }) => 
             );
         }
         return null;
-    }, []);
+    }, [store.data, store.status]);
 
     useEffect(() => {
         const hardwareBackPress = BackHandler.addEventListener('hardwareBackPress', () => {
@@ -144,8 +144,10 @@ export default observer(({ store, initialIndex, getVisibleItem, fetchData }) => 
             <TouchableOpacity
                 activeOpacity={1}
                 style={styles.commentInput}
-                onPress={() => commentRef.current?.slideUp({ autoFocus: true })}>
-                <CommentInput color="#fff" placeholderColor="#fff" editable={false} />
+                onPress={() => {
+                    commentRef.current?.slideUp({ autoFocus: true });
+                }}>
+                <CommentInput editable={false} />
             </TouchableOpacity>
             <CommentOverlay ref={commentRef} media={store.currentItem} navigation={navigation} />
         </View>
@@ -179,7 +181,9 @@ const styles = StyleSheet.create({
     },
     commentInput: {
         position: 'absolute',
-        bottom: 0,
+        bottom: Theme.HOME_INDICATOR_HEIGHT,
+        zIndex: 1,
+        height: 50,
         width: '100%',
     },
     inputStyle: {

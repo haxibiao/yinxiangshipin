@@ -195,6 +195,7 @@ export default class TabView extends React.PureComponent {
                     }}
                     horizontal
                     pagingEnabled
+                    bounces={false}
                     automaticallyAdjustContentInsets={false}
                     contentOffset={{ x: this.props.initialPage * this.state.sceneWidth }}
                     onMomentumScrollEnd={this.onMomentumScrollEnd}
