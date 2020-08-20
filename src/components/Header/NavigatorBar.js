@@ -19,7 +19,15 @@ const NavigatorBar = (props: any) => {
     const route = useRoute();
 
     const { isTopNavigator, leftView } = props;
-    const { showShadow, statusBarColor, statusBarStyle, animated, statusBarHidden, rightView, ...others } = props;
+    const {
+        showShadow,
+        statusBarColor,
+        statusBarStyle = 'dark-content',
+        animated,
+        statusBarHidden,
+        rightView,
+        ...others
+    } = props;
     const [barOpacity, setBarOpacity] = React.useState(new Animated.Value(props.hidden ? 0 : 1));
 
     let barHeight: number;
