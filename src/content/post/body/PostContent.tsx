@@ -63,7 +63,7 @@ export default observer(
                                 style={styles.tagItem}
                                 onPress={() => navigation.navigate('TagDetail', { tag })}>
                                 <View style={styles.tagLeft}>
-                                    <Text style={styles.tagLabel}>#</Text>
+                                    <Text style={styles.tagLabel}>集</Text>
                                 </View>
                                 <View style={{ maxWidth: pixel(100) }}>
                                     <Text style={styles.tagName} numberOfLines={1}>
@@ -215,27 +215,26 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         overflow: 'hidden',
-        height: pixel(27),
+        height: pixel(23),
         marginRight: pixel(10),
-        borderRadius: pixel(4),
-        backgroundColor: '#EDF3FF',
+        borderRadius: pixel(3),
+        backgroundColor: '#EDF3FF', // FEEFEE
     },
     tagLeft: {
         alignSelf: 'stretch',
         justifyContent: 'center',
         alignItems: 'center',
-        width: pixel(27),
+        width: pixel(23),
         backgroundColor: '#4085FF',
     },
     tagLabel: {
         color: '#fff',
-        fontSize: font(15),
-        fontWeight: 'bold',
+        fontSize: font(12),
     },
     tagName: {
         paddingHorizontal: pixel(6),
         color: '#4085FF',
-        fontSize: font(13),
+        fontSize: font(11),
     },
     footer: {
         marginTop: pixel(12),

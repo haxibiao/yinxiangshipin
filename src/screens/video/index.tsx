@@ -26,27 +26,24 @@ export default () => {
             return client.query({
                 query: GQL.tagPostsQuery,
                 variables: {
-                    tag_id: 24 || tag?.id,
+                    tag_id: tag?.id,
                     page: nextPage.current,
                     visibility: 'all',
                     count: 5,
                 },
             });
         }
-        console.log('xxxx', store.data.length - store.viewableItemIndex <= 2);
 
         if (
             (store.status !== 'loading' || store.status !== 'loadAll') &&
             store.data.length - store.viewableItemIndex <= 3
         ) {
-            console.log('fetchData');
             store.status = 'loading';
             const [error, result] = await exceptionCapture(postsQuery);
             const postsData = result?.data?.tag?.posts?.data;
             const hasMore = result?.data?.tag?.posts?.paginatorInfo?.hasMorePages;
             nextPage.current = result?.data?.tag?.posts?.paginatorInfo?.currentPage + 1;
             if (postsData?.length > 0) {
-                console.log('addSource');
                 store.addSource(postsData);
             }
             if (error) {

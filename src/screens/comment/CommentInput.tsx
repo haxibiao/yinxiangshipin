@@ -7,6 +7,7 @@ import { userStore } from '@src/store';
 import { useNavigation, useRoute } from '@react-navigation/native';
 const CommentInput = React.forwardRef((props, ref) => {
     const {
+        autoFocus,
         commentAbleType,
         commentAbleId,
         replyByComment,
@@ -23,7 +24,7 @@ const CommentInput = React.forwardRef((props, ref) => {
     const hideListener = useRef();
     const inputRef = useRef();
 
-    const onChangeText = useCallback(value => {
+    const onChangeText = useCallback((value) => {
         setBody(value);
         bodyRef.current = value;
     }, []);
@@ -54,7 +55,7 @@ const CommentInput = React.forwardRef((props, ref) => {
             });
             if (props.replyByComment) {
                 let findIndex;
-                const commentItem = __.find(prev.comments.data, function(comment, index) {
+                const commentItem = __.find(prev.comments.data, function (comment, index) {
                     findIndex = index;
                     return comment.id === props.replyByComment.id;
                 });
@@ -142,11 +143,11 @@ const CommentInput = React.forwardRef((props, ref) => {
                 comments: [],
             },
         },
-        onError: error => {
+        onError: (error) => {
             const content = error.message.replace('GraphQL error: ', '') || '评论失败';
             Toast.show({ content });
         },
-        onCompleted: data => {
+        onCompleted: (data) => {
             increaseCountComments();
         },
     });
@@ -182,6 +183,7 @@ const CommentInput = React.forwardRef((props, ref) => {
                     placeholder={replyByComment ? `回复 ${replyByComment.user.name}:` : '写评论...'}
                     style={styles.textInput}
                     value={body}
+                    autoFocus={autoFocus}
                     onChangeText={onChangeText}
                     ref={inputRef}
                 />

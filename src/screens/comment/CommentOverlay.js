@@ -38,14 +38,15 @@ class CommentOverlay extends Component {
         this.offset = new Animated.Value(0);
         this.state = {
             visible: false,
+            autoFocus: false,
         };
     }
 
     // 显示动画
-    slideUp = () => {
+    slideUp = (params) => {
         appStore.modalIsShow = true;
         this.setState(
-            () => ({ visible: true }),
+            () => ({ visible: true, autoFocus: params?.autoFocus }),
             () => {
                 Animated.timing(this.offset, {
                     easing: Easing.linear,
@@ -65,7 +66,7 @@ class CommentOverlay extends Component {
             toValue: 0,
             useNativeDriver: true,
         }).start(() => {
-            this.setState({ visible: false });
+            this.setState({ visible: false, autoFocus: false });
             appStore.modalIsShow = false;
         });
     };
@@ -104,7 +105,12 @@ class CommentOverlay extends Component {
                                     <Iconfont name="guanbi1" size={pixel(20)} color={Theme.defaultTextColor} />
                                 </TouchFeedback>
                             </View>
-                            <Comments media={media} commentAbleId={media.id} commentAbleType="articles" />
+                            <Comments
+                                media={media}
+                                autoFocus={this.state.autoFocus}
+                                commentAbleId={media.id}
+                                commentAbleType="articles"
+                            />
                         </View>
                     </Animated.View>
                 </View>

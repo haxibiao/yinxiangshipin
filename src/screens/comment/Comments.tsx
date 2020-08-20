@@ -12,7 +12,7 @@ interface Props {
 }
 
 const Comments = observer((props: Props) => {
-    const { commentAbleType, commentAbleId, media } = props;
+    const { autoFocus, commentAbleType, commentAbleId, media } = props;
     const [replyByComment, setReplyByComment] = useState();
     const flatListRef = useRef();
     const fancyInputRef = useRef();
@@ -95,6 +95,7 @@ const Comments = observer((props: Props) => {
                 }}
             />
             <CommentInput
+                autoFocus={autoFocus}
                 commentAbleType={commentAbleType}
                 updateScrollOffset={updateScrollOffset}
                 increaseCountComments={increaseCountComments}

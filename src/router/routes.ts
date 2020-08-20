@@ -45,6 +45,7 @@ import ArticleDetailScreen from '../screens/article/DetailScreen';
 import CommentScreen from '../screens/comment/CommentScreen';
 import PostDetailScreen from '../screens/post';
 import TagDetailScreen from '../screens/tagDetail';
+import VideoListScreen from '../screens/video';
 
 // category
 import CategoryScreen from '../screens/category';
@@ -170,6 +171,9 @@ export default {
     },
     TagDetail: {
         component: TagDetailScreen,
+    },
+    VideoList: {
+        component: VideoListScreen,
     },
     Chat: {
         component: ChatScreen,

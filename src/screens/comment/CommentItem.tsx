@@ -154,10 +154,11 @@ const CommentItem = (props: Props) => {
                 activeOpacity={0.9}
                 onPress={() => replyHandler(comment)}
                 onLongPress={onLongPress}>
-                <TouchableWithoutFeedback
+                <TouchableOpacity
+                    activeOpacity={0.9}
                     onPress={() => navigation.navigate('User', { user: Helper.syncGetter('user', comment) })}>
                     <Avatar source={Helper.syncGetter('user.avatar', comment)} size={pixel(40)} />
-                </TouchableWithoutFeedback>
+                </TouchableOpacity>
                 <View style={styles.commentRight}>
                     <View style={styles.commentedUser}>
                         <View style={styles.userName}>

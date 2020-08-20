@@ -62,10 +62,11 @@ const PostItem: React.FC<Props> = observer((props: Props) => {
         type,
         user,
         time_ago,
+        created_at,
         body,
         description,
         cover,
-        categories,
+        tag,
         submit,
         remark,
         count_likes,
@@ -109,17 +110,17 @@ const PostItem: React.FC<Props> = observer((props: Props) => {
             );
         }
     }, []);
-    const renderCategories = useMemo(() => {
-        if (Array.isArray(categories) && categories.length > 0) {
+    const renderTags = useMemo(() => {
+        if (tag?.data?.length > 0) {
             return (
-                <View style={styles.categories}>
-                    {categories.map((category, index) => (
+                <View style={styles.tag}>
+                    {tag.data.map((tag, index) => (
                         <TouchableOpacity
                             activeOpacity={1}
-                            key={category.id}
-                            style={styles.categoryItem}
-                            onPress={() => navigation.navigate('Category', { category })}>
-                            <Text style={styles.categoryName}>#{category.name}</Text>
+                            key={tag.id}
+                            style={styles.tagItem}
+                            onPress={() => navigation.navigate('TagDetail', { tag })}>
+                            <Text style={styles.tagName}>#{tag.name}</Text>
                         </TouchableOpacity>
                     ))}
                 </View>
@@ -200,7 +201,7 @@ const PostItem: React.FC<Props> = observer((props: Props) => {
                             <View style={styles.info}>
                                 <SafeText style={styles.nameText}>{user.name}</SafeText>
                                 <SafeText style={styles.timeAgoText} numberOfLines={1}>
-                                    {time_ago}
+                                    {time_ago || created_at}
                                 </SafeText>
                             </View>
                         </View>
@@ -213,7 +214,7 @@ const PostItem: React.FC<Props> = observer((props: Props) => {
                         </Text>
                     </View>
                     {renderCover}
-                    {renderCategories}
+                    {renderTags}
                     <View style={styles.bottomPartWrapper}>
                         <Row style={styles.metaList}>
                             <Like
@@ -259,11 +260,11 @@ PostItem.defaultProps = {
 export default PostItem;
 
 const styles = StyleSheet.create({
-    categories: {
+    tag: {
         flexDirection: 'row',
         flexWrap: 'wrap',
     },
-    categoryItem: {
+    tagItem: {
         alignItems: 'center',
         flexDirection: 'row',
         height: pixel(34),
@@ -271,7 +272,7 @@ const styles = StyleSheet.create({
         marginRight: pixel(10),
         marginTop: pixel(10),
     },
-    categoryName: {
+    tagName: {
         color: Theme.primaryColor,
         fontSize: font(13),
     },

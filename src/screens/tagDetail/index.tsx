@@ -2,7 +2,7 @@ import React, { useContext, useState, useCallback, useEffect, useMemo, useRef, F
 import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity, Animated } from 'react-native';
 import { useQuery } from '@apollo/react-hooks';
 import { observer, appStore } from '@src/store';
-import { Header } from '@src/components';
+import { NavBarHeader } from '@src/components';
 import { syncGetter, count } from '@src/common';
 import { GQL, MediaItem, ContentStatus, mergeProperty } from '@src/content';
 import { observable } from 'mobx';
@@ -29,12 +29,12 @@ export default observer((props: any) => {
     //
     const { loading, error, data, fetchMore, refetch } = useQuery(GQL.tagPostsQuery, {
         variables: {
-            tag_id: 24 || tag?.id,
+            tag_id: tag?.id,
             count: 12,
             order: hot ? 'HOT' : 'LATEST',
             visibility: 'all',
-            fetchPolicy: 'network-only',
         },
+        fetchPolicy: 'network-only',
     });
     const tagData = useMemo(() => data?.tag || tag, [data]);
     const listData = useMemo(() => data?.tag?.posts?.data, [data]);
@@ -68,7 +68,7 @@ export default observer((props: any) => {
         [tag, listData, nextPage],
     );
 
-    const header = useMemo(() => {
+    const listHeader = useMemo(() => {
         return (
             <View style={styles.header}>
                 <View style={styles.tagLogoWrap}>
@@ -77,10 +77,10 @@ export default observer((props: any) => {
                 <View style={styles.tagInfo}>
                     <View style={styles.tagInfoTop}>
                         <Text style={styles.tagName}>#{tagData?.name}</Text>
-                        <Text style={styles.tagCountHits}>{`${count(tagData?.count_plays || 0.0)}次播放`}</Text>
+                        <Text style={styles.tagCount}>{`${count(tagData?.count_plays || 0.0)}次播放`}</Text>
                     </View>
                     <View style={styles.tagInfoBottom}>
-                        <Text style={styles.tagCountHits}>{`${
+                        <Text style={styles.tagCount}>{`${
                             tagData?.count_posts > 0 ? count(tagData?.count_posts) : '0.0'
                         }个视频`}</Text>
                         <TouchableOpacity
@@ -112,13 +112,13 @@ export default observer((props: any) => {
         if (!loading && hasMore) {
             footer = <ContentStatus status="loadMore" />;
         }
-        if (listData?.length > 0 && !hasMore) {
-            footer = (
-                <View style={styles.listFooter}>
-                    <Text style={styles.listFooterText}>-- end --</Text>
-                </View>
-            );
-        }
+        // if (listData?.length > 0 && !hasMore) {
+        //     footer = (
+        //         <View style={styles.listFooter}>
+        //             <Text style={styles.listFooterText}>-- end --</Text>
+        //         </View>
+        //     );
+        // }
         return footer;
     }, [loading, listData, hasMore]);
 
@@ -146,14 +146,7 @@ export default observer((props: any) => {
 
     return (
         <View style={styles.container}>
-            <Header
-                lightBar
-                centerComponent={
-                    <Animated.View style={[styles.navTitle, { opacity: titleOpacity }]}>
-                        <Text style={styles.title}>{tag?.name}</Text>
-                    </Animated.View>
-                }
-            />
+            <NavBarHeader isTransparent centerStyle={{ opacity: titleOpacity }} title={tag?.name} />
             <FlatList
                 data={listData}
                 onScroll={onScroll}
@@ -162,7 +155,7 @@ export default observer((props: any) => {
                 numColumns={3}
                 renderItem={renderItem}
                 keyExtractor={(item, index) => String(item.id || index)}
-                ListHeaderComponent={header}
+                ListHeaderComponent={listHeader}
                 ListFooterComponent={listFooter}
                 ListEmptyComponent={listEmpty}
                 onEndReached={onEndReached}
@@ -195,7 +188,8 @@ const styles = StyleSheet.create({
     header: {
         flexDirection: 'row',
         padding: pixel(15),
-        paddingBottom: pixel(30),
+        paddingTop: pixel(5),
+        paddingBottom: pixel(20),
     },
     tagLogoWrap: {
         width: percent(25),
@@ -223,12 +217,12 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     tagName: {
+        marginBottom: pixel(5),
         fontSize: font(20),
         fontWeight: 'bold',
         color: '#fff',
     },
-    tagCountHits: {
-        marginTop: pixel(5),
+    tagCount: {
         fontSize: font(14),
         color: '#b2b2b2',
     },

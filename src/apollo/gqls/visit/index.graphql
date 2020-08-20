@@ -11,7 +11,7 @@ query userVisitsQuery($user_id: Int!, $page: Int) {
                 type
                 body
                 description
-                time_ago
+                created_at
                 cover
                 hits
                 count_likes
