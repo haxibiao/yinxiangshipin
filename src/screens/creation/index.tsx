@@ -3,34 +3,26 @@ import {
     StyleSheet,
     View,
     Image,
-    ScrollView,
     Text,
-    Keyboard,
-    StatusBar,
+    ScrollView,
     TouchableOpacity,
     TouchableWithoutFeedback,
+    TextInput,
+    StatusBar,
 } from 'react-native';
-import { PageContainer, HxfTextInput, Iconfont, MediaUploader } from '@src/components';
+import { PageContainer, NavBarHeader, Iconfont, MediaUploader, UserAgreementOverlay } from '@src/components';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { observer, userStore, appStore } from '@src/store';
-import { GQL, useMutation } from '@src/apollo';
-import { useApolloClient, ApolloProvider } from '@apollo/react-hooks';
+import { GQL, useMutation, errorMessage } from '@src/apollo';
 import { observable } from 'mobx';
-import { Overlay } from 'teaset';
-import Video from 'react-native-video';
-import { Badge, UserAgreementOverlay } from '@src/components';
 
-const contentGap = pixel(20);
 const MediaItemWidth = (Device.WIDTH - pixel(60)) / 3;
 
 export default (props: any) => {
     const route = useRoute();
-    const category = useMemo(() => route.params?.category, [props]);
     const navigation = useNavigation();
-    const client = useApolloClient();
-    const [categories, setCategories] = useState(() => (category ? [category] : []));
-    const [formData, setFormData] = useState({ body: '', qcvod_fileid: '', images: [], category_ids: [] });
-
+    const [tags, setTags] = useState(route.params?.tag ? [route.params?.tag] : []);
+    const [formData, setFormData] = useState({ body: '', qcvod_fileid: '', images: [], tag_names: [] });
     const isDisableButton = useMemo(() => {
         if (formData.body && (formData.qcvod_fileid || formData.images.length > 0)) {
             return false;
@@ -43,12 +35,12 @@ export default (props: any) => {
             body: formData.body,
             images: formData.images,
             qcvod_fileid: formData.qcvod_fileid,
-            category_ids: categories.map((c) => c.id),
+            tag_names: tags.map((c) => c.name),
             type: 'POST',
         },
         onError: (error: any) => {
             Toast.show({
-                content: error.message.replace('GraphQL error: ', '') || '发布失败',
+                content: errorMessage(error) || '发布失败',
             });
         },
         onCompleted: (mutationResult: any) => {
@@ -60,54 +52,6 @@ export default (props: any) => {
             });
         },
     });
-
-    const selectCategory = useCallback(
-        (category) => {
-            if (categories.length > 3) {
-                Toast.show({ content: '最多关联3个专题哦' });
-            }
-            if (
-                __.find(categories, function (item) {
-                    return item.id === category.id;
-                })
-            ) {
-                Toast.show({ content: '该专题已经添加过了' });
-            } else {
-                categories.unshift(category);
-                setCategories([...categories]);
-            }
-        },
-        [categories],
-    );
-
-    const addedCategories = useMemo(() => {
-        if (Array.isArray(categories)) {
-            return categories.slice(0, 3).map((category, index) => {
-                return (
-                    <TouchableOpacity
-                        activeOpacity={1}
-                        key={category.id}
-                        style={styles.categoryItem}
-                        onPress={() => navigation.navigate('Category', { category })}>
-                        <View style={{ maxWidth: pixel(100) }}>
-                            <Text style={styles.categoryName} numberOfLines={1}>
-                                #{category.name}
-                            </Text>
-                        </View>
-                        <TouchableOpacity
-                            style={styles.deleteCategory}
-                            onPress={() => {
-                                categories.splice(index, 1);
-                                setCategories([...categories]);
-                            }}>
-                            <Iconfont name="guanbi1" size={pixel(13)} color="#4CA7F0" />
-                        </TouchableOpacity>
-                    </TouchableOpacity>
-                );
-            });
-        }
-        return null;
-    }, [categories]);
 
     const changeBody = useCallback((value) => {
         setFormData((prevFormData) => {
@@ -127,218 +71,233 @@ export default (props: any) => {
         }
     }, []);
 
+    const hasMedia = useMemo(() => {
+        return formData.images.length > 0 || formData.qcvod_fileid;
+    }, [formData]);
+
+    const selectTag = useCallback(
+        (tag) => {
+            const isAdded = __.find(tags, function (item) {
+                return item.id === tag.id;
+            });
+            if (!isAdded) {
+                tags.unshift(tag);
+                setTags([...tags]);
+            }
+        },
+        [tags],
+    );
+
+    const deleteTagName = useCallback((index) => {
+        setTags((tags) => {
+            tags.splice(index, 1);
+            return [...tags];
+        });
+    }, []);
+
+    const renderTagNames = useMemo(() => {
+        if (tags?.length > 0) {
+            return (
+                <ScrollView
+                    contentContainerStyle={styles.tagNames}
+                    showsHorizontalScrollIndicator={false}
+                    horizontal={true}>
+                    {tags.map((tag, index) => (
+                        <View key={tag?.name} style={styles.tagItem}>
+                            <View style={{ maxWidth: pixel(100) }}>
+                                <Text style={styles.tagName} numberOfLines={1}>
+                                    #{tag?.name}
+                                </Text>
+                            </View>
+                            <TouchableOpacity style={styles.deleteTag} onPress={() => deleteTagName(index)}>
+                                <Iconfont name="guanbi1" size={pixel(13)} color="#4085FF" />
+                            </TouchableOpacity>
+                        </View>
+                    ))}
+                </ScrollView>
+            );
+        } else {
+            return null;
+        }
+    }, [tags]);
+
     useEffect(() => {
         if (!appStore.createUserAgreement) {
-            UserAgreementOverlay(() => {
-                navigation.navigate('CreatePost');
-            }, () => {
-                navigation.goBack();
-            });
+            UserAgreementOverlay(
+                () => {
+                    navigation.navigate('CreatePost');
+                },
+                () => {
+                    navigation.goBack();
+                },
+            );
         }
     }, []);
 
     return (
-        <PageContainer
-            submitting={loading}
-            leftView={
-                <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <Iconfont name="guanbi1" size={pixel(22)} color={Theme.primaryAuxiliaryColor} />
-                </TouchableOpacity>
-            }
-            rightView={
-                <TouchableOpacity
-                    disabled={isDisableButton}
-                    style={[styles.publishButton, isDisableButton && styles.disabledButton]}
-                    onPress={createPost}>
-                    <Text style={[styles.publishText, isDisableButton && styles.disabledPublishText]}>发布动态</Text>
-                </TouchableOpacity>
-            }>
-            <View style={styles.container}>
-                <ScrollView
-                    contentContainerStyle={styles.contentContainerStyle}
-                    showsVerticalScrollIndicator={false}
-                    bounces={false}>
-                    <View style={styles.creatorContainer}>
-                        {/* 动态内容 */}
-                        <View style={styles.bodyTextInputArea}>
-                            <HxfTextInput
-                                style={styles.bodyTextInput}
-                                placeholderTextColor={Theme.slateGray1}
-                                onChangeText={changeBody}
-                                multiline={true}
-                                maxLength={100}
-                                textAlignVertical="top"
-                                placeholder="记录你此刻的生活，分享给有趣的人看..."
-                            />
-                            <View style={styles.textInputLimit}>
-                                <Text style={styles.countInputText}>{`${formData.body.length}/100`}</Text>
-                            </View>
-                        </View>
-                        {/* 添加视频/图片 */}
-                        <View style={styles.mediaContainer}>
-                            <MediaUploader
-                                onResponse={uploadResponse}
-                                maxWidth={Device.WIDTH / 2}
-                                style={styles.mediaItem}
-                            />
-                        </View>
-                        {/* 添加专题 */}
-                        <TouchableOpacity
-                            style={styles.operation}
-                            onPress={() => navigation.navigate('SelectCategory', { selectCategory, categories })}
-                            activeOpacity={0.9}>
-                            {categories.length < 1 ? (
-                                <View style={styles.operationBtn}>
-                                    <Text style={styles.operationName}>添加话题</Text>
-                                </View>
-                            ) : (
-                                <ScrollView style={styles.categoriesContainer} horizontal={true}>
-                                    {addedCategories}
-                                </ScrollView>
-                            )}
-                            <Iconfont name="right" size={pixel(15)} color={Theme.secondaryTextColor} />
-                        </TouchableOpacity>
+        <View style={styles.container}>
+            <StatusBar barStyle="dark-content" />
+            <NavBarHeader
+                title="发布动态"
+                rightComponent={
+                    <TouchableOpacity
+                        disabled={isDisableButton}
+                        style={[styles.publishButton, isDisableButton && { backgroundColor: '#b2b2b2' }]}
+                        onPress={createPost}>
+                        <Text style={styles.publishText}>发布</Text>
+                    </TouchableOpacity>
+                }
+            />
+            <ScrollView contentContainerStyle={styles.contentContainer} showsVerticalScrollIndicator={false}>
+                <View style={styles.content}>
+                    <TextInput
+                        style={styles.bodyInput}
+                        onChangeText={changeBody}
+                        multiline={true}
+                        maxLength={100}
+                        textAlignVertical="top"
+                        placeholder="记录你此刻的生活，分享给有趣的人看..."
+                        underlineColorAndroid="transparent"
+                        placeholderTextColor="#b2b2b2"
+                    />
+                    <View style={styles.mediaContainer}>
+                        <MediaUploader
+                            onResponse={uploadResponse}
+                            maxWidth={Device.WIDTH / 2}
+                            style={styles.mediaItem}
+                        />
                     </View>
-                </ScrollView>
-            </View>
-        </PageContainer>
+                </View>
+                <View style={styles.operationContainer}>
+                    <TouchableOpacity
+                        style={styles.operation}
+                        activeOpacity={1}
+                        onPress={() => navigation.navigate('TagList', { selectTag })}>
+                        <View style={styles.operationLeft}>
+                            <Image
+                                source={require('@app/assets/images/icons/ic_tag_black.png')}
+                                style={styles.operationIcon}
+                            />
+                            <Text style={styles.operationName}>添加话题</Text>
+                        </View>
+                        <Iconfont name="right" size={pixel(14)} color="#b2b2b2" />
+                    </TouchableOpacity>
+                    <View>{renderTagNames}</View>
+                    <TouchableOpacity
+                        style={styles.operation}
+                        activeOpacity={1}
+                        disabled={hasMedia}
+                        onPress={() => null}>
+                        <View style={styles.operationLeft}>
+                            <Image
+                                source={
+                                    hasMedia
+                                        ? require('@app/assets/images/icons/ic_link_gray.png')
+                                        : require('@app/assets/images/icons/ic_link_black.png')
+                                }
+                                style={styles.operationIcon}
+                            />
+                            <Text style={[styles.operationName, hasMedia && { color: '#b2b2b2' }]}>分享视频链接</Text>
+                        </View>
+                        <Iconfont name="right" size={pixel(14)} color="#b2b2b2" />
+                    </TouchableOpacity>
+                </View>
+            </ScrollView>
+        </View>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#fff',
         flex: 1,
-        paddingHorizontal: contentGap,
+        backgroundColor: '#fff',
     },
-    contentContainerStyle: { flexGrow: 1, paddingBottom: Theme.HOME_INDICATOR_HEIGHT },
     publishButton: {
-        backgroundColor: Theme.watermelon,
-        borderRadius: pixel(15),
-        height: pixel(30),
+        marginRight: pixel(12),
+        height: pixel(28),
+        paddingHorizontal: pixel(12),
+        borderRadius: pixel(14),
         justifyContent: 'center',
-        paddingHorizontal: pixel(10),
-    },
-    disabledButton: {
-        backgroundColor: '#f0f0f0',
+        backgroundColor: Theme.watermelon,
     },
     publishText: {
         color: '#fff',
-        fontSize: font(14),
-        textAlign: 'center',
+        fontSize: font(15),
     },
-    disabledPublishText: {
-        color: Theme.subTextColor,
+    contentContainer: {
+        flexGrow: 1,
+        paddingBottom: Theme.HOME_INDICATOR_HEIGHT,
     },
-    creatorContainer: {
-        backgroundColor: '#fff',
-        borderRadius: pixel(3),
-        paddingVertical: pixel(20),
+    content: {
+        padding: pixel(15),
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        borderBottomColor: '#f0f0f0',
     },
-    bodyTextInput: {
+    bodyInput: {
         height: pixel(120),
-    },
-    bodyTextInputArea: {},
-    countInputText: {
-        color: Theme.slateGray1,
-        fontSize: font(13),
-    },
-    textInputLimit: {
-        alignItems: 'flex-end',
+        fontSize: font(15),
+        lineHeight: font(20),
+        color: '#2b2b2b',
+        paddingTop: 0,
+        padding: 0,
+        margin: 0,
     },
     mediaContainer: {
-        marginRight: -pixel(10),
-        marginBottom: pixel(5),
+        marginRight: -pixel(15),
+        marginBottom: pixel(10),
     },
-    mediaItem: { width: MediaItemWidth, height: MediaItemWidth, marginTop: pixel(10), marginRight: pixel(10) },
+    mediaItem: { width: MediaItemWidth, height: MediaItemWidth, marginTop: pixel(10), marginRight: pixel(15) },
+    operationContainer: {
+        paddingLeft: pixel(15),
+    },
     operation: {
-        paddingRight: pixel(12),
+        paddingVertical: pixel(15),
+        paddingRight: pixel(15),
         flexDirection: 'row',
-        justifyContent: 'space-between',
         alignItems: 'center',
-        borderBottomWidth: pixel(1),
-        borderColor: '#f0f0f0',
+        justifyContent: 'space-between',
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        borderBottomColor: '#f0f0f0',
     },
-    operationBtn: {
-        paddingVertical: pixel(12),
+    operationLeft: {
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    operationIcon: {
+        width: pixel(22),
+        height: pixel(22),
+        marginRight: pixel(10),
     },
     operationName: {
         color: '#2b2b2b',
-        fontSize: font(15),
+        fontSize: font(16),
     },
-    categoriesContainer: {
-        flex: 1,
-        marginTop: pixel(12),
-        marginRight: pixel(12),
+    tagNames: {
+        paddingTop: pixel(10),
     },
-    categoryItem: {
+    tagItem: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        height: pixel(32),
-        paddingHorizontal: pixel(6),
-        borderRadius: pixel(3),
         marginRight: pixel(10),
-        marginBottom: pixel(12),
-        backgroundColor: '#E7F5FE',
+        marginBottom: pixel(10),
+        height: pixel(28),
+        paddingLeft: pixel(8),
+        paddingRight: pixel(9),
+        borderWidth: pixel(1),
+        borderRadius: pixel(14),
+        borderColor: '#4085FF',
+        backgroundColor: '#fff',
     },
-    categoryName: {
-        color: '#4CA7F0',
+    tagName: {
         fontSize: font(12),
+        color: '#4085FF',
     },
-    deleteCategory: {
+    deleteTag: {
         alignSelf: 'stretch',
         justifyContent: 'center',
         paddingHorizontal: pixel(6),
         marginRight: -pixel(6),
-    },
-    productItem: {
-        flexDirection: 'row',
-        paddingVertical: pixel(12),
-        backgroundColor: '#fff',
-        overflow: 'hidden',
-    },
-    productCover: {
-        width: pixel(90),
-        height: pixel(90),
-        borderRadius: pixel(2),
-    },
-    productDetail: {
-        flex: 1,
-        marginLeft: pixel(12),
-        justifyContent: 'space-between',
-    },
-    goodsIntro: {
-        marginBottom: pixel(4),
-    },
-    introduction: {
-        fontSize: font(15),
-        lineHeight: font(20),
-        color: '#2b2b2b',
-    },
-    goodsPrice: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'flex-end',
-    },
-    price: {
-        fontSize: font(16),
-        color: '#FD567E',
-    },
-    addBtn: {
-        width: pixel(80),
-        height: pixel(30),
-        borderRadius: pixel(4),
-        backgroundColor: '#FE2C54',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    btnText: {
-        fontSize: font(15),
-        color: '#fff',
-        fontWeight: 'bold',
     },
 });

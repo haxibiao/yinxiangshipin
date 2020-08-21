@@ -16,4 +16,3 @@ export { default as Badge } from './Badge';
 export { default as Like } from './Like';
 export { default as MoreOperation } from './MoreOperation';
 export { default as GenderLabel } from './GenderLabel';
-export { default as Popover } from './Popover';
