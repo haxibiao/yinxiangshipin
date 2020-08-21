@@ -88,10 +88,15 @@ export default observer((props) => {
     }, [media]);
 
     const mediaTags = useMemo(() => {
-        if (media?.tags?.data?.length > 0) {
-            return media.tags?.data?.map((tag: any) => (
+        // const tagsData = [
+        //     { id: 24, name: '美少女' },
+        //     { id: 26, name: '长沙漫展' },
+        // ];
+        const tagsData = media?.tags?.data;
+        if (tagsData?.length > 0) {
+            return tagsData.map((tag: any) => (
                 <Text key={tag.id} style={styles.tagName} onPress={() => navigation.navigate('TagDetail', { tag })}>
-                    {`#${tag.name} `}
+                    {` #${tag.name} `}
                 </Text>
             ));
         }
@@ -135,7 +140,7 @@ export default observer((props) => {
                         </View>
                         <View>
                             <SafeText style={styles.content} numberOfLines={3}>
-                                {media?.description}
+                                {String(media?.description || media?.content).trim()}
                                 {mediaTags}
                             </SafeText>
                         </View>
@@ -176,14 +181,12 @@ const styles = StyleSheet.create({
         bottom: 0,
         left: 0,
         right: 0,
-        paddingHorizontal: pixel(Theme.itemSpace),
-        paddingBottom: Device.isFullScreenDevice
-            ? pixel(Theme.itemSpace)
-            : pixel(Theme.BOTTOM_HEIGHT + Theme.itemSpace),
+        paddingHorizontal: pixel(10),
+        paddingBottom: Device.isFullScreenDevice ? pixel(15) : pixel(Theme.BOTTOM_HEIGHT + 15),
     },
     videoInfo: {
         flex: 1,
-        marginRight: pixel(Theme.itemSpace),
+        marginRight: pixel(15),
     },
     goodsItem: {
         marginRight: pixel(20),

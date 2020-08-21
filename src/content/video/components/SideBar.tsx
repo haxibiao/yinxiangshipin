@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     countText: {
         color: 'rgba(255,255,255,0.8)',
         fontSize: font(12),
-        marginTop: pixel(5),
+        marginTop: pixel(4),
         textAlign: 'center',
     },
     imageSize: {

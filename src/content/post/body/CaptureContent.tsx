@@ -1,5 +1,14 @@
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
-import { View, StyleSheet, Image, Text, TouchableOpacity, Animated, TouchableWithoutFeedback } from 'react-native';
+import {
+    View,
+    StyleSheet,
+    Image,
+    Text,
+    TouchableOpacity,
+    Animated,
+    TouchableWithoutFeedback,
+    ScrollView,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Avatar, Iconfont, SafeText, PlaceholderImage, GridImage } from '@src/components';
 import { observer, userStore } from '@src/store';
@@ -69,7 +78,10 @@ export default observer(
             const data = post?.tags?.data;
             if (data?.length > 0) {
                 return (
-                    <View style={styles.tagList}>
+                    <ScrollView
+                        contentContainerStyle={styles.tagsContainer}
+                        showsHorizontalScrollIndicator={false}
+                        horizontal={true}>
                         {data.slice(0, 3).map((tag, index) => {
                             return (
                                 <TouchableWithoutFeedback onPress={() => navigation.navigate('TagDetail', { tag })}>
@@ -89,7 +101,7 @@ export default observer(
                                 </TouchableWithoutFeedback>
                             );
                         })}
-                    </View>
+                    </ScrollView>
                 );
             }
             return null;
@@ -146,7 +158,7 @@ export default observer(
                     {ContentStatus}
                 </View>
                 <SafeText style={styles.bodyText} numberOfLines={3}>
-                    {post?.description}
+                    {String(post?.content || post?.description).trim()}
                 </SafeText>
                 {renderCover}
                 {renderTags}
@@ -183,7 +195,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: pixel(14),
+        marginBottom: pixel(15),
     },
     creator: {
         flex: 1,
@@ -228,9 +240,9 @@ const styles = StyleSheet.create({
         height: COVER_WIDTH * 0.8,
         borderRadius: pixel(6),
     },
-    tagList: {
-        flexDirection: 'row',
-        marginTop: pixel(12),
+    tagsContainer: {
+        paddingTop: pixel(13),
+        paddingRight: pixel(10),
     },
     tagItem: {
         flexDirection: 'row',
@@ -241,6 +253,7 @@ const styles = StyleSheet.create({
     tagName: {
         color: '#0584FF',
         fontSize: font(13),
+        lineHeight: font(18),
     },
     footer: {
         marginTop: pixel(12),
