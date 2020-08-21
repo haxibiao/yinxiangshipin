@@ -387,6 +387,8 @@ query HotTagQuery($page: Int, $count: Int) {
         data {
             id
             name
+            count_plays
+            count_posts
         }
     }
 }

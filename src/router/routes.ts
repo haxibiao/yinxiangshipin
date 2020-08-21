@@ -1,6 +1,7 @@
 import CreationScreen from '../screens/creation';
 import SelectCategory from '../screens/creation/SelectCategory';
-import EditPost from '../screens/creation/EditPost';
+import EditPostScreen from '../screens/creation/EditPost';
+import TagListScreen from '../screens/creation/TagList';
 
 // login
 import LoginScreen from '../screens/login';
@@ -94,7 +95,10 @@ export default {
         component: SelectCategory,
     },
     EditPost: {
-        component: EditPost,
+        component: EditPostScreen,
+    },
+    TagList: {
+        component: TagListScreen,
     },
     Wallet: {
         component: Wallet,
