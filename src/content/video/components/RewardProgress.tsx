@@ -1,7 +1,7 @@
 import React, { useMemo, useEffect, useState, useContext, useRef, useCallback } from 'react';
 import { StyleSheet, View, Image, TouchableWithoutFeedback, Animated } from 'react-native';
 import { useBounceAnimation, useLinearAnimation, exceptionCapture } from '@src/common';
-import StoreContext, { observer, userStore } from '@src/store';
+import { observer, userStore } from '@src/store';
 import { GQL, useMutation } from '@src/apollo';
 import { useNavigation } from '@react-navigation/native';
 import * as Progress from 'react-native-progress';

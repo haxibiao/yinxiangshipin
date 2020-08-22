@@ -3,12 +3,11 @@ import { StyleSheet, Text, View, Image, TouchableOpacity, FlatList, StatusBar } 
 import { PageContainer, Placeholder, StatusView, PostItem, Footer, ItemSeparator } from '@src/components';
 
 import { GQL, useQuery, useLazyQuery } from '@src/apollo';
-import StoreContext, { observer, userStore } from '@src/store';
+import { observer, userStore } from '@src/store';
 
 import FeedbackItem from './FeedbackItem';
 
 export default observer((props) => {
-    const store = useContext(StoreContext);
     const { loading, error, data, fetchMore, refetch } = useQuery(GQL.MyFeedbackQuery, {
         variables: { id: userStore.me.id },
         fetchPolicy: 'network-only',

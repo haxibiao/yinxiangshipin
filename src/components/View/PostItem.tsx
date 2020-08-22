@@ -10,7 +10,7 @@ import GridImage from './GridImage';
 import Like from './Like';
 import MoreOperation from './MoreOperation';
 
-import StoreContext, { observer, useObservable, appStore, userStore } from '@src/store';
+import { observer, appStore, userStore } from '@src/store';
 import { useApolloClient, ApolloProvider } from '@src/apollo';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Overlay } from 'teaset';

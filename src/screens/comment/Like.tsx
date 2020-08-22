@@ -3,7 +3,7 @@ import { StyleSheet, View, TouchableOpacity, Image, Text } from 'react-native';
 import { Iconfont } from '@src/components';
 import { GQL, useMutation } from '@src/apollo';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import StoreContext, { observer } from '@src/store';
+import { observer } from '@src/store';
 
 interface ThumbUpTarget {
     id: number | string;
@@ -26,7 +26,7 @@ export default observer((props: Props) => {
         },
     });
 
-    const likeHandler = __.debounce(async function() {
+    const likeHandler = __.debounce(async function () {
         const [error] = await Helper.exceptionCapture(likeArticle);
         if (error) {
             comment.liked ? comment.likes-- : comment.likes++;

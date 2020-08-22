@@ -2,16 +2,15 @@ import React, { useContext, useState, useCallback, useEffect, useMemo, useRef, u
 import { StyleSheet, Text, View, Image, TouchableOpacity, FlatList, StatusBar } from 'react-native';
 import { PageContainer, Placeholder, StatusView, ItemSeparator, ListFooter, SubmitLoading } from '@src/components';
 import { GQL, useQuery, useLazyQuery, useApolloClient } from '@src/apollo';
-import StoreContext, { observer, userStore } from '@src/store';
+import { observer, userStore } from '@src/store';
 import { exceptionCapture } from '@src/common';
 import { useRoute } from '@react-navigation/native';
 
 import CommentItem from './CommentItem';
 import CommentInput from './CommentInput';
 
-export default observer(props => {
+export default observer((props) => {
     const client = useApolloClient();
-    const store = useContext(StoreContext);
     const route = useRoute();
     const commentId = route.params?.comment?.id;
     const [replyByComment, setReplyByComment] = useState();
@@ -24,7 +23,7 @@ export default observer(props => {
     }, [flatListRef]);
 
     const replyHandler = useCallback(
-        user => {
+        (user) => {
             fancyInputRef.current.focus();
             setReplyByComment(user);
         },
