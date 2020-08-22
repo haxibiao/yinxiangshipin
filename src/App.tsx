@@ -4,16 +4,28 @@ import SplashScreen from 'react-native-splash-screen';
 import Orientation from 'react-native-orientation';
 import codePush from 'react-native-code-push';
 import * as WeChat from 'react-native-wechat-lib';
-import { checkUpdate } from '@src/common';
-import { WechatAppId } from '@app/app.json';
+import { WechatAppId, DisplayName } from '@app/app.json';
 
 import StoreContext, * as store from './store';
 import { Toast } from './components';
 import ApolloApp from './ApolloApp';
+import { ad } from 'react-native-ad';
 
 function App() {
-    const { appStore } = store;
     const appLunch = useRef(true);
+
+    // 启动前，初始化Ad
+    ad.init({
+        appid: store.adStore.tt_appid,
+        app: DisplayName,
+    });
+
+    // 启动个开屏广告
+    ad.startSplash({
+        appid: store.adStore.tt_appid,
+        codeid: store.adStore.codeid_splash,
+    });
+
     if (appLunch.current) {
         Orientation.lockToPortrait();
         SplashScreen.hide();
@@ -31,7 +43,8 @@ function App() {
             .then((response) => response.json())
             .then((result) => {
                 // 1.保存APP配置(含ad appId, codeId等)
-                appStore.setAdConfig(result);
+                // FIXME 需要重新写
+                // store.adStore.setAdConfig(result);
                 // 2.广告初始化
                 //
                 // 3.开屏

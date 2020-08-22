@@ -3,7 +3,7 @@ import { StyleSheet, View, Image, Text, TouchableOpacity, StatusBar } from 'reac
 import { PageContainer, HxfTextInput, HxfButton, Row, Center, Iconfont, GradientView } from '@src/components';
 import { exceptionCapture, useBounceAnimation } from '@src/common';
 import { GQL, useMutation, useApolloClient } from '@src/apollo';
-import StoreContext, { observer, userStore } from '@src/store';
+import { observer, userStore } from '@src/store';
 import * as WeChat from 'react-native-wechat-lib';
 // import Cmicsso from 'react-native-cmicsso';
 import { Overlay } from 'teaset';
@@ -15,7 +15,6 @@ const thumbType = ['name', 'account', 'password'];
 export default observer((props: any) => {
     const { navigation } = props;
     const client = useApolloClient();
-    const store = useContext(StoreContext);
     const [submitting, toggleSubmitting] = useState(false);
     // const [signIn, toggleEntrance] = useState(true);
     //  const [isCmicssoSignIn, setIsCmicssoSignIn] = useState(false);
