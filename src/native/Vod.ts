@@ -1,7 +1,7 @@
 /*
  * created by wyk
+ * vod 类后期可以添加vod更多能力...
  */
-import { NativeModules, DeviceEventEmitter, NativeEventEmitter, Platform } from 'react-native';
 import VodUpload from 'react-native-vod';
 
 type UploadEvent = 'resultVideo' | 'videoProgress';
@@ -15,7 +15,7 @@ type UploadOption = {
     onError?: Function;
 };
 
-export function videoUploadUtil(props: UploadOption) {
+function upload(props: UploadOption) {
     const { videoPath, onStarted, onProcess, onCompleted, onError } = props;
 
     fetch(Config.ServerRoot + '/api/signature/vod-' + Config.Name, { method: 'GET' })
@@ -56,3 +56,7 @@ export function videoUploadUtil(props: UploadOption) {
             }
         });
 }
+
+export default {
+    upload,
+};

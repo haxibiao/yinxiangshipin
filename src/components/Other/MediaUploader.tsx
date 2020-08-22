@@ -1,6 +1,6 @@
 import React, { Component, useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import { StyleSheet, View, ScrollView, Image, Text, TouchableOpacity } from 'react-native';
-import { openImagePicker, videoUploadUtil } from '@src/native';
+import { openImagePicker, vod } from '@src/native';
 import Video from 'react-native-video';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import Iconfont from '../Iconfont';
@@ -130,7 +130,7 @@ const VideoUploadView = (props: Props) => {
     const videoUploadHandler = useCallback(() => {
         openImagePicker({ mediaType: 'video', multiple: false }).then((video) => {
             setVideo(video);
-            videoUploadUtil({
+            vod.upload({
                 videoPath: video.uploadPath,
                 onStarted: () => Loading.show('loading'),
                 onProcess: (progress: number) => {},
