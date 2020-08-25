@@ -7,11 +7,12 @@ const { dirs } = fs;
 const FILE_PATH = Platform.OS === 'android' ? dirs.DCIMDir : dirs.DocumentDir;
 
 export function download({ url, title, onSuccess, onFailed }) {
-    title = title || new Date().getTime();
+    title = String(title || new Date().getTime()).trim();
     return new Promise((resolve, reject) => {
         Loading.show('正在下载...');
         RNFetchBlob.config({
             // useDownloadManager: true,
+            fileCache: true,
             path: FILE_PATH + '/' + title + '.mp4',
         })
             .fetch('GET', url, {
