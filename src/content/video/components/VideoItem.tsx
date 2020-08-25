@@ -58,9 +58,8 @@ export default observer((props) => {
     const showOperation = useCallback(() => {
         const MoreOperationOverlay = (
             <Overlay.PopView
-                style={styles.overlay}
-                ref={(ref) => (overlayRef.current = ref)}
-                containerStyle={{ backgroundColor: 'rgba(0,0,0,0.6)' }}>
+                style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.6)' }}
+                ref={(ref) => (overlayRef.current = ref)}>
                 {operation}
             </Overlay.PopView>
         );

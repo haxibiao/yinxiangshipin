@@ -19,7 +19,7 @@ export default observer(() => {
                 fetchPolicy: 'network-only',
             },
         ],
-        onError: error => {
+        onError: (error) => {
             Toast.show({ content: errorMessage(error, '手机号绑定失败') });
         },
         onCompleted: () => {
@@ -27,7 +27,7 @@ export default observer(() => {
                 content: '手机号绑定成功',
             });
             userStore.changeProfile({ phone });
-            navigation.navigate('VerifyAliPay');
+            navigation.goBack();
         },
     });
 
