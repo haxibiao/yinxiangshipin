@@ -25,6 +25,7 @@ export default observer((props) => {
     }, [index, store.viewableItemIndex, viewable]);
 
     const client = useApolloClient();
+    const route = useRoute();
     const navigation = useNavigation();
     // 获取播放器实例，控制视频播放状态
     const playerRef = useRef();
@@ -86,6 +87,14 @@ export default observer((props) => {
         );
     }, [media]);
 
+    const goToScreen = useCallback((tag) => {
+        if (route.params?.tag?.id === tag?.id) {
+            navigation.navigate('TagDetail', { tag });
+        } else {
+            navigation.push('TagDetail', { tag });
+        }
+    }, []);
+
     const mediaTags = useMemo(() => {
         // const tagsData = [
         //     { id: 24, name: '美少女' },
@@ -94,7 +103,7 @@ export default observer((props) => {
         const tagsData = media?.tags?.data;
         if (tagsData?.length > 0) {
             return tagsData.map((tag: any) => (
-                <Text key={tag.id} style={styles.tagName} onPress={() => navigation.navigate('TagDetail', { tag })}>
+                <Text key={tag.id} style={styles.tagName} onPress={() => goToScreen(tag)}>
                     {` #${tag.name} `}
                 </Text>
             ));

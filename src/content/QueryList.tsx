@@ -100,6 +100,7 @@ export default React.forwardRef(function ContentList(
             }
             onEndReached={onEndReached}
             onEndReachedThreshold={0.1}
+            removeClippedSubviews={true}
             ListFooterComponent={listFooter}
             ListEmptyComponent={listEmpty}
             {...contentProps}

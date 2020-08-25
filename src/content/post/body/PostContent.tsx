@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { View, StyleSheet, Image, Text, TouchableOpacity, Animated, ScrollView } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { Avatar, Iconfont, SafeText, PlaceholderImage, GridImage } from '@src/components';
 import { observer, userStore } from '@src/store';
 import { useApolloClient } from '@apollo/react-hooks';
@@ -30,7 +30,16 @@ export default observer(
         const { user } = post;
         const overlayKey = useRef();
         const navigation = useNavigation();
+        const route = useRoute();
         const client = useApolloClient();
+
+        const goToScreen = useCallback(() => {
+            if (route.params?.user?.id === post?.user?.id) {
+                navigation.navigate('User', { user: post?.user });
+            } else {
+                navigation.push('User', { user: post?.user });
+            }
+        }, []);
 
         const renderCover = useMemo(() => {
             const images = post?.images;
@@ -64,7 +73,7 @@ export default observer(
                                 activeOpacity={1}
                                 key={tag?.id}
                                 style={styles.tagItem}
-                                onPress={() => navigation.navigate('TagDetail', { tag })}>
+                                onPress={() => navigation.push('TagDetail', { tag })}>
                                 <View style={styles.tagLeft}>
                                     <Text style={styles.tagLabel}>集</Text>
                                 </View>
@@ -120,7 +129,7 @@ export default observer(
             <>
                 <View style={styles.header}>
                     <View style={styles.creator}>
-                        <TouchableOpacity onPress={() => navigation.navigate('User', { user: post?.user })}>
+                        <TouchableOpacity onPress={goToScreen}>
                             <Avatar source={user?.avatar} size={pixel(38)} />
                         </TouchableOpacity>
                         <View style={styles.userInfo}>

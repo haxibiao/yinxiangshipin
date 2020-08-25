@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 export default function MediaItem({ media, ...params }) {
     const navigation = useNavigation();
     return (
-        <TouchableWithoutFeedback onPress={() => navigation.navigate('VideoList', { ...params })}>
+        <TouchableWithoutFeedback onPress={() => navigation.push('VideoList', { ...params })}>
             <Image style={styles.videoCover} source={{ uri: media?.video?.cover }} />
         </TouchableWithoutFeedback>
     );

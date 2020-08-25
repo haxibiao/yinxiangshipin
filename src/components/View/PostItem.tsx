@@ -195,7 +195,7 @@ const PostItem: React.FC<Props> = observer((props: Props) => {
                     )}
                     <View style={styles.headerWrapper}>
                         <View style={styles.userInfo}>
-                            <TouchableOpacity onPress={() => navigation.navigate('User', { user })}>
+                            <TouchableOpacity onPress={() => navigation.push('User', { user })}>
                                 <Avatar source={user.avatar} size={pixel(38)} />
                             </TouchableOpacity>
                             <View style={styles.info}>
