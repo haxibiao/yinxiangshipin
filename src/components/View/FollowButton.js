@@ -74,7 +74,7 @@ const FollowButton = (props: Props) => {
     if (userStore.me.id === user?.id) {
         return null;
     }
-    console.log('user.followed_status', user.followed_status);
+
     return (
         <TouchableOpacity {...others} style={style} onPress={onFollowHandler}>
             {!user?.followed_status > 0 && (

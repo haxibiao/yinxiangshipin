@@ -57,9 +57,14 @@ export default observer((props: any) => {
             height: 400,
             cropping: true,
             includeBase64: true,
+            compressImageQuality: 0.1,
         })
             .then((image) => {
-                saveAvatar(`data:${image.mime};base64,${image.data}`);
+                if (image.size > 12000) {
+                    Toast.show({ content: '头像上传失败，图片质量过大' });
+                } else {
+                    saveAvatar(`data:${image.mime};base64,${image.data}`);
+                }
             })
             .catch((error) => {
                 console.warn('error', error);

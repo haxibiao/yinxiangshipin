@@ -50,6 +50,7 @@ const styles = StyleSheet.create({
     body: {
         width: SCREEN_WIDTH / 4,
         height: SCREEN_WIDTH / 4,
+        padding: pixel(10),
         backgroundColor: 'rgba(0,0,0,0.8)',
         alignItems: 'center',
         justifyContent: 'center',
@@ -59,7 +60,7 @@ const styles = StyleSheet.create({
         fontSize: font(13),
         color: '#FFF',
         textAlign: 'center',
-        paddingTop: 8,
+        paddingTop: pixel(8),
     },
 });
 
