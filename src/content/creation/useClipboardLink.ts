@@ -5,6 +5,51 @@ import { getURLsFromString } from '../helper';
 
 const shareLinkCache: { [key: string]: any } = {};
 
+export function shareClipboardLink(clipboardString: string): Promise<any> {
+    if (validateLink(clipboardString)) {
+        const urls = getURLsFromString(clipboardString);
+        if (urls[0]) {
+            return getLinkContent(urls[0]);
+        } else {
+            return Promise.reject('分享失败，请检查分享链接是否正确');
+        }
+    } else {
+        return Promise.reject('分享失败，请复制正确的分享链接');
+    }
+
+    function validateLink(linkString: string): boolean {
+        if (
+            linkString.indexOf('http') !== -1 &&
+            (linkString.indexOf('douyin') !== -1 || linkString.indexOf('chenzhongtech') !== -1)
+        ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function getLinkContent(link: string): Promise<any> {
+        return fetch(`http://media.haxibiao.com/api/v1/spider/parse?share_link=${link}`)
+            .then((response) => response.json())
+            .then((content: any) => {
+                shareLinkCache[clipboardString] = content;
+                const item = content?.raw?.raw?.item_list[0];
+                const title = item?.share_info?.share_title;
+                const cover = item?.video?.dynamic_cover?.url_list[0];
+                const url = content?.raw?.video?.play_url;
+                return {
+                    shareLink: clipboardString,
+                    shareBody: {
+                        link,
+                        url,
+                        title,
+                        cover,
+                    },
+                };
+            });
+    }
+}
+
 export const useClipboardLink = (): [{ link: string; content: any }, (p: any) => void] => {
     const [shareContent, setShareContent] = useState<any>();
 
@@ -26,9 +71,12 @@ export const useClipboardLink = (): [{ link: string; content: any }, (p: any) =>
             .then((content: any) => {
                 shareLinkCache[clipboardString] = content;
                 const item = content?.raw?.raw?.item_list[0];
+                const play_url = content?.raw?.video?.play_url;
                 setShareContent({
                     shareLink: clipboardString,
-                    content: {
+                    shareBody: {
+                        link,
+                        url: play_url,
                         title: item?.share_info?.share_title,
                         cover: item?.video?.dynamic_cover?.url_list[0],
                     },
