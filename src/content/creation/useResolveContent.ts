@@ -4,13 +4,14 @@ import { exceptionCapture, GQL } from '../service';
 
 interface Props {
     shareLink: string;
+    content?: string;
     client: any;
     onSuccess?: (Event?: any) => any;
     onFailed?: (Event?: any) => any;
 }
 
 export const useResolveContent = (props: Props): (() => Promise<void>) => {
-    const { shareLink, client, onSuccess, onFailed } = props;
+    const { shareLink, content, client, onSuccess, onFailed } = props;
 
     const resolveDyVideo = useCallback(async () => {
         Loading.show();
@@ -19,11 +20,10 @@ export const useResolveContent = (props: Props): (() => Promise<void>) => {
                 mutation: GQL.resolveDouyinVideo,
                 variables: {
                     share_link: shareLink,
+                    content,
                 },
             }),
         );
-        console.log('error', client, shareLink, error, res);
-
         Loading.hide();
         if (error) {
             Toast.show({ content: '收藏失败' });
@@ -36,7 +36,7 @@ export const useResolveContent = (props: Props): (() => Promise<void>) => {
                 onSuccess();
             }
         }
-    }, [client, shareLink, onSuccess, onFailed]);
+    }, [client, shareLink, content, onSuccess, onFailed]);
 
     return resolveDyVideo;
 };

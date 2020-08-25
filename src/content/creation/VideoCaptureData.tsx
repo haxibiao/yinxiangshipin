@@ -1,5 +1,5 @@
-import React from 'react';
-import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, View, Text, Image, TouchableOpacity, TextInput } from 'react-native';
 import { Iconfont } from '@src/components';
 import { getURLsFromString, percent, pixel, font } from '../helper';
 import { useResolveContent } from './useResolveContent';
@@ -7,16 +7,20 @@ import { useResolveContent } from './useResolveContent';
 interface Props {
     client: any;
     shareLink: string;
-    content: any;
+    shareBody: {
+        title: string;
+        cover: string;
+    };
     onClose: (p?: any) => any;
 }
 
-export const VideoCaptureData = ({ client, shareLink, content, onClose }: Props) => {
-    const shareContent = useResolveContent({ client, shareLink, onSuccess: onClose, onFailed: onClose });
+export const VideoCaptureData = ({ client, shareLink, shareBody, onSuccess, onFailed, onClose }: Props) => {
+    const [content, setContent] = useState(shareBody?.title);
+    const shareVideo = useResolveContent({ client, shareLink, content, onSuccess, onFailed });
     return (
         <View style={styles.card}>
             <View style={styles.cover}>
-                <Image style={styles.coverImage} source={{ uri: content?.cover }} />
+                <Image style={styles.coverImage} source={{ uri: shareBody?.cover }} />
                 <View style={styles.videoMark}>
                     <Iconfont name="bofang1" size={font(20)} color={'#fff'} style={{ opacity: 0.8 }} />
                 </View>
@@ -25,10 +29,21 @@ export const VideoCaptureData = ({ client, shareLink, content, onClose }: Props)
                 </TouchableOpacity>
             </View>
             <View style={styles.body}>
-                <Text style={styles.title}>{content?.title}</Text>
+                {/* <Text style={styles.title}>{shareBody?.title}</Text> */}
+                <TextInput
+                    style={styles.inputContent}
+                    onChangeText={(val) => setContent(val)}
+                    value={content}
+                    multiline={true}
+                    maxLength={100}
+                    textAlignVertical="center"
+                    placeholder="把你想说的娓娓道来，分享给有趣的人"
+                    underlineColorAndroid="transparent"
+                    placeholderTextColor="#b2b2b2"
+                />
             </View>
-            <TouchableOpacity style={styles.shareBtn} onPress={shareContent}>
-                <Text style={styles.shareBtnText}>采集视频</Text>
+            <TouchableOpacity style={styles.shareBtn} onPress={shareVideo}>
+                <Text style={styles.shareBtnText}>收藏视频</Text>
             </TouchableOpacity>
             <Text style={styles.tips}>来自您复制的分享链接</Text>
         </View>
@@ -73,6 +88,18 @@ const styles = StyleSheet.create({
     body: {
         paddingHorizontal: pixel(20),
         marginBottom: pixel(15),
+    },
+    inputContent: {
+        height: pixel(60),
+        fontSize: font(15),
+        lineHeight: font(20),
+        color: '#2b2b2b',
+        paddingTop: 0,
+        padding: pixel(5),
+        margin: 0,
+        borderWidth: pixel(1),
+        borderColor: '#f0f0f0',
+        borderRadius: pixel(5),
     },
     title: {
         fontSize: font(15),

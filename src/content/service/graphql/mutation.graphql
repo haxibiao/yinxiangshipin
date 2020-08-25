@@ -69,14 +69,6 @@ mutation createPostContent(
 mutation resolveDouyinVideo($share_link: String!, $content: String, $description: String, $tag_names: [String]) {
     resolveDouyinVideo(share_link: $share_link, content: $content, description: $description, tag_names: $tag_names) {
         id
-        content
-        description
-        tags {
-            data {
-                id
-                name
-            }
-        }
     }
 }
 
