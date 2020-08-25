@@ -5,6 +5,7 @@
 # category_ids: 专题ID
 # tag_names: 标签名
 # qcvod_fileid: 腾讯云上传成功后的视频ID
+# $share_link: 复制的视频分享链接
 # type: 内容的类型
 mutation createPostContent(
     $body: String!
@@ -12,6 +13,7 @@ mutation createPostContent(
     $video_id: Int
     $qcvod_fileid: String
     $tag_names: [String]
+    $share_link: String
 ) {
     createPostContent(
         body: $body
@@ -19,6 +21,7 @@ mutation createPostContent(
         video_id: $video_id
         qcvod_fileid: $qcvod_fileid
         tag_names: $tag_names
+        share_link: $share_link
     ) {
         id
         spider {

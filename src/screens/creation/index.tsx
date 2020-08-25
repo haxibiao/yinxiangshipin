@@ -10,11 +10,24 @@ import {
     TextInput,
     StatusBar,
 } from 'react-native';
-import { PageContainer, NavBarHeader, Iconfont, MediaUploader, UserAgreementOverlay } from '@src/components';
+import Clipboard from '@react-native-community/clipboard';
+import {
+    PageContainer,
+    NavBarHeader,
+    Iconfont,
+    MediaUploader,
+    UserAgreementOverlay,
+    Loading,
+    OverlayViewer,
+} from '@src/components';
+import { GQL, shareClipboardLink, exceptionCapture, errorMessage } from '@src/content';
 import { useRoute, useNavigation } from '@react-navigation/native';
+import { useMutation } from '@apollo/react-hooks';
 import { observer, userStore, appStore } from '@src/store';
-import { GQL, useMutation, errorMessage } from '@src/apollo';
 import { observable } from 'mobx';
+import { Overlay } from 'teaset';
+import Video from 'react-native-video';
+import ShareVideoContent from './ShareVideoContent';
 
 const MediaItemWidth = (Device.WIDTH - pixel(60)) / 3;
 
@@ -22,36 +35,56 @@ export default (props: any) => {
     const route = useRoute();
     const navigation = useNavigation();
     const [tags, setTags] = useState(route.params?.tag ? [route.params?.tag] : []);
-    const [formData, setFormData] = useState({ body: '', qcvod_fileid: '', images: [], tag_names: [] });
+    const [formData, setFormData] = useState({
+        body: '',
+        qcvod_fileid: '',
+        images: [],
+        tag_names: [],
+    });
+    // 粘贴板分享视频
+    const shareLink = useRef();
+    const [sharedVideo, setSharedVideo] = useState();
+    const deleteVideo = useCallback(() => {
+        setSharedVideo(null);
+    }, []);
+
     const isDisableButton = useMemo(() => {
-        if (formData.body && (formData.qcvod_fileid || formData.images.length > 0)) {
+        if (formData.body && (formData.qcvod_fileid || formData.images.length > 0 || sharedVideo?.id)) {
             return false;
         }
         return true;
     }, [formData]);
 
-    const [createPost, { data, loading }] = useMutation(GQL.createPostContent, {
-        variables: {
-            body: formData.body,
-            images: formData.images,
-            qcvod_fileid: formData.qcvod_fileid,
-            tag_names: tags.map((c) => c.name),
-            type: 'POST',
-        },
-        onError: (error: any) => {
+    const createPost = useCallback(async () => {
+        Loading.show();
+        const [error, res] = await exceptionCapture(createPostContent);
+        Loading.hide();
+        if (error) {
             Toast.show({
                 content: errorMessage(error) || '发布失败',
             });
-        },
-        onCompleted: (mutationResult: any) => {
+        } else if (res) {
             Toast.show({
                 content: '发布成功',
             });
             navigation.replace('PostDetail', {
-                post: observable(mutationResult.createPostContent),
+                post: observable(res?.createPostContent),
             });
-        },
-    });
+        }
+
+        function createPostContent() {
+            return appStore.client.mutate({
+                mutation: GQL.createPostContent,
+                variables: {
+                    body: formData.body,
+                    images: formData.images,
+                    share_link: shareLink.current,
+                    qcvod_fileid: formData.qcvod_fileid || sharedVideo?.id,
+                    tag_names: tags.map((c) => c.name),
+                },
+            });
+        }
+    }, [sharedVideo, formData, tags]);
 
     const changeBody = useCallback((value) => {
         setFormData((prevFormData) => {
@@ -64,16 +97,70 @@ export default (props: any) => {
             setFormData((prevFormData: any) => {
                 return { ...prevFormData, images: response };
             });
+        } else if (response?.video_id) {
+            setFormData((prevFormData) => {
+                return { ...prevFormData, qcvod_fileid: response?.video_id };
+            });
         } else {
             setFormData((prevFormData) => {
-                return { ...prevFormData, qcvod_fileid: response ? response.video_id : null };
+                return { ...prevFormData, qcvod_fileid: null };
             });
         }
     }, []);
 
     const hasMedia = useMemo(() => {
-        return formData.images.length > 0 || formData.qcvod_fileid;
-    }, [formData]);
+        return formData.images.length > 0 || formData.qcvod_fileid || sharedVideo?.id;
+    }, [formData, sharedVideo]);
+
+    const shareVideo = useCallback(async () => {
+        Loading.show();
+        var popViewRef,
+            isShow = false;
+        function onClose() {
+            popViewRef?.close();
+            isShow = false;
+        }
+        const clipboardString = await Clipboard.getString();
+        const [error, sharedContent] = await exceptionCapture(() => shareClipboardLink(clipboardString));
+        Loading.hide();
+        if (sharedContent && !isShow) {
+            isShow = true;
+            shareLink.current = clipboardString;
+            Overlay.show(
+                <Overlay.PopView
+                    style={{
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}
+                    ref={(ref) => (popViewRef = ref)}>
+                    <ShareVideoContent
+                        client={appStore.client}
+                        onSuccess={(video) => {
+                            setSharedVideo(video);
+                            onClose();
+                        }}
+                        onClose={onClose}
+                        {...sharedContent}
+                    />
+                </Overlay.PopView>,
+            );
+        }
+    }, []);
+
+    const showVideo = useCallback((path) => {
+        const overlayView = (
+            <Video
+                source={{
+                    uri: path,
+                }}
+                style={{ ...StyleSheet.absoluteFill }}
+                muted={false}
+                paused={false}
+                resizeMode="contain"
+            />
+        );
+        OverlayViewer.show(overlayView);
+    }, []);
 
     const selectTag = useCallback(
         (tag) => {
@@ -161,14 +248,51 @@ export default (props: any) => {
                         placeholderTextColor="#b2b2b2"
                     />
                     <View style={styles.mediaContainer}>
-                        <MediaUploader
-                            onResponse={uploadResponse}
-                            maxWidth={Device.WIDTH / 2}
-                            style={styles.mediaItem}
-                        />
+                        {sharedVideo?.id ? (
+                            <TouchableOpacity
+                                style={styles.videoWrap}
+                                activeOpacity={1}
+                                onPress={() => showVideo(sharedVideo?.path)}>
+                                <Image
+                                    style={styles.videoItem}
+                                    source={{
+                                        uri: sharedVideo?.cover,
+                                    }}
+                                />
+                                <View style={styles.playMark}>
+                                    <TouchableOpacity style={styles.deleteVideo} onPress={deleteVideo}>
+                                        <Iconfont name="guanbi1" size={pixel(12)} color="#fff" />
+                                    </TouchableOpacity>
+                                </View>
+                            </TouchableOpacity>
+                        ) : (
+                            <MediaUploader
+                                onResponse={uploadResponse}
+                                maxWidth={Device.WIDTH / 2}
+                                style={styles.mediaItem}
+                            />
+                        )}
                     </View>
                 </View>
                 <View style={styles.operationContainer}>
+                    <TouchableOpacity
+                        style={styles.operation}
+                        activeOpacity={1}
+                        disabled={hasMedia}
+                        onPress={shareVideo}>
+                        <View style={styles.operationLeft}>
+                            <Image
+                                source={
+                                    hasMedia
+                                        ? require('@app/assets/images/icons/ic_link_gray.png')
+                                        : require('@app/assets/images/icons/ic_link_black.png')
+                                }
+                                style={styles.operationIcon}
+                            />
+                            <Text style={[styles.operationName, hasMedia && { color: '#b2b2b2' }]}>分享视频链接</Text>
+                        </View>
+                        <Iconfont name="right" size={pixel(14)} color="#b2b2b2" />
+                    </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.operation}
                         activeOpacity={1}
@@ -183,24 +307,6 @@ export default (props: any) => {
                         <Iconfont name="right" size={pixel(14)} color="#b2b2b2" />
                     </TouchableOpacity>
                     <View>{renderTagNames}</View>
-                    <TouchableOpacity
-                        style={styles.operation}
-                        activeOpacity={1}
-                        disabled={hasMedia}
-                        onPress={() => null}>
-                        <View style={styles.operationLeft}>
-                            <Image
-                                source={
-                                    hasMedia
-                                        ? require('@app/assets/images/icons/ic_link_gray.png')
-                                        : require('@app/assets/images/icons/ic_link_black.png')
-                                }
-                                style={styles.operationIcon}
-                            />
-                            <Text style={[styles.operationName, hasMedia && { color: '#b2b2b2' }]}>分享视频链接</Text>
-                        </View>
-                        <Iconfont name="right" size={pixel(14)} color="#b2b2b2" />
-                    </TouchableOpacity>
                 </View>
             </ScrollView>
         </View>
@@ -246,7 +352,40 @@ const styles = StyleSheet.create({
         marginRight: -pixel(15),
         marginBottom: pixel(10),
     },
-    mediaItem: { width: MediaItemWidth, height: MediaItemWidth, marginTop: pixel(10), marginRight: pixel(15) },
+    videoWrap: {
+        flexDirection: 'row',
+        alignSelf: 'flex-start',
+        marginTop: pixel(10),
+        marginRight: pixel(15),
+    },
+    videoItem: {
+        width: MediaItemWidth,
+        height: MediaItemWidth * 1.5,
+    },
+    playMark: {
+        ...StyleSheet.absoluteFill,
+        alignItems: 'center',
+        backgroundColor: 'rgba(0,0,0,0.2)',
+        borderRadius: pixel(5),
+        justifyContent: 'center',
+    },
+    deleteVideo: {
+        alignItems: 'center',
+        backgroundColor: 'rgba(32,30,51,0.8)',
+        borderRadius: pixel(20) / 2,
+        height: pixel(20),
+        justifyContent: 'center',
+        position: 'absolute',
+        right: pixel(3),
+        top: pixel(3),
+        width: pixel(20),
+    },
+    mediaItem: {
+        width: MediaItemWidth,
+        height: MediaItemWidth,
+        marginTop: pixel(10),
+        marginRight: pixel(15),
+    },
     operationContainer: {
         paddingLeft: pixel(15),
     },
