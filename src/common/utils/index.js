@@ -8,3 +8,4 @@ export * from './bindWechat';
 export * from './downloadApk';
 export * from './playAdvertVideo';
 export * from './getReward';
+export { fileHash } from './fileMD5Hash';
