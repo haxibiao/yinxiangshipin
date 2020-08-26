@@ -23,7 +23,13 @@ export default observer(() => {
                 isShow = true;
                 Overlay.show(
                     <Overlay.PopView style={styles.overlay} ref={(ref) => (popViewRef = ref)}>
-                        <VideoCaptureData client={appStore.client} onClose={onClose} {...params} />
+                        <VideoCaptureData
+                            client={appStore.client}
+                            onSuccess={onClose}
+                            onFailed={onClose}
+                            onClose={onClose}
+                            {...params}
+                        />
                     </Overlay.PopView>,
                 );
             }
@@ -31,7 +37,7 @@ export default observer(() => {
     }, []);
 
     useEffect(() => {
-        if (userStore.login && shareContent) {
+        if (userStore.login && shareContent && appStore.currentRouteName !== 'CreatePost') {
             showShareContentModal(shareContent);
         }
     }, [userStore, shareContent]);

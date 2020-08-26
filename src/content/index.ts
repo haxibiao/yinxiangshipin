@@ -6,4 +6,4 @@ export { mergeProperty } from './helper';
 export { Body } from './article';
 export { VideoList, VideoItem, MediaItem, DrawVideoList, DrawVideoStore } from './video';
 export { PostContent, PostItem, CaptureContent } from './post';
-export { VideoCaptureData, useClipboardLink, shareClipboardLink } from './creation';
+export { shareClipboardLink, useClipboardLink, useResolveVideo, useResolveContent, VideoCaptureData } from './creation';

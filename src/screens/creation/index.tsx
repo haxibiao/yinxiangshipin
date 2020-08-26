@@ -9,15 +9,16 @@ import {
     TouchableWithoutFeedback,
     TextInput,
     StatusBar,
+    Linking,
 } from 'react-native';
 import Clipboard from '@react-native-community/clipboard';
 import {
     PageContainer,
     NavBarHeader,
     Iconfont,
+    Loading,
     MediaUploader,
     UserAgreementOverlay,
-    Loading,
     OverlayViewer,
 } from '@src/components';
 import { GQL, shareClipboardLink, exceptionCapture, errorMessage } from '@src/content';
@@ -68,7 +69,7 @@ export default (props: any) => {
                 content: '发布成功',
             });
             navigation.replace('PostDetail', {
-                post: observable(res?.createPostContent),
+                post: observable(res?.data?.createPostContent),
             });
         }
 
@@ -113,16 +114,20 @@ export default (props: any) => {
     }, [formData, sharedVideo]);
 
     const shareVideo = useCallback(async () => {
-        Loading.show();
         var popViewRef,
             isShow = false;
         function onClose() {
             popViewRef?.close();
             isShow = false;
         }
+        Loading.show();
         const clipboardString = await Clipboard.getString();
         const [error, sharedContent] = await exceptionCapture(() => shareClipboardLink(clipboardString));
         Loading.hide();
+        if (error) {
+            Linking.openURL(Device.IOS ? 'itms-apps://itunes.apple.com/app/id1142110895' : 'snssdk1128://');
+            return;
+        }
         if (sharedContent && !isShow) {
             isShow = true;
             shareLink.current = clipboardString;

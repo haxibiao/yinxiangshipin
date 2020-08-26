@@ -54,6 +54,10 @@ export const useClipboardLink = (): [{ link: string; content: any }, (p: any) =>
     const [shareContent, setShareContent] = useState<any>();
 
     const validateLink = useCallback((linkString) => {
+        // console.log('====================================');
+        // console.log('shareLinkCache', shareLinkCache);
+        // console.log('linkString', linkString);
+        // console.log('====================================');
         if (
             !shareLinkCache[linkString] &&
             linkString.indexOf('http') !== -1 &&

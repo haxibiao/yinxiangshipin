@@ -5,6 +5,6 @@ export async function exceptionCapture(asyncFunc: (p?: any) => Promise<any>) {
         const res = await asyncFunc();
         return [null, res];
     } catch (err) {
-        return [{ error: errorMessage(err) }, null];
+        return [{ message: errorMessage(err) }, null];
     }
 }

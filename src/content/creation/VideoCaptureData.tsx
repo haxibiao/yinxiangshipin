@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { StyleSheet, View, Text, Image, TouchableOpacity, TextInput } from 'react-native';
-import { Iconfont } from '@src/components';
+import { Iconfont, Loading } from '@src/components';
 import { getURLsFromString, percent, pixel, font } from '../helper';
+import { exceptionCapture, GQL } from '../service';
+import { useResolveVideo } from './useResolveVideo';
 import { useResolveContent } from './useResolveContent';
 
 interface Props {
@@ -15,8 +17,45 @@ interface Props {
 }
 
 export const VideoCaptureData = ({ client, shareLink, shareBody, onSuccess, onFailed, onClose }: Props) => {
-    const [content, setContent] = useState(shareBody?.title);
-    const shareVideo = useResolveContent({ client, shareLink, content, onSuccess, onFailed });
+    const [body, setBody] = useState(shareBody?.title);
+
+    const resolveContentSuccess = useCallback(
+        async (video) => {
+            Loading.show('视频上传中');
+            const [error, res] = await exceptionCapture(() =>
+                client.mutate({
+                    mutation: GQL.createPostContent,
+                    variables: {
+                        body,
+                        qcvod_fileid: video?.id,
+                        share_link: shareLink,
+                    },
+                }),
+            );
+            Loading.hide();
+            if (error) {
+                Toast.show({ content: error.message || '收藏失败' });
+                if (onFailed instanceof Function) {
+                    onFailed();
+                }
+            } else if (res) {
+                Toast.show({ content: '收藏成功' });
+                if (onSuccess instanceof Function) {
+                    onSuccess();
+                }
+            }
+        },
+        [body, shareLink, onSuccess, onFailed],
+    );
+
+    const resolveVideo = useResolveVideo({ client, shareLink, content: body, onSuccess, onFailed });
+
+    const resolveContent = useResolveContent({
+        shareBody,
+        onSuccess: resolveContentSuccess,
+        onFailed: resolveVideo,
+    });
+
     return (
         <View style={styles.card}>
             <View style={styles.cover}>
@@ -32,8 +71,8 @@ export const VideoCaptureData = ({ client, shareLink, shareBody, onSuccess, onFa
                 {/* <Text style={styles.title}>{shareBody?.title}</Text> */}
                 <TextInput
                     style={styles.inputContent}
-                    onChangeText={(val) => setContent(val)}
-                    value={content}
+                    onChangeText={(val) => setBody(val)}
+                    value={body}
                     multiline={true}
                     maxLength={100}
                     textAlignVertical="center"
@@ -42,7 +81,7 @@ export const VideoCaptureData = ({ client, shareLink, shareBody, onSuccess, onFa
                     placeholderTextColor="#b2b2b2"
                 />
             </View>
-            <TouchableOpacity style={styles.shareBtn} onPress={shareVideo}>
+            <TouchableOpacity style={styles.shareBtn} onPress={resolveContent}>
                 <Text style={styles.shareBtnText}>收藏视频</Text>
             </TouchableOpacity>
             <Text style={styles.tips}>来自您复制的分享链接</Text>

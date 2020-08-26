@@ -8,6 +8,7 @@ import {
 } from '@react-navigation/native';
 import { createStackNavigator, CardStyleInterpolators, TransitionSpecs } from '@react-navigation/stack';
 import { name } from '@app/app.json';
+import { appStore } from '@src/store';
 import FocusAwareStatusBar from './FocusAwareStatusBar';
 import BottomTabNavigator from './BottomTabNavigator';
 import SCREENS from './routes';
@@ -91,7 +92,13 @@ const Stack = createStackNavigator<StackParamList>();
 
 export default () => {
     return (
-        <NavigationContainer ref={setRootNavigation} linking={{ prefixes: [`${name}://`] }}>
+        <NavigationContainer
+            ref={setRootNavigation}
+            linking={{ prefixes: [`${name}://`] }}
+            onStateChange={() => {
+                const currentRouteName = rootNavigation.getCurrentRoute().name;
+                appStore.currentRouteName = currentRouteName;
+            }}>
             <Stack.Navigator initialRouteName="Main" headerMode="none">
                 <Stack.Screen name="Main" component={BottomTabNavigator} />
                 {(Object.keys(SCREENS) as (keyof typeof SCREENS)[]).map((routeName) => (

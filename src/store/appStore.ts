@@ -15,6 +15,7 @@ class App {
     @observable client: Record<string, any> = {};
     @observable echo: Record<string, any> = {};
     @observable modalIsShow: boolean = false;
+    @observable currentRouteName: string = '';
 
     @observable createPostGuidance: boolean = true; // 用户引导,现在默认关闭
     @observable public createUserAgreement: boolean = true; // 用户协议观看记录,默认已看
