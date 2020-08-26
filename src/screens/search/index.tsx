@@ -4,7 +4,7 @@ import { PageContainer, Iconfont, HxfTextInput, ScrollTabBar } from 'components'
 import { Storage, Keys } from '@src/store';
 import { FocusAwareStatusBar } from '@src/router';
 import { useApolloClient, GQL } from '@src/apollo';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
 import __ from 'lodash';
 import SearchRecord from './components/SearchRecord';
@@ -119,9 +119,9 @@ const Search = () => {
                         tintTextStyle={styles.tintTextStyle}
                     />
                 )}>
-                <SearchedPost keyword={keyword} tabLabel="动态" />
-                <SearchedTag keyword={keyword} tabLabel="专题" />
-                <SearchedUser keyword={keyword} tabLabel="用户" />
+                <SearchedPost tabLabel="动态" keyword={keyword} navigation={navigation} />
+                <SearchedTag tabLabel="专题" keyword={keyword} navigation={navigation} />
+                <SearchedUser tabLabel="用户" keyword={keyword} navigation={navigation} />
             </ScrollableTabView>
         );
     }, [keyword]);
@@ -143,7 +143,7 @@ const Search = () => {
                             onSubmitEditing={onSubmitEditing}
                             onChangeText={onChangeText}
                             TextColor={'#DDDDDD'}
-                            style={{ flex: 1, marginLeft: pixel(6), fontSize: font(12) }}
+                            style={styles.textInput}
                         />
                     </View>
                     <TouchableOpacity style={styles.closeButton} activeOpacity={0.8} onPress={resetTextValue}>
@@ -224,6 +224,12 @@ const styles = StyleSheet.create({
     inputWrap: {
         flex: 1,
         alignSelf: 'stretch',
+    },
+    textInput: {
+        flex: 1,
+        marginLeft: pixel(6),
+        fontSize: font(12),
+        color: '#2b2b2b',
     },
     closeButton: {
         paddingLeft: pixel(10),

@@ -28,7 +28,7 @@ import { observer, userStore, appStore } from '@src/store';
 import { observable } from 'mobx';
 import { Overlay } from 'teaset';
 import Video from 'react-native-video';
-import ShareVideoContent from './ShareVideoContent';
+import SharedVideoContent from './SharedVideoContent';
 
 const MediaItemWidth = (Device.WIDTH - pixel(60)) / 3;
 
@@ -137,7 +137,7 @@ export default (props: any) => {
                         justifyContent: 'center',
                     }}
                     ref={(ref) => (popViewRef = ref)}>
-                    <ShareVideoContent
+                    <SharedVideoContent
                         client={appStore.client}
                         onSuccess={(video) => {
                             setSharedVideo(video);
@@ -308,7 +308,7 @@ export default (props: any) => {
                                 source={require('@app/assets/images/icons/ic_tag_black.png')}
                                 style={styles.operationIcon}
                             />
-                            <Text style={styles.operationName}>添加话题</Text>
+                            <Text style={styles.operationName}>添加标签</Text>
                         </View>
                         <Iconfont name="right" size={pixel(14)} color="#b2b2b2" />
                     </TouchableOpacity>

@@ -55,7 +55,7 @@ const index = observer(({ keyword }) => {
     return (
         <View style={styles.container}>
             <FlatList
-                contentContainerStyle={{ flexGrow: 1 }}
+                contentContainerStyle={styles.contentContainer}
                 showsVerticalScrollIndicator={false}
                 data={articles}
                 keyExtractor={(item, i) => String(item.id || i)}
@@ -72,6 +72,10 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'rgba(255,255,255,1)',
+    },
+    contentContainer: {
+        flexGrow: 1,
+        paddingBottom: Theme.HOME_INDICATOR_HEIGHT,
     },
     listFooter: {
         borderTopWidth: pixel(1),

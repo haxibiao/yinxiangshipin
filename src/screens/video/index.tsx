@@ -3,15 +3,16 @@ import { StyleSheet, View, Text, StatusBar } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { useApolloClient } from '@apollo/react-hooks';
 import { exceptionCapture } from '@src/common';
+import { FocusAwareStatusBar } from '@src/router';
 import { NavBarHeader } from '@src/components';
 import { DrawVideoList, DrawVideoStore, GQL } from '@src/content';
 
 export default () => {
     const route = useRoute();
     const tag = useMemo(() => route?.params?.tag, []);
-    const hasGoBack = useMemo(() => route?.params?.hasGoBack, []);
     const initData = useMemo(() => route?.params?.initData, []);
     const itemIndex = useMemo(() => route?.params?.itemIndex, []);
+    const nextPage = useRef(route?.params?.page);
     const store = useMemo(() => new DrawVideoStore({ initData, itemIndex }), []);
 
     const getVisibleItem = useCallback((index) => {
@@ -19,7 +20,6 @@ export default () => {
     }, []);
 
     const client = useApolloClient();
-    const nextPage = useRef(route?.params?.page + 1);
 
     const fetchData = useCallback(async () => {
         async function postsQuery() {
@@ -58,13 +58,14 @@ export default () => {
 
     return (
         <View style={styles.container}>
+            <FocusAwareStatusBar barStyle="light-content" />
             <DrawVideoList
                 store={store}
                 initialIndex={itemIndex}
                 getVisibleItem={getVisibleItem}
                 fetchData={fetchData}
             />
-            <NavBarHeader navBarStyle={styles.navBarStyle} hasSearchButton={true} isTransparent={true} />
+            <NavBarHeader navBarStyle={styles.navBarStyle} isTransparent={true} />
         </View>
     );
 };

@@ -6,7 +6,6 @@ import { observer, userStore, appStore } from '@src/store';
 import { useMutation, useQuery, GQL, errorMessage } from '@src/apollo';
 import { Overlay } from 'teaset';
 import Video from 'react-native-video';
-import AddTags from './AddTags';
 
 const contentGap = pixel(20);
 const MediaItemWidth = (Device.WIDTH - pixel(60)) / 3;
