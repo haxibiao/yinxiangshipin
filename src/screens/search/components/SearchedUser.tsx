@@ -6,7 +6,7 @@ import { observer } from '@src/store';
 import { observable } from 'mobx';
 
 const index = observer(({ keyword }) => {
-    const { loading, error, data, fetchMore, refetch } = useQuery(GQL.SearchUsersQuery, {
+    const { loading, error, data, fetchMore, refetch } = useQuery(GQL.searchUsersQuery, {
         variables: { keyword, type: 'POST', page: 1 },
     });
     let articles = useMemo(() => Helper.syncGetter('searchUsers.data', data), [data]);

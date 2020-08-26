@@ -36,7 +36,7 @@ class NewChatScreen extends Component {
                         handleSearch={() => this.handleSearch(this.keywords)}
                     />
                     {search ? (
-                        <Query query={GQL.SearchUsersQuery} variables={{ keyword: this.keywords }}>
+                        <Query query={GQL.searchUsersQuery} variables={{ keyword: this.keywords }}>
                             {({ loading, error, data, refetch, fetchMore }) => {
                                 if (loading || error) return null;
                                 let {

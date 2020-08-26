@@ -1,5 +1,5 @@
 # 搜索用户
-query SearchUsersQuery($keyword: String!, $page: Int, $count: Int) {
+query searchUsersQuery($keyword: String!, $page: Int, $count: Int) {
     searchUsers(keyword: $keyword, page: $page, count: $count) {
         paginatorInfo {
             hasMorePages
@@ -17,17 +17,18 @@ query SearchUsersQuery($keyword: String!, $page: Int, $count: Int) {
     }
 }
 
-query SearchCategoriesQuery($keyword: String!, $offset: Int) {
-    categories(keyword: $keyword, offset: $offset, limit: 10) {
-        id
-        name
-        logo
-        count_articles
-        count_follows
-        followed
-        user {
+# 搜索标签
+query searchTagsQuery($query: String!, $page: Int, $count: Int) {
+    searchTags(query: $query, page: $page, count: $count) {
+        paginatorInfo {
+            hasMorePages
+            currentPage
+        }
+        data {
             id
             name
+            count_plays
+            count_posts
         }
     }
 }
@@ -36,7 +37,8 @@ query SearchCategoriesQuery($keyword: String!, $offset: Int) {
 query searchPostQuery($query: String!, $page: Int) {
     searchPosts(query: $query, page: $page) {
         paginatorInfo {
-            total
+            hasMorePages
+            currentPage
         }
         data {
             id

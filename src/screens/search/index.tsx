@@ -2,14 +2,15 @@ import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { StyleSheet, View, Text, FlatList, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { PageContainer, Iconfont, HxfTextInput, ScrollTabBar } from 'components';
 import { Storage, Keys } from '@src/store';
-import { useApolloClient, GQL } from 'apollo';
+import { FocusAwareStatusBar } from '@src/router';
+import { useApolloClient, GQL } from '@src/apollo';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
 import __ from 'lodash';
 import SearchRecord from './components/SearchRecord';
 import SearchedPost from './components/SearchedPost';
-import SearchedIssue from './components/SearchedIssue';
 import SearchedUser from './components/SearchedUser';
+import SearchedTag from './components/SearchedTag';
 
 const Search = () => {
     const navigation = useNavigation();
@@ -119,6 +120,7 @@ const Search = () => {
                     />
                 )}>
                 <SearchedPost keyword={keyword} tabLabel="动态" />
+                <SearchedTag keyword={keyword} tabLabel="专题" />
                 <SearchedUser keyword={keyword} tabLabel="用户" />
             </ScrollableTabView>
         );
@@ -126,6 +128,7 @@ const Search = () => {
 
     return (
         <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="always">
+            <FocusAwareStatusBar barStyle="dark-content" />
             <View style={styles.header}>
                 <TouchableOpacity activeOpacity={1} onPress={backButtonPress} style={styles.backButton}>
                     <Iconfont name="zuojiantou" color={Theme.primaryTextColor} size={pixel(21)} />
@@ -273,7 +276,7 @@ const styles = StyleSheet.create({
     // },
     underlineStyle: {
         width: pixel(30),
-        left: (Device.WIDTH - pixel(70) * 2) / 2 + pixel(20),
+        left: (Device.WIDTH - pixel(70) * 3) / 2 + pixel(20),
     },
     activeTextStyle: {
         color: '#212121',
