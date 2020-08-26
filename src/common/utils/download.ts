@@ -49,20 +49,14 @@ export function download({ url, title, onSuccess, onFailed }: Props) {
                     // console.log('The file saved to ', filePath);
                     if (Platform.OS === 'android') {
                         fs.scanFile([{ path: filePath, mime: 'video/mp4' }]);
-                        Loading.hide();
-                        Toast.show({
-                            content: '下载成功',
-                        });
-                        resolve(filePath);
-                    }else{
-                        CameraRoll.saveToCameraRoll(filePath,"video")
-                        Loading.hide();
-                        Toast.show({
-                            content: '下载成功',
-                        });
-                        resolve(filePath);
+                    } else {
+                        CameraRoll.save(filePath, 'video');
                     }
-
+                    Loading.hide();
+                    Toast.show({
+                        content: '下载成功',
+                    });
+                    resolve(filePath);
                 })
                 .catch((error) => {
                     Loading.hide();
