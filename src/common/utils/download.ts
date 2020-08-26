@@ -1,6 +1,7 @@
 import { Dimensions, Platform, StatusBar, PixelRatio } from 'react-native';
 import Loading from '../../components/Popup/Loading';
 import RNFetchBlob from 'rn-fetch-blob';
+import CameraRoll from '@react-native-community/cameraroll';
 
 const { fs } = RNFetchBlob;
 const { dirs } = fs;
@@ -48,12 +49,20 @@ export function download({ url, title, onSuccess, onFailed }: Props) {
                     // console.log('The file saved to ', filePath);
                     if (Platform.OS === 'android') {
                         fs.scanFile([{ path: filePath, mime: 'video/mp4' }]);
+                        Loading.hide();
+                        Toast.show({
+                            content: '下载成功',
+                        });
+                        resolve(filePath);
+                    }else{
+                        CameraRoll.saveToCameraRoll(filePath,"video")
+                        Loading.hide();
+                        Toast.show({
+                            content: '下载成功',
+                        });
+                        resolve(filePath);
                     }
-                    Loading.hide();
-                    Toast.show({
-                        content: '下载成功',
-                    });
-                    resolve(filePath);
+
                 })
                 .catch((error) => {
                     Loading.hide();
