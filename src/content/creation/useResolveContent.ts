@@ -33,6 +33,9 @@ export const useResolveContent = ({ shareBody, onSuccess, onFailed }: Props) => 
                     // console.log('onCompleted data', data);
                     if (data.video_id) {
                         Loading.hide();
+                        // console.log('====================================');
+                        // console.log('uploadVideo onSuccess', shareBody?.url, data.video_id);
+                        // console.log('====================================');
                         onSuccess({
                             id: data.video_id,
                             path: shareBody?.url,
@@ -74,6 +77,9 @@ export const useResolveContent = ({ shareBody, onSuccess, onFailed }: Props) => 
                     getQCVodFileId(path)
                         .then((fileId) => {
                             Loading.hide();
+                            // console.log('====================================');
+                            // console.log('getQCVodFileId onSuccess', shareBody?.url, data.video_id);
+                            // console.log('====================================');
                             onSuccess({
                                 id: fileId,
                                 path: shareBody?.url,
@@ -99,12 +105,11 @@ export const useResolveContent = ({ shareBody, onSuccess, onFailed }: Props) => 
 function getQCVodFileId(videoPath: string): Promise<string> {
     return new Promise((resolve, reject) => {
         fileHash(videoPath, (error: any, md5Hash: string) => {
-            // console.log('error', error, 'md5Hash', md5Hash);
             if (md5Hash) {
                 fetch(`http://yxsp.haxifang.cn/api/video/hash/${md5Hash}`)
                     .then((response) => response.text())
                     .then((res) => {
-                        console.log('md5Hash', md5Hash, res);
+                        // console.log('md5Hash', md5Hash, res);
                         if (res) {
                             resolve(res);
                         } else {

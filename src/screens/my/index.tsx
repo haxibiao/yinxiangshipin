@@ -67,7 +67,7 @@ export default observer((props: any) => {
         return () => {
             navFocusListener();
         };
-    }, []);
+    }, [refetch]);
 
     return (
         <View style={styles.container}>

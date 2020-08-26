@@ -40,7 +40,6 @@ export default (props: any) => {
         body: '',
         qcvod_fileid: '',
         images: [],
-        tag_names: [],
     });
     // 粘贴板分享视频
     const shareLink = useRef();
@@ -170,20 +169,21 @@ export default (props: any) => {
     const selectTag = useCallback(
         (tag) => {
             const isAdded = __.find(tags, function (item) {
-                return item.id === tag.id;
+                return item.id === tag.id || item.name === tag.name;
             });
             if (!isAdded) {
-                tags.unshift(tag);
-                setTags([...tags]);
+                const newTags = [tag, ...tags];
+                setTags(newTags);
             }
         },
         [tags],
     );
 
-    const deleteTagName = useCallback((index) => {
+    const deleteTag = useCallback((index) => {
         setTags((tags) => {
-            tags.splice(index, 1);
-            return [...tags];
+            const newTags = [...tags];
+            newTags.splice(index, 1);
+            return newTags;
         });
     }, []);
 
@@ -201,7 +201,7 @@ export default (props: any) => {
                                     #{tag?.name}
                                 </Text>
                             </View>
-                            <TouchableOpacity style={styles.deleteTag} onPress={() => deleteTagName(index)}>
+                            <TouchableOpacity style={styles.deleteTag} onPress={() => deleteTag(index)}>
                                 <Iconfont name="guanbi1" size={pixel(13)} color="#4085FF" />
                             </TouchableOpacity>
                         </View>
@@ -301,6 +301,7 @@ export default (props: any) => {
                     <TouchableOpacity
                         style={styles.operation}
                         activeOpacity={1}
+                        disabled={tags.length >= 5}
                         onPress={() => navigation.navigate('TagList', { selectTag })}>
                         <View style={styles.operationLeft}>
                             <Image

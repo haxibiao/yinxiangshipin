@@ -98,7 +98,9 @@ class Toast extends Component<Props, State> {
                     {React.isValidElement(content) ? (
                         content
                     ) : (
-                        <Text style={[styles.content, textStyle]}>{content}</Text>
+                        <Text style={[styles.content, textStyle]} numberOfLines={4}>
+                            {content}
+                        </Text>
                     )}
                 </Animated.View>
             </View>

@@ -18,14 +18,12 @@ export default (props: any) => {
     const postTags = useMemo(() => {
         const postTagsData = post?.tags?.data;
         if (postTagsData?.length > 0) {
-            return postTagsData.map((tag) => {
-                return tag?.name;
-            });
+            return postTagsData;
         }
         return [];
     }, [post]);
 
-    const [tagsName, setTagsName] = useState([...postTags]);
+    const [tags, setTags] = useState(postTags);
 
     const [formData, setFormData] = useState({
         id: post?.id,
@@ -34,7 +32,7 @@ export default (props: any) => {
     });
 
     const isDisableButton = useMemo(() => {
-        if (postTags.join('') !== tagsName.join('')) {
+        if (postTags !== tags) {
             return false;
         }
         for (const key of Object.keys(formData)) {
@@ -43,17 +41,12 @@ export default (props: any) => {
             }
         }
         return true;
-    }, [post, formData, tagsName]);
-
-    const { data: userTagsData } = useQuery(GQL.userTags, {
-        variables: { id: userStore.me.id },
-    });
-    const tagsData = useMemo(() => userTagsData?.user?.tags?.data, [userTagsData]);
+    }, [post, tags, formData]);
 
     const [createPost, { data, loading }] = useMutation(GQL.updatePostMutation, {
         variables: {
             ...formData,
-            tag_names: tagsName,
+            tag_names: tags.map((c) => c.name),
         },
         refetchQueries: () => [
             {
@@ -94,53 +87,39 @@ export default (props: any) => {
         });
     }, []);
 
-    const selectTagName = useCallback((selectedTagName) => {
-        setTagsName((tagsName) => {
-            if (tagsName.length > 3) {
-                Toast.show({ content: '最多关联3个标签哦' });
-            } else if (tagsName.indexOf(selectedTagName) !== -1) {
-                Toast.show({ content: '该标签已经添加过了' });
-            } else {
-                return [selectedTagName, ...tagsName];
+    const selectTag = useCallback(
+        (tag) => {
+            const isAdded = __.find(tags, function (item) {
+                return item.id === tag.id || item.name === tag.name;
+            });
+            if (!isAdded) {
+                const newTags = [tag, ...tags];
+                setTags(newTags);
             }
-            return tagsName;
+        },
+        [tags],
+    );
+
+    const deleteTag = useCallback((index) => {
+        setTags((tags) => {
+            const newTags = [...tags];
+            newTags.splice(index, 1);
+            return newTags;
         });
     }, []);
 
-    const deleteTagName = useCallback((index) => {
-        setTagsName((tagsName) => {
-            tagsName.splice(index, 1);
-            return [...tagsName];
-        });
-    }, []);
-
-    const overlayKey = useRef();
-
-    const closeAddTagModal = useCallback(() => {
-        Overlay.hide(overlayKey.current);
-    }, []);
-
-    const showShopWindow = useCallback(() => {
-        const Operation = (
-            <Overlay.PopView style={{ alignItems: 'center', justifyContent: 'center' }}>
-                <AddTags selectTag={selectTagName} tagsData={tagsData} onClose={closeAddTagModal} />
-            </Overlay.PopView>
-        );
-        overlayKey.current = Overlay.show(Operation);
-    }, [tagsData]);
-
-    const postTagsName = useMemo(() => {
-        if (Array.isArray(tagsName)) {
-            return tagsName.slice(0, 3).map((tagName, index) => {
+    const renderTagNames = useMemo(() => {
+        if (Array.isArray(tags)) {
+            return tags.slice(0, 3).map((tag, index) => {
                 return (
-                    <View key={tagName} style={styles.tagItem}>
+                    <View key={tag?.id || tag?.name} style={styles.tagItem}>
                         <Iconfont name="biaoqian" size={font(15)} color="#fff" style={{ marginRight: pixel(4) }} />
                         <View style={{ maxWidth: pixel(100) }}>
                             <Text style={styles.tagName} numberOfLines={1}>
-                                {tagName}
+                                {tag?.name}
                             </Text>
                         </View>
-                        <TouchableOpacity style={styles.deleteTag} onPress={() => deleteTagName(index)}>
+                        <TouchableOpacity style={styles.deleteTag} onPress={() => deleteTag(index)}>
                             <Iconfont name="guanbi1" size={pixel(13)} color="#fff" />
                         </TouchableOpacity>
                     </View>
@@ -148,7 +127,7 @@ export default (props: any) => {
             });
         }
         return null;
-    }, [tagsName]);
+    }, [tags]);
 
     return (
         <PageContainer
@@ -209,8 +188,12 @@ export default (props: any) => {
                             </View>
                         </View>
                         {/* 添加专题 */}
-                        <TouchableOpacity style={styles.operation} onPress={showShopWindow} activeOpacity={0.9}>
-                            {tagsName.length < 1 ? (
+                        <TouchableOpacity
+                            style={styles.operation}
+                            activeOpacity={0.9}
+                            disabled={tags.length >= 5}
+                            onPress={() => navigation.navigate('TagList', { selectTag })}>
+                            {tags.length < 1 ? (
                                 <View style={styles.operationBtn}>
                                     <Iconfont
                                         name="biaoqian"
@@ -222,7 +205,7 @@ export default (props: any) => {
                                 </View>
                             ) : (
                                 <ScrollView style={styles.tagsContainer} horizontal={true}>
-                                    {postTagsName}
+                                    {renderTagNames}
                                 </ScrollView>
                             )}
                             <Iconfont name="right" size={pixel(15)} color="#b2b2b2" />
