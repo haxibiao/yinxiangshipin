@@ -34,8 +34,8 @@ query searchTagsQuery($query: String!, $page: Int, $count: Int) {
 }
 
 # 搜索动态
-query searchPostQuery($query: String!, $page: Int, $tag_id: Int, $user_id: Int) {
-    searchPosts(query: $query, page: $page, tag_id: $tag_id, user_id: $user_id) {
+query searchPostQuery($query: String!, $page: Int, $count: Int, $type: PostType, $tag_id: Int, $user_id: Int) {
+    searchPosts(query: $query, page: $page, count: $count, type: $type, tag_id: $tag_id, user_id: $user_id) {
         paginatorInfo {
             currentPage
             hasMorePages

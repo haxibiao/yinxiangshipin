@@ -7,7 +7,7 @@ const Content = observer(({ media }) => {
     const {
         time_ago,
         created_at,
-        count_tips,
+        count_visits,
         count_likes,
         count_comments,
         categories,
@@ -16,7 +16,6 @@ const Content = observer(({ media }) => {
         user,
         liked,
     } = media;
-    console.log('media', media);
     const categoryList = useMemo(() => {
         if (Array.isArray(categories) && categories.length > 0) {
             return (
@@ -40,7 +39,7 @@ const Content = observer(({ media }) => {
         <View style={styles.content}>
             <View style={styles.statistical}>
                 <Text style={styles.statisticalText} numberOfLines={1}>
-                    {count_tips || 0}浏览
+                    {count_visits || 0}浏览
                 </Text>
                 <Text style={[styles.statisticalText, { marginHorizontal: pixel(5) }]}>·</Text>
                 <Text style={styles.statisticalText} numberOfLines={1}>

@@ -11,7 +11,7 @@ const index = observer(({ navigation, keyword, tag_id, user_id }) => {
         ({ item, index, data, page }) => {
             return (
                 <TouchableWithoutFeedback
-                    onPress={() =>
+                    onPress={() => {
                         navigation.push('SearchedVideoList', {
                             keyword,
                             tag_id,
@@ -19,8 +19,8 @@ const index = observer(({ navigation, keyword, tag_id, user_id }) => {
                             initData: data,
                             itemIndex: index,
                             page,
-                        })
-                    }>
+                        });
+                    }}>
                     <View style={styles.itemWrap}>
                         <SearchVideoItem media={item} />
                     </View>
@@ -58,6 +58,7 @@ const index = observer(({ navigation, keyword, tag_id, user_id }) => {
             options={{
                 variables: {
                     query: keyword,
+                    type: 'VIDEO',
                     tag_id: tag_id,
                     user_id: user_id,
                 },

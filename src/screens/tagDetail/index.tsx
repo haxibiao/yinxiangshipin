@@ -67,18 +67,35 @@ export default observer((props: any) => {
         }
     }, [nextPage, hasMore, fetchMore]);
 
+    const goToScreen = useCallback(({ item, tag, initData, itemIndex, page }) => {
+        if (item?.video?.id) {
+            navigation.push('TagVideoList', { tag, initData, itemIndex, page });
+        } else {
+            navigation.push('PostDetail', { post: item });
+        }
+    }, []);
+
     const renderItem = useCallback(
         ({ item, index }) => {
+            let cover;
+            if (item?.video?.id) {
+                cover = item?.video?.dynamic_cover || media?.video?.cover;
+            } else {
+                cover = item?.images?.['0']?.url;
+            }
             return (
                 <TouchableWithoutFeedback
                     onPress={() =>
-                        navigation.push('TagVideoList', { tag, initData: listData, itemIndex: index, page: nextPage })
+                        goToScreen({
+                            item,
+                            tag,
+                            initData: listData,
+                            itemIndex: index,
+                            page: nextPage,
+                        })
                     }>
                     <View style={styles.itemWrap}>
-                        <Image
-                            style={styles.videoCover}
-                            source={{ uri: item?.video?.dynamic_cover || item?.video?.cover }}
-                        />
+                        <Image style={styles.videoCover} source={{ uri: cover }} />
                     </View>
                 </TouchableWithoutFeedback>
             );

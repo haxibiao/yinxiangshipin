@@ -14,18 +14,17 @@ import {
 import { FollowButton, Row, Iconfont, MoreOperation, GenderLabel } from '@src/components';
 import { GQL, useQuery, useApolloClient, ApolloProvider } from '@src/apollo';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { userStore, observer } from '@src/store';
+import { observer } from '@src/store';
 import { Overlay } from 'teaset';
 
-export default observer((props: { user: any; titleStyle: TextStyle; contentStyle: ViewStyle }) => {
-    const { user, titleStyle, contentStyle } = props;
+export default observer((props: { user: any }) => {
+    const { user, isSelf } = props;
     const navigation = useNavigation();
     const client = useApolloClient();
     const { data: userQueryResult, refetch } = useQuery(GQL.userQuery, {
         variables: { id: user.id },
         fetchPolicy: 'network-only',
     });
-    const isSelf = useMemo(() => userStore.me.id === user.id, []);
     const userProfile = useMemo(() => Object.assign(user, userQueryResult?.user), [userQueryResult]);
 
     const showMoreOperation = useCallback(() => {
@@ -49,6 +48,12 @@ export default observer((props: { user: any; titleStyle: TextStyle; contentStyle
         );
         Overlay.show(MoreOperationOverlay);
     }, [client, userProfile]);
+
+    const goToSearch = useCallback(() => {
+        navigation.push('SearchVideo', {
+            user_id: user.id,
+        });
+    }, []);
 
     const withChat = useCallback(() => {
         if (TOKEN) {
@@ -127,27 +132,23 @@ export default observer((props: { user: any; titleStyle: TextStyle; contentStyle
             {/* 用户页面顶部操作栏 */}
             <View style={styles.navBarStyle}>
                 <TouchableOpacity
+                    style={styles.navBarButton}
                     activeOpacity={1}
                     onPress={() => {
                         navigation.goBack();
-                    }}
-                    style={styles.navBarButton}>
+                    }}>
                     <Iconfont name="zuojiantou" color={'#fff'} size={pixel(22)} />
                 </TouchableOpacity>
-                {/* <Animated.View style={[styles.navBarTitle, titleStyle]}> */}
-                {/* <Text style={styles.titleText} numberOfLines={1}>
-                        {userProfile.name}
-                    </Text> */}
-                {/* </Animated.View> */}
-                {isSelf ? (
-                    <View style={[styles.navBarButton, { opacity: 0 }]}>
-                        <Iconfont name="qita1" size={pixel(21)} color={'#fff'} />
+                <View style={styles.rightButtons}>
+                    <View style={styles.navBarButton} activeOpacity={1} onPress={goToSearch}>
+                        <Iconfont name="fangdajing" size={pixel(22)} color={'#fff'} />
                     </View>
-                ) : (
-                    <TouchableOpacity activeOpacity={1} onPress={showMoreOperation} style={styles.navBarButton}>
-                        <Iconfont name="qita1" size={pixel(21)} color={'#fff'} />
-                    </TouchableOpacity>
-                )}
+                    {!isSelf && (
+                        <TouchableOpacity style={styles.navBarButton} activeOpacity={1} onPress={showMoreOperation}>
+                            <Iconfont name="daohanggengduoanzhuo" size={pixel(22)} color={'#fff'} />
+                        </TouchableOpacity>
+                    )}
+                </View>
             </View>
         </View>
     );
@@ -241,9 +242,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
     },
+    rightButtons: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
     navBarButton: {
         alignSelf: 'stretch',
-        paddingHorizontal: pixel(Theme.itemSpace),
+        paddingHorizontal: pixel(12),
         justifyContent: 'center',
     },
     followButton: {

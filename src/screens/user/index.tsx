@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import {
     TouchableOpacity,
     Image,
@@ -11,8 +11,8 @@ import {
     DeviceEventEmitter,
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-
 import { Iconfont, ScrollTabBar } from '@src/components';
+import { userStore } from '@src/store';
 import { TabView } from '@src/components/ScrollHeaderTabView';
 import UserProfile from './components/UserProfile';
 import Posts from './components/Posts';
@@ -29,6 +29,8 @@ const index = (props: Props) => {
     const route = useRoute();
     const user = route.params?.user;
 
+    const isSelf = useMemo(() => userStore.me.id === user.id, []);
+
     const headerOnLayout = useCallback((event: any) => {
         const { height } = event.nativeEvent.layout;
         setHeaderHeight(height);
@@ -41,10 +43,16 @@ const index = (props: Props) => {
     const _renderScrollHeader = useCallback(() => {
         return (
             <View onLayout={headerOnLayout}>
-                <UserProfile user={user} />
+                <UserProfile user={user} isSelf={isSelf} />
             </View>
         );
-    }, [user]);
+    }, [user, isSelf]);
+
+    const goToSearch = useCallback(() => {
+        navigation.push('SearchVideo', {
+            user_id: user.id,
+        });
+    }, []);
 
     const _renderNavBar = (animation: any): React.ReactElement => {
         const headerOpacity = animation.interpolate({
@@ -66,13 +74,19 @@ const index = (props: Props) => {
                         {user?.name}
                     </Text>
                 </Animated.View>
-
-                <TouchableOpacity
-                    activeOpacity={1}
-                    onPress={() => DeviceEventEmitter.emit('userOperation')}
-                    style={[styles.navBarButton, { alignItems: 'flex-end' }]}>
-                    <Iconfont name="qita1" size={pixel(22)} color={'#000'} />
-                </TouchableOpacity>
+                <View style={styles.rightButtons}>
+                    <TouchableOpacity activeOpacity={1} onPress={goToSearch} style={styles.navBarButton}>
+                        <Iconfont name="fangdajing" size={pixel(22)} color={'#000'} />
+                    </TouchableOpacity>
+                    {!isSelf && (
+                        <TouchableOpacity
+                            activeOpacity={1}
+                            onPress={() => DeviceEventEmitter.emit('userOperation')}
+                            style={styles.navBarButton}>
+                            <Iconfont name="daohanggengduoanzhuo" size={pixel(22)} color={'#000'} />
+                        </TouchableOpacity>
+                    )}
+                </View>
             </Animated.View>
         );
     };
@@ -129,13 +143,16 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         height: NAV_BAR_HEIGHT,
         paddingTop: pixel(Theme.statusBarHeight),
-        paddingHorizontal: pixel(Theme.itemSpace),
         backgroundColor: '#fff',
+    },
+    rightButtons: {
+        flexDirection: 'row',
+        alignItems: 'center',
     },
     navBarButton: {
         alignSelf: 'stretch',
-        width: pixel(50),
         justifyContent: 'center',
+        paddingHorizontal: pixel(12),
     },
     navBarTitle: {
         alignSelf: 'center',

@@ -16,7 +16,7 @@ const statusContent: { [key in Status]: any } = {
         image: require('./assets/content_loading.png'),
     },
     empty: {
-        title: '暂时还没有内容哦',
+        title: '没有相关内容哦',
         image: require('./assets/content_empty.png'),
     },
     error: {

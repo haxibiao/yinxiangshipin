@@ -9,6 +9,7 @@ query recommendPostsQuery {
         description
         status
         liked
+        count_visits
         count_likes
         count_comments
         review_id
@@ -63,6 +64,7 @@ query publicPostsQuery($user_id: Int, $count: Int, $page: Int) {
             description
             status
             liked
+            count_visits
             count_likes
             count_comments
             review_id
@@ -118,6 +120,7 @@ query postsQuery($user_id: Int!, $count: Int, $page: Int) {
             description
             status
             liked
+            count_visits
             count_likes
             count_comments
             review_id
@@ -182,6 +185,7 @@ query userPostsQuery($user_id: Int!, $filter: PostFilter, $count: Int, $page: In
             description
             status
             liked
+            count_visits
             count_likes
             count_comments
             review_id
@@ -222,8 +226,8 @@ query userPostsQuery($user_id: Int!, $filter: PostFilter, $count: Int, $page: In
 }
 
 # 搜索动态
-query searchPostQuery($query: String!, $page: Int, $count: Int, $tag_id: Int, $user_id: Int) {
-    searchPosts(query: $query, page: $page, count: $count, tag_id: $tag_id, user_id: $user_id) {
+query searchPostQuery($query: String!, $page: Int, $count: Int, $type: PostType, $tag_id: Int, $user_id: Int) {
+    searchPosts(query: $query, page: $page, count: $count, type: $type, tag_id: $tag_id, user_id: $user_id) {
         paginatorInfo {
             currentPage
             hasMorePages
@@ -237,6 +241,7 @@ query searchPostQuery($query: String!, $page: Int, $count: Int, $tag_id: Int, $u
             description
             status
             liked
+            count_visits
             count_likes
             count_comments
             review_id
@@ -434,6 +439,7 @@ query tagPostsQuery($tag_id: Int!, $page: Int, $count: Int, $order: PostOrderEnu
                 description
                 status
                 liked
+                count_visits
                 count_likes
                 count_comments
                 review_id

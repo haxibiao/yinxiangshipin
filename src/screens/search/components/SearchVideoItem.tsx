@@ -5,7 +5,7 @@ import LinearGradient from 'react-native-linear-gradient';
 
 export default function SearchVideoItem({ media }) {
     return (
-        <ImageBackground style={styles.videoCover} source={{ uri: item?.video?.dynamic_cover || media?.video?.cover }}>
+        <ImageBackground style={styles.videoCover} source={{ uri: media?.video?.dynamic_cover || media?.video?.cover }}>
             <LinearGradient
                 style={styles.contentContainer}
                 start={{ x: 0, y: 1 }}
