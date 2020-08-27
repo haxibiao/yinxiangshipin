@@ -4,10 +4,9 @@
  */
 
 import React, { Component } from 'react';
-import { StyleSheet, View, TouchableWithoutFeedback, Image, Text } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Image, Text } from 'react-native';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import Row from '../Basic/Row';
-import TouchFeedback from '../Basic/TouchFeedback';
 import PlaceholderImage from '../Basic/PlaceholderImage';
 import OverlayViewer from '../Popup/OverlayViewer';
 
@@ -24,90 +23,74 @@ type Props = {
 };
 
 class GridImage extends Component<Props> {
-    static defaultProps = {
-        gap: 6,
-    };
-
     state = {
         gridWidth: 0,
     };
 
     _onLayout = (e) => {
         const { width } = e.nativeEvent.layout;
-        this.setState({ gridWidth: width });
+        this.setState({ gridWidth: Math.floor(width) });
     };
 
     imagesLayout() {
-        let { images, gap, style, gridStyle } = this.props;
         const { gridWidth } = this.state;
-        if (images.length === 1) {
-            const { width, height } = images[0];
-            const style = Helper.ResponseMedia(width, height, gridWidth);
-            gridStyle = {
-                borderRadius: pixel(4),
-                ...style,
-                ...gridStyle,
-            };
+        const { images, style, gridStyle, gap = pixel(5) } = this.props;
+        const imagesData = images?.slice(0, 9) || [];
+        const imageSize = Math.ceil((gridWidth - gap * 2) / 3);
+        const defaultImageStyle = { width: imageSize, height: imageSize, ...gridStyle };
+
+        if (imagesData.length === 1) {
+            const { width, height } = imagesData[0];
+            const responseSize = Helper.ResponseMedia(width, height, gridWidth);
             return (
-                <TouchFeedback
+                <TouchableOpacity
                     activeOpacity={1}
                     onPress={() => this.showPicture(0)}
                     style={{ alignSelf: 'flex-start' }}>
-                    <PlaceholderImage style={gridStyle} source={{ uri: images[0].url }} />
-                </TouchFeedback>
-            );
-        } else {
-            const size = Math.ceil((gridWidth - gap * 2) / 3);
-            gridStyle = {
-                width: size,
-                height: size,
-                marginRight: gap,
-                marginTop: gap,
-                borderRadius: pixel(4),
-                ...gridStyle,
-            };
-            if (images.length === 4) {
-                return (
-                    <View style={{ marginTop: -gap }}>
-                        <Row>
-                            <TouchFeedback activeOpacity={1} onPress={() => this.showPicture(0)}>
-                                <PlaceholderImage style={gridStyle} source={{ uri: images[0].url }} />
-                            </TouchFeedback>
-                            <TouchFeedback activeOpacity={1} onPress={() => this.showPicture(1)}>
-                                <PlaceholderImage style={gridStyle} source={{ uri: images[1].url }} />
-                            </TouchFeedback>
-                        </Row>
-                        <Row>
-                            <TouchFeedback activeOpacity={1} onPress={() => this.showPicture(2)}>
-                                <PlaceholderImage style={gridStyle} source={{ uri: images[2].url }} />
-                            </TouchFeedback>
-                            <TouchFeedback activeOpacity={1} onPress={() => this.showPicture(3)}>
-                                <PlaceholderImage style={gridStyle} source={{ uri: images[3].url }} />
-                            </TouchFeedback>
-                        </Row>
-                    </View>
-                );
-            } else {
-                images.length > 9 && images.splice(9);
-                return (
-                    <View
+                    <PlaceholderImage
                         style={{
-                            flexDirection: 'row',
-                            flexWrap: 'wrap',
+                            borderRadius: pixel(4),
+                            ...responseSize,
+                            ...gridStyle,
+                        }}
+                        source={{ uri: imagesData[0].url }}
+                    />
+                </TouchableOpacity>
+            );
+        } else if (imagesData.length > 1) {
+            return (
+                <View
+                    style={[
+                        styles.imageContainer,
+                        {
                             marginTop: -gap,
-                            marginRight: -gap,
-                            overflow: 'hidden',
-                        }}>
-                        {images.map((elem, index) => {
-                            return (
-                                <TouchFeedback activeOpacity={1} onPress={() => this.showPicture(index)} key={index}>
-                                    <PlaceholderImage style={gridStyle} source={{ uri: elem.url }} />
-                                </TouchFeedback>
-                            );
-                        })}
-                    </View>
-                );
-            }
+                            marginRight: -gap * 2,
+                        },
+                    ]}>
+                    {imagesData.map((elem, index) => {
+                        return (
+                            <TouchableOpacity
+                                style={{ marginTop: gap, marginRight: gap }}
+                                key={index}
+                                activeOpacity={1}
+                                onPress={() => this.showPicture(index)}>
+                                <PlaceholderImage
+                                    style={{
+                                        ...defaultImageStyle,
+                                        ...imageStyle({
+                                            index,
+                                            count: imagesData.length,
+                                            radius: pixel(4),
+                                            gap,
+                                        }),
+                                    }}
+                                    source={{ uri: elem.url }}
+                                />
+                            </TouchableOpacity>
+                        );
+                    })}
+                </View>
+            );
         }
     }
 
@@ -124,11 +107,78 @@ class GridImage extends Component<Props> {
     };
 
     render() {
-        const { gap } = this.props;
         return <View onLayout={this._onLayout}>{this.imagesLayout()}</View>;
     }
 }
 
-const styles = StyleSheet.create({});
+function imageStyle({ count, index, radius, gap }) {
+    let style;
+
+    if (count === 1) {
+        style = {
+            borderRadius: radius,
+        };
+    } else if (count > 1 && count < 4) {
+        if (index === 0) {
+            style = {
+                borderTopLeftRadius: radius,
+                borderBottomLeftRadius: radius,
+            };
+        } else if (index === count - 1) {
+            style = {
+                borderTopRightRadius: radius,
+                borderBottomRightRadius: radius,
+            };
+        }
+    } else if (count === 4) {
+        if (index === 0) {
+            style = {
+                borderTopLeftRadius: radius,
+            };
+        } else if (index === 1) {
+            style = {
+                borderTopRightRadius: radius,
+                marginRight: gap,
+            };
+        } else if (index === 2) {
+            style = {
+                borderBottomLeftRadius: radius,
+            };
+        } else if (index === 3) {
+            style = {
+                borderBottomRightRadius: radius,
+            };
+        }
+    } else if (count > 4) {
+        if (index === 0) {
+            style = {
+                borderTopLeftRadius: radius,
+            };
+        } else if (index === 2) {
+            style = {
+                borderTopRightRadius: radius,
+            };
+        } else if (index === (count / 3 > 2 ? 6 : 3)) {
+            // index = 3 6
+            style = {
+                borderBottomLeftRadius: radius,
+            };
+        } else if (index === count - 1 && Math.ceil(count % 3) === 0) {
+            // index = 5 8
+            style = {
+                borderBottomRightRadius: radius,
+            };
+        }
+    }
+    return style;
+}
+
+const styles = StyleSheet.create({
+    imageContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        overflow: 'hidden',
+    },
+});
 
 export default GridImage;
