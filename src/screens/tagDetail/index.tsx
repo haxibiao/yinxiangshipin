@@ -75,7 +75,10 @@ export default observer((props: any) => {
                         navigation.push('TagVideoList', { tag, initData: listData, itemIndex: index, page: nextPage })
                     }>
                     <View style={styles.itemWrap}>
-                        <Image style={styles.videoCover} source={{ uri: item?.video?.cover }} />
+                        <Image
+                            style={styles.videoCover}
+                            source={{ uri: item?.video?.dynamic_cover || item?.video?.cover }}
+                        />
                     </View>
                 </TouchableWithoutFeedback>
             );

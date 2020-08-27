@@ -80,6 +80,7 @@ query searchPostQuery($query: String!, $page: Int, $tag_id: Int, $user_id: Int) 
                 id
                 url
                 cover
+                dynamic_cover
                 duration
                 width
                 height

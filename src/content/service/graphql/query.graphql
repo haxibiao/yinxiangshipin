@@ -268,6 +268,7 @@ query searchPostQuery($query: String!, $page: Int, $count: Int, $tag_id: Int, $u
                 id
                 url
                 cover
+                dynamic_cover
                 duration
                 width
                 height
@@ -464,6 +465,7 @@ query tagPostsQuery($tag_id: Int!, $page: Int, $count: Int, $order: PostOrderEnu
                     id
                     url
                     cover
+                    dynamic_cover
                     duration
                     width
                     height

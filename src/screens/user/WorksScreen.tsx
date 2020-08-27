@@ -1,39 +1,51 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { PageContainer } from '@src/components';
-import { useRoute } from '@react-navigation/native';
+import { NavBarHeader } from '@src/components';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { QueryList, PostItem, GQL } from '@src/content';
 
 export default () => {
+    const navigation = useNavigation();
     const route = useRoute();
+    const user_id = useMemo(() => route?.params?.user?.id, [route]);
 
     const renderItem = useCallback(({ item }) => {
         return <PostItem data={item} />;
     }, []);
 
     return (
-        <PageContainer title="个人动态">
+        <View style={styles.container}>
+            <NavBarHeader
+                statusbarProperties={{ barStyle: 'dark-content' }}
+                title="个人动态"
+                hasSearchButton={true}
+                onPressSearch={() => navigation.push('SearchVideo', { user_id })}
+            />
             <QueryList
                 gqlDocument={GQL.postsQuery}
                 dataOptionChain="posts.data"
                 paginateOptionChain="posts.paginatorInfo"
                 options={{
                     variables: {
-                        user_id: route?.params?.user?.id,
+                        user_id,
                         filter: 'normal',
                     },
                     fetchPolicy: 'network-only',
                 }}
                 renderItem={renderItem}
                 ItemSeparatorComponent={() => <View style={styles.separator} />}
-                contentContainerStyle={styles.container}
+                contentContainerStyle={styles.contentContainer}
             />
-        </PageContainer>
+        </View>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
+        backgroundColor: '#fff',
+    },
+    contentContainer: {
         flexGrow: 1,
         paddingBottom: Theme.HOME_INDICATOR_HEIGHT,
     },
