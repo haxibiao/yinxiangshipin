@@ -222,10 +222,11 @@ query userPostsQuery($user_id: Int!, $filter: PostFilter, $count: Int, $page: In
 }
 
 # 搜索动态
-query searchPostQuery($query: String!, $page: Int) {
-    searchPosts(query: $query, page: $page) {
+query searchPostQuery($query: String!, $page: Int, $count: Int, $tag_id: Int, $user_id: Int) {
+    searchPosts(query: $query, page: $page, count: $count, tag_id: $tag_id, user_id: $user_id) {
         paginatorInfo {
-            total
+            currentPage
+            hasMorePages
         }
         data {
             id

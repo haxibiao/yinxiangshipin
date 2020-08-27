@@ -1,14 +1,24 @@
 import React, { useContext, useState, useCallback, useEffect, useMemo, useRef, Fragment } from 'react';
-import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity, Animated } from 'react-native';
+import {
+    StyleSheet,
+    Text,
+    View,
+    Image,
+    FlatList,
+    TouchableOpacity,
+    TouchableWithoutFeedback,
+    Animated,
+} from 'react-native';
 import { useQuery } from '@apollo/react-hooks';
 import { observer, appStore } from '@src/store';
 import { NavBarHeader } from '@src/components';
 import { syncGetter, count } from '@src/common';
-import { GQL, MediaItem, ContentStatus, mergeProperty } from '@src/content';
+import { GQL, ContentStatus, mergeProperty } from '@src/content';
 import { observable } from 'mobx';
-import { useRoute } from '@react-navigation/native';
+import { useRoute, useNavigation } from '@react-navigation/native';
 
 export default observer((props: any) => {
+    const navigation = useNavigation();
     const route = useRoute();
     const tag = route?.params?.tag;
     const [hot, setHot] = useState(false);
@@ -60,9 +70,14 @@ export default observer((props: any) => {
     const renderItem = useCallback(
         ({ item, index }) => {
             return (
-                <View style={styles.itemWrap}>
-                    <MediaItem media={item} tag={tag} initData={listData} itemIndex={index} page={nextPage} />
-                </View>
+                <TouchableWithoutFeedback
+                    onPress={() =>
+                        navigation.push('TagVideoList', { tag, initData: listData, itemIndex: index, page: nextPage })
+                    }>
+                    <View style={styles.itemWrap}>
+                        <Image style={styles.videoCover} source={{ uri: item?.video?.cover }} />
+                    </View>
+                </TouchableWithoutFeedback>
             );
         },
         [tag, listData, nextPage],
@@ -99,7 +114,7 @@ export default observer((props: any) => {
                         </TouchableOpacity>
                     </View>
                     {/* <TouchableOpacity style={styles.favoriteBtn}>
-                        <Iconfont name="favorite" size={font(18)} color={tag?.favorite ? '#FE1966' : '#fff'} />
+                        <Iconfont name="favorite" size={font(18)} color={tag?.favorite ? Theme.primaryColor : '#fff'} />
                         <Text style={styles.favoriteBtnName}>{tag?.favorite ? '取消收藏' : '收藏'}</Text>
                     </TouchableOpacity> */}
                 </View>
@@ -146,7 +161,13 @@ export default observer((props: any) => {
 
     return (
         <View style={styles.container}>
-            <NavBarHeader isTransparent centerStyle={{ opacity: titleOpacity }} title={tag?.name} />
+            <NavBarHeader
+                isTransparent
+                hasSearchButton={true}
+                onPressSearch={() => navigation.push('SearchVideo', { tag_id: tag.id })}
+                centerStyle={{ opacity: titleOpacity }}
+                title={tag?.name}
+            />
             <FlatList
                 data={listData}
                 onScroll={onScroll}
@@ -209,7 +230,6 @@ const styles = StyleSheet.create({
         // justifyContent: 'center',
         justifyContent: 'space-between',
     },
-
     tagInfoTop: {},
     tagInfoBottom: {
         flexDirection: 'row',
@@ -246,8 +266,14 @@ const styles = StyleSheet.create({
         borderColor: '#2b2b2b',
         backgroundColor: '#2b2b2b',
     },
+    videoCover: {
+        ...StyleSheet.absoluteFillObject,
+        width: undefined,
+        height: undefined,
+    },
     columnWrapperStyle: {
         borderWidth: StyleSheet.hairlineWidth,
+        borderColor: '#161924',
     },
     listFooter: {
         paddingVertical: pixel(15),

@@ -20,6 +20,7 @@ export default React.forwardRef(function ContentList(
         dataOptionChain = 'publicPosts.data',
         paginateOptionChain = 'publicPosts.paginatorInfo',
         options,
+        renderItem,
         ListFooterComponent,
         ListEmptyComponent,
         ...contentProps
@@ -46,6 +47,16 @@ export default React.forwardRef(function ContentList(
             });
         }
     }, [nextPage, hasMore]);
+
+    const renderItemComponent = useCallback(
+        ({ item, index }) => {
+            if (renderItem instanceof Function) {
+                return renderItem({ item, index, data: listData, page: nextPage });
+            }
+            return null;
+        },
+        [renderItem, listData, nextPage],
+    );
 
     const listFooter = useCallback(() => {
         let footer = null;
@@ -98,6 +109,7 @@ export default React.forwardRef(function ContentList(
             refreshControl={
                 <RefreshControl onRefresh={refetch} refreshing={!!listData && loading} colors={[Theme.primaryColor]} />
             }
+            renderItem={renderItemComponent}
             onEndReached={onEndReached}
             onEndReachedThreshold={0.1}
             removeClippedSubviews={true}

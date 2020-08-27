@@ -28,6 +28,7 @@ import TaskScreen from '../screens/task';
 
 // find search
 import SearchScreen from '../screens/search';
+import SearchVideoScreen from '../screens/search/Video';
 
 // user
 import UserHomeScreen from '../screens/user';
@@ -46,7 +47,8 @@ import ArticleDetailScreen from '../screens/article/DetailScreen';
 import CommentScreen from '../screens/comment/CommentScreen';
 import PostDetailScreen from '../screens/post';
 import TagDetailScreen from '../screens/tagDetail';
-import VideoListScreen from '../screens/video';
+import TagVideoListScreen from '../screens/video/TagVideoList';
+import SearchedVideoListScreen from '../screens/video/SearchedVideoList';
 
 // category
 import CategoryScreen from '../screens/category';
@@ -161,6 +163,12 @@ export default {
     ModifyPassword: {
         component: ModifyPassword,
     },
+    Search: {
+        component: SearchScreen,
+    },
+    SearchVideo: {
+        component: SearchVideoScreen,
+    },
     文章详情: {
         component: ArticleDetailScreen,
     },
@@ -176,8 +184,11 @@ export default {
     TagDetail: {
         component: TagDetailScreen,
     },
-    VideoList: {
-        component: VideoListScreen,
+    TagVideoList: {
+        component: TagVideoListScreen,
+    },
+    SearchedVideoList: {
+        component: SearchedVideoListScreen,
     },
     Chat: {
         component: ChatScreen,
@@ -236,8 +247,5 @@ export default {
     },
     UserBlockList: {
         component: UserBlockScreen,
-    },
-    Search: {
-        component: SearchScreen,
     },
 };
