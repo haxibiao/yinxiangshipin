@@ -1,77 +1,94 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useCallback, useEffect } from 'react';
 import { StyleSheet, View, Text, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
-import { Iconfont } from 'components';
+import { Iconfont, Row } from '@src/components';
+import { Storage, Keys } from '@src/store';
 
-const SearchRecord = ({ data, remove, search }) => {
+const SearchRecord = ({ searchKeyword, search, color = '#2b2b2b' }) => {
+    const [recordData, setRecordData] = useState([]);
+
+    const getRecord = useCallback(async () => {
+        const record = await Storage.getItem(Keys.searchRecord);
+        console.log('record', record);
+        if (Array.isArray(record)) {
+            setRecordData(record);
+        }
+    }, []);
+
+    const addRecord = useCallback((newKeyword) => {
+        setRecordData((oldData) => {
+            const newData = new Set([newKeyword, ...oldData]);
+            Storage.setItem(Keys.searchRecord, [...newData]);
+            return [...newData];
+        });
+    }, []);
+
+    const removeRecordItem = useCallback((keyword) => {
+        setRecordData((oldData) => {
+            const newData = new Set(oldData);
+            newData.delete(keyword);
+            Storage.setItem(Keys.searchRecord, [...newData]);
+            return [...newData];
+        });
+    }, []);
+
+    useEffect(() => {
+        if (searchKeyword) {
+            addRecord(searchKeyword);
+        }
+    }, [searchKeyword]);
+
+    useEffect(() => {
+        getRecord();
+    }, []);
+
     const recordList = useMemo(() => {
-        if (Array.isArray(data)) {
-            return data.map(name => {
+        if (Array.isArray(recordData)) {
+            return recordData.map((keyword) => {
                 return (
-                    <TouchableWithoutFeedback key={name} onPress={() => search(name)}>
-                        <View style={styles.categoryItem}>
-                            <Text style={styles.categoryName}>{name}</Text>
+                    <TouchableWithoutFeedback key={keyword} onPress={() => search(keyword)}>
+                        <View style={styles.keywordItem}>
+                            <Row>
+                                <Iconfont name="shizhong" size={font(16)} color={color} />
+                                <Text style={[styles.keywordText, { color }]}>{keyword}</Text>
+                            </Row>
+                            <TouchableOpacity
+                                style={styles.closeBtn}
+                                activeOpacity={0.9}
+                                onPress={() => removeRecordItem(keyword)}>
+                                <Iconfont name="guanbi1" size={font(16)} color={color} />
+                            </TouchableOpacity>
                         </View>
                     </TouchableWithoutFeedback>
                 );
             });
         }
-    }, [data]);
+    }, [recordData]);
 
-    return (
-        <View style={styles.container}>
-            <View style={styles.title}>
-                <Text style={styles.titleText}>搜索历史</Text>
-                <TouchableOpacity style={styles.deleteButton} onPress={remove}>
-                    <Iconfont name="delete" color={'#999999'} size={pixel(20)} />
-                </TouchableOpacity>
-            </View>
-            <View style={styles.categoryWrap}>{recordList}</View>
-        </View>
-    );
+    return <View style={styles.container}>{recordList}</View>;
 };
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        paddingTop: pixel(10),
     },
-    deleteButton: {
-        paddingVertical: pixel(5),
-        paddingLeft: pixel(10),
-    },
-    title: {
+    keywordItem: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginTop: pixel(5),
-        paddingHorizontal: pixel(15),
-    },
-    titleText: {
-        color: '#666666',
-        fontSize: font(14),
-        // fontWeight: 'bold',
-    },
-    categoryWrap: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        marginTop: pixel(10),
-        marginLeft: pixel(20),
-    },
-    categoryItem: {
-        alignItems: 'center',
-        backgroundColor: Theme.groundColour,
         borderRadius: pixel(14),
-        flexDirection: 'row',
-        height: pixel(30),
-        minWidth: pixel(44),
-        justifyContent: 'center',
-        marginRight: pixel(20),
-        marginBottom: pixel(10),
-        paddingHorizontal: pixel(10),
+        paddingVertical: pixel(12),
+        paddingLeft: pixel(15),
     },
-    categoryName: {
-        color: '#363636',
-        fontSize: font(13),
+    keywordText: {
+        color: '#b2b2b2',
+        fontSize: font(15),
+        marginLeft: pixel(6),
+    },
+    closeBtn: {
+        alignSelf: 'stretch',
+        justifyContent: 'center',
+        paddingHorizontal: pixel(15),
     },
 });
 

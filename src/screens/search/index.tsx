@@ -20,7 +20,6 @@ const Search = () => {
 
     const [keyword, setKeyword] = useState('');
     const [textValue, setTextValue] = useState('');
-    const [recordData, setRecordData] = useState([]);
     const [searchVisible, toggleSearchVisible] = useState(false);
 
     const trimmedValue = textValue && textValue.trim();
@@ -32,13 +31,12 @@ const Search = () => {
         setTextValue(kw);
         setKeyword(kw);
         toggleSearchVisible(true);
-    }, 400);
+    }, 100);
 
     const searchBtnOnPress = __.debounce(() => {
-        addRecord(trimmedValue);
         setKeyword(trimmedValue);
         toggleSearchVisible(true);
-    }, 400);
+    }, 100);
 
     const onChangeText = useCallback(
         (text) => {
@@ -65,39 +63,15 @@ const Search = () => {
         toggleSearchVisible(false);
     }, []);
 
-    const addRecord = useCallback((newKeyword) => {
-        setRecordData((prv) => {
-            const newData = [...new Set([newKeyword, ...prv])].slice(0, 12);
-            Storage.setItem(Keys.searchRecord, newData);
-            return newData;
-        });
-    }, []);
-
-    const getRecord = useCallback(async () => {
-        const record = await Storage.getItem(Keys.searchRecord);
-        if (record) {
-            setRecordData(record);
-        }
-    }, []);
-
-    const removeRecord = useCallback(() => {
-        setRecordData([]);
-        Storage.removeItem(Keys.searchRecord);
-    }, []);
-
-    useEffect(() => {
-        getRecord();
-    }, []);
-
     const Record = useMemo(() => {
-        return <SearchRecord data={recordData} remove={removeRecord} search={search} />;
-    }, [recordData]);
+        return <SearchRecord searchKeyword={keyword} search={search} />;
+    }, [keyword]);
 
     const KeywordsList = useMemo(() => {
         return (
             <View style={styles.listHeader}>
                 <Text style={styles.searchText}>
-                    包含"<Text style={styles.highlightText}>{textValue}</Text>"的动态和问答
+                    搜索包含"<Text style={styles.highlightText}>{textValue}</Text>"的动态和问答
                 </Text>
             </View>
         );
