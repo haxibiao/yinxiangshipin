@@ -4,6 +4,6 @@ export { GQL, useBetterMutation, useLikeMutation, useDeleteMutation, exceptionCa
 export { AnimationLike, Commodity } from './widget';
 export { mergeProperty } from './helper';
 export { Body } from './article';
-export { VideoList, VideoItem, MediaItem, DrawVideoList, DrawVideoStore } from './video';
+export { VideoList, VideoItem, DrawVideoList, DrawVideoStore } from './video';
 export { PostContent, PostItem, CaptureContent } from './post';
 export { shareClipboardLink, useClipboardLink, useResolveVideo, useResolveContent, VideoCaptureData } from './creation';

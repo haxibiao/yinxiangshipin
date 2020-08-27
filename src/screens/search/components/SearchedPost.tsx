@@ -18,6 +18,7 @@ const index = observer(({ keyword }) => {
                 variables: {
                     query: keyword,
                 },
+                fetchPolicy: 'network-only',
             }}
             renderItem={renderItem}
             ItemSeparatorComponent={() => <View style={styles.separator} />}
@@ -29,7 +30,7 @@ const index = observer(({ keyword }) => {
 const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
-        paddingBottom: Theme.BOTTOM_HEIGHT,
+        paddingBottom: Theme.HOME_INDICATOR_HEIGHT,
     },
     separator: {
         marginHorizontal: pixel(14),

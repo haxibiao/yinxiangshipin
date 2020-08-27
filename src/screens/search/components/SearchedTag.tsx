@@ -29,6 +29,7 @@ const index = observer(({ keyword }) => {
                     query: keyword,
                     count: 10,
                 },
+                fetchPolicy: 'network-only',
             }}
             renderItem={renderItem}
             contentContainerStyle={styles.container}

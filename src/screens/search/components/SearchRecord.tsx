@@ -77,7 +77,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         borderRadius: pixel(14),
-        paddingVertical: pixel(12),
+        height: pixel(46),
+        paddingVertical: pixel(5),
         paddingLeft: pixel(15),
     },
     keywordText: {

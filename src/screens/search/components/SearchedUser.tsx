@@ -8,6 +8,7 @@ import { observable } from 'mobx';
 const index = observer(({ keyword }) => {
     const { loading, error, data, fetchMore, refetch } = useQuery(GQL.searchUsersQuery, {
         variables: { keyword, type: 'POST', page: 1 },
+        fetchPolicy: 'network-only',
     });
     let articles = useMemo(() => Helper.syncGetter('searchUsers.data', data), [data]);
     if (Array.isArray(articles)) {
