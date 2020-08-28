@@ -45,6 +45,7 @@ class DrawVideoStore {
     @observable public loading: boolean = false;
     @observable public hasMore: boolean = true;
     @observable public refreshing: boolean = false;
+    @observable public visibility: boolean = true;
     @observable public viewableItemIndex: number = 0;
     @observable public commentBody = '';
     // 激励视频逻辑

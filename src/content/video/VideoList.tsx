@@ -84,25 +84,26 @@ export default observer(() => {
         };
     }, []);
 
-    // useAdReward({ focus: videoStore.currentItem.isAdPosition, store: videoStore });
-
-    // const WatchReward = useMemo(() => {
-    //     if (!appStore.enableWallet) {
-    //         return (
-    //             <View style={styles.rewardProgress}>
-    //                 {!userStore.login && (
-    //                     <ImageBackground
-    //                         source={require('@app/assets/images/chat_left.png')}
-    //                         style={styles.overlayTip}
-    //                         resizeMode={'stretch'}>
-    //                         <Text style={styles.overlayTipText}>登录后看视频赚钱、边看边赚</Text>
-    //                     </ImageBackground>
-    //                 )}
-    //                 <RewardProgress store={videoStore} />
-    //             </View>
-    //         );
-    //     }
-    // }, [appStore.enableWallet, userStore.login]);
+    useEffect(() => {
+        const navWillFocusListener = navigation.addListener('focus', () => {
+            videoStore.visibility = true;
+        });
+        const navWillBlurListener = navigation.addListener('blur', () => {
+            videoStore.visibility = false;
+        });
+        const videoBlurListener = DeviceEventEmitter.addListener('videoFocus', () => {
+            videoStore.visibility = true;
+        });
+        const videoFocusListener = DeviceEventEmitter.addListener('videoBlur', () => {
+            videoStore.visibility = false;
+        });
+        return () => {
+            navWillFocusListener();
+            navWillBlurListener();
+            videoBlurListener.remove();
+            videoFocusListener.remove();
+        };
+    }, []);
 
     return (
         <View style={styles.container}>

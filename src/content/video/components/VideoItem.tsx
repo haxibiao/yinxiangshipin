@@ -15,7 +15,7 @@ import VideoOperation from './VideoOperation';
 
 export default observer((props) => {
     const { media, index, store } = props;
-    const viewable = index === store.viewableItemIndex;
+    const viewable = index === store.viewableItemIndex && store.visibility;
     const shown = useMemo(() => {
         // 播放器的显示区间
         if ((store.viewableItemIndex > index - 2 && store.viewableItemIndex < index + 3) || viewable) {

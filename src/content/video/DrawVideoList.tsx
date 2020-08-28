@@ -88,6 +88,27 @@ export default observer(({ store, initialIndex, getVisibleItem, fetchData }) => 
         };
     }, []);
 
+    useEffect(() => {
+        const navWillFocusListener = navigation.addListener('focus', () => {
+            store.visibility = true;
+        });
+        const navWillBlurListener = navigation.addListener('blur', () => {
+            store.visibility = false;
+        });
+        const videoBlurListener = DeviceEventEmitter.addListener('videoFocus', () => {
+            store.visibility = true;
+        });
+        const videoFocusListener = DeviceEventEmitter.addListener('videoBlur', () => {
+            store.visibility = false;
+        });
+        return () => {
+            navWillFocusListener();
+            navWillBlurListener();
+            videoBlurListener.remove();
+            videoFocusListener.remove();
+        };
+    }, []);
+
     return (
         <View style={styles.container}>
             <View style={styles.listContainer}>

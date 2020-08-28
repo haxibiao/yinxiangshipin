@@ -36,6 +36,7 @@ class DrawVideoStore {
     @observable public status: Status = '';
     @observable public fullVideoHeight: number = Device.HEIGHT;
     @observable public data: VideoItem[] = [];
+    @observable public visibility: boolean = true;
     @observable public viewableItemIndex: number = 0;
     @observable public commentBody = '';
 

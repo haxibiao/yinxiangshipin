@@ -1,5 +1,5 @@
 import React, { useRef, useMemo, useState, useCallback, useEffect, useImperativeHandle } from 'react';
-import { StyleSheet, View, TouchableWithoutFeedback, DeviceEventEmitter } from 'react-native';
+import { StyleSheet, View, TouchableWithoutFeedback } from 'react-native';
 import { Iconfont } from '@src/components';
 import { useNavigation } from '@react-navigation/native';
 import Video from 'react-native-video';
@@ -80,24 +80,6 @@ export default React.forwardRef((props: Props, ref) => {
 
     useEffect(() => {
         setPause(!viewable);
-        const navWillFocusListener = navigation.addListener('focus', () => {
-            setPause(!viewable);
-        });
-        const navWillBlurListener = navigation.addListener('blur', () => {
-            setPause(true);
-        });
-        const videoBlurListener = DeviceEventEmitter.addListener('videoBlur', () => {
-            setPause(true);
-        });
-        const videoFocusListener = DeviceEventEmitter.addListener('videoFocus', () => {
-            setPause(!viewable);
-        });
-        return () => {
-            navWillFocusListener();
-            navWillBlurListener();
-            videoBlurListener.remove();
-            videoFocusListener.remove();
-        };
     }, [viewable]);
 
     return (
