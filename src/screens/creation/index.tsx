@@ -53,7 +53,7 @@ export default (props: any) => {
             return false;
         }
         return true;
-    }, [formData]);
+    }, [formData, sharedVideo]);
 
     const createPost = useCallback(async () => {
         Loading.show();
@@ -140,6 +140,9 @@ export default (props: any) => {
                     <SharedVideoContent
                         client={appStore.client}
                         onSuccess={(video) => {
+                            if (video?.title) {
+                                changeBody(video?.title);
+                            }
                             setSharedVideo(video);
                             onClose();
                         }}
@@ -169,7 +172,7 @@ export default (props: any) => {
     const selectTag = useCallback(
         (tag) => {
             const isAdded = __.find(tags, function (item) {
-                return item.id === tag.id || item.name === tag.name;
+                return item.name === tag.name;
             });
             if (!isAdded) {
                 const newTags = [tag, ...tags];
@@ -245,6 +248,7 @@ export default (props: any) => {
                     <TextInput
                         style={styles.bodyInput}
                         onChangeText={changeBody}
+                        value={formData.body}
                         multiline={true}
                         maxLength={100}
                         textAlignVertical="top"
