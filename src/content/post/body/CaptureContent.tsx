@@ -82,7 +82,7 @@ export default observer(
                         contentContainerStyle={styles.tagsContainer}
                         showsHorizontalScrollIndicator={false}
                         horizontal={true}>
-                        {data.slice(0, 3).map((tag, index) => {
+                        {data.map((tag, index) => {
                             return (
                                 <TouchableWithoutFeedback onPress={() => navigation.navigate('TagDetail', { tag })}>
                                     <View key={tag.id} style={styles.tagItem}>
@@ -241,14 +241,14 @@ const styles = StyleSheet.create({
         borderRadius: pixel(6),
     },
     tagsContainer: {
-        paddingTop: pixel(13),
         paddingRight: pixel(10),
     },
     tagItem: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        marginRight: pixel(10),
+        paddingTop: pixel(13),
+        paddingRight: pixel(10),
     },
     tagName: {
         color: '#0584FF',

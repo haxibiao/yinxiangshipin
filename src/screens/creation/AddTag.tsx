@@ -28,8 +28,8 @@ export default (props) => {
                     disabled={tagName.length < 2}
                     style={[styles.addButton, tagName.length < 2 && { backgroundColor: '#b2b2b2' }]}
                     onPress={() => {
-                        selectTag({ name: tagName });
                         onClose();
+                        selectTag({ name: tagName });
                     }}>
                     <Text style={styles.btnText}>添加</Text>
                 </TouchableOpacity>

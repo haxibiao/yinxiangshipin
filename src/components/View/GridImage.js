@@ -34,7 +34,7 @@ class GridImage extends Component<Props> {
 
     imagesLayout() {
         const { gridWidth } = this.state;
-        const { images, style, gridStyle, gap = pixel(5) } = this.props;
+        const { images, style, gridStyle, gap = pixel(4) } = this.props;
         const imagesData = images?.slice(0, 9) || [];
         const imageSize = Math.ceil((gridWidth - gap * 2) / 3);
         const defaultImageStyle = { width: imageSize, height: imageSize, ...gridStyle };

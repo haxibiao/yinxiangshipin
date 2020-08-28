@@ -92,7 +92,7 @@ export default React.forwardRef(function ContentList(
                 break;
         }
         if (ListEmptyComponent instanceof Function) {
-            return ListEmptyComponent({ loading, error, data: listData });
+            return ListEmptyComponent({ status });
         } else if (status) {
             return <ContentStatus status={status} refetch={status === 'error' ? refetch : undefined} />;
         } else {

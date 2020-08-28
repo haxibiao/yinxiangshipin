@@ -8,7 +8,7 @@ import { NavBarHeader } from '@src/components';
 import { userStore } from '@src/store';
 import { count } from '@src/common';
 import { Overlay } from 'teaset';
-import AddTagForm from './AddTagForm';
+import AddTag from './AddTag';
 
 const TagItem = (props) => {
     const { tagData, selectTag, navigation } = props;
@@ -34,18 +34,22 @@ export default () => {
         return route.params?.selectTag;
     }, []);
 
-    const overlayKey = useRef();
-    const closeAddTagModal = useCallback(() => {
-        Overlay.hide(overlayKey.current);
-        navigation.goBack();
-    }, []);
     const openAddTagModal = useCallback(() => {
+        let overlayRef;
         const Operation = (
-            <Overlay.PopView style={{ alignItems: 'center', justifyContent: 'center' }}>
-                <AddTagForm selectTag={selectTag} onClose={closeAddTagModal} />
+            <Overlay.PopView
+                style={{ alignItems: 'center', justifyContent: 'center' }}
+                ref={(ref) => (overlayRef = ref)}>
+                <AddTag
+                    selectTag={selectTag}
+                    onClose={() => {
+                        overlayRef.close();
+                        navigation.goBack();
+                    }}
+                />
             </Overlay.PopView>
         );
-        overlayKey.current = Overlay.show(Operation);
+        Overlay.show(Operation);
     }, [selectTag]);
 
     const { data: userTagsData } = useQuery(GQL.userTags, {

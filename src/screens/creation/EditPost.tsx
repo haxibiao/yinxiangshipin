@@ -89,7 +89,7 @@ export default (props: any) => {
     const selectTag = useCallback(
         (tag) => {
             const isAdded = __.find(tags, function (item) {
-                return item.id === tag.id || item.name === tag.name;
+                return item.name === tag.name;
             });
             if (!isAdded) {
                 const newTags = [tag, ...tags];
@@ -109,7 +109,7 @@ export default (props: any) => {
 
     const renderTagNames = useMemo(() => {
         if (Array.isArray(tags)) {
-            return tags.slice(0, 3).map((tag, index) => {
+            return tags.map((tag, index) => {
                 return (
                     <View key={tag?.id || tag?.name} style={styles.tagItem}>
                         <Iconfont name="biaoqian" size={font(15)} color="#fff" style={{ marginRight: pixel(4) }} />
