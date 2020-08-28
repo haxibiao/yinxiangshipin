@@ -21,7 +21,10 @@ export const VideoCaptureData = ({ client, shareLink, shareBody, onSuccess, onFa
 
     const resolveContentSuccess = useCallback(
         async (video) => {
-            Loading.show('视频上传中');
+            Loading.show('视频收藏中');
+            // console.log('====================================');
+            // console.log('createPostContent', 'body：', body, 'qcvod_fileid：', video?.id, 'share_link：', shareLink);
+            // console.log('====================================');
             const [error, res] = await exceptionCapture(() =>
                 client.mutate({
                     mutation: GQL.createPostContent,

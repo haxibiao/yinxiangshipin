@@ -30,16 +30,16 @@ export const useResolveContent = ({ shareBody, onSuccess, onFailed }: Props) => 
                 onStarted: () => null,
                 onProcess: (progress: number) => {},
                 onCompleted: (data: any) => {
-                    // console.log('onCompleted data', data);
                     if (data.video_id) {
                         Loading.hide();
                         // console.log('====================================');
-                        // console.log('uploadVideo onSuccess', shareBody?.url, data.video_id);
+                        // console.log('uploadVideo onSuccess', shareBody, data.video_id);
                         // console.log('====================================');
                         onSuccess({
                             id: data.video_id,
                             path: shareBody?.url,
                             cover: shareBody?.cover,
+                            title: shareBody?.title,
                         });
                     } else {
                         Loading.hide();
@@ -78,7 +78,7 @@ export const useResolveContent = ({ shareBody, onSuccess, onFailed }: Props) => 
                         .then((fileId) => {
                             Loading.hide();
                             // console.log('====================================');
-                            // console.log('getQCVodFileId onSuccess', shareBody?.url, data.video_id);
+                            // console.log('getQCVodFileId onSuccess', path, shareBody, fileId);
                             // console.log('====================================');
                             onSuccess({
                                 id: fileId,
@@ -89,6 +89,9 @@ export const useResolveContent = ({ shareBody, onSuccess, onFailed }: Props) => 
                         })
                         .catch((err) => {
                             Loading.hide();
+                            // console.log('====================================');
+                            // console.log('getQCVodFileId fail , to uploadVideo', path);
+                            // console.log('====================================');
                             uploadVideo(path);
                         });
                 })
@@ -130,7 +133,9 @@ function getQCVodFileId(videoPath: string): Promise<string> {
 function downloadVideo(url: string, title: string): Promise<string> {
     title = String(title || new Date().getTime()).trim();
     const path: string = FILE_PATH + '/' + title + '.mp4';
-
+    // console.log('====================================');
+    // console.log('downloadVideo', url, title);
+    // console.log('====================================');
     return new Promise((resolve, reject) => {
         fs.exists(path)
             .then((exist) => {
@@ -146,7 +151,7 @@ function downloadVideo(url: string, title: string): Promise<string> {
     });
 
     function startDownload(resolve: (p?: any) => any, reject: (p?: any) => any) {
-        Loading.show('正在下载分享视频');
+        Loading.show('视频下载中');
         RNFetchBlob.config({
             fileCache: true,
             path,
