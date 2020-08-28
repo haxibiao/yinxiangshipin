@@ -14,21 +14,20 @@ import { ad } from 'react-native-ad';
 function App() {
     const appLunch = useRef(true);
 
-    // 启动前，初始化Ad
-    ad.init({
-        appid: store.adStore.tt_appid,
-        app: DisplayName,
-    });
-
-    // 启动个开屏广告
-    ad.startSplash({
-        appid: store.adStore.tt_appid,
-        codeid: store.adStore.codeid_splash,
-    });
-
     if (appLunch.current) {
         Orientation.lockToPortrait();
         SplashScreen.hide();
+        // 启动前，初始化Ad
+        ad.init({
+            appid: store.adStore.tt_appid,
+            app: DisplayName,
+        });
+
+        // 启动个开屏广告
+        ad.startSplash({
+            appid: store.adStore.tt_appid,
+            codeid: store.adStore.codeid_splash,
+        });
         appLunch.current = false;
     }
 
