@@ -79,7 +79,7 @@ export default observer((props: any) => {
         ({ item, index }) => {
             let cover;
             if (item?.video?.id) {
-                cover = item?.video?.dynamic_cover || media?.video?.cover;
+                cover = item?.video?.dynamic_cover || item?.video?.cover;
             } else {
                 cover = item?.images?.['0']?.url;
             }
