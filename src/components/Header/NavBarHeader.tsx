@@ -1,6 +1,16 @@
 import React, { useMemo } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Animated, ViewStyle, TextStyle } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import {
+    StyleSheet,
+    View,
+    Text,
+    TouchableOpacity,
+    Animated,
+    ViewStyle,
+    TextStyle,
+    StatusBar,
+    StatusBarProperties,
+} from 'react-native';
+import { useNavigation, useRoute, useIsFocused } from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 import Iconfont from '../Iconfont';
 
@@ -14,6 +24,7 @@ import Iconfont from '../Iconfont';
 }
 
 interface Props {
+    statusbarProperties: StatusBarProperties;
     navBarStyle?: ViewStyle;
     centerStyle?: ViewStyle;
     titleStyle?: TextStyle;
@@ -32,6 +43,7 @@ interface Props {
 export default (props: Props) => {
     const navigation = useNavigation();
     const {
+        statusbarProperties = {},
         navBarStyle,
         centerStyle,
         titleStyle,
@@ -124,8 +136,11 @@ export default (props: Props) => {
         }
     }, [centerComponent, centerStyle, title, titleStyle]);
 
+    const isFocused = useIsFocused();
+
     return (
         <View style={[styles.navBar, isTransparent && styles.transparent, navBarStyle]}>
+            {isFocused ? <StatusBar {...statusbarProperties} /> : null}
             <View style={styles.header}>
                 <View style={[styles.headerSide, styles.sideLeft]}>{headerLeft}</View>
                 {center}

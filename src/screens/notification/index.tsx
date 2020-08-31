@@ -1,6 +1,6 @@
 import React, { useContext, useState, useCallback, useEffect, useMemo } from 'react';
 import { ScrollView, StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
-import { PageContainer, Avatar, Badge, Row, SafeText, StatusView } from '@src/components';
+import { NavBarHeader, Avatar, Badge, Row, SafeText, StatusView } from '@src/components';
 import { GQL, useQuery } from '@src/apollo';
 import { observer, userStore, appStore } from '@src/store';
 import { FocusAwareStatusBar } from '@src/router';
@@ -45,8 +45,8 @@ export default observer((props: any) => {
     useEffect(() => {
         if (userId) {
             const navBlurListener = props.navigation.addListener('focus', (payload) => {
-                fetchUnreadQuery();
-                fetchChatsQuery();
+                fetchUnreadQuery && fetchUnreadQuery();
+                fetchChatsQuery && fetchChatsQuery();
             });
             return () => {
                 navBlurListener();
@@ -92,10 +92,14 @@ export default observer((props: any) => {
     }, [chats, loading]);
 
     return (
-        <PageContainer
-            isTopNavigator={true}
-            title={<Text style={{ fontSize: font(19), color: '#212121', fontWeight: 'bold' }}>消息</Text>}>
+        <View style={styles.container}>
             <FocusAwareStatusBar barStyle="dark-content" />
+            <NavBarHeader
+                title="消息"
+                centerStyle={{ marginHorizontal: pixel(12), justifyContent: 'flex-start' }}
+                titleStyle={{ fontSize: font(18) }}
+                hasGoBackButton={false}
+            />
             <ScrollView contentContainerStyle={styles.contentContainer}>
                 <View style={styles.notifyList}>
                     <TouchableOpacity
@@ -158,7 +162,7 @@ export default observer((props: any) => {
                 <Chats chats={chats} />
                 {PageFooter}
             </ScrollView>
-        </PageContainer>
+        </View>
     );
 });
 
@@ -173,6 +177,10 @@ export default observer((props: any) => {
 />; */
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#fff',
+    },
     contentContainer: {
         backgroundColor: Theme.groundColour,
         flexGrow: 1,

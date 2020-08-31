@@ -93,6 +93,7 @@ const index = (props: Props) => {
 
     return (
         <View style={styles.container}>
+            <StatusBar barStyle="dark-content" />
             <View style={{ flex: 1, backgroundColor: '#FFF' }}>
                 <TabView
                     averageTab={false}

@@ -1,28 +1,32 @@
-import React, { useEffect, useMemo, useCallback } from 'react';
+import React, { useRef, useEffect, useMemo, useCallback } from 'react';
 import { StyleSheet, View, Text, StatusBar } from 'react-native';
 import { observer, appStore, userStore } from '@src/store';
 import { VideoList, useClipboardLink, VideoCaptureData } from '@src/content';
 import { useApolloClient } from '@apollo/react-hooks';
 import { useBeginner } from '@src/common';
+import { NavBarHeader } from '@src/components';
 import { Overlay } from 'teaset';
 
 export default observer(() => {
     useBeginner();
 
     const [shareContent] = useClipboardLink();
+    const isShow = useRef(false);
 
     const showShareContentModal = useMemo(() => {
-        var isShow = false;
         var popViewRef;
         function onClose() {
-            popViewRef.close();
-            isShow = false;
+            popViewRef?.close();
+            isShow.current = false;
         }
         return (params) => {
-            if (!isShow) {
-                isShow = true;
+            if (!isShow.current) {
+                isShow.current = true;
                 Overlay.show(
-                    <Overlay.PopView style={styles.overlay} ref={(ref) => (popViewRef = ref)}>
+                    <Overlay.PopView
+                        style={styles.overlay}
+                        ref={(ref) => (popViewRef = ref)}
+                        onDisappearCompleted={() => (isShow.current = false)}>
                         <VideoCaptureData
                             client={appStore.client}
                             onSuccess={onClose}
@@ -50,6 +54,12 @@ export default observer(() => {
     return (
         <View style={{ flex: 1 }} onLayout={onLayout}>
             <VideoList />
+            <NavBarHeader
+                navBarStyle={styles.navBarStyle}
+                hasGoBackButton={false}
+                isTransparent={true}
+                hasSearchButton={true}
+            />
         </View>
     );
 });
@@ -58,5 +68,10 @@ const styles = StyleSheet.create({
     overlay: {
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    navBarStyle: {
+        position: 'absolute',
+        top: 0,
+        width: '100%',
     },
 });
