@@ -1,13 +1,12 @@
 import React from 'react';
 import { View, Animated, Platform, Dimensions } from 'react-native';
-import ViewPagerAndroid from '@react-native-community/viewpager';
+import ViewPager from '@react-native-community/viewpager';
 import TabBar from './TabBar';
 import { TabViewProps, TabProps, TABVIEW_TABDIDCLICK, TABVIEW_BECOME_RESPONDER } from './TabViewProps';
 
 const wh = Dimensions.get('window').height;
 
-const AnimatedViewPagerAndroid =
-    Platform.OS === 'android' ? Animated.createAnimatedComponent(ViewPagerAndroid) : undefined;
+const AnimatedViewPager = Platform.OS === 'android' ? Animated.createAnimatedComponent(ViewPager) : undefined;
 
 export default class TabView extends React.PureComponent {
     constructor(props) {
@@ -214,7 +213,7 @@ export default class TabView extends React.PureComponent {
             );
         } else {
             return (
-                <AnimatedViewPagerAndroid
+                <AnimatedViewPager
                     ref={(_ref) => (this.androidPager = _ref)}
                     key={this.state.tabs.length}
                     style={{ flex: 1 }}
@@ -237,7 +236,7 @@ export default class TabView extends React.PureComponent {
                         },
                     )}>
                     {this.getScene()}
-                </AnimatedViewPagerAndroid>
+                </AnimatedViewPager>
             );
         }
     }
@@ -246,9 +245,11 @@ export default class TabView extends React.PureComponent {
      * 获取标签子页面
      */
     getScene() {
-        const { children, renderScrollHeader } = this.props;
+        let { children, renderScrollHeader } = this.props;
         const { sceneWidth, displayKeys, currentIndex, tabs } = this.state;
-
+        if (!Array.isArray(children)) {
+            children = [children];
+        }
         return tabs.map((item, index) => {
             const key = this.makeSceneKey(item, index);
             const display = this.sceneKeyIsDisplay(displayKeys, key);
