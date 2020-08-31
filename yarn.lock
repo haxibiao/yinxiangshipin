@@ -1258,10 +1258,10 @@
   resolved "https://registry.yarnpkg.com/@react-native-community/toolbar-android/-/toolbar-android-0.1.0-rc.2.tgz#86cae655836afacc52d4063062cc59837d1a8640"
   integrity sha512-UCblqsitOcoYxVc6QzcaqCKogeRnePPMw7cbGvW5GI/GXIwQel8Kge9d910W3MUPUzw3pFzhIZVug6U3W067Pg==
 
-"@react-native-community/viewpager@4.1.6", "@react-native-community/viewpager@^4.1.6":
-  version "4.1.6"
-  resolved "https://registry.yarnpkg.com/@react-native-community/viewpager/-/viewpager-4.1.6.tgz#788f401f883929e8ac3698e328caef40b146f36e"
-  integrity sha512-zNPQlgrPSB4JHT7w+kB7tTNsbP8H+Tqg1m+AszSArHCwSK+4dl1mgUt7hDd6XX3TTXpH2CdDsRx2cmJTTAweXw==
+"@react-native-community/viewpager@3.3.0":
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/@react-native-community/viewpager/-/viewpager-3.3.0.tgz#e613747a43a31a6f3278f817ba96fdaaa7941f23"
+  integrity sha512-tyzh79l4t/hxiyS9QD3LRmWMs8KVkZzjrkQ8U8+8To1wmvVCBtp8BenvNsDLTBO7CpO/YmiThpmIdEZMr1WuVw==
 
 "@react-navigation/bottom-tabs@^5.8.0":
   version "5.8.0"
@@ -7271,6 +7271,15 @@ react-native-screens@^2.10.1:
   resolved "https://registry.yarnpkg.com/react-native-screens/-/react-native-screens-2.10.1.tgz#06d22fae87ef0ce51c616c34a199726db1403b95"
   integrity sha512-Z2kKSk4AwWRQNCBmTjViuBQK0/Lx0jc25TZptn/2gKYUCOuVRvCekoA26u0Tsb3BIQ8tWDsZW14OwDlFUXW1aw==
 
+react-native-scrollable-tab-view@haxibiao/react-native-scrollable-tab-view:
+  version "1.0.1"
+  resolved "https://codeload.github.com/haxibiao/react-native-scrollable-tab-view/tar.gz/b3cf2eb758dba7ed293f8fe3f31dbabd77c9c9d4"
+  dependencies:
+    "@react-native-community/viewpager" "3.3.0"
+    create-react-class "^15.6.2"
+    prop-types "^15.6.0"
+    react-timer-mixin "^0.13.3"
+
 react-native-shadow@^1.2.2:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/react-native-shadow/-/react-native-shadow-1.2.2.tgz#08991cd14b71e32f2fc6363911c139d231949a66"
@@ -7337,6 +7346,10 @@ react-native-video@^5.0.0:
     keymirror "^0.1.1"
     prop-types "^15.5.10"
     shaka-player "^2.4.4"
+
+"react-native-vod@git+http://code.haxibiao.cn/packages/react-native-vod.git":
+  version "1.0.4"
+  resolved "git+http://code.haxibiao.cn/packages/react-native-vod.git#f7ccaa49cc06b5545e07a8ceb2b6ccbc142cc359"
 
 react-native-webp-format@^1.1.2:
   version "1.1.2"
