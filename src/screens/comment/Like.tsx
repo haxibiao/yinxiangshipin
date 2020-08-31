@@ -39,7 +39,9 @@ export default observer((props: Props) => {
         if (TOKEN) {
             comment.liked ? comment.likes-- : comment.likes++;
             comment.liked = !comment.liked;
-            likeHandler();
+            if (comment.id > 0) {
+                likeHandler();
+            }
         } else {
             navigation.navigate('Login');
         }
