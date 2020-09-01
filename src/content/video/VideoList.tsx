@@ -76,11 +76,11 @@ export default observer(() => {
     //                 content: '遇到未知错误，领取失败',
     //             });
     //         } else {
-    //             const contribute = Helper.syncGetter('data.reward.contribute', res);
+    //             const gold = Helper.syncGetter('data.reward.gold', res);
 
     //             RewardOverlay.show({
     //                 reward: {
-    //                     contribute: contribute,
+    //                     gold: gold,
     //                 },
     //                 title: '领取点击详情奖励成功',
     //             });

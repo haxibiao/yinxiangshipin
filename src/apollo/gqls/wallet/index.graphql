@@ -91,11 +91,6 @@ query userContributesQuery($user_id: Int!, $page: Int) {
     }
 }
 
-# 判断贡献是否足够
-query canWithdrawalsQuery($amount: Float!) {
-    canWithdrawals(amount: $amount)
-}
-
 # 提现金额
 query getWithdrawAmountList {
     getWithdrawAmountList {

@@ -9,7 +9,7 @@ import { authNavigate } from '@src/router';
 
 interface Reward {
     gold?: number;
-    contribute?: number;
+    energy?: number;
 }
 
 interface Props {
@@ -26,7 +26,7 @@ const rewardTitle = (rewardList: { value: any; name: any }[]) => {
 
 const RewardOverlay = (props) => {
     const { reward, title, type } = props;
-    const { gold, contribute } = reward;
+    const { gold, energy } = reward;
     const currentGold = userStore.me?.gold + gold;
     const [adShow, setAdShow] = useState(false);
 
@@ -37,10 +37,10 @@ const RewardOverlay = (props) => {
             image: require('@app/assets/images/icon_wallet_dmb.png'),
         },
         {
-            value: contribute || 0,
-            name: contribute ? '贡献点' : null,
+            value: energy || 0,
+            name: energy ? Config.energyAlias : null,
             image: require('@app/assets/images/diamond.png'),
-            style: styles.contributeImage,
+            style: styles.energyImage,
         },
     ];
 
@@ -48,7 +48,7 @@ const RewardOverlay = (props) => {
         return elem.value > 0;
     });
 
-    const body = rewardList.length > 1 ? '额外奖励' : title || '偷偷告诉你一个小秘密，看视频点详情更有贡献点奖励哦';
+    const body = rewardList.length > 1 ? '额外奖励' : title || '偷偷告诉你一个小秘密，看视频点详情更有奖励哦';
     return (
         <View style={styles.container}>
             <View
@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
         borderTopRightRadius: pixel(10),
         // alignItems: 'center',
     },
-    contributeImage: {
+    energyImage: {
         width: 15,
         height: 15,
         marginLeft: 3,

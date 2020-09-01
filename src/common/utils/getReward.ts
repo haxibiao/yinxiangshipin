@@ -39,7 +39,7 @@ export function getUserReward(reason: rewardReason, callback?: (a?: any) => any)
                 RewardOverlay.show({
                     reward: {
                         gold: reward.gold,
-                        contribute: reward.contribute,
+                        energy: reward.energy,
                     },
                     title: '观看视频奖励领取成功',
                 });
@@ -78,7 +78,7 @@ export function getTaskReward(id) {
                 RewardOverlay.show({
                     reward: {
                         gold: rewardTask.reward_info.gold,
-                        contribute: rewardTask.reward_info.contribute,
+                        energy: rewardTask.reward_info.energy,
                     },
                     title: '任务奖励领取成功',
                 });

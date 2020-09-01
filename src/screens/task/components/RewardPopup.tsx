@@ -8,7 +8,7 @@ import { GQL } from '@src/apollo';
 type rewardObj = {
     message: string | null;
     gold: number | null;
-    contribute: number | null;
+    energy: number | null;
 };
 
 type Props = {
@@ -37,8 +37,8 @@ export default (props: Props) => {
                         <Text numberOfLines={1}>{reward.message || '完成任务获得奖励！'}</Text>
                         <Text numberOfLines={1}>
                             {(reward.gold ? Config.goldAlias + ' +' + reward.gold : '') +
-                                (reward.gold && reward.contribute ? '，' : '') +
-                                (reward.contribute ? `${Config.limitAlias} +` + reward.contribute : '')}
+                                (reward.gold && reward.energy ? '，' : '') +
+                                (reward.energy ? `${Config.energyAlias} +` + reward.energy : '')}
                         </Text>
                     </View>
                 </Row>

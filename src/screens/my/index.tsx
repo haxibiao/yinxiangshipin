@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { StyleSheet, View, ScrollView, Text, Image, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
-import { observer, appStore, userStore, Keys, Storage } from '@src/store';
+import { observer, adStore, userStore, Keys, Storage } from '@src/store';
 import { PageContainer, Iconfont, Row, Avatar } from '@src/components';
 import { FocusAwareStatusBar, authNavigate, useNavigation } from '@src/router';
 import { GQL, useQuery, useApolloClient } from '@src/apollo';
@@ -142,7 +142,11 @@ export default observer((props: any) => {
                         </View>
                     </View>
                 </TouchableWithoutFeedback>
-
+                {userStore.login && adStore.enableWallet && (
+                    <TouchableWithoutFeedback onPress={() => navigation.navigate('TaskCenter')}>
+                        <Image style={styles.taskEntry} source={require('@app/assets/images/task_entry.png')} />
+                    </TouchableWithoutFeedback>
+                )}
                 <View style={styles.columnItemsWrap}>
                     <TouchableOpacity
                         style={styles.columnItem}
@@ -207,6 +211,8 @@ export default observer((props: any) => {
 });
 
 const parallaxBgHeight = (Device.WIDTH * 651) / 1125;
+const taskEntryWidth = Device.WIDTH - pixel(40);
+const taskEntryHeight = (taskEntryWidth * 180) / 700;
 
 const styles = StyleSheet.create({
     container: {
@@ -233,7 +239,7 @@ const styles = StyleSheet.create({
     contentContainer: {
         flexGrow: 1,
         backgroundColor: '#fff',
-        marginTop: parallaxBgHeight - pixel(20),
+        marginTop: parallaxBgHeight - (Device.isFullScreenDevice ? pixel(30) : pixel(60)),
         paddingBottom: Theme.BOTTOM_HEIGHT,
         borderTopLeftRadius: pixel(20),
         borderTopRightRadius: pixel(20),
@@ -290,6 +296,14 @@ const styles = StyleSheet.create({
         fontSize: font(20),
         lineHeight: font(22),
         fontWeight: 'bold',
+    },
+    taskEntry: {
+        marginTop: pixel(20),
+        marginBottom: -taskEntryHeight * 0.1,
+        width: taskEntryWidth,
+        height: taskEntryHeight,
+        marginHorizontal: pixel(20),
+        resizeMode: 'stretch',
     },
     columnItemsWrap: {
         marginTop: pixel(20),

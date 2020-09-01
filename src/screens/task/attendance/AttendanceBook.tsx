@@ -9,13 +9,13 @@ import * as SignedReturnOverlay from './SignedReturnOverlay';
 interface SignInReturns {
     id: any;
     gold_reward: string | number;
-    contribute_reward: string | number;
+    energy_reward: string | number;
 }
 
 const AttendanceBook = (): JSX.Element => {
     const [boxShadowHeight, setBoxShadowHeight] = useState(150);
 
-    const onLayoutEffect = useCallback(event => {
+    const onLayoutEffect = useCallback((event) => {
         setBoxShadowHeight(event.nativeEvent.layout.height);
     }, []);
 
@@ -68,7 +68,7 @@ const AttendanceBook = (): JSX.Element => {
         (returns: SignInReturns) => {
             SignedReturnOverlay.show({
                 gold: returns.gold_reward,
-                contribute: returns.contribute_reward,
+                energy: returns.energy_reward,
                 signInDays: keepCheckInDays + 1,
             });
         },

@@ -14,7 +14,7 @@ interface Props {
 let OverlayKey: any = null;
 
 const ReceiveTaskOverlay = (props: Props) => {
-    const { gold, contribute, signInDays } = props;
+    const { gold, energy, signInDays } = props;
     const currentGold = userStore.me?.gold + gold;
 
     const [adShow, setAdShow] = useState(false);
@@ -60,13 +60,13 @@ const ReceiveTaskOverlay = (props: Props) => {
                                 />
                                 <Text style={styles.rewardNumber}>+{gold}</Text>
                             </Row>
-                            {contribute > 0 && (
+                            {energy > 0 && (
                                 <Row style={{ margintLeft: pixel(15) }}>
                                     <Image
                                         source={require('@app/assets/images/diamond.png')}
                                         style={styles.rewardImage}
                                     />
-                                    <Text style={styles.rewardNumber}>+{contribute}</Text>
+                                    <Text style={styles.rewardNumber}>+{energy}</Text>
                                 </Row>
                             )}
                         </View>

@@ -66,7 +66,7 @@ export default observer((props: any) => {
                         每天凌晨自动将{Config.goldAlias}兑换为余额
                     </Text>
                     <Text style={styles.assetRate}>
-                        今日汇率：{userProfile.exchangeRate || '1000'} {Config.goldAlias} / 1元
+                        今日汇率：{userProfile.exchangeRate || '500'} {Config.goldAlias} / 1元
                     </Text>
                 </View>
             </View>

@@ -20,26 +20,26 @@ const fakeAmountListData = [
     {
         tips: '秒到账',
         amount: 1,
-        contributes: 100,
-        description: 100 + Config.limitAlias,
+        golds: 100,
+        description: 100 + Config.goldAlias,
     },
     {
         tips: '限量抢',
         amount: 3,
-        contributes: 300,
-        description: 100 + Config.limitAlias,
+        golds: 300,
+        description: 100 + Config.goldAlias,
     },
     {
         tips: '限量抢',
         amount: 5,
-        contributes: 500,
-        description: 100 + Config.limitAlias,
+        golds: 500,
+        description: 100 + Config.goldAlias,
     },
     {
         tips: '限量抢',
         amount: 10,
-        contributes: 1000,
-        description: 100 + Config.limitAlias,
+        golds: 1000,
+        description: 100 + Config.goldAlias,
     },
 ];
 
@@ -101,19 +101,19 @@ export default observer((props: any) => {
                 query: GQL.getWithdrawAmountList,
             },
         ],
-        onCompleted: data => {
+        onCompleted: (data) => {
             navigation.navigate('WithdrawApply', {
                 amount,
                 created_at: syncGetter('createWithdraw.created_at', data),
             });
         },
-        onError: error => {
+        onError: (error) => {
             Toast.show({ content: error.message.replace('GraphQL error: ', '') || '提现失败' });
         },
     });
 
     const setWithdrawAmount = useCallback(
-        value => {
+        (value) => {
             if (userProfile.balance < value) {
                 Toast.show({ content: `余额不足，去做任务吧` });
             } else if (wallet.id) {
@@ -209,16 +209,12 @@ export default observer((props: any) => {
                             </View>
                             <View style={styles.cardItem}>
                                 <View style={styles.withdrawLimit}>
-                                    <SafeText style={styles.blackText2}>今日{Config.limitAlias}：</SafeText>
-                                    <SafeText style={styles.boldBlackText2}>
-                                        {userProfile.today_contributes || 0}
-                                    </SafeText>
+                                    <SafeText style={styles.blackText2}>今日{Config.goldAlias}：</SafeText>
+                                    <SafeText style={styles.boldBlackText2}>{userProfile.today_golds || 0}</SafeText>
                                 </View>
                                 <View style={styles.withdrawLimit}>
-                                    <SafeText style={styles.blackText2}>总{Config.limitAlias}：</SafeText>
-                                    <SafeText style={styles.boldBlackText2}>
-                                        {userProfile.total_contributes || 0}
-                                    </SafeText>
+                                    <SafeText style={styles.blackText2}>总{Config.goldAlias}：</SafeText>
+                                    <SafeText style={styles.boldBlackText2}>{userProfile.total_golds || 0}</SafeText>
                                 </View>
                                 <View style={styles.withdrawLimit}>
                                     <SafeText style={styles.blackText2}>总提现：</SafeText>
@@ -237,9 +233,9 @@ export default observer((props: any) => {
                     </View>
                     <View style={styles.amountOptions}>
                         <Text style={styles.withdrawTips}>
-                            提现需要消耗相应{Config.limitAlias}，更多疑问请查看下方提示
+                            提现需要消耗相应{Config.goldAlias}，更多疑问请查看下方提示
                         </Text>
-                        {withdrawAmountData.map(data => {
+                        {withdrawAmountData.map((data) => {
                             const selected = data.amount === amount;
                             return (
                                 <View key={data.amount}>
@@ -261,7 +257,7 @@ export default observer((props: any) => {
                                                 style={styles.diamondImage}
                                             />
                                             <Text style={[styles.amountTips, selected && { color: '#34BBFF' }]}>
-                                                {data.contributes}
+                                                {data.golds}
                                             </Text>
                                         </Row>
                                     </TouchableOpacity>
@@ -278,7 +274,7 @@ export default observer((props: any) => {
                         <Text style={styles.sectionHeaderTitle}>提现方式</Text>
                     </View>
                     <View style={styles.withdrawPlatforms}>
-                        {WithdrawalPlatforms.map(data => {
+                        {WithdrawalPlatforms.map((data) => {
                             if (Device.IOS && data.type === 'WECHAT') return null;
                             return (
                                 <TouchableWithoutFeedback
@@ -322,7 +318,7 @@ export default observer((props: any) => {
                     </Text>
 
                     <Text style={styles.ruleText}>
-                        {`2、${Config.limitAlias}获取方式：点击视频广告有机率获得${Config.limitAlias}、每天前十次观看并点击激励视频有机率获得${Config.limitAlias}，点赞，评论，发布优质内容等方式都有机率获得${Config.limitAlias}。提现所需${Config.limitAlias}为：提现金额*60`}
+                        {`2、${Config.goldAlias}获取方式：点击视频广告有机率获得${Config.goldAlias}、每天前十次观看并点击激励视频有机率获得${Config.goldAlias}，点赞，评论，发布优质内容等方式都有机率获得${Config.goldAlias}。提现所需${Config.goldAlias}为：提现金额*60`}
                     </Text>
 
                     <Text style={styles.ruleText}>
