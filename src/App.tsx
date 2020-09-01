@@ -15,6 +15,7 @@ function App() {
     const appLunch = useRef(true);
 
     if (appLunch.current) {
+        appLunch.current = false;
         Orientation.lockToPortrait();
         SplashScreen.hide();
         // 启动前，初始化Ad
@@ -27,7 +28,6 @@ function App() {
             appid: store.adStore.tt_appid,
             codeid: store.adStore.codeid_splash,
         });
-        appLunch.current = false;
     }
 
     // 获取APP的开启配置(广告和钱包)
