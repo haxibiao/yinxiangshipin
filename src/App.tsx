@@ -22,7 +22,6 @@ function App() {
             appid: store.adStore.tt_appid,
             app: DisplayName,
         });
-
         // 启动个开屏广告
         ad.startSplash({
             appid: store.adStore.tt_appid,

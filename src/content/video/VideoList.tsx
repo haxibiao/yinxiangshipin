@@ -11,11 +11,12 @@ import {
     DeviceEventEmitter,
     BackHandler,
 } from 'react-native';
-import { Iconfont } from '@src/components';
+import { ad } from 'react-native-ad';
 import LottieView from 'lottie-react-native';
+import { Iconfont } from '@src/components';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { FocusAwareStatusBar } from '@src/router';
-import { observer, userStore, appStore } from '@src/store';
+import { observer, userStore, appStore, adStore } from '@src/store';
 import { GQL, useApolloClient } from '@src/apollo';
 import CommentOverlay from '@src/screens/comment/CommentOverlay';
 import DrawVideoStore from './store';
@@ -23,11 +24,6 @@ import VideoItem from './components/VideoItem';
 import RewardProgress from './components/RewardProgress';
 import useAdReward from './components/useAdReward';
 import { debounce, font, pixel } from '../helper';
-
-const config = {
-    waitForInteraction: true,
-    viewAreaCoveragePercentThreshold: 95,
-};
 
 export default observer(() => {
     const route = useRoute();
@@ -56,6 +52,87 @@ export default observer(() => {
             videoStore.viewableItemIndex = info.viewableItems[0].index;
         }
     }, []);
+
+    // const [onClickReward] = useMutation(GQL.RewardMutation, {
+    //     variables: {
+    //         reason: 'DRAW_FEED_ADVIDEO_REWARD',
+    //     },
+    //     refetchQueries: () => [
+    //         {
+    //             query: GQL.MeMetaQuery,
+    //         },
+    //     ],
+    // });
+
+    // const getReward = useCallback(async (media: any) => {
+    //     const drawFeedAdId = media.id.toString();
+    //     console.log('media :', media);
+    //     if (videoStore.getReward.indexOf(drawFeedAdId) === -1) {
+    //         videoStore.addGetRewardId(drawFeedAdId);
+    //         // 发放给精力奖励
+    //         const [error, res] = await Helper.exceptionCapture(onClickReward);
+    //         if (error) {
+    //             Toast.show({
+    //                 content: '遇到未知错误，领取失败',
+    //             });
+    //         } else {
+    //             const contribute = Helper.syncGetter('data.reward.contribute', res);
+
+    //             RewardOverlay.show({
+    //                 reward: {
+    //                     contribute: contribute,
+    //                 },
+    //                 title: '领取点击详情奖励成功',
+    //             });
+    //             rewardTrack({
+    //                 name: `点击drawFeed广告奖励`,
+    //             });
+    //         }
+    //     } else {
+    //         Toast.show({
+    //             content: `该视频已获取过点击奖励`,
+    //             duration: 2000,
+    //         });
+    //     }
+    // }, []);
+
+    const renderVideoItem = useCallback(
+        ({ item, index }) => {
+            // index > 0 && index % 5 === 0
+            // item?.is_ad && adStore.enableAd
+            if (item?.is_ad && adStore.enableAd) {
+                if (Math.abs(index - videoStore.viewableItemIndex) === 1) {
+                    return (
+                        <View style={{ height: videoStore.fullVideoHeight }}>
+                            <View style={styles.contentCover}>
+                                <Image
+                                    style={styles.curtain}
+                                    source={require('@app/assets/images/curtain.png')}
+                                    resizeMode="cover"
+                                    blurRadius={2}
+                                />
+                                <View style={styles.blackMask} />
+                            </View>
+                        </View>
+                    );
+                }
+                return (
+                    <View style={{ height: videoStore.fullVideoHeight }}>
+                        <ad.DrawFeed codeid={adStore.codeid_draw_video} onAdClick={() => {}} />
+                        {/* <View style={styles.adClickTip}>
+                            <Image
+                                source={require('@app/assets/images/click_tips.png')}
+                                style={styles.adClickTipImage}
+                            />
+                            <Text style={styles.adClickTipText}>戳一戳，领取奖励</Text>
+                        </View> */}
+                    </View>
+                );
+            }
+            return <VideoItem store={videoStore} media={item} index={index} />;
+        },
+        [videoStore.viewableItemIndex],
+    );
 
     useEffect(() => {
         if (userStore.launched) {
@@ -130,7 +207,7 @@ export default observer(() => {
                     showsVerticalScrollIndicator={false}
                     keyboardShouldPersistTaps="always"
                     keyExtractor={(item, index) => String(item.id || index)}
-                    renderItem={({ item, index }) => <VideoItem store={videoStore} media={item} index={index} />}
+                    renderItem={renderVideoItem}
                     getItemLayout={(data, index) => ({
                         length: videoStore.fullVideoHeight,
                         offset: videoStore.fullVideoHeight * index,
@@ -162,7 +239,10 @@ export default observer(() => {
                     }
                     onMomentumScrollEnd={onMomentumScrollEnd}
                     onViewableItemsChanged={getVisibleRows}
-                    viewabilityConfig={config}
+                    viewabilityConfig={{
+                        waitForInteraction: true,
+                        viewAreaCoveragePercentThreshold: 95,
+                    }}
                 />
             </View>
 
@@ -215,5 +295,35 @@ const styles = StyleSheet.create({
         bottom: pixel(380 + Theme.HOME_INDICATOR_HEIGHT),
         position: 'absolute',
         right: pixel(Theme.itemSpace),
+    },
+    contentCover: {
+        ...StyleSheet.absoluteFillObject,
+    },
+    curtain: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: undefined,
+        height: undefined,
+    },
+    blackMask: {
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: 'rgba(0,0,0,0.1)',
+    },
+    adClickTip: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        position: 'absolute',
+        right: pixel(15),
+        bottom: pixel(25),
+    },
+    adClickTipImage: {
+        width: pixel((20 * 208) / 118),
+        height: pixel(20),
+    },
+    adClickTipText: {
+        color: '#C0CBD4',
+        fontSize: font(12),
+        marginHorizontal: pixel(10),
     },
 });

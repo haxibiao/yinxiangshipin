@@ -34,7 +34,7 @@ type Status = 'loading' | 'loadMore' | 'empty' | 'error';
 class DrawVideoStore {
     public uniqueIds = {};
     @observable public status: Status = '';
-    @observable public fullVideoHeight: number = Device.HEIGHT;
+    @observable public fullVideoHeight: number = appStore.viewportHeight;
     @observable public data: VideoItem[] = [];
     @observable public visibility: boolean = true;
     @observable public viewableItemIndex: number = 0;

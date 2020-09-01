@@ -31,14 +31,10 @@ interface VideoItem {
 
 const uniqueIds = {};
 
-const calculateHeight = Device.isFullScreenDevice
-    ? Device.HEIGHT - Theme.statusBarHeight - Theme.BOTTOM_HEIGHT
-    : Device.HEIGHT;
-
 class DrawVideoStore {
     private instance: DrawVideoStore = null;
     public playedVideoIds: number[] = []; // 记录用户浏览的视频
-    @observable public fullVideoHeight: number = calculateHeight;
+    @observable public fullVideoHeight: number = appStore.viewportHeight;
     @observable public data: VideoItem[] = [];
     @observable public loaded: boolean = true;
     @observable public error: boolean = false;
@@ -58,6 +54,10 @@ class DrawVideoStore {
     }
 
     constructor(initData: VideoItem) {
+        this.fullVideoHeight = Device.isFullScreenDevice
+            ? appStore.viewportHeight - Theme.statusBarHeight - Theme.BOTTOM_HEIGHT
+            : appStore.viewportHeight;
+
         if (!DrawVideoStore.instance) {
             if (initData) {
                 this.data = [initData];

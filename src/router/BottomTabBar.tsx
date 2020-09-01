@@ -16,7 +16,7 @@ import {
 import { CommonActions, useTheme } from '@react-navigation/native';
 import { useSafeArea } from 'react-native-safe-area-context';
 import { BoxShadow } from 'react-native-shadow';
-import { observer, userStore, appStore } from '@src/store';
+import { observer, userStore, appStore, adStore } from '@src/store';
 import { Overlay } from 'teaset';
 import PublishMenu from './PublishMenu';
 
@@ -195,7 +195,7 @@ export default observer(
         const tabBarItems = React.useMemo(() => {
             return routes.map((route: any, index: number) => {
                 {
-                    /* if (!appStore.enableWallet && route.name === 'Task') {
+                    /* if (!adStore.enableWallet && route.name === 'Task') {
                     return;
                     }*/
                 }
@@ -313,10 +313,10 @@ function PublishButton({ navigation }) {
     //     };
     //     return (
     //         <TouchableOpacity style={{ flex: 1 }} onPress={hidePublish}>
-    //             <PublishMenu navigation={navigation} onMenuPress={hidePublish} enableAd={appStore.enableAd} />
+    //             <PublishMenu navigation={navigation} onMenuPress={hidePublish} enableAd={adStore.enableAd} />
     //         </TouchableOpacity>
     //     );
-    // }, [appStore.enableAd]);
+    // }, [adStore.enableAd]);
 
     const onPublishPress = React.useCallback(() => {
         if (userStore.login) {
