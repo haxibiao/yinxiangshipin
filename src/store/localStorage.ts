@@ -4,29 +4,30 @@
  */
 import AsyncStorage from '@react-native-community/async-storage';
 
-interface ItemKeys {
+export interface ItemKeys {
     me: string;
     taskGuide: string;
     appVersion: string;
     notFirstInstall: string;
     viewedVersion: any;
     createPostGuidance: string;
-    createUserAgreement: string,
-
-    ShowSplash: string;
+    agreeCreatePostAgreement: string;
+    showSplash: string;
     searchRecord: string;
+    spiderVideo: string;
 }
 
-const Keys = {
+export const Keys = {
     me: 'me',
     taskGuide: 'taskGuide',
     appVersion: 'appVersion',
     notFirstInstall: 'notFirstInstall',
     viewedVersion: 'viewedVersion',
     createPostGuidance: 'createPostGuidance',
-    createUserAgreement: 'createUserAgreement',
-    ShowSplash: 'ShowSplash',
+    agreeCreatePostAgreement: 'agreeCreatePostAgreement',
+    showSplash: 'showSplash',
     searchRecord: 'searchRecord',
+    spiderVideo: 'spiderVideo',
 } as const;
 
 async function removeItem(key: keyof ItemKeys) {
@@ -62,8 +63,6 @@ async function getItem(key: keyof ItemKeys) {
 async function clearAll() {
     return AsyncStorage.clear();
 }
-
-export { Keys };
 
 export const Storage = {
     removeItem,

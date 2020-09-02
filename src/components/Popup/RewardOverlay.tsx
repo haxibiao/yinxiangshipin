@@ -9,7 +9,7 @@ import { authNavigate } from '@src/router';
 
 interface Reward {
     gold?: number;
-    energy?: number;
+    ticket?: number;
 }
 
 interface Props {
@@ -26,7 +26,7 @@ const rewardTitle = (rewardList: { value: any; name: any }[]) => {
 
 const RewardOverlay = (props) => {
     const { reward, title, type } = props;
-    const { gold, energy } = reward;
+    const { gold, ticket } = reward;
     const currentGold = userStore.me?.gold + gold;
     const [adShow, setAdShow] = useState(false);
 
@@ -34,13 +34,13 @@ const RewardOverlay = (props) => {
         {
             value: gold || 0,
             name: gold ? Config.goldAlias : null,
-            image: require('@app/assets/images/icon_wallet_dmb.png'),
+            image: require('@app/assets/images/diamond.png'),
         },
         {
-            value: energy || 0,
-            name: energy ? Config.energyAlias : null,
-            image: require('@app/assets/images/diamond.png'),
-            style: styles.energyImage,
+            value: ticket || 0,
+            name: ticket ? Config.ticketAlias : null,
+            image: require('@app/assets/images/ticket.png'),
+            style: styles.ticketImage,
         },
     ];
 
@@ -48,7 +48,6 @@ const RewardOverlay = (props) => {
         return elem.value > 0;
     });
 
-    const body = rewardList.length > 1 ? '额外奖励' : title || '偷偷告诉你一个小秘密，看视频点详情更有奖励哦';
     return (
         <View style={styles.container}>
             <View
@@ -66,15 +65,14 @@ const RewardOverlay = (props) => {
                     />
                 </View>
                 <View style={styles.header}>
-                    <View style={{}}>
+                    <View>
                         {rewardTitle(rewardList)}
                         <View style={styles.rewardContainer}>
-                            <Text style={{ color: Theme.grey }}>{body}</Text>
+                            <Text style={{ color: Theme.grey }}>{title}</Text>
 
                             {rewardList.slice(1).map((data, index) => {
                                 return (
                                     <Fragment key={index}>
-                                        {/*  <Image source={data.image} style={data.style} /> */}
                                         <Text style={{ color: Theme.theme, paddingLeft: pixel(3) }}>
                                             {data.value}
                                             <Text style={{ color: Theme.theme }}>{data.name}</Text>
@@ -172,7 +170,7 @@ const styles = StyleSheet.create({
         borderTopRightRadius: pixel(10),
         // alignItems: 'center',
     },
-    energyImage: {
+    ticketImage: {
         width: 15,
         height: 15,
         marginLeft: 3,

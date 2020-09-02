@@ -1,11 +1,11 @@
 import { Platform } from 'react-native';
 import { observable, action, computed } from 'mobx';
 import NetInfo from '@react-native-community/netinfo';
-import { Keys, Storage } from './localStorage';
+import { Keys, Storage, ItemKeys } from './localStorage';
 
 class App {
     // 直播相关: 是否有足够的权限开启直播( 麦克风，摄像头 )
-    @observable public sufficient_permissions: boolean = false;
+    @observable sufficient_permissions: boolean = false;
 
     @observable viewportHeight: number = Device.HEIGHT;
     @observable unreadMessages: number = 0;
@@ -18,18 +18,30 @@ class App {
     @observable currentRouteName: string = '';
 
     @observable createPostGuidance: boolean = true; // 用户引导,现在默认关闭
-    @observable public createUserAgreement: boolean = true; // 用户协议观看记录,默认已看
+    @observable agreeCreatePostAgreement: boolean = false; // 用户协议观看记录
+    @observable spiderVideo: boolean = false; // 是否已经采集过
 
     constructor() {
-        NetInfo.addEventListener(this.handleConnectivityChange);
         this.recall();
+        NetInfo.addEventListener(this.handleConnectivityChange);
     }
 
     @action.bound
     async recall() {
         // 现在默认关闭
-        // this.createPostGuidance = await Storage.getItem(Keys.createPostGuidance);
-        this.createUserAgreement = (await Storage.getItem(Keys.createUserAgreement)) || false;
+        const agreeCreatePostAgreement = await Storage.getItem(Keys.agreeCreatePostAgreement);
+        const spiderVideo = await Storage.getItem(Keys.spiderVideo);
+        if (agreeCreatePostAgreement) {
+            this.agreeCreatePostAgreement = true;
+        }
+        if (spiderVideo) {
+            this.spiderVideo = true;
+        }
+    }
+
+    @action.bound
+    setAppStorage(key: keyof ItemKeys, value: any) {
+        Storage.setItem(key, value);
     }
 
     @action.bound
@@ -43,6 +55,12 @@ class App {
         this.echo = echo;
     }
 
+    // 关于直播更新 sufficient permissions
+    @action.bound
+    appSetSufficientPermissions(sufficient: boolean) {
+        this.sufficient_permissions = sufficient;
+    }
+
     // 记录已查看的版本更新提示
     @action.bound
     async updateViewedVesion(viewedVersion: string) {
@@ -51,12 +69,6 @@ class App {
 
     changeAppVersion(version: string) {
         Storage.setItem(Keys.appVersion, version);
-    }
-
-    // 关于直播更新 sufficent_permissions
-    @action.bound
-    public AppSetSufficientPermissions(sufficient: boolean) {
-        this.sufficient_permissions = sufficient;
     }
 }
 

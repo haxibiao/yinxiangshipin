@@ -217,7 +217,7 @@ export default (props: any) => {
     }, [tags]);
 
     useEffect(() => {
-        if (!appStore.createUserAgreement) {
+        if (!appStore.agreeCreatePostAgreement) {
             UserAgreementOverlay(
                 () => {
                     navigation.navigate('CreatePost');

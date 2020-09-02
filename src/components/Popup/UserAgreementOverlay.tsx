@@ -86,8 +86,8 @@ const UserAgreementOverlay = (onHide?: () => void, onRefused?: () => void) => {
                 }}>
                 <UserAgreementOverlayView
                     hide={() => {
-                        appStore.createUserAgreement = true;
-                        Storage.setItem(Keys.createUserAgreement, true);
+                        appStore.setAppStorage(Keys.agreeCreatePostAgreement, true);
+                        appStore.agreeCreatePostAgreement = true;
                         overlayRef.close();
                         onHide && onHide();
                         isShow = null;

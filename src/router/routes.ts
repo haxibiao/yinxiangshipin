@@ -25,6 +25,7 @@ import FeedbackDetail from '../screens/Feedback/FeedbackDetail';
 
 // Task
 import TaskScreen from '../screens/task';
+import SpiderVideoTaskScreen from '../screens/task/SpiderVideoTask';
 
 // find search
 import SearchScreen from '../screens/search';
@@ -241,6 +242,9 @@ export default {
     },
     TaskCenter: {
         component: TaskScreen,
+    },
+    SpiderVideoTask: {
+        component: SpiderVideoTaskScreen,
     },
     PhoneVerification: {
         component: PhoneVerification,

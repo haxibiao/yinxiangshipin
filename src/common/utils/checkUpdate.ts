@@ -56,8 +56,8 @@ export function checkUpdate(type: String) {
             brand: DeviceInfo.getBrand(),
         },
     })
-        .then(response => response.json())
-        .then(data => {
+        .then((response) => response.json())
+        .then((data) => {
             console.log('data', data[0]);
             if (type === 'autoCheck') {
                 autoUpdate(data[0] || {});
@@ -65,7 +65,7 @@ export function checkUpdate(type: String) {
                 manualUpdate(data[0] || {});
             }
         })
-        .catch(err => {
+        .catch((err) => {
             console.warn(err);
         });
 }
