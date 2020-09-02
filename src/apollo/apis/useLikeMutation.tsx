@@ -1,6 +1,6 @@
 import { useMemo, useCallback } from 'react';
-import { GQL } from './gqls';
 import { useMutation } from '@apollo/react-hooks';
+import { GQL } from '../gqls';
 
 interface Props {
     variables: any;
@@ -10,7 +10,7 @@ export const useLikeMutation = ({ variables }: Props) => {
     const [likeArticle] = useMutation(GQL.toggleLikeMutation, { variables });
 
     const likeHandler = useMemo(() => {
-        return __.debounce(async function() {
+        return __.debounce(async function () {
             const [error, result] = await Helper.exceptionCapture(likeArticle);
             console.log('====================================');
             console.log(error, result);

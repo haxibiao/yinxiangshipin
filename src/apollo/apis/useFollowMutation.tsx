@@ -1,7 +1,8 @@
 import { useMemo, useCallback } from 'react';
-import { GQL } from './gqls';
-import { errorMessage } from './errorMessage';
 import { useMutation } from '@apollo/react-hooks';
+import { GQL } from '../gqls';
+import { errorMessage } from './errorMessage';
+
 interface Props {
     options: any;
 }

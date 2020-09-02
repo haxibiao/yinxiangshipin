@@ -1,9 +1,9 @@
 import React, { useState, useRef, useCallback, useImperativeHandle } from 'react';
-import { GQL } from './gqls';
 import { useApolloClient } from '@apollo/react-hooks';
 import { userStore } from '@src/store';
+import { GQL } from '../gqls';
 
-export const useCommentMutation = props => {
+export const useCommentMutation = (props) => {
     const { commentAbleType, commentAbleId, replyComment, onCompleted, onError } = props;
     const client = useApolloClient();
 
@@ -19,7 +19,7 @@ export const useCommentMutation = props => {
             });
             if (replyComment) {
                 let findIndex;
-                const commentItem = __.find(prev.comments.data, function(comment, index) {
+                const commentItem = __.find(prev.comments.data, function (comment, index) {
                     findIndex = index;
                     return comment.id === replyComment.id;
                 });
@@ -112,12 +112,12 @@ export const useCommentMutation = props => {
                     },
                 },
             })
-            .then(result => {
+            .then((result) => {
                 if (onCompleted instanceof Function) {
                     onCompleted(replyComment);
                 }
             })
-            .catch(error => {
+            .catch((error) => {
                 const content = error.message.replace('GraphQL error: ', '') || '评论失败';
                 if (onError instanceof Function) {
                     onError(content);

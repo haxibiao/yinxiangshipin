@@ -6,7 +6,6 @@ mutation UserRewardMutation($reason: RewardEnum) {
     reward(reason: $reason) {
         gold
         ticket
-        contribute
     }
 }
 
@@ -17,10 +16,8 @@ mutation rewardTaskMutation($id: ID!) {
         reward_info {
             gold
             ticket
-            contribute
             gold_high
             ticket_high
-            contribute_high
         }
     }
 }
