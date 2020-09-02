@@ -4,7 +4,7 @@ import { authNavigate } from '@src/router';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { GiftedChat, Bubble, Send, Composer, InputToolbar } from 'hxf-react-native-gifted-chat';
 import { PageContainer, LoadingError, SpinnerLoading, HeaderRight, Header, TouchFeedback } from '@src/components';
-import { Query, Mutation, withApollo, GQL, useQuery, useMutation } from '@src/apollo';
+import { Query, Mutation, GQL, useQuery, useMutation } from '@src/apollo';
 import { appStore, userStore, observer } from '@src/store';
 import Echo from 'laravel-echo';
 
@@ -172,7 +172,7 @@ const Chat = observer((props: Props) => {
                             );
                         }
                     }}
-                    onPressAvatar={user => {
+                    onPressAvatar={(user) => {
                         user = { ...user, ...{ id: user._id } };
                         navigation.navigate('User', { user });
                     }}

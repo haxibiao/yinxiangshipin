@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, TextInput } from 'react-native';
 import { PageContainer, HxfButton, Loading } from 'components';
-import { compose, graphql, GQL, errorMessage } from '@src/apollo';
+import { GQL, errorMessage } from '@src/apollo';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useMutation } from '@apollo/react-hooks';
 

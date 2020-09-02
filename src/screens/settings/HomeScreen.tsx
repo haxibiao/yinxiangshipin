@@ -2,10 +2,9 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, ScrollView, View, TouchableOpacity, Image } from 'react-native';
 import { PageContainer, TouchFeedback, Iconfont, ListItem, ItemSeparator, PopOverlay, Avatar } from '@src/components';
 import { userStore } from '@src/store';
-import { withApollo } from '@src/apollo';
 import { checkUpdate } from '@src/common';
 
-const index = (props: any) => {
+export default (props: any) => {
     const user = props.route.params?.user;
     const { navigation } = props;
     const [me, setMe] = useState(user);
@@ -95,7 +94,7 @@ const index = (props: any) => {
                     onPress={() => checkUpdate()}
                     style={styles.listItem}
                     leftComponent={<Text style={styles.itemText}>检查更新</Text>}
-                    rightComponent={<Text style={styles.rigthText}> {Config.AppVersion} </Text>}
+                    rightComponent={<Text style={styles.rigthText}> {Config.Version} </Text>}
                 />
                 <ItemSeparator />
 
@@ -184,5 +183,3 @@ const styles = StyleSheet.create({
         fontSize: font(14),
     },
 });
-
-export default withApollo(index);

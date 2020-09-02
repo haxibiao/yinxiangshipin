@@ -24,7 +24,7 @@ class AboutUs extends Component {
                                     }}
                                 />
                                 <Text style={styles.AppVersion}>
-                                    {Config.AppName} {Config.AppVersion}
+                                    {Config.AppName} {Config.Version}
                                 </Text>
                             </View>
                             <View style={{ paddingHorizontal: pixel(20) }}>

@@ -26,7 +26,7 @@ import {
     KeyboardSpacer,
     Footer,
 } from '@src/components';
-import { Query, Mutation, compose, withApollo, graphql, GQL } from '@src/apollo';
+import { Query, Mutation, compose, GQL } from '@src/apollo';
 import { appStore } from '@src/store';
 import { observer } from 'mobx-react';
 import Comments from './Comments';
