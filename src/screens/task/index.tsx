@@ -1,13 +1,20 @@
 import React, { Component, useCallback, useContext, useState, useRef, useMemo, useEffect } from 'react';
-import { StyleSheet, View, Text, ScrollView, TouchableOpacity, Image, StatusBar } from 'react-native';
-import { PageContainer, Iconfont, Row, HxfModal, HxfButton, PopOverlay, StatusView } from '@src/components';
+import {
+    StyleSheet,
+    View,
+    Text,
+    ScrollView,
+    TouchableOpacity,
+    TouchableWithoutFeedback,
+    Image,
+    StatusBar,
+} from 'react-native';
+import { Iconfont, Row, HxfButton, NavBarHeader } from '@src/components';
 import { authNavigate, useNavigation } from '@src/router';
 import { observer, appStore, userStore } from '@src/store';
 import { GQL, useMutation, useQuery } from '@src/apollo';
 import AttendanceBook from './attendance/AttendanceBook';
 import TaskList from './components/TaskList';
-
-const batTop = pixel(Theme.statusBarHeight);
 
 export default observer((props: any) => {
     const navigation = useNavigation();
@@ -29,58 +36,56 @@ export default observer((props: any) => {
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
-            <StatusBar barStyle="light-content" />
-            <View style={{ backgroundColor: Theme.primaryColor }}>
-                <Image style={styles.titleCover} source={require('@app/assets/images/wallet_back.png')} />
-                <Text style={styles.pageTitle}>任务中心</Text>
-                <Row style={{ paddingVertical: pixel(20) }}>
-                    <TouchableOpacity
-                        style={styles.assetItem}
-                        onPress={() => {
-                            authNavigator('WithdrawHistory', {
-                                wallet_id: Helper.syncGetter('wallet.id', userProfile),
-                            });
-                        }}>
-                        <Image
-                            source={require('@app/assets/images/icon_wallet_dmb.png')}
-                            style={styles.walletItemIcon}
-                        />
-                        <Text style={styles.assetName}>{Config.goldAlias}</Text>
-                        <Text style={styles.assetCount}>{Helper.syncGetter('gold', userProfile) || 0}</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.assetItem}
-                        onPress={() => {
-                            authNavigator('Wallet', { user: userProfile });
-                        }}>
-                        <Image
-                            source={require('@app/assets/images/icon_wallet_rmb.png')}
-                            style={styles.walletItemIcon}
-                        />
-                        <Text style={styles.assetName}>余额(元)</Text>
-                        <Text style={styles.assetCount}>{Helper.syncGetter('balance', userProfile) || 0}</Text>
-                    </TouchableOpacity>
-                </Row>
-                <View style={styles.assetTip}>
-                    <Text style={{ color: '#FFFC', fontSize: font(13) }}>
-                        每天凌晨自动将{Config.goldAlias}兑换为余额
-                    </Text>
-                    <Text style={styles.assetRate}>
-                        今日汇率：{userProfile.exchangeRate || '500'} {Config.goldAlias} / 1元
-                    </Text>
+            <NavBarHeader
+                title="任务中心"
+                isTransparent={true}
+                statusbarProperties={{ barStyle: 'light-content' }}
+                navBarStyle={{ position: 'absolute', left: 0, right: 0, zIndex: 1 }}
+            />
+            <TouchableWithoutFeedback
+                onPress={() => {
+                    authNavigator('Wallet', { user: userProfile });
+                }}>
+                <View style={styles.assetContainer}>
+                    <Image style={styles.walletBg} source={require('@app/assets/images/wallet_back.png')} />
+                    <Row style={{ paddingVertical: pixel(20) }}>
+                        <TouchableOpacity
+                            style={styles.assetItem}
+                            onPress={() => {
+                                authNavigator('WithdrawHistory', {
+                                    wallet_id: Helper.syncGetter('wallet.id', userProfile),
+                                    tabPage: 2,
+                                });
+                            }}>
+                            <Image
+                                source={require('@app/assets/images/wallet/icon_wallet_diamond.png')}
+                                style={styles.walletItemIcon}
+                            />
+                            <Text style={styles.assetName}>{Config.goldAlias}</Text>
+                            <Text style={styles.assetCount}>{userProfile?.gold || 0}</Text>
+                        </TouchableOpacity>
+                        <View style={styles.assetItem}>
+                            <Image
+                                source={require('@app/assets/images/wallet/icon_wallet_giftAward.png')}
+                                style={styles.walletItemIcon}
+                            />
+                            <Text style={styles.assetName}>{Config.ticketAlias}</Text>
+                            <Text style={styles.assetCount}>{userProfile?.ticket || 0}</Text>
+                        </View>
+                    </Row>
+                    <View style={styles.assetTip}>
+                        <Text style={{ color: '#fff', fontSize: font(13) }}>
+                            每天凌晨自动将{Config.goldAlias}兑换为余额
+                        </Text>
+                        <Text style={styles.assetRate}>
+                            今日汇率：{userProfile.exchangeRate || '500'} {Config.goldAlias} / 1元
+                        </Text>
+                    </View>
                 </View>
-            </View>
-            {userStore.login ? (
-                <>
-                    <AttendanceBook />
-                    <TaskList />
-                </>
-            ) : (
-                <StatusView.EmptyView
-                    title="精彩的东西往往需要去登陆！"
-                    imageSource={require('@app/assets/images/default_empty.png')}
-                />
-            )}
+            </TouchableWithoutFeedback>
+
+            <AttendanceBook />
+            <TaskList />
         </ScrollView>
     );
 });
@@ -91,24 +96,18 @@ const styles = StyleSheet.create({
         backgroundColor: '#F5F6FB',
         paddingBottom: pixel(Theme.BOTTOM_HEIGHT),
     },
-    titleCover: {
+    assetContainer: {
+        backgroundColor: Theme.primaryColor,
+        paddingTop: Theme.statusBarHeight + Theme.NAVBAR_HEIGHT - pixel(10),
+    },
+    walletBg: {
         position: 'absolute',
         top: 0,
-        flex: 1,
         bottom: 0,
         right: 0,
         left: 0,
-        resizeMode: 'cover',
         height: '100%',
         width: '100%',
-    },
-    pageTitle: {
-        color: '#fff',
-        fontSize: font(19),
-        fontWeight: 'bold',
-        letterSpacing: 1.5,
-        textAlign: 'center',
-        marginTop: batTop,
     },
     assetItem: {
         flex: 1,
@@ -117,10 +116,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     walletItemIcon: {
-        borderRadius: pixel(10),
-        height: pixel(20),
-        marginRight: pixel(5),
-        width: pixel(20),
+        height: pixel(28),
+        width: pixel(28),
+        marginRight: pixel(10),
+        borderRadius: pixel(14),
+        backgroundColor: '#FFF',
     },
     assetName: {
         fontSize: font(16),

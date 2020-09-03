@@ -81,7 +81,7 @@ export default function TaskList() {
     return (
         <SectionList
             sections={tasksMap}
-            keyExtractor={item => String(item.id)}
+            keyExtractor={(item) => String(item.id)}
             renderItem={({ item }) => <TaskItem task={item} />}
             ListEmptyComponent={() => <View />}
             renderSectionHeader={({ section: { title } }) => <Text style={styles.listHeader}>{title}</Text>}

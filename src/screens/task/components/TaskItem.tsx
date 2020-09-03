@@ -1,7 +1,10 @@
 import React, { useRef, useMemo, useState, useCallback, useEffect } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
-import { SafeText, HxfButton } from '@src/components';
-import { playAdvertVideo, getTaskReward, getUserReward } from '@src/common';
+import { StyleSheet, View, Text, TouchableOpacity, Image, Linking } from 'react-native';
+import { ad } from 'react-native-ad';
+import { userStore, appStore, adStore } from '@src/store';
+import { getTaskReward, getUserReward } from '@src/apollo';
+import { authNavigate } from '@src/router';
+import { SafeText, HxfButton, RewardOverlay } from '@src/components';
 import { useNavigation } from '@react-navigation/native';
 // import { Overlay } from 'teaset';
 
@@ -51,7 +54,7 @@ export default function TaskItem({ task }) {
                     </SafeText>
                     <View style={styles.taskReward}>
                         <Image
-                            source={require('@app/assets/images/icon_wallet_dmb.png')}
+                            source={require('@app/assets/images/wallet/icon_wallet_diamond.png')}
                             style={styles.taskRewardIcon}
                         />
                         <SafeText numberOfLines={1} style={styles.taskRewardGold}>
@@ -132,30 +135,34 @@ function useTaskState(task) {
         };
     }, [task]);
 
-    const gotTaskReward = useCallback(() => {
-        getTaskReward(task.id);
-    }, [task]);
-
-    const gotVideoReward = useCallback(video => {
-        const rewardType = video.ad_click ? 'WATCH_REWARD_VIDEO' : 'WATCH_REWARD_VIDEO';
-        getUserReward(rewardType);
-    }, []);
-
     // 做任务 跳转页面/观看激励视频
     const doTask = useCallback(() => {
-        const route = taskRouteInfo[btnName];
-        if (route) {
-            navigation.navigate(...route);
-        } else if (task.id === 7) {
-            if (taskInterval.current > 0) {
-                Toast.show({ content: '请稍后再试' });
-            } else {
-                playAdvertVideo({ callback: gotVideoReward });
-            }
+        const taskAction = taskRouteInfo[btnName];
+        if (typeof taskAction === 'string') {
+            navigation.navigate(taskAction);
+        } else if (typeof taskAction === 'function') {
+            taskAction(taskInterval.current);
         } else {
             Toast.show({ content: '请前往完成任务' });
         }
-    }, [btnName, task]);
+    }, [btnName]);
+
+    // 领取任务奖励
+    const gotTaskReward = useCallback((id) => {
+        getTaskReward(id)
+            .then((res) => {
+                RewardOverlay.show({
+                    reward: {
+                        gold: res?.gold,
+                        ticket: res?.ticket,
+                    },
+                    title: '任务奖励领取成功',
+                });
+            })
+            .catch((err) => {
+                Toast.show({ content: err });
+            });
+    }, []);
 
     const callback = useCallback(() => {
         // 根据任务状态执行不同操作
@@ -165,15 +172,62 @@ function useTaskState(task) {
                 doTask();
                 break;
             case 2:
-                gotTaskReward();
+                gotTaskReward(task.id);
                 break;
             default:
                 Toast.show({ content: '请前往完成任务' });
                 break;
         }
-    }, [doTask, gotTaskReward]);
+    }, [task.assignment_status, doTask]);
 
     return [{ btnName, btnColor, countdown }, callback];
+}
+
+function playRewardVideo(wait: number) {
+    let called;
+    if (wait > 0) {
+        Toast.show({ content: '请稍后再试' });
+    } else {
+        const rewardVideo = ad.startRewardVideo({ appid: adStore.tt_appid, codeid: adStore.codeid_reward_video });
+
+        rewardVideo.subscribe('onAdLoaded', (event) => {
+            if (!called) {
+                called = true;
+                getUserReward('WATCH_REWARD_VIDEO')
+                    .then((res) => {
+                        RewardOverlay.show({
+                            reward: {
+                                gold: res?.gold,
+                                ticket: res?.ticket,
+                            },
+                            title: '看视频奖励领取成功',
+                        });
+                    })
+                    .catch((err) => {
+                        Toast.show({ content: err });
+                    });
+            }
+        });
+        rewardVideo.subscribe('onAdError', (event) => {
+            Toast.show({ content: event.message || '视频播放失败！', duration: 1500 });
+        });
+    }
+}
+
+function resolveVideo() {
+    if (!appStore.spiderVideo) {
+        appStore.setAppStorage('spiderVideo', true);
+        appStore.spiderVideo = true;
+        authNavigate('SpiderVideoTask');
+    } else {
+        //TODO 唤起抖音，scheme可能存在一旦更改无法唤起的风险
+        const scheme = Device.IOS ? 'itms-apps://itunes.apple.com/app/id1142110895' : 'snssdk1128://';
+        Linking.openURL(scheme)
+            .then(() => null)
+            .catch(() => {
+                Toast.show({ content: '请打开抖音App复制视频链接' });
+            });
+    }
 }
 
 // resolve.submit_name
@@ -182,14 +236,14 @@ const taskColor = {
     每日任务: '#FF5E7D',
     自定义任务: '#12E2BB',
 };
-
 const taskRouteInfo = {
-    去修改: ['EditProfile'],
-    去发布: ['CreatePost'],
-    去提问: ['WriteIssue'],
-    写回答: ['Find', { tabLabelIndex: 3 }],
-    去绑定: ['BindingAccount'],
-    去好评: ['Praise'],
+    去观看: playRewardVideo,
+    去采集: resolveVideo,
+    去点赞: 'Home',
+    去发布: 'CreatePost',
+    去绑定: 'BindingAccount',
+    去修改: 'EditProfile',
+    去好评: 'Praise',
 };
 
 const styles = StyleSheet.create({
@@ -229,11 +283,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#fefabd',
+        // backgroundColor: '#fefabd',
     },
     taskRewardIcon: {
-        height: pixel(14),
-        width: pixel(14),
+        height: pixel(20),
+        width: pixel(20),
     },
     taskRewardGold: {
         color: '#ffaf00',
