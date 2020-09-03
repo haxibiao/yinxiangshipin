@@ -1,12 +1,12 @@
 import React, { Fragment, useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
+import { ad } from 'react-native-ad';
 import { Overlay } from 'teaset';
-import { appStore, userStore } from '@src/store';
+import { adStore, userStore } from '@src/store';
+import { authNavigate } from '@src/router';
 import Iconfont from '../Iconfont';
 import Row from '../Basic/Row';
 import HxfButton from '../Form/HxfButton';
-import { authNavigate } from '@src/router';
-
 interface Reward {
     gold?: number;
     ticket?: number;
@@ -20,72 +20,52 @@ interface Props {
 
 let OverlayKey: any = null;
 
-const rewardTitle = (rewardList: { value: any; name: any }[]) => {
-    return <Text style={styles.title}>{`恭喜获得${rewardList[0].value + rewardList[0].name}`}</Text>;
-};
-
 const RewardOverlay = (props) => {
     const { reward, title, type } = props;
     const { gold, ticket } = reward;
+    const [adShown, setAdShown] = useState(false);
     const currentGold = userStore.me?.gold + gold;
-    const [adShow, setAdShow] = useState(false);
-
-    const constructRewardList = [
-        {
-            value: gold || 0,
-            name: gold ? Config.goldAlias : null,
-            image: require('@app/assets/images/diamond.png'),
-        },
-        {
-            value: ticket || 0,
-            name: ticket ? Config.ticketAlias : null,
-            image: require('@app/assets/images/ticket.png'),
-            style: styles.ticketImage,
-        },
-    ];
-
-    const rewardList = constructRewardList.filter((elem) => {
-        return elem.value > 0;
-    });
 
     return (
         <View style={styles.container}>
             <View
                 style={[
                     styles.content,
-                    adShow ? {} : { borderBottomLeftRadius: pixel(10), borderBottomRightRadius: pixel(10) },
+                    adShown ? {} : { borderBottomLeftRadius: pixel(10), borderBottomRightRadius: pixel(10) },
                 ]}>
-                <TouchableOpacity style={styles.operation} onPress={hide}>
+                <TouchableOpacity style={styles.closeBtn} onPress={hide}>
                     <Iconfont name={'guanbi1'} color={'#D8D8D8'} size={font(16)} />
                 </TouchableOpacity>
                 <View style={{ alignItems: 'center' }}>
                     <Image
-                        source={require('@app/assets/images/bg_reward_overlay_top.png')}
-                        style={styles.headerImage}
+                        source={require('@app/assets/images/wallet/bg_reward_overlay_top.png')}
+                        style={styles.topImage}
                     />
                 </View>
                 <View style={styles.header}>
-                    <View>
-                        {rewardTitle(rewardList)}
-                        <View style={styles.rewardContainer}>
-                            <Text style={{ color: Theme.grey }}>{title}</Text>
-
-                            {rewardList.slice(1).map((data, index) => {
-                                return (
-                                    <Fragment key={index}>
-                                        <Text style={{ color: Theme.theme, paddingLeft: pixel(3) }}>
-                                            {data.value}
-                                            <Text style={{ color: Theme.theme }}>{data.name}</Text>
-                                        </Text>
-                                    </Fragment>
-                                );
-                            })}
+                    <Text style={styles.title}>{title || '恭喜获得奖励'}</Text>
+                    <View style={styles.rewardContainer}>
+                        <View style={styles.rewardItem}>
+                            <Image
+                                source={require('@app/assets/images/wallet/icon_wallet_diamond.png')}
+                                style={styles.rewardIcon}
+                            />
+                            <Text style={styles.rewardValue}>+{gold}</Text>
                         </View>
+                        {ticket > 0 && (
+                            <View style={styles.rewardItem}>
+                                <Image
+                                    source={require('@app/assets/images/wallet/icon_wallet_giftAward.png')}
+                                    style={styles.rewardIcon}
+                                />
+                                <Text style={styles.rewardValue}>+{ticket}</Text>
+                            </View>
+                        )}
                     </View>
                 </View>
-                <View style={{ alignItems: 'center', marginTop: pixel(5), paddingBottom: pixel(15) }}>
+                <View style={styles.modalFooter}>
                     <HxfButton
-                        style={styles.button}
+                        style={styles.buttonStyle}
                         textColor={'#623605'}
                         title={'查看详情'}
                         onPress={() => {
@@ -96,8 +76,8 @@ const RewardOverlay = (props) => {
                         }}
                     />
                 </View>
-                {!appStore.disableAd && (
-                    <Row style={{ justifyContent: 'center' }}>
+                {adStore.enableAd && (
+                    <Row style={styles.currentGold}>
                         <Text
                             style={{
                                 fontSize: font(13),
@@ -106,23 +86,23 @@ const RewardOverlay = (props) => {
                             当前{Config.goldAlias}:
                         </Text>
                         <Image
-                            source={require('@app/assets/images/icon_wallet_dmb.png')}
-                            style={{ width: pixel(17), height: pixel(17), marginHorizontal: pixel(3) }}
+                            source={require('@app/assets/images/wallet/icon_wallet_diamond.png')}
+                            style={styles.currentDiamond}
                         />
                         <Text
                             style={{
                                 fontSize: font(13),
                                 color: '#999999',
                             }}>
-                            {currentGold}
-                            <Text style={{ color: Theme.themeRed }}>
-                                ≈{Helper.goldExchange(currentGold, userStore.me?.exchange_rate)}元
+                            {currentGold}≈
+                            <Text style={{ color: '#FCE03D' }}>
+                                {Helper.goldExchange(currentGold, userStore.me?.exchange_rate)}元
                             </Text>
                         </Text>
                     </Row>
                 )}
             </View>
-            {adShow && (
+            {adShown && (
                 <Image
                     source={require('@app/assets/images/bg_feed_overlay_line.png')}
                     style={{
@@ -131,25 +111,35 @@ const RewardOverlay = (props) => {
                     }}
                 />
             )}
+            <View style={styles.adContainer}>
+                <ad.Feed
+                    codeid={adStore.codeid_feed}
+                    adWidth={Device.WIDTH - pixel(50)}
+                    onAdLayout={() => {
+                        setAdShown(true);
+                    }}
+                    onAdError={() => {
+                        setAdShown(false);
+                    }}
+                    onAdClose={() => {
+                        setAdShown(false);
+                    }}
+                />
+            </View>
         </View>
     );
 };
 
-const show = (props: Props) => {
+export const show = (props: Props) => {
     const overlayView = (
-        <Overlay.View animated={true}>
+        <Overlay.View animated>
             <RewardOverlay {...props} />
         </Overlay.View>
     );
     OverlayKey = Overlay.show(overlayView);
 };
-const hide = () => {
+export const hide = () => {
     Overlay.hide(OverlayKey);
-};
-
-export default {
-    show,
-    hide,
 };
 
 const styles = StyleSheet.create({
@@ -161,41 +151,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    content: {
-        width: Device.WIDTH - pixel(48),
-        backgroundColor: '#FFF',
-        alignItems: 'center',
-        paddingBottom: pixel(15),
-        borderTopLeftRadius: pixel(10),
-        borderTopRightRadius: pixel(10),
-        // alignItems: 'center',
-    },
-    ticketImage: {
-        width: 15,
-        height: 15,
-        marginLeft: 3,
-        paddingTop: 2,
-        marginRight: 2,
-    },
-    header: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginTop: pixel(25),
-        marginBottom: pixel(15),
-    },
-    headerImage: {
-        width: (Device.WIDTH * 0.28 * 318) / 216,
-        height: Device.WIDTH * 0.28,
-        marginTop: pixel(-75),
-    },
-    modalFooter: {
-        borderTopWidth: pixel(0.5),
-        borderTopColor: '#f0f0f0',
-        flexDirection: 'row',
-        marginTop: pixel(15),
-    },
-    operation: {
+    closeBtn: {
         position: 'absolute',
         right: pixel(0),
         top: pixel(0),
@@ -205,28 +161,71 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         alignItems: 'center',
     },
-    operationText: {
-        fontSize: font(15),
-        fontWeight: '400',
-        color: '#969696',
+    content: {
+        width: Device.WIDTH - pixel(48),
+        backgroundColor: '#FFF',
+        alignItems: 'center',
+        paddingBottom: pixel(15),
+        borderTopLeftRadius: pixel(10),
+        borderTopRightRadius: pixel(10),
+    },
+    topImage: {
+        width: (Device.WIDTH * 0.28 * 318) / 216,
+        height: Device.WIDTH * 0.28,
+        marginTop: pixel(-75),
+    },
+    header: {
+        marginVertical: pixel(12),
+        alignItems: 'center',
+    },
+    title: {
+        fontSize: font(18),
+        color: '#2b2b2b',
+        fontWeight: 'bold',
+        textAlign: 'center',
     },
     rewardContainer: {
+        marginTop: pixel(10),
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center',
-        paddingTop: 5,
     },
-    button: {
+    rewardItem: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginHorizontal: pixel(5),
+    },
+    rewardIcon: {
+        width: pixel(30),
+        height: pixel(30),
+    },
+    rewardValue: {
+        fontSize: font(14),
+        color: '#b2b2b2',
+    },
+    modalFooter: {
+        alignItems: 'center',
+        marginBottom: pixel(12),
+    },
+    buttonStyle: {
         backgroundColor: '#FCE03D',
         borderRadius: pixel(19),
         height: pixel(38),
         width: Device.WIDTH * 0.6,
     },
-    title: {
-        fontSize: font(18),
-        color: '#202020',
-        fontWeight: 'bold',
-        textAlign: 'center',
+    currentGold: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    currentDiamond: {
+        width: pixel(25),
+        height: pixel(25),
+    },
+    adContainer: {
+        width: Device.WIDTH - pixel(48),
+        backgroundColor: '#FFF',
+        borderBottomLeftRadius: pixel(10),
+        borderBottomRightRadius: pixel(10),
     },
 });
 

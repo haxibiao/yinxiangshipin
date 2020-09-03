@@ -1,15 +1,17 @@
 import React, { useMemo, useCallback, useState } from 'react';
 import { StyleSheet, View, Text, Image, ImageBackground, TouchableWithoutFeedback, Animated } from 'react-native';
-import { useCirculationAnimation, playAdvertVideo, getUserReward } from '@src/common';
-import { GQL, useMutation, useQuery } from '@src/apollo';
-import { appStore } from '@src/store';
 import { BoxShadow } from 'react-native-shadow';
+import { ad } from 'react-native-ad';
+import { appStore, adStore } from '@src/store';
+import { RewardOverlay } from '@src/components';
+import { useCirculationAnimation } from '@src/common';
+import { GQL, useMutation, useQuery, getUserReward } from '@src/apollo';
 import * as SignedReturnOverlay from './SignedReturnOverlay';
 
 interface SignInReturns {
     id: any;
     gold_reward: string | number;
-    energy_reward: string | number;
+    ticket_reward: string | number;
 }
 
 const AttendanceBook = (): JSX.Element => {
@@ -68,7 +70,7 @@ const AttendanceBook = (): JSX.Element => {
         (returns: SignInReturns) => {
             SignedReturnOverlay.show({
                 gold: returns.gold_reward,
-                energy: returns.energy_reward,
+                ticket: returns.ticket_reward,
                 signInDays: keepCheckInDays + 1,
             });
         },
@@ -82,10 +84,29 @@ const AttendanceBook = (): JSX.Element => {
     });
 
     const getDoubleReward = useCallback(() => {
-        playAdvertVideo({
-            callback: () => {
-                getUserReward('DOUBLE_SIGNIN_REWARD', refetch);
-            },
+        let called;
+        const rewardVideo = ad.startRewardVideo({ appid: adStore.tt_appid, codeid: adStore.codeid_reward_video });
+
+        rewardVideo.subscribe('onAdLoaded', (event) => {
+            if (!called) {
+                called = true;
+                getUserReward('DOUBLE_SIGNIN_REWARD', refetch)
+                    .then((res) => {
+                        RewardOverlay.show({
+                            reward: {
+                                gold: res?.gold,
+                                ticket: res?.ticket,
+                            },
+                            title: '签到双倍奖励领取成功',
+                        });
+                    })
+                    .catch((err) => {
+                        Toast.show({ content: err });
+                    });
+            }
+        });
+        rewardVideo.subscribe('onAdError', (event) => {
+            Toast.show({ content: event?.message || '视频播放失败！', duration: 1500 });
         });
     }, [refetch]);
 
@@ -181,13 +202,13 @@ const AttendanceBook = (): JSX.Element => {
     );
 };
 
-const signItemWidth = (Device.WIDTH - pixel(Theme.itemSpace * 2) - pixel(10)) / 7;
+const signItemWidth = (Device.WIDTH - pixel(40)) / 7;
 const coinImageWidth = signItemWidth * 0.9;
 const mysticGiftHeight = (coinImageWidth * 0.9 * 86) / 164;
 const doubleRewardHeight = mysticGiftHeight;
 
 const shadowOpt = {
-    width: Device.WIDTH - pixel(Theme.itemSpace * 2),
+    width: Device.WIDTH - pixel(30),
     height: pixel(150),
     color: '#E8E8E8',
     border: pixel(10),
@@ -196,7 +217,7 @@ const shadowOpt = {
     x: 0,
     y: 0,
     style: {
-        margin: pixel(Theme.itemSpace),
+        margin: pixel(15),
     },
 };
 

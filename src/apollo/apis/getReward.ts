@@ -32,7 +32,7 @@ export function getUserReward(reason: rewardReason) {
                     refetchQueries,
                 })
                 .then((data: any) => {
-                    resolve(data?.reward);
+                    resolve(data?.data?.reward);
                     // const reward = Helper.syncGetter('data.reward', data);
                     // RewardOverlay.show({
                     //     reward: {
@@ -73,7 +73,7 @@ export function getTaskReward(id: number) {
                     ],
                 })
                 .then((data: any) => {
-                    resolve(data?.rewardTask?.reward_info);
+                    resolve(data?.data?.rewardTask?.reward_info);
                     // const rewardTask = Helper.syncGetter('data.rewardTask', data);
                     // RewardOverlay.show({
                     //     reward: {
