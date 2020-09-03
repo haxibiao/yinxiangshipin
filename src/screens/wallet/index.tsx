@@ -20,26 +20,18 @@ const fakeAmountListData = [
     {
         tips: '秒到账',
         amount: 1,
-        golds: 100,
-        description: 100 + Config.goldAlias,
     },
     {
         tips: '限量抢',
         amount: 3,
-        golds: 300,
-        description: 100 + Config.goldAlias,
     },
     {
         tips: '限量抢',
         amount: 5,
-        golds: 500,
-        description: 100 + Config.goldAlias,
     },
     {
         tips: '限量抢',
         amount: 10,
-        golds: 1000,
-        description: 100 + Config.goldAlias,
     },
 ];
 
@@ -65,8 +57,6 @@ const fakeWallet = {
     today_withdraw_left: 0,
     available_balance: 0,
 };
-
-const BANNER_WIDTH = Device.WIDTH - pixel(Theme.itemSpace * 2);
 
 export default observer((props: any) => {
     const navigation = useNavigation();
@@ -193,35 +183,54 @@ export default observer((props: any) => {
             submitTips="请稍后...">
             <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
                 <View style={styles.statistics}>
-                    <ImageBackground source={require('@app/assets/images/wallet_bg.png')} style={styles.cardPackage}>
-                        <View style={styles.currentGold}>
-                            <View style={styles.cardItem}>
-                                <View>
-                                    <Text style={styles.blackText}>{Config.goldAlias}：</Text>
-                                    <SafeText style={styles.boldBlackText}>
-                                        {Helper.count(userProfile.gold) || 0}
-                                    </SafeText>
-                                </View>
-                                <View>
-                                    <SafeText style={styles.blackText}>余额(元)</SafeText>
-                                    <SafeText style={styles.boldBlackText}>{userProfile.balance || 0}</SafeText>
-                                </View>
+                    <ImageBackground
+                        source={require('@app/assets/images/wallet/wallet_bg_recharge.png')}
+                        style={styles.walletRedBg}>
+                        <View style={styles.assetItem}>
+                            <Image
+                                style={styles.assetIcon}
+                                source={require('@app/assets/images/wallet/icon_wallet_diamond.png')}
+                            />
+                            <View style={styles.assetInfo}>
+                                <Text style={styles.assetName}>{Config.goldAlias}</Text>
+                                <Text style={styles.assetDescription}>
+                                    用于转换余额，可以在任务、看视频等场景中获得
+                                </Text>
                             </View>
-                            <View style={styles.cardItem}>
-                                <View style={styles.withdrawLimit}>
-                                    <SafeText style={styles.blackText2}>今日{Config.goldAlias}：</SafeText>
-                                    <SafeText style={styles.boldBlackText2}>{userProfile.today_golds || 0}</SafeText>
-                                </View>
-                                <View style={styles.withdrawLimit}>
-                                    <SafeText style={styles.blackText2}>总{Config.goldAlias}：</SafeText>
-                                    <SafeText style={styles.boldBlackText2}>{userProfile.total_golds || 0}</SafeText>
-                                </View>
-                                <View style={styles.withdrawLimit}>
-                                    <SafeText style={styles.blackText2}>总提现：</SafeText>
-                                    <SafeText style={styles.boldBlackText2}>
-                                        {wallet.total_withdraw_amount || 0}
-                                    </SafeText>
-                                </View>
+                            <View style={styles.earnings}>
+                                <SafeText style={styles.earningsText}>{userProfile.gold || '0.00'}</SafeText>
+                            </View>
+                        </View>
+                        <View style={styles.assetItem}>
+                            <Image
+                                style={styles.assetIcon}
+                                source={require('@app/assets/images/wallet/icon_wallet_balance.png')}
+                            />
+                            <View style={styles.assetInfo}>
+                                <SafeText style={styles.assetName}>余额(元)</SafeText>
+                                <Text style={styles.assetDescription}>
+                                    用于提现，需要先绑定手机号以及支付宝/微信账号
+                                </Text>
+                            </View>
+                            <View style={styles.earnings}>
+                                <SafeText style={styles.earningsText}>{userProfile.balance || '0.00'}</SafeText>
+                            </View>
+                        </View>
+                        <View style={styles.assetItem}>
+                            <Image
+                                style={styles.assetIcon}
+                                source={require('@app/assets/images/wallet/icon_wallet_reworder_income.png')}
+                            />
+                            <View style={styles.assetInfo}>
+                                <SafeText style={styles.assetName}>总收入</SafeText>
+                                <SafeText style={styles.assetDescription}>
+                                    历史提现总和，目前您在{Config.AppName}上面获得的累计收益
+                                </SafeText>
+                            </View>
+                            <View style={styles.earnings}>
+                                <SafeText style={styles.earningsText}>
+                                    {wallet.total_withdraw_amount || '0.00'}
+                                </SafeText>
                             </View>
                         </View>
                     </ImageBackground>
@@ -244,7 +253,7 @@ export default observer((props: any) => {
                                         onPress={() => setWithdrawAmount(data.amount)}>
                                         <Row>
                                             <Image
-                                                source={require('@app/assets/images/icon_wallet_rmb.png')}
+                                                source={require('@app/assets/images/wallet/icon_wallet_rmb.png')}
                                                 style={styles.rmbImage}
                                             />
                                             <Text style={[styles.amountItemText, selected && { color: '#34BBFF' }]}>
@@ -253,11 +262,11 @@ export default observer((props: any) => {
                                         </Row>
                                         <Row>
                                             <Image
-                                                source={require('@app/assets/images/diamond.png')}
+                                                source={require('@app/assets/images/wallet/icon_wallet_diamond.png')}
                                                 style={styles.diamondImage}
                                             />
                                             <Text style={[styles.amountTips, selected && { color: '#34BBFF' }]}>
-                                                {data.golds}
+                                                {data.amount * userProfile.exchangeRate}
                                             </Text>
                                         </Row>
                                     </TouchableOpacity>
@@ -337,6 +346,7 @@ export default observer((props: any) => {
     );
 });
 
+const BG_WIDTH = Device.WIDTH - pixel(20);
 const amountItemWidth = (Device.WIDTH - pixel(65)) / 2;
 
 const styles = StyleSheet.create({
@@ -356,79 +366,55 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     statistics: {
-        padding: pixel(Theme.itemSpace),
+        paddingVertical: pixel(15),
     },
-    cardPackage: {
+    walletRedBg: {
+        marginHorizontal: pixel(10),
+        width: BG_WIDTH,
+        height: (BG_WIDTH * 693) / 1053,
         borderRadius: pixel(10),
-        height: BANNER_WIDTH * 0.4,
         overflow: 'hidden',
-        resizeMode: 'contain',
-        width: BANNER_WIDTH,
     },
-    cardContent: {
+    assetItem: {
         flex: 1,
+        padding: pixel(12),
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'stretch',
-        padding: pixel(Theme.itemSpace),
-    },
-    currentGold: {
-        flex: 1,
-        justifyContent: 'space-between',
-        padding: pixel(Theme.itemSpace),
-    },
-    cardItem: {
         alignItems: 'center',
-        flexDirection: 'row',
+    },
+    assetIcon: {
+        height: pixel(40),
+        width: pixel(40),
+    },
+    assetInfo: {
+        flex: 1,
+        alignSelf: 'stretch',
+        marginLeft: pixel(15),
+        marginRight: pixel(5),
         justifyContent: 'space-between',
     },
-    blackText: {
-        color: Theme.defaultTextColor,
-        fontSize: font(14),
-        fontWeight: 'bold',
-        ...Platform.select({
-            ios: {},
-            android: {
-                fontFamily: ' ',
-            },
-        }),
-    },
-    blackText2: {
-        color: Theme.defaultTextColor,
-        fontSize: font(14),
-        ...Platform.select({
-            ios: {},
-            android: {
-                fontFamily: ' ',
-            },
-        }),
-    },
-    boldBlackText: {
-        color: Theme.defaultTextColor,
-        fontSize: font(30),
-        fontWeight: 'bold',
-        ...Platform.select({
-            ios: {},
-            android: {
-                fontFamily: ' ',
-            },
-        }),
-    },
-    boldBlackText2: {
-        color: Theme.defaultTextColor,
+    assetName: {
+        color: '#fff',
         fontSize: font(16),
         fontWeight: 'bold',
-        ...Platform.select({
-            ios: {},
-            android: {
-                fontFamily: ' ',
-            },
-        }),
+        lineHeight: font(18),
+    },
+    assetDescription: {
+        color: '#fff',
+        fontSize: font(12),
+        lineHeight: font(14),
+    },
+    earnings: {
+        minWidth: pixel(55),
+        alignItems: 'flex-end',
+    },
+    earningsText: {
+        color: '#fff',
+        fontSize: font(20),
     },
     sectionContainer: {
-        margin: pixel(10),
-        padding: pixel(15),
-        paddingVertical: pixel(10),
+        marginHorizontal: pixel(10),
+        marginBottom: pixel(10),
+        paddingHorizontal: pixel(12),
         backgroundColor: '#fff',
         borderRadius: pixel(5),
     },
@@ -475,13 +461,12 @@ const styles = StyleSheet.create({
     },
     rmbImage: {
         height: pixel(18),
-        marginRight: pixel(2),
+        marginRight: pixel(5),
         width: pixel(18),
     },
     diamondImage: {
-        height: pixel(13),
-        marginRight: pixel(2),
-        width: pixel(13),
+        height: pixel(25),
+        width: pixel(25),
     },
     amountItemBadge: {
         position: 'absolute',
@@ -493,7 +478,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         paddingHorizontal: pixel(8),
         borderRadius: pixel(10),
-        backgroundColor: '#FF5152',
+        backgroundColor: '#FF5151',
     },
     amountItemBadgeText: {
         color: '#fff',
@@ -523,12 +508,12 @@ const styles = StyleSheet.create({
         fontSize: font(14),
     },
     withdrawBtn: {
-        marginTop: pixel(20),
-        marginBottom: pixel(15),
+        marginTop: pixel(15),
+        marginBottom: pixel(12),
+        height: pixel(46),
+        borderRadius: pixel(23),
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: pixel(23),
-        height: pixel(46),
     },
     ruleContainer: {
         marginHorizontal: pixel(10),
