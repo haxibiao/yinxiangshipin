@@ -33,7 +33,7 @@ export default observer(({ navigation }) => {
     return (
         <PageContainer title="安全验证" submitting={loading} white>
             <View style={styles.container}>
-                <View style={{ marginTop: pixel(50), paddingHorizontal: pixel(25), paddingBottom: pixel(15) }}>
+                <View style={{ marginTop: pixel(50), paddingHorizontal: pixel(20), paddingBottom: pixel(15) }}>
                     <Text
                         style={{
                             color: Theme.black,
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
         backgroundColor: Theme.white || '#FFF',
     },
     header: {
-        paddingHorizontal: pixel(25),
+        paddingHorizontal: pixel(20),
         marginVertical: pixel(15),
     },
     tips: {
@@ -83,14 +83,14 @@ const styles = StyleSheet.create({
     inputWrap: {
         borderBottomWidth: pixel(0.5),
         borderBottomColor: Theme.borderColor,
-        marginHorizontal: pixel(25),
+        marginHorizontal: pixel(20),
         paddingHorizontal: 0,
     },
     button: {
-        height: pixel(38),
+        height: pixel(44),
         borderRadius: pixel(5),
-        marginHorizontal: pixel(25),
-        marginTop: pixel(35),
+        marginHorizontal: pixel(20),
+        marginTop: pixel(30),
         backgroundColor: Theme.primaryColor,
     },
     footer: {

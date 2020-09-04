@@ -64,11 +64,13 @@ class HxfButton extends Component<Props, any> {
 
     public render() {
         const { gradient, style, buttonStyle, titleStyle, title, children, disabled, onPress } = this.buildProps();
+        let { colors } = this.props;
         if (gradient) {
+            if (!Array.isArray(colors)) {
+                colors = [Theme.primaryColor, Theme.secondaryColor];
+            }
             return (
-                <GradientView
-                    colors={disabled ? ['#787878', '#a4a4a4'] : [Theme.primaryColor, Theme.secondaryColor]}
-                    style={[styles.buttonWrap, style]}>
+                <GradientView colors={disabled ? ['#787878', '#a4a4a4'] : colors} style={[styles.buttonWrap, style]}>
                     <TouchableOpacity style={[{ flex: 1 }, styles.buttonWrap]} disabled={disabled} onPress={onPress}>
                         {this.renderIcon()}
                         {children || <Text style={titleStyle}>{title}</Text>}
