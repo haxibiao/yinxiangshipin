@@ -26,7 +26,7 @@ const WithdrawLog = () => {
 
     return (
         <View style={{ flex: 1 }}>
-            <Query query={GQL.userWithdraws} variables={{ wallet_id }}>
+            <Query query={GQL.userWithdraws} variables={{ wallet_id }} fetchPolicy="network-only">
                 {(res: { loading: any, error: any, data: any, refetch: any, fetchMore: any }) => {
                     const { loading, error, data, refetch, fetchMore } = res;
                     if (loading) return <SpinnerLoading />;
@@ -42,7 +42,7 @@ const WithdrawLog = () => {
                     return (
                         <FlatList
                             data={items}
-                            keyextractor={(index: any) => index.toString()}
+                            keyExtractor={(index: any) => index.toString()}
                             refreshControl={<RefreshControl refreshing={loading} onRefresh={refetch} />}
                             renderItem={({ item }) => {
                                 return <WithdrawLogItem item={item} navigation={navigation} />;

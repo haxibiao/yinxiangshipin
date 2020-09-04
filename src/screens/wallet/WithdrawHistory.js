@@ -6,7 +6,6 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { PageContainer, ScrollTabBar } from '@src/components';
 import WithdrawLog from './components/WithdrawLog';
 import IncomeAndExpenditure from './components/IncomeAndExpenditure';
-import ContributionLog from './components/ContributionLog';
 
 const WithdrawHistory = () => {
     const navigation = useNavigation();
@@ -18,7 +17,6 @@ const WithdrawHistory = () => {
                 initialPage={route.params?.tabPage || 0}
                 prerenderingSiblingsNumber={route.params?.tabPage || 0}>
                 <WithdrawLog navigation={navigation} tabLabel="提现" />
-                <ContributionLog navigation={navigation} tabLabel={Config.limitAlias} />
                 <IncomeAndExpenditure navigation={navigation} tabLabel="明细" />
             </ScrollableTabView>
         </PageContainer>

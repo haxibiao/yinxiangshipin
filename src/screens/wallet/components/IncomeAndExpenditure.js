@@ -26,7 +26,7 @@ class IntegralDetail extends Component {
         let { me: user } = userStore;
         return (
             <View style={{ flex: 1 }}>
-                <Query query={GQL.goldsHistoryQuery} variables={{ user_id: user.id }}>
+                <Query query={GQL.goldsHistoryQuery} variables={{ user_id: user.id }} fetchPolicy="network-only">
                     {({ loading, error, data, fetchMore, refetch }) => {
                         if (loading) return <SpinnerLoading />;
                         if (error) return <LoadingError reload={() => refetch()} />;
@@ -40,7 +40,7 @@ class IntegralDetail extends Component {
                         return (
                             <FlatList
                                 data={items}
-                                keyextractor={index => index.toString()}
+                                keyExtractor={(index) => index.toString()}
                                 refreshControl={<RefreshControl refreshing={loading} onRefresh={refetch} />}
                                 renderItem={({ item }) => {
                                     return <IncomeAndExpenditureItem item={item} />;
