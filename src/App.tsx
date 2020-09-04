@@ -32,17 +32,11 @@ function App() {
 
     // 获取APP的开启配置(广告和钱包)
     const fetchConfig = useCallback(() => {
-        fetch(Config.ServerRoot + '/api/app-config?os=' + Platform.OS + '&store=' + Config.AppStore, {
-            headers: {
-                os: Platform.OS,
-                store: Config.AppStore,
-            },
-        })
+        fetch(Config.ServerRoot + '/api/app-config?os=' + Platform.OS + '&store=' + Config.AppStore)
             .then((response) => response.json())
             .then((result) => {
                 // 1.保存APP配置(含ad appId, codeId等)
-                // FIXME 需要重新写
-                // store.adStore.setAdConfig(result);
+                store.adStore.setAdConfig(result);
                 // 2.广告初始化
                 //
                 // 3.开屏

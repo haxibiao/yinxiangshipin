@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { Iconfont, Row, HxfButton, NavBarHeader } from '@src/components';
 import { authNavigate, useNavigation } from '@src/router';
-import { observer, appStore, userStore } from '@src/store';
+import { observer, appStore, userStore, adStore } from '@src/store';
 import { GQL, useMutation, useQuery } from '@src/apollo';
 import AttendanceBook from './attendance/AttendanceBook';
 import TaskList from './components/TaskList';
@@ -44,7 +44,9 @@ export default observer((props: any) => {
             />
             <TouchableWithoutFeedback
                 onPress={() => {
-                    authNavigator('Wallet', { user: userProfile });
+                    if (adStore.enableWallet) {
+                        authNavigator('Wallet', { user: userProfile });
+                    }
                 }}>
                 <View style={styles.assetContainer}>
                     <Image style={styles.walletBg} source={require('@app/assets/images/wallet_back.png')} />
@@ -94,7 +96,7 @@ const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
         backgroundColor: '#F5F6FB',
-        paddingBottom: pixel(Theme.HOME_INDICATOR_HEIGHT),
+        paddingBottom: Theme.HOME_INDICATOR_HEIGHT + pixel(30),
     },
     assetContainer: {
         backgroundColor: '#FE4966',
