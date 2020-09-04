@@ -26,6 +26,7 @@ import FeedbackDetail from '../screens/Feedback/FeedbackDetail';
 // Task
 import TaskScreen from '../screens/task';
 import SpiderVideoTaskScreen from '../screens/task/SpiderVideoTask';
+import PraiseScreen from '../screens/task/Praise';
 
 // find search
 import SearchScreen from '../screens/search';
@@ -245,6 +246,9 @@ export default {
     },
     SpiderVideoTask: {
         component: SpiderVideoTaskScreen,
+    },
+    Praise: {
+        component: PraiseScreen,
     },
     PhoneVerification: {
         component: PhoneVerification,

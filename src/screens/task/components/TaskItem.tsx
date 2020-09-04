@@ -95,7 +95,9 @@ function useTaskState(task) {
     const [countdown, setCountdown] = useState(taskInterval.current);
 
     const btnName = useMemo(() => {
-        if (task.assignment_status === 2) {
+        if (task?.resolve?.submit_name === '去好评' && task.assignment_status === 1) {
+            return '审核中';
+        } else if (task.assignment_status === 2) {
             return '领奖励';
         } else if (task.assignment_status === 3) {
             return '已完成';
@@ -230,6 +232,10 @@ function resolveVideo() {
     }
 }
 
+function inReview() {
+    Toast.show({ content: '任务审核中，请留意奖励发放' });
+}
+
 // resolve.submit_name
 const taskColor = {
     新人任务: '#2FC6FC',
@@ -239,6 +245,7 @@ const taskColor = {
 const taskRouteInfo = {
     去观看: playRewardVideo,
     去采集: resolveVideo,
+    审核中: inReview,
     去点赞: 'Home',
     去发布: 'CreatePost',
     去绑定: 'BindingAccount',

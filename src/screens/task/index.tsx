@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
         backgroundColor: '#F5F6FB',
-        paddingBottom: pixel(Theme.BOTTOM_HEIGHT),
+        paddingBottom: pixel(Theme.HOME_INDICATOR_HEIGHT),
     },
     assetContainer: {
         backgroundColor: '#FE4966',
