@@ -26,7 +26,7 @@ export function moment(second: any) {
     return arr.join(':');
 }
 
-export function goldExchange(gold: number, rate = 1000) {
+export function goldExchange(gold: number, rate = 600) {
     return (gold / rate).toFixed(2);
 }
 

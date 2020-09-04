@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
         paddingBottom: pixel(Theme.BOTTOM_HEIGHT),
     },
     assetContainer: {
-        backgroundColor: Theme.primaryColor,
+        backgroundColor: '#FE4966',
         paddingTop: Theme.statusBarHeight + Theme.NAVBAR_HEIGHT - pixel(10),
     },
     walletBg: {

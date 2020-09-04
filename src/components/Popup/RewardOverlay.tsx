@@ -24,7 +24,7 @@ const RewardOverlay = (props) => {
     const { reward, title, type } = props;
     const { gold, ticket } = reward;
     const [adShown, setAdShown] = useState(false);
-    const currentGold = userStore.me?.gold + gold;
+    const currentGold = userStore.me?.gold;
 
     return (
         <View style={styles.container}>
@@ -96,7 +96,7 @@ const RewardOverlay = (props) => {
                             }}>
                             {currentGold}≈
                             <Text style={{ color: '#FCE03D' }}>
-                                {Helper.goldExchange(currentGold, userStore.me?.exchange_rate)}元
+                                {Helper.goldExchange(currentGold, userStore.me?.exchangeRate)}元
                             </Text>
                         </Text>
                     </Row>

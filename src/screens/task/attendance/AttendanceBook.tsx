@@ -53,8 +53,8 @@ const AttendanceBook = (): JSX.Element => {
                 try {
                     const result = await createCheckIn();
                     const todayReturns = Helper.syncGetter('data.createCheckIn', result);
-                    refetch();
                     checkInSuccess(todayReturns);
+                    refetch();
                 } catch (e) {
                     const str = e.toString().replace(/Error: GraphQL error: /, '');
                     Toast.show({ content: str || '签到失败' });
@@ -90,7 +90,7 @@ const AttendanceBook = (): JSX.Element => {
         rewardVideo.subscribe('onAdLoaded', (event) => {
             if (!called) {
                 called = true;
-                getUserReward('DOUBLE_SIGNIN_REWARD', refetch)
+                getUserReward('DOUBLE_SIGNIN_REWARD')
                     .then((res) => {
                         RewardOverlay.show({
                             reward: {
@@ -108,7 +108,7 @@ const AttendanceBook = (): JSX.Element => {
         rewardVideo.subscribe('onAdError', (event) => {
             Toast.show({ content: event?.message || '视频播放失败！', duration: 1500 });
         });
-    }, [refetch]);
+    }, []);
 
     const doubleCheckInReward = useMemo(() => {
         return (

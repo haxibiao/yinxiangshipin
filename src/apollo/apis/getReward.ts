@@ -22,6 +22,12 @@ export function getUserReward(reason: rewardReason) {
             fetchPolicy: 'network-only',
         });
     }
+    if (reason === 'DOUBLE_SIGNIN_REWARD') {
+        refetchQueries.push({
+            query: GQL.CheckInsQuery,
+            fetchPolicy: 'network-only',
+        });
+    }
 
     return new Promise((resolve, reject) => {
         if (appStore.client) {

@@ -27,7 +27,7 @@ const rewardTitle = (rewardList: { value: any; name: any }[]) => {
 const SignedReturnOverlay = (props) => {
     const { gold, ticket, signInDays } = props;
     const [adShown, setAdShown] = useState(false);
-    const currentGold = userStore.me?.gold + gold;
+    const currentGold = userStore.me?.gold;
 
     const loadAd = useCallback(
         __.debounce(() => {
@@ -134,7 +134,7 @@ const SignedReturnOverlay = (props) => {
                             }}>
                             {currentGold}
                             <Text style={{ color: Theme.themeRed }}>
-                                ≈{Helper.goldExchange(currentGold, userStore.me?.exchange_rate)}元
+                                ≈{Helper.goldExchange(currentGold, userStore.me?.exchangeRate)}元
                             </Text>
                         </Text>
                     </Row>
