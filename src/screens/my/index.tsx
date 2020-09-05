@@ -142,12 +142,24 @@ export default observer((props: any) => {
                         </View>
                     </View>
                 </TouchableWithoutFeedback>
-                {userStore.login && adStore.enableWallet && (
+                {userStore.login && adStore.enableAd && (
                     <TouchableWithoutFeedback onPress={() => navigation.navigate('TaskCenter')}>
                         <Image style={styles.taskEntry} source={require('@app/assets/images/task_entry.png')} />
                     </TouchableWithoutFeedback>
                 )}
                 <View style={styles.columnItemsWrap}>
+                    {userStore.login && adStore.enableWallet && (
+                        <TouchableOpacity style={styles.columnItem} onPress={() => authNavigator('Wallet')}>
+                            <View style={styles.columnItemLeft}>
+                                <Image
+                                    style={styles.columnIcon}
+                                    source={require('@app/assets/images/icons/ic_mine_wallet.png')}
+                                />
+                                <Text style={styles.columnName}>我的钱包</Text>
+                            </View>
+                            <Iconfont name="right" size={pixel(16)} color="#969696" />
+                        </TouchableOpacity>
+                    )}
                     <TouchableOpacity
                         style={styles.columnItem}
                         onPress={() => authNavigator('喜欢', { user: userProfile })}>
@@ -213,6 +225,7 @@ export default observer((props: any) => {
 const parallaxBgHeight = (Device.WIDTH * 651) / 1125;
 const taskEntryWidth = Device.WIDTH - pixel(40);
 const taskEntryHeight = (taskEntryWidth * 180) / 700;
+const scrollTop = parallaxBgHeight - (Device.isFullScreenDevice ? pixel(30) : pixel(60));
 
 const styles = StyleSheet.create({
     container: {
@@ -239,8 +252,8 @@ const styles = StyleSheet.create({
     contentContainer: {
         flexGrow: 1,
         backgroundColor: '#fff',
-        marginTop: parallaxBgHeight - (Device.isFullScreenDevice ? pixel(30) : pixel(60)),
-        paddingBottom: Theme.BOTTOM_HEIGHT,
+        marginTop: scrollTop,
+        paddingBottom: Theme.BOTTOM_HEIGHT + Theme.HOME_INDICATOR_HEIGHT + scrollTop,
         borderTopLeftRadius: pixel(20),
         borderTopRightRadius: pixel(20),
         overflow: 'hidden',
