@@ -43,12 +43,16 @@ export const useResolveContent = ({ shareBody, onSuccess, onFailed }: Props) => 
                         });
                     } else {
                         Loading.hide();
-                        onFailed(data);
+                        if (onFailed instanceof Function) {
+                            onFailed(data);
+                        }
                     }
                 },
                 onError: (error: any) => {
                     Loading.hide();
-                    onFailed(error);
+                    if (onFailed instanceof Function) {
+                        onFailed(error);
+                    }
                 },
             });
         },
@@ -97,7 +101,9 @@ export const useResolveContent = ({ shareBody, onSuccess, onFailed }: Props) => 
                 })
                 .catch((err) => {
                     Loading.hide();
-                    onFailed(err);
+                    if (onFailed instanceof Function) {
+                        onFailed(err);
+                    }
                 });
         }
     }, [shareBody, onSuccess, onFailed]);

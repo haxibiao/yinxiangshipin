@@ -18,7 +18,7 @@ type UploadOption = {
 function upload(props: UploadOption) {
     const { videoPath, onStarted, onProcess, onCompleted, onError } = props;
 
-    fetch(Config.ServerRoot + '/api/signature/vod-' + Config.Name, { method: 'GET' })
+    fetch(Config.ServerRoot + '/api/signature/vod-' + Config.PackageName, { method: 'GET' })
         .then((response) => {
             if (response.status < 200 || response.status > 300) {
                 throw new Error('签名获取失败');

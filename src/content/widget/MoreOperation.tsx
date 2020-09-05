@@ -232,7 +232,7 @@ const MoreOperation = (props: any) => {
                 description:
                     (Config.AppName ? '我在' + Config.AppName + '发现' : '') + '一个很有意思的内容，分享给你看看',
                 webpageUrl: Config.ServerRoot + `/share/post/${target.id}?user_id=${userStore.me.id}`,
-                thumbImageUrl: Config.ServerRoot + `/logo/${Config.Name}.com.png`,
+                thumbImageUrl: Config.ServerRoot + `/logo/${Config.PackageName}.com.png`,
                 scene: 0,
             });
         } catch (e) {
@@ -258,7 +258,7 @@ const MoreOperation = (props: any) => {
                 description:
                     (Config.AppName ? '我在' + Config.AppName + '发现' : '') + '一个很有意思的内容，分享给你看看',
                 webpageUrl: Config.ServerRoot + `/share/post/${target.id}?user_id=${userStore.me.id}`,
-                thumbImageUrl: Config.ServerRoot + `/logo/${Config.Name}.com.png`,
+                thumbImageUrl: Config.ServerRoot + `/logo/${Config.PackageName}.com.png`,
                 scene: 1,
             });
         } catch (e) {
@@ -269,7 +269,7 @@ const MoreOperation = (props: any) => {
     const shareToQQ = useCallback(async () => {
         closeOverlay();
         // const baseurl = new Buffer(Config.ServerRoot + "/share/post/"+ target.id).toString('base64');
-        // const baseimage = new Buffer(Config.ServerRoot + "/logo/ " + Config.Name + " .com.small.png").toString('base64');
+        // const baseimage = new Buffer(Config.ServerRoot + "/logo/ " + Config.PackageName + " .com.small.png").toString('base64');
         // const basetitle = new Buffer("这个视频好好看分享给你").toString('base64');
         // const basedesc = new Buffer(target.body).toString('base64');
         // const openUrl = "mqqapi://share/to_fri?file_type=news&src_type=web&version=1&generalpastboard=1&share_id=1107845270&url="+ baseurl +"&previewimageUrl=" + baseimage + "&image_url=" + baseimage + "&title=" + basetitle + "&description=" + basedesc + "&callback_type=scheme&thirdAppDisplayName=UVE=&app_name=UVE=&cflag=0&shareType=0";
@@ -289,7 +289,7 @@ const MoreOperation = (props: any) => {
         //     title: (Config.AppName ? '我在' + Config.AppName : '') + '发现一个很有意思的内容，分享给你看看',
         //     description: target.description,
         //     webpageUrl: Config.ServerRoot + `/share/post/${target.id}?user_id=${userStore.me.id}`,
-        //     imageUrl: Config.ServerRoot + `/logo/${Config.Name}.com.png`,
+        //     imageUrl: Config.ServerRoot + `/logo/${Config.PackageName}.com.png`,
         // }).then((data: any) => {
         //     console.log('data', data);
         // });
@@ -299,7 +299,7 @@ const MoreOperation = (props: any) => {
         //     title: '',
         //     description: target.body,
         //     webpageUrl: Config.ServerRoot + `/share/post/${target.id}?user_id=${userStore.me.id}`,
-        //     imageUrl: Config.ServerRoot + `/logo/${Config.Name}.com.png`,
+        //     imageUrl: Config.ServerRoot + `/logo/${Config.PackageName}.com.png`,
         // });
 
         // if (!callback) {
@@ -348,7 +348,7 @@ const MoreOperation = (props: any) => {
         //     title: target.description,
         //     description: (Config.AppName ? '我在' + Config.AppName : '') + '发现一个很有意思的内容，分享给你看看',
         //     webpageUrl: Config.ServerRoot + `/share/post/${target.id}?user_id=${userStore.me.id}`,
-        //     imageUrl: Config.ServerRoot + `/logo/${Config.Name}.com.png`,
+        //     imageUrl: Config.ServerRoot + `/logo/${Config.PackageName}.com.png`,
         // }).then((data: any) => {
         //     console.log('data', data);
         // });
