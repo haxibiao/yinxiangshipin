@@ -6,8 +6,8 @@
     "UploadServer": "http://yxsp.haxifang.cn",
     "SocketServer": "ws://socket.yinxiangshipin.com:6004",
     "AppSlogan": "专注短视频，知识变现的app",
-    "Version": "1.1.0",
-    "VersionCode": 3,
+    "Version": "1.2.0",
+    "VersionCode": 4,
     "Build": 1,
     "WechatAppId": "wx058fb6b32fc2b7c0",
 
@@ -15,17 +15,17 @@
     "feed_provider": "头条",
     "reward_video_provider": "头条",
 
-    "tt_appid_ios": "5016582",
-    "codeid_splash_ios": "816582039",
-    "codeid_feed_ios": "916582486",
-    "codeid_draw_video_ios": "945339778",
-    "codeid_full_video_ios": "945448691",
+    "tt_appid_ios": "5099588",
+    "codeid_splash_ios": "887368877",
+    "codeid_draw_video_ios": "945418808",
+    "codeid_feed_ios": "945418809",
     "codeid_reward_video_ios": "945448682",
+    "codeid_full_video_ios": "945448691",
 
-    "tt_appid": "5099588",
-    "codeid_splash": "816582039",
-    "codeid_feed": "945418809",
-    "codeid_draw_video": "945418808",
-    "codeid_full_video": "945448691",
-    "codeid_reward_video": "945448682"
+    "tt_appid": "5102920",
+    "codeid_splash": "887376386",
+    "codeid_draw_video": "945457147",
+    "codeid_feed": "945457111",
+    "codeid_reward_video": "945457145",
+    "codeid_full_video": "945457139"
 }

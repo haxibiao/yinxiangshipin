@@ -17,22 +17,20 @@ interface DeviceInfo {
 }
 
 interface AppConfig {
-    Name: string;
+    AppID: string;
     AppName: string;
     PackageName: string;
-    AppID: number;
-    AppSlogan: string;
+    Version: string;
     Build: string;
+    AppSlogan: string;
     ServerRoot: string;
     UploadServer: string;
-    Version: string;
-    appStoreUrl: string;
+    WechatAppId: string;
     AppStore: string;
-    AppVersion: string;
     goldAlias: string;
+    ticketAlias: string;
     qqGroup: string;
     iosAppStoreUrl: string;
-    WechatAppId: string;
 }
 
 interface Colour {
