@@ -12,6 +12,7 @@
 #import './visit/index.graphql'
 #import './feedback/index.graphql'
 #import './task/index.graphql'
+#import './tag/index.graphql'
 
 query me {
     me {

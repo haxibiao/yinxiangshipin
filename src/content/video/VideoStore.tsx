@@ -1,7 +1,7 @@
 import { observable, computed, action } from 'mobx';
 import { appStore } from '@src/store';
-import { GQL } from '../service';
 import { exceptionCapture } from '@src/common';
+import { GQL } from '@src/apollo';
 
 interface User {
     id: number;

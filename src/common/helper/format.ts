@@ -30,8 +30,21 @@ export function goldExchange(gold: number, rate = 600) {
     return (gold / rate).toFixed(2);
 }
 
-const numberConvert = (function numberConvertToUppercase() {
-    return function (num) {
+export function getURLsFromString(str: string): string[] {
+    var re = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=+$,\w]+@)?[A-Za-z0-9.-]+|(?:www\.|[-;:&=+$,\w]+@)[A-Za-z0-9.-]+)((?:\/[+~%\/.\w-]*)?\??(?:[-+=&;%@.\w]*)#?\w*)?)/gm;
+    var m;
+    var arr = [];
+    while ((m = re.exec(str)) !== null) {
+        if (m.index === re.lastIndex) {
+            re.lastIndex++;
+        }
+        arr.push(m[0]);
+    }
+    return arr;
+}
+
+export const numberConvertToUppercase = (function numberConvert() {
+    return function (num: number) {
         num = Number(num);
         const upperCaseNumber = [
             '零',
@@ -68,16 +81,3 @@ const numberConvert = (function numberConvertToUppercase() {
         }
     };
 })();
-
-export function getURLsFromString(str: string): string[] {
-    var re = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=+$,\w]+@)?[A-Za-z0-9.-]+|(?:www\.|[-;:&=+$,\w]+@)[A-Za-z0-9.-]+)((?:\/[+~%\/.\w-]*)?\??(?:[-+=&;%@.\w]*)#?\w*)?)/gm;
-    var m;
-    var arr = [];
-    while ((m = re.exec(str)) !== null) {
-        if (m.index === re.lastIndex) {
-            re.lastIndex++;
-        }
-        arr.push(m[0]);
-    }
-    return arr;
-}

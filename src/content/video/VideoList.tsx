@@ -23,7 +23,7 @@ import DrawVideoStore from './VideoStore';
 import VideoItem from './components/VideoItem';
 import RewardProgress from './components/RewardProgress';
 import useAdReward from './components/useAdReward';
-import { debounce, font, pixel } from '../helper';
+import { debounce } from '../helper';
 
 export default observer(() => {
     const commentRef = useRef();

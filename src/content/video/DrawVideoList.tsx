@@ -21,7 +21,7 @@ import CommentOverlay from '@src/screens/comment/CommentOverlay';
 import CommentInput from './components/CommentInput';
 import useAdReward from './components/useAdReward';
 import RewardProgress from './components/RewardProgress';
-import { debounce, font, pixel } from '../helper';
+import { debounce } from '../helper';
 
 const config = {
     waitForInteraction: true,

@@ -89,6 +89,13 @@ mutation updatePostMutation($id: Int!, $content: String, $description: String, $
     }
 }
 
+# 删除
+mutation deletePost($id: Int!) {
+    deletePost(id: $id) {
+        id
+    }
+}
+
 #看视频奖励
 mutation VideoPlayReward($input: videoPlayReport) {
     videoPlayReward(input: $input) {
