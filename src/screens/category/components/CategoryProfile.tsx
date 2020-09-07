@@ -43,7 +43,7 @@ export default observer(({ category, titleStyle, nameStyle }) => {
                         {category.description || '这个话题很懒，什么介绍都不写'}
                     </Text>
                     <View style={styles.fill}>
-                        <Text style={styles.countArticles}>{Helper.NumberFormat(category.count_articles)}条动态</Text>
+                        <Text style={styles.countArticles}>{Helper.count(category.count_articles)}条动态</Text>
                     </View>
                 </View>
             </ImageBackground>

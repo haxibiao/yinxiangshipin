@@ -114,7 +114,7 @@ export default observer((props: any) => {
                                     发布
                                 </Text>
                                 <Text style={styles.metaCount} numberOfLines={1}>
-                                    {Helper.NumberFormat(userProfile.count_articles)}
+                                    {Helper.count(userProfile.count_articles)}
                                 </Text>
                             </TouchableOpacity>
                             <TouchableOpacity
@@ -125,7 +125,7 @@ export default observer((props: any) => {
                                     关注
                                 </Text>
                                 <Text style={styles.metaCount} numberOfLines={1}>
-                                    {Helper.NumberFormat(userProfile.count_followings)}
+                                    {Helper.count(userProfile.count_followings)}
                                 </Text>
                             </TouchableOpacity>
                             <TouchableOpacity
@@ -136,7 +136,7 @@ export default observer((props: any) => {
                                     粉丝
                                 </Text>
                                 <Text style={styles.metaCount} numberOfLines={1}>
-                                    {Helper.NumberFormat(userProfile.count_followers)}
+                                    {Helper.count(userProfile.count_followers)}
                                 </Text>
                             </TouchableOpacity>
                         </View>

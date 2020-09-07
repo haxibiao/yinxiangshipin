@@ -23,7 +23,7 @@ import DrawVideoStore from './VideoStore';
 import VideoItem from './components/VideoItem';
 import RewardProgress from './components/RewardProgress';
 import useAdReward from './components/useAdReward';
-import { debounce } from '../helper';
+import __ from 'lodash';
 
 export default observer(() => {
     const commentRef = useRef();
@@ -35,7 +35,7 @@ export default observer(() => {
     }, []);
 
     const onMomentumScrollEnd = useCallback(
-        debounce(() => {
+        __.debounce(() => {
             if (videoStore.data.length - videoStore.viewableItemIndex <= 3) {
                 videoStore.fetchData();
             }

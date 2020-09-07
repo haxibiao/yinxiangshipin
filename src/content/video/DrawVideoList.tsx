@@ -21,7 +21,7 @@ import CommentOverlay from '@src/screens/comment/CommentOverlay';
 import CommentInput from './components/CommentInput';
 import useAdReward from './components/useAdReward';
 import RewardProgress from './components/RewardProgress';
-import { debounce } from '../helper';
+import __ from 'lodash';
 
 const config = {
     waitForInteraction: true,
@@ -46,7 +46,7 @@ export default observer(({ store, initialIndex = 0, getVisibleItem, fetchData, s
     }, []);
 
     const onMomentumScrollEnd = useCallback(
-        debounce(() => {
+        __.debounce(() => {
             if (fetchData instanceof Function) {
                 fetchData();
             }
