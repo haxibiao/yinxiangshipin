@@ -1,6 +1,6 @@
 import { useCallback, useRef } from 'react';
 import { Animated } from 'react-native';
-import { GQL } from './graphql';
+import { GQL } from '@src/apollo';
 import { useBetterMutation, MutationProps } from './useBetterMutation';
 
 interface Props extends MutationProps {
@@ -10,7 +10,7 @@ interface Props extends MutationProps {
 
 export const useLikeMutation = (props: Props) => {
     const { id, type, options, successful, failure } = props;
-    const [toggleLike, result] = useBetterMutation(GQL.toggleLike, {
+    const [toggleLike, result] = useBetterMutation(GQL.toggleLikeMutation, {
         options: Object.assign({
             variables: {
                 id,

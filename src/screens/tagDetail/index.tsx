@@ -9,11 +9,11 @@ import {
     TouchableWithoutFeedback,
     Animated,
 } from 'react-native';
-import { useQuery } from '@apollo/react-hooks';
 import { observer, appStore } from '@src/store';
 import { NavBarHeader } from '@src/components';
 import { syncGetter, count } from '@src/common';
-import { GQL, ContentStatus, mergeProperty } from '@src/content';
+import { GQL, useQuery } from '@src/apollo';
+import { ContentStatus, mergeProperty } from '@src/content';
 import { observable } from 'mobx';
 import { useRoute, useNavigation } from '@react-navigation/native';
 

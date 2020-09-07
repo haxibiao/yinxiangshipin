@@ -1,9 +1,8 @@
 import React, { useMemo, useCallback } from 'react';
 import { StyleSheet, View, Text, Image, TouchableWithoutFeedback, TouchableOpacity, Platform } from 'react-native';
-import { useMutation } from '@apollo/react-hooks';
 import { download } from '@src/common';
-import { GQL, errorMessage, useReport } from '../../service';
-import { percent, pixel, font } from '../../helper';
+import { GQL, useMutation, errorMessage } from '@src/apollo';
+import { useReport } from '../../service';
 import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 
 const VideoOperation = (props: any) => {

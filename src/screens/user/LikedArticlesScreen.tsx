@@ -1,7 +1,8 @@
 import React, { useCallback } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { PageContainer } from '@src/components';
-import { QueryList, PostItem, GQL } from '@src/content';
+import { GQL } from '@src/apollo';
+import { QueryList, PostItem } from '@src/content';
 import { userStore } from '@src/store';
 
 export default (props: any) => {

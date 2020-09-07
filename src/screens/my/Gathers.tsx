@@ -2,7 +2,8 @@ import React, { useCallback } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { PageContainer } from '@src/components';
 import { useRoute } from '@react-navigation/native';
-import { QueryList, PostItem, GQL, CaptureContent } from '@src/content';
+import { GQL } from '@src/apollo';
+import { QueryList, PostItem, CaptureContent } from '@src/content';
 
 export default () => {
     const route = useRoute();

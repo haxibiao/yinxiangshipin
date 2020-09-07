@@ -1,6 +1,6 @@
 import { useRef, useCallback } from 'react';
 import { Animated } from 'react-native';
-import { GQL } from './graphql';
+import { GQL } from '@src/apollo';
 import { useBetterMutation, MutationProps } from './useBetterMutation';
 
 interface Props extends MutationProps {

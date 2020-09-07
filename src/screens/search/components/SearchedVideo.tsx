@@ -1,7 +1,8 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { StyleSheet, View, Text, Image, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import { observer } from '@src/store';
-import { QueryList, GQL } from '@src/content';
+import { GQL } from '@src/apollo';
+import { QueryList } from '@src/content';
 import SearchVideoItem from './SearchVideoItem';
 
 const index = observer(({ navigation, keyword, tag_id, user_id }) => {

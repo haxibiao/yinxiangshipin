@@ -4,7 +4,8 @@ import { useRoute } from '@react-navigation/native';
 import { exceptionCapture } from '@src/common';
 import { NavBarHeader } from '@src/components';
 import { observer, appStore, userStore } from '@src/store';
-import { DrawVideoList, DrawVideoStore, GQL } from '@src/content';
+import { GQL } from '@src/apollo';
+import { DrawVideoList, DrawVideoStore } from '@src/content';
 
 export default observer((props) => {
     const videoStore = useMemo(() => new DrawVideoStore(), []);

@@ -1,8 +1,8 @@
 import React, { useState, useCallback } from 'react';
 import { StyleSheet, View, Text, Image, TouchableOpacity, TextInput } from 'react-native';
+import { GQL } from '@src/apollo';
+import { exceptionCapture, getURLsFromString } from '@src/common';
 import { Iconfont, Loading } from '@src/components';
-import { getURLsFromString, percent, pixel, font } from '../helper';
-import { exceptionCapture, GQL } from '../service';
 import { useResolveVideo } from './useResolveVideo';
 import { useResolveContent } from './useResolveContent';
 
@@ -33,6 +33,16 @@ export const VideoCaptureData = ({ client, shareLink, shareBody, onSuccess, onFa
                         qcvod_fileid: video?.id,
                         share_link: shareLink,
                     },
+                    refetchQueries: () => [
+                        {
+                            query: GQL.tasksQuery,
+                            fetchPolicy: 'network-only',
+                        },
+                        {
+                            query: GQL.MeMetaQuery,
+                            fetchPolicy: 'network-only',
+                        },
+                    ],
                 }),
             );
             Loading.hide();

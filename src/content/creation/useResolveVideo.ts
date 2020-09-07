@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useMemo } from 'react';
 import { Loading } from '@src/components';
-import { exceptionCapture, GQL } from '../service';
+import { GQL } from '@src/apollo';
+import { exceptionCapture } from '@src/common';
 
 interface Props {
     shareLink: string;

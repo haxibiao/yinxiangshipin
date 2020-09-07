@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { DocumentNode } from 'graphql';
 import { useMutation, MutationTuple, MutationHookOptions } from '@apollo/react-hooks';
-import { exceptionCapture } from './exceptionCapture';
+import { exceptionCapture } from '@src/common';
 import { debounce } from '../helper';
 
 export interface MutationProps {
@@ -14,7 +14,7 @@ export interface MutationProps {
 export const useBetterMutation = (gqlNode: DocumentNode, { options, successful, failure }: MutationProps) => {
     const [mutate, result] = useMutation(gqlNode, options);
     const mutation = useCallback(
-        debounce(async function(params?: MutationHookOptions) {
+        debounce(async function (params?: MutationHookOptions) {
             const [err, res] = await exceptionCapture(() => mutate(params));
             if (res) {
                 if (successful instanceof Function) {

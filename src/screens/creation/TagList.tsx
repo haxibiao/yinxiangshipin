@@ -1,9 +1,9 @@
 import React, { useRef, useMemo, useCallback } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, TextInput } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
-import { QueryList, PostItem, GQL } from '@src/content';
+import { GQL, useQuery } from '@src/apollo';
+import { QueryList, PostItem } from '@src/content';
 import { FocusAwareStatusBar } from '@src/router';
-import { useQuery } from '@apollo/react-hooks';
 import { NavBarHeader } from '@src/components';
 import { userStore } from '@src/store';
 import { count } from '@src/common';

@@ -1,8 +1,0 @@
-#import './query.graphql'
-#import './mutation.graphql'
-
-query me {
-    me {
-        id
-    }
-}

@@ -3,16 +3,14 @@ import { View, StyleSheet, Image, Text, TouchableOpacity, Animated, ScrollView }
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Avatar, Iconfont, SafeText, PlaceholderImage, GridImage } from '@src/components';
 import { observer, userStore } from '@src/store';
-import { useApolloClient } from '@apollo/react-hooks';
-import { ApolloProvider } from 'react-apollo';
-import { font, pixel, percent, WINDOW_WIDTH } from '../../helper';
-import { GQL, useLikeMutation } from '../../service';
+import { GQL, useApolloClient, ApolloProvider } from '@src/apollo';
+import { useLikeMutation } from '../../service';
 import { AnimationLike, Commodity, MoreOperation } from '../../widget';
 import { Overlay } from 'teaset';
 
-const videoWidth = WINDOW_WIDTH * 0.6;
+const videoWidth = Device.WIDTH * 0.6;
 const videoHeight = videoWidth * 1.33;
-const COVER_WIDTH = WINDOW_WIDTH - pixel(14) * 2;
+const COVER_WIDTH = Device.WIDTH - pixel(14) * 2;
 
 const HeartIcon = {
     liked: require('@app/assets/images/icons/ic_heart_red.png'),

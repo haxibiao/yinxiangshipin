@@ -1,7 +1,8 @@
 import React, { useCallback, useMemo } from 'react';
 import { View, Text, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
 import { observer } from '@src/store';
-import { QueryList, PostItem, GQL } from '@src/content';
+import { GQL } from '@src/apollo';
+import { QueryList, PostItem } from '@src/content';
 
 const index = observer(({ keyword }) => {
     // variables: { query: keyword, type: 'POST', page: 1 },

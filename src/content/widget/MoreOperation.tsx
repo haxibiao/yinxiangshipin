@@ -5,12 +5,11 @@ import * as WeChat from 'react-native-wechat-lib';
 import ShareIOS from 'react-native-share';
 import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 // import * as QQAPI from 'react-native-qq';
-import { useMutation } from '@apollo/react-hooks';
 import { userStore } from '@src/store';
-import { download } from '@src/common';
+import { download, syncGetter, exceptionCapture } from '@src/common';
 import { Share } from '@src/native';
-import { GQL, exceptionCapture, errorMessage, useReport } from '../service';
-import { syncGetter, pixel, font } from '../helper';
+import { GQL, useMutation, errorMessage } from '@src/apollo';
+import { useReport } from '../service';
 
 const MoreOperation = (props: any) => {
     const shareLink = useRef();

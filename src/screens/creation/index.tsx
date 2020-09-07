@@ -21,9 +21,9 @@ import {
     UserAgreementOverlay,
     OverlayViewer,
 } from '@src/components';
-import { GQL, shareClipboardLink, exceptionCapture, errorMessage } from '@src/content';
+import { GQL, useMutation, errorMessage } from '@src/apollo';
+import { shareClipboardLink, exceptionCapture } from '@src/content';
 import { useRoute, useNavigation } from '@react-navigation/native';
-import { useMutation } from '@apollo/react-hooks';
 import { observer, userStore, appStore } from '@src/store';
 import { observable } from 'mobx';
 import { Overlay } from 'teaset';

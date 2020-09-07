@@ -2,7 +2,8 @@ import React, { useCallback, useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { NavBarHeader } from '@src/components';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { QueryList, PostItem, GQL } from '@src/content';
+import { GQL } from '@src/apollo';
+import { QueryList, PostItem } from '@src/content';
 
 export default () => {
     const navigation = useNavigation();

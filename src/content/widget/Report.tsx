@@ -1,8 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import { StyleSheet, ScrollView, View, Text, TouchableOpacity, TextInput } from 'react-native';
 import { Iconfont } from '@src/components';
-import { font, pixel } from '../../helper';
-import { useBetterMutation, GQL } from '../../service';
+import { GQL } from '@src/apollo';
+import { useBetterMutation } from '../../service';
 
 const reportReasons = ['低俗色情', '侮辱谩骂', '垃圾广告', '违法侵权', '感官不适', '政治敏感', '其他原因'] as const;
 
@@ -28,7 +28,7 @@ export default function Report({ id, type, close, successful, failure }: Props) 
     const reasons = useMemo(() => {
         return (
             <View style={styles.reasonsContainer}>
-                {reportReasons.map(item => {
+                {reportReasons.map((item) => {
                     return (
                         <TouchableOpacity
                             key={item}
@@ -87,7 +87,7 @@ export default function Report({ id, type, close, successful, failure }: Props) 
                         style={[styles.reasonInput, reasonType !== '其他原因' && { backgroundColor: '#efefef' }]}
                         placeholder="请描述举报原因(200字以内)"
                         value={description}
-                        onChange={value => setDescription(value)}
+                        onChange={(value) => setDescription(value)}
                     />
                 </View>
             </ScrollView>

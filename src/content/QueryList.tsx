@@ -1,9 +1,10 @@
 import React, { useCallback, useMemo, useRef } from 'react';
 import { StyleSheet, View, Text, FlatList, FlatListProperties, ViewStyle, RefreshControl } from 'react-native';
-import { useQuery, QueryHookOptions } from '@apollo/react-hooks';
+import { QueryHookOptions } from '@apollo/react-hooks';
 import { DocumentNode } from 'graphql';
-import { GQL } from './service';
-import { pixel, font, syncGetter, mergeProperty } from './helper';
+import { GQL, useQuery } from '@src/apollo';
+import { syncGetter } from '@src/common';
+import { mergeProperty } from './helper';
 import ContentStatus from './ContentStatus';
 
 interface Props extends FlatListProperties {
