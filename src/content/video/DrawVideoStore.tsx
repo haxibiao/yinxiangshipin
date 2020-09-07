@@ -1,7 +1,7 @@
 import { observable, computed, action } from 'mobx';
+import { exceptionCapture } from '@src/common';
 import { appStore } from '@src/store';
 import { GQL } from '../service';
-import { exceptionCapture } from '@src/common';
 
 interface User {
     id: number;
@@ -39,18 +39,25 @@ class DrawVideoStore {
     @observable public visibility: boolean = true;
     @observable public viewableItemIndex: number = 0;
     @observable public commentBody = '';
+    // 业务逻辑
+    public haveWatchedVideos: number[] = []; // 已经浏览过的视频
+    public haveRewardedVideos: number[] = []; // 已经领取过奖励的视频
+    readonly rewardInterval: number = 30; // 观看视频奖励间隔
+    @observable public rewardProgress: number = 0; // 获得奖励的进度
 
     @computed get currentItem(): VideoItem {
         return this.data[this.viewableItemIndex >= 0 ? this.viewableItemIndex : 0];
     }
 
-    constructor({ initData, itemIndex }) {
+    constructor({ initData, itemIndex } = {}) {
         this.fullVideoHeight = Device.isFullScreenDevice
             ? appStore.viewportHeight - Theme.statusBarHeight - Theme.BOTTOM_HEIGHT
             : appStore.viewportHeight;
 
         if (initData) {
             this.data = initData;
+        }
+        if (itemIndex) {
             this.viewableItemIndex = itemIndex;
         }
     }
@@ -60,6 +67,9 @@ class DrawVideoStore {
         this.data = [];
         this.viewableItemIndex = 0;
         this.commentBody = '';
+        this.rewardProgress = 0;
+        this.haveWatchedVideos = [];
+        this.haveRewardedVideos = [];
     }
 
     @action.bound
@@ -79,6 +89,16 @@ class DrawVideoStore {
     @action.bound
     public changeCommentBody(value: any) {
         this.commentBody = value;
+    }
+
+    @action.bound
+    public addPlayedId(id: any) {
+        this.haveWatchedVideos = this.haveWatchedVideos.concat(id);
+    }
+
+    @action.bound
+    public addRewardedId(id: any) {
+        this.haveRewardedVideos = this.haveRewardedVideos.concat(id);
     }
 }
 

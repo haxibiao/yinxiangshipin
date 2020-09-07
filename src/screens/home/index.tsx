@@ -1,11 +1,12 @@
 import React, { useRef, useEffect, useMemo, useCallback } from 'react';
 import { StyleSheet, View, Text, StatusBar } from 'react-native';
 import { observer, appStore, userStore } from '@src/store';
-import { VideoList, useClipboardLink, VideoCaptureData } from '@src/content';
+import { useClipboardLink, VideoCaptureData } from '@src/content';
 import { useApolloClient } from '@apollo/react-hooks';
 import { useBeginner } from '@src/common';
 import { NavBarHeader } from '@src/components';
 import { Overlay } from 'teaset';
+import RecommendVideos from './RecommendVideos';
 
 export default observer(() => {
     useBeginner();
@@ -53,7 +54,7 @@ export default observer(() => {
 
     return (
         <View style={{ flex: 1 }} onLayout={onLayout}>
-            <VideoList />
+            <RecommendVideos />
             <NavBarHeader
                 navBarStyle={styles.navBarStyle}
                 hasGoBackButton={false}

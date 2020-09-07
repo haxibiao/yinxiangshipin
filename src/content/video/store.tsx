@@ -33,7 +33,6 @@ const uniqueIds = {};
 
 class DrawVideoStore {
     private instance: DrawVideoStore = null;
-    public playedVideoIds: number[] = []; // 记录用户浏览的视频
     @observable public fullVideoHeight: number = appStore.viewportHeight;
     @observable public data: VideoItem[] = [];
     @observable public loaded: boolean = true;
@@ -44,10 +43,11 @@ class DrawVideoStore {
     @observable public visibility: boolean = true;
     @observable public viewableItemIndex: number = 0;
     @observable public commentBody = '';
-    // 激励视频逻辑
-    readonly rewardLimit: number = 30; // 奖励频率
-    @observable public rewardProgress: number = 0;
-    @observable public getReward = [];
+    // 业务逻辑
+    public haveWatchedVideos: number[] = []; // 已经浏览过的视频
+    public haveRewardedVideos: number[] = []; // 已经领取过奖励的视频
+    readonly rewardInterval: number = 30; // 观看视频奖励间隔
+    @observable public rewardProgress: number = 0; // 获得奖励的进度
 
     @computed get currentItem(): VideoItem {
         return this.data[this.viewableItemIndex >= 0 ? this.viewableItemIndex : 0];
@@ -79,7 +79,8 @@ class DrawVideoStore {
         this.viewableItemIndex = 0;
         this.commentBody = '';
         this.rewardProgress = 0;
-        this.getReward = [];
+        this.haveWatchedVideos = [];
+        this.haveRewardedVideos = [];
     }
 
     @action.bound
@@ -129,8 +130,13 @@ class DrawVideoStore {
     }
 
     @action.bound
-    public addRewardedVideoId(id: any) {
-        this.getReward = this.getReward.concat(id);
+    public addPlayedId(id: any) {
+        this.haveWatchedVideos = this.haveWatchedVideos.concat(id);
+    }
+
+    @action.bound
+    public addRewardedId(id: any) {
+        this.haveRewardedVideos = this.haveRewardedVideos.concat(id);
     }
 }
 
