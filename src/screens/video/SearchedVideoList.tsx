@@ -1,11 +1,11 @@
 import React, { useRef, useEffect, useMemo, useCallback } from 'react';
 import { StyleSheet, View, Text, StatusBar } from 'react-native';
 import { useRoute } from '@react-navigation/native';
-import { useApolloClient } from '@apollo/react-hooks';
 import { exceptionCapture } from '@src/common';
 import { FocusAwareStatusBar } from '@src/router';
 import { NavBarHeader } from '@src/components';
-import { DrawVideoList, DrawVideoStore, GQL } from '@src/content';
+import { GQL, useApolloClient } from '@src/apollo';
+import { DrawVideoList, DrawVideoStore } from '@src/content';
 
 export default () => {
     const route = useRoute();
@@ -67,6 +67,7 @@ export default () => {
                 initialIndex={itemIndex}
                 getVisibleItem={getVisibleItem}
                 fetchData={fetchData}
+                showBottomInput={true}
             />
             <NavBarHeader navBarStyle={styles.navBarStyle} isTransparent={true} />
         </View>

@@ -39,8 +39,8 @@ class DrawVideoStore {
     @observable public viewableItemIndex: number = 0;
     @observable public commentBody = '';
     // 业务逻辑
-    public haveWatchedVideos: number[] = []; // 已经浏览过的视频
-    public haveRewardedVideos: number[] = []; // 已经领取过奖励的视频
+    public playedVideos: number[] = []; // 已经浏览过的视频
+    public rewardedVideos: number[] = []; // 已经领取过奖励的视频
     readonly rewardInterval: number = 30; // 观看视频奖励间隔
     @observable public rewardProgress: number = 0; // 获得奖励的进度
 
@@ -67,8 +67,8 @@ class DrawVideoStore {
         this.viewableItemIndex = 0;
         this.commentBody = '';
         this.rewardProgress = 0;
-        this.haveWatchedVideos = [];
-        this.haveRewardedVideos = [];
+        this.playedVideos = [];
+        this.rewardedVideos = [];
     }
 
     @action.bound
@@ -92,12 +92,12 @@ class DrawVideoStore {
 
     @action.bound
     public addPlayedId(id: any) {
-        this.haveWatchedVideos = this.haveWatchedVideos.concat(id);
+        this.playedVideos = this.playedVideos.concat(id);
     }
 
     @action.bound
     public addRewardedId(id: any) {
-        this.haveRewardedVideos = this.haveRewardedVideos.concat(id);
+        this.rewardedVideos = this.rewardedVideos.concat(id);
     }
 }
 

@@ -20,7 +20,7 @@ const RewardProgress = observer(({ store }) => {
     const [playReward] = useMutation(GQL.VideoPlayReward, {
         variables: {
             input: {
-                video_ids: [...new Set(store.playedVideoIds)],
+                video_ids: [...new Set(store.playedVideos)],
             },
         },
         refetchQueries: (): array => [
@@ -37,7 +37,7 @@ const RewardProgress = observer(({ store }) => {
                 store.rewardProgress = 0;
                 startImageAnimation();
                 const [error, res] = await exceptionCapture(playReward);
-                store.playedVideoIds = [];
+                store.playedVideos = [];
                 if (error) {
                     setReward('领取失败');
                 } else {

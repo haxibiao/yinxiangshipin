@@ -89,8 +89,8 @@ export default observer(({ store, initialIndex = 0, getVisibleItem, fetchData, s
     // TODO:点击领取奖励
     const getReward = useCallback(async () => {
         // const drawFeedAdId = media.id.toString();
-        // if (videoStore.getReward.indexOf(drawFeedAdId) === -1) {
-        //     videoStore.addGetRewardId(drawFeedAdId);
+        // if (videoStore.rewardedVideos.indexOf(drawFeedAdId) === -1) {
+        //     videoStore.addRewardedId(drawFeedAdId);
         //     // 发放给精力奖励
         //     const [error, res] = await Helper.exceptionCapture(onClickReward);
         //     if (error) {
