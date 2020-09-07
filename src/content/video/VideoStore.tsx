@@ -53,16 +53,12 @@ class DrawVideoStore {
         return this.data[this.viewableItemIndex >= 0 ? this.viewableItemIndex : 0];
     }
 
-    constructor(initData: VideoItem) {
+    constructor() {
         this.fullVideoHeight = Device.isFullScreenDevice
             ? appStore.viewportHeight - Theme.statusBarHeight - Theme.BOTTOM_HEIGHT
             : appStore.viewportHeight;
 
         if (!DrawVideoStore.instance) {
-            if (initData) {
-                this.data = [initData];
-                this.currentData = initData;
-            }
             DrawVideoStore.instance = this;
         }
         return DrawVideoStore.instance;

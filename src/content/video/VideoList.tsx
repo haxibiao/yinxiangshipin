@@ -19,20 +19,16 @@ import { FocusAwareStatusBar } from '@src/router';
 import { observer, userStore, appStore, adStore } from '@src/store';
 import { GQL, useApolloClient } from '@src/apollo';
 import CommentOverlay from '@src/screens/comment/CommentOverlay';
-import DrawVideoStore from './store';
+import DrawVideoStore from './VideoStore';
 import VideoItem from './components/VideoItem';
 import RewardProgress from './components/RewardProgress';
 import useAdReward from './components/useAdReward';
 import { debounce, font, pixel } from '../helper';
 
 export default observer(() => {
-    const route = useRoute();
-    const initVideo = useMemo(() => route?.params?.Video, []);
-    const hasGoBack = useMemo(() => route?.params?.hasGoBack, []);
-    const videoStore = useMemo(() => new DrawVideoStore(initVideo), []);
-    const navigation = useNavigation();
-    const client = useApolloClient();
     const commentRef = useRef();
+    const navigation = useNavigation();
+    const videoStore = useMemo(() => new DrawVideoStore(initVideo), []);
     const onLayout = useCallback((event) => {
         const { height } = event.nativeEvent.layout;
         videoStore.fullVideoHeight = height;
@@ -185,16 +181,6 @@ export default observer(() => {
     return (
         <View style={styles.container}>
             <FocusAwareStatusBar barStyle="light-content" />
-            <View style={styles.navBar}>
-                {hasGoBack && (
-                    <TouchableOpacity
-                        onPress={() => {
-                            navigation.goBack();
-                        }}>
-                        <Iconfont name="fanhui" size={font(22)} color={'#fff'} />
-                    </TouchableOpacity>
-                )}
-            </View>
             <View style={styles.listContainer}>
                 <FlatList
                     contentContainerStyle={styles.contentContainerStyle}
@@ -246,7 +232,7 @@ export default observer(() => {
                 />
             </View>
 
-            {/* {WatchReward} */}
+            {/* {RewardProgress} */}
             <CommentOverlay ref={commentRef} media={videoStore.currentItem} navigation={navigation} />
         </View>
     );
@@ -268,18 +254,6 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         // overflow: 'hidden',
         // borderRadius: Device.isFullScreenDevice ? pixel(8) : 0,
-    },
-    navBar: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        height: Theme.NAVBAR_HEIGHT,
-        paddingHorizontal: pixel(12),
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        top: Theme.statusBarHeight,
-        zIndex: 1,
     },
     emptyContainer: {
         flex: 1,
