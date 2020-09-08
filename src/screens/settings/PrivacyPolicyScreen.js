@@ -275,6 +275,25 @@ class PrivacyPolicyScreen extends Component {
                                 3.本《隐私政策》的版权为公司所有,在法律允许的范围内,公司保留最终解释和修改的权利。
                             </Text>
                         </View>
+                        <View style={styles.fontWrap}>
+                            <Text style={styles.darkFont}>五、联系我们 </Text>
+                        </View>
+                        <View style={styles.fontWrap}>
+                            <Text style={styles.tintFont}>
+                                1.当您遇到问题，可以通过http://jinlinle.com/ 与我们联系。
+                            </Text>
+                        </View>
+                        <View style={styles.fontWrap}>
+                            <Text style={styles.tintFont}>
+                                2.也可以将问题发送至客服邮箱lejunhao@haxifang.cn或寄到如下地址:中国湖南省衡阳市珠晖区衡州大道体育中心哈希坊科技有限公司(收)
+                            </Text>
+                        </View>
+                        <View style={styles.fontWrap}>
+                            <Text style={styles.tintFont}>
+                                3.公司名称:近邻乐（深圳）有限责任公司 注册地址:深圳市罗湖区莲塘街道罗沙路 2098
+                                号畔山花园 13-804 联系电话: 17692625821
+                            </Text>
+                        </View>
                     </View>
                 </ScrollView>
             </PageContainer>

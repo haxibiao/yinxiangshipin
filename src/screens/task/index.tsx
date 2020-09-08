@@ -85,7 +85,6 @@ export default observer((props: any) => {
                     </View>
                 </View>
             </TouchableWithoutFeedback>
-
             <AttendanceBook />
             <TaskList />
         </ScrollView>

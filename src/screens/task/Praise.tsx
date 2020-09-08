@@ -81,7 +81,7 @@ export default (props) => {
                     dropStyle={styles.operationItem}
                     dropItemStyle={{ alignItems: 'flex-end' }}
                     labels={[appStore || '请选择应用商店']}
-                    label={<Text style={styles.operationName}>应用商店</Text>}
+                    label={<Text style={styles.operationName}>选择应用商店</Text>}
                     tintColor={appStore ? Theme.primaryColor : '#b2b2b2'}
                     activityTintColor={Theme.primaryColor}
                     handler={(selection, row) => setAppStore(appStores[row])}

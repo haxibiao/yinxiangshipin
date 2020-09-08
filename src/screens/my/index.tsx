@@ -8,6 +8,9 @@ import { GQL, useQuery, useApolloClient } from '@src/apollo';
 export default observer((props: any) => {
     const client = useApolloClient();
     const navigation = useNavigation();
+    // 提前加载提现额度列表
+    useQuery(GQL.getWithdrawAmountList);
+    // 个人信息
     const { data, refetch } = useQuery(GQL.MeMetaQuery, {
         fetchPolicy: 'network-only',
     });
