@@ -10,7 +10,7 @@ const RewardProgress = observer(({ store }) => {
     const navigation = useNavigation();
     const firstReward = useRef(true);
     const userId = useMemo(() => userStore.me.id, [userStore.me]);
-    const progress = (store.rewardProgress / store.rewardLimit) * 100;
+    const progress = (store.rewardProgress / store.rewardInterval) * 100;
     const rewardAble = progress >= 100;
 
     const [rewardGold, setReward] = useState();
@@ -93,7 +93,7 @@ const RewardProgress = observer(({ store }) => {
                     {rewardGold}
                 </Animated.Text>
                 <Image source={require('../../assets/ic_video_reward_progress.png')} style={styles.rewardImage} />
-                {progress > 0 && !Device.IOS && (
+                {progress > 0 && (
                     <Progress.Circle
                         progress={progress / 100}
                         size={pixel(50)}
@@ -115,7 +115,6 @@ const styles = StyleSheet.create({
         width: pixel(54),
         justifyContent: 'center',
         alignItems: 'center',
-        // backgroundColor: '#F00',
     },
     rewardImage: {
         ...StyleSheet.absoluteFill,

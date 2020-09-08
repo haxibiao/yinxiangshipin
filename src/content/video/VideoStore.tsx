@@ -46,7 +46,7 @@ class DrawVideoStore {
     // 业务逻辑
     public playedVideos: number[] = []; // 已经浏览过的视频
     public rewardedVideos: number[] = []; // 已经领取过奖励的视频
-    readonly rewardInterval: number = 30; // 观看视频奖励间隔
+    readonly rewardInterval: number = 42; // 观看视频奖励间隔
     @observable public rewardProgress: number = 0; // 获得奖励的进度
 
     @computed get currentItem(): VideoItem {

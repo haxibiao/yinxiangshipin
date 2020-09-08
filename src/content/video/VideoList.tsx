@@ -94,8 +94,6 @@ export default observer(() => {
 
     const renderVideoItem = useCallback(
         ({ item, index }) => {
-            // index > 0 && index % 5 === 0
-            // item?.is_ad && adStore.enableAd
             if (item?.is_ad && adStore.enableAd) {
                 return (
                     <View style={{ height: videoStore.fullVideoHeight }}>
@@ -163,6 +161,8 @@ export default observer(() => {
         };
     }, []);
 
+    useAdReward(videoStore);
+
     return (
         <View style={styles.container}>
             <FocusAwareStatusBar barStyle="light-content" />
@@ -217,7 +217,12 @@ export default observer(() => {
                 />
             </View>
 
-            {/* {RewardProgress} */}
+            {/* 金币奖励悬浮球 */}
+            {adStore.enableWallet && (
+                <View style={styles.rewardProgress}>
+                    <RewardProgress store={store} />
+                </View>
+            )}
             <CommentOverlay ref={commentRef} media={videoStore.currentItem} navigation={navigation} />
         </View>
     );
@@ -249,9 +254,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     rewardProgress: {
-        bottom: pixel(380 + Theme.HOME_INDICATOR_HEIGHT),
         position: 'absolute',
-        right: pixel(Theme.itemSpace),
+        right: pixel(10),
+        bottom: pixel(360 + Theme.HOME_INDICATOR_HEIGHT),
     },
     contentCover: {
         ...StyleSheet.absoluteFillObject,

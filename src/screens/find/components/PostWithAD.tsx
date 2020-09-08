@@ -10,7 +10,7 @@ export default function PostWithAD({ item, index, adClick }) {
     const adContent = useMemo(() => {
         // item?.is_ad && adStore.enableAd
         // index > 0 && index % 5 === 0
-        if (visible && (index + 1) % 5 === 0) {
+        if (adStore.enableAd && visible && (index + 1) % 5 === 0) {
             const avatarId = Math.round(Math.random() * 10);
             return (
                 <>
@@ -19,7 +19,9 @@ export default function PostWithAD({ item, index, adClick }) {
                             <View style={styles.creator}>
                                 <Image
                                     style={styles.avatar}
-                                    source={{ uri: `${Config.ServerRoot}/storage/avatar/avatar-${avatarId}.jpg` }}
+                                    source={{
+                                        uri: `https://yinxiangshipin-1254284941.cos.ap-guangzhou.myqcloud.com/storage/avatar/avatar-${avatarId}.jpg`,
+                                    }}
                                 />
                                 <View style={styles.userInfo}>
                                     <Text style={styles.nameText}>匿名用户</Text>

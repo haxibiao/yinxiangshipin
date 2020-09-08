@@ -120,8 +120,6 @@ export default observer(({ store, initialIndex = 0, getVisibleItem, fetchData, s
     const renderVideoItem = useCallback(
         ({ item, index }) => {
             // 显示drawFeed广告
-            // index > 0 && index % 5 === 0
-            // item?.is_ad && adStore.enableAd
             if (item?.is_ad && adStore.enableAd) {
                 return (
                     <View style={{ height: store.fullVideoHeight }}>
@@ -187,6 +185,8 @@ export default observer(({ store, initialIndex = 0, getVisibleItem, fetchData, s
         };
     }, []);
 
+    useAdReward(store);
+
     return (
         <View style={styles.container}>
             <View style={styles.listContainer}>
@@ -226,8 +226,12 @@ export default observer(({ store, initialIndex = 0, getVisibleItem, fetchData, s
                     viewabilityConfig={config}
                 />
             </View>
-            {/* TODO:金币奖励悬浮球 */}
-            {/* {RewardProgress} */}
+            {/* 金币奖励悬浮球 */}
+            {adStore.enableWallet && (
+                <View style={styles.rewardProgress}>
+                    <RewardProgress store={store} />
+                </View>
+            )}
             {/* 内部视频列表显示评论框 */}
             {showBottomInput && (
                 <TouchableOpacity
@@ -279,9 +283,9 @@ const styles = StyleSheet.create({
         color: '#fff',
     },
     rewardProgress: {
-        bottom: pixel(380 + Theme.HOME_INDICATOR_HEIGHT),
         position: 'absolute',
-        right: pixel(Theme.itemSpace),
+        right: pixel(10),
+        bottom: pixel(360 + Theme.HOME_INDICATOR_HEIGHT),
     },
     contentCover: {
         ...StyleSheet.absoluteFillObject,

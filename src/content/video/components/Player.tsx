@@ -43,7 +43,7 @@ export default React.forwardRef((props: Props, ref) => {
         return {
             onLoadStart() {
                 setProgress(0);
-                // store.addPlayedId(media.id);
+                store.addPlayedId(media.id);
                 currentTime.current = 0;
             },
 
@@ -53,16 +53,17 @@ export default React.forwardRef((props: Props, ref) => {
             },
 
             onProgress(data) {
-                // if (!media.watched) {
-                //     (rewardProgress => {
-                //         setTimeout(() => {
-                //             store.rewardProgress += rewardProgress;
-                //         }, 20);
-                //     })(data.currentTime - currentTime.current);
-                //     if (Math.abs(currentTime.current - duration.current) <= 1) {
-                //         media.watched = true;
-                //     }
-                // }
+                if (!media.watched) {
+                    ((playProgress) => {
+                        setTimeout(() => {
+                            store.rewardProgress += playProgress;
+                        }, 20);
+                    })(data.currentTime - currentTime.current);
+
+                    if (Math.abs(currentTime.current - duration.current) <= 1) {
+                        media.watched = true;
+                    }
+                }
                 setProgress(data.currentTime);
                 currentTime.current = data.currentTime;
             },
