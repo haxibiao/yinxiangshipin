@@ -123,21 +123,6 @@ export default observer(({ store, initialIndex = 0, getVisibleItem, fetchData, s
             // index > 0 && index % 5 === 0
             // item?.is_ad && adStore.enableAd
             if (item?.is_ad && adStore.enableAd) {
-                if (Math.abs(index - store.viewableItemIndex) === 1) {
-                    return (
-                        <View style={{ height: store.fullVideoHeight }}>
-                            <View style={styles.contentCover}>
-                                <Image
-                                    style={styles.mediaCurtain}
-                                    source={require('@app/assets/images/curtain.png')}
-                                    resizeMode="cover"
-                                    blurRadius={2}
-                                />
-                                <View style={styles.blackMask} />
-                            </View>
-                        </View>
-                    );
-                }
                 return (
                     <View style={{ height: store.fullVideoHeight }}>
                         <ad.DrawFeed codeid={adStore.codeid_draw_video} onAdClick={getReward} />

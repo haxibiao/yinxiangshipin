@@ -1,14 +1,12 @@
 import React, { useRef, useMemo, useState, useCallback } from 'react';
 import { StyleSheet, Text, View, Image, TouchableWithoutFeedback, DeviceEventEmitter } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
-import { Overlay } from 'teaset';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { useApolloClient } from '@apollo/react-hooks';
-import { ApolloProvider } from 'react-apollo';
+import { useApolloClient, ApolloProvider } from '@src/apollo';
+import LinearGradient from 'react-native-linear-gradient';
 import { SafeText } from '@src/components';
 import { observer } from '@src/store';
+import { Overlay } from 'teaset';
 import { Commodity } from '../../widget';
-import { font, pixel } from '../../helper';
 import Player from './Player';
 import SideBar from './SideBar';
 import VideoOperation from './VideoOperation';

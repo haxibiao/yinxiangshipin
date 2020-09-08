@@ -5,7 +5,6 @@ import { useNavigation } from '@react-navigation/native';
 import { ApolloProvider } from 'react-apollo';
 import { observer } from '@src/store';
 import { Overlay } from 'teaset';
-import { font, pixel, count } from '../../helper';
 import { AnimationLike, MoreOperation } from '../../widget';
 
 const imageSource = {
@@ -76,7 +75,7 @@ export default observer(({ media, store, client, removeMedia }) => {
                 <TouchableOpacity onPress={showComment}>
                     <Image source={require('@app/assets/images/comment_item.png')} style={styles.imageSize} />
                     <SafeText style={styles.countText} shadowText={true}>
-                        {count(media?.count_comments)}
+                        {Helper.count(media?.count_comments)}
                     </SafeText>
                 </TouchableOpacity>
             </View>

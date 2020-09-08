@@ -1,7 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, Animated } from 'react-native';
 import { useCirculationAnimation } from '@src/common';
-import { font, pixel } from '../../helper';
 
 const VideoLoading = ({ loading }) => {
     if (!loading) {

@@ -5,7 +5,6 @@ import { observer, userStore } from '@src/store';
 import { GQL, useMutation } from '@src/apollo';
 import { useNavigation } from '@react-navigation/native';
 import * as Progress from 'react-native-progress';
-import { font, pixel } from '../../helper';
 
 const RewardProgress = observer(({ store }) => {
     const navigation = useNavigation();

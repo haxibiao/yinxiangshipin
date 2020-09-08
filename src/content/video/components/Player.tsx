@@ -3,7 +3,6 @@ import { StyleSheet, View, TouchableWithoutFeedback } from 'react-native';
 import { Iconfont } from '@src/components';
 import { useNavigation } from '@react-navigation/native';
 import Video from 'react-native-video';
-import { font, pixel } from '../../helper';
 import BufferingVideo from './BufferingVideo';
 
 interface Props {
