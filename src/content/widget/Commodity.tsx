@@ -1,6 +1,5 @@
 import React from 'react';
 import { StyleSheet, View, Image, Text, TouchableWithoutFeedback } from 'react-native';
-import { font, pixel } from '../helper';
 
 // style, product, navigation,
 export default function Commodity({ style, product, navigation }) {

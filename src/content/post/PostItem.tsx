@@ -3,8 +3,7 @@ import { StyleSheet, TouchableWithoutFeedback, ViewStyle, Animated } from 'react
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { useNavigation } from '@react-navigation/native';
-import { pixel, WINDOW_WIDTH } from '../helper';
-import { ContentData } from '../types';
+import { ContentData } from '@src/common';
 import { PostContent } from './body';
 
 interface Props {
@@ -59,7 +58,7 @@ export default observer(
                 {
                     translateY: animation.current.interpolate({
                         inputRange: [0, 1],
-                        outputRange: [WINDOW_WIDTH * -0.75, 0],
+                        outputRange: [Device.WIDTH * -0.75, 0],
                         extrapolate: 'clamp',
                     }),
                 },

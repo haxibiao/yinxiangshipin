@@ -1,6 +1,5 @@
 import React from 'react';
 import { StyleSheet, View, Text, Image, ImageBackground, TouchableOpacity } from 'react-native';
-import { percent, pixel, font } from '../helper';
 
 interface Props {
     cover: string;

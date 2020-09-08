@@ -1,7 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TextStyle, ViewStyle, Animated, Easing } from 'react-native';
 import LottieView from 'lottie-react-native';
-import { pixel, font, percent } from './helper';
 
 // 列表各状态：加载中、加载更多、没有数据、出错所对应的UI
 type Status = 'loading' | 'loadMore' | 'empty' | 'error';

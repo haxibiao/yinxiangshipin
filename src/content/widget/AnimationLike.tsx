@@ -2,7 +2,7 @@ import React, { useCallback, ReactChild } from 'react';
 import { View, Text, ViewStyle, Animated, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { observer } from 'mobx-react';
-import { ContentData } from '../helper';
+import { ContentData } from '@src/common';
 import { useLikeMutation } from '../service';
 
 interface Props {

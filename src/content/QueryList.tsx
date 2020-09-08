@@ -3,8 +3,7 @@ import { StyleSheet, View, Text, FlatList, FlatListProperties, ViewStyle, Refres
 import { QueryHookOptions } from '@apollo/react-hooks';
 import { DocumentNode } from 'graphql';
 import { GQL, useQuery } from '@src/apollo';
-import { syncGetter } from '@src/common';
-import { mergeProperty } from './helper';
+import { syncGetter, mergeProperty } from '@src/common';
 import ContentStatus from './ContentStatus';
 
 interface Props extends FlatListProperties {

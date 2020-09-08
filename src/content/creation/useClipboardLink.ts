@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { AppState } from 'react-native';
 import Clipboard from '@react-native-community/clipboard';
-import { getURLsFromString } from '../helper';
+import { getURLsFromString } from '@src/common';
 
 const shareLinkCache: { [key: string]: any } = {};
 
