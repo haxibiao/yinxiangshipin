@@ -14,7 +14,7 @@ import { PageContainer, Iconfont, Row, HxfButton, SafeText } from '@src/componen
 import { observer, userStore } from '@src/store';
 import { useNavigation } from '@src/router';
 import { GQL, useMutation, useQuery } from '@src/apollo';
-import { bindWechat, syncGetter } from '@src/common';
+import { bindWechat, syncGetter, useNavigationListener } from '@src/common';
 
 const fakeAmountListData = [
     {
@@ -60,14 +60,18 @@ const fakeWallet = {
 
 export default observer((props: any) => {
     const navigation = useNavigation();
+    // 提现方式
     const [withdrawType, setWithdrawType] = useState(WithdrawalPlatforms[0].type);
-
-    const { data: userMetaData } = useQuery(GQL.MeMetaQuery, {
+    // 钱包信息
+    const { data: userMetaData, refetch } = useQuery(GQL.MeMetaQuery, {
         fetchPolicy: 'network-only',
     });
-    const userProfile = useMemo(() => Object.assign(userStore.me, userMetaData?.me), [userStore.me, userMetaData]);
+    const userProfile = useMemo(() => Object.assign({ ...userStore.me }, userMetaData?.me), [
+        userStore.me,
+        userMetaData,
+    ]);
     const wallet = useMemo(() => userProfile?.wallet || fakeWallet, [userProfile]);
-
+    // 提现额度
     const { data: withdrawAmountListData } = useQuery(GQL.getWithdrawAmountList);
     const withdrawAmountData = useMemo(() => {
         return withdrawAmountListData?.getWithdrawAmountList || fakeAmountListData;
@@ -75,6 +79,14 @@ export default observer((props: any) => {
     const [amount, setAmount] = useState(
         userProfile.balance > withdrawAmountData[0].amount ? withdrawAmountData[0].amount : 0,
     );
+    useEffect(() => {
+        if (userProfile.balance > withdrawAmountData[0].amount) {
+            setAmount(withdrawAmountData[0].amount);
+        } else {
+            setAmount(0);
+        }
+    }, [withdrawAmountData]);
+    // 提现请求
     const [withdrawRequest, { loading }] = useMutation(GQL.CreateWithdrawMutation, {
         variables: {
             amount,
@@ -83,8 +95,7 @@ export default observer((props: any) => {
         errorPolicy: 'all',
         refetchQueries: () => [
             {
-                query: GQL.userProfileQuery,
-                variables: { id: userStore.me.id },
+                query: GQL.MeMetaQuery,
                 fetchPolicy: 'network-only',
             },
             {
@@ -101,7 +112,7 @@ export default observer((props: any) => {
             Toast.show({ content: error.message.replace('GraphQL error: ', '') || '提现失败' });
         },
     });
-
+    // 提现金额
     const setWithdrawAmount = useCallback(
         (value) => {
             if (userProfile.balance < value) {
@@ -120,7 +131,7 @@ export default observer((props: any) => {
     );
 
     const onWithdraw = useCallback(__.debounce(withdrawRequest, 500), [withdrawRequest]);
-
+    // 绑定提现账号
     const bindWithdrawAccount = useMemo(() => {
         return {
             ALIPAY() {
@@ -142,7 +153,7 @@ export default observer((props: any) => {
             },
         };
     }, [userProfile]);
-
+    // 提现按钮信息
     const buttonInfo = useMemo(() => {
         const platformName = withdrawType === 'ALIPAY' ? '支付宝' : '微信';
         const isBound =
@@ -150,6 +161,9 @@ export default observer((props: any) => {
                 ? syncGetter('wallet.platforms.alipay', userProfile)
                 : syncGetter('wallet.bind_platforms.wechat', userProfile);
         const disabled = isBound && amount <= 0;
+        console.log('====================================');
+        console.log('buttonInfo', userProfile, isBound);
+        console.log('====================================');
         if (isBound) {
             return {
                 disabled,
@@ -164,6 +178,8 @@ export default observer((props: any) => {
             };
         }
     }, [amount, withdrawType, userProfile, onWithdraw]);
+
+    // useNavigationListener({ onFocus: refetch });
 
     return (
         <PageContainer
@@ -184,7 +200,7 @@ export default observer((props: any) => {
             <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
                 <View style={styles.statistics}>
                     <ImageBackground
-                        source={require('@app/assets/images/wallet/wallet_bg_recharge.png')}
+                        source={require('@app/assets/images/wallet/wallet_bg_balance.png')}
                         style={styles.walletRedBg}>
                         <View style={styles.assetItem}>
                             <Image
@@ -242,7 +258,7 @@ export default observer((props: any) => {
                     </View>
                     <View style={styles.amountOptions}>
                         <Text style={styles.withdrawTips}>
-                            提现需要消耗相应{Config.goldAlias}，更多疑问请查看下方提示
+                            提现需要消耗相应{Config.goldAlias}，更多疑问请查看页面下方的温馨提示
                         </Text>
                         {withdrawAmountData.map((data) => {
                             const selected = data.amount === amount;
@@ -312,6 +328,7 @@ export default observer((props: any) => {
                     </View>
                     <HxfButton
                         gradient={true}
+                        colors={['#1A8EFF', '#30B5FF']}
                         disabled={buttonInfo.disabled}
                         style={styles.withdrawBtn}
                         title={buttonInfo.title}
@@ -323,15 +340,15 @@ export default observer((props: any) => {
                     <Text style={[styles.ruleText, styles.ruleTitle]}>温馨提示</Text>
 
                     <Text style={styles.ruleText}>
-                        {`1、您可以通过首页刷视频等方式获取${Config.goldAlias}；只有当您绑定懂得赚（官方专属钱包，提现秒到账不限时不限量）或支付宝或微信之后，才能开始提现。`}
+                        {`1、您可以通过完成任务、观看首页视频等方式获取${Config.goldAlias}；只有当您绑定支付宝或微信之后，才能开始提现。`}
                     </Text>
 
                     <Text style={styles.ruleText}>
-                        {`2、${Config.goldAlias}获取方式：点击视频广告有机率获得${Config.goldAlias}、每天前十次观看并点击激励视频有机率获得${Config.goldAlias}，点赞，评论，发布优质内容等方式都有机率获得${Config.goldAlias}。提现所需${Config.goldAlias}为：提现金额*60`}
+                        {`2、好评、点击广告、观看激励视频并点击下载有机率获得更多${Config.goldAlias}，点赞、评论、发布优质内容等方式都有机率获得${Config.goldAlias}。`}
                     </Text>
 
                     <Text style={styles.ruleText}>
-                        {`3、每天的转换汇率与平台收益及您的平台活跃度相关，因此汇率会受到影响上下浮动；活跃度越高，汇率越高；您可以通过刷视频、点赞评论互动、邀请好友一起来${Config.AppName}等行为来提高活跃度。`}
+                        {`3、每天的转换汇率与平台收益及您的平台活跃度相关，因此汇率会受到影响上下浮动；活跃度越高，汇率越高；您可以通过邀请好友、点赞、评论、发布优质内容等方式等行为来提高活跃度。`}
                     </Text>
                     <Text style={styles.ruleText}>
                         {`4、每天凌晨 00:00-08:00 期间，系统会把您账户中的所有${Config.goldAlias}自动转为余额。`}
@@ -478,7 +495,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         paddingHorizontal: pixel(8),
         borderRadius: pixel(10),
-        backgroundColor: '#FF5151',
+        backgroundColor: '#FE4966',
     },
     amountItemBadgeText: {
         color: '#fff',
@@ -486,7 +503,7 @@ const styles = StyleSheet.create({
     },
     activeAmountItem: {
         borderColor: '#34BBFF',
-        backgroundColor: '#E9F6FF',
+        // backgroundColor: '#E9F6FF',
     },
     withdrawOption: {
         flexDirection: 'row',
@@ -510,8 +527,8 @@ const styles = StyleSheet.create({
     withdrawBtn: {
         marginTop: pixel(15),
         marginBottom: pixel(12),
-        height: pixel(46),
-        borderRadius: pixel(23),
+        height: pixel(44),
+        borderRadius: pixel(22),
         alignItems: 'center',
         justifyContent: 'center',
     },

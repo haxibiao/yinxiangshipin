@@ -5,7 +5,7 @@ import { GQL, useMutation } from '@src/apollo';
 import { observer, userStore } from '@src/store';
 import { useRoute } from '@react-navigation/native';
 
-const Input = props => {
+const Input = (props) => {
     const { placeholder, get, defaultValue, ...other } = props;
     const [, setValue] = useState();
     return (
@@ -14,7 +14,7 @@ const Input = props => {
             defaultValue={defaultValue}
             placeholder={placeholder}
             {...other}
-            onChangeText={v => {
+            onChangeText={(v) => {
                 setValue(v);
                 get(v);
             }}
@@ -22,7 +22,7 @@ const Input = props => {
     );
 };
 
-export default observer(props => {
+export default observer((props) => {
     const { me } = userStore;
     const route = useRoute();
     const code = useRef(route.params?.code || '');
@@ -47,10 +47,7 @@ export default observer(props => {
                 pay_account: formData.pay_account,
             },
         },
-        refetchQueries: result => [
-            {
-                query: GQL.userWithdrawQuery,
-            },
+        refetchQueries: (result) => [
             {
                 query: GQL.MeMetaQuery,
                 fetchPolicy: 'network-only',
@@ -68,6 +65,7 @@ export default observer(props => {
             } else {
                 userStore.changeProfile({
                     wallet: {
+                        ...me?.wallet,
                         real_name: formData.real_name,
                         pay_account: formData.pay_account,
                         platforms: { alipay: formData.pay_account },
@@ -106,7 +104,7 @@ export default observer(props => {
                         maxLength={6}
                         keyboardType="numeric"
                         defaultValue={formData.code}
-                        get={v => {
+                        get={(v) => {
                             setFormData({
                                 ...formData,
                                 code: v,
@@ -119,7 +117,7 @@ export default observer(props => {
                         placeholder="请输入姓名"
                         maxLength={10}
                         defaultValue={formData.real_name}
-                        get={v => {
+                        get={(v) => {
                             setFormData({
                                 ...formData,
                                 real_name: v,
@@ -131,7 +129,7 @@ export default observer(props => {
                     <Input
                         placeholder="请输入支付宝账号"
                         defaultValue={formData.pay_account}
-                        get={v => {
+                        get={(v) => {
                             setFormData({
                                 ...formData,
                                 pay_account: v,
