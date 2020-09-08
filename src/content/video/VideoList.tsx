@@ -226,14 +226,12 @@ export default observer(() => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: Device.isFullScreenDevice ? Theme.statusBarHeight : 0,
         paddingBottom: Device.isFullScreenDevice ? Theme.BOTTOM_HEIGHT : 0,
         backgroundColor: '#000',
     },
     listContainer: {
         flex: 1,
         overflow: 'hidden',
-        borderRadius: Device.isFullScreenDevice ? pixel(8) : 0,
     },
     contentContainerStyle: {
         flexGrow: 1,

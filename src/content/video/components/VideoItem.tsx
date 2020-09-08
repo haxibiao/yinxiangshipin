@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         paddingHorizontal: pixel(10),
-        paddingBottom: Device.isFullScreenDevice ? pixel(15) : pixel(Theme.BOTTOM_HEIGHT + 15),
+        paddingBottom: Device.isFullScreenDevice ? pixel(15) : Theme.BOTTOM_HEIGHT + pixel(15),
     },
     videoInfo: {
         flex: 1,
