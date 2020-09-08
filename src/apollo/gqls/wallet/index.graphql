@@ -96,7 +96,6 @@ query getWithdrawAmountList {
     getWithdrawAmountList {
         tips
         amount
-        contributes
         description
     }
 }

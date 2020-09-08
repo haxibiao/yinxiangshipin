@@ -1,33 +1,46 @@
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useMemo, useCallback } from 'react';
+import { adStore } from '@src/store';
 
-const useAdReward = ({ focus, store }) => {
+const AdRewardProgress = (store: any) => {
+    const isFocusAdItem = useMemo(() => adStore.enableAd && store.visibility && store.currentItem?.is_ad, [
+        adStore.enableAd,
+        store.visibility,
+        store.currentItem,
+    ]);
+    const timer = useRef<ReturnType<typeof setTimeout>>();
     const currentTime = useRef(0);
-    const flag = useRef(focus);
-    const timer = useRef(0);
 
     const setRewardProgress = useCallback((): any => {
-        return setTimeout(() => {
-            if (flag.current && currentTime.current < store.rewardLimit) {
-                store.rewardProgress += 0.2;
-                currentTime.current += 0.2;
+        if (timer.current) {
+            clearTimeout(timer.current);
+        }
+        timer.current = setTimeout(() => {
+            if (!store.currentItem?.watched) {
+                store.rewardProgress = store.rewardProgress + 0.3;
+                currentTime.current = currentTime.current + 0.3;
+                if (currentTime.current >= store.rewardInterval) {
+                    store.currentItem.watched = true;
+                    currentTime.current = 0;
+                }
                 setRewardProgress();
             }
-        }, 200);
+        }, 100);
     }, []);
 
     useEffect(() => {
-        if (focus) {
-            flag.current = true;
-            timer.current = setRewardProgress();
+        if (isFocusAdItem) {
+            setRewardProgress();
         } else {
-            flag.current = false;
+            if (timer.current) {
+                clearTimeout(timer.current);
+            }
         }
         return () => {
             if (timer.current) {
                 clearTimeout(timer.current);
             }
         };
-    }, [focus]);
+    }, [isFocusAdItem]);
 };
 
-export default useAdReward;
+export default AdRewardProgress;

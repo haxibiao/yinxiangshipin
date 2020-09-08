@@ -161,9 +161,6 @@ export default observer((props: any) => {
                 ? syncGetter('wallet.platforms.alipay', userProfile)
                 : syncGetter('wallet.bind_platforms.wechat', userProfile);
         const disabled = isBound && amount <= 0;
-        console.log('====================================');
-        console.log('buttonInfo', userProfile, isBound);
-        console.log('====================================');
         if (isBound) {
             return {
                 disabled,
