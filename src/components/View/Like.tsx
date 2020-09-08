@@ -32,12 +32,12 @@ const Like = observer((props: Props) => {
     const [animation, startAnimation] = useBounceAnimation({ value: 1, toValue: 1.2 });
     const [likeArticle] = useMutation(GQL.toggleLikeMutation, {
         variables: {
-            liked_id: Helper.syncGetter('id', media),
-            liked_type: 'VIDEO',
+            id: Helper.syncGetter('id', media),
+            type: 'VIDEO',
         },
     });
 
-    const likeHandler = __.debounce(async function() {
+    const likeHandler = __.debounce(async function () {
         const [error, result] = await Helper.exceptionCapture(likeArticle);
         if (error) {
             media.liked ? media.count_likes-- : media.count_likes++;

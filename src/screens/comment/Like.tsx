@@ -21,8 +21,8 @@ export default observer((props: Props) => {
     const navigation = useNavigation();
     const [likeArticle] = useMutation(GQL.toggleLikeMutation, {
         variables: {
-            liked_id: Helper.syncGetter('id', comment),
-            liked_type: 'COMMENT',
+            id: Helper.syncGetter('id', comment),
+            type: 'COMMENT',
         },
     });
 

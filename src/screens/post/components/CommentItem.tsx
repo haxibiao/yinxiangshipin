@@ -61,8 +61,8 @@ const CommentItem = observer((props: Props) => {
 
     const likeHandler = useLikeMutation({
         variables: {
-            liked_id: Helper.syncGetter('id', comment),
-            liked_type: 'COMMENT',
+            id: Helper.syncGetter('id', comment),
+            type: 'COMMENT',
         },
     });
 

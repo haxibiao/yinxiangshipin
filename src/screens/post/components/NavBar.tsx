@@ -46,8 +46,8 @@ const NavBar = observer(({ lightModal, media, navigation }) => {
 
     const likeHandler = useLikeMutation({
         variables: {
-            liked_id: Helper.syncGetter('id', media),
-            liked_type: 'VIDEO',
+            id: Helper.syncGetter('id', media),
+            type: 'VIDEO',
         },
     });
 

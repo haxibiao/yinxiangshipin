@@ -1,13 +1,12 @@
 # 喜欢
 # enum LikeType {
 # VIDEO
-# ARTICLE
+# ARTICLE（旧）
 # COMMENT
-# ISSUE
-# ANSWER
+# POST（新）
 # }
-mutation toggleLikeMutation($liked_id: Int!, $liked_type: LikeType!) {
-    toggleLike(liked_id: $liked_id, liked_type: $liked_type) {
+mutation toggleLikeMutation($id: Int!, $type: LikeType!) {
+    toggleLike(liked_id: $id, liked_type: $type) {
         id
         isLiked
     }
