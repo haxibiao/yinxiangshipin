@@ -156,7 +156,13 @@ const styles = StyleSheet.create({
         paddingHorizontal: pixel(12),
     },
     navBarTitle: {
-        alignSelf: 'center',
+        position: 'absolute',
+        top: pixel(Theme.statusBarHeight),
+        bottom: 0,
+        left: pixel(100),
+        right: pixel(100),
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     titleText: {
         color: '#000',

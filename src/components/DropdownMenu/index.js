@@ -51,7 +51,7 @@ class DropdownMenu extends Component {
                         flex: 1,
                         justifyContent: 'space-between',
                         alignItems: 'center',
-                        paddingHorizontal: 15,
+                        paddingRight: 15,
                         flexDirection: 'row',
                     }}>
                     <Text
@@ -83,7 +83,7 @@ class DropdownMenu extends Component {
                         flex: 1,
                         justifyContent: 'space-between',
                         alignItems: 'center',
-                        paddingHorizontal: 15,
+                        paddingRight: 15,
                         flexDirection: 'row',
                     }}>
                     <Text
@@ -109,7 +109,7 @@ class DropdownMenu extends Component {
                         onPress={() => this.openOrClosePanel(this.state.activityIndex)}
                         activeOpacity={1}
                         style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0 }}>
-                        <View style={{ opacity: 0.4, backgroundColor: 'black', flex: 1 }} />
+                        <View style={{ opacity: 0.4, flex: 1 }} />
                     </TouchableOpacity>
 
                     <ScrollView
@@ -123,11 +123,11 @@ class DropdownMenu extends Component {
                                 style={{ flex: 1, height: 44 }}
                                 onPress={this.itemOnPress.bind(this, index)}>
                                 {this.renderChcek(index, title)}
-                                <View style={{ backgroundColor: '#F6F6F6', height: 1, marginLeft: 15 }} />
+                                <View style={{ backgroundColor: '#F6F6F6', height: 1 }} />
                             </TouchableOpacity>
                         ))}
                         <View style={{ flex: 1, height: 44, justifyContent: 'center' }}>
-                            <Text style={{ fontSize: 14, color: '#999', textAlign: 'center' }}>--end--</Text>
+                            <Text style={{ fontSize: font(14), color: '#999', textAlign: 'center' }}>--end--</Text>
                         </View>
                     </ScrollView>
                 </View>
@@ -295,11 +295,11 @@ DropdownMenu.propTypes = {
 
 const styles = StyleSheet.create({
     title_style: {
-        fontSize: 14,
+        fontSize: font(14),
     },
     item_text_style: {
         color: '#333333',
-        fontSize: 14,
+        fontSize: font(14),
     },
 });
 

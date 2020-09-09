@@ -60,7 +60,7 @@ class UserStore {
     @action.bound
     changeProfile(userMetaData: any) {
         if (userMetaData !== null && typeof userMetaData === 'object') {
-            this.me = { ...this.me, ...userMetaData };
+            this.me = Object.assign(this.me, userMetaData);
         }
         Storage.setItem(Keys.me, this.me);
     }

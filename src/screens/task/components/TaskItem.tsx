@@ -49,18 +49,31 @@ export default function TaskItem({ task }) {
             <Image source={taskIcon} style={styles.taskIcon} />
             <View style={styles.taskInfo}>
                 <View style={styles.taskTitleWrap}>
-                    <SafeText numberOfLines={1} style={styles.taskTitle}>
-                        {task.name}
+                    <SafeText style={styles.taskTitle} numberOfLines={1}>
+                        {String(task.name).slice(0, 8)}
                     </SafeText>
-                    <View style={styles.taskReward}>
-                        <Image
-                            source={require('@app/assets/images/wallet/icon_wallet_diamond.png')}
-                            style={styles.taskRewardIcon}
-                        />
-                        <SafeText numberOfLines={1} style={styles.taskRewardGold}>
-                            {task?.reward_info?.gold}
-                        </SafeText>
-                    </View>
+                    {task?.reward_info?.gold > 0 && (
+                        <View style={styles.taskReward}>
+                            <Image
+                                source={require('@app/assets/images/wallet/icon_wallet_diamond.png')}
+                                style={styles.taskRewardIcon}
+                            />
+                            <SafeText numberOfLines={1} style={styles.taskRewardGold}>
+                                {task?.reward_info?.gold}
+                            </SafeText>
+                        </View>
+                    )}
+                    {task?.reward_info?.ticket > 0 && (
+                        <View style={styles.taskReward}>
+                            <Image
+                                source={require('@app/assets/images/wallet/icon_wallet_giftAward.png')}
+                                style={styles.taskRewardIcon}
+                            />
+                            <SafeText numberOfLines={1} style={styles.taskRewardGold}>
+                                {task?.reward_info?.ticket}
+                            </SafeText>
+                        </View>
+                    )}
                 </View>
                 <SafeText numberOfLines={1} style={styles.taskDetails}>
                     {task.details}
@@ -279,7 +292,7 @@ const styles = StyleSheet.create({
     },
     taskTitle: {
         color: '#202020',
-        fontSize: font(16),
+        fontSize: font(15),
         lineHeight: font(22),
         fontWeight: 'bold',
     },
@@ -300,7 +313,6 @@ const styles = StyleSheet.create({
         color: '#ffaf00',
         fontSize: font(12),
         fontWeight: 'bold',
-        paddingHorizontal: pixel(2),
     },
     taskDetails: {
         color: '#adadad',
