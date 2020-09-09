@@ -1,8 +1,8 @@
 import React, { useState, useCallback } from 'react';
-import { StyleSheet, View, Text, Image, TouchableOpacity, TextInput } from 'react-native';
+import { StyleSheet, View, Text, Image, TouchableOpacity, TextInput, ScrollView } from 'react-native';
 import { GQL } from '@src/apollo';
 import { exceptionCapture, getURLsFromString } from '@src/common';
-import { Iconfont, Loading } from '@src/components';
+import { Iconfont, Loading, KeyboardSpacer } from '@src/components';
 import { useResolveVideo } from './useResolveVideo';
 import { useResolveContent } from './useResolveContent';
 
@@ -47,7 +47,7 @@ export const VideoCaptureData = ({ client, shareLink, shareBody, onSuccess, onFa
             );
             Loading.hide();
             if (error) {
-                Toast.show({ content: error.message || '收藏失败' });
+                Toast.show({ content: error?.message || '收藏失败' });
                 if (onFailed instanceof Function) {
                     onFailed();
                 }
@@ -70,41 +70,50 @@ export const VideoCaptureData = ({ client, shareLink, shareBody, onSuccess, onFa
     });
 
     return (
-        <View style={styles.card}>
-            <View style={styles.cover}>
-                <Image style={styles.coverImage} source={{ uri: shareBody?.cover }} />
-                <View style={styles.videoMark}>
-                    <Iconfont name="bofang1" size={font(20)} color={'#fff'} style={{ opacity: 0.8 }} />
+        <ScrollView contentContainerStyle={styles.container}>
+            <View style={styles.card}>
+                <View style={styles.cover}>
+                    <Image style={styles.coverImage} source={{ uri: shareBody?.cover }} />
+                    <View style={styles.videoMark}>
+                        <Iconfont name="bofang1" size={font(20)} color={'#fff'} style={{ opacity: 0.8 }} />
+                    </View>
+                    <TouchableOpacity style={styles.closeBtn} onPress={onClose}>
+                        <Iconfont name="guanbi1" size={font(14)} color="#fff" />
+                    </TouchableOpacity>
                 </View>
-                <TouchableOpacity style={styles.closeBtn} onPress={onClose}>
-                    <Iconfont name="guanbi1" size={font(14)} color="#fff" />
+                <View style={styles.body}>
+                    {/* <Text style={styles.title}>{shareBody?.title}</Text> */}
+                    <TextInput
+                        style={styles.inputContent}
+                        onChangeText={(val) => setBody(val)}
+                        value={body}
+                        multiline={true}
+                        maxLength={100}
+                        textAlignVertical="center"
+                        placeholder="把你想说的娓娓道来，分享给有趣的人"
+                        underlineColorAndroid="transparent"
+                        placeholderTextColor="#b2b2b2"
+                    />
+                </View>
+                <TouchableOpacity style={styles.shareBtn} onPress={resolveContent}>
+                    <Text style={styles.shareBtnText}>收藏视频</Text>
                 </TouchableOpacity>
+                <Text style={styles.tips}>来自您复制的分享链接</Text>
             </View>
-            <View style={styles.body}>
-                {/* <Text style={styles.title}>{shareBody?.title}</Text> */}
-                <TextInput
-                    style={styles.inputContent}
-                    onChangeText={(val) => setBody(val)}
-                    value={body}
-                    multiline={true}
-                    maxLength={100}
-                    textAlignVertical="center"
-                    placeholder="把你想说的娓娓道来，分享给有趣的人"
-                    underlineColorAndroid="transparent"
-                    placeholderTextColor="#b2b2b2"
-                />
-            </View>
-            <TouchableOpacity style={styles.shareBtn} onPress={resolveContent}>
-                <Text style={styles.shareBtnText}>收藏视频</Text>
-            </TouchableOpacity>
-            <Text style={styles.tips}>来自您复制的分享链接</Text>
-        </View>
+            <KeyboardSpacer />
+        </ScrollView>
     );
 };
 
-const CARD_WIDTH = percent(80) > pixel(280) ? pixel(280) : percent(80);
+const CARD_WIDTH = percent(84) > pixel(300) ? pixel(300) : percent(84);
 
 const styles = StyleSheet.create({
+    container: {
+        width: Device.WIDTH,
+        height: Device.HEIGHT,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     card: {
         width: CARD_WIDTH,
         backgroundColor: '#fff',

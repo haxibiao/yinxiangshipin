@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useMemo, useCallback } from 'react';
-import { StyleSheet, View, Text, StatusBar } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { observer, appStore, userStore } from '@src/store';
 import { useClipboardLink, VideoCaptureData } from '@src/content';
 import { useApolloClient } from '@apollo/react-hooks';
@@ -13,11 +13,11 @@ export default observer(() => {
 
     const [shareContent] = useClipboardLink();
     const isShow = useRef(false);
+    const overlayRef = useRef();
 
     const showShareContentModal = useMemo(() => {
-        var popViewRef;
         function onClose() {
-            popViewRef?.close();
+            overlayRef.current?.close();
             isShow.current = false;
         }
         return (params) => {
@@ -26,7 +26,7 @@ export default observer(() => {
                 Overlay.show(
                     <Overlay.PopView
                         style={styles.overlay}
-                        ref={(ref) => (popViewRef = ref)}
+                        ref={overlayRef}
                         onDisappearCompleted={() => (isShow.current = false)}>
                         <VideoCaptureData
                             client={appStore.client}
@@ -45,7 +45,20 @@ export default observer(() => {
         if (userStore.login && shareContent && appStore.currentRouteName !== 'CreatePost') {
             showShareContentModal(shareContent);
         }
-    }, [userStore, shareContent]);
+    }, [shareContent]);
+
+    // useEffect(() => {
+    //     const hardwareBackPress = BackHandler.addEventListener('hardwareBackPress', () => {
+    //         if (overlayRef.current) {
+    //             overlayRef.current?.close();
+    //             return true;
+    //         }
+    //         return false;
+    //     });
+    //     return () => {
+    //         hardwareBackPress.remove();
+    //     };
+    // }, []);
 
     const onLayout = useCallback((event) => {
         const { height } = event.nativeEvent.layout;
@@ -60,6 +73,7 @@ export default observer(() => {
                 hasGoBackButton={false}
                 isTransparent={true}
                 hasSearchButton={true}
+                statusbarProperties={{ barStyle: 'light-content' }}
             />
         </View>
     );
