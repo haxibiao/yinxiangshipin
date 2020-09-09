@@ -61,7 +61,7 @@ export default observer((props) => {
             const [error, result] = await Helper.exceptionCapture(setWalletPaymentInfo);
             toggleSubmitting(false);
             if (error) {
-                Toast.show({ content: error.message || hasWallet ? '修改失败' : '绑定失败', layout: 'top' });
+                Toast.show({ content: error?.message || hasWallet ? '修改失败' : '绑定失败', layout: 'top' });
             } else {
                 userStore.changeProfile({
                     wallet: {

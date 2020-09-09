@@ -88,7 +88,7 @@ const CommentItem = observer((props: Props) => {
         if (error) {
             setVisible(true);
             animation.current.setValue(1);
-            Toast.show({ content: error.message || '删除失败', layout: 'top' });
+            Toast.show({ content: error?.message || '删除失败', layout: 'top' });
         } else {
             onDelete(comment);
         }

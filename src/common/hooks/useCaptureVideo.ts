@@ -16,7 +16,7 @@ export const useCaptureVideo = (props: Props) => {
     const clipboardString = useRef('');
 
     const captureVideo = useCallback(
-        path => {
+        (path) => {
             return client.mutate({
                 mutation: GQL.resolveDouyinVideo,
                 variables: {
@@ -28,7 +28,7 @@ export const useCaptureVideo = (props: Props) => {
     );
 
     const stateChangeHandle = useCallback(
-        async event => {
+        async (event) => {
             if (event === 'active') {
                 const path = await Clipboard.getString();
                 if (
@@ -43,7 +43,7 @@ export const useCaptureVideo = (props: Props) => {
                     }
                     const [error, result] = await exceptionCapture(() => captureVideo(path));
                     if (error && onFailed) {
-                        onFailed(error);
+                        onFailed(error?.message);
                     } else if (result && onSuccess) {
                         Clipboard.setString('');
                         onSuccess(result);

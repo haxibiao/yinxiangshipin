@@ -22,7 +22,7 @@ export const useBetterMutation = (gqlNode: DocumentNode, { options, successful, 
                 }
             } else if (err) {
                 if (failure instanceof Function) {
-                    failure(err);
+                    failure(err?.message);
                 }
             }
         }, 250),

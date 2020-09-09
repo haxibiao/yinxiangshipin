@@ -33,7 +33,7 @@ const AccountLogin = () => {
     const onLogin = useCallback(async () => {
         const [error, result] = await exceptionCapture(signInMutation);
         if (error) {
-            toast(error.message);
+            toast(error?.message);
         } else if (result.data.signIn) {
             // 登录成功,更新用户全局状态并退出登陆页面
             toast('登陆成功');
@@ -52,7 +52,7 @@ const AccountLogin = () => {
                 <View style={{ marginTop: 30 }}>
                     <TextInput
                         style={styles.textInput}
-                        onChangeText={account => setAccount(account)}
+                        onChangeText={(account) => setAccount(account)}
                         value={Account}
                         placeholder="请输入账号/用户名/手机号"
                         numberOfLines={1}
@@ -61,7 +61,7 @@ const AccountLogin = () => {
                     <View style={[styles.textInput, { flexDirection: 'row' }]}>
                         <TextInput
                             style={{ flex: 1, padding: 0 }}
-                            onChangeText={passwd => setPasswd(passwd)}
+                            onChangeText={(passwd) => setPasswd(passwd)}
                             value={Passwd}
                             placeholder="请输入密码"
                             numberOfLines={1}

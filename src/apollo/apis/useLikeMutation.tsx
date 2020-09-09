@@ -12,9 +12,6 @@ export const useLikeMutation = ({ variables }: Props) => {
     const likeHandler = useMemo(() => {
         return __.debounce(async function () {
             const [error, result] = await Helper.exceptionCapture(likeArticle);
-            console.log('====================================');
-            console.log(error, result);
-            console.log('====================================');
             if (error) {
                 Toast.show({ content: '操作失败' });
             }

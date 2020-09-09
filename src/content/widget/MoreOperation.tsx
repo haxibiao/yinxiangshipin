@@ -53,7 +53,7 @@ const MoreOperation = (props: any) => {
             }),
         );
         if (error) {
-            Toast.show({ content: error.message });
+            Toast.show({ content: error?.message });
             return null;
         } else if (syncGetter('data.sharePost', result)) {
             shareLink.current = syncGetter('data.sharePost', result);

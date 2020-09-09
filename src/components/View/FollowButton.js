@@ -63,7 +63,6 @@ const FollowButton = (props: Props) => {
         } else {
             user.followed_status = user?.followed_status > 0 ? null : user?.id;
             const [error, res] = await exceptionCapture(followUser);
-            console.log('res', res);
             if (error) {
                 user.followed_status = user?.followed_status > 0 ? null : user?.id;
                 Toast.show({ content: errorMessage(error) || '关注失败', layout: 'top' });
