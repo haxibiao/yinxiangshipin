@@ -22,7 +22,8 @@ import {
     OverlayViewer,
 } from '@src/components';
 import { GQL, useMutation, errorMessage } from '@src/apollo';
-import { shareClipboardLink, exceptionCapture } from '@src/content';
+import { exceptionCapture } from '@src/common';
+import { shareClipboardLink } from '@src/content';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { observer, userStore, appStore } from '@src/store';
 import { observable } from 'mobx';

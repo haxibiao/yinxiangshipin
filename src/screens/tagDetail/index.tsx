@@ -11,9 +11,9 @@ import {
 } from 'react-native';
 import { observer, appStore } from '@src/store';
 import { NavBarHeader } from '@src/components';
-import { syncGetter, count } from '@src/common';
+import { syncGetter, count, mergeProperty } from '@src/common';
 import { GQL, useQuery } from '@src/apollo';
-import { ContentStatus, mergeProperty } from '@src/content';
+import { ContentStatus } from '@src/content';
 import { observable } from 'mobx';
 import { useRoute, useNavigation } from '@react-navigation/native';
 
