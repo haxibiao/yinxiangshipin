@@ -10,7 +10,7 @@ import {
     Linking,
     TextInput,
 } from 'react-native';
-import { Iconfont, MediaUploader, HxfButton, DropdownMenu, NavBarHeader } from '@src/components';
+import { Iconfont, MediaUploader, HxfButton, DropdownMenu, NavBarHeader, Loading } from '@src/components';
 import { BoxShadow } from 'react-native-shadow';
 import { GQL, useQuery, useMutation, useApolloClient, errorMessage } from '@src/apollo';
 import { appStore, userStore } from '@src/store';
@@ -28,7 +28,7 @@ const shadowOpt = {
     },
 };
 
-const appStores = ['OPPO', 'VIVO', '小米', '华为', '魅族', '百度', '豌豆荚', '应用宝'];
+const appStores = ['OPPO', 'VIVO', '小米', '华为', '魅族', '百度', '豌豆荚', '应用宝', '苹果'];
 
 export default (props) => {
     const [appStore, setAppStore] = useState('');
@@ -41,6 +41,7 @@ export default (props) => {
     const client = useApolloClient();
 
     const highPraiseTask = useCallback(() => {
+        Loading.show();
         client
             .mutate({
                 mutation: GQL.highPraiseTaskMutation,
@@ -52,10 +53,12 @@ export default (props) => {
                 ],
             })
             .then((result) => {
+                Loading.hide();
                 Toast.show({ content: '提交成功，请关注奖励发放' });
                 props.navigation.goBack();
             })
             .catch((err) => {
+                Loading.hide();
                 Toast.show({ content: errorMessage(err) || '提交失败' });
             });
     }, [appStore, phone, images]);

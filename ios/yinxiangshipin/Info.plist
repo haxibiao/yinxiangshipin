@@ -43,12 +43,12 @@
 			</dict>
 		</dict>
 	</dict>
-	<key>NSContactsUsageDescription</key>
-	<string>印象视频需要访问您的通讯录来推荐好友</string>
 	<key>NSAppleMusicUsageDescription</key>
 	<string>印象视频需要访问您的媒体资料库来提供下载功能</string>
 	<key>NSCameraUsageDescription</key>
 	<string>印象视频需要获取您的相机来拍摄图片</string>
+	<key>NSContactsUsageDescription</key>
+	<string>印象视频需要访问您的通讯录来推荐好友</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>印象视频需要您的位置信息推荐更好的内容</string>
 	<key>NSLocationWhenInUseUsageDescription</key>

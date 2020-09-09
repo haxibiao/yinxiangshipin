@@ -35,6 +35,7 @@
         "appcenter": "^3.1.0",
         "appcenter-analytics": "^3.1.0",
         "appcenter-crashes": "^3.1.0",
+        "deprecated-react-native-listview": "^0.0.6",
         "global": "^4.4.0",
         "graphql": "^15.3.0",
         "hxf-react-native-gifted-chat": "haxibiao/hxf-react-native-gifted-chat",
