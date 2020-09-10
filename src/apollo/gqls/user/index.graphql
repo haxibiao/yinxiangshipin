@@ -5,6 +5,7 @@ query MeMetaQuery {
         id
         balance
         gold
+        ticket
         total_contributes
         today_contributes
         exchangeRate
@@ -74,6 +75,7 @@ query userProfileQuery($id: Int!) {
         gender
         balance
         gold
+        ticket
         reward
         total_contributes
         today_contributes

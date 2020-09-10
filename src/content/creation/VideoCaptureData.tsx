@@ -5,6 +5,7 @@ import { exceptionCapture, getURLsFromString } from '@src/common';
 import { Iconfont, Loading, KeyboardSpacer } from '@src/components';
 import { useResolveVideo } from './useResolveVideo';
 import { useResolveContent } from './useResolveContent';
+import { observer, appStore } from '@src/store';
 
 interface Props {
     client: any;
@@ -16,7 +17,7 @@ interface Props {
     onClose: (p?: any) => any;
 }
 
-export const VideoCaptureData = ({ client, shareLink, shareBody, onSuccess, onFailed, onClose }: Props) => {
+export const VideoCaptureData = observer(({ client, shareLink, shareBody, onSuccess, onFailed, onClose }: Props) => {
     const [body, setBody] = useState(shareBody?.title);
 
     const resolveContentSuccess = useCallback(
@@ -69,6 +70,14 @@ export const VideoCaptureData = ({ client, shareLink, shareBody, onSuccess, onFa
         onFailed: resolveVideo,
     });
 
+    const collectVideo = useCallback(() => {
+        if (appStore.isLocalSpiderVideo) {
+            resolveContent();
+        } else {
+            resolveVideo();
+        }
+    }, [resolveVideo, resolveContent]);
+
     return (
         <ScrollView contentContainerStyle={styles.container}>
             <View style={styles.card}>
@@ -95,7 +104,7 @@ export const VideoCaptureData = ({ client, shareLink, shareBody, onSuccess, onFa
                         placeholderTextColor="#b2b2b2"
                     />
                 </View>
-                <TouchableOpacity style={styles.shareBtn} onPress={resolveContent}>
+                <TouchableOpacity style={styles.shareBtn} onPress={collectVideo}>
                     <Text style={styles.shareBtnText}>收藏视频</Text>
                 </TouchableOpacity>
                 <Text style={styles.tips}>来自您复制的分享链接</Text>
@@ -103,7 +112,7 @@ export const VideoCaptureData = ({ client, shareLink, shareBody, onSuccess, onFa
             <KeyboardSpacer />
         </ScrollView>
     );
-};
+});
 
 const CARD_WIDTH = percent(84) > pixel(300) ? pixel(300) : percent(84);
 

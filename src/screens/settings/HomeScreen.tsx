@@ -2,7 +2,7 @@ import React, { useState, useRef, useCallback } from 'react';
 import { StyleSheet, Text, ScrollView, View, TouchableOpacity, Image } from 'react-native';
 import { PageContainer, Iconfont, ListItem, ItemSeparator, PopOverlay, Loading } from '@src/components';
 import { checkUpdate } from '@src/common';
-import { observer, userStore, appStore } from '@src/store';
+import { observer, userStore, appStore, adStore } from '@src/store';
 import { useNavigation } from '@react-navigation/native';
 import { GQL, errorMessage } from '@src/apollo';
 
@@ -102,12 +102,31 @@ export default observer((props: any) => {
                             onPress={destroyAccount}
                             style={styles.listItem}
                             leftComponent={<Text style={styles.itemText}>账号注销</Text>}
+                            rightComponent={<Iconfont name="right" size={pixel(14)} color={Theme.subTextColor} />}
                         />
+                        <ItemSeparator />
+                        <ListItem
+                            onPress={() => navigation.navigate('UserBlockList')}
+                            style={styles.listItem}
+                            leftComponent={<Text style={styles.itemText}>黑名单</Text>}
+                            rightComponent={<Iconfont name="right" size={pixel(14)} color={Theme.subTextColor} />}
+                        />
+                    </>
+                )}
+                {userStore.login && adStore.enableAd && (
+                    <>
                         <ItemSeparator />
                         <ListItem
                             onPress={changResolveLinkType}
                             style={styles.listItem}
-                            leftComponent={<Text style={styles.itemText}>本地采集</Text>}
+                            leftComponent={
+                                <View>
+                                    <Text style={styles.itemText}>收藏方式</Text>
+                                    <Text style={styles.tipsText}>{`收藏第三方视频链接${
+                                        appStore.isLocalSpiderVideo ? '先' : '不'
+                                    }下载到本地`}</Text>
+                                </View>
+                            }
                             rightComponent={
                                 <Image
                                     style={styles.btnImage}
@@ -118,13 +137,6 @@ export default observer((props: any) => {
                                     }
                                 />
                             }
-                        />
-                        <ItemSeparator />
-                        <ListItem
-                            onPress={() => navigation.navigate('UserBlockList')}
-                            style={styles.listItem}
-                            leftComponent={<Text style={styles.itemText}>黑名单</Text>}
-                            rightComponent={<Iconfont name="right" size={pixel(14)} color={Theme.subTextColor} />}
                         />
                     </>
                 )}
@@ -191,10 +203,17 @@ const styles = StyleSheet.create({
         fontSize: font(15),
         marginRight: pixel(15),
     },
+    tipsText: {
+        color: '#b2b2b2',
+        fontSize: font(12),
+        marginRight: pixel(15),
+        marginTop: pixel(5),
+    },
     listItem: {
+        minHeight: pixel(50),
         backgroundColor: '#fff',
-        height: pixel(50),
-        paddingHorizontal: pixel(16),
+        padding: pixel(15),
+        paddingVertical: pixel(10),
     },
     logout: {
         alignSelf: 'center',

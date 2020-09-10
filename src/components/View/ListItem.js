@@ -4,21 +4,14 @@
  */
 
 import React, { Component } from 'react';
-
 import { StyleSheet, View } from 'react-native';
-import SafeText from '../Basic/SafeText';
 import TouchFeedback from '../Basic/TouchFeedback';
 
 type Props = {
-    disabled: ?boolean,
     style?: style,
-    leftComponent?: any,
+    disabled: ?boolean,
     onPress?: Function,
-    middleStyle?: any,
-    title?: string,
-    titleStyle?: any,
-    subTitle?: string,
-    subTitleStyle?: any,
+    leftComponent?: any,
     rightComponent?: any,
 };
 
@@ -28,51 +21,17 @@ class ListItem extends Component<Props> {
     };
 
     render() {
-        let {
-            disabled,
-            style,
-            leftComponent,
-            rightComponent,
-            title,
-            subTitle,
-            onPress,
-            middleStyle,
-            titleStyle,
-            subTitleStyle,
-        } = this.props;
+        let { style, disabled, onPress, leftComponent, rightComponent } = this.props;
         style = {
             flexDirection: 'row',
             alignItems: 'center',
+            justifyContent: 'space-between',
             ...style,
-        };
-        middleStyle = {
-            flex: 1,
-            marginHorizontal: pixel(Theme.itemSpace),
-            ...middleStyle,
-        };
-        titleStyle = {
-            fontSize: font(16),
-            color: Theme.highlightTextColor,
-            ...titleStyle,
-        };
-        subTitleStyle = {
-            marginTop: pixel(6),
-            fontSize: font(13),
-            color: '#999',
-            ...subTitleStyle,
         };
         return (
             <TouchFeedback onPress={onPress} disabled={disabled} activeOpacity={1}>
                 <View style={style}>
                     <View>{leftComponent}</View>
-                    <View style={middleStyle}>
-                        <SafeText style={titleStyle} numberOfLines={1}>
-                            {title}
-                        </SafeText>
-                        <SafeText style={subTitleStyle} numberOfLines={1}>
-                            {subTitle}
-                        </SafeText>
-                    </View>
                     <View>{rightComponent}</View>
                 </View>
             </TouchFeedback>
