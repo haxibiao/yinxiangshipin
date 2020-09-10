@@ -84,7 +84,9 @@ export default function TaskList() {
             keyExtractor={(item) => String(item.id)}
             renderItem={({ item }) => <TaskItem task={item} />}
             ListEmptyComponent={() => <View />}
-            renderSectionHeader={({ section: { title } }) => <Text style={styles.listHeader}>{title}</Text>}
+            renderSectionHeader={({ section: { title, data } }) =>
+                data.length > 0 ? <Text style={styles.listHeader}>{title}</Text> : null
+            }
             ItemSeparatorComponent={() => <View style={styles.taskItemSeparator} />}
         />
     );
