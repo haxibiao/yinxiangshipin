@@ -39,7 +39,7 @@ export const show = (props: Props) => {
                             style={styles.operation}
                             onPress={() => {
                                 hide();
-                                appStore.updateViewedVesion(onlineVersion);
+                                appStore.updateViewedVersion(onlineVersion);
                             }}>
                             <Iconfont name={'close'} color={Theme.grey} size={20} />
                         </TouchableOpacity>

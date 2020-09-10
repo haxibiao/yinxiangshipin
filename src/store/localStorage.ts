@@ -14,7 +14,8 @@ export interface ItemKeys {
     agreeCreatePostAgreement: string;
     showSplash: string;
     searchRecord: string;
-    spiderVideo: string;
+    spiderVideoTaskGuided: string;
+    isLocalSpiderVideo: string;
 }
 
 export const Keys = {
@@ -27,7 +28,8 @@ export const Keys = {
     agreeCreatePostAgreement: 'agreeCreatePostAgreement',
     showSplash: 'showSplash',
     searchRecord: 'searchRecord',
-    spiderVideo: 'spiderVideo',
+    spiderVideoTaskGuided: 'spiderVideoTaskGuided',
+    isLocalSpiderVideo: 'isLocalSpiderVideo',
 } as const;
 
 async function removeItem(key: keyof ItemKeys) {

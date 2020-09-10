@@ -19,7 +19,8 @@ class App {
 
     @observable createPostGuidance: boolean = true; // 用户引导,现在默认关闭
     @observable agreeCreatePostAgreement: boolean = false; // 用户协议观看记录
-    @observable spiderVideo: boolean = false; // 是否已经采集过
+    @observable spiderVideoTaskGuided: boolean = false; // 是否指导过采集任务
+    @observable isLocalSpiderVideo: boolean = true; // 是否启用本地采集
 
     constructor() {
         this.recall();
@@ -28,14 +29,17 @@ class App {
 
     @action.bound
     async recall() {
-        // 现在默认关闭
         const agreeCreatePostAgreement = await Storage.getItem(Keys.agreeCreatePostAgreement);
-        const spiderVideo = await Storage.getItem(Keys.spiderVideo);
+        const spiderVideoTaskGuided = await Storage.getItem(Keys.spiderVideoTaskGuided);
+        const isLocalSpiderVideo = await Storage.getItem(Keys.isLocalSpiderVideo);
         if (agreeCreatePostAgreement) {
             this.agreeCreatePostAgreement = true;
         }
-        if (spiderVideo) {
-            this.spiderVideo = true;
+        if (spiderVideoTaskGuided) {
+            this.spiderVideoTaskGuided = true;
+        }
+        if (isLocalSpiderVideo !== null) {
+            this.isLocalSpiderVideo = isLocalSpiderVideo;
         }
     }
 
@@ -63,7 +67,7 @@ class App {
 
     // 记录已查看的版本更新提示
     @action.bound
-    async updateViewedVesion(viewedVersion: string) {
+    async updateViewedVersion(viewedVersion: string) {
         await Storage.setItem(Keys.viewedVersion, viewedVersion);
     }
 

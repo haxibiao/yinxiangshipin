@@ -28,7 +28,7 @@ class UpdateOverlay {
                                     style={styles.operation}
                                     onPress={() => {
                                         UpdateOverlay.hide();
-                                        appStore.updateViewedVesion(serverVersion);
+                                        appStore.updateViewedVersion(serverVersion);
                                     }}>
                                     <Text style={styles.operationText}>以后再说</Text>
                                 </TouchableOpacity>

@@ -230,9 +230,9 @@ function playRewardVideo(wait: number) {
 }
 
 function resolveVideo() {
-    if (!appStore.spiderVideo) {
-        appStore.setAppStorage('spiderVideo', true);
-        appStore.spiderVideo = true;
+    if (!appStore.spiderVideoTaskGuided) {
+        appStore.setAppStorage('spiderVideoTaskGuided', true);
+        appStore.spiderVideoTaskGuided = true;
         authNavigate('SpiderVideoTask');
     } else {
         //TODO 唤起抖音，scheme可能存在一旦更改无法唤起的风险

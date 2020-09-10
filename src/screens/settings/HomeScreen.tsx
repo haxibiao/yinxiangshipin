@@ -2,11 +2,11 @@ import React, { useState, useRef, useCallback } from 'react';
 import { StyleSheet, Text, ScrollView, View, TouchableOpacity, Image } from 'react-native';
 import { PageContainer, Iconfont, ListItem, ItemSeparator, PopOverlay, Loading } from '@src/components';
 import { checkUpdate } from '@src/common';
-import { userStore, appStore } from '@src/store';
+import { observer, userStore, appStore } from '@src/store';
 import { useNavigation } from '@react-navigation/native';
 import { GQL, errorMessage } from '@src/apollo';
 
-export default (props: any) => {
+export default observer((props: any) => {
     const navigation = useNavigation();
 
     const signOut = useCallback(() => {
@@ -57,6 +57,11 @@ export default (props: any) => {
         });
     }, []);
 
+    const changResolveLinkType = useCallback(() => {
+        appStore.isLocalSpiderVideo = !appStore.isLocalSpiderVideo;
+        appStore.setAppStorage('isLocalSpiderVideo', appStore.isLocalSpiderVideo);
+    }, []);
+
     return (
         <PageContainer title="设置" white>
             <ScrollView
@@ -100,6 +105,22 @@ export default (props: any) => {
                         />
                         <ItemSeparator />
                         <ListItem
+                            onPress={changResolveLinkType}
+                            style={styles.listItem}
+                            leftComponent={<Text style={styles.itemText}>本地采集</Text>}
+                            rightComponent={
+                                <Image
+                                    style={styles.btnImage}
+                                    source={
+                                        appStore.isLocalSpiderVideo
+                                            ? require('@app/assets/images/bg.png')
+                                            : require('@app/assets/images/bf.png')
+                                    }
+                                />
+                            }
+                        />
+                        <ItemSeparator />
+                        <ListItem
                             onPress={() => navigation.navigate('UserBlockList')}
                             style={styles.listItem}
                             leftComponent={<Text style={styles.itemText}>黑名单</Text>}
@@ -112,7 +133,7 @@ export default (props: any) => {
                     onPress={checkUpdate}
                     style={styles.listItem}
                     leftComponent={<Text style={styles.itemText}>检查更新</Text>}
-                    rightComponent={<Text style={styles.rigthText}> {Config.Version} </Text>}
+                    rightComponent={<Text style={styles.rightText}> {Config.Version} </Text>}
                 />
                 <ItemSeparator />
                 <ListItem
@@ -137,7 +158,7 @@ export default (props: any) => {
             </ScrollView>
         </PageContainer>
     );
-};
+});
 
 const styles = StyleSheet.create({
     UserComment: {
@@ -180,8 +201,12 @@ const styles = StyleSheet.create({
         color: Theme.primaryColor,
         fontSize: font(14),
     },
-    rigthText: {
+    rightText: {
         color: Theme.subTextColor,
         fontSize: font(14),
+    },
+    btnImage: {
+        width: pixel(36),
+        height: (pixel(36) * 111) / 170,
     },
 });
