@@ -4,7 +4,7 @@ import { ad } from 'react-native-ad';
 import { userStore, appStore, adStore } from '@src/store';
 import { getTaskReward, getUserReward } from '@src/apollo';
 import { authNavigate } from '@src/router';
-import { SafeText, HxfButton, RewardOverlay } from '@src/components';
+import { SafeText, HxfButton, RewardOverlay, Loading } from '@src/components';
 import { useNavigation } from '@react-navigation/native';
 // import { Overlay } from 'teaset';
 
@@ -164,8 +164,10 @@ function useTaskState(task) {
 
     // 领取任务奖励
     const gotTaskReward = useCallback((id) => {
+        Loading.show();
         getTaskReward(id)
             .then((res) => {
+                Loading.hide();
                 RewardOverlay.show({
                     reward: {
                         gold: res?.gold,
@@ -175,6 +177,7 @@ function useTaskState(task) {
                 });
             })
             .catch((err) => {
+                Loading.hide();
                 Toast.show({ content: err });
             });
     }, []);
@@ -199,13 +202,36 @@ function useTaskState(task) {
 }
 
 function playRewardVideo(wait: number) {
-    let called;
+    let called = false;
     if (wait > 0) {
         Toast.show({ content: '请稍后再试' });
     } else {
-        const rewardVideo = ad.startRewardVideo({ appid: adStore.tt_appid, codeid: adStore.codeid_reward_video });
+        let rewardVideo;
+        if(userStore.me?.wallet?.total_withdraw_amount > 0){
+            rewardVideo = ad.startRewardVideo({ appid: adStore.tt_appid, codeid: adStore.codeid_reward_video });
+        }else {
+            rewardVideo = ad.startFullVideo({ appid: adStore.tt_appid, codeid: adStore.codeid_full_video });
+        }
 
-        rewardVideo.subscribe('onAdLoaded', (event) => {
+        rewardVideo.subscribe("onAdClose", (event) => {
+            if (!called) {
+                called = true;
+                getUserReward('WATCH_REWARD_VIDEO')
+                    .then((res) => {
+                        RewardOverlay.show({
+                            reward: {
+                                gold: res?.gold,
+                                ticket: res?.ticket,
+                            },
+                            title: '看视频奖励领取成功',
+                        });
+                    })
+                    .catch((err) => {
+                        Toast.show({ content: err });
+                    });
+            }
+        });
+        rewardVideo.subscribe("onAdLoaded", (event) => {
             if (!called) {
                 called = true;
                 getUserReward('WATCH_REWARD_VIDEO')

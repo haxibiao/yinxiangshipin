@@ -33,28 +33,25 @@ const SignedReturnOverlay = (props) => {
         __.debounce(() => {
             hide();
             let called;
-            const rewardVideo = ad.startRewardVideo({ appid: adStore.tt_appid, codeid: adStore.codeid_reward_video });
-            rewardVideo.subscribe('onAdLoaded', (event) => {
-                if (!called) {
-                    called = true;
-                    getUserReward('SIGNIN_VIDEO_REWARD')
-                        .then((res) => {
-                            RewardOverlay.show({
-                                reward: {
-                                    gold: res?.gold,
-                                    ticket: res?.ticket,
-                                },
-                                title: '额外奖励领取成功',
-                            });
-                        })
-                        .catch((err) => {
-                            Toast.show({ content: err });
+            // const rewardVideo = ad.startRewardVideo({ appid: adStore.tt_appid, codeid: adStore.codeid_reward_video });
+            const rewardVideo = ad.startFullVideo({ appid: adStore.tt_appid, codeid: adStore.codeid_full_video });
+
+            if (!called) {
+                called = true;
+                getUserReward('SIGNIN_VIDEO_REWARD')
+                    .then((res) => {
+                        RewardOverlay.show({
+                            reward: {
+                                gold: res?.gold,
+                                ticket: res?.ticket,
+                            },
+                            title: '额外奖励领取成功',
                         });
-                }
-            });
-            rewardVideo.subscribe('onAdError', (event) => {
-                Toast.show({ content: event.message || '视频播放失败！', duration: 1500 });
-            });
+                    })
+                    .catch((err) => {
+                        Toast.show({ content: err });
+                    });
+            }
         }),
         [],
     );
