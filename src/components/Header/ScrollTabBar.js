@@ -125,9 +125,9 @@ export default class ScrollTabBar extends Component<Props> {
     }
 
     render() {
-        let { style, tabs, hiddenUnderLine } = this.props;
+        let { style, tabBarStyle, tabs, hiddenUnderLine } = this.props;
         return (
-            <Animated.View style={[styles.tabBar, style]}>
+            <Animated.View style={[styles.tabBar, style, tabBarStyle]}>
                 {!hiddenUnderLine && this._renderUnderline()}
                 {tabs.map((name, page) => {
                     const isTabActive = this.props.activeTab === page;
