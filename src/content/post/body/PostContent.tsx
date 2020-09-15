@@ -99,7 +99,11 @@ export default observer(
                 <ApolloProvider client={client}>
                     <MoreOperation
                         target={post}
-                        options={isMe ? ['删除', '下载', '复制链接'] : ['举报', '不感兴趣', '下载', '复制链接']}
+                        options={
+                            isMe
+                                ? ['分享长图', '删除', '下载', '复制链接']
+                                : ['分享长图', '举报', '不感兴趣', '下载', '复制链接']
+                        }
                         videoUrl={post?.video?.url}
                         videoTitle={post?.body}
                         closeOverlay={hideMoreOperation}

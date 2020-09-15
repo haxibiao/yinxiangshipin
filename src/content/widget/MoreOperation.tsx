@@ -10,6 +10,8 @@ import { download, syncGetter, exceptionCapture } from '@src/common';
 import { Share } from '@src/native';
 import { GQL, useMutation, errorMessage } from '@src/apollo';
 import { useReport } from '../service';
+import QuestionShareCard from '@src/screens/share/QuestionShareCard';
+import QuestionShareCardOverlay from '@src/screens/share/QuestionShareCardOverlay';
 
 const MoreOperation = (props: any) => {
     const shareLink = useRef();
@@ -165,8 +167,22 @@ const MoreOperation = (props: any) => {
         }
     }, []);
 
+    let shareCardRef: any;
+    const shareCard = useCallback(async () => {
+        closeOverlay();
+        if (TOKEN) {
+            let image = await shareCardRef.onCapture(true);
+            QuestionShareCardOverlay.show(image, target);
+        } else {
+            navigation.navigate('Login');
+        }
+    }, [shareCardRef]);
     const operation = useMemo(
         () => ({
+            分享长图: {
+                image: require('@app/assets/images/share_img.png'),
+                callback: shareCard,
+            },
             下载: {
                 image: require('@app/assets/images/more_video_download.png'),
                 callback: downloadVideo,
@@ -417,6 +433,7 @@ const MoreOperation = (props: any) => {
             <TouchableOpacity style={styles.footer} onPress={closeOverlay}>
                 <Text style={styles.footerText}>取消</Text>
             </TouchableOpacity>
+            <QuestionShareCard post={target} ref={(ref) => (shareCardRef = ref)} shareMiniProgram />
         </View>
     );
 };

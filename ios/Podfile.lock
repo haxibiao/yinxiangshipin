@@ -322,6 +322,8 @@ PODS:
     - react-native-video/Video (= 5.0.2)
   - react-native-video/Video (5.0.2):
     - React
+  - react-native-view-shot (3.1.2):
+    - React
   - react-native-viewpager (3.3.0):
     - React
   - react-native-vod (1.0.4):
@@ -504,6 +506,7 @@ DEPENDENCIES:
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
   - react-native-video (from `../node_modules/react-native-video`)
+  - react-native-view-shot (from `../node_modules/react-native-view-shot`)
   - "react-native-viewpager (from `../node_modules/@react-native-community/viewpager`)"
   - react-native-vod (from `../node_modules/react-native-vod`)
   - react-native-webview (from `../node_modules/react-native-webview`)
@@ -642,6 +645,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-splash-screen"
   react-native-video:
     :path: "../node_modules/react-native-video"
+  react-native-view-shot:
+    :path: "../node_modules/react-native-view-shot"
   react-native-viewpager:
     :path: "../node_modules/@react-native-community/viewpager"
   react-native-vod:
@@ -761,6 +766,7 @@ SPEC CHECKSUMS:
   react-native-slider: e99fc201cefe81270fc9d81714a7a0f5e566b168
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
   react-native-video: d01ed7ff1e38fa7dcc6c15c94cf505e661b7bfd0
+  react-native-view-shot: 4475fde003fe8a210053d1f98fb9e06c1d834e1c
   react-native-viewpager: a7b438ca32c57b2614ece2a123e7fe116f743131
   react-native-vod: 83510663b2c0ef07a460505e81c1689c89d95e20
   react-native-webview: 1ad70b21fb9e44811e33a99e43a4b68b94806a6d
@@ -798,6 +804,6 @@ SPEC CHECKSUMS:
   Yoga: 7740b94929bbacbddda59bf115b5317e9a161598
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: c55ec151fbee7105821a807c54610b79fa753e2f
+PODFILE CHECKSUM: 9fc3f3b88c2a9068d492f4c7f8267a3d7835f784
 
-COCOAPODS: 1.9.3
+COCOAPODS: 1.9.2
