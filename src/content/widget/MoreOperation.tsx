@@ -180,7 +180,7 @@ const MoreOperation = (props: any) => {
     const operation = useMemo(
         () => ({
             分享长图: {
-                image: require('@app/assets/images/share_img.png'),
+                image: require('@app/assets/images/more_large_img.png'),
                 callback: shareCard,
             },
             下载: {
