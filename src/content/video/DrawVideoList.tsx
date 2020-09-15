@@ -33,7 +33,7 @@ interface Props {
     initialIndex?: number;
     getVisibleItem: (i: number) => void;
     fetchData: () => void;
-    showBottomInput: boolean;
+    showBottomInput?: boolean;
 }
 
 export default observer(({ store, initialIndex = 0, getVisibleItem, fetchData, showBottomInput }: Props) => {
@@ -137,7 +137,7 @@ export default observer(({ store, initialIndex = 0, getVisibleItem, fetchData, s
             }
             return <VideoItem store={store} media={item} index={index} />;
         },
-        [store.viewableItemIndex],
+        [adStore.enableAd],
     );
 
     // 模态框事件处理
@@ -160,28 +160,6 @@ export default observer(({ store, initialIndex = 0, getVisibleItem, fetchData, s
             hardwareBackPress.remove();
             DeviceEventEmitter.removeListener('showCommentModal');
             DeviceEventEmitter.removeListener('hideCommentModal');
-        };
-    }, []);
-
-    // 视频播放事件处理
-    useEffect(() => {
-        const navWillFocusListener = navigation.addListener('focus', () => {
-            store.visibility = true;
-        });
-        const navWillBlurListener = navigation.addListener('blur', () => {
-            store.visibility = false;
-        });
-        const videoBlurListener = DeviceEventEmitter.addListener('videoFocus', () => {
-            store.visibility = true;
-        });
-        const videoFocusListener = DeviceEventEmitter.addListener('videoBlur', () => {
-            store.visibility = false;
-        });
-        return () => {
-            navWillFocusListener();
-            navWillBlurListener();
-            videoBlurListener.remove();
-            videoFocusListener.remove();
         };
     }, []);
 

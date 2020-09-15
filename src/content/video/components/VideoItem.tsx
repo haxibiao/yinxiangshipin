@@ -11,9 +11,16 @@ import Player from './Player';
 import SideBar from './SideBar';
 import VideoOperation from './VideoOperation';
 
-export default observer((props) => {
+interface Props {
+    media: any;
+    index: number;
+    store: any;
+}
+
+export default observer((props: Props) => {
     const { media, index, store } = props;
     const viewable = index === store.viewableItemIndex && store.visibility;
+    
     const shown = useMemo(() => {
         // 播放器的显示区间
         if ((store.viewableItemIndex > index - 2 && store.viewableItemIndex < index + 3) || viewable) {

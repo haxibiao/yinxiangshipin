@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useMemo, useCallback } from 'react';
 import { StyleSheet, View, Text, StatusBar } from 'react-native';
-import { useRoute } from '@react-navigation/native';
+import { useRoute, useNavigation } from '@react-navigation/native';
 import { exceptionCapture } from '@src/common';
 import { FocusAwareStatusBar } from '@src/router';
 import { NavBarHeader } from '@src/components';
@@ -9,6 +9,7 @@ import { DrawVideoList, DrawVideoStore } from '@src/content';
 
 export default () => {
     const route = useRoute();
+    const navigation = useNavigation();
     const tag = useMemo(() => route?.params?.tag, []);
     const initData = useMemo(() => route?.params?.initData, []);
     const itemIndex = useMemo(() => route?.params?.itemIndex, []);
@@ -54,6 +55,20 @@ export default () => {
                 store.status = '';
             }
         }
+    }, []);
+
+    // 视频播放事件处理
+    useEffect(() => {
+        const navWillFocusListener = navigation.addListener('focus', () => {
+            store.visibility = true;
+        });
+        const navWillBlurListener = navigation.addListener('blur', () => {
+            store.visibility = false;
+        });
+        return () => {
+            navWillFocusListener();
+            navWillBlurListener();
+        };
     }, []);
 
     return (
