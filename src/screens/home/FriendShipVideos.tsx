@@ -15,14 +15,19 @@ export default observer((props: any) => {
     const fetchData = useCallback(async () => {
         async function postsQuery() {
             return appStore.client.query({
-                query: GQL.recommendPostsQuery,
+                query: GQL.followPostsQuery,
+                variables: {
+                    user_id: userStore?.me?.id,
+                    count: 5,
+                    filter: 'spider',
+                },
                 fetchPolicy: 'network-only',
             });
         }
         if (videoStore.status !== 'loading' && videoStore.data.length - videoStore.viewableItemIndex <= 3) {
             videoStore.status = 'loading';
             const [error, result] = await exceptionCapture(postsQuery);
-            const postsData = result?.data?.recommendPosts;
+            const postsData = result?.data?.followPosts?.data;
             if (postsData?.length > 0) {
                 videoStore.addSource(postsData);
             }

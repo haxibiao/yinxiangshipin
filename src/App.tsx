@@ -24,10 +24,10 @@ function App() {
             app: DisplayName,
         });
         // 启动个开屏广告
-        ad.startSplash({
-            appid: store.adStore.tt_appid,
-            codeid: store.adStore.codeid_splash,
-        });
+        // ad.startSplash({
+        //     appid: store.adStore.tt_appid,
+        //     codeid: store.adStore.codeid_splash,
+        // });
     }
 
     // 获取APP的开启配置(广告和钱包)
@@ -37,10 +37,6 @@ function App() {
             .then((result) => {
                 // 1.保存APP配置(含ad appId, codeId等)
                 store.adStore.setAdConfig(result);
-                // 2.广告初始化
-                //
-                // 3.开屏
-                SplashScreen.hide();
             })
             .catch((err) => {});
     }, []);

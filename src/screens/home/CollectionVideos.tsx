@@ -18,6 +18,7 @@ export default observer((props: any) => {
                 query: GQL.userPostsQuery,
                 variables: {
                     user_id: userStore?.me?.id,
+                    count: 5,
                     filter: 'spider',
                 },
                 fetchPolicy: 'network-only',
