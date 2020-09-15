@@ -1,14 +1,19 @@
-import React, { useRef, useEffect, useMemo, useCallback } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import React, { useRef, useEffect, useMemo, useCallback, useState } from 'react';
+import { StyleSheet, View, DeviceEventEmitter } from 'react-native';
 import { observer, appStore, userStore } from '@src/store';
 import { useClipboardLink, VideoCaptureData } from '@src/content';
 import { useApolloClient } from '@apollo/react-hooks';
 import { useBeginner } from '@src/common';
-import { NavBarHeader } from '@src/components';
+import { NavBarHeader, ScrollTabBar } from '@src/components';
 import { Overlay } from 'teaset';
+import ScrollableTabView from 'react-native-scrollable-tab-view';
+import { useNavigation } from '@react-navigation/native';
 import RecommendVideos from './RecommendVideos';
+import CollectionVideos from './CollectionVideos';
+import FriendShipVideos from './FriendShipVideos';
 
-export default observer(() => {
+
+export default observer(({}) => {
     useBeginner();
 
     const [shareContent] = useClipboardLink();
@@ -47,27 +52,56 @@ export default observer(() => {
         }
     }, [shareContent]);
 
-    // useEffect(() => {
-    //     const hardwareBackPress = BackHandler.addEventListener('hardwareBackPress', () => {
-    //         if (overlayRef.current) {
-    //             overlayRef.current?.close();
-    //             return true;
-    //         }
-    //         return false;
-    //     });
-    //     return () => {
-    //         hardwareBackPress.remove();
-    //     };
-    // }, []);
+    const navigation = useNavigation();
+    const currentPage = useRef(1);
+    const visibility = useRef(false);
+    const onChangeTab = useCallback((e) => {
+        currentPage.current = e.i;
+        DeviceEventEmitter.emit('onChangeVideoTab', visibility.current ? currentPage.current : -1);
+    }, []);
 
     const onLayout = useCallback((event) => {
         const { height } = event.nativeEvent.layout;
         appStore.viewportHeight = height;
     }, []);
 
+    // 视频播放事件处理
+    useEffect(() => {
+        const navWillFocusListener = navigation.addListener('focus', () => {
+            visibility.current = true;
+            DeviceEventEmitter.emit('onChangeVideoTab', currentPage.current);
+        });
+        const navWillBlurListener = navigation.addListener('blur', () => {
+            visibility.current = false;
+            DeviceEventEmitter.emit('onChangeVideoTab', -1);
+        });
+        return () => {
+            navWillFocusListener();
+            navWillBlurListener();
+        };
+    }, []);
+
     return (
         <View style={{ flex: 1 }} onLayout={onLayout}>
-            <RecommendVideos />
+            <ScrollableTabView
+                contentProps={{ keyboardShouldPersistTaps: 'always' }}
+                tabBarPosition="overlayTop"
+                initialPage={1}
+                onChangeTab={onChangeTab}
+                renderTabBar={(tabBarProps: any) => (
+                    <ScrollTabBar 
+                        {...tabBarProps} 
+                        tabWidth={pixel(74)}
+                        tabBarStyle={styles.tabBarStyle}
+                        underlineStyle={styles.underlineStyle}
+                        activeTextStyle={styles.activeTextStyle}
+                        tintTextStyle={styles.tintTextStyle}
+                    />
+                )}>
+                <CollectionVideos tabLabel="收藏" page={0} />
+                <RecommendVideos tabLabel="推荐" page={1} />
+                <FriendShipVideos tabLabel="关注" page={2} />
+            </ScrollableTabView>
             <NavBarHeader
                 navBarStyle={styles.navBarStyle}
                 hasGoBackButton={false}
@@ -87,6 +121,37 @@ const styles = StyleSheet.create({
     navBarStyle: {
         position: 'absolute',
         top: 0,
+        right: 0,
+        width: pixel(60),
+    },
+    tabBarStyle: {
         width: '100%',
+        height: pixel(42),
+        paddingHorizontal: pixel(42), 
+        marginTop: Theme.statusBarHeight,
+        borderWidth: 0,
+        justifyContent: 'center',
+    },
+    underlineStyle: {
+        width: pixel(24),
+        left: (Device.WIDTH - pixel(74) * 3) / 2 + pixel(25),
+        marginBottom: pixel(4),
+        backgroundColor: '#fff',
+    },
+    activeTextStyle: {
+        color: '#ffffff',
+        fontSize: font(19),
+        fontWeight: 'bold',
+        textShadowColor: 'rgba(0, 0, 0, 0.75)',
+        textShadowOffset: { width: 0, height: 0 },
+        textShadowRadius: 10,
+    },
+    tintTextStyle: {
+        color: '#ddd',
+        fontSize: font(19),
+        fontWeight: 'bold',
+        textShadowColor: 'rgba(0, 0, 0, 0.75)',
+        textShadowOffset: { width: 0, height: 0 },
+        textShadowRadius: 1,
     },
 });
