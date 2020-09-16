@@ -7,3 +7,4 @@ export * from './download';
 export * from './bindWechat';
 export * from './downloadApk';
 export { fileHash } from './fileMD5Hash';
+export { detectPhotos } from './detectPhotos';
