@@ -20,15 +20,15 @@ export async function detectPhotos() {
         //promise...
         let decodePromise = new Promise((resolve, reject) => {
             console.log('进入decodePromise了XXXXX', path);
-            QRreader(path)
-                .then((data) => {
-                    console.log('识别成功');
-                    return resolve(data);
-                })
-                .catch((err) => {
-                    console.log('识别失败');
-                    return resolve(false);
-                });
+            // QRreader(path)
+            //     .then((data) => {
+            //         console.log('识别成功');
+            //         return resolve(data);
+            //     })
+            //     .catch((err) => {
+            //         console.log('识别失败');
+            //         return resolve(false);
+            //     });
            
             //     if (result) {
             //         if (result.indexOf('/video/') !== -1 || result.indexOf('/post/') !== -1) {
