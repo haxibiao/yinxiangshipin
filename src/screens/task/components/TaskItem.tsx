@@ -2,11 +2,12 @@ import React, { useRef, useMemo, useState, useCallback, useEffect } from 'react'
 import { StyleSheet, View, Text, TouchableOpacity, Image, Linking } from 'react-native';
 import { ad } from 'react-native-ad';
 import { userStore, appStore, adStore } from '@src/store';
-import { getTaskReward, getUserReward } from '@src/apollo';
+import { getTaskReward, getUserReward, getNewUserReward } from '@src/apollo';
 import { authNavigate } from '@src/router';
-import { SafeText, HxfButton, RewardOverlay, Loading } from '@src/components';
+import { SafeText, HxfButton, RewardOverlay, Loading, PopOverlay } from '@src/components';
 import { useNavigation } from '@react-navigation/native';
-// import { Overlay } from 'teaset';
+import { Overlay } from 'teaset';
+import VideoTeaching from '../VideoTeaching';
 
 export default function TaskItem({ task }) {
     const [taskState, taskHandler] = useTaskState(task);
@@ -207,13 +208,13 @@ function playRewardVideo(wait: number) {
         Toast.show({ content: '请稍后再试' });
     } else {
         let rewardVideo;
-        if(userStore.me?.wallet?.total_withdraw_amount > 0){
+        if (userStore.me?.wallet?.total_withdraw_amount > 0) {
             rewardVideo = ad.startRewardVideo({ appid: adStore.tt_appid, codeid: adStore.codeid_reward_video });
-        }else {
+        } else {
             rewardVideo = ad.startFullVideo({ appid: adStore.tt_appid, codeid: adStore.codeid_full_video });
         }
 
-        rewardVideo.subscribe("onAdClose", (event) => {
+        rewardVideo.subscribe('onAdClose', (event) => {
             if (!called) {
                 called = true;
                 getUserReward('WATCH_REWARD_VIDEO')
@@ -231,7 +232,7 @@ function playRewardVideo(wait: number) {
                     });
             }
         });
-        rewardVideo.subscribe("onAdLoaded", (event) => {
+        rewardVideo.subscribe('onAdLoaded', (event) => {
             if (!called) {
                 called = true;
                 getUserReward('WATCH_REWARD_VIDEO')
@@ -271,6 +272,55 @@ function resolveVideo() {
     }
 }
 
+const showVideoTeaching = (function teaching() {
+    let overlayRef;
+    let isShow;
+    let timer;
+    let played;
+    function onClose() {
+        if (!played) {
+            PopOverlay({
+                content: '确定关闭吗，观看完教学视频可领取新人奖励哦！',
+                leftContent: '确定关闭',
+                rightContent: '继续观看',
+                leftConfirm: () => {
+                    overlayRef?.close();
+                    isShow = false;
+                },
+            });
+        } else {
+            overlayRef?.close();
+            isShow = false;
+        }
+    }
+
+    // 观看完毕，改变任务状态
+    function changeTaskStatus({ duration = 10 }) {
+        clearTimeout(timer);
+
+        timer = setTimeout(() => {
+            played = true;
+            getNewUserReward('VIDEO');
+        }, duration * 600);
+    }
+
+    return () => {
+        if (!isShow) {
+            isShow = true;
+            Overlay.show(
+                <Overlay.PopView
+                    modal={true}
+                    overlayOpacity={0.7}
+                    style={{ alignItems: 'center', justifyContent: 'center' }}
+                    ref={(ref) => (overlayRef = ref)}
+                    onDisappearCompleted={() => (isShow = false)}>
+                    <VideoTeaching onLoad={changeTaskStatus} onClose={onClose} />
+                </Overlay.PopView>,
+            );
+        }
+    };
+})();
+
 function inReview() {
     Toast.show({ content: '任务审核中，请留意奖励发放' });
 }
@@ -285,6 +335,7 @@ const taskRouteInfo = {
     去观看: playRewardVideo,
     去采集: resolveVideo,
     审核中: inReview,
+    去了解: showVideoTeaching,
     去点赞: 'Home',
     去发布: 'CreatePost',
     去绑定: 'BindingAccount',

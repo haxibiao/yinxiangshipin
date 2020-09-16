@@ -56,14 +56,14 @@ export default function TaskList() {
             const dailyTasks = { title: '每日任务', data: [] };
             const newUserTasks = { title: '新人任务', data: [] };
             for (const task of tasksData) {
-                if (task.group === '每日任务') {
-                    dailyTasks.data.push(task);
-                }
                 if (task.group === '新人任务') {
                     newUserTasks.data.push(task);
                 }
+                if (task.group === '每日任务') {
+                    dailyTasks.data.push(task);
+                }
             }
-            return [dailyTasks, newUserTasks];
+            return [newUserTasks, dailyTasks];
         }
     }, [data]);
 
