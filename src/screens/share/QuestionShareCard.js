@@ -5,8 +5,12 @@ import { BoxShadow } from 'react-native-shadow';
 import QRCode from 'react-native-qrcode-svg';
 import viewShotUtil from './viewShotUtil';
 
+const marginWidth = pixel(40);
+const contentWidth = Device.WIDTH - marginWidth * 2;
+const imageWidth = contentWidth - marginWidth;
+
 const shadowOpt = {
-    width: Device.WIDTH - pixel(80),
+    width: contentWidth,
     color: '#E8E8E8',
     border: pixel(10),
     radius: pixel(10),
@@ -14,71 +18,61 @@ const shadowOpt = {
     x: 0,
     y: 0,
     style: {
-        marginVertical: 20,
+        marginVertical: pixel(20),
     },
 };
 
 class QuestionShareCard extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            headerHeight: 78,
-        };
     }
+
     render() {
         const { post } = this.props;
         const images = post?.images;
         const video = post?.video;
 
         return (
-            <ScrollView style={{ flex: 1 }}>
-                <View
-                    style={{
-                        width: Device.WIDTH - pixel(80),
-                        backgroundColor: '#fff',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        marginHorizontal: pixel(40),
-                        marginVertical: 20,
-                        paddingVertical: 15,
-                    }}
-                    ref={(ref) => (this.shareCard = ref)}>
+            <ScrollView style={styles.container}>
+                <View style={styles.content} ref={(ref) => (this.shareCard = ref)}>
                     {(video || (images && Array.isArray(images), images.length > 0)) && (
                         <Image
                             source={{
                                 uri: video?.cover || images[0]?.url,
                             }}
                             style={{
-                                marginTop: pixel(Theme.itemSpace),
-                                width: ((Device.WIDTH - pixel(80)) / 4) * 3,
-                                height: Device.WIDTH - pixel(80),
+                                width: imageWidth,
+                                height: (imageWidth * 4) / 3,
                             }}
                         />
                     )}
                     <View style={styles.questionBody}>
-                        <View style={{ flex: 1, overflow: 'hidden', marginRight: 10 }}>
+                        <View style={{ flex: 1, overflow: 'hidden', marginRight: pixel(10) }}>
                             <View
                                 style={{
                                     flexDirection: 'row',
                                     alignItems: 'center',
-                                    backgroundColor: '#fff',
-                                    marginBottom: 10,
-                                }}
-                                onLayout={(event) => {
-                                    this.setState({
-                                        headerHeight: event.nativeEvent.layout.height,
-                                    });
                                 }}>
-                                <Avatar source={{ uri: post.user.avatar }} userId={post.user.id} size={40} />
-                                <View style={{ marginLeft: 15 }}>
+                                <Avatar
+                                    source={{ uri: post?.user?.avatar }}
+                                    size={pixel(40)}
+                                    style={{ backgroundColor: '#b2b2b2' }}
+                                />
+                                <View style={{ marginLeft: pixel(15) }}>
                                     <Text
-                                        style={{ color: '#363636', fontSize: 20, lineHeight: 30, fontWeight: 'bold' }}>
-                                        @{post.user.name}
+                                        style={{
+                                            color: '#363636',
+                                            fontSize: pixel(18),
+                                            fontWeight: 'bold',
+                                        }}>
+                                        @{post?.user?.name}
                                     </Text>
                                 </View>
                             </View>
-                            <Text style={{ color: '#363636', fontSize: 15, lineHeight: 22 }} numberOfLines={2}>
-                                {post.description}
+                            <Text
+                                style={{ color: '#363636', fontSize: pixel(15), lineHeight: pixel(22) }}
+                                numberOfLines={2}>
+                                {post?.description || post?.content}
                             </Text>
                         </View>
                         <View style={{ width: pixel(80), height: pixel(80) }}>
@@ -115,37 +109,25 @@ function correctRate(correct, count) {
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
+    content: {
+        width: contentWidth,
+        padding: pixel(20),
+        marginTop: pixel(30),
+        marginHorizontal: marginWidth,
+        backgroundColor: '#fff',
+    },
     questionBody: {
-        marginVertical: 30,
-        marginBottom: 50,
-        paddingHorizontal: 15,
-        paddingVertical: 15,
-        // borderRadius: 3,
-        backgroundColor: Theme.white,
-        width: Device.WIDTH - pixel(80),
+        marginTop: pixel(20),
         flexDirection: 'row',
         alignItems: 'center',
     },
     description: {
-        color: Theme.defaultTextColor,
+        color: '#2b2b2b',
         fontSize: pixel(15),
         lineHeight: pixel(22),
-    },
-    questionType: {
-        position: 'absolute',
-        top: 2,
-        left: 0,
-        width: pixel(36),
-        height: pixel(18),
-        borderTopLeftRadius: pixel(9),
-        borderBottomRightRadius: pixel(9),
-        backgroundColor: Theme.primaryColor,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    answerType: {
-        fontSize: pixel(11),
-        color: '#fff',
     },
 });
 

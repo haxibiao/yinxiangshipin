@@ -32,7 +32,7 @@ class viewShotUtil {
                     title: '需要访问您的相册',
                     message: '保存图片需要您开启该权限',
                 });
-                const result = await CameraRoll.saveToCameraRoll(uri, 'photo');
+                const result = await CameraRoll.save(uri, 'photo');
                 if (isShow) {
                     Toast.show({ content: '已保存到相册' });
                 }
