@@ -24,11 +24,11 @@ function App() {
             appid: store.adStore.tt_appid,
             app: DisplayName,
         });
-        // 启动个开屏广告
-        // ad.startSplash({
-        //     appid: store.adStore.tt_appid,
-        //     codeid: store.adStore.codeid_splash,
-        // });
+        // 启动个开屏广告;
+        ad.startSplash({
+            appid: store.adStore.tt_appid,
+            codeid: store.adStore.codeid_splash,
+        });
     }
 
     // 获取APP的开启配置(广告和钱包)
@@ -41,19 +41,22 @@ function App() {
             })
             .catch((err) => {});
     }, []);
+
     // 获取相册图片并检查图片中的二维码
-    const detectQrcodes = async () => {
-        //检查相册权限
-        let pic_info = await detectPhotos();
-        console.log('检测图片二维码结果:', pic_info);
-    };
+    // const detectQrcodes = async () => {
+    //     //检查相册权限
+    //     let pic_info = await detectPhotos();
+    //     console.log('检测图片二维码结果:', pic_info);
+    // };
 
     useEffect(() => {
-        detectQrcodes();
+        // 尝试解析相册图片
+        // detectQrcodes();
+        // 获取广告、钱包配置
         fetchConfig();
         // 检查版本更新
         // checkUpdate('autoCheck');
-        // WeChat lib注册
+        // WeChat注册
         WeChat.registerApp(WechatAppId, 'http://yxsp.haxifang.cn/');
     }, []);
 
