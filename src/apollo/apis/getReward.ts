@@ -2,14 +2,10 @@ import { appStore } from '@src/store';
 import { GQL } from '../gqls';
 import { errorMessage } from './errorMessage';
 
-export enum rewardReason {
-    SIGNIN_VIDEO_REWARD = 'SIGNIN_VIDEO_REWARD',
-    DOUBLE_SIGNIN_REWARD = 'DOUBLE_SIGNIN_REWARD',
-    WATCH_REWARD_VIDEO = 'WATCH_REWARD_VIDEO',
-}
-
 //  视频奖励领取
-export function getUserReward(reason: rewardReason) {
+type RewardReason = 'SIGNIN_VIDEO_REWARD' | 'DOUBLE_SIGNIN_REWARD' | 'WATCH_REWARD_VIDEO';
+
+export function getUserReward(reason: RewardReason) {
     const refetchQueries = [
         {
             query: GQL.MeMetaQuery,
@@ -88,6 +84,37 @@ export function getTaskReward(id: number) {
                     //     },
                     //     title: '任务奖励领取成功',
                     // });
+                })
+                .catch((err: any) => {
+                    reject(errorMessage(err, '奖励领取失败'));
+                });
+        } else {
+            reject('Cannot read property client');
+        }
+    });
+}
+
+//  任务奖励领取
+type RewardType = 'VIDEO';
+
+export function getNewUserReward(rewardType: RewardType) {
+    const refetchQueries = [
+        {
+            query: GQL.tasksQuery,
+            fetchPolicy: 'network-only',
+        },
+    ];
+
+    return new Promise((resolve, reject) => {
+        if (appStore.client) {
+            appStore.client
+                .mutate({
+                    mutation: GQL.newUserRewordMutation,
+                    variables: { rewardType },
+                    refetchQueries,
+                })
+                .then((data: any) => {
+                    resolve(data?.data?.reward);
                 })
                 .catch((err: any) => {
                     reject(errorMessage(err, '奖励领取失败'));

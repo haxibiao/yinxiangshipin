@@ -21,3 +21,9 @@ mutation rewardTaskMutation($id: ID!) {
         }
     }
 }
+
+#新用户奖励接口
+# "rewardType": "VIDEO"
+mutation newUserRewordMutation($rewardType: RewardType!) {
+    newUserReword(type: $rewardType)
+}

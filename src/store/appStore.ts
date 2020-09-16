@@ -20,7 +20,7 @@ class App {
     @observable createPostGuidance: boolean = true; // 用户引导,现在默认关闭
     @observable agreeCreatePostAgreement: boolean = false; // 用户协议观看记录
     @observable spiderVideoTaskGuided: boolean = false; // 是否指导过采集任务
-    @observable isLocalSpiderVideo: boolean = true; // 是否启用本地采集
+    @observable isLocalSpiderVideo: boolean = false; // 是否启用本地采集
 
     constructor() {
         this.recall();
