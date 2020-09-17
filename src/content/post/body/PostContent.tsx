@@ -101,8 +101,8 @@ export default observer(
                         target={post}
                         options={
                             isMe
-                                ? ['分享长图', '删除', '下载', '复制链接']
-                                : ['分享长图', '举报', '不感兴趣', '下载', '复制链接']
+                                ? ['删除', '下载', '分享长图', '复制链接']
+                                : ['举报', '不感兴趣', '下载', '分享长图', '复制链接']
                         }
                         videoUrl={post?.video?.url}
                         videoTitle={post?.body}

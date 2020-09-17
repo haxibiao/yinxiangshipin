@@ -14,7 +14,7 @@ export async function detectPhotos() {
         assetType: 'Photos',
     });
     const photos = result.edges;
-
+    //  TODO: occurred error: int android.graphics.Bitmap.getWidth()
     // const firstPhoto = photos[0]?.node.image.uri;
     // return new Promise((resolve, reject) => {
     //     QRreader(firstPhoto)

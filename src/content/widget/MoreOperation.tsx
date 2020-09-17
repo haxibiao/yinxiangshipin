@@ -170,19 +170,17 @@ const MoreOperation = (props: any) => {
     let shareCardRef: any;
     const shareCard = useCallback(async () => {
         closeOverlay();
-        if (TOKEN) {
-            let image = await shareCardRef.onCapture(true);
-            QuestionShareCardOverlay.show(image, target);
-        } else {
-            navigation.navigate('Login');
-        }
+        // if (TOKEN) {
+        //     let image = await shareCardRef.onCapture(true);
+        //     QuestionShareCardOverlay.show(image, target);
+        // } else {
+        //     navigation.navigate('Login');
+        // }
+        let image = await shareCardRef.onCapture(true);
+        QuestionShareCardOverlay.show(image, target);
     }, [shareCardRef]);
     const operation = useMemo(
         () => ({
-            分享长图: {
-                image: require('@app/assets/images/more_large_img.png'),
-                callback: shareCard,
-            },
             下载: {
                 image: require('@app/assets/images/more_video_download.png'),
                 callback: downloadVideo,
@@ -190,6 +188,10 @@ const MoreOperation = (props: any) => {
             复制链接: {
                 image: require('@app/assets/images/more_links.png'),
                 callback: copyLink,
+            },
+            分享长图: {
+                image: require('@app/assets/images/more_large_img.png'),
+                callback: shareCard,
             },
             举报: {
                 image: require('@app/assets/images/more_report.png'),
