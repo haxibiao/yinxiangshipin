@@ -41,7 +41,7 @@ export default observer((props: any) => {
             if (postsData?.length > 0) {
                 videoStore.addSource(postsData);
             }
-            if (postsData?.length === 0) {
+            if (postsData?.length < 5) {
                 videoStore.status = 'loadAll';
             } else if (error) {
                 videoStore.status = 'error';

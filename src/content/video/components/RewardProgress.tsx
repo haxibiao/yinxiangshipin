@@ -40,7 +40,7 @@ const RewardProgress = observer(({ store }) => {
                 if (error) {
                     setReward('领取失败');
                 } else {
-                    const gold = res?.data?.videoPlayReward?.gold;
+                    const gold = res?.data?.videoPlayReward?.gold || '?';
                     setReward(`+${gold}${Config.goldAlias}`);
                     startTextAnimation();
                 }
