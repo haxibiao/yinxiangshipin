@@ -92,7 +92,10 @@ const RewardProgress = observer(({ store }) => {
                     ]}>
                     {rewardGold}
                 </Animated.Text>
-                <Image source={require('../../assets/ic_video_reward_progress.png')} style={styles.rewardImage} />
+                <Image
+                    source={require('@app/assets/images/video/ic_video_reward_progress.png')}
+                    style={styles.rewardImage}
+                />
                 {progress > 0 && (
                     <Progress.Circle
                         progress={progress / 100}

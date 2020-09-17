@@ -7,7 +7,7 @@ export default function Commodity({ style, product, navigation }) {
         <TouchableWithoutFeedback onPress={() => navigation.navigate('MerchandiseDetail', { storeProduct: product })}>
             <View style={[styles.container, style]}>
                 <View style={styles.bezel}>
-                    <Image style={styles.iconStore} source={require('../assets/icon_store.png')} />
+                    <Image style={styles.iconStore} source={require('@app/assets/images/store/icon_store.png')} />
                     <Text style={styles.storeText}>商品上架了，去抢购~</Text>
                 </View>
                 <View style={styles.goodsInfo}>
@@ -23,7 +23,10 @@ export default function Commodity({ style, product, navigation }) {
                         </View>
                         <View style={styles.goodsPrice}>
                             <Text style={styles.price}>¥{product?.price}</Text>
-                            <Image style={styles.iconGoods} source={require('../assets/icon_goods.png')} />
+                            <Image
+                                style={styles.iconGoods}
+                                source={require('@app/assets/images/store/icon_goods.png')}
+                            />
                         </View>
                     </View>
                 </View>

@@ -8,19 +8,19 @@ type Status = 'loading' | 'loadMore' | 'empty' | 'error';
 const statusContent: { [key in Status]: any } = {
     loading: {
         title: '努力加载中',
-        image: require('./assets/loading.json'),
+        image: require('@app/assets/json/loading.json'),
     },
     loadMore: {
         title: '加载更多',
-        image: require('./assets/content_loading.png'),
+        image: require('@app/assets/images/default/default_loading.png'),
     },
     empty: {
         title: '没有相关内容哦',
-        image: require('./assets/content_empty.png'),
+        image: require('@app/assets/images/default/default_empty.png'),
     },
     error: {
         title: '加载失败，点击重试',
-        image: require('./assets/content_error.png'),
+        image: require('@app/assets/images/default/default_error.png'),
     },
 };
 

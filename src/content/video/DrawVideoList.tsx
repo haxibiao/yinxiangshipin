@@ -67,12 +67,35 @@ export default observer(({ store, initialIndex = 0, getVisibleItem, fetchData, s
         if (store.data.length > 0 && store.status !== 'loadAll') {
             return (
                 <View style={styles.listFooter}>
-                    <LottieView source={require('../assets/loading.json')} style={{ width: '30%' }} loop autoPlay />
+                    <LottieView
+                        source={require('@app/assets/json/loading.json')}
+                        style={{ width: '30%' }}
+                        loop
+                        autoPlay
+                    />
                 </View>
             );
         }
         return null;
     }, [store.data, store.status]);
+
+    const listEmpty = useCallback(() => {
+        if (store.status == 'loading') {
+            return (
+                <ImageBackground style={styles.emptyContainer} source={require('@app/assets/images/curtain.png')}>
+                    <LottieView
+                        source={require('@app/assets/json/loading.json')}
+                        style={{ width: '50%' }}
+                        loop
+                        autoPlay
+                    />
+                </ImageBackground>
+            );
+        } else {
+            return <Image style={styles.emptyContainer} source={require('@app/assets/images/curtain.png')} />;
+        }
+        return null;
+    }, [store.status]);
 
     // TODO:领取广告奖励接口
     // const [onClickReward] = useMutation(GQL.RewardMutation, {
@@ -186,18 +209,7 @@ export default observer(({ store, initialIndex = 0, getVisibleItem, fetchData, s
                         offset: store.fullVideoHeight * index,
                         index,
                     })}
-                    ListEmptyComponent={
-                        <ImageBackground
-                            style={styles.emptyContainer}
-                            source={require('@app/assets/images/curtain.png')}>
-                            <LottieView
-                                source={require('../assets/loading.json')}
-                                style={{ width: '50%' }}
-                                loop
-                                autoPlay
-                            />
-                        </ImageBackground>
-                    }
+                    ListEmptyComponent={listEmpty}
                     ListFooterComponent={listFooter}
                     onMomentumScrollEnd={onMomentumScrollEnd}
                     onViewableItemsChanged={getVisibleRows}

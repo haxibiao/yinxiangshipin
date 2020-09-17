@@ -189,7 +189,7 @@ export default observer(() => {
                             style={styles.emptyContainer}
                             source={require('@app/assets/images/curtain.png')}>
                             <LottieView
-                                source={require('../assets/loading.json')}
+                                source={require('@app/assets/json/loading.json')}
                                 style={{ width: '50%' }}
                                 loop
                                 autoPlay
@@ -200,7 +200,7 @@ export default observer(() => {
                         videoStore.data.length > 0 && (
                             <View style={styles.listFooter}>
                                 <LottieView
-                                    source={require('../assets/loading.json')}
+                                    source={require('@app/assets/json/loading.json')}
                                     style={{ width: '30%' }}
                                     loop
                                     autoPlay

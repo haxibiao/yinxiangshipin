@@ -4,7 +4,7 @@ import { QueryHookOptions } from '@apollo/react-hooks';
 import { DocumentNode } from 'graphql';
 import { GQL, useQuery } from '@src/apollo';
 import { syncGetter, mergeProperty } from '@src/common';
-import ContentStatus from './ContentStatus';
+import { ContentStatus } from './widget';
 
 interface Props extends FlatListProperties {
     gqlDocument?: DocumentNode;
