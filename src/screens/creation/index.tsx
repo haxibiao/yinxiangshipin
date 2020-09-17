@@ -114,6 +114,12 @@ export default (props: any) => {
     }, [formData, sharedVideo]);
 
     const shareVideo = useCallback(async () => {
+        if (!appStore.spiderVideoTaskGuided) {
+            appStore.setAppStorage('spiderVideoTaskGuided', true);
+            appStore.spiderVideoTaskGuided = true;
+            navigation.navigate('SpiderVideoTask');
+            return;
+        }
         var popViewRef,
             isShow = false;
         function onClose() {

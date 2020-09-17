@@ -6,7 +6,7 @@ const SpiderVideoTask = () => {
     const WIDTH = Device.WIDTH - 30;
 
     return (
-        <PageContainer title="任务介绍" white>
+        <PageContainer title="收藏视频教学" white>
             <ScrollView style={{ flex: 1, paddingHorizontal: pixel(15) }}>
                 <Image
                     source={require('@app/assets/images/guide/spider_video_task1.png')}
