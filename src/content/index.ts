@@ -1,6 +1,6 @@
 export { default as QueryList } from './QueryList';
 export { useBetterMutation, useLikeMutation, useDeleteMutation } from './service';
-export { AnimationLike, Commodity, ContentStatus, MoreOperation } from './widget';
+export { AnimationLike, Commodity, ContentStatus, MoreOperation, Placeholder } from './widget';
 export { Body } from './article';
 export { VideoList, VideoItem, DrawVideoList, DrawVideoStore, MediaPlayer } from './video';
 export { PostContent, PostItem, CaptureContent } from './post';
