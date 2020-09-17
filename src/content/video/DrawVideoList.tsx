@@ -1,4 +1,4 @@
-import React, { useRef, useMemo, useEffect, useCallback } from 'react';
+import React, { useRef, useMemo, useEffect, useCallback, ReactElement } from 'react';
 import {
     StyleSheet,
     View,
@@ -34,210 +34,217 @@ interface Props {
     getVisibleItem: (i: number) => void;
     fetchData: () => void;
     showBottomInput?: boolean;
+    EmptyComponent?: ReactElement;
+    rewardEnable?: boolean;
 }
 
-export default observer(({ store, initialIndex = 0, getVisibleItem, fetchData, showBottomInput }: Props) => {
-    const navigation = useNavigation();
-    const commentRef = useRef();
+export default observer(
+    ({ store, initialIndex = 0, getVisibleItem, fetchData, showBottomInput, EmptyComponent, rewardEnable }: Props) => {
+        const navigation = useNavigation();
+        const commentRef = useRef();
 
-    const onLayout = useCallback((event) => {
-        const { height } = event.nativeEvent.layout;
-        store.fullVideoHeight = height;
-    }, []);
+        const onLayout = useCallback((event) => {
+            const { height } = event.nativeEvent.layout;
+            store.fullVideoHeight = height;
+        }, []);
 
-    const onMomentumScrollEnd = useCallback(
-        __.debounce(() => {
-            if (fetchData instanceof Function) {
-                fetchData();
-            }
-        }),
-        [fetchData],
-    );
+        const onMomentumScrollEnd = useCallback(
+            __.debounce(() => {
+                if (fetchData instanceof Function) {
+                    fetchData();
+                }
+            }),
+            [fetchData],
+        );
 
-    const getVisibleRows = useCallback(
-        (info) => {
-            if (info.viewableItems[0]) {
-                getVisibleItem(info.viewableItems[0].index);
-            }
-        },
-        [getVisibleItem],
-    );
+        const getVisibleRows = useCallback(
+            (info) => {
+                if (info.viewableItems[0]) {
+                    getVisibleItem(info.viewableItems[0].index);
+                }
+            },
+            [getVisibleItem],
+        );
 
-    const listFooter = useCallback(() => {
-        if (store.data.length > 0 && store.status !== 'loadAll') {
-            return (
-                <View style={styles.listFooter}>
-                    <LottieView
-                        source={require('@app/assets/json/loading.json')}
-                        style={{ width: '30%' }}
-                        loop
-                        autoPlay
-                    />
-                </View>
-            );
-        }
-        return null;
-    }, [store.data, store.status]);
-
-    const listEmpty = useCallback(() => {
-        if (store.status == 'loading') {
-            return (
-                <ImageBackground style={styles.emptyContainer} source={require('@app/assets/images/curtain.png')}>
-                    <LottieView
-                        source={require('@app/assets/json/loading.json')}
-                        style={{ width: '50%' }}
-                        loop
-                        autoPlay
-                    />
-                </ImageBackground>
-            );
-        } else {
-            return <Image style={styles.emptyContainer} source={require('@app/assets/images/curtain.png')} />;
-        }
-        return null;
-    }, [store.status]);
-
-    // TODO:领取广告奖励接口
-    // const [onClickReward] = useMutation(GQL.RewardMutation, {
-    //     variables: {
-    //         reason: 'DRAW_FEED_ADVIDEO_REWARD',
-    //     },
-    //     refetchQueries: () => [
-    //         {
-    //             query: GQL.MeMetaQuery,
-    //         },
-    //     ],
-    // });
-
-    // TODO:点击领取奖励
-    const getReward = useCallback(async () => {
-        // const drawFeedAdId = media.id.toString();
-        // if (videoStore.rewardedVideos.indexOf(drawFeedAdId) === -1) {
-        //     videoStore.addRewardedId(drawFeedAdId);
-        //     // 发放给精力奖励
-        //     const [error, res] = await Helper.exceptionCapture(onClickReward);
-        //     if (error) {
-        //         Toast.show({
-        //             content: '遇到未知错误，领取失败',
-        //         });
-        //     } else {
-        //         const gold = Helper.syncGetter('data.reward.gold', res);
-        //         RewardOverlay.show({
-        //             reward: {
-        //                 gold: gold,
-        //             },
-        //             title: '领取点击详情奖励成功',
-        //         });
-        //         rewardTrack({
-        //             name: `点击drawFeed广告奖励`,
-        //         });
-        //     }
-        // } else {
-        //     Toast.show({
-        //         content: `该视频已获取过点击奖励`,
-        //         duration: 2000,
-        //     });
-        // }
-    }, []);
-
-    const renderVideoItem = useCallback(
-        ({ item, index }) => {
-            // 显示drawFeed广告
-            if (item?.is_ad && adStore.enableAd) {
+        const listFooter = useCallback(() => {
+            if (store.data.length > 0 && store.status !== 'loadAll') {
                 return (
-                    <View style={{ height: store.fullVideoHeight }}>
-                        <ad.DrawFeed codeid={adStore.codeid_draw_video} onAdClick={getReward} />
-                        {/* TODO: 引导用户点击*/}
-                        {/* <View style={styles.adClickTip}>
+                    <View style={styles.listFooter}>
+                        <LottieView
+                            source={require('@app/assets/json/loading.json')}
+                            style={{ width: '30%' }}
+                            loop
+                            autoPlay
+                        />
+                    </View>
+                );
+            }
+            return null;
+        }, [store.data, store.status]);
+
+        const listEmpty = useCallback(() => {
+            if (store.status == 'loading') {
+                return (
+                    <ImageBackground style={styles.emptyContainer} source={require('@app/assets/images/curtain.png')}>
+                        <LottieView
+                            source={require('@app/assets/json/loading.json')}
+                            style={{ width: '50%' }}
+                            loop
+                            autoPlay
+                        />
+                    </ImageBackground>
+                );
+            } else if (React.isValidElement(EmptyComponent)) {
+                return EmptyComponent;
+                // return null;
+            } else {
+                return <Image style={styles.emptyContainer} source={require('@app/assets/images/curtain.png')} />;
+            }
+        }, [store.status]);
+
+        // TODO:领取广告奖励接口
+        // const [onClickReward] = useMutation(GQL.RewardMutation, {
+        //     variables: {
+        //         reason: 'DRAW_FEED_ADVIDEO_REWARD',
+        //     },
+        //     refetchQueries: () => [
+        //         {
+        //             query: GQL.MeMetaQuery,
+        //         },
+        //     ],
+        // });
+
+        // TODO:点击领取奖励
+        const getReward = useCallback(async () => {
+            // const drawFeedAdId = media.id.toString();
+            // if (videoStore.rewardedVideos.indexOf(drawFeedAdId) === -1) {
+            //     videoStore.addRewardedId(drawFeedAdId);
+            //     // 发放给精力奖励
+            //     const [error, res] = await Helper.exceptionCapture(onClickReward);
+            //     if (error) {
+            //         Toast.show({
+            //             content: '遇到未知错误，领取失败',
+            //         });
+            //     } else {
+            //         const gold = Helper.syncGetter('data.reward.gold', res);
+            //         RewardOverlay.show({
+            //             reward: {
+            //                 gold: gold,
+            //             },
+            //             title: '领取点击详情奖励成功',
+            //         });
+            //         rewardTrack({
+            //             name: `点击drawFeed广告奖励`,
+            //         });
+            //     }
+            // } else {
+            //     Toast.show({
+            //         content: `该视频已获取过点击奖励`,
+            //         duration: 2000,
+            //     });
+            // }
+        }, []);
+
+        const renderVideoItem = useCallback(
+            ({ item, index }) => {
+                // 显示drawFeed广告
+                if (item?.is_ad && adStore.enableAd) {
+                    return (
+                        <View style={{ height: store.fullVideoHeight }}>
+                            <ad.DrawFeed codeid={adStore.codeid_draw_video} onAdClick={getReward} />
+                            {/* TODO: 引导用户点击*/}
+                            {/* <View style={styles.adClickTip}>
                             <Image
                                 source={require('@app/assets/images/click_tips.png')}
                                 style={styles.adClickTipImage}
                             />
                             <Text style={styles.adClickTipText}>戳一戳，领取奖励</Text>
                         </View> */}
-                    </View>
-                );
-            }
-            return <VideoItem store={store} media={item} index={index} />;
-        },
-        [adStore.enableAd],
-    );
+                        </View>
+                    );
+                }
+                return <VideoItem store={store} media={item} index={index} />;
+            },
+            [adStore.enableAd],
+        );
 
-    // 模态框事件处理
-    useEffect(() => {
-        const hardwareBackPress = BackHandler.addEventListener('hardwareBackPress', () => {
-            if (commentRef.current?.state?.visible) {
+        // 模态框事件处理
+        useEffect(() => {
+            const hardwareBackPress = BackHandler.addEventListener('hardwareBackPress', () => {
+                if (commentRef.current?.state?.visible) {
+                    commentRef.current?.slideDown();
+                    return true;
+                }
+                return false;
+            });
+            DeviceEventEmitter.addListener('showCommentModal', () => {
+                commentRef.current?.slideUp();
+            });
+            DeviceEventEmitter.addListener('hideCommentModal', () => {
                 commentRef.current?.slideDown();
-                return true;
-            }
-            return false;
-        });
-        DeviceEventEmitter.addListener('showCommentModal', () => {
-            commentRef.current?.slideUp();
-        });
-        DeviceEventEmitter.addListener('hideCommentModal', () => {
-            commentRef.current?.slideDown();
-        });
+            });
 
-        return () => {
-            hardwareBackPress.remove();
-            DeviceEventEmitter.removeListener('showCommentModal');
-            DeviceEventEmitter.removeListener('hideCommentModal');
-        };
-    }, []);
+            return () => {
+                hardwareBackPress.remove();
+                DeviceEventEmitter.removeListener('showCommentModal');
+                DeviceEventEmitter.removeListener('hideCommentModal');
+            };
+        }, []);
 
-    useAdReward(store);
+        // 视频奖励进度
+        useAdReward(store, rewardEnable);
 
-    return (
-        <View style={styles.container}>
-            <View style={styles.listContainer}>
-                <FlatList
-                    onLayout={onLayout}
-                    contentContainerStyle={styles.contentContainerStyle}
-                    data={store.data}
-                    initialScrollIndex={initialIndex}
-                    bounces={false}
-                    scrollsToTop={false}
-                    pagingEnabled={true}
-                    removeClippedSubviews={true}
-                    showsVerticalScrollIndicator={false}
-                    keyboardShouldPersistTaps="always"
-                    keyExtractor={(item, index) => String(item.id || index)}
-                    renderItem={renderVideoItem}
-                    getItemLayout={(data, index) => ({
-                        length: store.fullVideoHeight,
-                        offset: store.fullVideoHeight * index,
-                        index,
-                    })}
-                    ListEmptyComponent={listEmpty}
-                    ListFooterComponent={listFooter}
-                    onMomentumScrollEnd={onMomentumScrollEnd}
-                    onViewableItemsChanged={getVisibleRows}
-                    viewabilityConfig={config}
-                />
-            </View>
-            {/* 金币奖励悬浮球 */}
-            {adStore.enableWallet && (
-                <View style={styles.rewardProgress}>
-                    <RewardProgress store={store} />
+        return (
+            <View style={styles.container}>
+                <View style={styles.listContainer}>
+                    <FlatList
+                        onLayout={onLayout}
+                        contentContainerStyle={styles.contentContainerStyle}
+                        data={store.data}
+                        initialScrollIndex={initialIndex}
+                        bounces={false}
+                        scrollsToTop={false}
+                        pagingEnabled={true}
+                        removeClippedSubviews={true}
+                        showsVerticalScrollIndicator={false}
+                        keyboardShouldPersistTaps="always"
+                        keyExtractor={(item, index) => String(item.id || index)}
+                        renderItem={renderVideoItem}
+                        getItemLayout={(data, index) => ({
+                            length: store.fullVideoHeight,
+                            offset: store.fullVideoHeight * index,
+                            index,
+                        })}
+                        ListEmptyComponent={listEmpty}
+                        ListFooterComponent={listFooter}
+                        onMomentumScrollEnd={onMomentumScrollEnd}
+                        onViewableItemsChanged={getVisibleRows}
+                        viewabilityConfig={config}
+                    />
                 </View>
-            )}
-            {/* 内部视频列表显示评论框 */}
-            {showBottomInput && (
-                <TouchableOpacity
-                    activeOpacity={1}
-                    style={styles.commentInput}
-                    onPress={() => {
-                        commentRef.current?.slideUp({ autoFocus: true });
-                    }}>
-                    <CommentInput editable={false} />
-                </TouchableOpacity>
-            )}
-            {/* 评论模态框 */}
-            <CommentOverlay ref={commentRef} media={store.currentItem} navigation={navigation} />
-        </View>
-    );
-});
+                {/* 金币奖励悬浮球 */}
+                {rewardEnable && adStore.enableWallet && (
+                    <View style={styles.rewardProgress}>
+                        <RewardProgress store={store} />
+                    </View>
+                )}
+                {/* 内部视频列表显示评论框 */}
+                {showBottomInput && (
+                    <TouchableOpacity
+                        activeOpacity={1}
+                        style={styles.commentInput}
+                        onPress={() => {
+                            commentRef.current?.slideUp({ autoFocus: true });
+                        }}>
+                        <CommentInput editable={false} />
+                    </TouchableOpacity>
+                )}
+                {/* 评论模态框 */}
+                <CommentOverlay ref={commentRef} media={store.currentItem} navigation={navigation} />
+            </View>
+        );
+    },
+);
 
 const styles = StyleSheet.create({
     container: {

@@ -12,7 +12,6 @@ import RecommendVideos from './RecommendVideos';
 import CollectionVideos from './CollectionVideos';
 import FriendShipVideos from './FriendShipVideos';
 
-
 export default observer(({}) => {
     useBeginner();
 
@@ -89,8 +88,8 @@ export default observer(({}) => {
                 initialPage={1}
                 onChangeTab={onChangeTab}
                 renderTabBar={(tabBarProps: any) => (
-                    <ScrollTabBar 
-                        {...tabBarProps} 
+                    <ScrollTabBar
+                        {...tabBarProps}
                         tabWidth={pixel(74)}
                         tabBarStyle={styles.tabBarStyle}
                         underlineStyle={styles.underlineStyle}
@@ -127,7 +126,7 @@ const styles = StyleSheet.create({
     tabBarStyle: {
         width: '100%',
         height: pixel(42),
-        paddingHorizontal: pixel(42), 
+        paddingHorizontal: pixel(42),
         marginTop: Theme.statusBarHeight,
         borderWidth: 0,
         justifyContent: 'center',

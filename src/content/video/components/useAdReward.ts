@@ -1,7 +1,7 @@
 import { useEffect, useRef, useMemo, useCallback } from 'react';
 import { adStore } from '@src/store';
 
-const AdRewardProgress = (store: any) => {
+const AdRewardProgress = (store: any, rewardEnable?: boolean) => {
     const isFocusAdItem = useMemo(() => adStore.enableAd && store.visibility && store.currentItem?.is_ad, [
         adStore.enableAd,
         store.visibility,
@@ -28,19 +28,17 @@ const AdRewardProgress = (store: any) => {
     }, []);
 
     useEffect(() => {
-        if (isFocusAdItem) {
+        if (rewardEnable && isFocusAdItem) {
             setRewardProgress();
-        } else {
-            if (timer.current) {
-                clearTimeout(timer.current);
-            }
+        } else if (timer.current) {
+            clearTimeout(timer.current);
         }
         return () => {
             if (timer.current) {
                 clearTimeout(timer.current);
             }
         };
-    }, [isFocusAdItem]);
+    }, [isFocusAdItem, rewardEnable]);
 };
 
 export default AdRewardProgress;

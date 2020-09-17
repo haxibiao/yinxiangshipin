@@ -1,16 +1,20 @@
-import React, { useEffect, useMemo, useCallback } from 'react';
+import React, { useRef, useEffect, useMemo, useCallback } from 'react';
 import { DeviceEventEmitter } from 'react-native';
 import { exceptionCapture } from '@src/common';
 import { observer, appStore, userStore } from '@src/store';
 import { GQL } from '@src/apollo';
-import { DrawVideoList, DrawVideoStore } from '@src/content';
+import { DrawVideoList, DrawVideoStore, Placeholder } from '@src/content';
+import { useNavigation } from '@react-navigation/native';
 
 export default observer((props: any) => {
+    const navigation = useNavigation();
     const videoStore = useMemo(() => new DrawVideoStore(), []);
 
     const getVisibleItem = useCallback((index) => {
         videoStore.viewableItemIndex = index;
     }, []);
+
+    const page = useRef(1);
 
     const fetchData = useCallback(async () => {
         async function postsQuery() {
@@ -18,16 +22,22 @@ export default observer((props: any) => {
                 query: GQL.userPostsQuery,
                 variables: {
                     user_id: userStore?.me?.id,
+                    page: page.current,
                     count: 5,
                     filter: 'spider',
                 },
                 fetchPolicy: 'network-only',
             });
         }
-        if (videoStore.status !== 'loading' && videoStore.data.length - videoStore.viewableItemIndex <= 3) {
+        if (
+            videoStore.status !== 'loading' &&
+            videoStore.status !== 'loadAll' &&
+            videoStore.data.length - videoStore.viewableItemIndex <= 3
+        ) {
             videoStore.status = 'loading';
             const [error, result] = await exceptionCapture(postsQuery);
             const postsData = result?.data?.userPosts?.data;
+            page.current = result?.data?.userPosts?.paginatorInfo?.currentPage + 1;
             if (postsData?.length > 0) {
                 videoStore.addSource(postsData);
             }
@@ -57,5 +67,21 @@ export default observer((props: any) => {
         };
     }, [props.visibility]);
 
-    return <DrawVideoList store={videoStore} getVisibleItem={getVisibleItem} fetchData={fetchData} />;
+    if (!userStore.login) {
+        return (
+            <Placeholder.NotLogged
+                style={{ flex: 1, backgroundColor: '#111722' }}
+                onPress={() => navigation.navigate('Login')}
+            />
+        );
+    }
+
+    return (
+        <DrawVideoList
+            store={videoStore}
+            getVisibleItem={getVisibleItem}
+            fetchData={fetchData}
+            EmptyComponent={<Placeholder.NoContent />}
+        />
+    );
 });
