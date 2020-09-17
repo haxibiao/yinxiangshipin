@@ -141,6 +141,8 @@ android {
         versionName appConfigJson.Version
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
+        missingDimensionStrategy 'react-native-camera', 'general'
+        missingDimensionStrategy "RNN.reactNativeVersion", "reactNative57_5"
     }
     splits {
         abi {

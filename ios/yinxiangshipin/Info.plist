@@ -57,6 +57,8 @@
 	<string>印象视频需要获取您的麦克风来录制音频</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>印象视频需要获取您的相册来发布内容</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>印象视频需要获取您的相册来创作内容</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>iconfont.ttf</string>
