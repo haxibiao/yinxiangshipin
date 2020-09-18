@@ -4,7 +4,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { useApolloClient, ApolloProvider } from '@src/apollo';
 import LinearGradient from 'react-native-linear-gradient';
 import { SafeText } from '@src/components';
-import { observer } from '@src/store';
+import { observer, userStore } from '@src/store';
 import { Overlay } from 'teaset';
 import { Commodity } from '../../widget';
 import Player from './Player';
@@ -20,7 +20,8 @@ interface Props {
 export default observer((props: Props) => {
     const { media, index, store } = props;
     const viewable = index === store.viewableItemIndex && store.visibility;
-    
+    const isMe = useMemo(() => userStore?.me?.id === media?.user?.id, []);
+
     const shown = useMemo(() => {
         // 播放器的显示区间
         if ((store.viewableItemIndex > index - 2 && store.viewableItemIndex < index + 3) || viewable) {
@@ -54,7 +55,7 @@ export default observer((props: Props) => {
                     target={media}
                     videoUrl={media?.video?.url}
                     videoTitle={media?.body}
-                    options={['下载', '不感兴趣', '举报']}
+                    options={isMe ? ['下载'] : ['下载', '不感兴趣', '举报']}
                     closeOverlay={() => overlayRef.current?.close()}
                     onRemove={removeMedia}
                 />

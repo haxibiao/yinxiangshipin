@@ -50,7 +50,7 @@ class DrawVideoStore {
 
     constructor({ initData, itemIndex } = {}) {
         if (Device.isFullScreenDevice) {
-            this.fullVideoHeight = appStore.viewportHeight - Theme.statusBarHeight - Theme.BOTTOM_HEIGHT;
+            this.fullVideoHeight = appStore.viewportHeight - Theme.BOTTOM_HEIGHT;
         }
         if (initData) {
             this.data = initData;

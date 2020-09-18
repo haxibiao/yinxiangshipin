@@ -1,5 +1,3 @@
-'use strict';
-
 import React from 'react';
 import { StyleSheet, View, Text, Image, ScrollView } from 'react-native';
 import { Overlay } from 'teaset';
@@ -13,11 +11,10 @@ class QuestionShareCardOverlay {
     static show(image, post) {
         let overlayView = (
             <Overlay.View animated>
-                <ScrollView style={{ flex: 1 }}>
-                    <View style={{ height: 25 }} />
-                    <QuestionShareCard post={post} ref={(ref) => (this._shareCard = ref)} />
-                </ScrollView>
-                <View style={{ backgroundColor: '#FFF' }}>
+                <View style={{ flex: 1, paddingTop: Theme.NAVBAR_HEIGHT }}>
+                    <QuestionShareCard post={post} />
+                </View>
+                <View style={{ backgroundColor: '#FFF', paddingBottom: Theme.HOME_INDICATOR_HEIGHT - 10 || 0 }}>
                     <View style={styles.top}>
                         <TouchFeedback
                             style={{ alignItems: 'center' }}
@@ -26,7 +23,7 @@ class QuestionShareCardOverlay {
                                 await viewShotUtil.saveImage(image, true);
                             }}>
                             <Image
-                                source={require('@app/assets/images/more_video_download.png')}
+                                source={require('@app/assets/images/icons/ic_download.png')}
                                 style={styles.imageStyle}
                             />
 

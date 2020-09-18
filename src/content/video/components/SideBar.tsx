@@ -3,7 +3,7 @@ import { StyleSheet, View, Image, Animated, TouchableOpacity, DeviceEventEmitter
 import { Avatar, SafeText } from '@src/components';
 import { useNavigation } from '@react-navigation/native';
 import { ApolloProvider } from 'react-apollo';
-import { observer } from '@src/store';
+import { observer, userStore } from '@src/store';
 import { Overlay } from 'teaset';
 import { AnimationLike, MoreOperation } from '../../widget';
 
@@ -14,6 +14,7 @@ const imageSource = {
 
 export default observer(({ media, store, client, removeMedia }) => {
     const navigation = useNavigation();
+    const isMe = useMemo(() => userStore?.me?.id === media?.user?.id, []);
 
     const showComment = useCallback(() => {
         DeviceEventEmitter.emit('showCommentModal');
@@ -26,7 +27,9 @@ export default observer(({ media, store, client, removeMedia }) => {
             <ApolloProvider client={client}>
                 <MoreOperation
                     target={media}
-                    options={['举报', '不感兴趣', '下载', '复制链接']}
+                    options={
+                        isMe ? ['下载', '分享长图', '复制链接'] : ['举报', '不感兴趣', '下载', '分享长图', '复制链接']
+                    }
                     videoUrl={media?.video?.url}
                     videoTitle={media?.body}
                     closeOverlay={() => overlayRef.current?.close()}
