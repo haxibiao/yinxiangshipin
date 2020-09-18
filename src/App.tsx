@@ -10,7 +10,6 @@ import StoreContext, * as store from './store';
 import { Toast } from './components';
 import ApolloApp from './ApolloApp';
 import { ad } from 'react-native-ad';
-import { detectPhotos } from '@src/common';
 
 function App() {
     const appLunch = useRef(true);
@@ -42,16 +41,7 @@ function App() {
             .catch((err) => {});
     }, []);
 
-    // 获取相册图片并检查图片中的二维码
-    // const detectQrcodes = async () => {
-    //     //检查相册权限
-    //     let pic_info = await detectPhotos();
-    //     console.log('检测图片二维码结果:', pic_info);
-    // };
-
     useEffect(() => {
-        // 尝试解析相册图片
-        // detectQrcodes();
         // 获取广告、钱包配置
         fetchConfig();
         // 检查版本更新

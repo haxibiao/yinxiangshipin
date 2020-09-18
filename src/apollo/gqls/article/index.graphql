@@ -223,7 +223,6 @@ query userPostsQuery($user_id: Int!, $filter: PostFilter, $count: Int, $page: In
     }
 }
 
-
 #我的关注列表的收藏动态
 query followPostsQuery($user_id: Int!, $filter: PostFilter, $count: Int, $page: Int) {
     followPosts(user_id: $user_id, filter: $filter, count: $count, page: $page) {
@@ -275,7 +274,56 @@ query followPostsQuery($user_id: Int!, $filter: PostFilter, $count: Int, $page: 
                 width
                 height
             }
-        }   
+        }
+    }
+}
+
+#动态详情
+query postQuery($id: Int!) {
+    post(id: $id) {
+        id
+        spider {
+            id
+        }
+        content
+        description
+        status
+        liked
+        count_likes
+        count_comments
+        review_id
+        review_day
+        is_ad
+        created_at
+        user {
+            id
+            name
+            avatar
+            followed_status
+            gender
+            age
+            introduction
+        }
+        tags {
+            data {
+                id
+                name
+            }
+        }
+        images {
+            id
+            url
+            width
+            height
+        }
+        video {
+            id
+            url
+            cover
+            duration
+            width
+            height
+        }
     }
 }
 

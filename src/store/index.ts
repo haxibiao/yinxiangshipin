@@ -7,6 +7,7 @@ export default React.createContext({});
 
 export { when } from 'mobx';
 export { observer, useObserver } from 'mobx-react-lite';
+export { observable } from 'mobx';
 
 export { default as appStore } from './appStore';
 export { default as adStore } from './adStore';

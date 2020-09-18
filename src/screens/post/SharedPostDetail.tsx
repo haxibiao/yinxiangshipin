@@ -13,7 +13,8 @@ import {
 } from 'react-native';
 import { Player, Avatar, ListFooter, StatusView, HxfTextInput, KeyboardSpacer, MoreOperation } from '@src/components';
 import { GQL, useQuery, useCommentMutation, ApolloProvider, useApolloClient } from '@src/apollo';
-import { observer, userStore } from '@src/store';
+import { observable, observer, userStore } from '@src/store';
+import { Placeholder } from '@src/content';
 import { BoxShadow } from 'react-native-shadow';
 import { Overlay } from 'teaset';
 import NavBar from './components/NavBar';
@@ -24,8 +25,9 @@ import CommentItem from './components/CommentItem';
 
 export default observer((props) => {
     const { navigation, route } = props;
-    const media = route.params?.post || {};
-    const isSelf = userStore.me.id === media?.user?.id;
+    const post_id = route.params?.post_id;
+    const user_id = route.params?.user_id;
+    const isSelf = userStore.me.id === user_id;
     const fancyInputRef = useRef();
     const [placeholder, setPlaceholder] = useState();
     const [commentValue, setCommentValue] = useState('');
@@ -41,9 +43,21 @@ export default observer((props) => {
         }
     }, []);
 
+    // 动态详情
+    const { data: postData } = useQuery(GQL.postQuery, {
+        variables: { id: post_id },
+        fetchPolicy: 'network-only',
+    });
+    const media = useMemo(() => {
+        if (postData?.post?.id) {
+            return observable(postData?.post);
+        }
+        return {};
+    }, [postData]);
+
     // 评论数据
     const { data, refetch, loading, fetchMore } = useQuery(GQL.commentsQuery, {
-        variables: { commentable_type: 'articles', commentable_id: media?.id, replyCount: 3 },
+        variables: { commentable_type: 'articles', commentable_id: post_id, replyCount: 3 },
         fetchPolicy: 'network-only',
     });
     const commentsData = useMemo(() => Helper.syncGetter('comments.data', data), [data]);
@@ -91,7 +105,7 @@ export default observer((props) => {
     // 添加评论
     const addComment = useCommentMutation({
         commentAbleType: 'articles',
-        commentAbleId: media?.id,
+        commentAbleId: post_id,
         replyComment,
         onCompleted,
         onError,
@@ -261,6 +275,14 @@ export default observer((props) => {
             />
         );
     }, [loading, commentsData, hasMorePages]);
+
+    if (!media?.id) {
+        return (
+            <View style={styles.container}>
+                <Placeholder.Loading />
+            </View>
+        );
+    }
 
     return (
         <View style={styles.container}>

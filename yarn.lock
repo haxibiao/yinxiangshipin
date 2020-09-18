@@ -7484,7 +7484,7 @@ react-native-view-shot@^3.1.2:
 
 "react-native-vod@git+http://code.haxibiao.cn/packages/react-native-vod.git":
   version "1.0.4"
-  resolved "git+http://code.haxibiao.cn/packages/react-native-vod.git#f7ccaa49cc06b5545e07a8ceb2b6ccbc142cc359"
+  resolved "git+http://code.haxibiao.cn/packages/react-native-vod.git#e635b6a4ad26a866c2cb2077c00986ef35661ea8"
 
 react-native-webp-format@^1.1.2:
   version "1.1.2"

@@ -3,8 +3,8 @@ import { StyleSheet, View, DeviceEventEmitter } from 'react-native';
 import { observer, appStore, userStore } from '@src/store';
 import { useClipboardLink, VideoCaptureData } from '@src/content';
 import { useApolloClient } from '@apollo/react-hooks';
-import { useBeginner } from '@src/common';
-import { NavBarHeader, ScrollTabBar } from '@src/components';
+import { useBeginner, detectPhotos } from '@src/common';
+import { NavBarHeader, ScrollTabBar, PopOverlay } from '@src/components';
 import { Overlay } from 'teaset';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
 import { useNavigation } from '@react-navigation/native';
@@ -64,8 +64,27 @@ export default observer(({}) => {
         appStore.viewportHeight = height;
     }, []);
 
+    // 获取相册图片并检查图片中的二维码
+    const detectSharePhoto = useCallback(async () => {
+        const photoInfo = await detectPhotos();
+        if (photoInfo?.type == 'post' && photoInfo?.post_id) {
+            setTimeout(() => {
+                PopOverlay({
+                    content: '检测到有被其他用户分享的精彩内容，是否跳转页面查看内容详情?',
+                    rightContent: '查看',
+                    onConfirm: async () => {
+                        navigation.navigate('SharedPostDetail', { ...photoInfo });
+                    },
+                });
+            }, 6000);
+        }
+    }, []);
+
     // 视频播放事件处理
     useEffect(() => {
+        // 尝试解析相册图片
+        detectSharePhoto();
+        // 监听视频分栏切换，暂停/播放视频
         const navWillFocusListener = navigation.addListener('focus', () => {
             visibility.current = true;
             DeviceEventEmitter.emit('onChangeVideoTab', currentPage.current);

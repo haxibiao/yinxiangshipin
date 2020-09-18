@@ -48,6 +48,7 @@ import EditProfileScreen from '../screens/profile/HomeScreen';
 import ArticleDetailScreen from '../screens/article/DetailScreen';
 import CommentScreen from '../screens/comment/CommentScreen';
 import PostDetailScreen from '../screens/post';
+import SharedPostDetail from '../screens/post/SharedPostDetail';
 import TagDetailScreen from '../screens/tagDetail';
 import TagVideoListScreen from '../screens/video/TagVideoList';
 import SearchedVideoListScreen from '../screens/video/SearchedVideoList';
@@ -182,6 +183,9 @@ export default {
     },
     PostDetail: {
         component: PostDetailScreen,
+    },
+    SharedPostDetail: {
+        component: SharedPostDetail,
     },
     TagDetail: {
         component: TagDetailScreen,

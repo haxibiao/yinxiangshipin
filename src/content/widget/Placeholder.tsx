@@ -1,5 +1,6 @@
 import React, { useMemo, ReactChild } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, ViewStyle, TextStyle } from 'react-native';
+import LottieView from 'lottie-react-native';
 
 const Source = {
     Loading: require('@app/assets/json/loading.json'),

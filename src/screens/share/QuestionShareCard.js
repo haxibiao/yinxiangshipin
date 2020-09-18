@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, Image, ScrollView } from 'react-native';
 import { Avatar } from '@src/components';
 import { BoxShadow } from 'react-native-shadow';
 import QRCode from 'react-native-qrcode-svg';
+import { userStore } from '@src/store';
 import viewShotUtil from './viewShotUtil';
 
 const marginWidth = pixel(40);
@@ -77,7 +78,7 @@ class QuestionShareCard extends Component {
                         </View>
                         <View style={{ width: pixel(80), height: pixel(80) }}>
                             <QRCode
-                                value={`https://yinxiangshipin.com`}
+                                value={`https://yinxiangshipin.com/share/post/${post?.id}?post_id=${post?.id}&user_id=${userStore?.me?.id}`}
                                 size={pixel(80)}
                                 color={'#000'}
                                 backgroundColor={'#FFF'}
