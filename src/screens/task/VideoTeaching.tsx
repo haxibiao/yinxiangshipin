@@ -19,11 +19,12 @@ export default function VideoTeaching({ title, onClose, onLoad }: Props) {
                 <MediaPlayer
                     onLoad={onLoad}
                     poster={{
-                        uri: 'http://hashvod-1251052432.file.myqcloud.com/images/202009161658215f61d3ad4f98d.jpg',
+                        uri:
+                            'http://1254284941.vod2.myqcloud.com/bc7b9472vodtranscq1254284941/97279dfe5285890807758278376/coverBySnapshot_10_0.jpg',
                     }}
                     source={{
                         uri:
-                            'http://1254284941.vod2.myqcloud.com/e591a6cavodcq1254284941/38edc2155285890807689452433/f0.mp4',
+                            'http://1254284941.vod2.myqcloud.com/e591a6cavodcq1254284941/97279dfe5285890807758278376/34BIm7m36uYA.mp4',
                     }}
                 />
             </View>

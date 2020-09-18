@@ -278,7 +278,10 @@ const showVideoTeaching = (function teaching() {
     let timer;
     let played;
     function onClose() {
-        if (!played) {
+        if (played) {
+            overlayRef?.close();
+            isShow = false;
+        } else {
             PopOverlay({
                 content: '确定关闭吗，观看完教学视频可领取新人奖励哦！',
                 leftContent: '确定关闭',
@@ -288,9 +291,6 @@ const showVideoTeaching = (function teaching() {
                     isShow = false;
                 },
             });
-        } else {
-            overlayRef?.close();
-            isShow = false;
         }
     }
 
