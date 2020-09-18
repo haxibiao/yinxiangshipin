@@ -8,11 +8,14 @@ import { useNavigation } from '@react-navigation/native';
 
 export default observer((props: any) => {
     const navigation = useNavigation();
-    const videoStore = useMemo(() => new DrawVideoStore(), []);
+    const videoStore = useMemo(() => new DrawVideoStore(), [userStore.login]);
 
-    const getVisibleItem = useCallback((index) => {
-        videoStore.viewableItemIndex = index;
-    }, []);
+    const getVisibleItem = useCallback(
+        (index) => {
+            videoStore.viewableItemIndex = index;
+        },
+        [videoStore],
+    );
 
     const page = useRef(1);
 
@@ -49,14 +52,14 @@ export default observer((props: any) => {
                 videoStore.status = '';
             }
         }
-    }, []);
+    }, [videoStore]);
 
     // 首次加载视频数据
     useEffect(() => {
         if (userStore.launched) {
             fetchData();
         }
-    }, [userStore.launched]);
+    }, [userStore.login, userStore.launched]);
 
     useEffect(() => {
         const onChangeVideoTab = DeviceEventEmitter.addListener('onChangeVideoTab', (activePage) => {
@@ -65,7 +68,7 @@ export default observer((props: any) => {
         return () => {
             onChangeVideoTab.remove();
         };
-    }, [props.visibility]);
+    }, [videoStore, props.visibility]);
 
     if (!userStore.login) {
         return (
