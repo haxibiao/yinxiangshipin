@@ -25,7 +25,7 @@ import { GQL, useMutation, errorMessage } from '@src/apollo';
 import { exceptionCapture } from '@src/common';
 import { shareClipboardLink } from '@src/content';
 import { useRoute, useNavigation } from '@react-navigation/native';
-import { observer, userStore, appStore } from '@src/store';
+import { observer, userStore, appStore, adStore } from '@src/store';
 import { observable } from 'mobx';
 import { Overlay } from 'teaset';
 import Video from 'react-native-video';
@@ -114,7 +114,7 @@ export default (props: any) => {
     }, [formData, sharedVideo]);
 
     const shareVideo = useCallback(async () => {
-        if (!appStore.spiderVideoTaskGuided) {
+        if (adStore.enableAd && !appStore.spiderVideoTaskGuided) {
             appStore.setAppStorage('spiderVideoTaskGuided', true);
             appStore.spiderVideoTaskGuided = true;
             navigation.navigate('SpiderVideoTask');
