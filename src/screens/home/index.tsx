@@ -100,7 +100,7 @@ export default observer(({}) => {
     }, []);
 
     return (
-        <View style={{ flex: 1 }} onLayout={onLayout}>
+        <View style={{ flex: 1, backgroundColor: '#111722' }} onLayout={onLayout}>
             <ScrollableTabView
                 contentProps={{ keyboardShouldPersistTaps: 'always' }}
                 tabBarPosition="overlayTop"
