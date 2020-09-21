@@ -421,11 +421,13 @@ const MoreOperation = (props: any) => {
 
     return (
         <View style={styles.optionsContainer}>
-            <View style={[styles.body, { marginTop: pixel(10) }]}>
-                <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                    {shareView}
-                </ScrollView>
-            </View>
+            {type === 'articles' && (
+                <View style={[styles.body, { marginTop: pixel(10) }]}>
+                    <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+                        {shareView}
+                    </ScrollView>
+                </View>
+            )}
             <View style={styles.dividingLine} />
             <View style={styles.body}>
                 <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
@@ -435,7 +437,9 @@ const MoreOperation = (props: any) => {
             <TouchableOpacity style={styles.footer} onPress={closeOverlay}>
                 <Text style={styles.footerText}>取消</Text>
             </TouchableOpacity>
-            <QuestionShareCard post={target} ref={(ref) => (shareCardRef = ref)} shareMiniProgram />
+            {type === 'articles' && (
+                <QuestionShareCard post={target} ref={(ref) => (shareCardRef = ref)} shareMiniProgram />
+            )}
         </View>
     );
 };
@@ -475,7 +479,6 @@ const styles = StyleSheet.create({
     optionItem: {
         alignItems: 'center',
         justifyContent: 'center',
-        maxWidth: Device.WIDTH * 0.25,
         minWidth: Device.WIDTH * 0.22,
         padding: pixel(12),
     },

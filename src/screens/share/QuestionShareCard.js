@@ -32,14 +32,13 @@ class QuestionShareCard extends Component {
         const { post } = this.props;
         const images = post?.images;
         const video = post?.video;
-
         return (
             <ScrollView style={styles.container}>
                 <View style={styles.content} ref={(ref) => (this.shareCard = ref)}>
                     {(video || (images && Array.isArray(images), images.length > 0)) && (
                         <Image
                             source={{
-                                uri: video?.cover || images[0]?.url,
+                                uri: video?.cover || video?.cover_url || images[0]?.url,
                             }}
                             style={{
                                 width: imageWidth,

@@ -140,14 +140,18 @@ const PostItem: React.FC<Props> = observer((props: Props) => {
                 ref={(ref) => (overlayRef = ref)}>
                 <ApolloProvider client={client}>
                     <MoreOperation
+                        client={client}
                         navigation={navigation}
-                        onPressIn={() => overlayRef.close()}
+                        closeOverlay={() => overlayRef.close()}
                         target={post}
-                        showShare={Platform.OS === 'android'}
-                        downloadUrl={Helper.syncGetter('video.url', post)}
-                        downloadUrlTitle={Helper.syncGetter('body', post)}
-                        options={isSelf ? ['删除', '下载', '复制链接'] : ['下载', '举报', '不感兴趣', '复制链接']}
-                        deleteCallback={() => startAnimation(1, 0)}
+                        videoUrl={Helper.syncGetter('video.url', post)}
+                        videoTitle={Helper.syncGetter('body', post)}
+                        options={
+                            isSelf
+                                ? ['删除', '下载', '分享长图', '复制链接']
+                                : ['下载', '举报', '不感兴趣', '分享长图', '复制链接']
+                        }
+                        onRemove={() => startAnimation(1, 0)}
                     />
                 </ApolloProvider>
             </Overlay.PullView>

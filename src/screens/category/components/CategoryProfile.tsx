@@ -16,14 +16,16 @@ export default observer(({ category, titleStyle, nameStyle }) => {
     //             style={{ flexDirection: 'column', justifyContent: 'flex-end' }}
     //             containerStyle={{ backgroundColor: 'transparent' }}
     //             animated={true}
-    //             ref={ref => (overlayRef = ref)}>
+    //             ref={(ref) => (overlayRef = ref)}>
     //             <ApolloProvider client={client}>
     //                 <MoreOperation
-    //                     onPressIn={() => overlayRef.close()}
+    //                     type="category"
+    //                     client={client}
+    //                     navigation={navigation}
+    //                     closeOverlay={() => overlayRef.close()}
     //                     target={category}
     //                     options={['举报']}
-    //                     type="category"
-    //                     deleteCallback={() => startAnimation(1, 0)}
+    //                     onRemove={() => startAnimation(1, 0)}
     //                 />
     //             </ApolloProvider>
     //         </Overlay.PullView>

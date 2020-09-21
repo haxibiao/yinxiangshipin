@@ -37,7 +37,8 @@ export default observer((props: { user: any }) => {
                 ref={(ref: any) => (overlayRef = ref)}>
                 <ApolloProvider client={client}>
                     <MoreOperation
-                        onPressIn={() => overlayRef.close()}
+                        client={client}
+                        closeOverlay={() => overlayRef.close()}
                         navigation={navigation}
                         target={userProfile}
                         options={['举报', '拉黑']}

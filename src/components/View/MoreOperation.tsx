@@ -1,31 +1,20 @@
 import React, { useRef, useMemo, useCallback } from 'react';
-import { StyleSheet, View, Text, Image, ScrollView, Linking, Platform } from 'react-native';
+import { StyleSheet, View, Text, Image, ScrollView, Linking, Platform, TouchableOpacity } from 'react-native';
 import Clipboard from '@react-native-community/clipboard';
-import { GQL, useMutation, useClientBuilder } from '@src/apollo';
-import { download, exceptionCapture, syncGetter, useReport } from '@src/common';
-import { userStore } from '@src/store';
-import { Share } from '@src/native';
 import * as WeChat from 'react-native-wechat-lib';
-import TouchFeedback from '../Basic/TouchFeedback';
 import ShareIOS from 'react-native-share';
 import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 // import * as QQAPI from 'react-native-qq';
+import { userStore } from '@src/store';
+import { download, syncGetter, exceptionCapture, useReport } from '@src/common';
+import { Share } from '@src/native';
+import { GQL, useMutation, errorMessage } from '@src/apollo';
+import QuestionShareCard from '@src/screens/share/QuestionShareCard';
+import QuestionShareCardOverlay from '@src/screens/share/QuestionShareCardOverlay';
 
 const MoreOperation = (props: any) => {
     const shareLink = useRef();
-    const client = useClientBuilder(syncGetter('me.token', userStore));
-    const {
-        options,
-        target,
-        type,
-        downloadUrl,
-        downloadUrlTitle,
-        onPressIn,
-        deleteCallback,
-        navigation,
-        showShare,
-        shares,
-    } = props;
+    const { shares, options, type, target, videoUrl, videoTitle, closeOverlay, onRemove, client, navigation } = props;
     const report = useReport({ target, type });
 
     const [deleteArticleMutation] = useMutation(GQL.deleteArticle, {
@@ -33,20 +22,22 @@ const MoreOperation = (props: any) => {
             id: target.id,
         },
         onCompleted: (data: any) => {
-            deleteCallback();
+            if (onRemove instanceof Function) {
+                onRemove();
+            }
             Toast.show({
                 content: '删除成功',
             });
         },
         onError: (error: any) => {
             Toast.show({
-                content: error.message.replace('GraphQL error: ', '') || '删除失败',
+                content: errorMessage(error) || '删除失败',
             });
         },
     });
 
     const deleteArticle = useCallback(() => {
-        onPressIn();
+        closeOverlay();
         deleteArticleMutation();
     }, [deleteArticleMutation]);
 
@@ -72,26 +63,38 @@ const MoreOperation = (props: any) => {
     }, []);
 
     const copyLink = useCallback(async () => {
-        onPressIn();
+        closeOverlay();
         const link = await fetchShareLink();
         Clipboard.setString(link);
         Toast.show({ content: '复制成功，快去分享给好友吧！' });
     }, []);
 
     const reportArticle = useCallback(() => {
-        onPressIn();
+        closeOverlay();
         report();
     }, [report]);
 
     const toDownloadVideo = () => {
-        download({ url: downloadUrl, title: downloadUrlTitle || Config.AppID + '_' + target.id });
+        download({ url: videoUrl, title: videoTitle || Config.AppID + '_' + target.id });
     };
 
     const downloadVideo = useCallback(() => {
-        onPressIn();
-
-        // TODO: 之后这里的权限判断代码要迁移到下载函数中实现
+        closeOverlay();
+        // Android 保存文件权限检查
         if (Platform.OS === 'android') {
+            // FIXME: By Bin 这里之前是申请了读取权限，但是没有写入权限导致闪退问题
+            // // 外部储存读取权限获取
+            // check(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE).then((result: any) => {
+            //     console.log('测试', result);
+            //     if (result === RESULTS.GRANTED) {
+            //         // 获取权限成功
+            //     } else {
+            //         request(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE).then((result: any) => {
+            //             // 申请权限之后
+            //         });
+            //     }
+            // });
+
             // 外部储存写入权限获取
             check(PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE).then((result: any) => {
                 if (result === RESULTS.GRANTED) {
@@ -105,10 +108,10 @@ const MoreOperation = (props: any) => {
         } else {
             toDownloadVideo();
         }
-    }, [downloadUrl]);
+    }, [videoUrl]);
 
     const dislike = useCallback(() => {
-        onPressIn();
+        closeOverlay();
         if (TOKEN) {
             client
                 .mutate({
@@ -118,11 +121,14 @@ const MoreOperation = (props: any) => {
                     },
                 })
                 .then((result: any) => {
+                    if (onRemove instanceof Function) {
+                        onRemove();
+                    }
                     Toast.show({ content: '操作成功，将减少此类型内容的推荐！' });
                 })
                 .catch((error: any) => {
                     // 查询接口，服务器返回错误后
-                    Toast.show({ content: error.message.replace('GraphQL error: ', '') });
+                    Toast.show({ content: errorMessage(error) });
                 });
         } else {
             navigation.navigate('Login');
@@ -130,7 +136,7 @@ const MoreOperation = (props: any) => {
     }, [target]);
 
     const shield = useCallback(() => {
-        onPressIn();
+        closeOverlay();
         if (TOKEN) {
             client
                 .mutate({
@@ -160,6 +166,18 @@ const MoreOperation = (props: any) => {
         }
     }, []);
 
+    let shareCardRef: any;
+    const shareCard = useCallback(async () => {
+        closeOverlay();
+        // if (TOKEN) {
+        //     let image = await shareCardRef.onCapture(true);
+        //     QuestionShareCardOverlay.show(image, target);
+        // } else {
+        //     navigation.navigate('Login');
+        // }
+        let image = await shareCardRef.onCapture(true);
+        QuestionShareCardOverlay.show(image, target);
+    }, [shareCardRef]);
     const operation = useMemo(
         () => ({
             下载: {
@@ -169,6 +187,10 @@ const MoreOperation = (props: any) => {
             复制链接: {
                 image: require('@app/assets/images/more_links.png'),
                 callback: copyLink,
+            },
+            分享长图: {
+                image: require('@app/assets/images/more_large_img.png'),
+                callback: shareCard,
             },
             举报: {
                 image: require('@app/assets/images/more_report.png'),
@@ -192,23 +214,24 @@ const MoreOperation = (props: any) => {
 
     const optionsView = useMemo(() => {
         return options.map((option: any, index: number) => {
-            if ((option === '下载' || option === '复制链接') && !downloadUrl) {
+            if ((option === '下载' || option === '复制链接') && !videoUrl) {
                 return;
             }
+
             return (
-                <TouchFeedback
+                <TouchableOpacity
                     style={[styles.optionItem, options.length < 5 && { width: Device.WIDTH / 4 }]}
                     key={index}
                     onPress={operation[option].callback}>
                     <Image style={styles.optionIcon} source={operation[option].image} />
                     <Text style={styles.optionName}>{option}</Text>
-                </TouchFeedback>
+                </TouchableOpacity>
             );
         });
     }, [options]);
 
     const shareToWechat = useCallback(async () => {
-        onPressIn();
+        closeOverlay();
         const link = await fetchShareLink();
 
         if (Device.IOS) {
@@ -234,7 +257,7 @@ const MoreOperation = (props: any) => {
     }, []);
 
     const shareToTimeline = useCallback(async () => {
-        onPressIn();
+        closeOverlay();
         const link = await fetchShareLink();
 
         if (Device.IOS) {
@@ -260,7 +283,7 @@ const MoreOperation = (props: any) => {
     }, []);
 
     const shareToQQ = useCallback(async () => {
-        onPressIn();
+        closeOverlay();
         // const baseurl = new Buffer(Config.ServerRoot + "/share/post/"+ target.id).toString('base64');
         // const baseimage = new Buffer(Config.ServerRoot + "/logo/ " + Config.PackageName + " .com.small.png").toString('base64');
         // const basetitle = new Buffer("这个视频好好看分享给你").toString('base64');
@@ -303,7 +326,7 @@ const MoreOperation = (props: any) => {
     }, []);
 
     const shareToWeiBo = useCallback(async () => {
-        onPressIn();
+        closeOverlay();
         const link = await fetchShareLink();
         // Clipboard.setString(link);
 
@@ -323,7 +346,7 @@ const MoreOperation = (props: any) => {
     }, []);
 
     const shareToQQZone = useCallback(async () => {
-        onPressIn();
+        closeOverlay();
         const link = await fetchShareLink();
         // Clipboard.setString(link);
 
@@ -384,46 +407,46 @@ const MoreOperation = (props: any) => {
     const shareView = useMemo(() => {
         return shares.map((option: any, index: any) => {
             return (
-                <TouchFeedback
+                <TouchableOpacity
                     style={[styles.optionItem, shares.length < 5 && { width: Device.WIDTH / 4 }]}
                     key={index}
                     onPress={share[option].callback}>
                     <Image style={styles.optionIcon} source={share[option].image} />
                     <Text style={styles.optionName}>{option}</Text>
-                </TouchFeedback>
+                </TouchableOpacity>
             );
         });
     }, [shares]);
 
     return (
         <View style={styles.optionsContainer}>
-            {showShare && (
-                <>
-                    <View style={[styles.body, { marginTop: pixel(10) }]}>
-                        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                            {shareView}
-                        </ScrollView>
-                    </View>
-                    <View style={styles.dividingLine} />
-                </>
+            {type === 'articles' && (
+                <View style={[styles.body, { marginTop: pixel(10) }]}>
+                    <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+                        {shareView}
+                    </ScrollView>
+                </View>
             )}
+            <View style={styles.dividingLine} />
             <View style={styles.body}>
                 <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                     {optionsView}
                 </ScrollView>
             </View>
-            <TouchFeedback style={styles.footer} onPress={onPressIn}>
+            <TouchableOpacity style={styles.footer} onPress={closeOverlay}>
                 <Text style={styles.footerText}>取消</Text>
-            </TouchFeedback>
+            </TouchableOpacity>
+            {type === 'articles' && (
+                <QuestionShareCard post={target} ref={(ref) => (shareCardRef = ref)} shareMiniProgram />
+            )}
         </View>
     );
 };
 
 MoreOperation.defaultProps = {
-    options: ['不感兴趣', '举报'],
     type: 'articles',
+    options: ['不感兴趣', '举报'],
     shares: ['微信', 'QQ好友', '微博', '朋友圈', 'QQ空间'],
-    showShare: false,
 };
 
 const styles = StyleSheet.create({
@@ -455,7 +478,6 @@ const styles = StyleSheet.create({
     optionItem: {
         alignItems: 'center',
         justifyContent: 'center',
-        maxWidth: Device.WIDTH * 0.25,
         minWidth: Device.WIDTH * 0.22,
         padding: pixel(12),
     },

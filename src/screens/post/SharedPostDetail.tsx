@@ -152,14 +152,18 @@ export default observer((props) => {
                 ref={(ref) => (overlayRef = ref)}>
                 <ApolloProvider client={client}>
                     <MoreOperation
+                        client={client}
                         navigation={navigation}
-                        onPressIn={() => overlayRef.close()}
+                        closeOverlay={() => overlayRef.close()}
                         target={media}
-                        showShare={Platform.OS === 'android'}
-                        downloadUrl={Helper.syncGetter('video.url', media)}
-                        downloadUrlTitle={Helper.syncGetter('body', media)}
-                        options={isSelf ? ['删除', '下载', '复制链接'] : ['下载', '举报', '不感兴趣', '复制链接']}
-                        deleteCallback={() => {
+                        videoUrl={Helper.syncGetter('video.url', media)}
+                        videoTitle={Helper.syncGetter('body', media)}
+                        options={
+                            isSelf
+                                ? ['删除', '下载', '分享长图', '复制链接']
+                                : ['下载', '举报', '不感兴趣', '分享长图', '复制链接']
+                        }
+                        onRemove={() => {
                             navigation.goBack();
                             DeviceEventEmitter.emit('deletePost', media);
                         }}
