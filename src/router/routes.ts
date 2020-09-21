@@ -43,6 +43,9 @@ import UserBlockScreen from '../screens/user/UserBlock';
 import BrowsingHistoryScreen from '../screens/my/HistoryScreen';
 import GathersScreen from '../screens/my/Gathers';
 import EditProfileScreen from '../screens/profile/HomeScreen';
+import CollectionScreen from '../screens/my/CollectionScreen';
+import CreateCollectionScreen from '../screens/my/components/CreateCollectionScreen';
+import CollectionDetailScreen from '../screens/my/components/CollectionDetail';
 
 // content
 import ArticleDetailScreen from '../screens/article/DetailScreen';
@@ -219,6 +222,15 @@ export default {
     },
     我的收藏: {
         component: GathersScreen,
+    },
+    创建合集: {
+        component: CreateCollectionScreen,
+    },
+    CollectionDetail: {
+        component: CollectionDetailScreen,
+    },
+    我的合集: {
+        component: CollectionScreen,
     },
     浏览记录: {
         component: BrowsingHistoryScreen,

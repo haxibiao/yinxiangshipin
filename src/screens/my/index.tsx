@@ -163,6 +163,18 @@ export default observer((props: any) => {
                             <Iconfont name="right" size={pixel(16)} color="#969696" />
                         </TouchableOpacity>
                     )}
+                    {/* <TouchableOpacity
+                        style={styles.columnItem}
+                        onPress={() => authNavigator('我的合集', { user: userProfile })}>
+                        <View style={styles.columnItemLeft}>
+                            <Image
+                                style={styles.columnIcon}
+                                source={require('@app/assets/images/icons/ic_mine_collect.png')}
+                            />
+                            <Text style={styles.columnName}>我的合集</Text>
+                        </View>
+                        <Iconfont name="right" size={pixel(16)} color="#969696" />
+                    </TouchableOpacity> */}
                     <TouchableOpacity
                         style={styles.columnItem}
                         onPress={() => authNavigator('喜欢', { user: userProfile })}>

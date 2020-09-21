@@ -8,11 +8,15 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import __ from 'lodash';
 import SearchRecord from './components/SearchRecord';
 import SearchedVideo from './components/SearchedVideo';
+import CollectionPost from '@src/screens/my/components/CollectionPost';
 
 const Search = () => {
     const route = useRoute();
     const tag_id = useMemo(() => route?.params?.tag_id, []);
     const user_id = useMemo(() => route?.params?.user_id, []);
+    // 区分个人合集和公共合集入口
+    const selectable = useMemo(() => route?.params?.selectable || false, []);
+    const uploadVideoResponse = useMemo(() => route?.params?.uploadVideoResponse, []);
 
     const navigation = useNavigation();
     const backButtonPress = useCallback(() => {
@@ -65,7 +69,11 @@ const Search = () => {
     }, []);
 
     const Record = useMemo(() => {
-        return <SearchRecord searchKeyword={keyword} search={search} color="#fff" />;
+        if (!selectable) {
+            return <SearchRecord searchKeyword={keyword} search={search} color="#fff" />;
+        } else {
+            return <CollectionPost user_id={user_id} uploadVideoResponse={uploadVideoResponse} />;
+        }
     }, [keyword]);
 
     const KeywordsList = useMemo(() => {
@@ -120,7 +128,14 @@ const Search = () => {
                 <View style={[styles.posContent, { zIndex: recordZIndex }]}>{Record}</View>
                 <View style={[styles.posContent, { zIndex: inputValueZIndex }]}>{KeywordsList}</View>
                 <View style={[styles.posContent, { zIndex: resultTabViewZIndex }]}>
-                    <SearchedVideo keyword={keyword} navigation={navigation} tag_id={tag_id} user_id={user_id} />
+                    <SearchedVideo
+                        keyword={keyword}
+                        navigation={navigation}
+                        tag_id={tag_id}
+                        user_id={user_id}
+                        selectable={selectable}
+                        uploadVideoResponse={uploadVideoResponse}
+                    />
                 </View>
             </View>
         </ScrollView>

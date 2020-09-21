@@ -1,32 +1,62 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { StyleSheet, View, Text, Image, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
+import { SafeText, Iconfont } from '@src/components';
 import { observer } from '@src/store';
 import { GQL } from '@src/apollo';
 import { QueryList } from '@src/content';
 import SearchVideoItem from './SearchVideoItem';
 
-const index = observer(({ navigation, keyword, tag_id, user_id }) => {
+// selectable:区分个人合集和公共合集入口
+const index = observer(({ navigation, keyword, tag_id, user_id, selectable, uploadVideoResponse }) => {
     const [hot, setHot] = useState(false);
 
     const renderItem = useCallback(
         ({ item, index, data, page }) => {
-            return (
-                <TouchableWithoutFeedback
-                    onPress={() => {
-                        navigation.push('SearchedVideoList', {
-                            keyword,
-                            tag_id,
-                            user_id,
-                            initData: data,
-                            itemIndex: index,
-                            page,
-                        });
-                    }}>
-                    <View style={styles.itemWrap}>
-                        <SearchVideoItem media={item} />
+            if (selectable && uploadVideoResponse) {
+                let { images, video, id } = item;
+                return (
+                    <View style={styles.rowItem}>
+                        <Image
+                            source={{ uri: item.images.length > 0 ? item.images[0] : item.video && item.video.cover }}
+                            style={styles.postCover}
+                        />
+                        <View style={{ flex: 1, justifyContent: 'space-around' }}>
+                            <SafeText style={styles.bodyText} numberOfLines={1}>
+                                {item.content || item.description}
+                            </SafeText>
+                            <SafeText style={styles.collectionInfo} numberOfLines={1}>
+                                1.2w播放·更新至第n集
+                            </SafeText>
+                        </View>
+                        <TouchableOpacity
+                            style={{ padding: pixel(5), alignSelf: 'center' }}
+                            onPress={() => {
+                                uploadVideoResponse({ response: video, post_id: id });
+                                navigation.goBack();
+                            }}>
+                            <Iconfont name="iconfontadd" size={pixel(18)} color="#fff" />
+                        </TouchableOpacity>
                     </View>
-                </TouchableWithoutFeedback>
-            );
+                );
+            } else {
+                return (
+                    <TouchableWithoutFeedback
+                        onPress={() => {
+                            navigation.push('SearchedVideoList', {
+                                keyword,
+                                tag_id,
+                                user_id,
+                                initData: data,
+                                itemIndex: index,
+                                page,
+                            });
+                        }}>
+                        <View style={styles.itemWrap}>
+                            <SearchVideoItem media={item} />
+                        </View>
+                    </TouchableWithoutFeedback>
+                );
+            }
         },
         [keyword, tag_id, user_id],
     );
@@ -65,9 +95,9 @@ const index = observer(({ navigation, keyword, tag_id, user_id }) => {
                 },
                 fetchPolicy: 'network-only',
             }}
-            numColumns={2}
+            numColumns={!selectable && 2}
             renderItem={renderItem}
-            columnWrapperStyle={styles.columnWrapperStyle}
+            columnWrapperStyle={!selectable && styles.columnWrapperStyle}
             ListHeaderComponent={listHeader}
         />
     );
@@ -77,6 +107,11 @@ const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
         paddingBottom: Theme.HOME_INDICATOR_HEIGHT,
+    },
+    collectionInfo: {
+        fontSize: font(11),
+        marginTop: pixel(10),
+        color: '#666',
     },
     itemWrap: {
         width: '50%',
@@ -112,6 +147,28 @@ const styles = StyleSheet.create({
     filterBtnName: {
         fontSize: font(14),
         color: '#b2b2b2',
+    },
+    rowItem: {
+        flexDirection: 'row',
+        padding: pixel(Theme.itemSpace),
+        paddingBottom: 0,
+    },
+    postCover: {
+        width: Device.WIDTH * 0.25,
+        height: Device.WIDTH * 0.3,
+        resizeMode: 'cover',
+        borderRadius: pixel(3),
+        marginRight: pixel(10),
+    },
+    bodyText: {
+        fontSize: font(14),
+        fontWeight: 'bold',
+        color: '#fff',
+    },
+    collectionInfo: {
+        fontSize: font(11),
+        marginTop: pixel(10),
+        color: '#666',
     },
 });
 
