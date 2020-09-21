@@ -16,6 +16,7 @@ export interface ItemKeys {
     searchRecord: string;
     spiderVideoTaskGuided: string;
     isLocalSpiderVideo: string;
+    detectedQRCodeRecord: string;
 }
 
 export const Keys = {
@@ -30,6 +31,7 @@ export const Keys = {
     searchRecord: 'searchRecord',
     spiderVideoTaskGuided: 'spiderVideoTaskGuided',
     isLocalSpiderVideo: 'isLocalSpiderVideo',
+    detectedQRCodeRecord: 'detectedQRCodeRecord',
 } as const;
 
 async function removeItem(key: keyof ItemKeys) {

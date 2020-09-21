@@ -293,12 +293,10 @@ const styles = StyleSheet.create({
     },
     metaWrap: {
         flexDirection: 'row',
-        alignItems: 'flex-end',
         marginTop: pixel(20),
     },
     metaItem: {
         flexDirection: 'row',
-        alignItems: 'flex-end',
         marginRight: pixel(20),
     },
     metaName: {

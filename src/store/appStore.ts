@@ -16,11 +16,12 @@ class App {
     @observable echo: Record<string, any> = {};
     @observable modalIsShow: boolean = false;
     @observable currentRouteName: string = '';
-
+    // storage record
     @observable createPostGuidance: boolean = true; // 用户引导,现在默认关闭
     @observable agreeCreatePostAgreement: boolean = false; // 用户协议观看记录
     @observable spiderVideoTaskGuided: boolean = false; // 是否指导过采集任务
     @observable isLocalSpiderVideo: boolean = false; // 是否启用本地采集
+    detectedQRCodeRecord: string[] = []; // 是否启用本地采集
 
     constructor() {
         this.recall();
@@ -32,6 +33,7 @@ class App {
         const agreeCreatePostAgreement = await Storage.getItem(Keys.agreeCreatePostAgreement);
         const spiderVideoTaskGuided = await Storage.getItem(Keys.spiderVideoTaskGuided);
         const isLocalSpiderVideo = await Storage.getItem(Keys.isLocalSpiderVideo);
+        const detectedQRCodeRecord = await Storage.getItem(Keys.detectedQRCodeRecord);
         if (agreeCreatePostAgreement) {
             this.agreeCreatePostAgreement = true;
         }
@@ -40,6 +42,9 @@ class App {
         }
         if (isLocalSpiderVideo !== null) {
             this.isLocalSpiderVideo = isLocalSpiderVideo;
+        }
+        if (Array.isArray(detectedQRCodeRecord)) {
+            this.detectedQRCodeRecord = detectedQRCodeRecord;
         }
     }
 

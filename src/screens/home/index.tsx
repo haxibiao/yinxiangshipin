@@ -73,10 +73,12 @@ export default observer(({}) => {
                     content: '检测到有被其他用户分享的精彩内容，是否跳转页面查看内容详情?',
                     rightContent: '查看',
                     onConfirm: async () => {
+                        appStore.detectedQRCodeRecord.push(photoInfo?.qrInfo);
+                        appStore.setAppStorage('detectedQRCodeRecord', appStore.detectedQRCodeRecord);
                         navigation.navigate('SharedPostDetail', { ...photoInfo });
                     },
                 });
-            }, 6000);
+            }, 5000);
         }
     }, []);
 
