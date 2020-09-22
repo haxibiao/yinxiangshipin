@@ -48,7 +48,6 @@ import CreateCollectionScreen from '../screens/my/components/CreateCollectionScr
 import CollectionDetailScreen from '../screens/my/components/CollectionDetail';
 
 // content
-import ArticleDetailScreen from '../screens/article/DetailScreen';
 import CommentScreen from '../screens/comment/CommentScreen';
 import PostDetailScreen from '../screens/post';
 import SharedPostDetail from '../screens/post/SharedPostDetail';
@@ -174,9 +173,6 @@ export default {
     },
     SearchVideo: {
         component: SearchVideoScreen,
-    },
-    文章详情: {
-        component: ArticleDetailScreen,
     },
     Category: {
         component: CategoryScreen,
