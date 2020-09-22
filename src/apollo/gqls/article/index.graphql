@@ -46,6 +46,15 @@ query recommendPostsQuery {
             width
             height
         }
+        collections {
+            id
+            logo
+            name
+            description
+            followed
+            count_articles
+            count_follows
+        }
     }
 }
 
@@ -99,6 +108,15 @@ query publicPostsQuery($user_id: Int, $count: Int, $page: Int) {
                 duration
                 width
                 height
+            }
+            collections {
+                id
+                logo
+                name
+                description
+                followed
+                count_articles
+                count_follows
             }
         }
     }
@@ -158,6 +176,15 @@ query postsQuery($user_id: Int!, $count: Int, $page: Int) {
                 duration
                 width
                 height
+            }
+            collections {
+                id
+                logo
+                name
+                description
+                followed
+                count_articles
+                count_follows
             }
         }
     }
@@ -223,6 +250,15 @@ query userPostsQuery($user_id: Int!, $filter: PostFilter, $count: Int, $page: In
                 width
                 height
             }
+            collections {
+                id
+                logo
+                name
+                description
+                followed
+                count_articles
+                count_follows
+            }
         }
     }
 }
@@ -278,6 +314,15 @@ query followPostsQuery($user_id: Int!, $filter: PostFilter, $count: Int, $page: 
                 width
                 height
             }
+            collections {
+                id
+                logo
+                name
+                description
+                followed
+                count_articles
+                count_follows
+            }
         }
     }
 }
@@ -327,6 +372,15 @@ query postQuery($id: Int!) {
             duration
             width
             height
+        }
+        collections {
+            id
+            logo
+            name
+            description
+            followed
+            count_articles
+            count_follows
         }
     }
 }

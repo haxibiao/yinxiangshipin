@@ -1,3 +1,4 @@
+// creation
 import CreationScreen from '../screens/creation';
 import SelectCategory from '../screens/creation/SelectCategory';
 import EditPostScreen from '../screens/creation/EditPost';
@@ -44,13 +45,20 @@ import BrowsingHistoryScreen from '../screens/my/HistoryScreen';
 import EnshrinedScreen from '../screens/my/Enshrined';
 import EditProfileScreen from '../screens/profile/HomeScreen';
 
-// content
+// comment
 import CommentScreen from '../screens/comment/CommentScreen';
+
+// post
 import PostDetailScreen from '../screens/post';
 import SharedPostDetail from '../screens/post/SharedPostDetail';
+
+// tag
 import TagDetailScreen from '../screens/tagDetail';
+
+// videoList
 import TagVideoListScreen from '../screens/video/TagVideoList';
 import SearchedVideoListScreen from '../screens/video/SearchedVideoList';
+import CollectionVideoListScreen from '../screens/video/CollectionVideoList';
 
 // collection
 import CollectionScreen from '../screens/collection';
@@ -196,6 +204,9 @@ export default {
     },
     SearchedVideoList: {
         component: SearchedVideoListScreen,
+    },
+    CollectionVideoList: {
+        component: CollectionVideoListScreen,
     },
     Chat: {
         component: ChatScreen,

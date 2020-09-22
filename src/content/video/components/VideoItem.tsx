@@ -1,9 +1,9 @@
 import React, { useRef, useMemo, useState, useCallback } from 'react';
-import { StyleSheet, Text, View, Image, TouchableWithoutFeedback, DeviceEventEmitter } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableWithoutFeedback, Pressable, DeviceEventEmitter } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useApolloClient, ApolloProvider } from '@src/apollo';
 import LinearGradient from 'react-native-linear-gradient';
-import { SafeText } from '@src/components';
+import { SafeText, Iconfont } from '@src/components';
 import { observer, userStore } from '@src/store';
 import { Overlay } from 'teaset';
 import { Commodity } from '../../widget';
@@ -117,6 +117,32 @@ export default observer((props: Props) => {
         return null;
     }, []);
 
+    const Collection = useMemo(() => {
+        const collection = media?.collections?.[0];
+        if (collection) {
+            return (
+                <Pressable
+                    onPress={() => {
+                        DeviceEventEmitter.emit('showCollectionModal');
+                        navigation.push('CollectionVideoList', {
+                            collection,
+                            current_episode: 1,
+                            initData: [media],
+                        });
+                    }}>
+                    <View style={styles.collectionItem}>
+                        <View style={styles.collectionInfo}>
+                            <Iconfont name="wenji" color="#fff" size={pixel(14)} />
+                            <SafeText style={styles.collectionName}>{`合集 · ${collection?.name}`}</SafeText>
+                        </View>
+                        <Iconfont name="right" color="#b2b2b2" size={pixel(15)} />
+                    </View>
+                </Pressable>
+            );
+        }
+        return null;
+    }, [media]);
+
     return (
         <View
             style={{
@@ -137,29 +163,32 @@ export default observer((props: Props) => {
             </View>
             <TouchableWithoutFeedback onPress={togglePause} onLongPress={showOperation}>
                 <LinearGradient
-                    style={styles.blackContainer}
+                    style={styles.pstContainer}
                     pointerEvents="box-none"
                     start={{ x: 0, y: 1 }}
                     end={{ x: 0, y: 0 }}
-                    colors={['rgba(000,000,000,0.4)', 'rgba(000,000,000,0.2)', 'rgba(000,000,000,0.0)']}>
-                    <View style={styles.videoInfo}>
-                        {media?.product && (
-                            <Commodity style={styles.goodsItem} product={media?.product} navigation={navigation} />
-                        )}
-                        <View style={styles.userInfo}>
-                            <SafeText style={styles.userName}>@{media?.user?.name}</SafeText>
-                            <SafeText shadowText={true} style={styles.createdAt}>
-                                {` · ${media?.created_at}`}
-                            </SafeText>
+                    colors={['rgba(000,000,000,0.5)', 'rgba(000,000,000,0.3)', 'rgba(000,000,000,0.0)']}>
+                    <View style={styles.postInfo}>
+                        <View style={styles.videoInfo}>
+                            {media?.product && (
+                                <Commodity style={styles.goodsItem} product={media?.product} navigation={navigation} />
+                            )}
+                            <View style={styles.userInfo}>
+                                <SafeText style={styles.userName}>@{media?.user?.name}</SafeText>
+                                <SafeText shadowText={true} style={styles.createdAt}>
+                                    {` · ${media?.created_at}`}
+                                </SafeText>
+                            </View>
+                            <View>
+                                <SafeText style={styles.content} numberOfLines={3}>
+                                    {String(media?.description || media?.content).trim()}
+                                    {mediaTags}
+                                </SafeText>
+                            </View>
                         </View>
-                        <View>
-                            <SafeText style={styles.content} numberOfLines={3}>
-                                {String(media?.description || media?.content).trim()}
-                                {mediaTags}
-                            </SafeText>
-                        </View>
+                        <SideBar media={media} store={store} client={client} removeMedia={removeMedia} />
                     </View>
-                    <SideBar media={media} store={store} client={client} removeMedia={removeMedia} />
+                    {Collection}
                 </LinearGradient>
             </TouchableWithoutFeedback>
         </View>
@@ -188,13 +217,15 @@ const styles = StyleSheet.create({
         ...StyleSheet.absoluteFillObject,
         backgroundColor: 'rgba(0,0,0,0.1)',
     },
-    blackContainer: {
-        flexDirection: 'row',
-        alignItems: 'flex-end',
+    pstContainer: {
         position: 'absolute',
         bottom: 0,
         left: 0,
         right: 0,
+    },
+    postInfo: {
+        flexDirection: 'row',
+        alignItems: 'flex-end',
         paddingHorizontal: pixel(10),
         paddingBottom: Device.isFullScreenDevice ? pixel(15) : Theme.BOTTOM_HEIGHT + pixel(15),
     },
@@ -228,5 +259,23 @@ const styles = StyleSheet.create({
     footerText: {
         fontSize: font(15),
         color: '#969696',
+    },
+    collectionItem: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: pixel(10),
+        paddingVertical: pixel(12),
+        backgroundColor: 'rgba(0,0,0,0.5)',
+    },
+    collectionInfo: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    collectionName: {
+        marginLeft: pixel(6),
+        fontSize: font(14),
+        fontWeight: 'bold',
+        color: '#ffffff',
     },
 });
