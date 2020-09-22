@@ -1,0 +1,97 @@
+#import './mutation.graphql'
+
+# 个人合集
+query CollectionsQuery($user_id: Int!, $count: Int, $page: Int) {
+    collections(user_id: $user_id, count: $count, page: $page) {
+        paginatorInfo {
+            currentPage
+            hasMorePages
+        }
+        data {
+            id
+            name
+            logo
+            status
+            type
+            count_articles
+            followed
+            user {
+                id
+                name
+            }
+        }
+    }
+}
+
+# 合集内的视频
+query CollectionQuery($collection_id: Int!, $page: Int, $count: Int) {
+    collection(collection_id: $collection_id) {
+        id
+        name
+        logo
+        type
+        status
+        count_articles
+        count_follows
+        followed
+        user {
+            id
+            name
+        }
+        posts(page: $page, count: $count) {
+            paginatorInfo {
+                currentPage
+                hasMorePages
+            }
+            data {
+                id
+                spider {
+                    id
+                }
+                content
+                description
+                status
+                liked
+                count_likes
+                count_comments
+                review_id
+                review_day
+                is_ad
+                created_at
+                user {
+                    id
+                    name
+                    avatar
+                    followed_status
+                    gender
+                    age
+                    introduction
+                }
+                collections {
+                    id
+                    name
+                }
+                tags {
+                    data {
+                        id
+                        name
+                    }
+                }
+                images {
+                    id
+                    url
+                    width
+                    height
+                }
+                video {
+                    id
+                    url
+                    cover
+                    duration
+                    width
+                    height
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,42 @@
+mutation CreateCollectionMutation(
+    $name: String!
+    $logo: String
+    $description: String
+    $post_ids: [Int!]
+    $type: CollectType = POST
+) {
+    createCollection(name: $name, logo: $logo, description: $description, post_ids: $post_ids, type: $type) {
+        id
+        name
+        logo
+        type
+        status
+        count_articles
+        count_follows
+        followed
+        posts {
+            id
+            content
+        }
+    }
+}
+
+# 修改集合信息
+mutation editCollectionMutation($collection_id: Int!, $name: String!, $logo: String, $type: CollectType) {
+    editCollection(collection_id: $collection_id, name: $name, logo: $logo, type: $type) {
+        id
+        name
+        description
+        logo
+        type
+        status
+        count_articles
+        count_follows
+        followed
+    }
+}
+
+# 将视频从合集中移除
+mutation moveOutCollectionsMutation($collection_ids: [Int!]!, $post_ids: [Int!]!) {
+    moveOutCollections(collection_ids: $collection_ids, post_ids: $post_ids)
+}
