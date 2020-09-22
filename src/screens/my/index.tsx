@@ -193,7 +193,7 @@ export default observer((props: any) => {
                         <View style={styles.columnItemLeft}>
                             <Image
                                 style={styles.columnIcon}
-                                source={require('@app/assets/images/icons/ic_mine_collect.png')}
+                                source={require('@app/assets/images/icons/ic_mine_enshrine.png')}
                             />
                             <Text style={styles.columnName}>我的收藏</Text>
                         </View>
