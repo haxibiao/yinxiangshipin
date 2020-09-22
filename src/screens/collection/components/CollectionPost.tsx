@@ -6,42 +6,14 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { GQL } from '@src/apollo';
 import { userStore } from '@src/store';
 import { QueryList } from '@src/content';
+import SearchCollectionPostItem from '@src/screens/search/components/SearchCollectionPostItem';
 
 export default function CollectionPost({ user_id, uploadVideoResponse }) {
     const navigation = useNavigation();
     const route = useRoute();
 
-    const renderItem = useCallback(({ item }) => {
-        let { images, video, id } = item;
-        let isSelected = false;
-        console.log('isSelected', isSelected);
-        return (
-            <View style={styles.rowItem}>
-                <Image
-                    source={{ uri: item.images.length > 0 ? item.images[0] : item.video && item.video.cover }}
-                    style={styles.postCover}
-                />
-                <View style={{ flex: 1, justifyContent: 'space-around' }}>
-                    <SafeText style={styles.bodyText} numberOfLines={1}>
-                        {item.content || item.description}
-                    </SafeText>
-                    <SafeText style={styles.collectionInfo} numberOfLines={1}>
-                        1.2w播放·更新至第n集
-                    </SafeText>
-                </View>
-                {!isSelected && (
-                    <TouchableOpacity
-                        style={{ padding: pixel(5), alignSelf: 'center' }}
-                        onPress={() => {
-                            uploadVideoResponse({ response: video, post_id: id });
-                            isSelected = true;
-                            // navigation.goBack();
-                        }}>
-                        <Iconfont name="iconfontadd" size={pixel(18)} color="#fff" />
-                    </TouchableOpacity>
-                )}
-            </View>
-        );
+    const renderItem = useCallback(({ item, index }) => {
+        return <SearchCollectionPostItem item={item} index={index} uploadVideoResponse={uploadVideoResponse} />;
     }, []);
     return (
         <View style={styles.container}>

@@ -43,9 +43,6 @@ import UserBlockScreen from '../screens/user/UserBlock';
 import BrowsingHistoryScreen from '../screens/my/HistoryScreen';
 import EnshrinedScreen from '../screens/my/Enshrined';
 import EditProfileScreen from '../screens/profile/HomeScreen';
-import CollectionScreen from '../screens/my/CollectionScreen';
-import CreateCollectionScreen from '../screens/my/components/CreateCollectionScreen';
-import CollectionDetailScreen from '../screens/my/components/CollectionDetail';
 
 // content
 import CommentScreen from '../screens/comment/CommentScreen';
@@ -54,6 +51,11 @@ import SharedPostDetail from '../screens/post/SharedPostDetail';
 import TagDetailScreen from '../screens/tagDetail';
 import TagVideoListScreen from '../screens/video/TagVideoList';
 import SearchedVideoListScreen from '../screens/video/SearchedVideoList';
+
+// collection
+import CollectionScreen from '../screens/collection';
+import CreateCollectionScreen from '../screens/collection/CreateCollectionScreen';
+import CollectionDetailScreen from '../screens/collection/CollectionDetail';
 
 // category
 import CategoryScreen from '../screens/category';

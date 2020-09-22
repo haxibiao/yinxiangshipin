@@ -1,8 +1,10 @@
 import React, { useCallback, useState, useMemo } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView } from 'react-native';
-import { NavBarHeader, MediaUploader, PageContainer, Row, Iconfont } from '@src/components';
-import { userStore } from '@src/store';
+import { NavBarHeader, MediaUploader, PageContainer, Row, Iconfont, Loading } from '@src/components';
+import { userStore, appStore } from '@src/store';
 import { useNavigation } from '@react-navigation/native';
+import { GQL, useMutation, errorMessage } from '@src/apollo';
+import { exceptionCapture } from '@src/common';
 import Video from 'react-native-video';
 
 const maxMediaWidth = Device.WIDTH - Theme.itemSpace * 4;
@@ -16,6 +18,7 @@ export default function CreateCollectionScreen(props) {
             return { ...prevFormData, cover: response[0] ? response[0] : '' };
         });
     }, []);
+
     const uploadVideoResponse = useCallback(
         ({ response, post_id }) => {
             if (
@@ -51,6 +54,34 @@ export default function CreateCollectionScreen(props) {
     console.log('video', video);
     console.log('videoData', videoData);
 
+    const createCollection = useCallback(async () => {
+        Loading.show();
+        const [error, res] = await exceptionCapture(createPostCollection);
+        Loading.hide();
+        if (error) {
+            Toast.show({
+                content: errorMessage(error) || '创建失败',
+            });
+        } else if (res) {
+            Toast.show({
+                content: '创建成功',
+            });
+            navigation.goBack();
+        }
+
+        function createPostCollection() {
+            return appStore.client.mutate({
+                mutation: GQL.CreateCollectionMutation,
+                variables: {
+                    name: formData.title,
+                    logo: formData.cover,
+                    description: formData.description,
+                    post_ids: videoData.map((v) => v.post_id),
+                },
+            });
+        }
+    }, [formData, videoData]);
+
     const topComponent = useCallback(() => {
         return (
             <View>
@@ -66,7 +97,7 @@ export default function CreateCollectionScreen(props) {
                     <View style={{ flex: 1, overflow: 'hidden' }}>
                         <View style={styles.titleInput}>
                             <TextInput
-                                style={{ fontSize: font(12), flex: 1, padding: 0 }}
+                                style={{ fontSize: font(12), flex: 1, width: 0, padding: 0 }}
                                 onChangeText={(val) =>
                                     setFormData((prevFormData) => {
                                         return { ...prevFormData, title: val };
@@ -81,7 +112,7 @@ export default function CreateCollectionScreen(props) {
                         </View>
                         <View style={styles.descriptionView}>
                             <TextInput
-                                style={{ fontSize: font(12), flex: 1, padding: 0 }}
+                                style={{ fontSize: font(12), flex: 1, padding: 0, height: 0 }}
                                 onChangeText={(val) =>
                                     setFormData((prevFormData) => {
                                         return { ...prevFormData, description: val };
@@ -90,7 +121,7 @@ export default function CreateCollectionScreen(props) {
                                 multiline
                                 value={formData.description}
                                 placeholder="请输入合集的简介"
-                                numberOfLines={2}
+                                numberOfLines={4}
                                 maxLength={100}
                             />
                             <Text style={styles.wordCount}>{formData.description.length}/100</Text>
@@ -132,6 +163,7 @@ export default function CreateCollectionScreen(props) {
         }
     }, [video, videoData]);
 
+    const disabledBtn = !(formData.title && formData.cover && videoData.length > 0);
     return (
         <PageContainer>
             <ScrollView showsVerticalScrollIndicator={false}>
@@ -156,10 +188,21 @@ export default function CreateCollectionScreen(props) {
                         </View>
 
                         <Row style={{ marginTop: pixel(20) }}>
-                            <TouchableOpacity style={[styles.btnStyle, styles.leftBtn]}>
-                                <Text style={styles.btnTextStyle}>创建</Text>
+                            <TouchableOpacity
+                                style={[
+                                    styles.btnStyle,
+                                    styles.leftBtn,
+                                    disabledBtn && {
+                                        backgroundColor: '#fff',
+                                        borderColor: '#9996',
+                                        borderWidth: pixel(1),
+                                    },
+                                ]}
+                                onPress={createCollection}
+                                disabled={disabledBtn}>
+                                <Text style={[styles.btnTextStyle, disabledBtn && { color: 'red' }]}>创建</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.btnStyle}>
+                            <TouchableOpacity style={styles.btnStyle} onPress={() => navigation.goBack()}>
                                 <Text style={[styles.btnTextStyle, { color: '#000' }]}>取消</Text>
                             </TouchableOpacity>
                         </Row>
@@ -206,8 +249,8 @@ const styles = StyleSheet.create({
         borderColor: '#9996',
         borderRadius: pixel(5),
         marginTop: pixel(10),
-        // flex: 1,
-        // overflow: 'hidden',
+        flex: 1,
+        overflow: 'hidden',
     },
     btnStyle: {
         backgroundColor: '#9996',

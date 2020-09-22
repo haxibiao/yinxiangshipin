@@ -135,6 +135,10 @@ query postsQuery($user_id: Int!, $count: Int, $page: Int) {
                 age
                 introduction
             }
+            collections {
+                id
+                name
+            }
             tags {
                 data {
                     id

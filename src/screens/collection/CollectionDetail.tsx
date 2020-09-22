@@ -13,16 +13,16 @@ import { observer, appStore } from '@src/store';
 import { NavBarHeader, SafeText, Iconfont, Row } from '@src/components';
 import { syncGetter, count, mergeProperty } from '@src/common';
 import { GQL, useQuery } from '@src/apollo';
-import { ContentStatus } from '@src/content';
+import { ContentStatus, QueryList } from '@src/content';
 import { observable } from 'mobx';
 import { useRoute, useNavigation } from '@react-navigation/native';
+import PostItem from './components/PostItem';
 
 export default observer((props: any) => {
     const navigation = useNavigation();
     const route = useRoute();
-    const tag = route?.params?.tag;
+    const collection = route?.params?.collection;
     const [hot, setHot] = useState(false);
-    const user_name = route?.params?.user_name;
     const [isCollect, setIsCollect] = useState(false);
 
     const scrollAnimateValue = useRef(new Animated.Value(0));
@@ -39,19 +39,17 @@ export default observer((props: any) => {
         extrapolate: 'clamp',
     });
 
-    const { loading, error, data, fetchMore, refetch } = useQuery(GQL.tagPostsQuery, {
+    const { loading, error, data, fetchMore, refetch } = useQuery(GQL.CollectionQuery, {
         variables: {
-            tag_id: tag?.id,
-            count: 12,
-            order: hot ? 'HOT' : 'LATEST',
-            visibility: 'all',
+            collection_id: collection.id,
         },
         fetchPolicy: 'network-only',
     });
-    const tagData = useMemo(() => data?.tag || tag, [data]);
-    const listData = useMemo(() => data?.tag?.posts?.data, [data]);
-    const nextPage = useMemo(() => data?.tag?.posts?.paginatorInfo?.currentPage + 1 || 2, [data]);
-    const hasMore = useMemo(() => data?.tag?.posts?.paginatorInfo?.hasMorePages, [data]);
+
+    const tagData = useMemo(() => data?.collection || collection, [data]);
+    const listData = useMemo(() => data?.collection?.posts?.data, [data]);
+    const nextPage = useMemo(() => data?.collection?.posts?.paginatorInfo?.currentPage + 1 || 2, [data]);
+    const hasMore = useMemo(() => data?.collection?.posts?.paginatorInfo?.hasMorePages, [data]);
     const isLoading = useRef(false);
     const onEndReached = useCallback(() => {
         if (!isLoading.current && hasMore) {
@@ -79,64 +77,28 @@ export default observer((props: any) => {
 
     const renderItem = useCallback(
         ({ item, index }) => {
-            let cover;
-            if (item?.video?.id) {
-                cover = item?.video?.dynamic_cover || item?.video?.cover;
-            } else {
-                cover = item?.images?.['0']?.url;
-            }
             return (
-                <TouchableWithoutFeedback
-                    onPress={() =>
-                        goToScreen({
-                            item,
-                            tag,
-                            initData: listData,
-                            itemIndex: index,
-                            page: nextPage,
-                        })
-                    }>
-                    <View style={styles.itemWrap}>
-                        <Image style={styles.videoCover} source={{ uri: cover }} />
-                        <View style={{ flex: 1, overflow: 'hidden', justifyContent: 'space-around' }}>
-                            <SafeText style={styles.contentText} numberOfLines={2}>
-                                {item.content || item.description}
-                            </SafeText>
-                            <Row>
-                                <Iconfont
-                                    name={isCollect ? 'xihuanfill' : 'xihuan'}
-                                    size={font(15)}
-                                    color={isCollect ? Theme.primaryColor : '#fff'}
-                                />
-                                <Text style={[styles.contentText, { marginLeft: pixel(3) }]} numberOfLines={1}>
-                                    {item.count_likes}
-                                </Text>
-                            </Row>
-                        </View>
-                    </View>
-                </TouchableWithoutFeedback>
+                <PostItem item={item} index={index} collection={collection} listData={listData} nextPage={nextPage} />
             );
         },
-        [tag, listData, nextPage],
+        [collection, listData, nextPage],
     );
 
     const listHeader = useMemo(() => {
         return (
             <>
                 <View style={styles.header}>
-                    <View style={styles.tagLogoWrap}>
-                        <Image style={styles.tagLogo} source={require('@app/assets/images/icons/ic_tag_red.png')} />
-                    </View>
+                    <Image style={styles.tagLogoWrap} source={{ uri: tagData.logo }} />
                     <View style={styles.tagInfo}>
                         <Text style={styles.tagName}>#{tagData?.name}</Text>
-                        <Text style={styles.tagCount}>{`${count(
-                            tagData?.count_plays || 0.0,
-                        )}次播放 · @${user_name}`}</Text>
+                        <Text style={styles.tagCount}>{`${count(tagData?.count_plays || 0.0)}次播放 · @${
+                            tagData?.user?.name
+                        }`}</Text>
                         <View style={styles.tagInfoBottom}>
                             <Text style={styles.tagCount}>
                                 {`更新至第${tagData?.count_posts > 0 ? count(tagData?.count_posts) : '0'}集`}
                             </Text>
-                            <TouchableOpacity
+                            {/* <TouchableOpacity
                                 style={styles.filterBtn}
                                 onPress={() =>
                                     setHot((h) => {
@@ -149,7 +111,7 @@ export default observer((props: any) => {
                                     source={require('@app/assets/images/icons/ic_order_gray.png')}
                                 />
                                 <Text style={styles.filterBtnName}>{hot ? '最多点赞' : '最新发布'}</Text>
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
                         </View>
                     </View>
                 </View>
@@ -217,9 +179,9 @@ export default observer((props: any) => {
             <NavBarHeader
                 isTransparent
                 hasSearchButton={true}
-                onPressSearch={() => navigation.push('SearchVideo', { tag_id: tag.id })}
+                onPressSearch={() => navigation.push('SearchVideo', { tag_id: collection.id })}
                 centerStyle={{ opacity: titleOpacity }}
-                title={tag?.name}
+                title={collection?.name}
             />
             <FlatList
                 data={listData}
@@ -267,13 +229,6 @@ const styles = StyleSheet.create({
         width: percent(25),
         height: percent(25),
         borderRadius: pixel(2),
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#ffffff',
-    },
-    tagLogo: {
-        width: '50%',
-        height: '50%',
     },
     tagInfo: {
         flex: 1,
@@ -318,18 +273,18 @@ const styles = StyleSheet.create({
         paddingVertical: pixel(10),
         marginBottom: pixel(20),
     },
-    itemWrap: {
-        width: Device.WIDTH,
-        flexDirection: 'row',
-        paddingHorizontal: pixel(Theme.itemSpace),
-        marginVertical: pixel(Theme.itemSpace) / 2,
-    },
-    videoCover: {
-        width: percent(18),
-        height: percent(18) * 1.4,
-        marginRight: pixel(10),
-        borderRadius: pixel(2),
-    },
+    // itemWrap: {
+    //     width: Device.WIDTH,
+    //     flexDirection: 'row',
+    //     paddingHorizontal: pixel(Theme.itemSpace),
+    //     marginVertical: pixel(Theme.itemSpace) / 2,
+    // },
+    // videoCover: {
+    //     width: percent(18),
+    //     height: percent(18) * 1.4,
+    //     marginRight: pixel(10),
+    //     borderRadius: pixel(2),
+    // },
     contentText: {
         fontSize: font(14),
         color: '#fff',
@@ -338,10 +293,6 @@ const styles = StyleSheet.create({
         height: pixel(0.5),
         backgroundColor: '#666',
         marginBottom: pixel(Theme.itemSpace) / 2,
-    },
-    columnWrapperStyle: {
-        borderWidth: StyleSheet.hairlineWidth,
-        borderColor: '#161924',
     },
     listFooter: {
         paddingVertical: pixel(15),

@@ -64,6 +64,10 @@ query searchPostQuery($query: String!, $page: Int, $count: Int, $type: PostType,
                 age
                 introduction
             }
+            collections {
+                id
+                name
+            }
             tags {
                 data {
                     id

@@ -8,7 +8,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import __ from 'lodash';
 import SearchRecord from './components/SearchRecord';
 import SearchedVideo from './components/SearchedVideo';
-import CollectionPost from '@src/screens/my/components/CollectionPost';
+import CollectionPost from '@src/screens/collection/components/CollectionPost';
 
 const Search = () => {
     const route = useRoute();
@@ -115,14 +115,20 @@ const Search = () => {
                         </View>
                     </TouchableOpacity>
                 </View>
-                <TouchableOpacity
-                    onPress={searchBtnOnPress}
-                    style={styles.searchButton}
-                    disabled={!(inputValueZIndex > 0)}>
-                    <Text style={[styles.searchButtonText, inputValueZIndex > 0 && { color: Theme.primaryColor }]}>
-                        搜索
-                    </Text>
-                </TouchableOpacity>
+                {selectable && !trimmedValue.length > 0 ? (
+                    <TouchableOpacity onPress={() => navigation.goBack()} style={styles.searchButton}>
+                        <Text style={styles.searchButtonText}>完成</Text>
+                    </TouchableOpacity>
+                ) : (
+                    <TouchableOpacity
+                        onPress={searchBtnOnPress}
+                        style={styles.searchButton}
+                        disabled={!(inputValueZIndex > 0)}>
+                        <Text style={[styles.searchButtonText, inputValueZIndex > 0 && { color: Theme.primaryColor }]}>
+                            搜索
+                        </Text>
+                    </TouchableOpacity>
+                )}
             </View>
             <View style={styles.container}>
                 <View style={[styles.posContent, { zIndex: recordZIndex }]}>{Record}</View>

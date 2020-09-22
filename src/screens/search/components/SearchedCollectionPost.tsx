@@ -5,16 +5,39 @@ import { observer } from '@src/store';
 import { GQL } from '@src/apollo';
 import { QueryList } from '@src/content';
 import SearchVideoItem from './SearchVideoItem';
-import SearchCollectionPostItem from './SearchCollectionPostItem';
 
 // selectable:区分个人合集和公共合集入口
-const index = observer(({ navigation, keyword, tag_id, user_id, selectable, uploadVideoResponse }) => {
+const SearchedCollectionPost = observer(({ navigation, keyword, tag_id, user_id, selectable, uploadVideoResponse }) => {
     const [hot, setHot] = useState(false);
 
     const renderItem = useCallback(
         ({ item, index, data, page }) => {
             if (selectable && uploadVideoResponse) {
-                return <SearchCollectionPostItem item={item} index={index} uploadVideoResponse={uploadVideoResponse} />;
+                let { images, video, id } = item;
+                return (
+                    <View style={styles.rowItem}>
+                        <Image
+                            source={{ uri: item.images.length > 0 ? item.images[0] : item.video && item.video.cover }}
+                            style={styles.postCover}
+                        />
+                        <View style={{ flex: 1, justifyContent: 'space-around' }}>
+                            <SafeText style={styles.bodyText} numberOfLines={1}>
+                                {item.content || item.description}
+                            </SafeText>
+                            <SafeText style={styles.collectionInfo} numberOfLines={1}>
+                                1.2w播放·更新至第n集
+                            </SafeText>
+                        </View>
+                        <TouchableOpacity
+                            style={{ padding: pixel(5), alignSelf: 'center' }}
+                            onPress={() => {
+                                uploadVideoResponse({ response: video, post_id: id });
+                                // navigation.goBack();
+                            }}>
+                            <Iconfont name="iconfontadd" size={pixel(18)} color="#fff" />
+                        </TouchableOpacity>
+                    </View>
+                );
             } else {
                 return (
                     <TouchableWithoutFeedback
@@ -149,4 +172,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default index;
+export default SearchedCollectionPost;
