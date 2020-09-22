@@ -32,6 +32,7 @@ import PraiseScreen from '../screens/task/Praise';
 // find search
 import SearchScreen from '../screens/search';
 import SearchVideoScreen from '../screens/search/Video';
+import SearchedVideoListScreen from '../screens/search/VideoList';
 
 // user
 import UserHomeScreen from '../screens/user';
@@ -53,17 +54,14 @@ import PostDetailScreen from '../screens/post';
 import SharedPostDetail from '../screens/post/SharedPostDetail';
 
 // tag
-import TagDetailScreen from '../screens/tagDetail';
-
-// videoList
-import TagVideoListScreen from '../screens/video/TagVideoList';
-import SearchedVideoListScreen from '../screens/video/SearchedVideoList';
-import CollectionVideoListScreen from '../screens/video/CollectionVideoList';
+import TagDetailScreen from '../screens/tag';
+import TagVideoListScreen from '../screens/tag/VideoList';
 
 // collection
 import CollectionScreen from '../screens/collection';
 import CreateCollectionScreen from '../screens/collection/CreateCollectionScreen';
 import CollectionDetailScreen from '../screens/collection/CollectionDetail';
+import CollectionVideoListScreen from '../screens/collection/VideoList';
 
 // category
 import CategoryScreen from '../screens/category';

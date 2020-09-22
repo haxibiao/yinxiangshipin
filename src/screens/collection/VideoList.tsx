@@ -8,7 +8,7 @@ import { NavBarHeader } from '@src/components';
 import { GQL } from '@src/apollo';
 import { DrawVideoList, DrawVideoStore } from '@src/content';
 import { Overlay } from 'teaset';
-import CollectionPosts from '@src/screens/collection/components/CollectionPosts';
+import CollectionEpisodes from './components/CollectionEpisodes';
 
 export default () => {
     const route = useRoute();
@@ -85,7 +85,7 @@ export default () => {
                 containerStyle={{ backgroundColor: 'transparent' }}
                 animated={true}>
                 <ApolloProvider client={client}>
-                    <CollectionPosts
+                    <CollectionEpisodes
                         collection={collection}
                         post={initData[itemIndex]}
                         onClose={onClose}
