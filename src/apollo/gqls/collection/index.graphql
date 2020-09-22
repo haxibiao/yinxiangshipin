@@ -9,12 +9,14 @@ query CollectionsQuery($user_id: Int!, $count: Int, $page: Int) {
         }
         data {
             id
-            name
             logo
-            status
-            type
+            name
+            description
             count_articles
+            count_follows
             followed
+            type
+            status
             user {
                 id
                 name
@@ -27,13 +29,14 @@ query CollectionsQuery($user_id: Int!, $count: Int, $page: Int) {
 query CollectionQuery($collection_id: Int!, $page: Int, $count: Int) {
     collection(collection_id: $collection_id) {
         id
-        name
         logo
-        type
-        status
+        name
+        description
         count_articles
         count_follows
         followed
+        type
+        status
         user {
             id
             name

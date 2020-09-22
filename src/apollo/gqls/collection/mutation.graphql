@@ -7,13 +7,14 @@ mutation CreateCollectionMutation(
 ) {
     createCollection(name: $name, logo: $logo, description: $description, post_ids: $post_ids, type: $type) {
         id
-        name
         logo
-        type
-        status
+        name
+        description
         count_articles
         count_follows
         followed
+        type
+        status
         posts {
             id
             content
@@ -25,14 +26,14 @@ mutation CreateCollectionMutation(
 mutation editCollectionMutation($collection_id: Int!, $name: String!, $logo: String, $type: CollectType) {
     editCollection(collection_id: $collection_id, name: $name, logo: $logo, type: $type) {
         id
+        logo
         name
         description
-        logo
-        type
-        status
         count_articles
         count_follows
         followed
+        type
+        status
     }
 }
 
