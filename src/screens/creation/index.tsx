@@ -25,10 +25,12 @@ import { GQL, useMutation, errorMessage } from '@src/apollo';
 import { exceptionCapture } from '@src/common';
 import { shareClipboardLink } from '@src/content';
 import { useRoute, useNavigation } from '@react-navigation/native';
+import { ApolloProvider } from '@apollo/react-hooks';
 import { observer, userStore, appStore, adStore } from '@src/store';
 import { observable } from 'mobx';
 import { Overlay } from 'teaset';
 import Video from 'react-native-video';
+import SelectCollection, { CollectionItem } from '@src/screens/collection/components/SelectCollection';
 import SharedVideoContent from './SharedVideoContent';
 
 const MediaItemWidth = (Device.WIDTH - pixel(60)) / 3;
@@ -40,6 +42,7 @@ export default (props: any) => {
     const [formData, setFormData] = useState({
         body: '',
         qcvod_fileid: '',
+        collection: '',
         images: [],
     });
     // 粘贴板分享视频
@@ -223,6 +226,47 @@ export default (props: any) => {
         }
     }, [tags]);
 
+    // 选择合集
+    const overlayKey = useRef();
+
+    const closeCollection = useCallback(() => {
+        Overlay.hide(overlayKey.current);
+    }, []);
+
+    const addCollection = useCallback((value) => {
+        setFormData((prevFormData) => {
+            return { ...prevFormData, collection: value };
+        });
+        closeCollection();
+    }, []);
+
+    const deleteCollection = useCallback(() => {
+        setFormData((prevFormData) => {
+            return { ...prevFormData, collection: null };
+        });
+        closeCollection();
+    }, []);
+
+    const userCollection = useMemo(() => {
+        return (
+            <ApolloProvider client={appStore.client}>
+                <SelectCollection onClose={closeCollection} onClick={addCollection} navigation={navigation} />
+            </ApolloProvider>
+        );
+    }, [appStore.client]);
+
+    const showCollection = useCallback(() => {
+        const Operation = (
+            <Overlay.PullView
+                style={{ flexDirection: 'column', justifyContent: 'flex-end' }}
+                containerStyle={{ backgroundColor: 'transparent' }}
+                animated={true}>
+                {userCollection}
+            </Overlay.PullView>
+        );
+        overlayKey.current = Overlay.show(Operation);
+    }, [userCollection]);
+
     useEffect(() => {
         if (!appStore.agreeCreatePostAgreement) {
             UserAgreementOverlay(
@@ -324,6 +368,35 @@ export default (props: any) => {
                         <Iconfont name="right" size={pixel(14)} color="#b2b2b2" />
                     </TouchableOpacity>
                     <View>{renderTagNames}</View>
+                    <TouchableOpacity
+                        style={styles.operation}
+                        activeOpacity={1}
+                        disabled={formData.collection}
+                        onPress={showCollection}>
+                        <View style={styles.operationLeft}>
+                            <Image
+                                source={
+                                    formData.collection
+                                        ? require('@app/assets/images/icons/ic_collection_gray.png')
+                                        : require('@app/assets/images/icons/ic_collection_black.png')
+                                }
+                                style={styles.operationIcon}
+                            />
+                            <Text style={[styles.operationName, formData.collection && { color: '#b2b2b2' }]}>
+                                添加合集
+                            </Text>
+                        </View>
+                        <Iconfont name="right" size={pixel(14)} color="#b2b2b2" />
+                    </TouchableOpacity>
+                    {!!formData.collection && (
+                        <CollectionItem
+                            style={{ paddingLeft: 0 }}
+                            collection={formData.collection}
+                            navigation={navigation}
+                            onClick={deleteCollection}
+                            btnName="移除"
+                        />
+                    )}
                 </View>
             </ScrollView>
         </View>
