@@ -41,7 +41,7 @@ import UserBlockScreen from '../screens/user/UserBlock';
 
 // my
 import BrowsingHistoryScreen from '../screens/my/HistoryScreen';
-import GathersScreen from '../screens/my/Gathers';
+import EnshrinedScreen from '../screens/my/Enshrined';
 import EditProfileScreen from '../screens/profile/HomeScreen';
 import CollectionScreen from '../screens/my/CollectionScreen';
 import CreateCollectionScreen from '../screens/my/components/CreateCollectionScreen';
@@ -220,8 +220,8 @@ export default {
     获取验证码: {
         component: VerificationScreen,
     },
-    我的收藏: {
-        component: GathersScreen,
+    Enshrined: {
+        component: EnshrinedScreen,
     },
     创建合集: {
         component: CreateCollectionScreen,

@@ -189,7 +189,7 @@ export default observer((props: any) => {
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.columnItem}
-                        onPress={() => authNavigator('我的收藏', { user: userProfile })}>
+                        onPress={() => authNavigator('Enshrined', { user: userProfile })}>
                         <View style={styles.columnItemLeft}>
                             <Image
                                 style={styles.columnIcon}

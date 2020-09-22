@@ -9,7 +9,7 @@ import { Overlay } from 'teaset';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
 import { useNavigation } from '@react-navigation/native';
 import RecommendVideos from './RecommendVideos';
-import CollectionVideos from './CollectionVideos';
+import EnshrinedVideos from './EnshrinedVideos';
 import FriendShipVideos from './FriendShipVideos';
 
 export default observer(({}) => {
@@ -118,7 +118,7 @@ export default observer(({}) => {
                         tintTextStyle={styles.tintTextStyle}
                     />
                 )}>
-                <CollectionVideos tabLabel="收藏" page={0} />
+                <EnshrinedVideos tabLabel="收藏" page={0} />
                 <RecommendVideos tabLabel="推荐" page={1} />
                 <FriendShipVideos tabLabel="关注" page={2} />
             </ScrollableTabView>
