@@ -21,6 +21,7 @@ export default React.forwardRef(function ContentList(
         paginateOptionChain = 'publicPosts.paginatorInfo',
         options,
         renderItem,
+        ListHeaderComponent,
         ListFooterComponent,
         ListEmptyComponent,
         ...contentProps
@@ -57,6 +58,13 @@ export default React.forwardRef(function ContentList(
         },
         [renderItem, listData, nextPage],
     );
+    const listHeader = useCallback(() => {
+        let header = null;
+        if (ListHeaderComponent instanceof Function) {
+            header = ListHeaderComponent({ loading, data });
+        }
+        return header;
+    }, [ListHeaderComponent, loading, data]);
 
     const listFooter = useCallback(() => {
         let footer = null;
@@ -92,7 +100,7 @@ export default React.forwardRef(function ContentList(
                 break;
         }
         if (ListEmptyComponent instanceof Function) {
-            return ListEmptyComponent({ status });
+            return ListEmptyComponent({ status, refetch });
         } else if (status) {
             return <ContentStatus status={status} refetch={status === 'error' ? refetch : undefined} />;
         } else {
@@ -113,6 +121,7 @@ export default React.forwardRef(function ContentList(
             onEndReached={onEndReached}
             onEndReachedThreshold={0.1}
             removeClippedSubviews={true}
+            ListHeaderComponent={listHeader}
             ListFooterComponent={listFooter}
             ListEmptyComponent={listEmpty}
             {...contentProps}
