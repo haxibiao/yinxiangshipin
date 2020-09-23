@@ -96,3 +96,40 @@ query followedArticlesQuery($page: Int, $user_id: Int!) {
         }
     }
 }
+
+# 收藏的合集
+query followedCollectionsQuery($user_id: Int!, $followed_type: String, $page: Int, $count: Int) {
+    follows(user_id: $user_id, followed_type: $followed_type, page: $page, count: $count) {
+        paginatorInfo {
+            currentPage
+            hasMorePages
+        }
+        data {
+            id
+            collection {
+                id
+                logo
+                name
+                description
+                count_articles
+                count_follows
+                followed
+                type
+                status
+                user {
+                    id
+                    name
+                    avatar
+                }
+                posts {
+                    paginatorInfo {
+                        total
+                    }
+                    data {
+                        id
+                    }
+                }
+            }
+        }
+    }
+}

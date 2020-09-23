@@ -12,9 +12,6 @@ export default function CollectionPost({ user_id, uploadVideoResponse }) {
     const navigation = useNavigation();
     const route = useRoute();
 
-    const renderItem = useCallback(({ item, index }) => {
-        return <SearchCollectionPostItem item={item} index={index} uploadVideoResponse={uploadVideoResponse} />;
-    }, []);
     return (
         <View style={styles.container}>
             <QueryList
@@ -29,7 +26,9 @@ export default function CollectionPost({ user_id, uploadVideoResponse }) {
                     },
                     fetchPolicy: 'network-only',
                 }}
-                renderItem={renderItem}
+                renderItem={({ item, index }) => (
+                    <SearchCollectionPostItem item={item} index={index} uploadVideoResponse={uploadVideoResponse} />
+                )}
             />
         </View>
     );

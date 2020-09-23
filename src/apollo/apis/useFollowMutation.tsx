@@ -20,3 +20,17 @@ export const useFollowMutation = (options: Props) => {
 
     return followHandler;
 };
+
+export const useFollowCollectionMutation = (options: Props) => {
+    const [followCollection] = useMutation(GQL.followCollectionMutation, { ...options });
+    const followHandler = useMemo(() => {
+        return __.debounce(async function () {
+            const [error, result] = await Helper.exceptionCapture(followCollection);
+            if (error) {
+                Toast.show({ content: errorMessage(error) || '操作失败' });
+            }
+        }, 500);
+    }, [followCollection]);
+
+    return followHandler;
+};

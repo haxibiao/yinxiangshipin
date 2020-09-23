@@ -1,5 +1,5 @@
 import React, { useMemo, useCallback } from 'react';
-import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity, Keyboard } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity } from 'react-native';
 import {
     TouchFeedback,
     Row,
@@ -11,60 +11,67 @@ import {
     PullChooser,
 } from '@src/components';
 import { useRoute, useNavigation } from '@react-navigation/native';
-import { GQL } from '@src/apollo';
+import { GQL, useMutation } from '@src/apollo';
+import { useApolloClient } from '@apollo/react-hooks';
 import { QueryList } from '@src/content';
 import { userStore } from '@app/src/store';
+import { UserCollectionItem } from './components/CollectionItem';
 
 export default function CollectionScreen() {
     const navigation = useNavigation();
     const route = useRoute();
+    const client = useApolloClient();
     const user_id = route?.params?.user?.id || userStore.me.id;
     const isSelf = user_id === userStore.me.id;
-    const onLongPress = useCallback(() => {
-        Keyboard.dismiss();
-        const operations = [];
-        if (isSelf) {
-            operations.push({
-                title: '删除合集',
-                onPress: () => {},
+    const deleteCollectionMutation = useCallback(({ collection_id }) => {
+        client
+            .mutate({
+                mutation: GQL.deleteCollectionMutation,
+                variables: {
+                    id: collection_id,
+                },
+                refetchQueries: () => [
+                    {
+                        query: GQL.CollectionsQuery,
+                        variables: {
+                            user_id: user_id,
+                        },
+                    },
+                    {
+                        query: GQL.followedCollectionsQuery,
+                        variables: {
+                            user_id: user_id,
+                            followed_type: 'collections',
+                        },
+                    },
+                ],
+            })
+            .then((result) => {
+                Toast.show({
+                    content: '删除成功',
+                });
+            })
+            .catch((error) => {
+                Toast.show({
+                    content: errorMessage(error) || '删除失败',
+                });
             });
-        } else {
-            operations.push({
-                title: '收藏合集',
-                onPress: () => {},
-            });
-        }
+    }, []);
 
-        PullChooser.show(operations);
-    }, [isSelf]);
-    const renderItem = ({ item, index }) => {
-        return (
-            <TouchableOpacity
-                style={styles.rowBoxItem}
-                onPress={() =>
-                    navigation.navigate('CollectionDetail', {
-                        collection: { id: item.id, name: item.name, user: item.user },
-                    })
-                }
-                onLongPress={onLongPress}>
-                <Image source={{ uri: item.logo }} style={styles.logoImg} />
-                <View style={{ flex: 1 }}>
-                    <Row>
-                        <Image
-                            source={require('@app/assets/images/icons/ic_collection_gray.png')}
-                            style={styles.collectionIcon}
-                        />
-                        <SafeText style={{ fontSize: font(14), fontWeight: 'bold', color: '#000' }} numberOfLines={1}>
-                            {item.name}
-                        </SafeText>
-                    </Row>
-                    <SafeText style={styles.collectionInfo} numberOfLines={1}>
-                        1.2w播放·更新至第n集
-                    </SafeText>
-                </View>
-            </TouchableOpacity>
-        );
-    };
+    const onLongPress = useCallback(
+        (id) => {
+            const operations = [];
+            if (isSelf) {
+                operations.push({
+                    title: '删除合集',
+                    onPress: () => deleteCollectionMutation({ collection_id: id }),
+                });
+            }
+            PullChooser.show(operations);
+        },
+        [isSelf],
+    );
+
     return (
         <PageContainer
             title="我的合集"
@@ -86,7 +93,14 @@ export default function CollectionScreen() {
                     },
                     fetchPolicy: 'network-only',
                 }}
-                renderItem={renderItem}
+                renderItem={({ item, index }) => (
+                    <UserCollectionItem
+                        item={item}
+                        index={index}
+                        navigation={navigation}
+                        onLongPress={() => isSelf && onLongPress(item.id)}
+                    />
+                )}
                 contentContainerStyle={styles.container}
             />
         </PageContainer>

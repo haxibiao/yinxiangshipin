@@ -35,15 +35,18 @@ export default function PostItem({ item, index, collection, listData, nextPage }
                 <Image style={styles.videoCover} source={{ uri: cover }} />
                 <View style={{ flex: 1, overflow: 'hidden', justifyContent: 'space-around' }}>
                     <SafeText style={styles.contentText} numberOfLines={2}>
-                        {item.content || item.description}
+                        {`第${index + 1}集￨${item?.content || item?.description}`}
                     </SafeText>
                     <Row>
+                        <SafeText style={[styles.metaText, { marginRight: pixel(15) }]}>
+                            {Helper.moment(item?.video?.duration)}
+                        </SafeText>
                         <Iconfont
                             name={item.liked ? 'xihuanfill' : 'xihuan'}
-                            size={font(15)}
+                            size={pixel(15)}
                             color={item.liked ? Theme.primaryColor : '#fff'}
                         />
-                        <Text style={[styles.contentText, { marginLeft: pixel(3) }]} numberOfLines={1}>
+                        <Text style={[styles.metaText, { marginLeft: pixel(3) }]} numberOfLines={1}>
                             {item.count_likes}
                         </Text>
                     </Row>
@@ -67,7 +70,11 @@ const styles = StyleSheet.create({
         borderRadius: pixel(2),
     },
     contentText: {
-        fontSize: font(14),
+        fontSize: font(15),
+        color: '#fff',
+    },
+    metaText: {
+        fontSize: font(13),
         color: '#fff',
     },
 });

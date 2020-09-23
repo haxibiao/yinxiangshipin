@@ -3,7 +3,7 @@ mutation CreateCollectionMutation(
     $logo: String
     $description: String
     $post_ids: [Int!]
-    $type: CollectType = POST
+    $type: CollectType
 ) {
     createCollection(name: $name, logo: $logo, description: $description, post_ids: $post_ids, type: $type) {
         id
@@ -17,8 +17,15 @@ mutation CreateCollectionMutation(
         type
         status
         posts {
-            id
-            content
+            paginatorInfo {
+                currentPage
+                hasMorePages
+                total
+            }
+            data {
+                id
+                content
+            }
         }
     }
 }
@@ -42,4 +49,11 @@ mutation editCollectionMutation($collection_id: Int!, $name: String!, $logo: Str
 # 将视频从合集中移除
 mutation moveOutCollectionsMutation($collection_ids: [Int!]!, $post_ids: [Int!]!) {
     moveOutCollections(collection_ids: $collection_ids, post_ids: $post_ids)
+}
+
+# 删除合集
+mutation deleteCollectionMutation($id: Int!) {
+    deleteCollection(id: $id) {
+        id
+    }
 }

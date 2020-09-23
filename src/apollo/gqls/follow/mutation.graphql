@@ -14,3 +14,10 @@ mutation followUserMutation($id: Int!) {
         isFollowed
     }
 }
+
+# 收藏合集
+mutation followCollectionMutation($followed_id: Int!, $followed_type: FollowType!) {
+    toggleFollow(followed_type: $followed_type, followed_id: $followed_id) {
+        id
+    }
+}

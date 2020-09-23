@@ -9,10 +9,10 @@ import {
     TouchableWithoutFeedback,
     Animated,
 } from 'react-native';
-import { observer, appStore } from '@src/store';
+import { observer, appStore, userStore } from '@src/store';
 import { NavBarHeader, SafeText, Iconfont, Row } from '@src/components';
 import { syncGetter, count, mergeProperty } from '@src/common';
-import { GQL, useQuery } from '@src/apollo';
+import { GQL, useQuery, useFollowCollectionMutation, useMutation } from '@src/apollo';
 import { ContentStatus, QueryList } from '@src/content';
 import { observable } from 'mobx';
 import { useRoute, useNavigation } from '@react-navigation/native';
@@ -22,8 +22,6 @@ export default observer((props: any) => {
     const navigation = useNavigation();
     const route = useRoute();
     const collection = route?.params?.collection;
-    const [hot, setHot] = useState(false);
-    const [isCollect, setIsCollect] = useState(false);
 
     const scrollAnimateValue = useRef(new Animated.Value(0));
 
@@ -46,7 +44,7 @@ export default observer((props: any) => {
         fetchPolicy: 'network-only',
     });
 
-    const tagData = useMemo(() => data?.collection || collection, [data]);
+    let tagData = useMemo(() => data?.collection || collection, [data]);
     const listData = useMemo(() => data?.collection?.posts?.data, [data]);
     const nextPage = useMemo(() => data?.collection?.posts?.paginatorInfo?.currentPage + 1 || 2, [data]);
     const hasMore = useMemo(() => data?.collection?.posts?.paginatorInfo?.hasMorePages, [data]);
@@ -75,6 +73,23 @@ export default observer((props: any) => {
         }
     }, []);
 
+    const toggleFollow = useFollowCollectionMutation({
+        variables: {
+            followed_id: tagData?.id,
+            followed_type: 'collections',
+        },
+        refetchQueries: () => [
+            {
+                query: GQL.followedCollectionsQuery,
+                variables: { user_id: userStore.me?.id, followed_type: 'collections' },
+            },
+        ],
+    });
+    const toggleFollowOnPress = useCallback(() => {
+        tagData.followed = tagData.followed === 1 ? 0 : 1;
+        toggleFollow();
+    }, [tagData, tagData.followed]);
+
     const renderItem = useCallback(
         ({ item, index }) => {
             return (
@@ -95,47 +110,24 @@ export default observer((props: any) => {
                             tagData?.user?.name
                         }`}</Text>
                         <View style={styles.tagInfoBottom}>
-                            <Text style={styles.tagCount}>
-                                {`更新至第${tagData?.count_posts > 0 ? count(tagData?.count_posts) : '0'}集`}
-                            </Text>
-                            {/* <TouchableOpacity
-                                style={styles.filterBtn}
-                                onPress={() =>
-                                    setHot((h) => {
-                                        return !h;
-                                    })
-                                }
-                                activeOpacity={1}>
-                                <Image
-                                    style={styles.filterIcon}
-                                    source={require('@app/assets/images/icons/ic_order_gray.png')}
-                                />
-                                <Text style={styles.filterBtnName}>{hot ? '最多点赞' : '最新发布'}</Text>
-                            </TouchableOpacity> */}
+                            <Text style={styles.tagCount}>{`更新至第${tagData?.posts.paginatorInfo.total}集`}</Text>
                         </View>
                     </View>
                 </View>
-                <TouchableOpacity
-                    activeOpacity={1}
-                    style={styles.collectBtn}
-                    onPress={() =>
-                        setIsCollect((r) => {
-                            return !r;
-                        })
-                    }>
+                <TouchableOpacity activeOpacity={1} style={styles.collectBtn} onPress={toggleFollowOnPress}>
                     <Iconfont
-                        name={isCollect ? 'xihuanfill' : 'xihuan'}
+                        name={tagData?.followed > 0 ? 'xihuanfill' : 'xihuan'}
                         size={font(15)}
-                        color={isCollect ? Theme.primaryColor : '#fff'}
+                        color={tagData?.followed > 0 ? Theme.primaryColor : '#fff'}
                     />
                     <Text style={[styles.contentText, { marginLeft: pixel(3) }]}>
-                        {isCollect ? '已收藏' : '收藏合集'}
+                        {tagData?.followed > 0 ? '已收藏' : '收藏合集'}
                     </Text>
                 </TouchableOpacity>
                 <View style={styles.lineStyle} />
             </>
         );
-    }, [hot, tagData, isCollect]);
+    }, [tagData, tagData?.followed]);
 
     const listFooter = useCallback(() => {
         let footer = null;

@@ -78,6 +78,14 @@ export default function CreateCollectionScreen(props) {
                     description: formData.description,
                     post_ids: videoData.map((v) => v.post_id),
                 },
+                refetchQueries: () => [
+                    {
+                        query: GQL.CollectionsQuery,
+                        variables: {
+                            user_id: userStore.me.id,
+                        },
+                    },
+                ],
             });
         }
     }, [formData, videoData]);
@@ -163,7 +171,8 @@ export default function CreateCollectionScreen(props) {
         }
     }, [video, videoData]);
 
-    const disabledBtn = !(formData.title && formData.cover && videoData.length > 0);
+    const disabledBtn = !(formData.title && formData.description && formData.cover && videoData.length > 0);
+
     return (
         <PageContainer>
             <ScrollView showsVerticalScrollIndicator={false}>
