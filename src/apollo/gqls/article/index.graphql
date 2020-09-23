@@ -17,6 +17,7 @@ query recommendPostsQuery {
         review_day
         is_ad
         created_at
+        current_episode
         user {
             id
             name
@@ -54,6 +55,7 @@ query recommendPostsQuery {
             followed
             count_articles
             count_follows
+            updated_to_episode
         }
     }
 }
@@ -80,6 +82,7 @@ query publicPostsQuery($user_id: Int, $count: Int, $page: Int) {
             review_day
             is_ad
             created_at
+            current_episode
             user {
                 id
                 name
@@ -117,6 +120,7 @@ query publicPostsQuery($user_id: Int, $count: Int, $page: Int) {
                 followed
                 count_articles
                 count_follows
+                updated_to_episode
             }
         }
     }
@@ -144,6 +148,7 @@ query postsQuery($user_id: Int!, $count: Int, $page: Int) {
             review_day
             is_ad
             created_at
+            current_episode
             user {
                 id
                 name
@@ -152,10 +157,6 @@ query postsQuery($user_id: Int!, $count: Int, $page: Int) {
                 gender
                 age
                 introduction
-            }
-            collections {
-                id
-                name
             }
             tags {
                 data {
@@ -185,6 +186,7 @@ query postsQuery($user_id: Int!, $count: Int, $page: Int) {
                 followed
                 count_articles
                 count_follows
+                updated_to_episode
             }
         }
     }
@@ -221,6 +223,7 @@ query userPostsQuery($user_id: Int!, $filter: PostFilter, $count: Int, $page: In
             review_day
             is_ad
             created_at
+            current_episode
             user {
                 id
                 name
@@ -258,6 +261,7 @@ query userPostsQuery($user_id: Int!, $filter: PostFilter, $count: Int, $page: In
                 followed
                 count_articles
                 count_follows
+                updated_to_episode
             }
         }
     }
@@ -285,6 +289,7 @@ query followPostsQuery($user_id: Int!, $filter: PostFilter, $count: Int, $page: 
             review_day
             is_ad
             created_at
+            current_episode
             user {
                 id
                 name
@@ -322,6 +327,7 @@ query followPostsQuery($user_id: Int!, $filter: PostFilter, $count: Int, $page: 
                 followed
                 count_articles
                 count_follows
+                updated_to_episode
             }
         }
     }
@@ -344,6 +350,7 @@ query postQuery($id: Int!) {
         review_day
         is_ad
         created_at
+        current_episode
         user {
             id
             name
@@ -381,6 +388,7 @@ query postQuery($id: Int!) {
             followed
             count_articles
             count_follows
+            updated_to_episode
         }
     }
 }

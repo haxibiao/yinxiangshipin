@@ -7,6 +7,7 @@ const Source = {
     NotLogged: require('@app/assets/images/default_blank.png'),
     NoContent: require('@app/assets/images/default_empty.png'),
     SomeError: require('@app/assets/images/default_error.png'),
+    NoCollection: require('@app/assets/images/default_empty.png'),
 };
 
 interface Props {
@@ -17,7 +18,7 @@ interface Props {
     children: ReactChild;
 }
 
-function NotLogged({ style, onPress, children }: Props) {
+function NotLogged({ style, imageStyle, onPress, children }: Props) {
     const content = useMemo(() => {
         if (React.isValidElement(children)) {
             return children;
@@ -36,13 +37,13 @@ function NotLogged({ style, onPress, children }: Props) {
 
     return (
         <View style={[styles.container, style]}>
-            <Image style={styles.image} source={Source.NotLogged} />
+            <Image style={[styles.image, imageStyle]} source={Source.NotLogged} />
             {content}
         </View>
     );
 }
 
-function Loading({ style, onPress, children }: Props) {
+function Loading({ style, imageStyle, onPress, children }: Props) {
     const content = useMemo(() => {
         if (React.isValidElement(children)) {
             return children;
@@ -59,7 +60,7 @@ function Loading({ style, onPress, children }: Props) {
     );
 }
 
-function NoContent({ style, onPress, children }: Props) {
+function NoContent({ style, imageStyle, onPress, children }: Props) {
     const content = useMemo(() => {
         if (React.isValidElement(children)) {
             return children;
@@ -70,13 +71,13 @@ function NoContent({ style, onPress, children }: Props) {
 
     return (
         <View style={[styles.container, style]}>
-            <Image style={styles.image} source={Source.NoContent} />
+            <Image style={[styles.image, imageStyle]} source={Source.NoContent} />
             {content}
         </View>
     );
 }
 
-function SomeError({ style, onPress, children }: Props) {
+function SomeError({ style, imageStyle, onPress, children }: Props) {
     const content = useMemo(() => {
         if (React.isValidElement(children)) {
             return children;
@@ -95,7 +96,32 @@ function SomeError({ style, onPress, children }: Props) {
 
     return (
         <View style={[styles.container, style]}>
-            <Image style={styles.image} source={Source.SomeError} />
+            <Image style={[styles.image, imageStyle]} source={Source.SomeError} />
+            {content}
+        </View>
+    );
+}
+
+function NoCollection({ style, imageStyle, onPress, children }: Props) {
+    const content = useMemo(() => {
+        if (React.isValidElement(children)) {
+            return children;
+        } else {
+            return (
+                <>
+                    <Text style={styles.title}>你还没有合集</Text>
+                    <Text style={styles.description}>合集可以帮助你二次创作、管理内容</Text>
+                    <TouchableOpacity style={styles.btnStyle} onPress={onPress}>
+                        <Text style={styles.btnName}>创建合集</Text>
+                    </TouchableOpacity>
+                </>
+            );
+        }
+    }, []);
+
+    return (
+        <View style={[styles.container, style]}>
+            <Image style={[styles.image, imageStyle]} source={Source.NoCollection} />
             {content}
         </View>
     );
@@ -106,6 +132,7 @@ export default {
     NotLogged,
     NoContent,
     SomeError,
+    NoCollection,
 };
 
 const styles = StyleSheet.create({

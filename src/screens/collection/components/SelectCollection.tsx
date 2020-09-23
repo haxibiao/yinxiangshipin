@@ -1,7 +1,8 @@
 import React, { useCallback } from 'react';
 import { StyleSheet, View, Text, Image, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { QueryList, ContentStatus } from '@src/content';
+import { QueryList, ContentStatus, Placeholder } from '@src/content';
+import { userStore } from '@src/store';
 import { Iconfont } from '@src/components';
 import { GQL } from '@src/apollo';
 
@@ -13,6 +14,23 @@ export default ({ onClose, onClick, navigation }) => {
         [navigation],
     );
 
+    const listEmpty = useCallback(({ status, refetch }) => {
+        if (status === 'empty') {
+            return (
+                <Placeholder.NoCollection
+                    style={{ minHeight: Device.HEIGHT / 2 }}
+                    imageStyle={{ width: percent(40), height: percent(40) }}
+                    onPress={() => {
+                        onClose();
+                        navigation.navigate('创建合集');
+                    }}
+                />
+            );
+        } else {
+            return <ContentStatus status={status} refetch={status === 'error' ? refetch : undefined} />;
+        }
+    }, []);
+
     return (
         <View style={styles.container}>
             <View style={styles.windowHeader}>
@@ -22,17 +40,18 @@ export default ({ onClose, onClick, navigation }) => {
                 </TouchableOpacity>
             </View>
             <QueryList
-                // gqlDocument={GQL.userPostsQuery}
-                // dataOptionChain="userPosts.data"
-                // paginateOptionChain="userPosts.paginatorInfo"
-                // options={{
-                //     variables: {
-                //         user_id: route?.params?.user?.id,
-                //         filter: 'spider',
-                //     },
-                //     fetchPolicy: 'network-only',
-                // }}
+                gqlDocument={GQL.CollectionsQuery}
+                dataOptionChain="collections.data"
+                paginateOptionChain="collections.paginatorInfo"
+                options={{
+                    variables: {
+                        user_id: userStore.me?.id,
+                        count: 10,
+                    },
+                    fetchPolicy: 'network-only',
+                }}
                 renderItem={renderItem}
+                ListEmptyComponent={listEmpty}
                 ItemSeparatorComponent={() => <View style={styles.separator} />}
                 contentContainerStyle={styles.content}
             />
@@ -44,17 +63,14 @@ export function CollectionItem({ style, collection, navigation, onClick, btnName
     return (
         <TouchableWithoutFeedback onPress={() => navigation.navigate('CollectionDetail', { collection })}>
             <View style={[styles.collectionItem, style]}>
-                <Image
-                    style={styles.collectionCover}
-                    source={{ uri: collection?.cover?.url || 'http://cos.haxibiao.com/images/5f22a1fae6c3f.jpeg' }}
-                />
+                <Image style={styles.collectionCover} source={{ uri: collection?.logo }} />
                 <View style={styles.collectionInfo}>
                     <View style={styles.introduction}>
                         <Text style={styles.collectionName} numberOfLines={2}>
-                            {`${collection?.name || collection?.description}`}
+                            {`${collection?.name}  ${collection?.description}`}
                         </Text>
                     </View>
-                    <Text style={styles.countPost}>{`共${collection?.count_post}个作品`}</Text>
+                    <Text style={styles.countPost}>{`共${collection?.count_articles || 0}个作品`}</Text>
                 </View>
                 {btnName && onClick && (
                     <TouchableOpacity style={styles.button} onPress={() => onClick(collection)}>
@@ -127,6 +143,7 @@ const styles = StyleSheet.create({
         width: pixel(70),
         height: pixel(70),
         borderRadius: pixel(2),
+        backgroundColor: '#f0f0f0',
     },
     collectionInfo: {
         flex: 1,
@@ -134,7 +151,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     introduction: {
-        marginBottom: pixel(4),
+        marginBottom: pixel(6),
     },
     collectionName: {
         fontSize: font(15),
@@ -143,11 +160,12 @@ const styles = StyleSheet.create({
     },
     countPost: {
         fontSize: font(14),
+        lineHeight: font(20),
         color: '#b2b2b2',
     },
     button: {
         width: pixel(66),
-        height: pixel(28),
+        height: pixel(30),
         borderRadius: pixel(4),
         backgroundColor: '#FE2C54',
         justifyContent: 'center',

@@ -39,10 +39,10 @@ export default (props: any) => {
     const route = useRoute();
     const navigation = useNavigation();
     const [tags, setTags] = useState(route.params?.tag ? [route.params?.tag] : []);
+    const [collections, setCollections] = useState(route.params?.collection ? [route.params?.collection] : []);
     const [formData, setFormData] = useState({
         body: '',
         qcvod_fileid: '',
-        collection: '',
         images: [],
     });
     // 粘贴板分享视频
@@ -85,10 +85,11 @@ export default (props: any) => {
                     share_link: shareLink.current,
                     qcvod_fileid: formData.qcvod_fileid || sharedVideo?.id,
                     tag_names: tags.map((c) => c.name),
+                    collection_ids: collections.map((c) => c.name),
                 },
             });
         }
-    }, [sharedVideo, formData, tags]);
+    }, [sharedVideo, formData, tags, collections]);
 
     const changeBody = useCallback((value) => {
         setFormData((prevFormData) => {
@@ -234,16 +235,12 @@ export default (props: any) => {
     }, []);
 
     const addCollection = useCallback((value) => {
-        setFormData((prevFormData) => {
-            return { ...prevFormData, collection: value };
-        });
+        setCollections([value]);
         closeCollection();
     }, []);
 
     const deleteCollection = useCallback(() => {
-        setFormData((prevFormData) => {
-            return { ...prevFormData, collection: null };
-        });
+        setCollections([]);
         closeCollection();
     }, []);
 
@@ -371,27 +368,27 @@ export default (props: any) => {
                     <TouchableOpacity
                         style={styles.operation}
                         activeOpacity={1}
-                        disabled={formData.collection}
+                        disabled={collections.length > 0}
                         onPress={showCollection}>
                         <View style={styles.operationLeft}>
                             <Image
                                 source={
-                                    formData.collection
+                                    collections.length > 0
                                         ? require('@app/assets/images/icons/ic_collection_gray.png')
                                         : require('@app/assets/images/icons/ic_collection_black.png')
                                 }
                                 style={styles.operationIcon}
                             />
-                            <Text style={[styles.operationName, formData.collection && { color: '#b2b2b2' }]}>
-                                添加合集
+                            <Text style={[styles.operationName, collections.length > 0 && { color: '#b2b2b2' }]}>
+                                添加到合集
                             </Text>
                         </View>
                         <Iconfont name="right" size={pixel(14)} color="#b2b2b2" />
                     </TouchableOpacity>
-                    {!!formData.collection && (
+                    {!!collections.length > 0 && (
                         <CollectionItem
                             style={{ paddingLeft: 0 }}
-                            collection={formData.collection}
+                            collection={collections.length > 0}
                             navigation={navigation}
                             onClick={deleteCollection}
                             btnName="移除"

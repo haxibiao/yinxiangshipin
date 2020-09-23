@@ -107,7 +107,7 @@ export default React.forwardRef(function ContentList(
             return null;
         }
     }, [ListEmptyComponent, loading, listData, error, refetch]);
-    // console.log('listData,', data, listData);
+
     return (
         <FlatList
             contentContainerStyle={styles.container}
