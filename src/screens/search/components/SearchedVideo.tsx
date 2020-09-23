@@ -8,7 +8,7 @@ import SearchVideoItem from './SearchVideoItem';
 import SearchCollectionPostItem from './SearchCollectionPostItem';
 
 // selectable:区分个人合集和公共合集入口
-const index = observer(({ navigation, keyword, tag_id, user_id, selectable, uploadVideoResponse }) => {
+const index = observer(({ navigation, keyword, tag_id, user_id, collection_id, selectable, uploadVideoResponse }) => {
     const [hot, setHot] = useState(false);
 
     const renderItem = useCallback(
@@ -57,7 +57,25 @@ const index = observer(({ navigation, keyword, tag_id, user_id, selectable, uplo
         );
     }, [hot]);
 
-    return (
+    return collection_id ? (
+        <QueryList
+            contentContainerStyle={styles.container}
+            gqlDocument={GQL.searchCollectionPostQuery}
+            dataOptionChain="searchPosts.data"
+            paginateOptionChain="searchPosts.paginatorInfo"
+            options={{
+                variables: {
+                    query: keyword,
+                    collection_id: collection_id,
+                },
+                fetchPolicy: 'network-only',
+            }}
+            numColumns={1}
+            renderItem={({ item, index }) => (
+                <SearchCollectionPostItem item={item} index={index} collection_id={collection_id} />
+            )}
+        />
+    ) : (
         <QueryList
             contentContainerStyle={styles.container}
             gqlDocument={GQL.searchPostQuery}

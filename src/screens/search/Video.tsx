@@ -14,6 +14,7 @@ const Search = () => {
     const route = useRoute();
     const tag_id = useMemo(() => route?.params?.tag_id, []);
     const user_id = useMemo(() => route?.params?.user_id, []);
+    const collection_id = useMemo(() => route?.params?.collection_id, []);
     // 区分个人合集和公共合集入口
     const selectable = useMemo(() => route?.params?.selectable || false, []);
     const uploadVideoResponse = useMemo(() => route?.params?.uploadVideoResponse, []);
@@ -98,7 +99,7 @@ const Search = () => {
                     <View style={styles.inputWrap}>
                         <HxfTextInput
                             value={textValue}
-                            placeholder={`搜索${tag_id ? '合集中' : '用户发布'}的内容`}
+                            placeholder={`搜索${tag_id || collection_id ? '合集中' : '用户发布'}的内容`}
                             onFocus={onFocus}
                             onSubmitEditing={onSubmitEditing}
                             onChangeText={onChangeText}
@@ -139,6 +140,7 @@ const Search = () => {
                         navigation={navigation}
                         tag_id={tag_id}
                         user_id={user_id}
+                        collection_id={collection_id}
                         selectable={selectable}
                         uploadVideoResponse={uploadVideoResponse}
                     />

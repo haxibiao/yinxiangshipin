@@ -1,13 +1,13 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
-import { SafeText, Iconfont } from '@src/components';
+import { SafeText, Iconfont, Row } from '@src/components';
 import { useNavigation } from '@react-navigation/native';
 
-export default function SearchCollectionPostItem({ item, index, uploadVideoResponse }) {
+export default function SearchCollectionPostItem({ item, index, collection_id, uploadVideoResponse }) {
     let { images, video, id, collections } = item;
     // const navigation = useNavigation();
     return (
-        !collections?.[0] && (
+        (collection_id || !collections?.[0]) && (
             <View style={styles.rowItem}>
                 <Image
                     source={{
@@ -15,22 +15,34 @@ export default function SearchCollectionPostItem({ item, index, uploadVideoRespo
                     }}
                     style={styles.postCover}
                 />
-                <View style={{ flex: 1, justifyContent: 'space-around' }}>
-                    <SafeText style={styles.bodyText} numberOfLines={1}>
-                        {item.content || item.description}
+                <View style={{ flex: 1, overflow: 'hidden', justifyContent: 'space-around' }}>
+                    <SafeText style={styles.contentText} numberOfLines={2}>
+                        {`第${index + 1}集￨${item?.content || item?.description}`}
                     </SafeText>
-                    <SafeText style={styles.collectionInfo} numberOfLines={1}>
-                        1.2w播放·更新至第n集
-                    </SafeText>
+                    <Row>
+                        <SafeText style={[styles.metaText, { marginRight: pixel(15) }]}>
+                            {Helper.moment(item?.video?.duration)}
+                        </SafeText>
+                        <Iconfont
+                            name={item.liked ? 'xihuanfill' : 'xihuan'}
+                            size={pixel(15)}
+                            color={item.liked ? Theme.primaryColor : '#fff'}
+                        />
+                        <Text style={[styles.metaText, { marginLeft: pixel(3) }]} numberOfLines={1}>
+                            {item.count_likes}
+                        </Text>
+                    </Row>
                 </View>
-                <TouchableOpacity
-                    style={{ padding: pixel(5), alignSelf: 'center' }}
-                    onPress={() => {
-                        uploadVideoResponse({ response: video, post_id: id });
-                        // navigation.goBack();
-                    }}>
-                    <Iconfont name="iconfontadd" size={pixel(18)} color="#fff" />
-                </TouchableOpacity>
+                {uploadVideoResponse && (
+                    <TouchableOpacity
+                        style={{ padding: pixel(5), alignSelf: 'center' }}
+                        onPress={() => {
+                            uploadVideoResponse({ response: video, post_id: id });
+                            // navigation.goBack();
+                        }}>
+                        <Iconfont name="iconfontadd" size={pixel(18)} color="#fff" />
+                    </TouchableOpacity>
+                )}
             </View>
         )
     );
@@ -58,5 +70,13 @@ const styles = StyleSheet.create({
         fontSize: font(11),
         marginTop: pixel(10),
         color: '#666',
+    },
+    contentText: {
+        fontSize: font(15),
+        color: '#fff',
+    },
+    metaText: {
+        fontSize: font(13),
+        color: '#fff',
     },
 });

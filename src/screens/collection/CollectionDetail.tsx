@@ -171,7 +171,7 @@ export default observer((props: any) => {
             <NavBarHeader
                 isTransparent
                 hasSearchButton={true}
-                onPressSearch={() => navigation.push('SearchVideo', { tag_id: collection.id })}
+                onPressSearch={() => navigation.push('SearchVideo', { collection_id: collection.id })}
                 centerStyle={{ opacity: titleOpacity }}
                 title={collection?.name}
             />
