@@ -1,10 +1,10 @@
 import React, { useRef, useEffect, useMemo, useCallback } from 'react';
-import { StyleSheet, View, Text, DeviceEventEmitter } from 'react-native';
+import { StyleSheet, View, Text, TouchableWithoutFeedback, DeviceEventEmitter } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { useApolloClient, ApolloProvider } from '@src/apollo';
 import { exceptionCapture } from '@src/common';
 import { FocusAwareStatusBar } from '@src/router';
-import { NavBarHeader } from '@src/components';
+import { NavBarHeader, SafeText, Iconfont } from '@src/components';
 import { GQL } from '@src/apollo';
 import { DrawVideoList, DrawVideoStore } from '@src/content';
 import { Overlay } from 'teaset';
@@ -14,18 +14,16 @@ export default () => {
     const route = useRoute();
     const client = useApolloClient();
     const navigation = useNavigation();
+    const post = useMemo(() => route?.params?.post, []);
     const collection = useMemo(() => route?.params?.collection, []);
-    const current_episode = useMemo(() => route?.params?.current_episode, []);
-    const initData = useMemo(() => route?.params?.initData, []);
-    const itemIndex = useMemo(() => route?.params?.itemIndex, []);
-    const nextPage = useRef(current_episode / 5 || 1);
-    const store = useMemo(() => new DrawVideoStore({ initData }), []);
+    const nextPage = useRef(0); // Math.ceil(post?.current_episode / 5)
+    const store = useMemo(() => new DrawVideoStore({ initData: [post] }), []);
 
     const getVisibleItem = useCallback((index) => {
         store.viewableItemIndex = index;
     }, []);
 
-    const fetchData = useCallback(async () => {
+    const fetchData = useCallback(async ({ initFetch }: { initFetch?: boolean }) => {
         async function postsQuery() {
             return client.query({
                 query: GQL.CollectionQuery,
@@ -47,7 +45,15 @@ export default () => {
             const hasMore = result?.data?.collection?.posts?.paginatorInfo?.hasMorePages;
             nextPage.current = result?.data?.collection?.posts?.paginatorInfo?.currentPage + 1;
             if (postsData?.length > 0) {
-                store.addSource(postsData);
+                if (initFetch) {
+                    const currentIndex = __.findIndex(postsData, function (item) {
+                        return item?.id === post?.id;
+                    });
+                    store.data = postsData;
+                    store.viewableItemIndex = currentIndex || 0;
+                } else {
+                    store.addSource(postsData);
+                }
             }
             if (error) {
                 store.status = 'error';
@@ -74,50 +80,68 @@ export default () => {
     }, []);
 
     // 显示合集列表
-    const showCollection = useCallback(() => {
+    const showCollection = useMemo(() => {
         let overlayKey;
+        let isShown;
         function onClose() {
+            isShown = false;
             Overlay.hide(overlayKey);
         }
-        const Operation = (
+        const Episodes = (
             <Overlay.PullView
                 style={{ flexDirection: 'column', justifyContent: 'flex-end' }}
                 containerStyle={{ backgroundColor: 'transparent' }}
+                onDisappearCompleted={() => (isShown = false)}
                 animated={true}>
                 <ApolloProvider client={client}>
                     <CollectionEpisodes
                         collection={collection}
-                        post={initData[itemIndex]}
+                        post={post}
                         onClose={onClose}
                         navigation={navigation}
+                        currentPage={1}
                     />
                 </ApolloProvider>
             </Overlay.PullView>
         );
-        overlayKey = Overlay.show(Operation);
-    }, []);
+        return () => {
+            if (!isShown) {
+                isShown = true;
+                overlayKey = Overlay.show(Episodes);
+            }
+        };
+    }, [collection, post]);
 
-    // 模态框事件处理
+    // 页面初始化
     useEffect(() => {
         showCollection();
-        DeviceEventEmitter.addListener('showCollectionModal', () => {
-            showCollection();
+        fetchData({ initFetch: true });
+        DeviceEventEmitter.addListener('JumpPlayCollectionVideo', ({ data, index, page }) => {
+            store.data = data;
+            store.viewableItemIndex = index;
+            nextPage.current = page;
         });
         return () => {
-            DeviceEventEmitter.removeListener('showCollectionModal');
+            DeviceEventEmitter.removeListener('JumpPlayCollectionVideo');
         };
     }, []);
 
     return (
         <View style={styles.container}>
             <FocusAwareStatusBar barStyle="light-content" />
-            <DrawVideoList
-                store={store}
-                initialIndex={itemIndex}
-                getVisibleItem={getVisibleItem}
-                fetchData={fetchData}
-                showBottomInput={true}
-            />
+            <DrawVideoList store={store} initialIndex={0} getVisibleItem={getVisibleItem} fetchData={fetchData} />
+            <TouchableWithoutFeedback onPress={showCollection}>
+                <View style={styles.collectionItem}>
+                    <View style={styles.collectionInfo}>
+                        <Iconfont name="wenji" color="#fff" size={pixel(15)} />
+                        <SafeText
+                            style={
+                                styles.collectionName
+                            }>{`${collection?.name} · 更新至第${collection?.updated_to_episode}集`}</SafeText>
+                    </View>
+                    <Iconfont name="xiangshang2" color="#b2b2b2" size={pixel(17)} />
+                </View>
+            </TouchableWithoutFeedback>
             <NavBarHeader navBarStyle={styles.navBarStyle} isTransparent={true} />
         </View>
     );
@@ -126,10 +150,34 @@ export default () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: '#000',
     },
     navBarStyle: {
         position: 'absolute',
         top: 0,
         width: '100%',
+    },
+    collectionItem: {
+        position: 'absolute',
+        left: pixel(12),
+        right: pixel(12),
+        bottom: Theme.HOME_INDICATOR_HEIGHT + 5,
+        zIndex: 1,
+        height: 40,
+        borderRadius: 20,
+        paddingHorizontal: pixel(15),
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        backgroundColor: '#333333',
+    },
+    collectionInfo: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    collectionName: {
+        marginLeft: pixel(6),
+        fontSize: font(14),
+        color: '#ffffff',
     },
 });

@@ -102,7 +102,7 @@ export default observer(({}) => {
     }, []);
 
     return (
-        <View style={{ flex: 1, backgroundColor: '#111722' }} onLayout={onLayout}>
+        <View style={styles.container} onLayout={onLayout}>
             <ScrollableTabView
                 contentProps={{ keyboardShouldPersistTaps: 'always' }}
                 tabBarPosition="overlayTop"
@@ -134,6 +134,10 @@ export default observer(({}) => {
 });
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#000',
+    },
     overlay: {
         alignItems: 'center',
         justifyContent: 'center',

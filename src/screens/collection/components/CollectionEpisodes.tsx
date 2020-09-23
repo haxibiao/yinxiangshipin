@@ -1,23 +1,31 @@
 import React, { useCallback } from 'react';
-import { StyleSheet, View, Text, Image, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
+import {
+    StyleSheet,
+    View,
+    Text,
+    Image,
+    TouchableOpacity,
+    TouchableWithoutFeedback,
+    DeviceEventEmitter,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { QueryList, ContentStatus } from '@src/content';
 import { Iconfont, SafeText } from '@src/components';
 import { GQL } from '@src/apollo';
 
-export default ({ collection, post, onClose, navigation }) => {
+export default ({ collection, post, onClose, navigation, currentPage = 1 }) => {
     const renderItem = useCallback(({ item, index, data, page }) => {
-        const postByCollectionId = post?.collections?.[0]?.id || -1;
         return (
             <TouchableWithoutFeedback
-                onPress={() =>
-                    navigation.push('CollectionVideoList', { collection, initData: data, itemIndex: index, page })
-                }>
-                <View
-                    style={[
-                        styles.postItem,
-                        postByCollectionId === collection?.id && { backgroundColor: 'rgba(222,222,222,0.6)' },
-                    ]}>
+                onPress={() => {
+                    onClose();
+                    DeviceEventEmitter.emit('JumpPlayCollectionVideo', {
+                        data,
+                        index,
+                        page,
+                    });
+                }}>
+                <View style={[styles.postItem, post?.id === item?.id && { backgroundColor: 'rgba(222,222,222,0.3)' }]}>
                     <Image style={styles.postCover} source={{ uri: item?.video?.cover }} />
                     <View style={styles.postInfo}>
                         <View style={styles.introduction}>
@@ -48,7 +56,7 @@ export default ({ collection, post, onClose, navigation }) => {
             <View style={styles.windowHeader}>
                 <Text style={styles.headerText}>
                     {collection?.name}
-                    {collection?.count_articles && ' · 更新至第' + collection?.count_articles + '集'}
+                    {collection?.updated_to_episode > 0 && ' · 更新至第' + collection?.updated_to_episode + '集'}
                 </Text>
                 <TouchableOpacity style={styles.closeWindow} onPress={onClose}>
                     <Iconfont name="guanbi1" size={pixel(16)} color="#fff" />
@@ -61,9 +69,10 @@ export default ({ collection, post, onClose, navigation }) => {
                 options={{
                     variables: {
                         collection_id: collection?.id,
-                        count: 5,
+                        count: 10,
+                        page: currentPage,
                     },
-                    fetchPolicy: 'network-only',
+                    // fetchPolicy: 'network-only',
                 }}
                 renderItem={renderItem}
                 contentContainerStyle={styles.content}
@@ -81,14 +90,14 @@ export default ({ collection, post, onClose, navigation }) => {
 const styles = StyleSheet.create({
     container: {
         height: (Device.HEIGHT * 2) / 3,
+        paddingBottom: pixel(Theme.HOME_INDICATOR_HEIGHT),
         borderTopLeftRadius: pixel(12),
         borderTopRightRadius: pixel(12),
-        backgroundColor: 'rgba(0,0,0,0.5)',
+        backgroundColor: 'rgba(0,0,0,0.6)',
         overflow: 'hidden',
     },
     content: {
         flexGrow: 1,
-        paddingBottom: pixel(Theme.HOME_INDICATOR_HEIGHT),
     },
     windowHeader: {
         alignItems: 'center',
@@ -111,8 +120,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     listFooter: {
-        padding: pixel(12),
-        backgroundColor: 'rgba(0,0,0,0.5)',
+        paddingHorizontal: pixel(12),
+        paddingVertical: pixel(15),
+        backgroundColor: 'rgba(0,0,0,0.6)',
     },
     footerBtn: {
         flexDirection: 'row',
@@ -120,7 +130,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         height: pixel(42),
         borderRadius: pixel(4),
-        backgroundColor: '#151515',
+        backgroundColor: '#333333',
     },
     btnText: {
         fontSize: font(15),

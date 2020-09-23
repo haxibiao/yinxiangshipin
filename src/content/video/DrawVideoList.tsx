@@ -208,7 +208,7 @@ export default observer(
                         removeClippedSubviews={true}
                         showsVerticalScrollIndicator={false}
                         keyboardShouldPersistTaps="always"
-                        keyExtractor={(item, index) => String(item.id || index)}
+                        keyExtractor={(item, index) => String(item?.id || index)}
                         renderItem={renderVideoItem}
                         getItemLayout={(data, index) => ({
                             length: store.fullVideoHeight,
@@ -249,8 +249,8 @@ export default observer(
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingBottom: Device.isFullScreenDevice ? Theme.BOTTOM_HEIGHT : 0,
         backgroundColor: '#000',
+        paddingBottom: Device.isFullScreenDevice ? Theme.BOTTOM_HEIGHT : 0,
     },
     listContainer: {
         flex: 1,

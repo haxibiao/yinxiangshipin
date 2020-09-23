@@ -4,7 +4,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { useApolloClient, ApolloProvider } from '@src/apollo';
 import LinearGradient from 'react-native-linear-gradient';
 import { SafeText, Iconfont } from '@src/components';
-import { observer, userStore } from '@src/store';
+import { observer, userStore, appStore } from '@src/store';
 import { Overlay } from 'teaset';
 import { Commodity } from '../../widget';
 import Player from './Player';
@@ -119,15 +119,13 @@ export default observer((props: Props) => {
 
     const Collection = useMemo(() => {
         const collection = media?.collections?.[0];
-        if (collection) {
+        if (collection && appStore.currentRouteName !== 'CollectionVideoList') {
             return (
                 <Pressable
                     onPress={() => {
-                        DeviceEventEmitter.emit('showCollectionModal');
-                        navigation.push('CollectionVideoList', {
+                        navigation.navigate('CollectionVideoList', {
                             collection,
-                            current_episode: 1,
-                            initData: [media],
+                            post: media,
                         });
                     }}>
                     <View style={styles.collectionItem}>
@@ -141,7 +139,7 @@ export default observer((props: Props) => {
             );
         }
         return null;
-    }, [media]);
+    }, [media, appStore.currentRouteName]);
 
     return (
         <View
