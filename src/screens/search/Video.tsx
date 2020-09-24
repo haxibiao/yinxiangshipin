@@ -116,7 +116,7 @@ const Search = () => {
                         </View>
                     </TouchableOpacity>
                 </View>
-                {selectable && !trimmedValue.length > 0 ? (
+                {uploadVideoResponse && !trimmedValue.length > 0 ? (
                     <TouchableOpacity onPress={() => navigation.goBack()} style={styles.searchButton}>
                         <Text style={styles.searchButtonText}>完成</Text>
                     </TouchableOpacity>

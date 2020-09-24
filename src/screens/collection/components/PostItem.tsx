@@ -1,10 +1,12 @@
-import React, { useCallback } from 'react';
-import { StyleSheet, Text, View, TouchableWithoutFeedback, Image } from 'react-native';
+import React, { useCallback, useMemo, useState } from 'react';
+import { StyleSheet, Text, View, TouchableWithoutFeedback, Image, TouchableOpacity } from 'react-native';
 import { SafeText, Iconfont, Row } from '@src/components';
 import { useNavigation } from '@react-navigation/native';
+import { observer } from 'mobx-react';
 
-export default function PostItem({ item, index, collection, listData, nextPage }) {
+export default function PostItem({ item, index, collection, listData, nextPage, uploadVideoResponse }) {
     const navigation = useNavigation();
+    const isAddCollection = item?.collections?.[0];
     let cover;
     if (item?.video?.id) {
         cover = item?.video?.cover;
@@ -30,7 +32,8 @@ export default function PostItem({ item, index, collection, listData, nextPage }
                     itemIndex: index,
                     page: nextPage,
                 })
-            }>
+            }
+            disabled={!collection}>
             <View style={styles.itemWrap}>
                 <Image style={styles.videoCover} source={{ uri: cover }} />
                 <View style={{ flex: 1, overflow: 'hidden', justifyContent: 'space-around' }}>
@@ -51,6 +54,17 @@ export default function PostItem({ item, index, collection, listData, nextPage }
                         </Text>
                     </Row>
                 </View>
+                {uploadVideoResponse && (
+                    <TouchableOpacity
+                        style={[styles.selectedBox, isAddCollection && { borderColor: '#666' }]}
+                        onPress={() => {
+                            // item.collections.push('0');
+                            uploadVideoResponse({ response: item?.video, post_id: item?.id });
+                        }}
+                        disabled={isAddCollection}>
+                        <Iconfont name="iconfontadd" size={pixel(18)} color={isAddCollection ? '#666' : '#fff'} />
+                    </TouchableOpacity>
+                )}
             </View>
         </TouchableWithoutFeedback>
     );
@@ -76,5 +90,13 @@ const styles = StyleSheet.create({
     metaText: {
         fontSize: font(13),
         color: '#fff',
+    },
+    selectedBox: {
+        padding: pixel(2),
+        alignSelf: 'center',
+        borderRadius: percent(50),
+        borderColor: '#fff',
+        borderWidth: pixel(1),
+        marginLeft: pixel(10),
     },
 });

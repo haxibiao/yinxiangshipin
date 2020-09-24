@@ -14,6 +14,7 @@ query CollectionsQuery($user_id: Int!, $count: Int, $page: Int) {
             description
             count_articles
             count_follows
+            count_posts
             updated_to_episode
             followed
             type
@@ -43,6 +44,8 @@ query CollectionQuery($collection_id: Int!, $page: Int, $count: Int) {
         description
         count_articles
         count_follows
+        count_posts
+        updated_to_episode
         followed
         type
         status

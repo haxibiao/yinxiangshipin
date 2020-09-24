@@ -168,6 +168,7 @@ query searchCollectionsQuery($query: String!, $page: Int, $count: Int) {
             description
             count_articles
             count_follows
+            count_posts
             updated_to_episode
             followed
             type

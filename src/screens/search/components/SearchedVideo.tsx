@@ -5,7 +5,7 @@ import { observer } from '@src/store';
 import { GQL } from '@src/apollo';
 import { QueryList } from '@src/content';
 import SearchVideoItem from './SearchVideoItem';
-import SearchCollectionPostItem from './SearchCollectionPostItem';
+import PostItem from '@src/screens/collection/components/PostItem';
 
 // selectable:区分个人合集和公共合集入口
 const index = observer(({ navigation, keyword, tag_id, user_id, collection_id, selectable, uploadVideoResponse }) => {
@@ -14,7 +14,15 @@ const index = observer(({ navigation, keyword, tag_id, user_id, collection_id, s
     const renderItem = useCallback(
         ({ item, index, data, page }) => {
             if (selectable && uploadVideoResponse) {
-                return <SearchCollectionPostItem item={item} index={index} uploadVideoResponse={uploadVideoResponse} />;
+                return (
+                    <PostItem
+                        item={item}
+                        index={index}
+                        listData={data}
+                        nextPage={page}
+                        uploadVideoResponse={uploadVideoResponse}
+                    />
+                );
             } else {
                 return (
                     <TouchableWithoutFeedback
@@ -71,8 +79,8 @@ const index = observer(({ navigation, keyword, tag_id, user_id, collection_id, s
                 fetchPolicy: 'network-only',
             }}
             numColumns={1}
-            renderItem={({ item, index }) => (
-                <SearchCollectionPostItem item={item} index={index} collection_id={collection_id} />
+            renderItem={({ item, index, data, page }) => (
+                <PostItem item={item} index={index} listData={data} nextPage={page} />
             )}
         />
     ) : (

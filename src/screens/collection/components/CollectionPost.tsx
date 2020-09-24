@@ -6,7 +6,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { GQL } from '@src/apollo';
 import { userStore } from '@src/store';
 import { QueryList } from '@src/content';
-import SearchCollectionPostItem from '@src/screens/search/components/SearchCollectionPostItem';
+import PostItem from '@src/screens/collection/components/PostItem';
 
 export default function CollectionPost({ user_id, uploadVideoResponse }) {
     const navigation = useNavigation();
@@ -26,8 +26,14 @@ export default function CollectionPost({ user_id, uploadVideoResponse }) {
                     },
                     fetchPolicy: 'network-only',
                 }}
-                renderItem={({ item, index }) => (
-                    <SearchCollectionPostItem item={item} index={index} uploadVideoResponse={uploadVideoResponse} />
+                renderItem={({ item, index, data, page }) => (
+                    <PostItem
+                        item={item}
+                        index={index}
+                        listData={data}
+                        nextPage={page}
+                        uploadVideoResponse={uploadVideoResponse}
+                    />
                 )}
             />
         </View>

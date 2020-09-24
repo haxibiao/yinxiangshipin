@@ -1,17 +1,12 @@
-mutation CreateCollectionMutation(
-    $name: String!
-    $logo: String
-    $description: String
-    $post_ids: [Int!]
-    $type: CollectType
-) {
-    createCollection(name: $name, logo: $logo, description: $description, post_ids: $post_ids, type: $type) {
+mutation CreateCollectionMutation($name: String!, $logo: String, $description: String, $collectable_ids: [Int!]) {
+    createCollection(name: $name, logo: $logo, description: $description, collectable_ids: $collectable_ids) {
         id
         logo
         name
         description
         count_articles
         count_follows
+        count_posts
         updated_to_episode
         followed
         type
@@ -46,14 +41,19 @@ mutation editCollectionMutation($collection_id: Int!, $name: String!, $logo: Str
     }
 }
 
-# 将视频从合集中移除
-mutation moveOutCollectionsMutation($collection_ids: [Int!]!, $post_ids: [Int!]!) {
-    moveOutCollections(collection_ids: $collection_ids, post_ids: $post_ids)
-}
-
 # 删除合集
 mutation deleteCollectionMutation($id: Int!) {
     deleteCollection(id: $id) {
         id
     }
+}
+
+# 添加动态至个人合集
+mutation moveInCollectionsMutation($collection_id: Int!, $collectable_ids: [Int!]) {
+    moveInCollections(collection_id: $collection_id, collectable_ids: $collectable_ids)
+}
+
+# 将动态从个人合集中移除
+mutation moveOutCollectionsMutation($collection_id: Int!, $collectable_ids: [Int!]!) {
+    moveOutCollections(collection_id: $collection_id, collectable_ids: $collectable_ids)
 }

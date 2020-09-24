@@ -62,6 +62,7 @@ export default function CreateCollectionScreen(props) {
             Toast.show({
                 content: errorMessage(error) || '创建失败',
             });
+            console.log('创建合集error', error);
         } else if (res) {
             Toast.show({
                 content: '创建成功',
@@ -76,7 +77,7 @@ export default function CreateCollectionScreen(props) {
                     name: formData.title,
                     logo: formData.cover,
                     description: formData.description,
-                    post_ids: videoData.map((v) => v.post_id),
+                    collectable_ids: videoData.map((v) => v.post_id),
                 },
                 refetchQueries: () => [
                     {
@@ -179,7 +180,7 @@ export default function CreateCollectionScreen(props) {
                 <View style={styles.bodyView}>
                     {topComponent()}
                     <View style={{ marginTop: pixel(30) }}>
-                        <Text style={{ fontSize: font(12), color: '#666', marginBottom: pixel(10) }}>合集内作品0</Text>
+                        <Text style={styles.uploadCount}>合集内作品{videoData.length}</Text>
                         <View style={styles.albumContainer}>
                             {Album}
                             <TouchableOpacity
@@ -198,15 +199,7 @@ export default function CreateCollectionScreen(props) {
 
                         <Row style={{ marginTop: pixel(20) }}>
                             <TouchableOpacity
-                                style={[
-                                    styles.btnStyle,
-                                    styles.leftBtn,
-                                    disabledBtn && {
-                                        backgroundColor: '#fff',
-                                        borderColor: '#9996',
-                                        borderWidth: pixel(1),
-                                    },
-                                ]}
+                                style={[styles.btnStyle, styles.leftBtn, disabledBtn && styles.disabledBtn]}
                                 onPress={createCollection}
                                 disabled={disabledBtn}>
                                 <SafeText style={[styles.btnTextStyle, disabledBtn && { color: 'red' }]}>创建</SafeText>
@@ -271,6 +264,11 @@ const styles = StyleSheet.create({
         backgroundColor: 'red',
         marginRight: pixel(Theme.itemSpace),
     },
+    disabledBtn: {
+        backgroundColor: '#fff',
+        borderColor: '#9996',
+        borderWidth: pixel(1),
+    },
     btnTextStyle: {
         fontSize: font(11),
         color: '#fff',
@@ -312,6 +310,11 @@ const styles = StyleSheet.create({
         right: pixel(3),
         top: pixel(3),
         width: pixel(18),
+    },
+    uploadCount: {
+        fontSize: font(12),
+        color: '#666',
+        marginBottom: pixel(10),
     },
     albumContainer: {
         flexDirection: 'row',
