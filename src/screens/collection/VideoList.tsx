@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useMemo, useCallback } from 'react';
 import { StyleSheet, View, Text, TouchableWithoutFeedback, DeviceEventEmitter } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { useApolloClient, ApolloProvider } from '@src/apollo';
+import { observer } from '@src/store';
 import { exceptionCapture } from '@src/common';
 import { FocusAwareStatusBar } from '@src/router';
 import { NavBarHeader, SafeText, Iconfont } from '@src/components';
@@ -10,7 +11,7 @@ import { DrawVideoList, DrawVideoStore } from '@src/content';
 import { Overlay } from 'teaset';
 import CollectionEpisodes from './components/CollectionEpisodes';
 
-export default () => {
+export default observer(() => {
     const listRef = useRef();
     const route = useRoute();
     const client = useApolloClient();
@@ -21,49 +22,58 @@ export default () => {
     const store = useMemo(() => new DrawVideoStore({ initData: [post] }), []);
 
     const getVisibleItem = useCallback((index) => {
-        store.viewableItemIndex = index;
-        const current_episode = store.data[index]?.current_episode;
-        if (index === 0 && current_episode !== 1) {
-            fetchPrevPage(current_episode / 5 - 1);
+        if (!store.JumpPlayCollectionVideo) {
+            store.viewableItemIndex = index;
         }
     }, []);
 
-    const fetchPrevPage = useCallback((page) => {
-        fetchData({ page, prevPage: true });
-    }, []);
+    const fetchData = useCallback(async (initFetch) => {
+        let prevPage;
+        const current_episode = store.data[store.viewableItemIndex]?.current_episode;
+        if (!initFetch && store.viewableItemIndex === 0 && current_episode !== 1) {
+            prevPage = Math.ceil(current_episode / 5) - 1;
+        }
 
-    const fetchData = useCallback(async (params) => {
         async function postsQuery() {
             return client.query({
                 query: GQL.CollectionQuery,
                 variables: {
                     collection_id: collection?.id,
-                    page: params?.page || nextPage.current,
+                    page: prevPage || nextPage.current,
                     count: 5,
                 },
             });
         }
 
-        if (
-            (store.status !== 'loading' || store.status !== 'loadAll') &&
-            store.data.length - store.viewableItemIndex <= 3
-        ) {
+        const opened = (() => {
+            if (store.status == 'loading' || store.status == 'loadAll') {
+                return false;
+            } else if (prevPage || initFetch) {
+                return true;
+            } else {
+                return store.data.length - store.viewableItemIndex <= 3;
+            }
+        })();
+        if (opened) {
             store.status = 'loading';
             const [error, result] = await exceptionCapture(postsQuery);
             const postsData = result?.data?.collection?.posts?.data;
             const hasMore = result?.data?.collection?.posts?.paginatorInfo?.hasMorePages;
-            nextPage.current = result?.data?.collection?.posts?.paginatorInfo?.currentPage + 1;
+            if (!prevPage) {
+                nextPage.current = result?.data?.collection?.posts?.paginatorInfo?.currentPage + 1;
+            }
             if (postsData?.length > 0) {
-                if (params?.initFetch) {
+                if (initFetch) {
                     const currentIndex = __.findIndex(postsData, function (item) {
                         return item?.id === post?.id;
                     });
                     store.data = postsData;
                     store.viewableItemIndex = currentIndex > 0 ? currentIndex : 0;
                     store.JumpPlayCollectionVideo = true;
-                } else if (params?.prevPage) {
+                } else if (prevPage) {
                     store.prependSource(postsData);
                     store.viewableItemIndex = postsData.length;
+                    store.JumpPlayCollectionVideo = true;
                 } else {
                     store.addSource(postsData);
                 }
@@ -109,10 +119,10 @@ export default () => {
                 <ApolloProvider client={client}>
                     <CollectionEpisodes
                         collection={collection}
-                        post={post}
+                        post={store.data[store.viewableItemIndex]}
                         onClose={onClose}
                         navigation={navigation}
-                        currentPage={1}
+                        currentPage={nextPage.current}
                     />
                 </ApolloProvider>
             </Overlay.PullView>
@@ -123,7 +133,7 @@ export default () => {
                 overlayKey = Overlay.show(Episodes);
             }
         };
-    }, [collection, post]);
+    }, [collection]);
 
     const onContentSizeChange = useCallback((contentWidth, contentHeight) => {
         if (store.JumpPlayCollectionVideo) {
@@ -138,7 +148,7 @@ export default () => {
     // 页面初始化
     useEffect(() => {
         showCollection();
-        fetchData({ initFetch: true });
+        fetchData(true);
         DeviceEventEmitter.addListener('JumpPlayCollectionVideo', ({ data, index, page }) => {
             store.data = data;
             store.viewableItemIndex = index;
@@ -176,7 +186,7 @@ export default () => {
             <NavBarHeader navBarStyle={styles.navBarStyle} isTransparent={true} />
         </View>
     );
-};
+});
 
 const styles = StyleSheet.create({
     container: {

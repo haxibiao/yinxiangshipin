@@ -11,9 +11,28 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { QueryList, ContentStatus } from '@src/content';
 import { Iconfont, SafeText } from '@src/components';
-import { GQL } from '@src/apollo';
+import { GQL, useFollowMutation } from '@src/apollo';
+import { userStore } from '@src/store';
 
 export default ({ collection, post, onClose, navigation, currentPage = 1 }) => {
+    const toggleFollow = useFollowMutation({
+        variables: {
+            followed_id: collection.id,
+            followed_type: 'collections',
+        },
+        refetchQueries: () => [
+            {
+                query: GQL.followedCollectionsQuery,
+                variables: { user_id: userStore.me?.id, followed_type: 'collections' },
+            },
+        ],
+    });
+
+    const toggleFollowOnPress = useCallback(() => {
+        collection.followed = collection.followed === 1 ? 0 : 1;
+        toggleFollow();
+    }, [collection]);
+
     const renderItem = useCallback(({ item, index, data, page }) => {
         return (
             <TouchableWithoutFeedback
@@ -30,7 +49,7 @@ export default ({ collection, post, onClose, navigation, currentPage = 1 }) => {
                     <View style={styles.postInfo}>
                         <View style={styles.introduction}>
                             <Text style={styles.postName} numberOfLines={2}>
-                                {`第${index + 1}集￨${item?.description}`}
+                                {`第${item?.current_episode || index}集￨${item?.description}`}
                             </Text>
                         </View>
                         <View style={styles.postMeta}>
@@ -69,18 +88,19 @@ export default ({ collection, post, onClose, navigation, currentPage = 1 }) => {
                 options={{
                     variables: {
                         collection_id: collection?.id,
-                        count: 10,
+                        count: 5,
                         page: currentPage,
                     },
                     // fetchPolicy: 'network-only',
                 }}
                 renderItem={renderItem}
+                // initialScrollIndex
                 contentContainerStyle={styles.content}
             />
             <View style={styles.listFooter}>
-                <TouchableOpacity style={styles.footerBtn} onPress={() => null}>
+                <TouchableOpacity style={styles.footerBtn} onPress={toggleFollowOnPress}>
                     <Iconfont name="biaoxingfill" size={pixel(16)} color={collection?.followed ? '#FE2C54' : '#fff'} />
-                    <Text style={styles.btnText}>{collection?.followed ? '取消收藏' : '收藏合集'}</Text>
+                    <Text style={styles.btnText}>{collection?.followed ? '已收藏' : '收藏合集'}</Text>
                 </TouchableOpacity>
             </View>
         </View>
