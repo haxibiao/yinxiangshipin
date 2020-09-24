@@ -59,22 +59,34 @@ const CommentItem = observer((props: Props) => {
         DeviceEventEmitter.emit('replyComment', comment);
     }, []);
 
-    const likeHandler = useLikeMutation({
+    const changeLiked = useCallback(() => {
+        if (comment) {
+            comment.liked ? comment.likes-- : comment.likes++;
+            comment.liked = !comment.liked;
+        }
+    }, [comment]);
+
+    const toggleLikeFailed = useCallback((err) => {
+        changeLiked();
+        Toast.show({ content: err || '点赞失败' });
+    }, []);
+
+    const [toggleLikeMutation] = useLikeMutation({
         variables: {
-            id: Helper.syncGetter('id', comment),
+            id: comment?.id,
             type: 'COMMENT',
         },
+        failure: toggleLikeFailed,
     });
 
     const toggleLike = useCallback(() => {
         if (TOKEN) {
-            comment.liked ? comment.likes-- : comment.likes++;
-            comment.liked = !comment.liked;
-            likeHandler();
+            changeLiked();
+            toggleLikeMutation();
         } else {
             navigation.navigate('Login');
         }
-    }, [comment, likeHandler]);
+    }, [changeLiked, toggleLikeMutation]);
 
     const [deleteCommentMutation] = useMutation(GQL.deleteCommentMutation, {
         variables: {

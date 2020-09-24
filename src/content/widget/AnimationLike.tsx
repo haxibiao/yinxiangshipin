@@ -3,7 +3,7 @@ import { View, Text, ViewStyle, Animated, TouchableOpacity } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import { observer } from 'mobx-react';
 import { ContentData } from '@src/common';
-import { useLikeMutation } from '../service';
+import { useLikeMutation } from '@src/apollo';
 
 interface Props {
     content: ContentData;
@@ -25,8 +25,10 @@ export default observer(({ content, style, children }: Props) => {
     }, []);
 
     const [toggleLike, { startAnimation, animateValue }] = useLikeMutation({
-        id: content.id,
-        type: 'POST',
+        variables: {
+            id: content.id,
+            type: 'POST',
+        },
         failure,
     });
 

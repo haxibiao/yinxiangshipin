@@ -17,7 +17,7 @@ import { userStore } from '@src/store';
 import { observer } from 'mobx-react';
 
 const NavBar = observer(({ lightModal, media, navigation }) => {
-    const initValue = useRef(media.user.id === userStore.me.id ? 0 : media.user.followed_status ? 0 : 1);
+    const initValue = useRef(media?.user?.id === userStore.me.id ? 0 : media?.user?.followed_status ? 0 : 1);
     const [fadeOut, fadeOutAnimation] = useLinearAnimation({ initValue: initValue.current, duration: 400 });
 
     const images = useMemo(() => {
@@ -44,49 +44,64 @@ const NavBar = observer(({ lightModal, media, navigation }) => {
         };
     }, [lightModal]);
 
-    const likeHandler = useLikeMutation({
+    const changeLiked = useCallback(() => {
+        if (media) {
+            media.liked ? media.count_likes-- : media.count_likes++;
+            media.liked = !media?.liked;
+        }
+    }, [media]);
+
+    const toggleLikeFailed = useCallback((err) => {
+        changeLiked();
+        Toast.show({ content: err || '点赞失败' });
+    }, []);
+
+    const [toggleLikeMutation] = useLikeMutation({
         variables: {
-            id: Helper.syncGetter('id', media),
+            id: media?.id,
             type: 'VIDEO',
         },
+        failure: toggleLikeFailed,
     });
 
-    const followHandler = useFollowMutation({
+    const toggleLikeFn = useCallback(() => {
+        if (TOKEN) {
+            console.log('toggleLikeMutation', toggleLikeMutation());
+            toggleLikeMutation();
+            changeLiked();
+        } else {
+            navigation.navigate('Login');
+        }
+    }, [changeLiked, toggleLikeMutation]);
+
+    const followMutation = useFollowMutation({
         variables: {
-            followed_id: Helper.syncGetter('user.id', media),
+            followed_id: media?.user?.id,
             followed_type: 'users',
         },
     });
 
-    const toggleLike = useCallback(() => {
-        if (TOKEN) {
-            media.liked ? media.count_likes-- : media.count_likes++;
-            media.liked = !media.liked;
-            likeHandler();
-        } else {
-            navigation.navigate('Login');
-        }
-    }, [media, likeHandler]);
-
     const followUser = useCallback(() => {
         if (TOKEN) {
-            media.user.followed_status = 1;
+            if (media?.user) {
+                media.user.followed_status = 1;
+            }
             fadeOutAnimation(1, 0);
-            followHandler();
+            followMutation();
         } else {
             navigation.navigate('Login');
         }
-    }, [media, followHandler]);
+    }, [media, followMutation]);
 
     const forwardPost = useCallback(() => {
         DeviceEventEmitter.emit('forwardPost');
     }, []);
 
     useEffect(() => {
-        if (media.user.followed_status && initValue.current) {
+        if (media?.user?.followed_status && initValue.current) {
             fadeOutAnimation(1, 0);
         }
-    }, [media.user.followed_status]);
+    }, [media?.user?.followed_status]);
 
     return (
         <View
@@ -102,8 +117,8 @@ const NavBar = observer(({ lightModal, media, navigation }) => {
                 <TouchableOpacity style={styles.operateButton} onPress={() => navigation.goBack()}>
                     <Image source={images.back} style={styles.icon} />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.operateButton} onPress={toggleLike}>
-                    <Image source={media.liked ? images.liked : images.like} style={styles.icon} />
+                <TouchableOpacity style={styles.operateButton} onPress={toggleLikeFn}>
+                    <Image source={media?.liked ? images.liked : images.like} style={styles.icon} />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.operateButton} onPress={forwardPost}>
                     <Image source={images.forward} style={styles.icon} />
@@ -123,8 +138,8 @@ const NavBar = observer(({ lightModal, media, navigation }) => {
                         <SafeText style={[styles.buttonText, { color: colors.textColor }]}>关 注</SafeText>
                     </TouchableOpacity>
                 </Animated.View>
-                <TouchableWithoutFeedback onPress={() => navigation.navigate('User', { user: media.user })}>
-                    <Image style={styles.avatar} source={{ uri: media.user.avatar }} />
+                <TouchableWithoutFeedback onPress={() => navigation.navigate('User', { user: media?.user })}>
+                    <Image style={styles.avatar} source={{ uri: media?.user?.avatar }} />
                 </TouchableWithoutFeedback>
             </View>
         </View>
