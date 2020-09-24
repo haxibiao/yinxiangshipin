@@ -1,8 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { StyleSheet, ScrollView, View, Text, TouchableOpacity, TextInput } from 'react-native';
+import { GQL, useBetterMutation } from '@src/apollo';
 import { Iconfont, SafeText } from '@src/components';
-import { GQL } from '@src/apollo';
-import { useBetterMutation } from '../../service';
 
 const reportReasons = ['低俗色情', '侮辱谩骂', '垃圾广告', '违法侵权', '感官不适', '政治敏感', '其他原因'] as const;
 

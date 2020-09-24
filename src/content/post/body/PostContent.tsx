@@ -4,7 +4,6 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { Avatar, Iconfont, SafeText, PlaceholderImage, GridImage } from '@src/components';
 import { observer, userStore } from '@src/store';
 import { GQL, useApolloClient, ApolloProvider } from '@src/apollo';
-import { useLikeMutation } from '../../service';
 import { AnimationLike, Commodity, MoreOperation } from '../../widget';
 import { Overlay } from 'teaset';
 

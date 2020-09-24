@@ -25,7 +25,7 @@ export const useBetterMutation = (gqlNode: DocumentNode, { options, successful, 
                     failure(err?.message);
                 }
             }
-        }, 250),
+        }, 100),
         [mutate],
     );
 

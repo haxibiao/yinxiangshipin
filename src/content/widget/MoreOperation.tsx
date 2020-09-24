@@ -8,8 +8,7 @@ import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import { userStore } from '@src/store';
 import { download, syncGetter, exceptionCapture } from '@src/common';
 import { Share } from '@src/native';
-import { GQL, useMutation, errorMessage } from '@src/apollo';
-import { useReport } from '../service';
+import { GQL, useMutation, errorMessage, useReport } from '@src/apollo';
 import QuestionShareCard from '@src/screens/share/QuestionShareCard';
 import QuestionShareCardOverlay from '@src/screens/share/QuestionShareCardOverlay';
 

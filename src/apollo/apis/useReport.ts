@@ -1,6 +1,7 @@
 import React, { useCallback, useRef } from 'react';
 import { PullChooser } from '@src/components';
-import { useMutation, GQL } from '@src/apollo';
+import { useMutation } from '@apollo/react-hooks';
+import { GQL } from '../gqls';
 
 export const useReport = (props) => {
     const reason = useRef();

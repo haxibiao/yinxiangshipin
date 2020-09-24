@@ -1,23 +1,19 @@
 import { useCallback, useRef } from 'react';
 import { Animated } from 'react-native';
-import { GQL } from '@src/apollo';
+import { GQL } from '../gqls';
 import { useBetterMutation, MutationProps } from './useBetterMutation';
 
 interface Props extends MutationProps {
-    id: number;
-    type: 'VIDEO' | 'ARTICLE' | 'COMMENT' | 'POST';
+    variables: {
+        id: number;
+        type: 'VIDEO' | 'ARTICLE' | 'COMMENT' | 'POST';
+    };
 }
 
 export const useLikeMutation = (props: Props) => {
-    const { id, type, options, successful, failure } = props;
+    const { variables, options, successful, failure } = props;
     const [toggleLike, result] = useBetterMutation(GQL.toggleLikeMutation, {
-        options: Object.assign({
-            variables: {
-                id,
-                type,
-            },
-            options,
-        }),
+        options: Object.assign({ variables }, options),
         successful,
         failure,
     });
