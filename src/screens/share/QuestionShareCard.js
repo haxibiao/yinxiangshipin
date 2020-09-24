@@ -1,6 +1,6 @@
 import React, { Component, useMemo } from 'react';
 import { StyleSheet, View, Text, Image, ScrollView } from 'react-native';
-import { Avatar } from '@src/components';
+import { Avatar, SafeText } from '@src/components';
 import { BoxShadow } from 'react-native-shadow';
 import QRCode from 'react-native-qrcode-svg';
 import { userStore } from '@src/store';
@@ -59,14 +59,14 @@ class QuestionShareCard extends Component {
                                     style={{ backgroundColor: '#b2b2b2' }}
                                 />
                                 <View style={{ marginLeft: pixel(15) }}>
-                                    <Text
+                                    <SafeText
                                         style={{
                                             color: '#363636',
                                             fontSize: pixel(18),
                                             fontWeight: 'bold',
                                         }}>
                                         @{post?.user?.name}
-                                    </Text>
+                                    </SafeText>
                                 </View>
                             </View>
                             <Text

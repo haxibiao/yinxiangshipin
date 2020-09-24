@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useCallback } from 'react';
 import { StyleSheet, View, Text, TextInput } from 'react-native';
-import { PageContainer, TouchFeedback, HxfButton, CustomTextInput } from 'components';
+import { PageContainer, TouchFeedback, HxfButton, CustomTextInput, SafeText } from 'components';
 import { useMutation, GQL, errorMessage } from '@src/apollo';
 import { observer, userStore } from '@src/store';
 
@@ -34,7 +34,7 @@ export default observer(({ navigation }) => {
         <PageContainer title="安全验证" submitting={loading} white>
             <View style={styles.container}>
                 <View style={{ marginTop: pixel(50), paddingHorizontal: pixel(20), paddingBottom: pixel(15) }}>
-                    <Text
+                    <SafeText
                         style={{
                             color: Theme.black,
                             fontSize: font(20),
@@ -42,7 +42,7 @@ export default observer(({ navigation }) => {
                             paddingBottom: pixel(20),
                         }}>
                         验证账号
-                    </Text>
+                    </SafeText>
                     <Text style={styles.tipsText}>绑定支付宝信息需要验证账号的安全性</Text>
                 </View>
                 <View style={styles.inputWrap}>

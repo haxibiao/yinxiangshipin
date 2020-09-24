@@ -11,7 +11,7 @@ import {
     TextStyle,
     ViewStyle,
 } from 'react-native';
-import { FollowButton, Row, Iconfont, MoreOperation, GenderLabel } from '@src/components';
+import { FollowButton, Row, Iconfont, MoreOperation, GenderLabel, SafeText } from '@src/components';
 import { GQL, useQuery, useApolloClient, ApolloProvider } from '@src/apollo';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { observer } from '@src/store';
@@ -116,9 +116,9 @@ export default observer((props: { user: any }) => {
                         )}
                     </View>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <Text style={styles.userName} numberOfLines={1}>
+                        <SafeText style={styles.userName} numberOfLines={1}>
                             {userProfile.name}
-                        </Text>
+                        </SafeText>
                         <GenderLabel user={userProfile} />
                     </View>
                     <View style={{ marginTop: pixel(15) }}>

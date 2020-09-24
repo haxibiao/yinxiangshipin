@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { SafeText } from '@src/components';
 import Iconfont from '../Iconfont';
 
 const NavigatorBar = (props: any) => {
@@ -93,9 +94,9 @@ const NavigatorBar = (props: any) => {
     // convert string title to NavigatorBar.Title
     if (typeof title === 'string') {
         title = (
-            <Text style={[styles.titleText, titleStyle]} numberOfLines={1}>
+            <SafeText style={[styles.titleText, titleStyle]} numberOfLines={1}>
                 {title}
-            </Text>
+            </SafeText>
         );
     }
 

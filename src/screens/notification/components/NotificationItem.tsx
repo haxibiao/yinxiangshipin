@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import { StyleSheet, View, Text, Image, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
-import { Iconfont } from '@src/components';
+import { Iconfont, SafeText } from '@src/components';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
@@ -72,7 +72,7 @@ export default observer(({ data }) => {
                     <Image style={styles.avatar} source={{ uri: Helper.syncGetter('user.avatar', data) }} />
                 </TouchableOpacity>
                 <View style={styles.content}>
-                    <Text style={styles.userName}>{Helper.syncGetter('user.name', data) || '匿名用户'}</Text>
+                    <SafeText style={styles.userName}>{Helper.syncGetter('user.name', data) || '匿名用户'}</SafeText>
                     <Text style={styles.noticeType}>{title}</Text>
                     <Text style={styles.timeAgo}>{Helper.syncGetter('time_ago', data) || '1分钟前'}</Text>
                 </View>

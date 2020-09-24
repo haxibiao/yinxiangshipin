@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, Image, ScrollView, TouchableOpacity } from 'react-native';
-import { PageContainer, Row } from '@src/components';
+import { PageContainer, Row, SafeText } from '@src/components';
 
 class CommonQuestionScreen extends Component {
     constructor(props) {
@@ -35,7 +35,7 @@ class CommonQuestionScreen extends Component {
                         <Image style={styles.avatar} source={require('@app/assets/images/avatar_man.png')} />
                         <View style={styles.content}>
                             <View style={[styles.inner, styles.right]}>
-                                <Text style={styles.questionText}>{elem.question}</Text>
+                                <SafeText style={styles.questionText}>{elem.question}</SafeText>
                             </View>
                         </View>
                     </View>

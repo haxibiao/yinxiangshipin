@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { StyleSheet, View, Text, TextInput } from 'react-native';
-import { PageContainer, HxfButton, PopOverlay } from '@src/components';
+import { PageContainer, HxfButton, PopOverlay, SafeText } from '@src/components';
 import { GQL, useApolloClient } from '@src/apollo';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { userStore } from '@src/store';
@@ -16,7 +16,7 @@ export default function ModifyPassword() {
     const disabledSumbit = useMemo(() => {
         let count = 0;
         const values = Object.values([password, againPassword]);
-        values.forEach(item => {
+        values.forEach((item) => {
             if (item) {
                 count++;
             }
@@ -29,14 +29,14 @@ export default function ModifyPassword() {
     return (
         <PageContainer white title="修改密码" submitting={submitting}>
             <View style={{ marginVertical: pixel(35), paddingHorizontal: pixel(25) }}>
-                <Text style={{ fontSize: font(20), fontWeight: '600' }}>提交新密码</Text>
+                <SafeText style={{ fontSize: font(20), fontWeight: '600' }}>提交新密码</SafeText>
             </View>
 
             <View style={styles.inputWrap}>
                 <TextInput
                     placeholder="请输入新密码,不少于6位"
                     style={styles.textInput}
-                    onChangeText={text => onPasswordChange(text)}
+                    onChangeText={(text) => onPasswordChange(text)}
                     value={password}
                     secureTextEntry={true}
                     maxLength={16}
@@ -46,7 +46,7 @@ export default function ModifyPassword() {
                 <TextInput
                     placeholder="请再次输入新密码,不少于6位"
                     style={styles.textInput}
-                    onChangeText={text => {
+                    onChangeText={(text) => {
                         onAgainPasswordChange(text);
                     }}
                     value={againPassword}
@@ -74,12 +74,12 @@ export default function ModifyPassword() {
                                     mutation: GQL.updateUserIntroduction,
                                     variables: { id: id, input: { password: password } },
                                 })
-                                .then(result => {
+                                .then((result) => {
                                     console.log('更新用户数据后返回的用户信息: ', result);
                                     Toast.show({ content: '修改成功' });
                                     navigation.goBack();
                                 })
-                                .catch(error => {
+                                .catch((error) => {
                                     console.log('更新用户数据接口错误  error : ', error);
                                     PopOverlay({
                                         content: '网络错误，绑定失败，请稍后重试',

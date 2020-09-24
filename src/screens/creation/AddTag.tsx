@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { StyleSheet, View, Text, Image, ScrollView, TouchableOpacity, TextInput } from 'react-native';
+import { SafeText } from '@src/components';
 
 export default (props) => {
     const { selectTag, onClose } = props;
@@ -13,7 +14,7 @@ export default (props) => {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.title}>添加标签</Text>
+                <SafeText style={styles.title}>添加标签</SafeText>
             </View>
             <View style={styles.body}>
                 <TextInput

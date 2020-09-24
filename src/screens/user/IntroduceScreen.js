@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Image, Text, ScrollView } from 'react-native';
 
 import { Colors, width } from '@src/common';
-import { Screen, Avatar, Header, ShareModal } from '@src/components';
+import { Screen, Avatar, Header, ShareModal, SafeText } from '@src/components';
 
 import { Query, GQL } from '@src/apollo';
 
@@ -48,14 +48,14 @@ class IntroduceScreen extends Component {
                                                 />
                                             </View>
                                             <View style={{ marginTop: 5 }}>
-                                                <Text
+                                                <SafeText
                                                     style={{
                                                         fontSize: font(22),
                                                         fontWeight: '500',
                                                         color: Colors.primaryFontColor,
                                                     }}>
                                                     {user.name}
-                                                </Text>
+                                                </SafeText>
                                             </View>
                                             <View style={{ marginTop: 15 }}>
                                                 <Text style={{ fontSize: font(15), color: '#666' }}>
@@ -133,7 +133,7 @@ class IntroduceScreen extends Component {
     }
 
     toggleModalVisible() {
-        this.setState(prevState => ({
+        this.setState((prevState) => ({
             modalVisible: !prevState.modalVisible,
         }));
     }

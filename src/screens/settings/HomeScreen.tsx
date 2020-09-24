@@ -1,6 +1,6 @@
 import React, { useState, useRef, useCallback } from 'react';
 import { StyleSheet, Text, ScrollView, View, TouchableOpacity, Image } from 'react-native';
-import { PageContainer, Iconfont, ListItem, ItemSeparator, PopOverlay, Loading } from '@src/components';
+import { PageContainer, Iconfont, ListItem, ItemSeparator, PopOverlay, Loading, SafeText } from '@src/components';
 import { checkUpdate } from '@src/common';
 import { observer, userStore, appStore, adStore } from '@src/store';
 import { useNavigation } from '@react-navigation/native';
@@ -80,7 +80,7 @@ export default observer((props: any) => {
                             leftComponent={
                                 <View style={styles.UserComment}>
                                     <Image source={{ uri: userStore.me.avatar }} style={styles.avatarImage} />
-                                    <Text style={styles.avatarName}>{userStore.me.name}</Text>
+                                    <SafeText style={styles.avatarName}>{userStore.me.name}</SafeText>
                                 </View>
                             }
                             rightComponent={

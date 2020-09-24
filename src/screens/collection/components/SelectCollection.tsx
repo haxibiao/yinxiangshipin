@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, Image, TouchableOpacity, TouchableWithoutFeedba
 import { useNavigation } from '@react-navigation/native';
 import { QueryList, ContentStatus, Placeholder } from '@src/content';
 import { userStore } from '@src/store';
-import { Iconfont } from '@src/components';
+import { Iconfont, SafeText } from '@src/components';
 import { GQL } from '@src/apollo';
 
 export default ({ onClose, onClick, navigation }) => {
@@ -34,7 +34,7 @@ export default ({ onClose, onClick, navigation }) => {
     return (
         <View style={styles.container}>
             <View style={styles.windowHeader}>
-                <Text style={styles.headerText}>选择合集</Text>
+                <SafeText style={styles.headerText}>选择合集</SafeText>
                 <TouchableOpacity style={styles.closeWindow} onPress={onClose}>
                     <Iconfont name="guanbi1" size={pixel(20)} color={Theme.defaultTextColor} />
                 </TouchableOpacity>

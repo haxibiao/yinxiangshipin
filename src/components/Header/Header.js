@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Platform, ViewStyle } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { SafeText } from '@src/components';
 
 import Iconfont from '../Iconfont';
 
@@ -54,9 +55,9 @@ const Header = (props: Props) => {
                 centerComponent
             ) : (
                 <View style={styles.title}>
-                    <Text style={[styles.routeName, lightBar && { color: '#fff' }]}>
+                    <SafeText style={[styles.routeName, lightBar && { color: '#fff' }]}>
                         {routeName ? routeName : route.name}
-                    </Text>
+                    </SafeText>
                 </View>
             )}
             {rightComponent && <View style={[styles.side, { right: 15 }]}>{rightComponent}</View>}

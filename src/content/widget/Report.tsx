@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { StyleSheet, ScrollView, View, Text, TouchableOpacity, TextInput } from 'react-native';
-import { Iconfont } from '@src/components';
+import { Iconfont, SafeText } from '@src/components';
 import { GQL } from '@src/apollo';
 import { useBetterMutation } from '../../service';
 
@@ -60,7 +60,7 @@ export default function Report({ id, type, close, successful, failure }: Props) 
                 <TouchableOpacity style={styles.headerButton} activeOpacity={0.8} onPress={close}>
                     <Iconfont name="guanbi1" size={font(20)} color="#2b2b2b" />
                 </TouchableOpacity>
-                <Text style={styles.title}>举报原因</Text>
+                <SafeText style={styles.title}>举报原因</SafeText>
                 <TouchableOpacity
                     style={styles.headerButton}
                     activeOpacity={0.8}

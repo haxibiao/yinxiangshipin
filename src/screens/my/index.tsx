@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { StyleSheet, View, ScrollView, Text, Image, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
 import { observer, adStore, userStore, Keys, Storage } from '@src/store';
-import { PageContainer, Iconfont, Row, Avatar } from '@src/components';
+import { PageContainer, Iconfont, Row, Avatar, SafeText } from '@src/components';
 import { FocusAwareStatusBar, authNavigate, useNavigation } from '@src/router';
 import { GQL, useQuery, useApolloClient } from '@src/apollo';
 
@@ -98,9 +98,9 @@ export default observer((props: any) => {
                                 style={styles.userAvatar}
                             />
                             <View>
-                                <Text style={styles.userName} numberOfLines={1}>
+                                <SafeText style={styles.userName} numberOfLines={1}>
                                     {userStore.login ? userProfile.name : '登录/注册'}
-                                </Text>
+                                </SafeText>
                                 <Text style={styles.userIntroduction} numberOfLines={1}>
                                     {userStore.login
                                         ? userProfile.introduction || '这个人很懒，啥都没留下'
@@ -116,9 +116,9 @@ export default observer((props: any) => {
                                 <Text style={styles.metaName} numberOfLines={1}>
                                     发布
                                 </Text>
-                                <Text style={styles.metaCount} numberOfLines={1}>
+                                <SafeText style={styles.metaCount} numberOfLines={1}>
                                     {Helper.count(userProfile.count_articles)}
-                                </Text>
+                                </SafeText>
                             </TouchableOpacity>
                             <TouchableOpacity
                                 onPress={() => authNavigator('Society', { user: userProfile })}
@@ -127,9 +127,9 @@ export default observer((props: any) => {
                                 <Text style={styles.metaName} numberOfLines={1}>
                                     关注
                                 </Text>
-                                <Text style={styles.metaCount} numberOfLines={1}>
+                                <SafeText style={styles.metaCount} numberOfLines={1}>
                                     {Helper.count(userProfile.count_followings)}
-                                </Text>
+                                </SafeText>
                             </TouchableOpacity>
                             <TouchableOpacity
                                 onPress={() => authNavigator('Society', { user: userProfile, follower: true })}
@@ -138,9 +138,9 @@ export default observer((props: any) => {
                                 <Text style={styles.metaName} numberOfLines={1}>
                                     粉丝
                                 </Text>
-                                <Text style={styles.metaCount} numberOfLines={1}>
+                                <SafeText style={styles.metaCount} numberOfLines={1}>
                                     {Helper.count(userProfile.count_followers)}
-                                </Text>
+                                </SafeText>
                             </TouchableOpacity>
                         </View>
                     </View>

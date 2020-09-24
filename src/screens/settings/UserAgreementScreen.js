@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, ScrollView, Text } from 'react-native';
 
-import { PageContainer } from '@src/components';
+import { PageContainer, SafeText } from '@src/components';
 
 class UserAgreementScreen extends Component {
     render() {
@@ -10,10 +10,10 @@ class UserAgreementScreen extends Component {
             <PageContainer title="用户协议" white>
                 <ScrollView style={styles.container}>
                     <View style={{ paddingHorizontal: 15, paddingVertical: 20 }}>
-                        <Text style={styles.title}>
+                        <SafeText style={styles.title}>
                             {Config.AppName}
                             用户协议
-                        </Text>
+                        </SafeText>
                         <View style={styles.fontWrap}>
                             <Text style={styles.darkFont}>1、导言</Text>
                         </View>

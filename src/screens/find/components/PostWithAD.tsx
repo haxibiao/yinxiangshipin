@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { StyleSheet, View, Text, Image } from 'react-native';
+import { SafeText } from '@src/components';
 import { PostItem } from '@src/content';
 import { adStore } from '@src/store';
 import { ad } from 'react-native-ad';
@@ -25,9 +26,9 @@ export default function PostWithAD({ item, index, adClick }) {
                                 />
                                 <View style={styles.userInfo}>
                                     <Text style={styles.nameText}>匿名用户</Text>
-                                    <Text style={styles.timeAgoText} numberOfLines={1}>
+                                    <SafeText style={styles.timeAgoText} numberOfLines={1}>
                                         {`${avatarId}分钟前`}
-                                    </Text>
+                                    </SafeText>
                                 </View>
                             </View>
                         </View>

@@ -61,7 +61,7 @@ export default observer((props: any) => {
                     <View style={styles.header}>
                         <Image style={styles.tagLogoWrap} source={{ uri: tagData?.logo }} />
                         <View style={styles.tagInfo}>
-                            <Text style={styles.tagName}>#{tagData?.name}</Text>
+                            <SafeText style={styles.tagName}>#{tagData?.name}</SafeText>
                             <Text style={styles.tagCount}>
                                 {`${count(tagData?.count_plays || 0.0)}次播放`}
                                 {`· @${tagData?.user?.name}`}

@@ -10,7 +10,7 @@ import {
     DeviceEventEmitter,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { Iconfont, Avatar } from '@src/components';
+import { Iconfont, Avatar, SafeText } from '@src/components';
 import { useLinearAnimation } from '@src/common';
 import { GQL, useLikeMutation, useFollowMutation } from '@src/apollo';
 import { userStore } from '@src/store';
@@ -120,7 +120,7 @@ const NavBar = observer(({ lightModal, media, navigation }) => {
                         },
                     ]}>
                     <TouchableOpacity style={styles.followButton} onPress={followUser} activeOpacity={1}>
-                        <Text style={[styles.buttonText, { color: colors.textColor }]}>关 注</Text>
+                        <SafeText style={[styles.buttonText, { color: colors.textColor }]}>关 注</SafeText>
                     </TouchableOpacity>
                 </Animated.View>
                 <TouchableWithoutFeedback onPress={() => navigation.navigate('User', { user: media.user })}>

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View, TextInput, Text, TouchableOpacity, Dimensions } from 'react-native';
 import HxfModal from './HxfModal';
 import Iconfont from '../Iconfont';
+import { SafeText } from '@src/components';
 
 class WriteModal extends Component {
     render() {
@@ -10,7 +11,7 @@ class WriteModal extends Component {
             <HxfModal
                 visible={visible}
                 handleVisible={handleVisible}
-                header={<Text style={styles.modalHeader}>{modalName}</Text>}>
+                header={<SafeText style={styles.modalHeader}>{modalName}</SafeText>}>
                 <View>
                     <TextInput
                         words={false}
@@ -25,14 +26,16 @@ class WriteModal extends Component {
                         defaultValue={value + ''}
                     />
                     <View style={styles.modalFooter}>
-                        <Text
+                        <SafeText
                             style={[styles.modalFooterText, { marginLeft: 20, color: Theme.secondaryColor }]}
                             onPress={submit}>
                             确定
-                        </Text>
-                        <Text style={[styles.modalFooterText, { color: Theme.subTextColor }]} onPress={handleVisible}>
+                        </SafeText>
+                        <SafeText
+                            style={[styles.modalFooterText, { color: Theme.subTextColor }]}
+                            onPress={handleVisible}>
                             取消
-                        </Text>
+                        </SafeText>
                     </View>
                 </View>
             </HxfModal>

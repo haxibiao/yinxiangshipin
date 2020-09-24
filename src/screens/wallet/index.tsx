@@ -205,7 +205,7 @@ export default observer((props: any) => {
                                 source={require('@app/assets/images/wallet/icon_wallet_diamond.png')}
                             />
                             <View style={styles.assetInfo}>
-                                <Text style={styles.assetName}>{Config.goldAlias}</Text>
+                                <SafeText style={styles.assetName}>{Config.goldAlias}</SafeText>
                                 <Text style={styles.assetDescription}>
                                     用于转换余额，可以在任务、看视频等场景中获得
                                 </Text>
@@ -251,7 +251,7 @@ export default observer((props: any) => {
 
                 <View style={styles.sectionContainer}>
                     <View style={styles.sectionHeader}>
-                        <Text style={styles.sectionHeaderTitle}>提现金额</Text>
+                        <SafeText style={styles.sectionHeaderTitle}>提现金额</SafeText>
                     </View>
                     <View style={styles.amountOptions}>
                         <Text style={styles.withdrawTips}>
@@ -293,7 +293,7 @@ export default observer((props: any) => {
                         })}
                     </View>
                     <View style={styles.sectionHeader}>
-                        <Text style={styles.sectionHeaderTitle}>提现方式</Text>
+                        <SafeText style={styles.sectionHeaderTitle}>提现方式</SafeText>
                     </View>
                     <View style={styles.withdrawPlatforms}>
                         {WithdrawalPlatforms.map((data) => {
@@ -334,7 +334,7 @@ export default observer((props: any) => {
                 </View>
 
                 <View style={styles.ruleContainer}>
-                    <Text style={[styles.ruleText, styles.ruleTitle]}>温馨提示</Text>
+                    <SafeText style={[styles.ruleText, styles.ruleTitle]}>温馨提示</SafeText>
 
                     <Text style={styles.ruleText}>
                         {`1、您可以通过完成任务、观看首页视频等方式获取${Config.goldAlias}；只有当您绑定支付宝或微信之后，才能开始提现。`}

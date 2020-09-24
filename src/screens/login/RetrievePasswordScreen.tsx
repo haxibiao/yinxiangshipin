@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, TextInput } from 'react-native';
-import { PageContainer, HxfButton, Loading } from 'components';
+import { PageContainer, HxfButton, Loading, SafeText } from 'components';
 import { GQL, errorMessage } from '@src/apollo';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useMutation } from '@apollo/react-hooks';
@@ -96,7 +96,7 @@ const RetrievePasswordScreen = (props: any) => {
     return (
         <PageContainer title="重置密码" white>
             <View style={styles.container}>
-                <Text style={styles.title}>设置新密码</Text>
+                <SafeText style={styles.title}>设置新密码</SafeText>
                 <View style={styles.textWrap}>
                     <TextInput
                         placeholder="请输入验证码"

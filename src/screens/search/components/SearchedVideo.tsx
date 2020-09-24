@@ -41,7 +41,7 @@ const index = observer(({ navigation, keyword, tag_id, user_id, collection_id, s
     const listHeader = useMemo(() => {
         return (
             <View style={styles.header}>
-                <Text style={styles.title}>视频</Text>
+                <SafeText style={styles.title}>视频</SafeText>
                 <TouchableOpacity
                     style={styles.filterBtn}
                     onPress={() =>

@@ -10,7 +10,7 @@ import {
     Linking,
     TextInput,
 } from 'react-native';
-import { Iconfont, MediaUploader, HxfButton, DropdownMenu, NavBarHeader, Loading } from '@src/components';
+import { Iconfont, MediaUploader, HxfButton, DropdownMenu, NavBarHeader, Loading, SafeText } from '@src/components';
 import { BoxShadow } from 'react-native-shadow';
 import { GQL, useQuery, useMutation, useApolloClient, errorMessage } from '@src/apollo';
 import { appStore, userStore } from '@src/store';
@@ -118,7 +118,7 @@ export default (props) => {
                         />
                     </View>
                     <View style={styles.ruleContainer}>
-                        <Text style={styles.ruleTitle}>温馨提示</Text>
+                        <SafeText style={styles.ruleTitle}>温馨提示</SafeText>
                         <Text style={styles.ruleText}>
                             在应用商店给我们评价后并截图，同您在应用商店的账号（手机号）一并提交。
                         </Text>

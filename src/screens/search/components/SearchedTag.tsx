@@ -5,6 +5,7 @@ import { observer } from '@src/store';
 import { count } from '@src/common';
 import { QueryList, PostItem } from '@src/content';
 import { useNavigation } from '@react-navigation/native';
+import { SafeText } from '@src/components';
 
 const index = observer(({ keyword }) => {
     const navigation = useNavigation();
@@ -12,7 +13,7 @@ const index = observer(({ keyword }) => {
         return (
             <TouchableOpacity style={styles.tagItem} onPress={() => navigation.navigate('TagDetail', { tag: item })}>
                 <View style={styles.tagNameWrap}>
-                    <Text style={styles.tagName}>#{item?.name}</Text>
+                    <SafeText style={styles.tagName}>#{item?.name}</SafeText>
                 </View>
                 <Text style={styles.countPlays}>{count(item?.count_plays)}次播放</Text>
             </TouchableOpacity>

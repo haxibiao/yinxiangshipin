@@ -9,7 +9,7 @@ import {
     Image,
     StatusBar,
 } from 'react-native';
-import { Iconfont, Row, HxfButton, NavBarHeader } from '@src/components';
+import { Iconfont, Row, HxfButton, NavBarHeader, SafeText } from '@src/components';
 import { authNavigate, useNavigation } from '@src/router';
 import { observer, appStore, userStore, adStore } from '@src/store';
 import { GQL, useMutation, useQuery } from '@src/apollo';
@@ -64,7 +64,7 @@ export default observer((props: any) => {
                                 style={styles.walletItemIcon}
                             />
                             <Text style={styles.assetName}>{Config.goldAlias}</Text>
-                            <Text style={styles.assetCount}>{userProfile?.gold || 0}</Text>
+                            <SafeText style={styles.assetCount}>{userProfile?.gold || 0}</SafeText>
                         </TouchableOpacity>
                         <View style={styles.assetItem}>
                             <Image
@@ -72,16 +72,16 @@ export default observer((props: any) => {
                                 style={styles.walletItemIcon}
                             />
                             <Text style={styles.assetName}>{Config.ticketAlias}</Text>
-                            <Text style={styles.assetCount}>{userProfile?.ticket || 0}</Text>
+                            <SafeText style={styles.assetCount}>{userProfile?.ticket || 0}</SafeText>
                         </View>
                     </Row>
                     <View style={styles.assetTip}>
                         <Text style={{ color: '#fff', fontSize: font(13) }}>
                             每天凌晨自动将{Config.goldAlias}兑换为余额
                         </Text>
-                        <Text style={styles.assetRate}>
+                        <SafeText style={styles.assetRate}>
                             今日汇率：{userProfile.exchangeRate || '500'} {Config.goldAlias} / 1元
-                        </Text>
+                        </SafeText>
                     </View>
                 </View>
             </TouchableWithoutFeedback>

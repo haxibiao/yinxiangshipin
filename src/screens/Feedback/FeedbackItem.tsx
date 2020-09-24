@@ -48,9 +48,9 @@ const FeedbackItem: React.FC<Props> = observer((props: Props) => {
                 {renderCover}
                 <View style={styles.bottomPartWrapper}>
                     <Row style={styles.metaList}>
-                        <Text style={styles.timeAgoText} numberOfLines={1}>
+                        <SafeText style={styles.timeAgoText} numberOfLines={1}>
                             {created_at}
-                        </Text>
+                        </SafeText>
                         <Row>
                             <Iconfont name="remen1" size={pixel(14)} color={Theme.slateGray1} />
                             <Text style={[styles.metaText, { marginRight: pixel(10) }]} numberOfLines={1}>

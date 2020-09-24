@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image, ImageBackground, TouchableOpacity, ViewStyle } from 'react-native';
-import { HxfButton, PageContainer } from '@src/components';
+import { HxfButton, PageContainer, SafeText } from '@src/components';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 
@@ -15,7 +15,13 @@ const HelpItem = (props: { issue: string; answer: string; style?: ViewStyle }) =
                 }}>
                 <View style={{ flexDirection: 'row' }}>
                     <View style={{ flex: 1 }}>
-                        <Text style={{ color: '#000', fontSize: pixel(14), marginLeft: pixel(5), marginRight: pixel(10) }}>
+                        <Text
+                            style={{
+                                color: '#000',
+                                fontSize: pixel(14),
+                                marginLeft: pixel(5),
+                                marginRight: pixel(10),
+                            }}>
                             {issue}
                         </Text>
                     </View>
@@ -66,14 +72,17 @@ export default function loginHelp() {
                                     borderRadius: 100,
                                     backgroundColor: '#FFF',
                                 }}>
-                                <Text style={{ color: Theme.primaryColor, fontWeight: 'bold' }}>{Config.AppName}</Text>
+                                <SafeText style={{ color: Theme.primaryColor, fontWeight: 'bold' }}>
+                                    {Config.AppName}
+                                </SafeText>
                             </View>
                             <View style={{ flex: 1 }} />
                         </View>
 
-                        <Text style={{ marginTop: pixel(10), fontSize: pixel(26), color: '#FFF', fontWeight: 'bold' }}>
+                        <SafeText
+                            style={{ marginTop: pixel(10), fontSize: pixel(26), color: '#FFF', fontWeight: 'bold' }}>
                             登陆帮助
-                        </Text>
+                        </SafeText>
                         <View style={{ flex: 1 }} />
                         <Text style={{ color: '#FFFC' }}>2020 年 06 月修订</Text>
                     </View>

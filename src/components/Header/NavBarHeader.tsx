@@ -11,6 +11,7 @@ import {
     StatusBarProperties,
 } from 'react-native';
 import { useNavigation, useRoute, useIsFocused } from '@react-navigation/native';
+import { SafeText } from '@src/components';
 import LinearGradient from 'react-native-linear-gradient';
 import Iconfont from '../Iconfont';
 
@@ -128,9 +129,9 @@ export default (props: Props) => {
         } else if (title) {
             return (
                 <Animated.View style={[styles.center, centerStyle]}>
-                    <Text style={[styles.title, { color: isTransparent ? '#fff' : '#2b2b2b' }, titleStyle]}>
+                    <SafeText style={[styles.title, { color: isTransparent ? '#fff' : '#2b2b2b' }, titleStyle]}>
                         {title}
-                    </Text>
+                    </SafeText>
                 </Animated.View>
             );
         }

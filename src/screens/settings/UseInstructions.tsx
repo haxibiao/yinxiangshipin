@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { PageContainer } from '@src/components';
+import { PageContainer, SafeText } from '@src/components';
 import { useNavigation, useRoute } from '@react-navigation/native';
 // 积分使用说明
 const UseInstructions = () => {
@@ -9,7 +9,7 @@ const UseInstructions = () => {
         <PageContainer title="使用说明" white>
             <View style={styles.container}>
                 <View>
-                    <Text style={styles.title}>印象视频积分使用说明</Text>
+                    <SafeText style={styles.title}>印象视频积分使用说明</SafeText>
                 </View>
                 <View style={styles.fontWrap}>
                     <Text style={styles.tintFont}>目的：制定一个比较完善的健康分作为一个可视化文档,供用户参考。</Text>

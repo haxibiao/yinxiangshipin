@@ -1,5 +1,6 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { StyleSheet, View, Text, SectionList } from 'react-native';
+import { SafeText } from '@src/components';
 import { useNavigation } from '@react-navigation/native';
 import { useApolloClient, useQuery } from '@apollo/react-hooks';
 import { GQL } from '@src/apollo';
@@ -85,7 +86,7 @@ export default function TaskList() {
             renderItem={({ item }) => <TaskItem task={item} />}
             ListEmptyComponent={() => <View />}
             renderSectionHeader={({ section: { title, data } }) =>
-                data.length > 0 ? <Text style={styles.listHeader}>{title}</Text> : null
+                data.length > 0 ? <SafeText style={styles.listHeader}>{title}</SafeText> : null
             }
             ItemSeparatorComponent={() => <View style={styles.taskItemSeparator} />}
         />

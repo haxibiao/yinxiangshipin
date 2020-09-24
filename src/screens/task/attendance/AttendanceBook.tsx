@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, Image, ImageBackground, TouchableWithoutFeedbac
 import { BoxShadow } from 'react-native-shadow';
 import { ad } from 'react-native-ad';
 import { appStore, adStore } from '@src/store';
-import { RewardOverlay } from '@src/components';
+import { RewardOverlay, SafeText } from '@src/components';
 import { useCirculationAnimation } from '@src/common';
 import { GQL, useMutation, useQuery, getUserReward } from '@src/apollo';
 import * as SignedReturnOverlay from './SignedReturnOverlay';
@@ -173,9 +173,9 @@ const AttendanceBook = (): JSX.Element => {
                                 ? require('@app/assets/images/coin_grey.png')
                                 : require('@app/assets/images/coin_yellow.png')
                         }>
-                        <Text style={[styles.rewardGoldText, elem.checked && { color: '#a0a0a0' }]}>
+                        <SafeText style={[styles.rewardGoldText, elem.checked && { color: '#a0a0a0' }]}>
                             {elem.gold_reward || 0}
-                        </Text>
+                        </SafeText>
                     </ImageBackground>
                     <Text style={styles.recordDayText}>{elem.checked ? '已签' : `${index + 1}天`}</Text>
                 </View>
@@ -190,9 +190,9 @@ const AttendanceBook = (): JSX.Element => {
             })}>
             <View style={styles.attendanceBook} onLayout={onLayoutEffect}>
                 <View style={styles.header}>
-                    <Text style={styles.signInText}>
+                    <SafeText style={styles.signInText}>
                         已签到<Text style={styles.keepSignInText}>{` ${keepCheckInDays}/${checkIns.length} `}</Text>天
-                    </Text>
+                    </SafeText>
                 </View>
                 <TouchableWithoutFeedback onPress={toDaySignIn} disabled={loading}>
                     <View style={styles.attendance}>{checkInRecord}</View>

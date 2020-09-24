@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Text, Image, ImageBackground, TouchableOpacity } from 'react-native';
+import { SafeText } from '@src/components';
 
 interface Props {
     cover: string;
@@ -13,7 +14,7 @@ export const CaptureSuccess = ({ cover, title, onClose, onClick }: Props) => {
         <View style={styles.overlayWrap}>
             <ImageBackground style={styles.overlayImage} source={require('@app/assets/images/capture_video_cover.png')}>
                 <View style={styles.overlayContent}>
-                    <Text style={styles.title}>上传成功</Text>
+                    <SafeText style={styles.title}>上传成功</SafeText>
                     <Image source={cover} style={styles.videoCover} />
                     <Text style={styles.body}>{title}</Text>
                     <TouchableOpacity style={styles.button} onPress={onClick}>

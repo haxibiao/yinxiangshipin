@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
-import { Avatar } from 'components';
+import { Avatar, SafeText } from 'components';
 import { observer } from 'mobx-react';
 import { from } from 'apollo-boost';
 
@@ -35,10 +35,10 @@ const attentionPanel = observer((props: Props) => {
             </View>
             <View style={styles.attentionPanelBtm}>
                 <Text style={styles.fanBox}>
-                    <Text style={styles.fanNum}>168</Text>粉丝
+                    <SafeText style={styles.fanNum}>168</SafeText>粉丝
                 </Text>
                 <Text style={styles.attentionBox}>
-                    <Text style={styles.fanNum}>168</Text>关注
+                    <SafeText style={styles.fanNum}>168</SafeText>关注
                 </Text>
             </View>
         </View>

@@ -64,7 +64,7 @@ const SearchedCollectionPost = observer(({ navigation, keyword, tag_id, user_id,
     const listHeader = useMemo(() => {
         return (
             <View style={styles.header}>
-                <Text style={styles.title}>视频</Text>
+                <SafeText style={styles.title}>视频</SafeText>
                 <TouchableOpacity
                     style={styles.filterBtn}
                     onPress={() =>

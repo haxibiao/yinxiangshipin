@@ -1,6 +1,6 @@
 import React, { Component, useState, useContext, useEffect, useCallback } from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity, StatusBar } from 'react-native';
-import { PageContainer, HxfTextInput, HxfButton, Row, Center, Iconfont, GradientView } from '@src/components';
+import { PageContainer, HxfTextInput, HxfButton, Row, Center, Iconfont, GradientView, SafeText } from '@src/components';
 import { exceptionCapture, useBounceAnimation } from '@src/common';
 import { GQL, useMutation, useApolloClient } from '@src/apollo';
 import { observer, userStore } from '@src/store';
@@ -178,7 +178,7 @@ export default observer((props: any) => {
                             style={{ width: pixel(20), height: pixel(20), marginRight: pixel(5) }}
                             source={require('@app/assets/images/ic_login_weichat.png')}
                         /> */}
-                        <Text style={styles.buttonText}>{`短信一键登陆${Config.AppName || ''}`}</Text>
+                        <SafeText style={styles.buttonText}>{`短信一键登陆${Config.AppName || ''}`}</SafeText>
                     </TouchableOpacity>
 
                     <TouchableOpacity
@@ -186,9 +186,9 @@ export default observer((props: any) => {
                         onPress={() => {
                             navigation.navigate('AccountLogin');
                         }}>
-                        <Text style={[styles.buttonText, { color: '#0008' }]}>{`${
+                        <SafeText style={[styles.buttonText, { color: '#0008' }]}>{`${
                             Config.AppName || ''
-                        }账号密码登陆`}</Text>
+                        }账号密码登陆`}</SafeText>
                     </TouchableOpacity>
 
                     <View style={styles.groupFooter}>

@@ -1,12 +1,13 @@
 import React, { Component, useMemo } from 'react';
 import { StyleSheet, View, Text, ImageBackground, TouchableOpacity } from 'react-native';
 import PlaceholderImage from '../Basic/PlaceholderImage';
+import { SafeText } from '@src/components';
 
 // interface Props {
 //     earnings: number;
 // }
 
-const CaptureVideoSuccess = props => {
+const CaptureVideoSuccess = (props) => {
     const { video } = props;
 
     return useMemo(
@@ -16,7 +17,7 @@ const CaptureVideoSuccess = props => {
                     style={styles.overlayImage}
                     source={require('@app/assets/images/capture_video_cover.png')}>
                     <View style={styles.overlayContent}>
-                        <Text style={styles.title}>上传成功</Text>
+                        <SafeText style={styles.title}>上传成功</SafeText>
                         <PlaceholderImage source={video.cover} style={styles.videoCover} videoMark={true} />
                         <Text style={styles.body}>{video.body}</Text>
                         <TouchableOpacity style={styles.button} onPress={props.onPress}>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, TextInput } from 'react-native';
-import { PageContainer, HxfButton, Loading } from '@src/components';
+import { PageContainer, HxfButton, Loading, SafeText } from '@src/components';
 import { GQL, errorMessage } from '@src/apollo';
 import { useMutation } from '@apollo/react-hooks';
 import { useNavigation } from '@react-navigation/native';
@@ -41,7 +41,7 @@ const VerificationScreen = (props: any) => {
     return (
         <PageContainer title="找回密码" white>
             <View style={styles.container}>
-                <Text style={styles.title}>获取验证码</Text>
+                <SafeText style={styles.title}>获取验证码</SafeText>
                 <View style={styles.textWrap}>
                     <TextInput
                         placeholder="请输入手机号"

@@ -2,7 +2,7 @@
 import React, { useCallback, version } from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet, StatusBar, TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { PageContainer } from '@src/components';
+import { PageContainer, SafeText } from '@src/components';
 
 import { exceptionCapture } from '@src/common';
 import { appStore, Storage, userStore } from '@src/store';
@@ -87,9 +87,9 @@ const AccountLogin = () => {
                             onLogin();
                         }}>
                         <View style={[styles.textCenter, styles.borderButtom]}>
-                            <Text style={styles.buttonText} numberOfLines={1}>
+                            <SafeText style={styles.buttonText} numberOfLines={1}>
                                 立即登陆
-                            </Text>
+                            </SafeText>
                         </View>
                     </TouchableOpacity>
                 </View>

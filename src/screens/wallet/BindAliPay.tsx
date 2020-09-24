@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useRef, useCallback } from 'react';
 import { View, StyleSheet, Text, TextInput } from 'react-native';
-import { PageContainer, HxfButton } from '@src/components';
+import { PageContainer, HxfButton, SafeText } from '@src/components';
 import { GQL, useMutation } from '@src/apollo';
 import { observer, userStore } from '@src/store';
 import { useRoute } from '@react-navigation/native';
@@ -85,7 +85,7 @@ export default observer((props) => {
         <PageContainer title={hasWallet ? '修改支付宝' : '绑定支付宝'} submitting={submitting}>
             <View style={styles.container}>
                 <View style={{ paddingVertical: pixel(20) }}>
-                    <Text
+                    <SafeText
                         style={{
                             color: Theme.defaultTextColor,
                             fontSize: font(20),
@@ -93,7 +93,7 @@ export default observer((props) => {
                             paddingBottom: pixel(20),
                         }}>
                         支付宝信息
-                    </Text>
+                    </SafeText>
                     <Text style={styles.tipsText}>
                         支付宝账号及真实姓名为提现有效证据,请输入已经通过实名认证的支付宝账号,否则提现将失败
                     </Text>

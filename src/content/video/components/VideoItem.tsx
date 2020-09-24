@@ -109,9 +109,9 @@ export default observer((props: Props) => {
         const tagsData = media?.tags?.data;
         if (tagsData?.length > 0) {
             return tagsData.map((tag: any) => (
-                <Text key={tag.id} style={styles.tagName} onPress={() => goToScreen(tag)}>
+                <SafeText key={tag.id} style={styles.tagName} onPress={() => goToScreen(tag)}>
                     {` #${tag.name} `}
-                </Text>
+                </SafeText>
             ));
         }
         return null;

@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, ScrollView, Text } from 'react-native';
 
-import { PageContainer } from '@src/components';
+import { PageContainer, SafeText } from '@src/components';
 // import { Colors, config } from '@src/common';
 
 class PrivacyPolicyScreen extends Component {
@@ -11,10 +11,10 @@ class PrivacyPolicyScreen extends Component {
             <PageContainer title="隐私协议" white>
                 <ScrollView style={styles.container}>
                     <View style={{ paddingHorizontal: 15, paddingVertical: 20 }}>
-                        <Text style={styles.title}>
+                        <SafeText style={styles.title}>
                             {Config.AppName}
                             隐私政策
-                        </Text>
+                        </SafeText>
                         <View style={styles.fontWrap}>
                             <Text style={styles.tintFont}>
                                 {Config.AppName}

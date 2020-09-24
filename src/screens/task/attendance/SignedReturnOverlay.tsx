@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
 import { ad } from 'react-native-ad';
 import { userStore, adStore } from '@src/store';
 import { getUserReward } from '@src/apollo';
-import { Iconfont, Row, HxfButton, RewardOverlay } from '@src/components';
+import { Iconfont, Row, HxfButton, RewardOverlay, SafeText } from '@src/components';
 import { authNavigate } from '@src/router';
 import { Overlay } from 'teaset';
 
@@ -21,7 +21,7 @@ interface Props {
 let OverlayKey: any = null;
 
 const rewardTitle = (rewardList: { value: any; name: any }[]) => {
-    return <Text style={styles.title}>{`恭喜获得${rewardList[0].value + rewardList[0].name}`}</Text>;
+    return <SafeText style={styles.title}>{`恭喜获得${rewardList[0].value + rewardList[0].name}`}</SafeText>;
 };
 
 const SignedReturnOverlay = (props) => {
@@ -79,10 +79,10 @@ const SignedReturnOverlay = (props) => {
                     />
                 </View>
                 <View style={styles.header}>
-                    <Text style={styles.title}>
+                    <SafeText style={styles.title}>
                         获得第
                         <Text style={{ color: '#EF514A' }}>{signInDays}</Text>天签到奖励
-                    </Text>
+                    </SafeText>
                     <View style={styles.rewardContainer}>
                         <View style={styles.rewardItem}>
                             <Image

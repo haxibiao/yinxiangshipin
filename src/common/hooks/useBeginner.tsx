@@ -1,5 +1,6 @@
 import React, { useRef, useMemo, useCallback, useEffect } from 'react';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, BackHandler } from 'react-native';
+import { SafeText } from '@src/components';
 import { Overlay } from 'teaset';
 import { Storage } from '@src/store';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -57,7 +58,7 @@ export const useBeginner = () => {
             <View style={styles.container}>
                 <View style={styles.contentView}>
                     <ScrollView contentContainerStyle={styles.agreementContent} showsVerticalScrollIndicator={false}>
-                        <Text style={styles.title}>个人信息保护指引</Text>
+                        <SafeText style={styles.title}>个人信息保护指引</SafeText>
                         <View>
                             <Text style={styles.tintFont}>感谢您信任并使用{Config.AppName}</Text>
                         </View>
@@ -97,12 +98,12 @@ export const useBeginner = () => {
                         {/* <TouchableOpacity
                             style={[styles.bottomBtn, { borderColor: '#EAEAEA', borderRightWidth: pixel(0.5) }]}
                             onPress={refused}>
-                            <Text style={{ marginRight: 5, color: '#191919', fontWeight: 'bold' }}>不同意</Text>
+                            <SafeText style={{ marginRight: 5, color: '#191919', fontWeight: 'bold' }}>不同意</SafeText>
                         </TouchableOpacity> */}
                         <TouchableOpacity style={styles.bottomBtn} onPress={agreement}>
-                            <Text style={{ marginRight: 5, color: Theme.primaryColor, fontWeight: 'bold' }}>
+                            <SafeText style={{ marginRight: 5, color: Theme.primaryColor, fontWeight: 'bold' }}>
                                 知道了
-                            </Text>
+                            </SafeText>
                         </TouchableOpacity>
                     </View>
                 </View>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Image, ViewStyle, ScrollView } from 'react-native';
 import { appStore, Keys, Storage } from '@src/store';
+import { SafeText } from '@src/components';
 // import Row from '../Basic/Row';
 
 import { Overlay } from 'teaset';
@@ -20,7 +21,7 @@ const UserAgreementOverlayView = (props: any) => {
     return (
         <View style={styles.overlayView}>
             <ScrollView contentContainerStyle={styles.agreementContent} showsVerticalScrollIndicator={false}>
-                <Text style={styles.title}>用户协议与社区内容公约</Text>
+                <SafeText style={styles.title}>用户协议与社区内容公约</SafeText>
                 <View>
                     <Text style={styles.tintFont}>感谢您信任并使用{Config.AppName}</Text>
                 </View>
@@ -63,10 +64,12 @@ const UserAgreementOverlayView = (props: any) => {
                 <TouchableOpacity
                     style={[styles.bottomBtn, { borderColor: '#EAEAEA', borderRightWidth: pixel(0.5) }]}
                     onPress={refused}>
-                    <Text style={{ marginRight: 5, color: '#191919', fontWeight: 'bold' }}>不同意</Text>
+                    <SafeText style={{ marginRight: 5, color: '#191919', fontWeight: 'bold' }}>不同意</SafeText>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.bottomBtn} onPress={hide}>
-                    <Text style={{ marginRight: 5, color: Theme.primaryColor, fontWeight: 'bold' }}>我同意</Text>
+                    <SafeText style={{ marginRight: 5, color: Theme.primaryColor, fontWeight: 'bold' }}>
+                        我同意
+                    </SafeText>
                 </TouchableOpacity>
             </View>
         </View>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
-import { Iconfont, Loading } from '@src/components';
+import { Iconfont, Loading, SafeText } from '@src/components';
 import { MediaPlayer } from '@src/content';
 
 interface Props {
@@ -13,7 +13,7 @@ export default function VideoTeaching({ title, onClose, onLoad }: Props) {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.title}>{'视频教学' || title}</Text>
+                <SafeText style={styles.title}>{'视频教学' || title}</SafeText>
             </View>
             <View style={styles.content}>
                 <MediaPlayer

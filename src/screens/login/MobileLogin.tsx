@@ -2,7 +2,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet, StatusBar, TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { PageContainer } from '@src/components';
+import { PageContainer, SafeText } from '@src/components';
 
 import UserAgreement from './components/UserAgreement';
 
@@ -93,7 +93,7 @@ const MobileLogin = () => {
                 <View style={{ marginTop: 30 }}>
                     <TextInput
                         style={styles.textInput}
-                        onChangeText={account => setAccount(account)}
+                        onChangeText={(account) => setAccount(account)}
                         value={Account}
                         placeholder="请输入你的手机号"
                         numberOfLines={1}
@@ -102,26 +102,26 @@ const MobileLogin = () => {
                     <View style={[styles.textInput, { flexDirection: 'row' }]}>
                         <TextInput
                             style={{ flex: 1, padding: 0 }}
-                            onChangeText={text => setCaptcha(text)}
+                            onChangeText={(text) => setCaptcha(text)}
                             value={Captcha}
                             placeholder="请输入验证码"
                             numberOfLines={1}
                         />
                         <TouchableOpacity style={[styles.textCenter]} onPress={() => getVerifyCode()}>
-                            <Text
+                            <SafeText
                                 style={{
                                     fontWeight: 'bold',
                                     minWidth: pixel(80),
                                     color: codeTiming >= 60 || codeTiming <= 0 ? '#16FA' : '#16F4',
                                 }}>
                                 {codeTiming >= 60 || codeTiming <= 0 ? '获取验证码' : '重新发送(' + codeTiming + 's)'}
-                            </Text>
+                            </SafeText>
                         </TouchableOpacity>
                     </View>
                 </View>
                 <View style={{ marginTop: 35 }}>
                     <TouchableOpacity style={[styles.textCenter, styles.borderButtom]} onPress={() => smsSign()}>
-                        <Text style={styles.buttonText}>登陆账号</Text>
+                        <SafeText style={styles.buttonText}>登陆账号</SafeText>
                     </TouchableOpacity>
                 </View>
             </View>

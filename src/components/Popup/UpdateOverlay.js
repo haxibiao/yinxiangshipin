@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, NativeModules } from 'react-native';
-
+import { SafeText } from '@src/components';
 import { appStore } from '@src/store';
 
 import { Overlay } from 'teaset';
@@ -12,7 +12,7 @@ class UpdateOverlay {
                 <View style={styles.container}>
                     <View style={styles.content}>
                         <View style={styles.header}>
-                            <Text style={styles.modalRemindContent}>检测到新版本</Text>
+                            <SafeText style={styles.modalRemindContent}>检测到新版本</SafeText>
                         </View>
                         <View style={styles.center}>
                             <Text style={styles.centerTitle}>建议在WLAN环境下进行升级</Text>
@@ -30,7 +30,7 @@ class UpdateOverlay {
                                         UpdateOverlay.hide();
                                         appStore.updateViewedVersion(serverVersion);
                                     }}>
-                                    <Text style={styles.operationText}>以后再说</Text>
+                                    <SafeText style={styles.operationText}>以后再说</SafeText>
                                 </TouchableOpacity>
                             )}
 
@@ -57,7 +57,9 @@ class UpdateOverlay {
                                         });
                                     }
                                 }}>
-                                <Text style={[styles.operationText, { color: Theme.primaryColor }]}>立即更新</Text>
+                                <SafeText style={[styles.operationText, { color: Theme.primaryColor }]}>
+                                    立即更新
+                                </SafeText>
                             </TouchableOpacity>
                         </View>
                     </View>

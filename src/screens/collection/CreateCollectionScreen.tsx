@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useMemo } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView } from 'react-native';
-import { NavBarHeader, MediaUploader, PageContainer, Row, Iconfont, Loading } from '@src/components';
+import { NavBarHeader, MediaUploader, PageContainer, Row, Iconfont, Loading, SafeText } from '@src/components';
 import { userStore, appStore } from '@src/store';
 import { useNavigation } from '@react-navigation/native';
 import { GQL, useMutation, errorMessage } from '@src/apollo';
@@ -209,10 +209,10 @@ export default function CreateCollectionScreen(props) {
                                 ]}
                                 onPress={createCollection}
                                 disabled={disabledBtn}>
-                                <Text style={[styles.btnTextStyle, disabledBtn && { color: 'red' }]}>创建</Text>
+                                <SafeText style={[styles.btnTextStyle, disabledBtn && { color: 'red' }]}>创建</SafeText>
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.btnStyle} onPress={() => navigation.goBack()}>
-                                <Text style={[styles.btnTextStyle, { color: '#000' }]}>取消</Text>
+                                <SafeText style={[styles.btnTextStyle, { color: '#000' }]}>取消</SafeText>
                             </TouchableOpacity>
                         </Row>
                     </View>

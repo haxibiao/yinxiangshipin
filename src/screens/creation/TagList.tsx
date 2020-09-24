@@ -4,7 +4,7 @@ import { useRoute, useNavigation } from '@react-navigation/native';
 import { GQL, useQuery } from '@src/apollo';
 import { QueryList, PostItem } from '@src/content';
 import { FocusAwareStatusBar } from '@src/router';
-import { NavBarHeader } from '@src/components';
+import { NavBarHeader, SafeText } from '@src/components';
 import { userStore } from '@src/store';
 import { count } from '@src/common';
 import { Overlay } from 'teaset';
@@ -20,7 +20,7 @@ const TagItem = (props) => {
     return (
         <TouchableOpacity style={styles.tagItem} onPress={onClick}>
             <View style={styles.tagNameWrap}>
-                <Text style={styles.tagName}>#{tagData?.name}</Text>
+                <SafeText style={styles.tagName}>#{tagData?.name}</SafeText>
             </View>
             <Text style={styles.countPlays}>{count(tagData?.count_plays)}次播放</Text>
         </TouchableOpacity>

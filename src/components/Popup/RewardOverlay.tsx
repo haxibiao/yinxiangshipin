@@ -7,6 +7,7 @@ import { authNavigate } from '@src/router';
 import Iconfont from '../Iconfont';
 import Row from '../Basic/Row';
 import HxfButton from '../Form/HxfButton';
+import { SafeText } from '@src/components';
 interface Reward {
     gold?: number;
     ticket?: number;
@@ -43,7 +44,7 @@ const RewardOverlay = (props) => {
                     />
                 </View>
                 <View style={styles.header}>
-                    <Text style={styles.title}>{title || '恭喜获得奖励'}</Text>
+                    <SafeText style={styles.title}>{title || '恭喜获得奖励'}</SafeText>
                     <View style={styles.rewardContainer}>
                         <View style={styles.rewardItem}>
                             <Image

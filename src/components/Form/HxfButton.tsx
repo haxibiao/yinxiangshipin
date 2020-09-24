@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, TouchableOpacity, View, Text, TouchableWithoutFeedback, ActivityIndicator } from 'react-native';
 import GradientView from '../Basic/GradientView';
+import { SafeText } from '@src/components';
 
 type Size = 'mini' | 'small' | 'medium' | 'default';
 
@@ -73,7 +74,7 @@ class HxfButton extends Component<Props, any> {
                 <GradientView colors={disabled ? ['#787878', '#a4a4a4'] : colors} style={[styles.buttonWrap, style]}>
                     <TouchableOpacity style={[{ flex: 1 }, styles.buttonWrap]} disabled={disabled} onPress={onPress}>
                         {this.renderIcon()}
-                        {children || <Text style={titleStyle}>{title}</Text>}
+                        {children || <SafeText style={titleStyle}>{title}</SafeText>}
                     </TouchableOpacity>
                 </GradientView>
             );
@@ -84,7 +85,7 @@ class HxfButton extends Component<Props, any> {
                 disabled={disabled}
                 onPress={onPress}>
                 {this.renderIcon()}
-                {children || <Text style={titleStyle}>{title}</Text>}
+                {children || <SafeText style={titleStyle}>{title}</SafeText>}
             </TouchableOpacity>
         );
     }

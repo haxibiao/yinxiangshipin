@@ -5,7 +5,7 @@
 
 import React, { Component } from 'react';
 import { StyleSheet, View, ScrollView, Text, Image } from 'react-native';
-import { PageContainer, TouchFeedback, Iconfont, Row, ListItem } from '@src/components';
+import { PageContainer, TouchFeedback, Iconfont, Row, ListItem, SafeText } from '@src/components';
 
 class AboutUs extends Component {
     render() {
@@ -29,7 +29,7 @@ class AboutUs extends Component {
                             </View>
                             <View style={{ paddingHorizontal: pixel(20) }}>
                                 <Text style={styles.sectionTitle}>关于{Config.AppName}</Text>
-                                <Text style={styles.appIntro}>
+                                <SafeText style={styles.appIntro}>
                                     {Config.AppName}
                                     是一款集健康小知识，
                                     休闲短视频于一身的健康科普软件。视频内容将不断更新，让您不停获取到最新的健康小知识，每天完成任务还能不断获得收益哦！在等朋友，等公交，等开饭等闲暇之余，玩
@@ -37,7 +37,7 @@ class AboutUs extends Component {
                                     获得乐趣，健康知识的同时还能够赚点金币，
                                     {Config.AppName}
                                     是您killtime的最佳搭档。如果您想要获得各类健康知识就来印象视频吧，娱乐，健康，冷门知识科普应有尽有。
-                                </Text>
+                                </SafeText>
                             </View>
 
                             <View style={{ marginTop: pixel(30) }}>

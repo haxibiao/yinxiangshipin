@@ -25,6 +25,7 @@ import {
     Placeholder,
     KeyboardSpacer,
     Footer,
+    SafeText,
 } from '@src/components';
 import { Query, Mutation, compose, GQL } from '@src/apollo';
 import { appStore } from '@src/store';
@@ -95,12 +96,12 @@ class CommentOverlay extends Component {
                         }}>
                         <View style={styles.contentContainer}>
                             <View style={styles.header}>
-                                <Text style={styles.headerText}>
-                                    <Text style={styles.countCommentsText}>
+                                <SafeText style={styles.headerText}>
+                                    <SafeText style={styles.countCommentsText}>
                                         {Helper.syncGetter('count_comments', media)}
-                                    </Text>
+                                    </SafeText>
                                     {Helper.syncGetter('count_comments', media) > 0 ? '条评论' : '评论'}
-                                </Text>
+                                </SafeText>
                                 <TouchFeedback style={styles.close} onPress={this.slideDown}>
                                     <Iconfont name="guanbi1" size={pixel(20)} color={Theme.defaultTextColor} />
                                 </TouchFeedback>

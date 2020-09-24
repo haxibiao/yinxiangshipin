@@ -1,18 +1,18 @@
 import { StyleSheet, View, Text, ImageBackground, TouchableOpacity } from 'react-native';
 import { Theme, PxFit, percent } from 'utils';
 import { app } from 'store';
-
+import { SafeText } from '@src/components';
 // interface Props {
 //     earnings: number;
 // }
 
-const CaptureVideoStart = props => {
+const CaptureVideoStart = (props) => {
     return (
         <ImageBackground style={styles.overlayImage} source={require('@app/assets/images/participation_profit.png')}>
             <View style={styles.overlayContent}>
                 <View style={styles.title}>
                     <Text style={styles.text2}>从您的粘贴板获取视频分享链接</Text>
-                    <Text style={styles.text1}>正在分享视频</Text>
+                    <SafeText style={styles.text1}>正在分享视频</SafeText>
                 </View>
             </View>
         </ImageBackground>

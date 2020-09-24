@@ -10,7 +10,7 @@ import {
     Animated,
 } from 'react-native';
 import { observer, appStore } from '@src/store';
-import { NavBarHeader } from '@src/components';
+import { NavBarHeader, SafeText } from '@src/components';
 import { syncGetter, count, mergeProperty } from '@src/common';
 import { GQL, useQuery } from '@src/apollo';
 import { ContentStatus } from '@src/content';
@@ -111,7 +111,7 @@ export default observer((props: any) => {
                 </View>
                 <View style={styles.tagInfo}>
                     <View style={styles.tagInfoTop}>
-                        <Text style={styles.tagName}>#{tagData?.name}</Text>
+                        <SafeText style={styles.tagName}>#{tagData?.name}</SafeText>
                         <Text style={styles.tagCount}>{`${count(tagData?.count_plays || 0.0)}次播放`}</Text>
                     </View>
                     <View style={styles.tagInfoBottom}>

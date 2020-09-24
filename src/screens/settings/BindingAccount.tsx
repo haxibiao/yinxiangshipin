@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { PageContainer, HxfButton, HxfTextInput } from '@src/components';
+import { PageContainer, HxfButton, HxfTextInput, SafeText } from '@src/components';
 import { observer, userStore } from '@src/store';
 import { GQL, useMutation, errorMessage } from '@src/apollo';
 import { useNavigation } from '@react-navigation/native';
@@ -35,7 +35,7 @@ export default observer(() => {
         <PageContainer title="手机号绑定" submitting={loading} white>
             <View style={styles.container}>
                 <View style={styles.itemWrapper}>
-                    <Text style={styles.title}>设置账号与密码</Text>
+                    <SafeText style={styles.title}>设置账号与密码</SafeText>
                 </View>
                 <View style={styles.inputWrapper}>
                     <HxfTextInput
