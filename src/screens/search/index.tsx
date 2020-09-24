@@ -11,6 +11,7 @@ import SearchRecord from './components/SearchRecord';
 import SearchedPost from './components/SearchedPost';
 import SearchedUser from './components/SearchedUser';
 import SearchedTag from './components/SearchedTag';
+import SearchedCollection from './components/SearchedCollection';
 
 const Search = () => {
     const navigation = useNavigation();
@@ -96,6 +97,7 @@ const Search = () => {
                 <SearchedPost tabLabel="动态" keyword={keyword} navigation={navigation} />
                 <SearchedTag tabLabel="专题" keyword={keyword} navigation={navigation} />
                 <SearchedUser tabLabel="用户" keyword={keyword} navigation={navigation} />
+                <SearchedCollection tabLabel="合集" keyword={keyword} navigation={navigation} />
             </ScrollableTabView>
         );
     }, [keyword]);
@@ -256,7 +258,7 @@ const styles = StyleSheet.create({
     // },
     underlineStyle: {
         width: pixel(30),
-        left: (Device.WIDTH - pixel(70) * 3) / 2 + pixel(20),
+        left: (Device.WIDTH - pixel(70) * 4) / 2 + pixel(20),
     },
     activeTextStyle: {
         color: '#212121',

@@ -153,3 +153,37 @@ query searchCollectionPostQuery($query: String!, $page: Int, $collection_id: Int
         }
     }
 }
+
+# 搜索合集
+query searchCollectionsQuery($query: String!, $page: Int, $count: Int) {
+    searchCollections(query: $query, page: $page, count: $count) {
+        paginatorInfo {
+            currentPage
+            hasMorePages
+        }
+        data {
+            id
+            logo
+            name
+            description
+            count_articles
+            count_follows
+            updated_to_episode
+            followed
+            type
+            status
+            user {
+                id
+                name
+            }
+            posts {
+                paginatorInfo {
+                    total
+                }
+                data {
+                    id
+                }
+            }
+        }
+    }
+}
