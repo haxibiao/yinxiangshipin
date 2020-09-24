@@ -1,7 +1,7 @@
 import { useCallback, useRef } from 'react';
 import { Animated } from 'react-native';
 import { GQL } from '../gqls';
-import { useBetterMutation, MutationProps } from './useBetterMutation';
+import { useDebouncedMutation, MutationProps } from './useDebouncedMutation';
 
 interface Props extends MutationProps {
     variables: {
@@ -12,7 +12,7 @@ interface Props extends MutationProps {
 
 export const useLikeMutation = (props: Props) => {
     const { variables, options, successful, failure } = props;
-    const [toggleLike, result] = useBetterMutation(GQL.toggleLikeMutation, {
+    const [toggleLike, result] = useDebouncedMutation(GQL.toggleLikeMutation, {
         options: Object.assign({ variables }, options),
         successful,
         failure,

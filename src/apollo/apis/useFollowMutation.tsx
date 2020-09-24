@@ -15,7 +15,7 @@ export const useFollowMutation = (options: Props) => {
             if (error) {
                 Toast.show({ content: errorMessage(error) || '操作失败' });
             }
-        }, 500);
+        }, 200);
     }, [toggleMutation]);
 
     return followHandler;
