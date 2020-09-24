@@ -8,29 +8,15 @@ interface Props {
 }
 
 export const useFollowMutation = (options: Props) => {
-    const [followUser] = useMutation(GQL.followUserMutation, { ...options });
+    const [toggleMutation] = useMutation(GQL.toggleMutation, { ...options });
     const followHandler = useMemo(() => {
         return __.debounce(async function () {
-            const [error, result] = await Helper.exceptionCapture(followUser);
+            const [error, result] = await Helper.exceptionCapture(toggleMutation);
             if (error) {
                 Toast.show({ content: errorMessage(error) || '操作失败' });
             }
         }, 500);
-    }, [followUser]);
-
-    return followHandler;
-};
-
-export const useFollowCollectionMutation = (options: Props) => {
-    const [followCollection] = useMutation(GQL.followCollectionMutation, { ...options });
-    const followHandler = useMemo(() => {
-        return __.debounce(async function () {
-            const [error, result] = await Helper.exceptionCapture(followCollection);
-            if (error) {
-                Toast.show({ content: errorMessage(error) || '操作失败' });
-            }
-        }, 500);
-    }, [followCollection]);
+    }, [toggleMutation]);
 
     return followHandler;
 };

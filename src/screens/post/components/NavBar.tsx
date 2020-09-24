@@ -53,7 +53,8 @@ const NavBar = observer(({ lightModal, media, navigation }) => {
 
     const followHandler = useFollowMutation({
         variables: {
-            id: Helper.syncGetter('user.id', media),
+            followed_id: Helper.syncGetter('user.id', media),
+            followed_type: 'users',
         },
     });
 

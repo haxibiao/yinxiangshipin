@@ -12,7 +12,7 @@ import {
 import { observer, appStore, userStore } from '@src/store';
 import { NavBarHeader, SafeText, Iconfont, Row } from '@src/components';
 import { syncGetter, count, mergeProperty } from '@src/common';
-import { GQL, useQuery, useFollowCollectionMutation, useMutation } from '@src/apollo';
+import { GQL, useQuery, useFollowMutation, useMutation } from '@src/apollo';
 import { ContentStatus, QueryList } from '@src/content';
 import { observable } from 'mobx';
 import { useRoute, useNavigation } from '@react-navigation/native';
@@ -36,7 +36,7 @@ export default observer((props: any) => {
         extrapolate: 'clamp',
     });
 
-    const toggleFollow = useFollowCollectionMutation({
+    const toggleFollow = useFollowMutation({
         variables: {
             followed_id: collection.id,
             followed_type: 'collections',

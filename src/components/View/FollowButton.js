@@ -43,7 +43,8 @@ const FollowButton = (props: Props) => {
 
     const followUser = useFollowMutation({
         variables: {
-            id: user?.id,
+            followed_id: user?.id,
+            followed_type: 'users',
         },
         refetchQueries: () => [
             {

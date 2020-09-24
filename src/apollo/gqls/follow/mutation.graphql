@@ -9,15 +9,11 @@ mutation unfollowMutation($followed_id: Int!) {
         id
     }
 }
-mutation followUserMutation($id: Int!) {
-    toggleFollow(followed_type: users, followed_id: $id) {
-        isFollowed
-    }
-}
 
-# 收藏合集
-mutation followCollectionMutation($followed_id: Int!, $followed_type: FollowType!) {
-    toggleFollow(followed_type: $followed_type, followed_id: $followed_id) {
+# 关注用户、收藏合集
+mutation toggleMutation($followed_id: Int!, $followed_type: FollowType!) {
+    toggleFollow(followed_id: $followed_id, followed_type: $followed_type) {
         id
+        isFollowed
     }
 }
