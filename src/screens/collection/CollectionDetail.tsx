@@ -21,61 +21,24 @@ import PostItem from './components/PostItem';
 export default observer((props: any) => {
     const navigation = useNavigation();
     const route = useRoute();
-    const collection = route?.params?.collection;
+    let collection = route?.params?.collection;
+    let tagData = collection;
 
     const scrollAnimateValue = useRef(new Animated.Value(0));
-
     const onScroll = useMemo(() => {
         return Animated.event([{ nativeEvent: { contentOffset: { y: scrollAnimateValue.current } } }], {
             useNativeDriver: false,
         });
     }, []);
-
     const titleOpacity = scrollAnimateValue.current.interpolate({
         inputRange: [pixel(50), percent(50)],
         outputRange: [0, 1],
         extrapolate: 'clamp',
     });
 
-    const { loading, error, data, fetchMore, refetch } = useQuery(GQL.CollectionQuery, {
-        variables: {
-            collection_id: collection.id,
-        },
-        fetchPolicy: 'network-only',
-    });
-
-    let tagData = useMemo(() => data?.collection || collection, [data]);
-    const listData = useMemo(() => data?.collection?.posts?.data, [data]);
-    const nextPage = useMemo(() => data?.collection?.posts?.paginatorInfo?.currentPage + 1 || 2, [data]);
-    const hasMore = useMemo(() => data?.collection?.posts?.paginatorInfo?.hasMorePages, [data]);
-    const isLoading = useRef(false);
-    const onEndReached = useCallback(() => {
-        if (!isLoading.current && hasMore) {
-            isLoading.current = true;
-            fetchMore({
-                variables: {
-                    page: nextPage,
-                },
-                updateQuery: (prev: any, { fetchMoreResult }) => {
-                    isLoading.current = false;
-                    if (!fetchMoreResult) return prev;
-                    return mergeProperty(prev, fetchMoreResult);
-                },
-            });
-        }
-    }, [nextPage, hasMore, fetchMore]);
-
-    const goToScreen = useCallback(({ item, tag, initData, itemIndex, page }) => {
-        if (item?.video?.id) {
-            navigation.push('TagVideoList', { tag, initData, itemIndex, page });
-        } else {
-            navigation.push('PostDetail', { post: item });
-        }
-    }, []);
-
     const toggleFollow = useFollowCollectionMutation({
         variables: {
-            followed_id: tagData?.id,
+            followed_id: collection.id,
             followed_type: 'collections',
         },
         refetchQueries: () => [
@@ -88,83 +51,42 @@ export default observer((props: any) => {
     const toggleFollowOnPress = useCallback(() => {
         tagData.followed = tagData.followed === 1 ? 0 : 1;
         toggleFollow();
-    }, [tagData, tagData.followed]);
+    }, [tagData]);
 
-    const renderItem = useCallback(
-        ({ item, index }) => {
+    const listHeader = useCallback(
+        (data) => {
+            collection = data?.collection || collection;
             return (
-                <PostItem item={item} index={index} collection={collection} listData={listData} nextPage={nextPage} />
-            );
-        },
-        [collection, listData, nextPage],
-    );
-
-    const listHeader = useMemo(() => {
-        return (
-            <>
-                <View style={styles.header}>
-                    <Image style={styles.tagLogoWrap} source={{ uri: tagData.logo }} />
-                    <View style={styles.tagInfo}>
-                        <Text style={styles.tagName}>#{tagData?.name}</Text>
-                        <Text style={styles.tagCount}>{`${count(tagData?.count_plays || 0.0)}次播放 · @${
-                            tagData?.user?.name
-                        }`}</Text>
-                        <View style={styles.tagInfoBottom}>
-                            <Text style={styles.tagCount}>{`更新至第${tagData?.posts.paginatorInfo.total}集`}</Text>
+                <View>
+                    <View style={styles.header}>
+                        <Image style={styles.tagLogoWrap} source={{ uri: tagData?.logo }} />
+                        <View style={styles.tagInfo}>
+                            <Text style={styles.tagName}>#{tagData?.name}</Text>
+                            <Text style={styles.tagCount}>
+                                {`${count(tagData?.count_plays || 0.0)}次播放`}
+                                {`· @${tagData?.user?.name}`}
+                            </Text>
+                            <View style={styles.tagInfoBottom}>
+                                <Text style={styles.tagCount}>{`更新至第${tagData?.posts.paginatorInfo.total}集`}</Text>
+                            </View>
                         </View>
                     </View>
-                </View>
-                <TouchableOpacity activeOpacity={1} style={styles.collectBtn} onPress={toggleFollowOnPress}>
-                    <Iconfont
-                        name={tagData?.followed > 0 ? 'xihuanfill' : 'xihuan'}
-                        size={font(15)}
-                        color={tagData?.followed > 0 ? Theme.primaryColor : '#fff'}
-                    />
-                    <Text style={[styles.contentText, { marginLeft: pixel(3) }]}>
-                        {tagData?.followed > 0 ? '已收藏' : '收藏合集'}
-                    </Text>
-                </TouchableOpacity>
-                <View style={styles.lineStyle} />
-            </>
-        );
-    }, [tagData, tagData?.followed]);
-
-    const listFooter = useCallback(() => {
-        let footer = null;
-        if (!loading && hasMore) {
-            footer = <ContentStatus status="loadMore" />;
-        }
-        if (listData?.length > 0 && !hasMore) {
-            footer = (
-                <View style={styles.listFooter}>
-                    <Text style={styles.listFooterText}>-- end --</Text>
+                    <TouchableOpacity activeOpacity={1} style={styles.collectBtn} onPress={() => toggleFollowOnPress()}>
+                        <Iconfont
+                            name={tagData?.followed > 0 ? 'xihuanfill' : 'xihuan'}
+                            size={font(15)}
+                            color={tagData?.followed > 0 ? Theme.primaryColor : '#fff'}
+                        />
+                        <Text style={[styles.contentText, { marginLeft: pixel(3) }]}>
+                            {tagData?.followed > 0 ? '已收藏' : '收藏合集'}
+                        </Text>
+                    </TouchableOpacity>
+                    <View style={styles.lineStyle} />
                 </View>
             );
-        }
-        return footer;
-    }, [loading, listData, hasMore]);
-
-    const listEmpty = useCallback(() => {
-        let status = '';
-        switch (true) {
-            case error:
-                status = 'error';
-                break;
-            case loading:
-                status = 'loading';
-                break;
-            case listData?.length === 0:
-                status = 'empty';
-                break;
-            default:
-                break;
-        }
-        if (status) {
-            return <ContentStatus status={status} refetch={status === 'error' ? refetch : undefined} />;
-        } else {
-            return null;
-        }
-    }, [loading, listData, error, refetch]);
+        },
+        [tagData],
+    );
 
     return (
         <View style={styles.container}>
@@ -175,17 +97,22 @@ export default observer((props: any) => {
                 centerStyle={{ opacity: titleOpacity }}
                 title={collection?.name}
             />
-            <FlatList
-                data={listData}
-                onScroll={onScroll}
+            <QueryList
+                gqlDocument={GQL.CollectionQuery}
+                dataOptionChain="collection.posts.data"
+                paginateOptionChain="collection.posts.paginatorInfo"
+                options={{
+                    variables: {
+                        collection_id: collection.id,
+                    },
+                    fetchPolicy: 'network-only',
+                }}
                 contentContainerStyle={styles.contentContainer}
-                renderItem={renderItem}
-                keyExtractor={(item, index) => String(item.id || index)}
-                ListHeaderComponent={listHeader}
-                ListFooterComponent={listFooter}
-                ListEmptyComponent={listEmpty}
-                onEndReached={onEndReached}
-                onEndReachedThreshold={0.1}
+                onScroll={onScroll}
+                renderItem={({ item, index, data, page }) => (
+                    <PostItem item={item} index={index} collection={collection} listData={data} nextPage={page} />
+                )}
+                ListHeaderComponent={({ data }) => listHeader(data)}
             />
         </View>
     );
