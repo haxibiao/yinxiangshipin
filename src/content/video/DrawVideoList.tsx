@@ -9,6 +9,7 @@ import {
     TouchableOpacity,
     DeviceEventEmitter,
     BackHandler,
+    FlatListProperties,
 } from 'react-native';
 import { ad } from 'react-native-ad';
 import LottieView from 'lottie-react-native';
@@ -28,7 +29,7 @@ const config = {
     viewAreaCoveragePercentThreshold: 95,
 };
 
-interface Props {
+interface Props extends FlatListProperties {
     store: any;
     initialIndex?: number;
     getVisibleItem: (i: number) => void;
@@ -39,7 +40,17 @@ interface Props {
 }
 
 export default observer(
-    ({ store, initialIndex = 0, getVisibleItem, fetchData, showBottomInput, EmptyComponent, rewardEnable }: Props) => {
+    ({
+        store,
+        initialIndex = 0,
+        getVisibleItem,
+        fetchData,
+        showBottomInput,
+        EmptyComponent,
+        rewardEnable,
+        listRef,
+        ...flatListProps
+    }: Props) => {
         const navigation = useNavigation();
         const commentRef = useRef();
 
@@ -198,10 +209,12 @@ export default observer(
             <View style={styles.container}>
                 <View style={styles.listContainer}>
                     <FlatList
+                        ref={listRef}
                         onLayout={onLayout}
                         contentContainerStyle={styles.contentContainerStyle}
                         data={store.data}
                         initialScrollIndex={initialIndex}
+                        initialNumToRender={1}
                         bounces={false}
                         scrollsToTop={false}
                         pagingEnabled={true}
@@ -220,6 +233,7 @@ export default observer(
                         onMomentumScrollEnd={onMomentumScrollEnd}
                         onViewableItemsChanged={getVisibleRows}
                         viewabilityConfig={config}
+                        {...flatListProps}
                     />
                 </View>
                 {/* 金币奖励悬浮球 */}

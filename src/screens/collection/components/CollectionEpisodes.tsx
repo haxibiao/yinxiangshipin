@@ -38,7 +38,7 @@ export default ({ collection, post, onClose, navigation, currentPage = 1 }) => {
                                 {Helper.moment(item?.video?.duration)}
                             </SafeText>
                             <Iconfont
-                                name="xihuanfill"
+                                name={item?.liked ? 'xihuanfill' : 'xihuan'}
                                 size={pixel(13)}
                                 color={item?.liked ? '#FE2C54' : '#e4e4e4'}
                                 style={{ marginRight: pixel(4) }}

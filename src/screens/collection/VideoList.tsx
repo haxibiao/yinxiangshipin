@@ -11,25 +11,34 @@ import { Overlay } from 'teaset';
 import CollectionEpisodes from './components/CollectionEpisodes';
 
 export default () => {
+    const listRef = useRef();
     const route = useRoute();
     const client = useApolloClient();
     const navigation = useNavigation();
     const post = useMemo(() => route?.params?.post, []);
     const collection = useMemo(() => route?.params?.collection, []);
-    const nextPage = useRef(0); // Math.ceil(post?.current_episode / 5)
+    const nextPage = useRef(Math.ceil(post?.current_episode / 5)); // Math.ceil(post?.current_episode / 5)
     const store = useMemo(() => new DrawVideoStore({ initData: [post] }), []);
 
     const getVisibleItem = useCallback((index) => {
         store.viewableItemIndex = index;
+        const current_episode = store.data[index]?.current_episode;
+        if (index === 0 && current_episode !== 1) {
+            fetchPrevPage(current_episode / 5 - 1);
+        }
     }, []);
 
-    const fetchData = useCallback(async ({ initFetch }: { initFetch?: boolean }) => {
+    const fetchPrevPage = useCallback((page) => {
+        fetchData({ page, prevPage: true });
+    }, []);
+
+    const fetchData = useCallback(async (params) => {
         async function postsQuery() {
             return client.query({
                 query: GQL.CollectionQuery,
                 variables: {
                     collection_id: collection?.id,
-                    page: nextPage.current,
+                    page: params?.page || nextPage.current,
                     count: 5,
                 },
             });
@@ -45,12 +54,16 @@ export default () => {
             const hasMore = result?.data?.collection?.posts?.paginatorInfo?.hasMorePages;
             nextPage.current = result?.data?.collection?.posts?.paginatorInfo?.currentPage + 1;
             if (postsData?.length > 0) {
-                if (initFetch) {
+                if (params?.initFetch) {
                     const currentIndex = __.findIndex(postsData, function (item) {
                         return item?.id === post?.id;
                     });
                     store.data = postsData;
-                    store.viewableItemIndex = currentIndex || 0;
+                    store.viewableItemIndex = currentIndex > 0 ? currentIndex : 0;
+                    store.JumpPlayCollectionVideo = true;
+                } else if (params?.prevPage) {
+                    store.prependSource(postsData);
+                    store.viewableItemIndex = postsData.length;
                 } else {
                     store.addSource(postsData);
                 }
@@ -112,6 +125,16 @@ export default () => {
         };
     }, [collection, post]);
 
+    const onContentSizeChange = useCallback((contentWidth, contentHeight) => {
+        if (store.JumpPlayCollectionVideo) {
+            store.JumpPlayCollectionVideo = false;
+            listRef.current?.scrollToIndex({
+                index: store.viewableItemIndex,
+                animated: false,
+            });
+        }
+    }, []);
+
     // 页面初始化
     useEffect(() => {
         showCollection();
@@ -119,6 +142,7 @@ export default () => {
         DeviceEventEmitter.addListener('JumpPlayCollectionVideo', ({ data, index, page }) => {
             store.data = data;
             store.viewableItemIndex = index;
+            store.JumpPlayCollectionVideo = true;
             nextPage.current = page;
         });
         return () => {
@@ -129,7 +153,14 @@ export default () => {
     return (
         <View style={styles.container}>
             <FocusAwareStatusBar barStyle="light-content" />
-            <DrawVideoList store={store} initialIndex={0} getVisibleItem={getVisibleItem} fetchData={fetchData} />
+            <DrawVideoList
+                listRef={listRef}
+                store={store}
+                initialIndex={0}
+                getVisibleItem={getVisibleItem}
+                fetchData={fetchData}
+                onContentSizeChange={onContentSizeChange}
+            />
             <TouchableWithoutFeedback onPress={showCollection}>
                 <View style={styles.collectionItem}>
                     <View style={styles.collectionInfo}>

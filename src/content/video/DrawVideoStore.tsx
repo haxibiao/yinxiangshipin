@@ -34,7 +34,7 @@ class DrawVideoStore {
     public uniqueIds = {};
     @observable public status: Status = '';
     @observable public fullVideoHeight: number = appStore.viewportHeight;
-    @observable public data: VideoItem[] = [];
+    @observable public data = observable.array<VideoItem>([]);
     @observable public visibility: boolean = true;
     @observable public viewableItemIndex: number = 0;
     @observable public commentBody = '';
@@ -76,7 +76,16 @@ class DrawVideoStore {
             this.uniqueIds[item?.id] = this.uniqueIds[item?.id] + 1 || 1;
             return this.uniqueIds[item?.id] <= 1;
         });
-        this.data = this.data.concat(newData);
+        this.data = [...this.data, ...newData];
+    }
+
+    @action.bound
+    public prependSource(source: VideoItem[]) {
+        const newData = source.filter((item) => {
+            this.uniqueIds[item?.id] = this.uniqueIds[item?.id] + 1 || 1;
+            return this.uniqueIds[item?.id] <= 1;
+        });
+        this.data = [...newData, ...this.data];
     }
 
     @action.bound
