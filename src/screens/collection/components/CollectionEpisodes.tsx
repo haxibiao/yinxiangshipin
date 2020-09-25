@@ -14,11 +14,11 @@ import { Iconfont, SafeText } from '@src/components';
 import { GQL, useFollowMutation } from '@src/apollo';
 import { userStore } from '@src/store';
 
-export default ({ collection, post, onClose, navigation }) => {
+export default ({ collection, getCurrentPost, onClose, navigation }) => {
     // const countEpisodes = useMemo(() => collection?.updated_to_episode, [collection]);
+    const post = getCurrentPost();
     const currentPage = useMemo(() => Math.ceil(post?.current_episode / 10), [post]);
     const initialIndex = useMemo(() => (post?.current_episode % 10) - 1, [post]);
-    console.log('currentPage', currentPage, initialIndex, post?.current_episode);
     const toggleFollow = useFollowMutation({
         variables: {
             followed_id: collection.id,

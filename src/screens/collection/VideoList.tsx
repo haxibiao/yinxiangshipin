@@ -9,7 +9,10 @@ import { NavBarHeader, SafeText, Iconfont } from '@src/components';
 import { GQL } from '@src/apollo';
 import { DrawVideoList, DrawVideoStore } from '@src/content';
 import { Overlay } from 'teaset';
+import LottieView from 'lottie-react-native';
 import CollectionEpisodes from './components/CollectionEpisodes';
+
+const VIDEO_QUERY_COUNT = 5;
 
 export default observer(() => {
     const listRef = useRef();
@@ -18,63 +21,92 @@ export default observer(() => {
     const navigation = useNavigation();
     const post = useMemo(() => route?.params?.post, []);
     const collection = useMemo(() => route?.params?.collection, []);
-    const nextPage = useRef(Math.ceil(post?.current_episode / 5)); // Math.ceil(post?.current_episode / 5)
+    const nextPage = useRef(Math.ceil(post?.current_episode / VIDEO_QUERY_COUNT));
     const store = useMemo(() => new DrawVideoStore({ initData: [post] }), []);
 
     const getVisibleItem = useCallback((index) => {
+        // console.log('getVisibleItem', index);
+        // 因为onContentSizeChange在getVisibleItem前面调用，如果是跳转播放就不需要getVisibleItem更新viewableItemIndex了
         if (!store.JumpPlayCollectionVideo) {
             store.viewableItemIndex = index;
         }
     }, []);
 
-    const fetchData = useCallback(async (initFetch) => {
-        let prevPage;
-        const current_episode = store.data[store.viewableItemIndex]?.current_episode;
-        if (!initFetch && store.viewableItemIndex === 0 && current_episode !== 1) {
-            prevPage = Math.ceil(current_episode / 5) - 1;
-        }
+    // const lisHeader = useCallback(() => {
+    //     if (store.data[store.viewableItemIndex]?.current_episode !== 1) {
+    //         return (
+    //             <View style={{ alignItems: 'center' }}>
+    //                 <LottieView
+    //                     source={require('@app/assets/json/loading.json')}
+    //                     style={{ width: '30%' }}
+    //                     loop
+    //                     autoPlay
+    //                 />
+    //             </View>
+    //         );
+    //     }
+    //     return null;
+    // }, [store.data, store.viewableItemIndex]);
 
+    const fetchData = useCallback(async (initFetch) => {
+        let isTopReached = false;
+        let prevPage = 0;
+        const current_episode = store.data[store.viewableItemIndex]?.current_episode;
+        // 到达首页item,并且还有上一集，才计算上一页的页码
+        if (!initFetch && store.viewableItemIndex === 0 && current_episode !== 1) {
+            isTopReached = true;
+            prevPage = Math.ceil(current_episode / VIDEO_QUERY_COUNT) - 1;
+        }
+        // console.log('isTopReached', isTopReached, prevPage);
         async function postsQuery() {
             return client.query({
                 query: GQL.CollectionQuery,
                 variables: {
                     collection_id: collection?.id,
-                    page: prevPage || nextPage.current,
-                    count: 5,
+                    page: isTopReached ? prevPage : nextPage.current,
+                    count: VIDEO_QUERY_COUNT,
                 },
             });
         }
-
+        // 是否fetch data
         const opened = (() => {
-            if (store.status == 'loading' || store.status == 'loadAll') {
+            if (store.status == 'loading') {
                 return false;
-            } else if (prevPage || initFetch) {
+            } else if (initFetch) {
                 return true;
-            } else {
+            } else if (isTopReached && prevPage >= 1) {
+                return true;
+            } else if (store.status !== 'loadAll') {
                 return store.data.length - store.viewableItemIndex <= 3;
             }
         })();
+        // console.log('opened', opened);
         if (opened) {
             store.status = 'loading';
             const [error, result] = await exceptionCapture(postsQuery);
             const postsData = result?.data?.collection?.posts?.data;
             const hasMore = result?.data?.collection?.posts?.paginatorInfo?.hasMorePages;
-            if (!prevPage) {
+            if (!isTopReached) {
+                // 不是上一页才更新nextPage
                 nextPage.current = result?.data?.collection?.posts?.paginatorInfo?.currentPage + 1;
             }
+            // console.log('postsData', postsData?.length);
             if (postsData?.length > 0) {
                 if (initFetch) {
+                    // 初始化，播放当前集数
                     const currentIndex = __.findIndex(postsData, function (item) {
                         return item?.id === post?.id;
                     });
                     store.data = postsData;
                     store.viewableItemIndex = currentIndex > 0 ? currentIndex : 0;
                     store.JumpPlayCollectionVideo = true;
-                } else if (prevPage) {
+                } else if (isTopReached) {
+                    // 填充上一页数据，更新viewableItemIndex
                     store.prependSource(postsData);
                     store.viewableItemIndex = postsData.length;
                     store.JumpPlayCollectionVideo = true;
                 } else {
+                    // 加载下一页
                     store.addSource(postsData);
                 }
             }
@@ -119,7 +151,7 @@ export default observer(() => {
                 <ApolloProvider client={client}>
                     <CollectionEpisodes
                         collection={collection}
-                        post={store.data[store.viewableItemIndex]}
+                        getCurrentPost={() => store.data[store.viewableItemIndex]}
                         onClose={onClose}
                         navigation={navigation}
                     />
@@ -134,7 +166,7 @@ export default observer(() => {
         };
     }, [collection]);
 
-    const onContentSizeChange = useCallback((contentWidth, contentHeight) => {
+    const scrollToIndex = useCallback(() => {
         if (store.JumpPlayCollectionVideo) {
             store.JumpPlayCollectionVideo = false;
             listRef.current?.scrollToIndex({
@@ -144,15 +176,27 @@ export default observer(() => {
         }
     }, []);
 
+    const onContentSizeChange = useCallback((contentWidth, contentHeight) => {
+        // 跳转播放
+        // console.log('onContentSizeChange', store.viewableItemIndex);
+        scrollToIndex();
+    }, []);
+
     // 页面初始化
     useEffect(() => {
         showCollection();
         fetchData(true);
         DeviceEventEmitter.addListener('JumpPlayCollectionVideo', ({ data, index, page }) => {
-            store.data = data;
-            store.viewableItemIndex = index;
+            // console.log('JumpPlayCollectionVideo', index);
             store.JumpPlayCollectionVideo = true;
+            store.viewableItemIndex = index;
             nextPage.current = page;
+            // data相同的情况下，直接scrollToIndex即可
+            if (store.data.length === data.length && store.data[0]?.id === data[0]?.id) {
+                scrollToIndex();
+            } else {
+                store.data = data;
+            }
         });
         return () => {
             DeviceEventEmitter.removeListener('JumpPlayCollectionVideo');
@@ -170,6 +214,7 @@ export default observer(() => {
                 getVisibleItem={getVisibleItem}
                 fetchData={fetchData}
                 onContentSizeChange={onContentSizeChange}
+                // ListHeaderComponent={lisHeader}
             />
             <TouchableWithoutFeedback onPress={showCollection}>
                 <View style={styles.collectionItem}>
