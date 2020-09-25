@@ -80,7 +80,7 @@ const index = observer(({ navigation, keyword, tag_id, user_id, collection_id, s
             }}
             numColumns={1}
             renderItem={({ item, index, data, page }) => (
-                <PostItem item={item} index={index} listData={data} nextPage={page} />
+                <PostItem item={item} index={index} listData={data} nextPage={page} collection={item?.collections[0]} />
             )}
         />
     ) : (
