@@ -10,6 +10,7 @@ import {
     DeviceEventEmitter,
     BackHandler,
     FlatListProperties,
+    ViewStyle,
 } from 'react-native';
 import { ad } from 'react-native-ad';
 import LottieView from 'lottie-react-native';
@@ -37,6 +38,8 @@ interface Props extends FlatListProperties {
     showBottomInput?: boolean;
     EmptyComponent?: ReactElement;
     rewardEnable?: boolean;
+    rewardStyle?: ViewStyle;
+    style?: ViewStyle;
 }
 
 export default observer(
@@ -49,6 +52,8 @@ export default observer(
         EmptyComponent,
         rewardEnable,
         listRef,
+        rewardStyle,
+        style,
         ...flatListProps
     }: Props) => {
         const navigation = useNavigation();
@@ -206,7 +211,7 @@ export default observer(
         useAdReward(store, rewardEnable);
 
         return (
-            <View style={styles.container}>
+            <View style={[styles.container, style]}>
                 <View style={styles.listContainer}>
                     <FlatList
                         ref={listRef}
@@ -238,7 +243,7 @@ export default observer(
                 </View>
                 {/* 金币奖励悬浮球 */}
                 {rewardEnable && adStore.enableWallet && (
-                    <View style={styles.rewardProgress}>
+                    <View style={[styles.rewardProgress, rewardStyle]}>
                         <RewardProgress store={store} />
                     </View>
                 )}

@@ -38,7 +38,7 @@ const TransitionScreen = {
                                   inputRange: [0, 1],
                                   outputRange: [0, -layouts.screen.width],
                               })
-                            : 1,
+                            : 0,
                     },
                 ],
             },

@@ -53,6 +53,12 @@ export default observer((props: any) => {
     }, [props.visibility]);
 
     return (
-        <DrawVideoList store={videoStore} getVisibleItem={getVisibleItem} fetchData={fetchData} rewardEnable={true} />
+        <DrawVideoList
+            rewardStyle={{ marginBottom: pixel(50) }}
+            store={videoStore}
+            getVisibleItem={getVisibleItem}
+            fetchData={fetchData}
+            rewardEnable={true}
+        />
     );
 });

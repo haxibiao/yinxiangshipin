@@ -164,6 +164,7 @@ export default observer(() => {
         <View style={styles.container}>
             <FocusAwareStatusBar barStyle="light-content" />
             <DrawVideoList
+                style={{ paddingBottom: 0 }}
                 listRef={listRef}
                 store={store}
                 initialIndex={0}
@@ -199,13 +200,10 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     collectionItem: {
-        position: 'absolute',
-        left: pixel(12),
-        right: pixel(12),
-        bottom: Theme.HOME_INDICATOR_HEIGHT + 5,
-        zIndex: 1,
-        height: 40,
-        borderRadius: 20,
+        margin: pixel(12),
+        marginBottom: Theme.HOME_INDICATOR_HEIGHT || pixel(12),
+        height: pixel(44),
+        borderRadius: pixel(22),
         paddingHorizontal: pixel(15),
         flexDirection: 'row',
         alignItems: 'center',
