@@ -87,7 +87,7 @@ export default React.forwardRef(function ContentList(
     const listEmpty = useCallback(() => {
         let status = '';
         switch (true) {
-            case error:
+            case !!error:
                 status = 'error';
                 break;
             case loading:
