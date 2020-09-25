@@ -89,6 +89,7 @@ const styles = StyleSheet.create({
         marginRight: pixel(Theme.itemSpace),
         resizeMode: 'cover',
         borderRadius: pixel(3),
+        backgroundColor: '#000',
     },
     collectionIcon: {
         width: pixel(12),

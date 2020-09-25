@@ -196,7 +196,6 @@ export default function CreateCollectionScreen(props) {
                                 <Iconfont name="iconfontadd" size={pixel(30)} color={Theme.slateGray1} />
                             </TouchableOpacity>
                         </View>
-
                         <Row style={{ marginTop: pixel(20) }}>
                             <TouchableOpacity
                                 style={[styles.btnStyle, styles.leftBtn, disabledBtn && styles.disabledBtn]}
@@ -216,9 +215,6 @@ export default function CreateCollectionScreen(props) {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
     bodyView: {
         flexGrow: 1,
         backgroundColor: '#fff',
@@ -233,7 +229,6 @@ const styles = StyleSheet.create({
     },
     titleInput: {
         padding: pixel(5),
-        // paddingVertical:pixel(5),
         borderWidth: pixel(0.5),
         borderColor: '#9996',
         borderRadius: pixel(5),
@@ -297,7 +292,6 @@ const styles = StyleSheet.create({
         borderRadius: pixel(5),
         width: mediaWidth,
         height: mediaWidth * 1.4,
-        // marginRight: Theme.itemSpace,
         overflow: 'hidden',
     },
     close: {
@@ -321,14 +315,4 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         alignItems: 'center',
     },
-    // uploadView: {
-    //     alignItems: 'center',
-    //     backgroundColor: Theme.slateGray2,
-    //     borderRadius: pixel(5),
-    //     height: mediaWidth,
-    //     justifyContent: 'center',
-    //     marginRight: Theme.itemSpace,
-    //     overflow: 'hidden',
-    //     width: mediaWidth,
-    // },
 });
