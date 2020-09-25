@@ -63,11 +63,15 @@ export default observer((props: any) => {
                         <View style={styles.tagInfo}>
                             <SafeText style={styles.tagName}>#{tagData?.name}</SafeText>
                             <Text style={styles.tagCount}>
-                                {`${count(tagData?.count_plays || 0.0)}次播放`}
+                                {`${count(tagData?.count_plays || Math.round(Math.random() * 100))}次播放`}
                                 {`· @${tagData?.user?.name}`}
                             </Text>
                             <View style={styles.tagInfoBottom}>
-                                <Text style={styles.tagCount}>{`更新至第${tagData?.posts.paginatorInfo.total}集`}</Text>
+                                <Text style={styles.tagCount}>
+                                    {tagData?.updated_to_episode > 0
+                                        ? `更新至第${tagData?.updated_to_episode || 0}集`
+                                        : ``}
+                                </Text>
                             </View>
                         </View>
                     </View>

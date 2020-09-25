@@ -177,14 +177,6 @@ query searchCollectionsQuery($query: String!, $page: Int, $count: Int) {
                 id
                 name
             }
-            posts {
-                paginatorInfo {
-                    total
-                }
-                data {
-                    id
-                }
-            }
         }
     }
 }

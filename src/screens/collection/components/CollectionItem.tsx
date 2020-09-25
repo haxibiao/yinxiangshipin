@@ -1,6 +1,7 @@
 import React, { useMemo, useCallback } from 'react';
 import { StyleSheet, View, Image, Text, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
 import { Iconfont, Row, SafeText } from '@src/components';
+import { count } from '@src/common';
 
 export default function CollectionItem({ collection, navigation }) {
     return (
@@ -40,7 +41,8 @@ const UserCollectionItem = ({ item, index, navigation, onLongPress }) => {
                     </SafeText>
                 </Row>
                 <SafeText style={styles.collectionInfo} numberOfLines={1}>
-                    1.2w播放·更新至第{item.posts.paginatorInfo?.total || 0}集
+                    {`${count(item.count_plays || Math.round(Math.random() * 100))}播放`}
+                    {item.updated_to_episode > 0 && `·更新至第${item.updated_to_episode}集`}
                 </SafeText>
             </View>
         </TouchableOpacity>

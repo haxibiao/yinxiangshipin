@@ -113,6 +113,8 @@ query followedCollectionsQuery($user_id: Int!, $followed_type: String, $page: In
                 description
                 count_articles
                 count_follows
+                count_posts
+                updated_to_episode
                 followed
                 type
                 status
@@ -120,14 +122,6 @@ query followedCollectionsQuery($user_id: Int!, $followed_type: String, $page: In
                     id
                     name
                     avatar
-                }
-                posts {
-                    paginatorInfo {
-                        total
-                    }
-                    data {
-                        id
-                    }
                 }
             }
         }

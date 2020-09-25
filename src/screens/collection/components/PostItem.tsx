@@ -38,7 +38,8 @@ export default function PostItem({ item, index, collection, listData, nextPage, 
                 <Image style={styles.videoCover} source={{ uri: cover }} />
                 <View style={{ flex: 1, overflow: 'hidden', justifyContent: 'space-around' }}>
                     <SafeText style={styles.contentText} numberOfLines={2}>
-                        {`第${index + 1}集￨${item?.content || item?.description}`}
+                        {item?.current_episode && `第${item?.current_episode}集￨`}
+                        {`${item?.content || item?.description}`}
                     </SafeText>
                     <Row>
                         <SafeText style={[styles.metaText, { marginRight: pixel(15) }]}>

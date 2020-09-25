@@ -57,7 +57,6 @@ query CollectionQuery($collection_id: Int!, $page: Int, $count: Int) {
             paginatorInfo {
                 currentPage
                 hasMorePages
-                total
             }
             data {
                 id
