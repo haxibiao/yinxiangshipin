@@ -10,19 +10,24 @@ import {
     Animated,
 } from 'react-native';
 import { observer, appStore, userStore } from '@src/store';
-import { NavBarHeader, SafeText, Iconfont, Row } from '@src/components';
+import { NavBarHeader, SafeText, Iconfont, Row, Loading } from '@src/components';
 import { syncGetter, count, mergeProperty } from '@src/common';
 import { GQL, useQuery, useFollowMutation, useMutation } from '@src/apollo';
 import { ContentStatus, QueryList } from '@src/content';
 import { observable } from 'mobx';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import PostItem from './components/PostItem';
+import { Overlay } from 'teaset';
+import { ApolloProvider } from '@apollo/react-hooks';
+import AddedToCollection from './components/AddedToCollection';
+import OperationVideoStore from './store';
 
 export default observer((props: any) => {
     const navigation = useNavigation();
     const route = useRoute();
     let collection = route?.params?.collection;
     let tagData = collection;
+    const isSelf = useMemo(() => tagData?.user.id === userStore.me.id, [tagData]);
 
     const scrollAnimateValue = useRef(new Animated.Value(0));
     const onScroll = useMemo(() => {
@@ -92,6 +97,96 @@ export default observer((props: any) => {
         [tagData],
     );
 
+    // 合集中批量添加/删除动态操作
+    const [moveInCollection, { loading: addLoading, error: addError }] = useMutation(GQL.moveInCollectionsMutation);
+    const [moveOutCollection, { loading: deleteLoading, error: deleteError }] = useMutation(
+        GQL.moveOutCollectionsMutation,
+    );
+
+    // 选择合集
+    const [collections, setCollections] = useState(route.params?.collection ? [route.params?.collection] : []);
+    const overlayKey = useRef();
+
+    const closeCollection = useCallback(() => {
+        Overlay.hide(overlayKey.current);
+    }, []);
+
+    const addCollection = useCallback((value) => {
+        setCollections([value]);
+        closeCollection();
+    }, []);
+
+    const deleteCollection = useCallback(() => {
+        setCollections([]);
+        closeCollection();
+    }, []);
+    const confirmBtn = useCallback(({ operation, collection_id }) => {
+        closeCollection();
+        if (operation === '添加') {
+            moveInCollection({
+                variables: {
+                    collection_id: collection_id,
+                    collectable_ids: OperationVideoStore.stashAddVideo.map((item) => {
+                        return item.post_id;
+                    }),
+                },
+                refetchQueries: () => [
+                    {
+                        query: GQL.CollectionQuery,
+                        variables: { collection_id: collection_id },
+                        fetchPolicy: 'network-only',
+                    },
+                ],
+            });
+        } else {
+            moveOutCollection({
+                variables: {
+                    collection_id: collection_id,
+                    collectable_ids: OperationVideoStore.stashDeleteVideo.map((item) => {
+                        return item.post_id;
+                    }),
+                },
+                refetchQueries: () => [
+                    {
+                        query: GQL.CollectionQuery,
+                        variables: { collection_id: collection_id },
+                        fetchPolicy: 'network-only',
+                    },
+                ],
+            });
+        }
+    }, []);
+    useEffect(() => {
+        if (addLoading || deleteLoading) {
+            Loading.show();
+        } else {
+            Loading.hide();
+        }
+    }, [addLoading, deleteLoading, addError, deleteError]);
+
+    const showCollection = useCallback((operation) => {
+        const Operation = (
+            <Overlay.PullView
+                style={{ flexDirection: 'column', justifyContent: 'flex-end' }}
+                containerStyle={{ backgroundColor: 'transparent' }}
+                animated={true}>
+                <ApolloProvider client={appStore.client}>
+                    <AddedToCollection
+                        onClose={closeCollection}
+                        onClick={addCollection}
+                        navigation={navigation}
+                        operation={operation}
+                        collection={collection}
+                        confirmBtn={confirmBtn}
+                    />
+                </ApolloProvider>
+            </Overlay.PullView>
+        );
+        OperationVideoStore.setStashAddVideo([]);
+        OperationVideoStore.setStashDeleteVideo([]);
+        overlayKey.current = Overlay.show(Operation);
+    }, []);
+
     return (
         <View style={styles.container}>
             <NavBarHeader
@@ -118,6 +213,21 @@ export default observer((props: any) => {
                 )}
                 ListHeaderComponent={({ data }) => listHeader(data)}
             />
+            {isSelf && (
+                <View style={styles.bottomOperation}>
+                    <Text style={styles.btnText}>合集操作</Text>
+                    <View style={styles.rightView}>
+                        <TouchableOpacity style={styles.btnStyle} onPress={() => showCollection('添加')}>
+                            <Text style={styles.btnText}>批量添加</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[styles.btnStyle, { marginLeft: pixel(15) }]}
+                            onPress={() => showCollection('删除')}>
+                            <Text style={styles.btnText}>批量删除</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            )}
         </View>
     );
 });
@@ -196,18 +306,6 @@ const styles = StyleSheet.create({
         paddingVertical: pixel(10),
         marginBottom: pixel(20),
     },
-    // itemWrap: {
-    //     width: Device.WIDTH,
-    //     flexDirection: 'row',
-    //     paddingHorizontal: pixel(Theme.itemSpace),
-    //     marginVertical: pixel(Theme.itemSpace) / 2,
-    // },
-    // videoCover: {
-    //     width: percent(18),
-    //     height: percent(18) * 1.4,
-    //     marginRight: pixel(10),
-    //     borderRadius: pixel(2),
-    // },
     contentText: {
         fontSize: font(14),
         color: '#fff',
@@ -226,5 +324,31 @@ const styles = StyleSheet.create({
     listFooterText: {
         fontSize: font(13),
         color: '#b4b4b4',
+    },
+    bottomOperation: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        backgroundColor: '#161924',
+        zIndex: 999,
+        bottom: Theme.HOME_INDICATOR_HEIGHT,
+        paddingVertical: pixel(10),
+        paddingHorizontal: pixel(Theme.itemSpace),
+        borderTopColor: '#666',
+        borderTopWidth: pixel(1),
+    },
+    rightView: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
+    btnStyle: {
+        backgroundColor: '#666',
+        borderRadius: pixel(5),
+        padding: pixel(10),
+    },
+    btnText: {
+        fontSize: font(12),
+        color: '#fff',
     },
 });

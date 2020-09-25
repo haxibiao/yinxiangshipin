@@ -62,6 +62,7 @@ import CollectionScreen from '../screens/collection';
 import CreateCollectionScreen from '../screens/collection/CreateCollectionScreen';
 import CollectionDetailScreen from '../screens/collection/CollectionDetail';
 import CollectionVideoListScreen from '../screens/collection/VideoList';
+import AddToCollectionScreen from '../screens/collection/components/AddedToCollection';
 
 // category
 import CategoryScreen from '../screens/category';
@@ -232,6 +233,9 @@ export default {
     },
     创建合集: {
         component: CreateCollectionScreen,
+    },
+    AddToCollection: {
+        component: AddToCollectionScreen,
     },
     CollectionDetail: {
         component: CollectionDetailScreen,
