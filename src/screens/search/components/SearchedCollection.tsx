@@ -9,33 +9,25 @@ import { UserCollectionItem } from '@src/screens/collection/components/Collectio
 
 const index = observer(({ keyword, navigation }) => {
     return (
-        <View style={styles.container}>
-            <QueryList
-                contentContainerStyle={styles.contentContainer}
-                gqlDocument={GQL.searchCollectionsQuery}
-                dataOptionChain="searchCollections.data"
-                paginateOptionChain="searchCollections.paginatorInfo"
-                options={{
-                    variables: {
-                        query: keyword,
-                    },
-                    fetchPolicy: 'network-only',
-                }}
-                renderItem={({ item, index }) => (
-                    <UserCollectionItem item={item} index={index} navigation={navigation} />
-                )}
-            />
-        </View>
+        <QueryList
+            contentContainerStyle={styles.contentContainer}
+            gqlDocument={GQL.searchCollectionsQuery}
+            dataOptionChain="searchCollections.data"
+            paginateOptionChain="searchCollections.paginatorInfo"
+            options={{
+                variables: {
+                    query: keyword,
+                    count: 10,
+                },
+                fetchPolicy: 'network-only',
+            }}
+            renderItem={({ item, index }) => <UserCollectionItem item={item} index={index} navigation={navigation} />}
+        />
     );
 });
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: 'rgba(255,255,255,1)',
-    },
     contentContainer: {
-        flexGrow: 1,
         paddingBottom: Theme.HOME_INDICATOR_HEIGHT,
     },
     listFooter: {
