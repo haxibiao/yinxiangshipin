@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import {
     StyleSheet,
     View,
@@ -14,7 +14,11 @@ import { Iconfont, SafeText } from '@src/components';
 import { GQL, useFollowMutation } from '@src/apollo';
 import { userStore } from '@src/store';
 
-export default ({ collection, post, onClose, navigation, currentPage = 1 }) => {
+export default ({ collection, post, onClose, navigation }) => {
+    // const countEpisodes = useMemo(() => collection?.updated_to_episode, [collection]);
+    const currentPage = useMemo(() => Math.ceil(post?.current_episode / 10), [post]);
+    const initialIndex = useMemo(() => (post?.current_episode % 10) - 1, [post]);
+    console.log('currentPage', currentPage, initialIndex, post?.current_episode);
     const toggleFollow = useFollowMutation({
         variables: {
             followed_id: collection.id,
@@ -88,13 +92,12 @@ export default ({ collection, post, onClose, navigation, currentPage = 1 }) => {
                 options={{
                     variables: {
                         collection_id: collection?.id,
-                        count: 5,
+                        count: 10,
                         page: currentPage,
                     },
                     // fetchPolicy: 'network-only',
                 }}
                 renderItem={renderItem}
-                // initialScrollIndex
                 contentContainerStyle={styles.content}
             />
             <View style={styles.listFooter}>

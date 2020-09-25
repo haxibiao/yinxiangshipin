@@ -32,7 +32,7 @@ export default function PostWithAD({ item, index, adClick }) {
                                 </View>
                             </View>
                         </View>
-                        <View style={{ marginHorizontal: -pixel(14) }}>
+                        <View style={{ marginHorizontal: -pixel(14), minHeight: pixel(100) }}>
                             <ad.Feed
                                 codeid={adStore.codeid_feed}
                                 adWidth={Device.WIDTH}
@@ -76,7 +76,7 @@ export default function PostWithAD({ item, index, adClick }) {
             );
         }
         return null;
-    }, [item, index, visible, adClick]);
+    }, [adStore.enableAd, visible]);
 
     return (
         <>

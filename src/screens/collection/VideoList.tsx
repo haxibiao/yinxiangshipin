@@ -122,7 +122,6 @@ export default observer(() => {
                         post={store.data[store.viewableItemIndex]}
                         onClose={onClose}
                         navigation={navigation}
-                        currentPage={nextPage.current}
                     />
                 </ApolloProvider>
             </Overlay.PullView>
