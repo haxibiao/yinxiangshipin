@@ -20,7 +20,7 @@ import PostItem from './components/PostItem';
 import { Overlay } from 'teaset';
 import { ApolloProvider } from '@apollo/react-hooks';
 import AddedToCollection from './components/AddedToCollection';
-import OperationVideoStore from './store';
+import StashVideoStore from './store';
 
 export default observer((props: any) => {
     const navigation = useNavigation();
@@ -126,7 +126,7 @@ export default observer((props: any) => {
             moveInCollection({
                 variables: {
                     collection_id: collection_id,
-                    collectable_ids: OperationVideoStore.stashAddVideo.map((item) => {
+                    collectable_ids: StashVideoStore.stashAddVideo.map((item) => {
                         return item.post_id;
                     }),
                 },
@@ -142,7 +142,7 @@ export default observer((props: any) => {
             moveOutCollection({
                 variables: {
                     collection_id: collection_id,
-                    collectable_ids: OperationVideoStore.stashDeleteVideo.map((item) => {
+                    collectable_ids: StashVideoStore.stashDeleteVideo.map((item) => {
                         return item.post_id;
                     }),
                 },
@@ -182,8 +182,8 @@ export default observer((props: any) => {
                 </ApolloProvider>
             </Overlay.PullView>
         );
-        OperationVideoStore.setStashAddVideo([]);
-        OperationVideoStore.setStashDeleteVideo([]);
+        StashVideoStore.setStashAddVideo([]);
+        StashVideoStore.setStashDeleteVideo([]);
         overlayKey.current = Overlay.show(Operation);
     }, []);
 

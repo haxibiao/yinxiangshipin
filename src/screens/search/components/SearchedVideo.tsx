@@ -6,42 +6,31 @@ import { GQL } from '@src/apollo';
 import { QueryList } from '@src/content';
 import SearchVideoItem from './SearchVideoItem';
 import PostItem from '@src/screens/collection/components/PostItem';
+import StashVideoStore from '@src/screens/collection/store';
 
 // selectable:区分个人合集和公共合集入口
-const index = observer(({ navigation, keyword, tag_id, user_id, collection_id, selectable, uploadVideoResponse }) => {
+const index = observer(({ navigation, keyword, tag_id, user_id, collection_id }) => {
     const [hot, setHot] = useState(false);
 
     const renderItem = useCallback(
         ({ item, index, data, page }) => {
-            if (selectable && uploadVideoResponse) {
-                return (
-                    <PostItem
-                        item={item}
-                        index={index}
-                        listData={data}
-                        nextPage={page}
-                        uploadVideoResponse={uploadVideoResponse}
-                    />
-                );
-            } else {
-                return (
-                    <TouchableWithoutFeedback
-                        onPress={() => {
-                            navigation.push('SearchedVideoList', {
-                                keyword,
-                                tag_id,
-                                user_id,
-                                initData: data,
-                                itemIndex: index,
-                                page,
-                            });
-                        }}>
-                        <View style={styles.itemWrap}>
-                            <SearchVideoItem media={item} />
-                        </View>
-                    </TouchableWithoutFeedback>
-                );
-            }
+            return (
+                <TouchableWithoutFeedback
+                    onPress={() => {
+                        navigation.push('SearchedVideoList', {
+                            keyword,
+                            tag_id,
+                            user_id,
+                            initData: data,
+                            itemIndex: index,
+                            page,
+                        });
+                    }}>
+                    <View style={styles.itemWrap}>
+                        <SearchVideoItem media={item} />
+                    </View>
+                </TouchableWithoutFeedback>
+            );
         },
         [keyword, tag_id, user_id],
     );
@@ -82,6 +71,7 @@ const index = observer(({ navigation, keyword, tag_id, user_id, collection_id, s
             renderItem={({ item, index, data, page }) => (
                 <PostItem item={item} index={index} listData={data} nextPage={page} collection={item?.collections[0]} />
             )}
+            ListHeaderComponent={listHeader}
         />
     ) : (
         <QueryList
@@ -98,9 +88,9 @@ const index = observer(({ navigation, keyword, tag_id, user_id, collection_id, s
                 },
                 fetchPolicy: 'network-only',
             }}
-            numColumns={!selectable && 2}
+            numColumns={2}
             renderItem={renderItem}
-            columnWrapperStyle={!selectable && styles.columnWrapperStyle}
+            columnWrapperStyle={styles.columnWrapperStyle}
             ListHeaderComponent={listHeader}
         />
     );

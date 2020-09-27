@@ -7,11 +7,11 @@ import { GQL } from '@src/apollo';
 import { userStore } from '@src/store';
 import { QueryList } from '@src/content';
 import PostItem from '@src/screens/collection/components/PostItem';
+import { observer } from 'mobx-react';
 
-export default function CollectionPost({ user_id, uploadVideoResponse }) {
+const CollectionPost = observer(({ user_id, addPostPress, videoData }) => {
     const navigation = useNavigation();
     const route = useRoute();
-
     return (
         <View style={styles.container}>
             <QueryList
@@ -22,7 +22,6 @@ export default function CollectionPost({ user_id, uploadVideoResponse }) {
                 options={{
                     variables: {
                         user_id,
-                        filter: 'normal',
                     },
                     fetchPolicy: 'network-only',
                 }}
@@ -32,13 +31,14 @@ export default function CollectionPost({ user_id, uploadVideoResponse }) {
                         index={index}
                         listData={data}
                         nextPage={page}
-                        uploadVideoResponse={uploadVideoResponse}
+                        addPostPress={addPostPress}
+                        videoData={videoData}
                     />
                 )}
             />
         </View>
     );
-}
+});
 
 const styles = StyleSheet.create({
     container: {
@@ -73,3 +73,5 @@ const styles = StyleSheet.create({
         color: '#666',
     },
 });
+
+export default CollectionPost;

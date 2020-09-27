@@ -1,18 +1,23 @@
-import React, { useCallback, useState, useMemo } from 'react';
+import React, { useCallback, useState, useMemo, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { NavBarHeader, MediaUploader, PageContainer, Row, Iconfont, Loading, SafeText } from '@src/components';
 import { userStore, appStore } from '@src/store';
 import { useNavigation } from '@react-navigation/native';
 import { GQL, useMutation, errorMessage } from '@src/apollo';
 import { exceptionCapture } from '@src/common';
+import StashVideoStore from '@src/screens/collection/store';
 import Video from 'react-native-video';
 
 const maxMediaWidth = Device.WIDTH - Theme.itemSpace * 4;
 const mediaWidth = maxMediaWidth / 3;
+
 export default function CreateCollectionScreen(props) {
     const navigation = useNavigation();
     const [formData, setFormData] = useState({ cover: '', title: '', description: '' });
+    // video：添加至合集的视频，含空数据
     const [video, setVideo] = useState([]);
+    // videoData存储处理过的video数据
+    const [videoData, setVideoData] = useState([]);
     const uploadResponse = useCallback((response) => {
         setFormData((prevFormData) => {
             return { ...prevFormData, cover: response[0] ? response[0] : '' };
@@ -20,39 +25,34 @@ export default function CreateCollectionScreen(props) {
     }, []);
 
     const uploadVideoResponse = useCallback(
-        ({ response, post_id }) => {
-            if (
-                __.find(video, function (item) {
-                    return item.post_id === post_id;
-                })
-            ) {
-                Toast.show({ content: '该作品已经添加过了' });
-            } else {
-                setVideo((prevVideoData) => {
-                    return [
-                        ...prevVideoData,
-                        { videoUrl: response ? response.url : '', post_id: post_id ? post_id : '' },
-                    ];
+        (addedVideo) => {
+            addedVideo &&
+                setVideo(() => {
+                    return [...videoData, ...addedVideo];
                 });
-            }
         },
+        [video, videoData],
+    );
+
+    const deleteVideo = useCallback(
+        (index) => {
+            setVideoData((prevData) => {
+                prevData.splice(index, 1);
+                return [...prevData];
+            });
+        },
+        [videoData],
+    );
+
+    useEffect(
+        () =>
+            setVideoData(() => {
+                return video.filter(function (obj) {
+                    return !!obj.videoUrl && obj.post_id > 0;
+                });
+            }),
         [video],
     );
-    const videoData = useMemo(() => {
-        return video.filter(function (obj) {
-            return obj.videoUrl.length > 0 && obj.post_id > 0;
-        });
-    }, [video]);
-
-    const deleteVideo = useCallback((index) => {
-        setVideo((prevVideo) => {
-            prevVideo.splice(index, 1);
-            return [...prevVideo];
-        });
-    }, []);
-    console.log('formData', formData);
-    console.log('video', video);
-    console.log('videoData', videoData);
 
     const createCollection = useCallback(async () => {
         Loading.show();
@@ -173,7 +173,17 @@ export default function CreateCollectionScreen(props) {
     }, [video, videoData]);
 
     const disabledBtn = !(formData.title && formData.description && formData.cover && videoData.length > 0);
-
+    const disabledOnPress = useCallback(() => {
+        if (!formData.title) {
+            Toast.show({ content: '请完善标题' });
+        } else if (!formData.description) {
+            Toast.show({ content: '请完善简介' });
+        } else if (!formData.cover) {
+            Toast.show({ content: '请上传封面' });
+        } else if (!videoData.length > 0) {
+            Toast.show({ content: '至少添加一个作品' });
+        }
+    }, [formData, videoData]);
     return (
         <PageContainer>
             <ScrollView showsVerticalScrollIndicator={false}>
@@ -185,26 +195,26 @@ export default function CreateCollectionScreen(props) {
                             {Album}
                             <TouchableOpacity
                                 activeOpacity={0.8}
-                                onPress={() =>
-                                    navigation.navigate('SearchVideo', {
+                                onPress={() => {
+                                    navigation.navigate('SelectPost', {
                                         user_id: userStore.me.id,
-                                        selectable: true,
                                         uploadVideoResponse,
-                                    })
-                                }
+                                        videoData: videoData,
+                                    });
+                                }}
                                 style={styles.addPost}>
                                 <Iconfont name="iconfontadd" size={pixel(30)} color={Theme.slateGray1} />
                             </TouchableOpacity>
                         </View>
                         <Row style={{ marginTop: pixel(20) }}>
                             <TouchableOpacity
+                                activeOpacity={0.8}
                                 style={[styles.btnStyle, styles.leftBtn, disabledBtn && styles.disabledBtn]}
-                                onPress={createCollection}
-                                disabled={disabledBtn}>
+                                onPress={disabledBtn ? disabledOnPress : createCollection}>
                                 <SafeText style={[styles.btnTextStyle, disabledBtn && { color: 'red' }]}>创建</SafeText>
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.btnStyle} onPress={() => navigation.goBack()}>
-                                <SafeText style={[styles.btnTextStyle, { color: '#000' }]}>取消</SafeText>
+                                <SafeText style={styles.btnTextStyle}>取消</SafeText>
                             </TouchableOpacity>
                         </Row>
                     </View>
@@ -250,7 +260,7 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
     },
     btnStyle: {
-        backgroundColor: '#9996',
+        backgroundColor: '#b2b2b2',
         paddingVertical: pixel(5),
         paddingHorizontal: pixel(20),
         borderRadius: pixel(3),
@@ -265,9 +275,8 @@ const styles = StyleSheet.create({
         borderWidth: pixel(1),
     },
     btnTextStyle: {
-        fontSize: font(11),
+        fontSize: font(12),
         color: '#fff',
-        fontWeight: 'bold',
     },
     playMark: {
         ...StyleSheet.absoluteFill,

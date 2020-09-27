@@ -3,10 +3,24 @@ import { StyleSheet, Text, View, TouchableWithoutFeedback, Image, TouchableOpaci
 import { SafeText, Iconfont, Row } from '@src/components';
 import { useNavigation } from '@react-navigation/native';
 import { observer } from 'mobx-react';
-
-export default function PostItem({ item, index, collection, listData, nextPage, uploadVideoResponse }) {
+interface Props {
+    item?: any;
+    index?: number;
+    listData?: any[];
+    nextPage?: number;
+    collection: any;
+    addPostPress: any;
+    videoData: any;
+}
+const PostItem = observer((props: Props) => {
+    let { item, index, listData, nextPage, collection, addPostPress, videoData } = props;
     const navigation = useNavigation();
-    const isAddCollection = item?.collections?.[0];
+    // 创建合集 -> 选择作品页 -> isAddCollection判断能否添加当前作品
+    // isStash：添加作品时判断是否已在添加区，true则不可点击添加按钮
+    const isStash = videoData ? !!videoData.find((video) => video.post_id === item.id) : false;
+    // isAddCollection：是否已存在某个合集中 或 是否已在缓存区，true则不可点击添加按钮
+    const isAddCollection = item?.collections.length > 0 || isStash;
+
     let cover;
     if (item?.video?.id) {
         cover = item?.video?.cover;
@@ -21,7 +35,6 @@ export default function PostItem({ item, index, collection, listData, nextPage, 
             navigation.push('PostDetail', { post: item });
         }
     }, []);
-
     return (
         <TouchableWithoutFeedback
             onPress={() =>
@@ -55,13 +68,10 @@ export default function PostItem({ item, index, collection, listData, nextPage, 
                         </Text>
                     </Row>
                 </View>
-                {uploadVideoResponse && (
+                {addPostPress && (
                     <TouchableOpacity
                         style={[styles.selectedBox, isAddCollection && { borderColor: '#666' }]}
-                        onPress={() => {
-                            // item.collections.push('0');
-                            uploadVideoResponse({ response: item?.video, post_id: item?.id });
-                        }}
+                        onPress={() => addPostPress(item)}
                         disabled={isAddCollection}>
                         <Iconfont name="iconfontadd" size={pixel(18)} color={isAddCollection ? '#666' : '#fff'} />
                     </TouchableOpacity>
@@ -69,7 +79,7 @@ export default function PostItem({ item, index, collection, listData, nextPage, 
             </View>
         </TouchableWithoutFeedback>
     );
-}
+});
 
 const styles = StyleSheet.create({
     itemWrap: {
@@ -101,3 +111,5 @@ const styles = StyleSheet.create({
         marginLeft: pixel(10),
     },
 });
+
+export default PostItem;

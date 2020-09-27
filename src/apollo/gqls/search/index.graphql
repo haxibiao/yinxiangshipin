@@ -64,6 +64,7 @@ query searchPostQuery($query: String!, $page: Int, $count: Int, $type: PostType,
                 age
                 introduction
             }
+            current_episode
             collections {
                 id
                 name

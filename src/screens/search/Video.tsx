@@ -15,9 +15,6 @@ const Search = () => {
     const tag_id = useMemo(() => route?.params?.tag_id, []);
     const user_id = useMemo(() => route?.params?.user_id, []);
     const collection_id = useMemo(() => route?.params?.collection_id, []);
-    // 区分个人合集和公共合集入口
-    const selectable = useMemo(() => route?.params?.selectable || false, []);
-    const uploadVideoResponse = useMemo(() => route?.params?.uploadVideoResponse, []);
 
     const navigation = useNavigation();
     const backButtonPress = useCallback(() => {
@@ -70,11 +67,7 @@ const Search = () => {
     }, []);
 
     const Record = useMemo(() => {
-        if (!selectable) {
-            return <SearchRecord searchKeyword={keyword} search={search} color="#fff" />;
-        } else {
-            return <CollectionPost user_id={user_id} uploadVideoResponse={uploadVideoResponse} />;
-        }
+        return <SearchRecord searchKeyword={keyword} search={search} color="#fff" />;
     }, [keyword]);
 
     const KeywordsList = useMemo(() => {
@@ -116,20 +109,15 @@ const Search = () => {
                         </View>
                     </TouchableOpacity>
                 </View>
-                {uploadVideoResponse && !trimmedValue.length > 0 ? (
-                    <TouchableOpacity onPress={() => navigation.goBack()} style={styles.searchButton}>
-                        <Text style={styles.searchButtonText}>完成</Text>
-                    </TouchableOpacity>
-                ) : (
-                    <TouchableOpacity
-                        onPress={searchBtnOnPress}
-                        style={styles.searchButton}
-                        disabled={!(inputValueZIndex > 0)}>
-                        <Text style={[styles.searchButtonText, inputValueZIndex > 0 && { color: Theme.primaryColor }]}>
-                            搜索
-                        </Text>
-                    </TouchableOpacity>
-                )}
+
+                <TouchableOpacity
+                    onPress={searchBtnOnPress}
+                    style={styles.searchButton}
+                    disabled={!(inputValueZIndex > 0)}>
+                    <Text style={[styles.searchButtonText, inputValueZIndex > 0 && { color: Theme.primaryColor }]}>
+                        搜索
+                    </Text>
+                </TouchableOpacity>
             </View>
             <View style={styles.container}>
                 <View style={[styles.posContent, { zIndex: recordZIndex }]}>{Record}</View>
@@ -141,8 +129,6 @@ const Search = () => {
                         tag_id={tag_id}
                         user_id={user_id}
                         collection_id={collection_id}
-                        selectable={selectable}
-                        uploadVideoResponse={uploadVideoResponse}
                     />
                 </View>
             </View>

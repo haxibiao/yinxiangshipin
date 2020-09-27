@@ -5,14 +5,12 @@ import { QueryList, ContentStatus, Placeholder } from '@src/content';
 import { userStore } from '@src/store';
 import { Iconfont, SafeText, Row } from '@src/components';
 import { GQL } from '@src/apollo';
-import OperationVideoStore from '../store';
+import StashVideoStore from '../store';
 import { observer } from 'mobx-react';
 
 export default observer(({ onClose, onClick, navigation, operation, collection, confirmBtn }) => {
-    const stashAddVideo = useMemo(() => OperationVideoStore.stashAddVideo, [OperationVideoStore.stashAddVideo]);
-    const stashDeleteVideo = useMemo(() => OperationVideoStore.stashDeleteVideo, [
-        OperationVideoStore.stashDeleteVideo,
-    ]);
+    const stashAddVideo = useMemo(() => StashVideoStore.stashAddVideo, [StashVideoStore.stashAddVideo]);
+    const stashDeleteVideo = useMemo(() => StashVideoStore.stashDeleteVideo, [StashVideoStore.stashDeleteVideo]);
 
     const operationBtn = useCallback(
         (name, item) => {
@@ -26,7 +24,7 @@ export default observer(({ onClose, onClick, navigation, operation, collection, 
                     item.collections.push(1);
                 } else {
                     item.collections.push(1);
-                    OperationVideoStore.setStashAddVideo([...stashAddVideo, { post_id: item.id }]);
+                    StashVideoStore.setStashAddVideo([...stashAddVideo, { post_id: item.id }]);
                 }
             } else {
                 if (
@@ -38,7 +36,7 @@ export default observer(({ onClose, onClick, navigation, operation, collection, 
                     item.collections = [];
                 } else {
                     item.collections = [];
-                    OperationVideoStore.setStashDeleteVideo([...stashDeleteVideo, { post_id: item.id }]);
+                    StashVideoStore.setStashDeleteVideo([...stashDeleteVideo, { post_id: item.id }]);
                 }
             }
         },
