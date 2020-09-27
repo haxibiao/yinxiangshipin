@@ -67,7 +67,13 @@ query searchPostQuery($query: String!, $page: Int, $count: Int, $type: PostType,
             current_episode
             collections {
                 id
+                logo
                 name
+                description
+                followed
+                count_articles
+                count_follows
+                updated_to_episode
             }
             tags {
                 data {
@@ -129,7 +135,13 @@ query searchCollectionPostQuery($query: String!, $page: Int, $collection_id: Int
             }
             collections {
                 id
+                logo
                 name
+                description
+                followed
+                count_articles
+                count_follows
+                updated_to_episode
             }
             tags {
                 data {

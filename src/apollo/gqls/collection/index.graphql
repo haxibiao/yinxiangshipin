@@ -85,7 +85,13 @@ query CollectionQuery($collection_id: Int!, $page: Int, $count: Int) {
                 }
                 collections {
                     id
+                    logo
                     name
+                    description
+                    followed
+                    count_articles
+                    count_follows
+                    updated_to_episode
                 }
                 tags {
                     data {
