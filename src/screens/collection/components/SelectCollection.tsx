@@ -67,10 +67,10 @@ export function CollectionItem({ style, collection, navigation, onClick, btnName
                 <View style={styles.collectionInfo}>
                     <View style={styles.introduction}>
                         <Text style={styles.collectionName} numberOfLines={2}>
-                            {`${collection?.name}  ${collection?.description}`}
+                            {`${collection?.name}`}
                         </Text>
                     </View>
-                    <Text style={styles.countPost}>{`共${collection?.count_articles || 0}个作品`}</Text>
+                    <Text style={styles.countPost}>{`共${collection?.count_posts || 0}个作品`}</Text>
                 </View>
                 {btnName && onClick && (
                     <TouchableOpacity style={styles.button} onPress={() => onClick(collection)}>

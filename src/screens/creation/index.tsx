@@ -388,7 +388,7 @@ export default (props: any) => {
                     {!!collections.length > 0 && (
                         <CollectionItem
                             style={{ paddingLeft: 0 }}
-                            collection={collections.length > 0}
+                            collection={collections.length > 0 && collections[0]}
                             navigation={navigation}
                             onClick={deleteCollection}
                             btnName="移除"
