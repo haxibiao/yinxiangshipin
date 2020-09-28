@@ -58,6 +58,7 @@ export default observer((props: any) => {
         toggleFollow();
     }, [tagData]);
 
+    const [lines, setLines] = useState(2);
     const listHeader = useCallback(
         (data) => {
             collection = data?.collection || collection;
@@ -80,6 +81,13 @@ export default observer((props: any) => {
                             </View>
                         </View>
                     </View>
+                    <TouchableOpacity
+                        style={{ marginBottom: pixel(20), marginHorizontal: pixel(Theme.itemSpace) }}
+                        onPress={() => setLines((l) => (l > 0 ? null : 2))}>
+                        <SafeText style={styles.tagCount} numberOfLines={lines}>
+                            {tagData?.description}
+                        </SafeText>
+                    </TouchableOpacity>
                     <TouchableOpacity activeOpacity={1} style={styles.collectBtn} onPress={() => toggleFollowOnPress()}>
                         <Iconfont
                             name={tagData?.followed > 0 ? 'xihuanfill' : 'xihuan'}
@@ -94,7 +102,7 @@ export default observer((props: any) => {
                 </View>
             );
         },
-        [tagData],
+        [tagData, lines],
     );
 
     // 合集中批量添加/删除动态操作
@@ -254,7 +262,7 @@ const styles = StyleSheet.create({
     },
     header: {
         flexDirection: 'row',
-        padding: pixel(15),
+        padding: pixel(Theme.itemSpace),
         paddingTop: pixel(5),
         paddingBottom: pixel(20),
     },
