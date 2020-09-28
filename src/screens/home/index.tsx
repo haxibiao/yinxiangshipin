@@ -17,7 +17,7 @@ import { ad } from 'react-native-ad';
 
 // 监听新用户登录
 when(
-    () => adStore.enableAd && adStore.enableWallet && userStore?.me?.id,
+    () => adStore.enableAd && adStore.enableWallet && userStore?.me?.id && userStore.me.agreement,
     () => {
         // 新手指导
         BeginnerGuidance({

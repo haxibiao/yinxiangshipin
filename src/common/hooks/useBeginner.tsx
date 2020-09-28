@@ -2,7 +2,7 @@ import React, { useRef, useMemo, useCallback, useEffect } from 'react';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, BackHandler } from 'react-native';
 import { SafeText } from '@src/components';
 import { Overlay } from 'teaset';
-import { Storage } from '@src/store';
+import { Storage, userStore } from '@src/store';
 import { useNavigation, useRoute } from '@react-navigation/native';
 const UserAgreementGuide = 'UserAgreementGuide' + Config.Version;
 
@@ -42,6 +42,7 @@ export const useBeginner = () => {
 
     const agreement = useCallback(() => {
         isAgreed.current = true;
+        userStore.me.agreement = true;
         onBlur();
         removeBackListener();
         Storage.setItem(UserAgreementGuide, JSON.stringify({}));

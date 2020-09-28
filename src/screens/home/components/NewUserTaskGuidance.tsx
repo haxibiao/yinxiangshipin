@@ -61,7 +61,7 @@ const taskGuideHeight = (taskGuideWidth * 750) / 790;
 const walletGuideWidth = Device.WIDTH - pixel(30);
 const walletGuideHeight = (walletGuideWidth * 838) / 336;
 
-const WalletBgWidth = pixel(100);
+const WalletBgWidth = (Device.WIDTH - pixel(20)) * 0.66 - walletGuideHeight * 0.28;
 
 const styles = StyleSheet.create({
     container: {
