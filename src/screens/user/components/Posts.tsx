@@ -1,15 +1,17 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
-import { View, Text, FlatList, StyleSheet } from 'react-native';
+import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { HPageViewHoc } from 'components/ScrollHeaderTabView';
 import { StatusView, Placeholder, CustomRefreshControl, SpinnerLoading } from '@src/components';
-import { PostItem } from '@src/content';
+import { PostItem, QueryList } from '@src/content';
 import { observer, userStore } from '@src/store';
 import { Query, useQuery, GQL } from '@src/apollo';
 import { observable } from 'mobx';
+import { useNavigation } from '@react-navigation/native';
 
 const HFlatList = HPageViewHoc(FlatList);
 
 export default (props: any) => {
+    const navigation = useNavigation();
     const { loading, error, data, refetch, fetchMore } = useQuery(GQL.postsQuery, {
         variables: { user_id: props.user.id },
         fetchPolicy: 'network-only',
@@ -22,6 +24,38 @@ export default (props: any) => {
         return <PostItem data={item} />;
     }, []);
 
+    const headerComponent = useCallback(() => {
+        return (
+            <QueryList
+                gqlDocument={GQL.CollectionsQuery}
+                dataOptionChain="collections.data"
+                paginateOptionChain="collections.paginatorInfo"
+                options={{
+                    variables: {
+                        user_id: props.user.id,
+                    },
+                    fetchPolicy: 'network-only',
+                }}
+                contentContainerStyle={styles.container}
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+                renderItem={({ item, index, data }) => (
+                    <TouchableOpacity
+                        style={[styles.collectionItem, index === data.length - 1 && { marginRight: 0 }]}
+                        onPress={() => navigation.navigate('CollectionDetail', { collection: item })}>
+                        <Image
+                            source={require('@app/assets/images/icons/ic_collection_gray.png')}
+                            style={styles.icon}
+                        />
+                        <Text style={styles.collectionText}>{item.name}</Text>
+                    </TouchableOpacity>
+                )}
+                ListFooterComponent={() => {
+                    return null;
+                }}
+            />
+        );
+    }, []);
     return (
         <HFlatList
             {...props}
@@ -60,12 +94,36 @@ export default (props: any) => {
                     });
                 }
             }}
+            ListHeaderComponent={headerComponent}
             ListFooterComponent={() => (hasMorePages || loading ? <Placeholder quantity={1} /> : null)}
         />
     );
 };
 
 const styles = StyleSheet.create({
+    collectionItem: {
+        flexDirection: 'row',
+        backgroundColor: '#f4f4f4',
+        borderRadius: pixel(3),
+        marginRight: pixel(5),
+        alignItems: 'center',
+        marginTop: pixel(10),
+        paddingHorizontal: pixel(Theme.itemSpace) / 2,
+    },
+    icon: {
+        width: pixel(12),
+        height: pixel(12),
+        resizeMode: 'cover',
+        marginRight: pixel(2),
+    },
+    collectionText: {
+        fontSize: font(10),
+        color: '#666',
+    },
+    container: {
+        paddingHorizontal: pixel(Theme.itemSpace),
+        height: pixel(40),
+    },
     separator: {
         marginHorizontal: pixel(14),
         height: pixel(1),
