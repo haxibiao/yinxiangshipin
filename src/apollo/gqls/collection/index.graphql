@@ -55,6 +55,7 @@ query CollectionQuery($collection_id: Int!, $page: Int, $count: Int) {
         }
         posts(page: $page, count: $count) {
             paginatorInfo {
+                lastPage
                 currentPage
                 hasMorePages
             }

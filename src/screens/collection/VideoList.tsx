@@ -135,7 +135,7 @@ export default observer(() => {
     }, []);
 
     // 显示合集列表
-    const showCollection = useMemo(() => {
+    const showCollection = useCallback(() => {
         let overlayKey;
         let isShown;
         function onClose() {
@@ -150,21 +150,20 @@ export default observer(() => {
                 animated={true}>
                 <ApolloProvider client={client}>
                     <CollectionEpisodes
+                        key={store.viewableItemIndex}
                         collection={collection}
-                        getCurrentPost={() => store.data[store.viewableItemIndex]}
+                        post={store.data[store.viewableItemIndex]}
                         onClose={onClose}
                         navigation={navigation}
                     />
                 </ApolloProvider>
             </Overlay.PullView>
         );
-        return () => {
-            if (!isShown) {
-                isShown = true;
-                overlayKey = Overlay.show(Episodes);
-            }
-        };
-    }, [collection]);
+        if (!isShown) {
+            isShown = true;
+            overlayKey = Overlay.show(Episodes);
+        }
+    });
 
     const scrollToIndex = useCallback(() => {
         if (store.JumpPlayCollectionVideo) {
@@ -192,9 +191,9 @@ export default observer(() => {
             store.viewableItemIndex = index;
             nextPage.current = page;
             // data相同的情况下，直接scrollToIndex即可
-            if (store.data.length === data.length && store.data[0]?.id === data[0]?.id) {
+            if (store.data.length === data?.length && store.data[0]?.id === data[0]?.id) {
                 scrollToIndex();
-            } else {
+            } else if (Array.isArray(data)) {
                 store.data = data;
             }
         });

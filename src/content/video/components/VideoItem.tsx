@@ -121,7 +121,6 @@ export default observer((props: Props) => {
         const collectionData = media?.collections?.[0];
         if (collectionData && appStore.currentRouteName !== 'CollectionVideoList') {
             const collection = observable(collectionData);
-            // media.current_episode = 28;
             return (
                 <Pressable
                     onPress={() => {
