@@ -15,7 +15,7 @@ const index = observer(({ keyword }) => {
                 <View style={styles.tagNameWrap}>
                     <SafeText style={styles.tagName}>#{item?.name}</SafeText>
                 </View>
-                <Text style={styles.countPlays}>{count(item?.count_plays)}次播放</Text>
+                <Text style={styles.countPlays}>{count(item?.count_views)}次播放</Text>
             </TouchableOpacity>
         );
     }, []);

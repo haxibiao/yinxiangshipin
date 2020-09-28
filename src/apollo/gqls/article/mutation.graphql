@@ -76,6 +76,7 @@ mutation createPostContent(
             followed
             count_articles
             count_follows
+            count_views
         }
     }
 }

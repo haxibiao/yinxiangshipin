@@ -114,6 +114,7 @@ query followedCollectionsQuery($user_id: Int!, $followed_type: String, $page: In
                 count_articles
                 count_follows
                 count_posts
+                count_views
                 updated_to_episode
                 followed
                 type

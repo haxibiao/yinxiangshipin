@@ -51,6 +51,7 @@ query userLikedArticlesQuery($user_id: Int!, $page: Int) {
                     followed
                     count_articles
                     count_follows
+                    count_views
                     updated_to_episode
                 }
             }

@@ -73,7 +73,7 @@ export default observer((props: any) => {
                         <View style={styles.tagInfo}>
                             <SafeText style={styles.tagName}>#{tagData?.name}</SafeText>
                             <Text style={styles.tagCount}>
-                                {`${count(tagData?.count_plays || Math.round(Math.random() * 100))}次播放`}
+                                {`${count(tagData?.count_views || 0)}次播放`}
                                 {`· @${tagData?.user?.name}`}
                             </Text>
                             <View style={styles.tagInfoBottom}>

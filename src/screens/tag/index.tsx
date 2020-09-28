@@ -112,12 +112,12 @@ export default observer((props: any) => {
                 <View style={styles.tagInfo}>
                     <View style={styles.tagInfoTop}>
                         <SafeText style={styles.tagName}>#{tagData?.name}</SafeText>
-                        <Text style={styles.tagCount}>{`${count(tagData?.count_plays || 0.0)}次播放`}</Text>
+                        <Text style={styles.tagCount}>{`${count(tagData?.count_views || 0.0)}次播放`}</Text>
                     </View>
                     <View style={styles.tagInfoBottom}>
-                        <Text style={styles.tagCount}>{`${
-                            tagData?.count_posts > 0 ? count(tagData?.count_posts) : '0.0'
-                        }个视频`}</Text>
+                        <Text style={styles.tagCount}>{`${count(
+                            tagData?.count_posts > 0 ? tagData?.count_posts : '0.0',
+                        )}个视频`}</Text>
                         <TouchableOpacity
                             style={styles.filterBtn}
                             onPress={() =>

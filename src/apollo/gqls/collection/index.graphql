@@ -15,6 +15,7 @@ query CollectionsQuery($user_id: Int!, $count: Int, $page: Int) {
             count_articles
             count_follows
             count_posts
+            count_views
             updated_to_episode
             followed
             type
@@ -22,14 +23,6 @@ query CollectionsQuery($user_id: Int!, $count: Int, $page: Int) {
             user {
                 id
                 name
-            }
-            posts {
-                paginatorInfo {
-                    total
-                }
-                data {
-                    id
-                }
             }
         }
     }
@@ -45,6 +38,7 @@ query CollectionQuery($collection_id: Int!, $page: Int, $count: Int) {
         count_articles
         count_follows
         count_posts
+        count_views
         updated_to_episode
         followed
         type
@@ -92,6 +86,7 @@ query CollectionQuery($collection_id: Int!, $page: Int, $count: Int) {
                     followed
                     count_articles
                     count_follows
+                    count_views
                     updated_to_episode
                 }
                 tags {

@@ -41,7 +41,7 @@ const UserCollectionItem = ({ item, index, navigation, onLongPress }) => {
                     </SafeText>
                 </Row>
                 <SafeText style={styles.collectionInfo} numberOfLines={1}>
-                    {`${count(item.count_plays || Math.round(Math.random() * 100))}播放`}
+                    {`${count(item.count_views || 0)}播放`}
                     {item.updated_to_episode > 0 && `·更新至第${item.updated_to_episode}集`}
                 </SafeText>
             </View>

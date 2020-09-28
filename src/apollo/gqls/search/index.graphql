@@ -29,6 +29,7 @@ query searchTagsQuery($query: String!, $page: Int, $count: Int) {
             name
             count_plays
             count_posts
+            count_views
         }
     }
 }
@@ -73,6 +74,7 @@ query searchPostQuery($query: String!, $page: Int, $count: Int, $type: PostType,
                 followed
                 count_articles
                 count_follows
+                count_views
                 updated_to_episode
             }
             tags {
@@ -141,6 +143,7 @@ query searchCollectionPostQuery($query: String!, $page: Int, $collection_id: Int
                 followed
                 count_articles
                 count_follows
+                count_views
                 updated_to_episode
             }
             tags {
@@ -182,6 +185,7 @@ query searchCollectionsQuery($query: String!, $page: Int, $count: Int) {
             count_articles
             count_follows
             count_posts
+            count_views
             updated_to_episode
             followed
             type

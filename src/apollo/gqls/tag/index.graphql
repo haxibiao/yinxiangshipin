@@ -22,6 +22,7 @@ query HotTagQuery($page: Int, $count: Int) {
             name
             count_plays
             count_posts
+            count_views
         }
     }
 }
@@ -33,6 +34,7 @@ query tagPostsQuery($tag_id: Int!, $page: Int, $count: Int, $order: PostOrderEnu
         name
         count_posts
         count_plays
+        count_views
         posts(visibility: $visibility, page: $page, count: $count, order: $order) {
             paginatorInfo {
                 total

@@ -55,6 +55,7 @@ query recommendPostsQuery {
             followed
             count_articles
             count_follows
+            count_views
             updated_to_episode
         }
     }
@@ -120,6 +121,7 @@ query publicPostsQuery($user_id: Int, $count: Int, $page: Int) {
                 followed
                 count_articles
                 count_follows
+                count_views
                 updated_to_episode
             }
         }
@@ -186,6 +188,7 @@ query postsQuery($user_id: Int!, $count: Int, $page: Int) {
                 followed
                 count_articles
                 count_follows
+                count_views
                 updated_to_episode
             }
         }
@@ -261,6 +264,7 @@ query userPostsQuery($user_id: Int!, $filter: PostFilter, $count: Int, $page: In
                 followed
                 count_articles
                 count_follows
+                count_views
                 updated_to_episode
             }
         }
@@ -327,6 +331,7 @@ query followPostsQuery($user_id: Int!, $filter: PostFilter, $count: Int, $page: 
                 followed
                 count_articles
                 count_follows
+                count_views
                 updated_to_episode
             }
         }
@@ -388,6 +393,7 @@ query postQuery($id: Int!) {
             followed
             count_articles
             count_follows
+            count_views
             updated_to_episode
         }
     }

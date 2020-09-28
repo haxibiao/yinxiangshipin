@@ -7,21 +7,11 @@ mutation CreateCollectionMutation($name: String!, $logo: String, $description: S
         count_articles
         count_follows
         count_posts
+        count_views
         updated_to_episode
         followed
         type
         status
-        posts {
-            paginatorInfo {
-                currentPage
-                hasMorePages
-                total
-            }
-            data {
-                id
-                content
-            }
-        }
     }
 }
 
@@ -34,6 +24,7 @@ mutation editCollectionMutation($collection_id: Int!, $name: String!, $logo: Str
         description
         count_articles
         count_follows
+        count_views
         updated_to_episode
         followed
         type
