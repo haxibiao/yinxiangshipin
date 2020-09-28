@@ -77,7 +77,7 @@ export default observer((props: any) => {
         return withdrawAmountListData?.getWithdrawAmountList || fakeAmountListData;
     }, [withdrawAmountListData]);
     const [amount, setAmount] = useState(() => {
-        if (userProfile?.gold >= userProfile?.exchangeRate / 2 && userProfile?.wallet?.total_withdraw_amount <= 0) {
+        if (userProfile?.gold >= userProfile?.exchangeRate * 0.3 && userProfile?.wallet?.total_withdraw_amount <= 0) {
             return withdrawAmountData[0].amount;
         }
         return userProfile.balance > withdrawAmountData[0].amount ? withdrawAmountData[0].amount : 0;
@@ -121,7 +121,7 @@ export default observer((props: any) => {
             // 未提现过的新用户
             if (
                 value == 0.3 &&
-                userProfile?.gold >= userProfile?.exchangeRate / 2 &&
+                userProfile?.gold >= userProfile?.exchangeRate * 0.3 &&
                 userProfile?.wallet?.total_withdraw_amount <= 0
             ) {
                 setAmount(value);
