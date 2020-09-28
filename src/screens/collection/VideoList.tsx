@@ -13,7 +13,9 @@ import LottieView from 'lottie-react-native';
 import CollectionEpisodes from './components/CollectionEpisodes';
 
 const VIDEO_QUERY_COUNT = 5;
-const paddingBottom = pixel(44) + pixel(12) + (Theme.HOME_INDICATOR_HEIGHT || pixel(12));
+const paddingBottom = Device.isFullScreenDevice
+    ? pixel(44) + pixel(12) + (Theme.HOME_INDICATOR_HEIGHT || pixel(12))
+    : pixel(12);
 
 export default observer(() => {
     const listRef = useRef();

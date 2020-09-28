@@ -167,27 +167,36 @@ export default observer((props: Props) => {
                     start={{ x: 0, y: 1 }}
                     end={{ x: 0, y: 0 }}
                     colors={['rgba(000,000,000,0.5)', 'rgba(000,000,000,0.3)', 'rgba(000,000,000,0.0)']}>
-                    <View style={styles.postInfo}>
-                        <View style={styles.videoInfo}>
-                            {media?.product && (
-                                <Commodity style={styles.goodsItem} product={media?.product} navigation={navigation} />
-                            )}
-                            <View style={styles.userInfo}>
-                                <SafeText style={styles.userName}>@{media?.user?.name}</SafeText>
-                                <SafeText shadowText={true} style={styles.createdAt}>
-                                    {` · ${media?.created_at}`}
-                                </SafeText>
+                    <View
+                        style={{
+                            paddingBottom: Device.isFullScreenDevice ? 0 : Theme.BOTTOM_HEIGHT,
+                        }}>
+                        <View style={styles.postInfo}>
+                            <View style={styles.videoInfo}>
+                                {media?.product && (
+                                    <Commodity
+                                        style={styles.goodsItem}
+                                        product={media?.product}
+                                        navigation={navigation}
+                                    />
+                                )}
+                                <View style={styles.userInfo}>
+                                    <SafeText style={styles.userName}>@{media?.user?.name}</SafeText>
+                                    <SafeText shadowText={true} style={styles.createdAt}>
+                                        {` · ${media?.created_at}`}
+                                    </SafeText>
+                                </View>
+                                <View>
+                                    <SafeText style={styles.content} numberOfLines={3}>
+                                        {String(media?.description || media?.content).trim()}
+                                        {mediaTags}
+                                    </SafeText>
+                                </View>
                             </View>
-                            <View>
-                                <SafeText style={styles.content} numberOfLines={3}>
-                                    {String(media?.description || media?.content).trim()}
-                                    {mediaTags}
-                                </SafeText>
-                            </View>
+                            <SideBar media={media} store={store} client={client} removeMedia={removeMedia} />
                         </View>
-                        <SideBar media={media} store={store} client={client} removeMedia={removeMedia} />
+                        {Collection}
                     </View>
-                    {Collection}
                 </LinearGradient>
             </TouchableWithoutFeedback>
         </View>
@@ -226,7 +235,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'flex-end',
         paddingHorizontal: pixel(10),
-        paddingBottom: Device.isFullScreenDevice ? pixel(15) : Theme.BOTTOM_HEIGHT + pixel(15),
+        paddingBottom: pixel(15),
     },
     videoInfo: {
         flex: 1,
