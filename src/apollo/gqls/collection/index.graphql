@@ -113,3 +113,8 @@ query CollectionQuery($collection_id: Int!, $page: Int, $count: Int) {
         }
     }
 }
+
+# 分享合集
+query shareCollectionMutation($collection_id: Int!) {
+    shareCollection(collection_id: $collection_id)
+}

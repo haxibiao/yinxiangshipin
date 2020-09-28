@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { observer, appStore, userStore } from '@src/store';
 import { NavBarHeader, SafeText, Iconfont, Row, Loading } from '@src/components';
-import { syncGetter, count, mergeProperty } from '@src/common';
+import { syncGetter, count, exceptionCapture } from '@src/common';
 import { GQL, useQuery, useFollowMutation, useMutation } from '@src/apollo';
 import { ContentStatus, QueryList } from '@src/content';
 import { observable } from 'mobx';
@@ -21,6 +21,7 @@ import { Overlay } from 'teaset';
 import { ApolloProvider } from '@apollo/react-hooks';
 import AddedToCollection from './components/AddedToCollection';
 import StashVideoStore from './store';
+import CollectionShareOverlay from '../share/CollectionShareOverlay';
 
 export default observer((props: any) => {
     const navigation = useNavigation();
@@ -199,15 +200,57 @@ export default observer((props: any) => {
         overlayKey.current = Overlay.show(Operation);
     }, []);
 
+    const searchHandle = useCallback(() => {
+        navigation.push('SearchVideo', { collection_id: collection.id });
+    }, []);
+
+    // 分享合集
+    const shareLink = useRef();
+    const fetchShareLink = useCallback(async () => {
+        const [error, result] = await exceptionCapture(() =>
+            appStore.client.query({
+                query: GQL.shareCollectionMutation,
+                variables: {
+                    collection_id: collection.id,
+                },
+            }),
+        );
+        if (error) {
+            Toast.show({ content: error?.message });
+            return null;
+        } else if (syncGetter('data.shareCollection', result)) {
+            shareLink.current = syncGetter('data.shareCollection', result);
+            return shareLink.current;
+        }
+    }, []);
+    const shareOnPress = __.debounce(async () => {
+        const shareLink = await fetchShareLink();
+        // 解析合集网址
+        const image = await [...shareLink.match(/#http.*?#/g)][0].replace(/#/g, '');
+        CollectionShareOverlay.show(image, collection);
+    }, 500);
+
     return (
         <View style={styles.container}>
             <NavBarHeader
                 isTransparent
-                hasSearchButton={true}
-                onPressSearch={() => navigation.push('SearchVideo', { collection_id: collection.id })}
                 centerStyle={{ opacity: titleOpacity }}
                 title={collection?.name}
+                rightComponent={
+                    <TouchableWithoutFeedback onPress={searchHandle}>
+                        <View style={styles.search}>
+                            <Iconfont name="fangdajing" size={pixel(22)} color={'#fff'} />
+                            <TouchableOpacity
+                                activeOpacity={0.6}
+                                style={{ marginLeft: pixel(15) }}
+                                onPress={shareOnPress}>
+                                <Iconfont name="qita1" size={pixel(22)} color={'#fff'} />
+                            </TouchableOpacity>
+                        </View>
+                    </TouchableWithoutFeedback>
+                }
             />
+
             <QueryList
                 gqlDocument={GQL.CollectionQuery}
                 dataOptionChain="collection.posts.data"
@@ -248,6 +291,14 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#161924',
+    },
+    search: {
+        width: pixel(50),
+        paddingRight: pixel(12),
+        flexDirection: 'row',
+        alignSelf: 'stretch',
+        justifyContent: 'center',
+        alignItems: 'flex-end',
     },
     contentContainer: {
         flexGrow: 1,
