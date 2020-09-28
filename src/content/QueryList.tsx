@@ -70,16 +70,17 @@ export default React.forwardRef(function ContentList(
         let footer = null;
         if (ListFooterComponent instanceof Function) {
             footer = ListFooterComponent({ loading, hasMore, data: listData });
-        }
-        if (!loading && hasMore) {
-            footer = <ContentStatus status="loadMore" />;
-        }
-        if (listData?.length > 0 && !hasMore) {
-            footer = (
-                <View style={styles.listFooter}>
-                    <Text style={styles.listFooterText}>底都被你看光了</Text>
-                </View>
-            );
+        } else {
+            if (!loading && hasMore) {
+                footer = <ContentStatus status="loadMore" />;
+            }
+            if (listData?.length > 0 && !hasMore) {
+                footer = (
+                    <View style={styles.listFooter}>
+                        <Text style={styles.listFooterText}>底都被你看光了</Text>
+                    </View>
+                );
+            }
         }
         return footer;
     }, [ListFooterComponent, loading, listData, hasMore]);
