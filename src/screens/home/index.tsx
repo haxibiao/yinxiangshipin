@@ -16,16 +16,16 @@ import NewUserTaskGuidance from './components/NewUserTaskGuidance';
 import { ad } from 'react-native-ad';
 
 // 监听新用户登录
-// when(
-//     () => adStore.enableAd && adStore.enableWallet && userStore?.me?.isNewUser;,
-//     () => {
-//         // 新手指导
-//         BeginnerGuidance({
-//             guidanceKey: 'NewUserTask',
-//             GuidanceView: NewUserTaskGuidance,
-//         });
-//     },
-// );
+when(
+    () => adStore.enableAd && adStore.enableWallet && userStore?.me.isNewUser,
+    () => {
+        // 新手指导
+        BeginnerGuidance({
+            guidanceKey: 'NewUserTask',
+            GuidanceView: NewUserTaskGuidance,
+        });
+    },
+);
 // setTimeout(() => {
 //     BeginnerGuidance({
 //         guidanceKey: 'NewUserTask',
