@@ -54,8 +54,12 @@ export default observer((props: any) => {
         ],
     });
     const toggleFollowOnPress = useCallback(() => {
-        tagData.followed = tagData.followed === 1 ? 0 : 1;
-        toggleFollow();
+        if (TOKEN) {
+            tagData.followed = tagData.followed === 1 ? 0 : 1;
+            toggleFollow();
+        } else {
+            navigation.navigate('Login');
+        }
     }, [tagData]);
 
     const [lines, setLines] = useState(2);
@@ -88,7 +92,7 @@ export default observer((props: any) => {
                             {tagData?.description}
                         </SafeText>
                     </TouchableOpacity>
-                    <TouchableOpacity activeOpacity={1} style={styles.collectBtn} onPress={() => toggleFollowOnPress()}>
+                    <TouchableOpacity activeOpacity={0.8} style={styles.collectBtn} onPress={toggleFollowOnPress}>
                         <Iconfont
                             name={tagData?.followed > 0 ? 'xihuanfill' : 'xihuan'}
                             size={font(15)}

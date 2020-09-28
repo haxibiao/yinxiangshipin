@@ -33,8 +33,13 @@ export default ({ collection, post, onClose, navigation }) => {
         ],
     });
     const toggleFollowOnPress = useCallback(() => {
-        collection.followed = collection.followed === 1 ? 0 : 1;
-        toggleFollow();
+        if (TOKEN) {
+            collection.followed = collection.followed === 1 ? 0 : 1;
+            toggleFollow();
+        } else {
+            onClose();
+            navigation.navigate('Login');
+        }
     }, [collection]);
     // 合集信息
     const [prevPageData, setPrevPageData] = useState();
