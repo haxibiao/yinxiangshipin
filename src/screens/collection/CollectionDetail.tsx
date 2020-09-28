@@ -237,17 +237,14 @@ export default observer((props: any) => {
                 centerStyle={{ opacity: titleOpacity }}
                 title={collection?.name}
                 rightComponent={
-                    <TouchableWithoutFeedback onPress={searchHandle}>
-                        <View style={styles.search}>
+                    <View style={styles.search}>
+                        <TouchableOpacity onPress={searchHandle}>
                             <Iconfont name="fangdajing" size={pixel(22)} color={'#fff'} />
-                            <TouchableOpacity
-                                activeOpacity={0.6}
-                                style={{ marginLeft: pixel(15) }}
-                                onPress={shareOnPress}>
-                                <Iconfont name="qita1" size={pixel(22)} color={'#fff'} />
-                            </TouchableOpacity>
-                        </View>
-                    </TouchableWithoutFeedback>
+                        </TouchableOpacity>
+                        <TouchableOpacity activeOpacity={0.6} style={{ marginLeft: pixel(15) }} onPress={shareOnPress}>
+                            <Iconfont name="qita1" size={pixel(22)} color={'#fff'} />
+                        </TouchableOpacity>
+                    </View>
                 }
             />
 
@@ -293,12 +290,11 @@ const styles = StyleSheet.create({
         backgroundColor: '#161924',
     },
     search: {
-        width: pixel(50),
-        paddingRight: pixel(12),
+        paddingRight: pixel(Theme.itemSpace),
         flexDirection: 'row',
         alignSelf: 'stretch',
         justifyContent: 'center',
-        alignItems: 'flex-end',
+        alignItems: 'center',
     },
     contentContainer: {
         flexGrow: 1,

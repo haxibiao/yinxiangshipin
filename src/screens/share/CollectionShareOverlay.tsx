@@ -7,7 +7,7 @@ import * as WeChat from 'react-native-wechat-lib';
 import viewShotUtil from './viewShotUtil';
 
 class CollectionShareOverlay {
-    static show(image, collection) {
+    static show(imageUrl, collection) {
         let overlayView = (
             <Overlay.View animated style={{ flexDirection: 'column', justifyContent: 'flex-end' }}>
                 <View
@@ -21,13 +21,20 @@ class CollectionShareOverlay {
                         <TouchFeedback
                             onPress={async () => {
                                 CollectionShareOverlay.hide();
-                                console.log('result ', image);
+                                console.log('result ', imageUrl);
+                                if (Device.IOS) {
+                                    ShareIOS.open({
+                                        title: '分享给朋友',
+                                        url: imageUrl,
+                                    });
+                                    return;
+                                }
                                 try {
-                                    WeChat.shareImage({
-                                        type: 'imageFile',
+                                    await WeChat.shareWebpage({
                                         title: '我在印象视频发现一个有意思的东西，快来看看吧',
                                         description: collection.description,
-                                        imageUrl: image,
+                                        webpageUrl: imageUrl,
+                                        thumbImageUrl: Config.ServerRoot + `/logo/${Config.PackageName}.com.png`,
                                         scene: 0,
                                     });
                                 } catch (e) {
@@ -45,12 +52,19 @@ class CollectionShareOverlay {
                         <TouchFeedback
                             onPress={async () => {
                                 CollectionShareOverlay.hide();
+                                if (Device.IOS) {
+                                    ShareIOS.open({
+                                        title: '分享给朋友',
+                                        url: imageUrl,
+                                    });
+                                    return;
+                                }
                                 try {
-                                    await WeChat.shareImage({
-                                        type: 'imageFile',
-                                        title: '我在印象视频发现一个有意思的东西，快来看看吧',
+                                    await WeChat.shareWebpage({
+                                        title: collection.name,
                                         description: collection.description,
-                                        imageUrl: image,
+                                        webpageUrl: imageUrl,
+                                        thumbImageUrl: Config.ServerRoot + `/logo/${Config.PackageName}.com.png`,
                                         scene: 1,
                                     });
                                 } catch (e) {
@@ -64,42 +78,56 @@ class CollectionShareOverlay {
                             <Text style={{ color: Theme.grey, fontSize: 12 }}>朋友圈</Text>
                         </TouchFeedback>
                         <TouchFeedback
-                            onPress={async () => {
+                            onPress={() => {
                                 CollectionShareOverlay.hide();
-                                let callback = await Share.shareImageToQQ(result);
-                                if (callback == false) {
-                                    Toast.show({
-                                        content: '请先安装QQ客户端',
-                                    });
-                                }
+                                ShareIOS.open({
+                                    title: '分享给朋友',
+                                    url: imageUrl,
+                                });
+                                return;
+                                // let callback = await Share.shareImageToQQ(result);
+                                // if (callback == false) {
+                                //     Toast.show({
+                                //         content: '请先安装QQ客户端',
+                                //     });
+                                // }
                             }}
                             style={{ alignItems: 'center' }}>
                             <Image source={require('@app/assets/images/share_qq.png')} style={styles.imageStyle} />
                             <Text style={{ color: Theme.grey, fontSize: 12 }}>QQ好友</Text>
                         </TouchFeedback>
                         <TouchFeedback
-                            onPress={async () => {
+                            onPress={() => {
                                 CollectionShareOverlay.hide();
-                                let callback = await Share.shareToSinaFriends(result);
-                                if (callback == false) {
-                                    Toast.show({
-                                        content: '请先安装微博客户端',
-                                    });
-                                }
+                                ShareIOS.open({
+                                    title: '分享给朋友',
+                                    url: imageUrl,
+                                });
+                                // let callback = await Share.shareToSinaFriends(result);
+                                // if (callback == false) {
+                                //     Toast.show({
+                                //         content: '请先安装微博客户端',
+                                //     });
+                                // }
                             }}
                             style={{ alignItems: 'center' }}>
                             <Image source={require('@app/assets/images/share_wb.png')} style={styles.imageStyle} />
                             <Text style={{ color: Theme.grey, fontSize: 12 }}>微博</Text>
                         </TouchFeedback>
                         <TouchFeedback
-                            onPress={async () => {
+                            onPress={() => {
                                 CollectionShareOverlay.hide();
-                                let callback = await Share.shareImageToQQZone(result);
-                                if (callback == false) {
-                                    Toast.show({
-                                        content: '请先安装QQ空间客户端',
-                                    });
-                                }
+                                ShareIOS.open({
+                                    title: '分享给朋友',
+                                    url: imageUrl,
+                                });
+                                return;
+                                // let callback = await Share.shareImageToQQZone(result);
+                                // if (callback == false) {
+                                //     Toast.show({
+                                //         content: '请先安装QQ空间客户端',
+                                //     });
+                                // }
                             }}
                             style={{ alignItems: 'center' }}>
                             <Image source={require('@app/assets/images/share_qqz.png')} style={styles.imageStyle} />
