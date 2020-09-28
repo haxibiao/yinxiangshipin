@@ -18,7 +18,6 @@ import { exceptionCapture, mergeProperty } from '@src/common';
 const VIDEO_QUERY_COUNT = 10;
 
 export default ({ collection, post, onClose, navigation }) => {
-    const initialIndex = useMemo(() => (post?.current_episode % VIDEO_QUERY_COUNT) - 1, [post]);
     // 收藏合集
     const toggleFollow = useFollowMutation({
         variables: {
@@ -42,117 +41,97 @@ export default ({ collection, post, onClose, navigation }) => {
         }
     }, [collection]);
     // 合集信息
-    const [prevPageData, setPrevPageData] = useState();
-    const [nextPageData, setNextPageData] = useState();
-    const [loading, setLoading] = useState(true);
+    const initialIndex = useMemo(() => (post?.current_episode % VIDEO_QUERY_COUNT) - 1, [post]);
+    const currentPage = useMemo(() => Math.ceil(post?.current_episode / VIDEO_QUERY_COUNT), [post]);
     const paginationInfo = useRef(
         (() => {
-            const currentPage = Math.ceil(post?.current_episode / VIDEO_QUERY_COUNT);
             const lastPage = Math.ceil(collection?.updated_to_episode / VIDEO_QUERY_COUNT);
             return {
                 loadingPrevPage: false,
                 loadingNextPage: false,
                 hasPrevPage: currentPage > 1,
-                hasNextPage: currentPage <= lastPage,
+                hasNextPage: currentPage < lastPage,
                 prevPage: currentPage - 1 || -1,
-                nextPage: currentPage,
-                error: false,
+                nextPage: currentPage + 1,
                 lastPage,
             };
         })(),
     );
-    const client = useApolloClient();
-    const collectionQuery = useCallback(
-        async ({ page, next }) => {
-            function query() {
-                return client.query({
-                    query: GQL.CollectionQuery,
+    const { loading, error, data, fetchMore, refetch } = useQuery(GQL.CollectionQuery, {
+        variables: {
+            collection_id: collection?.id,
+            count: VIDEO_QUERY_COUNT,
+            page: currentPage,
+        },
+    });
+    const episodeData = useMemo(() => data?.collection?.posts?.data, [data]);
+    useEffect(() => {
+        async function init() {
+            if (fetchMore && paginationInfo.current.hasPrevPage && !paginationInfo.current.hasNextPage) {
+                await onTopReached();
+            }
+        }
+        init();
+    }, [fetchMore]);
+    // 加载更多
+    const onTopReached = useCallback(
+        async (callback) => {
+            if (!paginationInfo.current.loadingPrevPage && paginationInfo.current.hasPrevPage) {
+                paginationInfo.current.loadingPrevPage = true;
+                fetchMore({
                     variables: {
-                        collection_id: collection?.id,
-                        page,
-                        count: VIDEO_QUERY_COUNT,
+                        page: paginationInfo.current.prevPage,
+                    },
+                    updateQuery: (prev: any, { fetchMoreResult }: any) => {
+                        paginationInfo.current.prevPage--;
+                        if (paginationInfo.current.prevPage <= 0) {
+                            paginationInfo.current.hasPrevPage = false;
+                        }
+                        paginationInfo.current.loadingPrevPage = false;
+                        if (!fetchMoreResult) return prev;
+                        if (callback instanceof Function) {
+                            callback();
+                        }
+                        return mergeProperty(prev, fetchMoreResult, { prepend: true });
                     },
                 });
             }
-
-            const [err, result] = await exceptionCapture(query);
-            if (err) {
-                paginationInfo.current.error = true;
-            }
-            console.log(next ? 'bottom' : 'top', page, result?.data?.collection?.posts?.data);
-            return result?.data?.collection?.posts?.data;
         },
-        [client],
+        [fetchMore],
     );
 
-    // 加载更多
-    const onTopReached = useCallback(async () => {
-        if (!paginationInfo.current.loadingPrevPage && paginationInfo.current.hasPrevPage) {
-            // console.log('====================================');
-            // console.log('onTopReached', paginationInfo.current.prevPage);
-            // console.log('====================================');
-            paginationInfo.current.loadingPrevPage = true;
-            const fetchMoreResult = await collectionQuery({ page: paginationInfo.current.prevPage });
-            paginationInfo.current.prevPage--;
-            if (paginationInfo.current.prevPage <= 0) {
-                paginationInfo.current.hasPrevPage = false;
-            }
-            paginationInfo.current.loadingPrevPage = false;
-            if (Array.isArray(fetchMoreResult)) {
-                setPrevPageData((prevData) => {
-                    if (Array.isArray(prevData)) {
-                        return [...fetchMoreResult, ...prevData].reverse();
-                    }
-                    return [...fetchMoreResult].reverse();
-                });
-            }
-        }
-    }, []);
-    const onEndReached = useCallback(async () => {
+    const onEndReached = useCallback(async (callback) => {
         if (!paginationInfo.current.loadingNextPage && paginationInfo.current.hasNextPage) {
-            // console.log('====================================');
-            // console.log('onEndReached', paginationInfo.current.nextPage);
-            // console.log('====================================');
             paginationInfo.current.loadingNextPage = true;
-            const fetchMoreResult = await collectionQuery({ page: paginationInfo.current.nextPage, next: true });
-            paginationInfo.current.nextPage++;
-            if (paginationInfo.current.nextPage > paginationInfo.current.lastPage) {
-                paginationInfo.current.hasNextPage = false;
-            }
-            paginationInfo.current.loadingNextPage = false;
-            if (Array.isArray(fetchMoreResult)) {
-                setNextPageData((nextData) => {
-                    if (Array.isArray(nextData)) {
-                        return [...nextData, ...fetchMoreResult];
+            fetchMore({
+                variables: {
+                    page: paginationInfo.current.nextPage,
+                },
+                updateQuery: (prev: any, { fetchMoreResult }: any) => {
+                    paginationInfo.current.nextPage++;
+                    if (paginationInfo.current.nextPage > paginationInfo.current.lastPage) {
+                        paginationInfo.current.hasNextPage = false;
                     }
-                    return fetchMoreResult;
-                });
-            }
+                    paginationInfo.current.loadingNextPage = false;
+                    if (!fetchMoreResult) return prev;
+                    if (callback instanceof Function) {
+                        callback();
+                    }
+                    return mergeProperty(prev, fetchMoreResult);
+                },
+            });
         }
-    }, []);
-
-    useEffect(() => {
-        async function init() {
-            await onEndReached();
-            await onTopReached();
-            setLoading(false);
-        }
-        init();
     }, []);
 
     const renderItem = useCallback(
-        ({ item, index, topList }) => {
-            let data = [...nextPageData];
-            if (Array.isArray(prevPageData)) {
-                data = [...prevPageData, ...data];
-            }
+        ({ item, index }) => {
             return (
                 <TouchableWithoutFeedback
                     onPress={() => {
                         onClose();
                         DeviceEventEmitter.emit('JumpPlayCollectionVideo', {
-                            data,
-                            index: topList ? index : prevPageData?.length + index,
+                            index,
+                            data: episodeData,
                             page: paginationInfo.current.nextPage,
                         });
                     }}>
@@ -185,23 +164,21 @@ export default ({ collection, post, onClose, navigation }) => {
                 </TouchableWithoutFeedback>
             );
         },
-        [prevPageData, nextPageData],
+        [episodeData],
     );
+
     // 加载状态UI
-    // const ListHeaderComponent = useCallback(() => {
-    //     let header = null;
-    //     if (prevPageData?.length > 0 && paginationInfo.current.hasPrevPage) {
-    //         header = <ContentStatus status="loadMore" />;
-    //     }
-    //     console.log('====================================');
-    //     console.log(prevPageData?.length, paginationInfo.current.hasPrevPage);
-    //     console.log('====================================');
-    //     return header;
-    // }, [prevPageData]);
+    const ListHeaderComponent = useCallback(() => {
+        let header = null;
+        // if (episodeData?.length > 0 && paginationInfo.current.hasPrevPage) {
+        //     header = <ContentStatus status="loadMore" />;
+        // }
+        return header;
+    }, [episodeData]);
 
     const ListFooterComponent = useCallback(() => {
         let footer = null;
-        if (nextPageData?.length > 0) {
+        if (episodeData?.length > 0) {
             if (paginationInfo.current.hasNextPage) {
                 footer = <ContentStatus status="loadMore" />;
             } else {
@@ -213,32 +190,29 @@ export default ({ collection, post, onClose, navigation }) => {
             }
         }
         return footer;
-    }, [loading, nextPageData]);
+    }, [episodeData]);
 
     const ListEmptyComponent = useCallback(() => {
         let status = '';
         switch (true) {
-            case paginationInfo.current.error:
+            case !!error:
                 status = 'error';
                 break;
             case loading:
                 status = 'loading';
                 break;
-            case nextPageData?.length === 0:
+            case episodeData?.length === 0:
                 status = 'empty';
                 break;
             default:
                 break;
         }
-        console.log('status', status);
         if (status) {
-            return (
-                <ContentStatus status={status} refetch={status === 'error' ? nextCollectionData?.refetch : undefined} />
-            );
+            return <ContentStatus status={status} refetch={status === 'error' ? refetch : undefined} />;
         } else {
             return null;
         }
-    }, [loading, nextPageData]);
+    }, [error, loading, refetch, episodeData]);
 
     return (
         <View style={styles.container}>
@@ -252,14 +226,13 @@ export default ({ collection, post, onClose, navigation }) => {
                 </TouchableOpacity>
             </View>
             <BidirectionalList
-                // loading={!loading && !prevPageData && !nextPageData}
+                // loading={!loading && !episodeData && !episodeData}
                 contentHeight={(Device.HEIGHT * 2) / 3}
-                prevPageData={prevPageData}
-                nextPageData={nextPageData}
+                data={episodeData}
                 renderItem={renderItem}
                 onTopReached={onTopReached}
                 onEndReached={onEndReached}
-                // ListHeaderComponent={ListHeaderComponent}
+                ListHeaderComponent={ListHeaderComponent}
                 ListFooterComponent={ListFooterComponent}
                 ListEmptyComponent={ListEmptyComponent}
             />
@@ -368,60 +341,3 @@ const styles = StyleSheet.create({
         color: '#b4b4b4',
     },
 });
-
-// // 上一页数据
-// const prevCollectionData = useQuery(GQL.CollectionQuery, {
-//     variables: {
-//         collection_id: collection?.id,
-//         page: paginationInfo.current.prevPage,
-//         count: VIDEO_QUERY_COUNT,
-//     },
-//     skip: !paginationInfo.current.hasPrevPage,
-// });
-// const prevPageData = useMemo(() => prevCollectionData?.data?.collection.posts.data, [prevCollectionData]);
-// // 下一页数据
-// const nextCollectionData = useQuery(GQL.CollectionQuery, {
-//     variables: {
-//         collection_id: collection?.id,
-//         page: paginationInfo.current.nextPage,
-//         count: VIDEO_QUERY_COUNT,
-//     },
-// });
-// const nextPageData = useMemo(() => nextCollectionData?.data?.collection.posts.data, [nextCollectionData]);
-
-// const [prevPageData, setPrevPageData] = useState(null);
-// const [nextPageData, setNextPageData] = useState(null);
-// const client = useApolloClient();
-// const collectionQuery = useCallback(
-//     async ({ page, count, next }) => {
-//         function query() {
-//             client.query({
-//                 query: GQL.CollectionQuery,
-//                 variables: {
-//                     page,
-//                     count,
-//                 },
-//             });
-//         }
-
-//         const [err, result] = await exceptionCapture(query);
-//         const postsData = result?.data?.collection?.posts?.data;
-//         if (paginationInfo.current.lastPage) {
-//             paginationInfo.current.lastPage = result?.data?.collection?.posts?.paginatorInfo?.lastPage;
-//         }
-//         if (next) {
-//             paginationInfo.current.nextPage = page + 1;
-//             if (paginationInfo.current.nextPage > paginationInfo.current.lastPage) {
-//                 paginationInfo.current.hasNextPage = false;
-//             }
-//             if (postsData) {
-//             }
-//         } else {
-//             paginationInfo.current.prevPage = page - 1;
-//             if (paginationInfo.current.nextPage <= 0) {
-//                 paginationInfo.current.hasPrevPage = false;
-//             }
-//         }
-//     },
-//     [client],
-// );
