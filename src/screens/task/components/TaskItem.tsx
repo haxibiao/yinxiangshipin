@@ -325,19 +325,19 @@ function inReview() {
     Toast.show({ content: '任务审核中，请留意奖励发放' });
 }
 
-function nationalDayTask({ task_object }) {
-    authNavigate('CollectionDetail', { collection: { id: task_object?.[0] } });
+function nationalDayTask({ collection }) {
+    authNavigate('CollectionDetail', { collection });
 }
 
 function midAutumnFestivalTask({ task_object }) {
-    authNavigate('CollectionDetail', { collection: { id: task_object?.[0] } });
+    authNavigate('CollectionDetail', { collection });
 }
 
 // resolve.submit_name
 const taskColor = {
-    新人任务: '#2FC6FC',
+    活动任务: '#2FC6FC',
+    新人任务: '#12E2BB',
     每日任务: '#FF5E7D',
-    自定义任务: '#12E2BB',
 };
 const taskRouteInfo = {
     去观看: playRewardVideo,
