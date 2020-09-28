@@ -17,7 +17,7 @@ import { ad } from 'react-native-ad';
 
 // 监听新用户登录
 when(
-    () => adStore.enableAd && adStore.enableWallet && userStore?.me.isNewUser,
+    () => adStore.enableAd && adStore.enableWallet && userStore?.me?.id,
     () => {
         // 新手指导
         BeginnerGuidance({
@@ -26,12 +26,6 @@ when(
         });
     },
 );
-// setTimeout(() => {
-//     BeginnerGuidance({
-//         guidanceKey: 'NewUserTask',
-//         GuidanceView: NewUserTaskGuidance,
-//     });
-// }, 3000);
 
 export default observer(({}) => {
     useBeginner();
