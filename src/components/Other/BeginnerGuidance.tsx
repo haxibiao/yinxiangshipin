@@ -1,18 +1,24 @@
-import React, { Component, useState, useCallback } from 'react';
-import { StyleSheet, View, TouchableWithoutFeedback, Text } from 'react-native';
+/*
+ * @flow
+ * created by wyk made in 2018-12-05 20:53:57
+ */
+'use strict';
+
+import React from 'react';
+import { StyleSheet, View, TouchableWithoutFeedback, Text, BackHandler } from 'react-native';
 import { Overlay } from 'teaset';
-import { Keys, Storage } from '@src/store/localStorage';
+import { Storage } from '@src/store';
 
 interface Props {
-    guidanceKey: string; // 指导标识
-    GuidanceView: JSX.Element; // 内部指导视图
-    dismissEnabled?: boolean; // 外部能否关闭
-    recordable?: boolean; // 是否记录到storage，再次进来将不会触发,默认为true
-    skipEnabled?: boolean; // 能否跳过
-    skipGuidanceKeys?: string[]; // 跳过的指导，方便跳过其它步骤
+    guidanceKey: string; //指导标识
+    GuidanceView: JSX.Element; //内部指导视图
+    dismissEnabled?: boolean; //外部能否关闭
+    recordable?: boolean; //是否记录到Storage，再次进来将不会触发,默认为true
+    skipEnabled?: boolean; //能否跳过
+    skipGuidanceKeys?: Array; //跳过的指导，方便跳过其它步骤
 }
 
-const BeginnerGuidance = (props: Props) => {
+export default (props: Props) => {
     const {
         guidanceKey,
         GuidanceView,
@@ -22,96 +28,92 @@ const BeginnerGuidance = (props: Props) => {
         skipGuidanceKeys = [guidanceKey],
     } = props;
     const guidanceType = `BeginnerGuidance_${guidanceKey}`;
-    const backListener = useRef();
-    const OverlayKey = useRef();
+    let backListener;
+    let OverlayKey;
 
-    const overlayView = useMemo(() => {
-        return (
-            <Overlay.View animated={false}>
-                <TouchableWithoutFeedback disabled={!dismissEnabled} onPress={handleDismiss}>
-                    <View style={styles.container}>
-                        <GuidanceView onDismiss={handleDismiss} />
-                        {skipEnabled && (
-                            <View style={styles.header}>
-                                <TouchableWithoutFeedback onPress={skipGuidance}>
-                                    <View style={styles.closeBtn}>
-                                        <Text style={styles.closeBtnText}>跳过引导</Text>
-                                    </View>
-                                </TouchableWithoutFeedback>
-                            </View>
-                        )}
-                    </View>
-                </TouchableWithoutFeedback>
-            </Overlay.View>
-        );
-    }, [dismissEnabled, handleDismiss, skipEnabled, skipGuidance]);
+    const overlayView = (
+        <Overlay.View animated={false}>
+            <TouchableWithoutFeedback disabled={!dismissEnabled} onPress={handleDismiss}>
+                <View style={styles.container}>
+                    <GuidanceView onDismiss={handleDismiss} />
+                    {skipEnabled && (
+                        <View style={styles.header}>
+                            <TouchableWithoutFeedback onPress={skipGuidance}>
+                                <View style={styles.closeBtn}>
+                                    <Text style={styles.closeBtnText}>跳过引导</Text>
+                                </View>
+                            </TouchableWithoutFeedback>
+                        </View>
+                    )}
+                </View>
+            </TouchableWithoutFeedback>
+        </Overlay.View>
+    );
 
-    const removeBackListener = useCallback(() => {
-        if (Device.Android) {
-            backListener.current.remove();
-        }
-    }, [backListener]);
-
-    const handleDismiss = useCallback(() => {
-        if (recordable) {
-            storage.setItem(guidanceType, JSON.stringify({}));
-        }
-        removeBackListener();
-        Overlay.hide(OverlayKey.current);
-    }, [guidanceType, recordable, removeBackListener]);
-
-    const skipGuidance = useCallback(() => {
-        if (recordable) {
-            skipGuidanceKeys.forEach(skipGuidanceKey => {
-                storage.setItem(`BeginnerGuidance_${skipGuidanceKey}`, JSON.stringify({}));
-            });
-        }
-        removeBackListener();
-        Overlay.hide(OverlayKey.current);
-    }, [recordable, removeBackListener, skipGuidanceKeys]);
-
-    React.useEffect(async () => {
-        const result = await Storage.getItem(key);
+    (async function () {
+        // OverlayKey = Overlay.show(overlayView);
+        const result = await Storage.getItem(guidanceType);
+        console.log('result', result);
         if (!result) {
-            OverlayKey.current = Overlay.show(overlayView);
+            OverlayKey = Overlay.show(overlayView);
             if (Device.Android) {
-                backListener.current = BackHandler.addEventListener('hardwareBackPress', () => {
+                backListener = BackHandler.addEventListener('hardwareBackPress', () => {
                     return true;
                 });
             }
         }
-    }, []);
+    })();
+
+    function handleDismiss() {
+        recordable && Storage.setItem(guidanceType, JSON.stringify({}));
+        removeBackListener();
+        Overlay.hide(OverlayKey);
+    }
+
+    function skipGuidance() {
+        if (recordable) {
+            skipGuidanceKeys.forEach((skipGuidanceKey) => {
+                Storage.setItem(`BeginnerGuidance_${skipGuidanceKey}`, JSON.stringify({}));
+            });
+        }
+        removeBackListener();
+        Overlay.hide(OverlayKey);
+    }
+
+    function removeBackListener() {
+        if (Device.Android) {
+            backListener.remove();
+        }
+    }
 };
 
 const styles = StyleSheet.create({
-    closeBtn: {
-        alignItems: 'center',
-        backgroundColor: 'rgba(255,255,255,0.6)',
-        borderRadius: pixel(14),
-        height: pixel(28),
-        justifyContent: 'center',
-        paddingHorizontal: pixel(10),
-    },
-    closeBtnText: {
-        color: '#fff',
-        fontSize: font(15),
-    },
     container: {
-        alignItems: 'center',
-        backgroundColor: 'rgba(0,0,0,0.6)',
         flex: 1,
+        width: Device.WIDTH,
         height: Device.HEIGHT,
         justifyContent: 'center',
-        width: Device.WIDTH,
+        alignItems: 'center',
+        backgroundColor: 'rgba(0,0,0,0.3)',
     },
     header: {
-        alignItems: 'flex-end',
-        justifyContent: 'center',
-        paddingHorizontal: pixel(Theme.itemSpace),
         position: 'absolute',
-        top: pixel(Theme.statusBarHeight + 10),
+        top: pixel(Device.statusBarHeight + 10),
+        paddingHorizontal: pixel(Theme.itemSpace),
         width: '100%',
+        justifyContent: 'center',
+        alignItems: 'flex-end',
+    },
+    closeBtn: {
+        height: pixel(28),
+        paddingHorizontal: pixel(10),
+        borderRadius: pixel(14),
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(255,255,255,0.6)',
+    },
+    closeBtnText: {
+        fontSize: pixel(15),
+        color: '#fff',
     },
 });
-
-export default BeginnerGuidance;

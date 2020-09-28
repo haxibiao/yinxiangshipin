@@ -72,42 +72,8 @@ class UserStore {
     }
 
     @action.bound
-    changeGender(gender: string) {
-        this.me.gender = gender;
-        Storage.setItem(Keys.me, this.me);
-    }
-
-    @action.bound
-    changeName(name: string) {
-        this.me.name = name;
-        Storage.setItem(Keys.me, this.me);
-    }
-
-    @action.bound
-    changeIntroduction(introduction: any) {
-        this.me.introduction = introduction;
-        Storage.setItem(Keys.me, this.me);
-    }
-
-    @action.bound
-    changePhone(phone: string) {
-        this.me.phone = phone;
-        Storage.setItem(Keys.me, this.me);
-    }
-
-    @action.bound
-    changeBirthday(birthday_msg: string) {
-        this.me.birthday_msg = birthday_msg;
-        Storage.setItem(Keys.me, this.me);
-    }
-
-    @action.bound
-    changeAlipay(real_name: string, pay_account: string) {
-        this.me.wallet = {
-            ...this.me.wallet,
-            real_name,
-            pay_account,
-        };
+    changeUserStatus(status: boolean) {
+        this.me.isNewUser = status;
         Storage.setItem(Keys.me, this.me);
     }
 }

@@ -76,7 +76,11 @@ const MobileLogin = () => {
         onCompleted: (result: any) => {
             // 登录成功,更新用户全局状态并退出登陆页面
             // console.log('登陆成功', result);
-            userStore.signIn(result.smsSignIn);
+            const userData = result?.smsSignIn;
+            if (userData?.gold <= 0 && userData?.balance <= 0 && userData?.wallet?.total_withdraw_amount <= 0) {
+                userData.isNewUser = true;
+            }
+            userStore.signIn(userData);
             toast('登陆成功');
             navigation.goBack();
             navigation.goBack();
