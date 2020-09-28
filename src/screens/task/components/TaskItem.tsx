@@ -157,11 +157,11 @@ function useTaskState(task) {
         if (typeof taskAction === 'string') {
             navigation.navigate(taskAction);
         } else if (typeof taskAction === 'function') {
-            taskAction(taskInterval.current);
+            taskAction(Object.assign({}, task, { wait: taskInterval.current }));
         } else {
             Toast.show({ content: '请前往完成任务' });
         }
-    }, [btnName]);
+    }, [btnName, task]);
 
     // 领取任务奖励
     const gotTaskReward = useCallback((id) => {
@@ -202,7 +202,7 @@ function useTaskState(task) {
     return [{ btnName, btnColor, countdown }, callback];
 }
 
-function playRewardVideo(wait: number) {
+function playRewardVideo({ wait }: { wait: number }) {
     let called = false;
     if (wait > 0) {
         Toast.show({ content: '请稍后再试' });
@@ -325,6 +325,14 @@ function inReview() {
     Toast.show({ content: '任务审核中，请留意奖励发放' });
 }
 
+function nationalDayTask({ task_object }) {
+    authNavigate('CollectionDetail', { collection: { id: task_object?.[0] } });
+}
+
+function midAutumnFestivalTask({ task_object }) {
+    authNavigate('CollectionDetail', { collection: { id: task_object?.[0] } });
+}
+
 // resolve.submit_name
 const taskColor = {
     新人任务: '#2FC6FC',
@@ -336,6 +344,8 @@ const taskRouteInfo = {
     去采集: resolveVideo,
     审核中: inReview,
     去了解: showVideoTeaching,
+    庆国庆: nationalDayTask,
+    庆中秋: midAutumnFestivalTask,
     去点赞: 'Home',
     去发布: 'CreatePost',
     去绑定: 'BindingAccount',

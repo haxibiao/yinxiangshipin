@@ -54,9 +54,13 @@ export default function TaskList() {
     const tasksMap = useMemo(() => {
         const tasksData = data?.tasks;
         if (Array.isArray(tasksData) && tasksData.length > 0) {
+            const activityTasks = { title: '活动任务', data: [] };
             const dailyTasks = { title: '每日任务', data: [] };
             const newUserTasks = { title: '新人任务', data: [] };
             for (const task of tasksData) {
+                if (task.group === '活动任务') {
+                    activityTasks.data.push(task);
+                }
                 if (task.group === '新人任务') {
                     newUserTasks.data.push(task);
                 }
@@ -64,7 +68,7 @@ export default function TaskList() {
                     dailyTasks.data.push(task);
                 }
             }
-            return [newUserTasks, dailyTasks];
+            return [activityTasks, newUserTasks, dailyTasks];
         }
     }, [data]);
 
