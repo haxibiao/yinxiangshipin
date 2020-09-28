@@ -13,6 +13,7 @@ import LottieView from 'lottie-react-native';
 import CollectionEpisodes from './components/CollectionEpisodes';
 
 const VIDEO_QUERY_COUNT = 5;
+const paddingBottom = pixel(44) + pixel(12) + (Theme.HOME_INDICATOR_HEIGHT || pixel(12));
 
 export default observer(() => {
     const listRef = useRef();
@@ -206,7 +207,7 @@ export default observer(() => {
         <View style={styles.container}>
             <FocusAwareStatusBar barStyle="light-content" />
             <DrawVideoList
-                style={{ paddingBottom: 0 }}
+                style={{ paddingBottom }}
                 listRef={listRef}
                 store={store}
                 initialIndex={0}
@@ -243,8 +244,10 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     collectionItem: {
-        margin: pixel(12),
-        marginBottom: Theme.HOME_INDICATOR_HEIGHT || pixel(12),
+        position: 'absolute',
+        left: pixel(12),
+        right: pixel(12),
+        bottom: Theme.HOME_INDICATOR_HEIGHT || pixel(12),
         height: pixel(44),
         borderRadius: pixel(22),
         paddingHorizontal: pixel(15),

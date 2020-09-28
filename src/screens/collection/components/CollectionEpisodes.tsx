@@ -41,7 +41,7 @@ export default ({ collection, post, onClose, navigation }) => {
         }
     }, [collection]);
     // 合集信息
-    const initialIndex = useMemo(() => (post?.current_episode % VIDEO_QUERY_COUNT) - 1, [post]);
+    const listRef = useRef();
     const currentPage = useMemo(() => Math.ceil(post?.current_episode / VIDEO_QUERY_COUNT), [post]);
     const paginationInfo = useRef(
         (() => {
@@ -57,6 +57,13 @@ export default ({ collection, post, onClose, navigation }) => {
             };
         })(),
     );
+    const initialIndex = useMemo(() => {
+        const index = (post?.current_episode % VIDEO_QUERY_COUNT) - 1;
+        if (paginationInfo.current.hasPrevPage && !paginationInfo.current.hasNextPage) {
+            return VIDEO_QUERY_COUNT + index;
+        }
+        return VIDEO_QUERY_COUNT;
+    }, [post]);
     const { loading, error, data, fetchMore, refetch } = useQuery(GQL.CollectionQuery, {
         variables: {
             collection_id: collection?.id,
@@ -170,9 +177,9 @@ export default ({ collection, post, onClose, navigation }) => {
     // 加载状态UI
     const ListHeaderComponent = useCallback(() => {
         let header = null;
-        // if (episodeData?.length > 0 && paginationInfo.current.hasPrevPage) {
-        //     header = <ContentStatus status="loadMore" />;
-        // }
+        if (episodeData?.length > 0 && paginationInfo.current.hasPrevPage && paginationInfo.current.loadingPrevPage) {
+            header = <ContentStatus status="loadMore" />;
+        }
         return header;
     }, [episodeData]);
 
@@ -226,7 +233,7 @@ export default ({ collection, post, onClose, navigation }) => {
                 </TouchableOpacity>
             </View>
             <BidirectionalList
-                // loading={!loading && !episodeData && !episodeData}
+                ref={listRef}
                 contentHeight={(Device.HEIGHT * 2) / 3}
                 data={episodeData}
                 renderItem={renderItem}
