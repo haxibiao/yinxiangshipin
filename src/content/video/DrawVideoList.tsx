@@ -301,7 +301,8 @@ const styles = StyleSheet.create({
     rewardProgress: {
         position: 'absolute',
         right: pixel(10),
-        bottom: pixel(360 + Theme.HOME_INDICATOR_HEIGHT),
+        top: Theme.statusBarHeight + Theme.NAVBAR_HEIGHT + pixel(70),
+        // bottom: pixel(360 + Theme.HOME_INDICATOR_HEIGHT),
     },
     contentCover: {
         ...StyleSheet.absoluteFillObject,
