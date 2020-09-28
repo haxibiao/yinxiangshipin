@@ -76,9 +76,12 @@ export default observer((props: any) => {
     const withdrawAmountData = useMemo(() => {
         return withdrawAmountListData?.getWithdrawAmountList || fakeAmountListData;
     }, [withdrawAmountListData]);
-    const [amount, setAmount] = useState(
-        userProfile.balance > withdrawAmountData[0].amount ? withdrawAmountData[0].amount : 0,
-    );
+    const [amount, setAmount] = useState(() => {
+        if (userProfile?.gold >= userProfile?.exchangeRate / 2 && userProfile?.wallet?.total_withdraw_amount <= 0) {
+            return withdrawAmountData[0].amount;
+        }
+        return userProfile.balance > withdrawAmountData[0].amount ? withdrawAmountData[0].amount : 0;
+    });
     useEffect(() => {
         if (userProfile.balance > withdrawAmountData[0].amount) {
             setAmount(withdrawAmountData[0].amount);
@@ -115,16 +118,26 @@ export default observer((props: any) => {
     // 提现金额
     const setWithdrawAmount = useCallback(
         (value) => {
-            if (userProfile.balance < value) {
-                Toast.show({ content: `余额不足，去做任务吧` });
-            } else if (wallet.id) {
-                if (wallet.today_withdraw_left >= value) {
-                    setAmount(value);
-                } else {
-                    Toast.show({ content: `今日提现额度已用完` });
-                }
+            // 未提现过的新用户
+            if (
+                value == 0.3 &&
+                userProfile?.gold >= userProfile?.exchangeRate / 2 &&
+                userProfile?.wallet?.total_withdraw_amount <= 0
+            ) {
+                setAmount(value);
             } else {
-                Toast.show({ content: `请先完善信息` });
+                // 正常流程
+                if (userProfile.balance < value) {
+                    Toast.show({ content: `余额不足，去做任务吧` });
+                } else if (wallet.id) {
+                    if (wallet.today_withdraw_left >= value) {
+                        setAmount(value);
+                    } else {
+                        Toast.show({ content: `今日提现额度已用完` });
+                    }
+                } else {
+                    Toast.show({ content: `请先完善信息` });
+                }
             }
         },
         [userProfile, wallet],
