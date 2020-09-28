@@ -329,7 +329,7 @@ function nationalDayTask({ collection }) {
     authNavigate('CollectionDetail', { collection });
 }
 
-function midAutumnFestivalTask({ task_object }) {
+function midAutumnFestivalTask({ collection }) {
     authNavigate('CollectionDetail', { collection });
 }
 

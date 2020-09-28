@@ -85,7 +85,7 @@ export default (props: any) => {
                     share_link: shareLink.current,
                     qcvod_fileid: formData.qcvod_fileid || sharedVideo?.id,
                     tag_names: tags.map((c) => c.name),
-                    collection_ids: collections.map((c) => c.name),
+                    collection_ids: collections.map((c) => c.id),
                 },
             });
         }
