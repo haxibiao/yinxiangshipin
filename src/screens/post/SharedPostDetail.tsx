@@ -158,10 +158,11 @@ export default observer((props) => {
                         target={media}
                         videoUrl={Helper.syncGetter('video.url', media)}
                         videoTitle={Helper.syncGetter('body', media)}
+                        collection={Helper.syncGetter('collections', media)?.[0]}
                         options={
                             isSelf
-                                ? ['删除', '下载', '分享长图', '复制链接']
-                                : ['下载', '举报', '不感兴趣', '分享长图', '复制链接']
+                                ? ['删除', '下载', '分享长图', '分享合集', '复制链接']
+                                : ['下载', '举报', '不感兴趣', '分享长图', '分享合集', '复制链接']
                         }
                         onRemove={() => {
                             navigation.goBack();

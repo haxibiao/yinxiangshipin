@@ -8,7 +8,7 @@ import ShareIOS from 'react-native-share';
 import viewShotUtil from './viewShotUtil';
 
 class CollectionShareOverlay {
-    static show(imageUrl, collection) {
+    static show(shareLink, pageUrl, collection) {
         let overlayView = (
             <Overlay.View animated style={{ flexDirection: 'column', justifyContent: 'flex-end' }}>
                 <View
@@ -22,20 +22,20 @@ class CollectionShareOverlay {
                         <TouchFeedback
                             onPress={async () => {
                                 CollectionShareOverlay.hide();
-                                console.log('result ', imageUrl);
+                                console.log('result ', pageUrl);
                                 if (Device.IOS) {
                                     ShareIOS.open({
                                         title: '分享给朋友',
-                                        url: imageUrl,
+                                        url: pageUrl,
                                     });
                                     return;
                                 }
                                 try {
                                     await WeChat.shareWebpage({
                                         title: '我在印象视频发现一个有意思的东西，快来看看吧',
-                                        description: collection.description,
-                                        webpageUrl: imageUrl,
-                                        thumbImageUrl: Config.ServerRoot + `/logo/${Config.PackageName}.com.png`,
+                                        description: `${collection.name}：${collection.description}`,
+                                        webpageUrl: pageUrl,
+                                        thumbImageUrl: collection.logo,
                                         scene: 0,
                                     });
                                 } catch (e) {
@@ -56,7 +56,7 @@ class CollectionShareOverlay {
                                 if (Device.IOS) {
                                     ShareIOS.open({
                                         title: '分享给朋友',
-                                        url: imageUrl,
+                                        url: pageUrl,
                                     });
                                     return;
                                 }
@@ -64,8 +64,8 @@ class CollectionShareOverlay {
                                     await WeChat.shareWebpage({
                                         title: collection.name,
                                         description: collection.description,
-                                        webpageUrl: imageUrl,
-                                        thumbImageUrl: Config.ServerRoot + `/logo/${Config.PackageName}.com.png`,
+                                        webpageUrl: pageUrl,
+                                        thumbImageUrl: collection.logo,
                                         scene: 1,
                                     });
                                 } catch (e) {
@@ -83,7 +83,7 @@ class CollectionShareOverlay {
                                 CollectionShareOverlay.hide();
                                 ShareIOS.open({
                                     title: '分享给朋友',
-                                    url: imageUrl,
+                                    url: shareLink,
                                 });
                                 return;
                                 // let callback = await Share.shareImageToQQ(result);
@@ -102,7 +102,7 @@ class CollectionShareOverlay {
                                 CollectionShareOverlay.hide();
                                 ShareIOS.open({
                                     title: '分享给朋友',
-                                    url: imageUrl,
+                                    url: shareLink,
                                 });
                                 // let callback = await Share.shareToSinaFriends(result);
                                 // if (callback == false) {
@@ -120,7 +120,7 @@ class CollectionShareOverlay {
                                 CollectionShareOverlay.hide();
                                 ShareIOS.open({
                                     title: '分享给朋友',
-                                    url: imageUrl,
+                                    url: shareLink,
                                 });
                                 return;
                                 // let callback = await Share.shareImageToQQZone(result);

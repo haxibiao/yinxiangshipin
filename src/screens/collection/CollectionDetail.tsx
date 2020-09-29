@@ -235,10 +235,10 @@ export default observer((props: any) => {
         }
     }, []);
     const shareOnPress = __.debounce(async () => {
-        const shareLink = await fetchShareLink();
+        const collectionLink = await fetchShareLink();
         // 解析合集网址
-        const image = await [...shareLink.match(/#http.*?#/g)][0].replace(/#/g, '');
-        CollectionShareOverlay.show(image, collection);
+        const image = await [...collectionLink.match(/#http.*?#/g)][0].replace(/#/g, '');
+        CollectionShareOverlay.show(collectionLink, image, collection);
     }, 500);
 
     return (

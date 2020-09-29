@@ -146,10 +146,11 @@ const PostItem: React.FC<Props> = observer((props: Props) => {
                         target={post}
                         videoUrl={Helper.syncGetter('video.url', post)}
                         videoTitle={Helper.syncGetter('body', post)}
+                        collection={Helper.syncGetter('collections', post)?.[0]}
                         options={
                             isSelf
-                                ? ['删除', '下载', '分享长图', '复制链接']
-                                : ['下载', '举报', '不感兴趣', '分享长图', '复制链接']
+                                ? ['删除', '下载', '分享长图', '分享合集', '复制链接']
+                                : ['下载', '举报', '不感兴趣', '分享长图', '分享合集', '复制链接']
                         }
                         onRemove={() => startAnimation(1, 0)}
                     />

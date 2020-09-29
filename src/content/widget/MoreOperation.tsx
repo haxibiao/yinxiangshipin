@@ -5,16 +5,29 @@ import * as WeChat from 'react-native-wechat-lib';
 import ShareIOS from 'react-native-share';
 import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 // import * as QQAPI from 'react-native-qq';
-import { userStore } from '@src/store';
+import { userStore, appStore } from '@src/store';
 import { download, syncGetter, exceptionCapture } from '@src/common';
 import { Share } from '@src/native';
 import { GQL, useMutation, errorMessage, useReport } from '@src/apollo';
 import QuestionShareCard from '@src/screens/share/QuestionShareCard';
 import QuestionShareCardOverlay from '@src/screens/share/QuestionShareCardOverlay';
+import CollectionShareOverlay from '@src/screens/share/CollectionShareOverlay';
 
 const MoreOperation = (props: any) => {
     const shareLink = useRef();
-    const { shares, options, type, target, videoUrl, videoTitle, closeOverlay, onRemove, client, navigation } = props;
+    const {
+        shares,
+        options,
+        type,
+        target,
+        videoUrl,
+        videoTitle,
+        closeOverlay,
+        onRemove,
+        client,
+        navigation,
+        collection,
+    } = props;
     const report = useReport({ target, type });
 
     const [deleteArticleMutation] = useMutation(GQL.deleteArticle, {
@@ -178,6 +191,34 @@ const MoreOperation = (props: any) => {
         let image = await shareCardRef.onCapture(true);
         QuestionShareCardOverlay.show(image, target);
     }, [shareCardRef]);
+
+    const shareCollectionLink = useRef();
+    const fetchShareCollection = useCallback(async () => {
+        const [error, result] = await exceptionCapture(() =>
+            appStore.client.query({
+                query: GQL.shareCollectionMutation,
+                variables: {
+                    collection_id: collection?.id,
+                },
+            }),
+        );
+        if (error) {
+            Toast.show({ content: error?.message });
+            return null;
+        } else if (syncGetter('data.shareCollection', result)) {
+            shareCollectionLink.current = syncGetter('data.shareCollection', result);
+            return shareCollectionLink.current;
+        }
+    }, []);
+
+    const shareCollection = useCallback(async () => {
+        closeOverlay();
+        let collectionLink = await fetchShareCollection();
+        // 解析合集网址
+        let image = await [...collectionLink.match(/#http.*?#/g)][0].replace(/#/g, '');
+        CollectionShareOverlay.show(collectionLink, image, collection);
+    }, []);
+
     const operation = useMemo(
         () => ({
             下载: {
@@ -208,13 +249,19 @@ const MoreOperation = (props: any) => {
                 image: require('@app/assets/images/more_shield.png'),
                 callback: shield,
             },
+            分享合集: {
+                image: require('@app/assets/images/more_large_img.png'),
+                callback: shareCollection,
+            },
         }),
-        [reportArticle, deleteArticle, dislike, downloadVideo, copyLink, shield],
+        [reportArticle, deleteArticle, dislike, downloadVideo, copyLink, shield, shareCollection],
     );
 
     const optionsView = useMemo(() => {
         return options.map((option: any, index: number) => {
             if ((option === '下载' || option === '复制链接') && !videoUrl) {
+                return;
+            } else if (option === '分享合集' && !collection) {
                 return;
             }
 
