@@ -205,6 +205,20 @@ export default observer(() => {
         };
     }, []);
 
+    // 视频播放事件处理
+    useEffect(() => {
+        const navWillFocusListener = navigation.addListener('focus', () => {
+            store.visibility = true;
+        });
+        const navWillBlurListener = navigation.addListener('blur', () => {
+            store.visibility = false;
+        });
+        return () => {
+            navWillFocusListener();
+            navWillBlurListener();
+        };
+    }, []);
+
     return (
         <View style={styles.container}>
             <FocusAwareStatusBar barStyle="light-content" />
