@@ -4,6 +4,7 @@ import { Overlay } from 'teaset';
 import { TouchFeedback } from '@src/components';
 import { Share } from '@src/native';
 import * as WeChat from 'react-native-wechat-lib';
+import ShareIOS from 'react-native-share';
 import viewShotUtil from './viewShotUtil';
 
 class CollectionShareOverlay {
