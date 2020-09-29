@@ -64,6 +64,7 @@ import CollectionDetailScreen from '../screens/collection/CollectionDetail';
 import CollectionVideoListScreen from '../screens/collection/VideoList';
 import AddToCollectionScreen from '../screens/collection/components/AddedToCollection';
 import SelectPostScreen from '../screens/collection/components/SelectPostScreen';
+import EditCollectionScreen from '../screens/creation/EditCollection';
 
 // category
 import CategoryScreen from '../screens/category';
@@ -240,6 +241,9 @@ export default {
     },
     SelectPost: {
         component: SelectPostScreen,
+    },
+    EditCollection: {
+        component: EditCollectionScreen,
     },
     CollectionDetail: {
         component: CollectionDetailScreen,

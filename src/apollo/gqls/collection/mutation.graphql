@@ -1,3 +1,4 @@
+# 创建个人合集
 mutation CreateCollectionMutation($name: String!, $logo: String, $description: String, $collectable_ids: [Int!]) {
     createCollection(name: $name, logo: $logo, description: $description, collectable_ids: $collectable_ids) {
         id
@@ -15,9 +16,15 @@ mutation CreateCollectionMutation($name: String!, $logo: String, $description: S
     }
 }
 
-# 修改集合信息
-mutation editCollectionMutation($collection_id: Int!, $name: String!, $logo: String, $type: CollectType) {
-    editCollection(collection_id: $collection_id, name: $name, logo: $logo, type: $type) {
+# 修改合集信息   type:"POST"
+mutation editCollectionMutation(
+    $collection_id: Int!
+    $name: String!
+    $logo: String
+    $description: String
+    $type: CollectType
+) {
+    editCollection(collection_id: $collection_id, name: $name, logo: $logo, description: $description, type: $type) {
         id
         logo
         name

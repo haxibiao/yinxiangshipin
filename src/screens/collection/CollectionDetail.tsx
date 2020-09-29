@@ -72,7 +72,18 @@ export default observer((props: any) => {
                     <View style={styles.header}>
                         <Image style={styles.tagLogoWrap} source={{ uri: tagData?.logo }} />
                         <View style={styles.tagInfo}>
-                            <SafeText style={styles.tagName}>#{tagData?.name}</SafeText>
+                            <View style={styles.modifyInfo}>
+                                <SafeText style={styles.tagName}>#{tagData?.name}</SafeText>
+                                {isSelf && (
+                                    <TouchableOpacity
+                                        style={styles.editBox}
+                                        onPress={() =>
+                                            navigation.navigate('EditCollection', { collection: collection })
+                                        }>
+                                        <Text style={styles.editText}>编辑</Text>
+                                    </TouchableOpacity>
+                                )}
+                            </View>
                             <Text style={styles.tagCount}>
                                 {`${count(tagData?.count_views || 0)}次播放`}
                                 {`· @${tagData?.user?.name}`}
@@ -247,7 +258,6 @@ export default observer((props: any) => {
                     </View>
                 }
             />
-
             <QueryList
                 gqlDocument={GQL.CollectionQuery}
                 dataOptionChain="collection.posts.data"
@@ -332,10 +342,25 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
     },
+    modifyInfo: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
     tagName: {
         marginBottom: pixel(5),
         fontSize: font(18),
         fontWeight: 'bold',
+        color: '#fff',
+    },
+    editBox: {
+        backgroundColor: '#666',
+        borderRadius: pixel(5),
+        paddingVertical: pixel(5),
+        paddingHorizontal: pixel(10),
+    },
+    editText: {
+        fontSize: font(14),
         color: '#fff',
     },
     tagCount: {
