@@ -51,19 +51,11 @@ export default ({ collection, post, onClose, navigation }) => {
                 loadingNextPage: false,
                 hasPrevPage: currentPage > 1,
                 hasNextPage: currentPage < lastPage,
-                prevPage: currentPage - 1 || -1,
-                nextPage: currentPage + 1,
                 lastPage,
             };
         })(),
     );
-    const initialIndex = useMemo(() => {
-        const index = (post?.current_episode % VIDEO_QUERY_COUNT) - 1;
-        if (paginationInfo.current.hasPrevPage && !paginationInfo.current.hasNextPage) {
-            return VIDEO_QUERY_COUNT + index;
-        }
-        return VIDEO_QUERY_COUNT;
-    }, [post]);
+
     const { loading, error, data, fetchMore, refetch } = useQuery(GQL.CollectionQuery, {
         variables: {
             collection_id: collection?.id,
@@ -71,27 +63,31 @@ export default ({ collection, post, onClose, navigation }) => {
             page: currentPage,
         },
     });
+    const hasMore = useMemo(() => data?.collection?.posts?.paginatorInfo?.hasMorePages, [data]);
     const episodeData = useMemo(() => data?.collection?.posts?.data, [data]);
-    useEffect(() => {
-        async function init() {
-            if (fetchMore && paginationInfo.current.hasPrevPage && !paginationInfo.current.hasNextPage) {
-                await onTopReached();
-            }
-        }
-        init();
-    }, [fetchMore]);
+    const nextPage = useMemo(
+        () => Math.ceil(episodeData?.[episodeData?.length - 1]?.current_episode / VIDEO_QUERY_COUNT) + 1,
+        [data],
+    );
+    const prvPage = useMemo(() => Math.ceil(episodeData?.[0]?.current_episode / VIDEO_QUERY_COUNT) - 1, [episodeData]);
+    // console.log('paginatorInfo', hasMore, nextPage, prvPage);
+
     // 加载更多
+    const [isLoadingPrevPage, setLoadingPrevPage] = useState(false);
+    const initFetchPrevPage = useRef(true);
     const onTopReached = useCallback(
         async (callback) => {
-            if (!paginationInfo.current.loadingPrevPage && paginationInfo.current.hasPrevPage) {
+            if (prvPage >= 1 && !paginationInfo.current.loadingPrevPage && paginationInfo.current.hasPrevPage) {
+                initFetchPrevPage.current = false;
                 paginationInfo.current.loadingPrevPage = true;
+                setLoadingPrevPage(true);
                 fetchMore({
                     variables: {
-                        page: paginationInfo.current.prevPage,
+                        page: prvPage,
                     },
                     updateQuery: (prev: any, { fetchMoreResult }: any) => {
-                        paginationInfo.current.prevPage--;
-                        if (paginationInfo.current.prevPage <= 0) {
+                        setLoadingPrevPage(false);
+                        if (prvPage - 1 <= 0) {
                             paginationInfo.current.hasPrevPage = false;
                         }
                         paginationInfo.current.loadingPrevPage = false;
@@ -104,31 +100,41 @@ export default ({ collection, post, onClose, navigation }) => {
                 });
             }
         },
-        [fetchMore],
+        [prvPage],
     );
-
-    const onEndReached = useCallback(async (callback) => {
-        if (!paginationInfo.current.loadingNextPage && paginationInfo.current.hasNextPage) {
-            paginationInfo.current.loadingNextPage = true;
-            fetchMore({
-                variables: {
-                    page: paginationInfo.current.nextPage,
-                },
-                updateQuery: (prev: any, { fetchMoreResult }: any) => {
-                    paginationInfo.current.nextPage++;
-                    if (paginationInfo.current.nextPage > paginationInfo.current.lastPage) {
-                        paginationInfo.current.hasNextPage = false;
-                    }
-                    paginationInfo.current.loadingNextPage = false;
-                    if (!fetchMoreResult) return prev;
-                    if (callback instanceof Function) {
-                        callback();
-                    }
-                    return mergeProperty(prev, fetchMoreResult);
-                },
-            });
+    useEffect(() => {
+        async function init() {
+            await onTopReached();
         }
-    }, []);
+        if (initFetchPrevPage.current) {
+            init();
+        }
+    }, [onTopReached]);
+
+    const onEndReached = useCallback(
+        async (callback) => {
+            if (hasMore && paginationInfo.current.hasNextPage && !paginationInfo.current.loadingNextPage) {
+                paginationInfo.current.loadingNextPage = true;
+                fetchMore({
+                    variables: {
+                        page: nextPage,
+                    },
+                    updateQuery: (prev: any, { fetchMoreResult }: any) => {
+                        if (nextPage + 1 > paginationInfo.current.lastPage) {
+                            paginationInfo.current.hasNextPage = false;
+                        }
+                        paginationInfo.current.loadingNextPage = false;
+                        if (!fetchMoreResult) return prev;
+                        if (callback instanceof Function) {
+                            callback();
+                        }
+                        return mergeProperty(prev, fetchMoreResult);
+                    },
+                });
+            }
+        },
+        [fetchMore, hasMore, nextPage],
+    );
 
     const renderItem = useCallback(
         ({ item, index }) => {
@@ -177,16 +183,16 @@ export default ({ collection, post, onClose, navigation }) => {
     // 加载状态UI
     const ListHeaderComponent = useCallback(() => {
         let header = null;
-        if (episodeData?.length > 0 && paginationInfo.current.hasPrevPage && paginationInfo.current.loadingPrevPage) {
+        if (isLoadingPrevPage) {
             header = <ContentStatus status="loadMore" />;
         }
         return header;
-    }, [episodeData]);
+    }, [isLoadingPrevPage]);
 
     const ListFooterComponent = useCallback(() => {
         let footer = null;
-        if (episodeData?.length > 0) {
-            if (paginationInfo.current.hasNextPage) {
+        if (hasMore !== undefined) {
+            if (hasMore && paginationInfo.current.hasNextPage) {
                 footer = <ContentStatus status="loadMore" />;
             } else {
                 footer = (
@@ -197,7 +203,7 @@ export default ({ collection, post, onClose, navigation }) => {
             }
         }
         return footer;
-    }, [episodeData]);
+    }, [hasMore]);
 
     const ListEmptyComponent = useCallback(() => {
         let status = '';

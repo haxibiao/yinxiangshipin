@@ -50,22 +50,25 @@ export default React.forwardRef(
             contentInfo.current.contentOffsetY = event.nativeEvent.contentOffset.y;
         }, []);
 
-        const onScroll = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
-            const prevOffsetY = contentInfo.current.contentOffsetY;
-            const offsetThreshold = containerHeight * onEndReachedThreshold;
-            const contentHeight = event?.nativeEvent?.contentSize?.height;
-            const contentOffsetY = Math.ceil(event?.nativeEvent?.contentOffset?.y);
-            if (prevOffsetY > contentOffsetY && contentOffsetY <= offsetThreshold) {
-                onTopReached(() => setTopReached(true));
-            } else if (
-                prevOffsetY < contentOffsetY &&
-                contentOffsetY >= contentHeight - containerHeight - offsetThreshold
-            ) {
-                onEndReached(() => setTopReached(false));
-            }
-            contentInfo.current.contentOffsetY = event?.nativeEvent?.contentOffset?.y;
-            // console.log('contentOffsetY', contentInfo.current.contentOffsetY);
-        }, []);
+        const onScroll = useCallback(
+            (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+                const prevOffsetY = contentInfo.current.contentOffsetY;
+                const offsetThreshold = containerHeight * onEndReachedThreshold;
+                const contentHeight = event?.nativeEvent?.contentSize?.height;
+                const contentOffsetY = Math.ceil(event?.nativeEvent?.contentOffset?.y);
+                if (prevOffsetY > contentOffsetY && contentOffsetY <= offsetThreshold) {
+                    onTopReached(() => setTopReached(true));
+                } else if (
+                    prevOffsetY < contentOffsetY &&
+                    contentOffsetY >= contentHeight - containerHeight - offsetThreshold
+                ) {
+                    onEndReached(() => setTopReached(false));
+                }
+                contentInfo.current.contentOffsetY = event?.nativeEvent?.contentOffset?.y;
+                // console.log('contentOffsetY', contentInfo.current.contentOffsetY);
+            },
+            [onTopReached, onEndReached],
+        );
 
         const onContentSizeChange = useCallback(
             (contentWidth, contentHeight) => {
