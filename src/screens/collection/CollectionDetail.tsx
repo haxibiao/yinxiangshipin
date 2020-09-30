@@ -84,16 +84,16 @@ export default observer((props: any) => {
                                     </TouchableOpacity>
                                 )}
                             </View>
-                            <Text style={styles.tagCount}>
+                            <SafeText style={styles.tagCount}>
                                 {`${count(tagData?.count_views || 0)}次播放`}
                                 {`· @${tagData?.user?.name}`}
-                            </Text>
+                            </SafeText>
                             <View style={styles.tagInfoBottom}>
-                                <Text style={styles.tagCount}>
+                                <SafeText style={styles.tagCount}>
                                     {tagData?.updated_to_episode > 0
                                         ? `更新至第${tagData?.updated_to_episode || 0}集`
                                         : ``}
-                                </Text>
+                                </SafeText>
                             </View>
                         </View>
                     </View>

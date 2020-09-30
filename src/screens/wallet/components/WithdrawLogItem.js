@@ -6,7 +6,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, TouchableOpacity, Text, Image } from 'react-native';
 
-import { Row } from 'components';
+import { Row, SafeText } from 'components';
 
 function WithdrawLogItem(props) {
     const { style, navigation, item } = props;
@@ -59,18 +59,18 @@ function WithdrawLogItem(props) {
             <Image source={imageUrl} style={{ width: size, height: size, marginVertical: pixel(15) }} />
             <Row style={styles.content}>
                 <View style={{ width: (Device.WIDTH * 4) / 7 }}>
-                    <Text style={styles.statusText}>
+                    <SafeText style={styles.statusText}>
                         {item.to_platform === 'dongdezhuan' ? '提现到懂得赚' : statusText}
-                    </Text>
+                    </SafeText>
                     {item.status == -1 && (
-                        <Text
+                        <SafeText
                             style={{ fontSize: font(12), color: Theme.themeRed }}
-                            numberOfLines={1}>{`${item.remark}`}</Text>
+                            numberOfLines={1}>{`${item.remark}`}</SafeText>
                     )}
-                    <Text style={styles.time}>{item.created_at}</Text>
+                    <SafeText style={styles.time}>{item.created_at}</SafeText>
                 </View>
                 <View>
-                    <Text style={{ fontSize: font(20), color }}>￥{item.amount}</Text>
+                    <SafeText style={{ fontSize: font(20), color }}>￥{item.amount}</SafeText>
                 </View>
             </Row>
         </TouchableOpacity>

@@ -282,24 +282,24 @@ export default observer((props: any) => {
                                                 source={require('@app/assets/images/wallet/icon_wallet_rmb.png')}
                                                 style={styles.rmbImage}
                                             />
-                                            <Text style={[styles.amountItemText, selected && { color: '#34BBFF' }]}>
+                                            <SafeText style={[styles.amountItemText, selected && { color: '#34BBFF' }]}>
                                                 {data.amount}元
-                                            </Text>
+                                            </SafeText>
                                         </Row>
                                         <Row>
                                             <Image
                                                 source={require('@app/assets/images/wallet/icon_wallet_diamond.png')}
                                                 style={styles.diamondImage}
                                             />
-                                            <Text style={[styles.amountTips, selected && { color: '#34BBFF' }]}>
+                                            <SafeText style={[styles.amountTips, selected && { color: '#34BBFF' }]}>
                                                 {data.amount * userProfile.exchangeRate}
-                                            </Text>
+                                            </SafeText>
                                         </Row>
                                     </TouchableOpacity>
                                     <View style={styles.amountItemBadge}>
-                                        <Text style={styles.amountItemBadgeText} numberOfLines={1}>
+                                        <SafeText style={styles.amountItemBadgeText} numberOfLines={1}>
                                             {data.tips}
-                                        </Text>
+                                        </SafeText>
                                     </View>
                                 </View>
                             );

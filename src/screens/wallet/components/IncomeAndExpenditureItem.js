@@ -6,7 +6,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 
-import { Row } from '@src/components';
+import { Row, SafeText } from '@src/components';
 
 class IncomeAndExpenditureItem extends Component {
     render() {
@@ -14,22 +14,22 @@ class IncomeAndExpenditureItem extends Component {
         return (
             <View style={styles.item}>
                 <Row style={{ justifyContent: 'space-between' }}>
-                    <Text style={{ fontSize: font(15), color: Theme.defaultTextColor }}>{item.remark}</Text>
-                    <Text
+                    <SafeText style={{ fontSize: font(15), color: Theme.defaultTextColor }}>{item.remark}</SafeText>
+                    <SafeText
                         style={{
                             fontSize: font(20),
                             color: item.gold > 0 ? Theme.primaryColor : Theme.secondaryColor,
                         }}>
                         {item.gold > 0 ? '+' + item.gold : item.gold}
-                    </Text>
+                    </SafeText>
                 </Row>
                 <Row style={{ justifyContent: 'space-between', marginTop: pixel(10) }}>
-                    <Text style={{ fontSize: font(12), color: Theme.subTextColor }}>{item.created_at}</Text>
-                    <Text
+                    <SafeText style={{ fontSize: font(12), color: Theme.subTextColor }}>{item.created_at}</SafeText>
+                    <SafeText
                         style={{
                             fontSize: font(12),
                             color: Theme.subTextColor,
-                        }}>{`剩余${Config.goldAlias}: ${item.balance}`}</Text>
+                        }}>{`剩余${Config.goldAlias}: ${item.balance}`}</SafeText>
                 </Row>
             </View>
         );

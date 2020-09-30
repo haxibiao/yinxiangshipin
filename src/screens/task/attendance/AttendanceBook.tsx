@@ -122,7 +122,7 @@ const AttendanceBook = (): JSX.Element => {
                         style={styles.redEnvelop}
                         source={require('@app/assets/images/get_double_signIn_reward.gif')}
                     />
-                    <Text style={styles.recordDayText}>领取</Text>
+                    <SafeText style={styles.recordDayText}>领取</SafeText>
                 </View>
             </TouchableWithoutFeedback>
         );
@@ -159,7 +159,7 @@ const AttendanceBook = (): JSX.Element => {
                             />
                         </View>
 
-                        <Text style={styles.recordDayText}>{elem.checked ? '已签' : `${index + 1}天`}</Text>
+                        <SafeText style={styles.recordDayText}>{elem.checked ? '已签' : `${index + 1}天`}</SafeText>
                     </View>
                 );
             }
@@ -177,7 +177,7 @@ const AttendanceBook = (): JSX.Element => {
                             {elem.gold_reward || 0}
                         </SafeText>
                     </ImageBackground>
-                    <Text style={styles.recordDayText}>{elem.checked ? '已签' : `${index + 1}天`}</Text>
+                    <SafeText style={styles.recordDayText}>{elem.checked ? '已签' : `${index + 1}天`}</SafeText>
                 </View>
             );
         });
@@ -191,7 +191,8 @@ const AttendanceBook = (): JSX.Element => {
             <View style={styles.attendanceBook} onLayout={onLayoutEffect}>
                 <View style={styles.header}>
                     <SafeText style={styles.signInText}>
-                        已签到<Text style={styles.keepSignInText}>{` ${keepCheckInDays}/${checkIns.length} `}</Text>天
+                        已签到
+                        <SafeText style={styles.keepSignInText}>{` ${keepCheckInDays}/${checkIns.length} `}</SafeText>天
                     </SafeText>
                 </View>
                 <TouchableWithoutFeedback onPress={toDaySignIn} disabled={loading}>

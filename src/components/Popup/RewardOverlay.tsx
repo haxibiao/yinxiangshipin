@@ -51,7 +51,7 @@ const RewardOverlay = (props) => {
                                 source={require('@app/assets/images/wallet/icon_wallet_diamond.png')}
                                 style={styles.rewardIcon}
                             />
-                            <Text style={styles.rewardValue}>+{gold}</Text>
+                            <SafeText style={styles.rewardValue}>+{gold}</SafeText>
                         </View>
                         {ticket > 0 && (
                             <View style={styles.rewardItem}>
@@ -59,7 +59,7 @@ const RewardOverlay = (props) => {
                                     source={require('@app/assets/images/wallet/icon_wallet_giftAward.png')}
                                     style={styles.rewardIcon}
                                 />
-                                <Text style={styles.rewardValue}>+{ticket}</Text>
+                                <SafeText style={styles.rewardValue}>+{ticket}</SafeText>
                             </View>
                         )}
                     </View>
@@ -90,16 +90,16 @@ const RewardOverlay = (props) => {
                             source={require('@app/assets/images/wallet/icon_wallet_diamond.png')}
                             style={styles.currentDiamond}
                         />
-                        <Text
+                        <SafeText
                             style={{
                                 fontSize: font(13),
                                 color: '#999999',
                             }}>
                             {currentGold}≈
-                            <Text style={{ color: '#FCE03D' }}>
+                            <SafeText style={{ color: '#FCE03D' }}>
                                 {Helper.goldExchange(currentGold, userStore.me?.exchangeRate)}元
-                            </Text>
-                        </Text>
+                            </SafeText>
+                        </SafeText>
                     </Row>
                 )}
             </View>

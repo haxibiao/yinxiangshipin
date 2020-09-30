@@ -63,9 +63,9 @@ const PostItem = observer((props: Props) => {
                             size={pixel(15)}
                             color={item.liked ? Theme.primaryColor : '#fff'}
                         />
-                        <Text style={[styles.metaText, { marginLeft: pixel(3) }]} numberOfLines={1}>
+                        <SafeText style={[styles.metaText, { marginLeft: pixel(3) }]} numberOfLines={1}>
                             {item.count_likes}
-                        </Text>
+                        </SafeText>
                     </Row>
                 </View>
                 {addPostPress && (

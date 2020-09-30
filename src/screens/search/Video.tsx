@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { StyleSheet, View, Text, FlatList, TouchableOpacity, Image, ScrollView } from 'react-native';
-import { PageContainer, Iconfont, HxfTextInput, ScrollTabBar } from 'components';
+import { PageContainer, Iconfont, HxfTextInput, ScrollTabBar, SafeText } from 'components';
 import { Storage, Keys } from '@src/store';
 import { FocusAwareStatusBar } from '@src/router';
 import { useApolloClient, GQL } from '@src/apollo';
@@ -73,9 +73,9 @@ const Search = () => {
     const KeywordsList = useMemo(() => {
         return (
             <View style={styles.listHeader}>
-                <Text style={styles.searchText}>
-                    搜索包含"<Text style={styles.highlightText}>{textValue}</Text>"的动态
-                </Text>
+                <SafeText style={styles.searchText}>
+                    搜索包含"<SafeText style={styles.highlightText}>{textValue}</SafeText>"的动态
+                </SafeText>
             </View>
         );
     }, [textValue]);

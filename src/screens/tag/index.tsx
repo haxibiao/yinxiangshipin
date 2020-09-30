@@ -112,12 +112,12 @@ export default observer((props: any) => {
                 <View style={styles.tagInfo}>
                     <View style={styles.tagInfoTop}>
                         <SafeText style={styles.tagName}>#{tagData?.name}</SafeText>
-                        <Text style={styles.tagCount}>{`${count(tagData?.count_views || 0.0)}次播放`}</Text>
+                        <SafeText style={styles.tagCount}>{`${count(tagData?.count_views || 0.0)}次播放`}</SafeText>
                     </View>
                     <View style={styles.tagInfoBottom}>
-                        <Text style={styles.tagCount}>{`${count(
+                        <SafeText style={styles.tagCount}>{`${count(
                             tagData?.count_posts > 0 ? tagData?.count_posts : '0.0',
-                        )}个视频`}</Text>
+                        )}个视频`}</SafeText>
                         <TouchableOpacity
                             style={styles.filterBtn}
                             onPress={() =>
@@ -130,7 +130,7 @@ export default observer((props: any) => {
                                 style={styles.filterIcon}
                                 source={require('@app/assets/images/icons/ic_order_gray.png')}
                             />
-                            <Text style={styles.filterBtnName}>{hot ? '最多点赞' : '最新发布'}</Text>
+                            <SafeText style={styles.filterBtnName}>{hot ? '最多点赞' : '最新发布'}</SafeText>
                         </TouchableOpacity>
                     </View>
                     {/* <TouchableOpacity style={styles.favoriteBtn}>
