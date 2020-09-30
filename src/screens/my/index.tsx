@@ -148,7 +148,7 @@ export default observer((props: any) => {
                         </View>
                     </View>
                 </TouchableWithoutFeedback>
-                {userStore.login && adStore.enableAd && (
+                {userStore.login && adStore.enableWallet && (
                     <TouchableWithoutFeedback onPress={() => navigation.navigate('TaskCenter')}>
                         <Image style={styles.taskEntry} source={require('@app/assets/images/task_entry.png')} />
                     </TouchableWithoutFeedback>
