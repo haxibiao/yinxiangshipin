@@ -1,9 +1,8 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { StyleSheet, View, Text, Image, TouchableOpacity, TouchableWithoutFeedback, ScrollView } from 'react-native';
-import { SafeText, Iconfont } from '@src/components';
+import { SafeText, Iconfont, FocusAwareStatusBar } from '@src/components';
 import { observer } from '@src/store';
 import { GQL } from '@src/apollo';
-import { FocusAwareStatusBar } from '@src/router';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { QueryList } from '@src/content';
 import PostItem from '@src/screens/collection/components/PostItem';

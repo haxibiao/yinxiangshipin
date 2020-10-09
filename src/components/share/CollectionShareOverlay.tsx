@@ -1,7 +1,6 @@
 import React from 'react';
-import { StyleSheet, View, Text, Image, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, Image, ScrollView, TouchableOpacity } from 'react-native';
 import { Overlay } from 'teaset';
-import { TouchFeedback } from '@src/components';
 import { Share } from '@src/native';
 import * as WeChat from 'react-native-wechat-lib';
 import ShareIOS from 'react-native-share';
@@ -19,7 +18,7 @@ class CollectionShareOverlay {
                         paddingBottom: Theme.HOME_INDICATOR_HEIGHT - 10 || 0,
                     }}>
                     <View style={styles.top}>
-                        <TouchFeedback
+                        <TouchableOpacity
                             onPress={async () => {
                                 CollectionShareOverlay.hide();
                                 console.log('result ', pageUrl);
@@ -49,8 +48,8 @@ class CollectionShareOverlay {
                             <Image source={require('@app/assets/images/share_wx.png')} style={styles.imageStyle} />
 
                             <Text style={{ color: Theme.grey, fontSize: 12 }}>微信好友</Text>
-                        </TouchFeedback>
-                        <TouchFeedback
+                        </TouchableOpacity>
+                        <TouchableOpacity
                             onPress={async () => {
                                 CollectionShareOverlay.hide();
                                 if (Device.IOS) {
@@ -77,8 +76,8 @@ class CollectionShareOverlay {
                             style={{ alignItems: 'center' }}>
                             <Image source={require('@app/assets/images/share_pyq.png')} style={styles.imageStyle} />
                             <Text style={{ color: Theme.grey, fontSize: 12 }}>朋友圈</Text>
-                        </TouchFeedback>
-                        <TouchFeedback
+                        </TouchableOpacity>
+                        <TouchableOpacity
                             onPress={() => {
                                 CollectionShareOverlay.hide();
                                 ShareIOS.open({
@@ -96,8 +95,8 @@ class CollectionShareOverlay {
                             style={{ alignItems: 'center' }}>
                             <Image source={require('@app/assets/images/share_qq.png')} style={styles.imageStyle} />
                             <Text style={{ color: Theme.grey, fontSize: 12 }}>QQ好友</Text>
-                        </TouchFeedback>
-                        <TouchFeedback
+                        </TouchableOpacity>
+                        <TouchableOpacity
                             onPress={() => {
                                 CollectionShareOverlay.hide();
                                 ShareIOS.open({
@@ -114,8 +113,8 @@ class CollectionShareOverlay {
                             style={{ alignItems: 'center' }}>
                             <Image source={require('@app/assets/images/share_wb.png')} style={styles.imageStyle} />
                             <Text style={{ color: Theme.grey, fontSize: 12 }}>微博</Text>
-                        </TouchFeedback>
-                        <TouchFeedback
+                        </TouchableOpacity>
+                        <TouchableOpacity
                             onPress={() => {
                                 CollectionShareOverlay.hide();
                                 ShareIOS.open({
@@ -133,15 +132,15 @@ class CollectionShareOverlay {
                             style={{ alignItems: 'center' }}>
                             <Image source={require('@app/assets/images/share_qqz.png')} style={styles.imageStyle} />
                             <Text style={{ color: Theme.grey, fontSize: 12 }}>QQ空间</Text>
-                        </TouchFeedback>
+                        </TouchableOpacity>
                     </View>
-                    <TouchFeedback
+                    <TouchableOpacity
                         style={styles.closeItem}
                         onPress={() => {
                             CollectionShareOverlay.hide();
                         }}>
                         <Text style={styles.headerText}>取消</Text>
-                    </TouchFeedback>
+                    </TouchableOpacity>
                 </View>
             </Overlay.View>
         );

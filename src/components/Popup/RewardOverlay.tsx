@@ -1,13 +1,13 @@
 import React, { Fragment, useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
 import { ad } from 'react-native-ad';
+import { useNavigation } from '@react-navigation/native';
 import { Overlay } from 'teaset';
 import { adStore, userStore } from '@src/store';
-import { authNavigate } from '@src/router';
 import Iconfont from '../Iconfont';
 import Row from '../Basic/Row';
 import HxfButton from '../Form/HxfButton';
-import { SafeText } from '@src/components';
+import SafeText from '../Basic/SafeText';
 interface Reward {
     gold?: number;
     ticket?: number;
@@ -26,6 +26,7 @@ const RewardOverlay = (props) => {
     const { gold, ticket } = reward;
     const [adShown, setAdShown] = useState(false);
     const currentGold = userStore.me?.gold;
+    const navigation = useNavigation();
 
     return (
         <View style={styles.container}>
@@ -71,9 +72,7 @@ const RewardOverlay = (props) => {
                         title={'查看详情'}
                         onPress={() => {
                             hide();
-                            authNavigate('WithdrawHistory', {
-                                tabPage: 2,
-                            });
+                            navigation.navigate('WithdrawHistory', { tabPage: 2 });
                         }}
                     />
                 </View>

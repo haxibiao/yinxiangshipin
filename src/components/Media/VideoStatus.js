@@ -9,7 +9,6 @@ import {
     ActivityIndicator,
 } from 'react-native';
 import { observer, Provider, inject } from 'mobx-react';
-import { withNavigation } from '@src/router';
 import Iconfont from '../Iconfont';
 
 @observer

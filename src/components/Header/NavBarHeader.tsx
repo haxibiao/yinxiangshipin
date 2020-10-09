@@ -11,8 +11,8 @@ import {
     StatusBarProperties,
 } from 'react-native';
 import { useNavigation, useRoute, useIsFocused } from '@react-navigation/native';
-import { SafeText } from '@src/components';
 import LinearGradient from 'react-native-linear-gradient';
+import SafeText from '../Basic/SafeText';
 import Iconfont from '../Iconfont';
 
 {

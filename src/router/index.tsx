@@ -9,7 +9,6 @@ import {
 import { createStackNavigator, CardStyleInterpolators, TransitionSpecs } from '@react-navigation/stack';
 import { name } from '@app/app.json';
 import { appStore } from '@src/store';
-import FocusAwareStatusBar from './FocusAwareStatusBar';
 import BottomTabNavigator from './BottomTabNavigator';
 import SCREENS from './routes';
 import privateRoutes from './privateRoutes';
@@ -52,7 +51,7 @@ const TransitionScreen = {
     },
 };
 
-export { FocusAwareStatusBar, useNavigation, useRoute, CommonActions };
+export { useNavigation, useRoute, CommonActions };
 
 export let rootNavigation: any = null;
 

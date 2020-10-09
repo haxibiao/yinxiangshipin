@@ -3,8 +3,7 @@ import { StyleSheet, View, Text, TouchableOpacity, TextInput } from 'react-nativ
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { GQL, useQuery } from '@src/apollo';
 import { QueryList, PostItem } from '@src/content';
-import { FocusAwareStatusBar } from '@src/router';
-import { NavBarHeader, SafeText } from '@src/components';
+import { NavBarHeader, SafeText, FocusAwareStatusBar } from '@src/components';
 import { userStore } from '@src/store';
 import { count } from '@src/common';
 import { Overlay } from 'teaset';

@@ -10,8 +10,6 @@ import {
     Dimensions,
     TouchableHighlight,
 } from 'react-native';
-import { withNavigation } from '@src/router';
-
 import Iconfont from '../Iconfont';
 import { Avatar } from '../Basic';
 
@@ -215,4 +213,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default withNavigation(NoteItem);
+export default NoteItem;

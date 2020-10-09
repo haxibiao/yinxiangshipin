@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Image, ViewStyle, ScrollView } from 'react-native';
 import { appStore, Keys, Storage } from '@src/store';
-import { SafeText } from '@src/components';
+import SafeText from '../Basic/SafeText';
 // import Row from '../Basic/Row';
 
 import { Overlay } from 'teaset';

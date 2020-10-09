@@ -1,6 +1,7 @@
 import React, { Component, useMemo } from 'react';
 import { StyleSheet, View, Text, Image, ScrollView } from 'react-native';
-import { Avatar, SafeText } from '@src/components';
+import Avatar from '../Basic/Avatar';
+import SafeText from '../Basic/SafeText';
 import { BoxShadow } from 'react-native-shadow';
 import QRCode from 'react-native-qrcode-svg';
 import { userStore } from '@src/store';

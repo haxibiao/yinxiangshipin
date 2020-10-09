@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { View, StyleSheet, Image, Text, TouchableOpacity, Animated, ScrollView } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { Avatar, Iconfont, SafeText, PlaceholderImage, GridImage } from '@src/components';
+import { Avatar, Iconfont, SafeText, PlaceholderImage, GridImage, MoreOperation } from '@src/components';
 import { observer, userStore } from '@src/store';
 import { GQL, useApolloClient, ApolloProvider } from '@src/apollo';
-import { AnimationLike, Commodity, MoreOperation } from '../../widget';
+import { AnimationLike, Commodity } from '../../widget';
 import { Overlay } from 'teaset';
 
 const videoWidth = Device.WIDTH * 0.6;

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View, TextInput, Text, TouchableOpacity, Dimensions } from 'react-native';
 import HxfModal from './HxfModal';
 import Iconfont from '../Iconfont';
-import { SafeText } from '@src/components';
+import SafeText from '../Basic/SafeText';
 
 class WriteModal extends Component {
     render() {

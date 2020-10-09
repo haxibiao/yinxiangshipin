@@ -4,8 +4,7 @@
  */
 
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import { withNavigation, CommonActions } from '@src/router';
+import { StyleSheet, View, Text, TouchableOpacity, ViewStyle } from 'react-native';
 
 import Iconfont from '../Iconfont';
 import Row from '../Basic/Row';
@@ -22,7 +21,9 @@ type User = {
 };
 
 type Props = {
+    style: ViewStyle,
     user: User,
+    navigation: any,
 };
 
 class UserItem extends Component<Props> {
@@ -91,4 +92,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default withNavigation(UserItem);
+export default UserItem;

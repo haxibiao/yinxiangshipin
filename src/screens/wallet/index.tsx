@@ -10,9 +10,9 @@ import {
     ImageBackground,
     Image,
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { PageContainer, Iconfont, Row, HxfButton, SafeText } from '@src/components';
 import { observer, userStore } from '@src/store';
-import { useNavigation } from '@src/router';
 import { GQL, useMutation, useQuery } from '@src/apollo';
 import { bindWechat, syncGetter, useNavigationListener } from '@src/common';
 

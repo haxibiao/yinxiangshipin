@@ -11,9 +11,7 @@ import {
     PermissionsAndroid,
     Platform,
 } from 'react-native';
-
-import Iconfont from '../Iconfont';
-import { SafeText } from '@src/components';
+import Iconfont from '../../components/Iconfont';
 import { Overlay } from 'teaset';
 import DownLoadApk from '@src/screens/wallet/components/DownLoadApk';
 import { appStore } from '@src/store';
@@ -46,7 +44,7 @@ export const show = (props: Props) => {
                         </TouchableOpacity>
                     )}
                     <View style={[styles.header, { paddingTop: versionData.is_force ? pixel(25) : pixel(15) }]}>
-                        <SafeText style={styles.modalRemindContent}>检测到新版本</SafeText>
+                        <Text style={styles.modalRemindContent}>检测到新版本</Text>
                     </View>
                     <View style={styles.center}>
                         <Text style={styles.centerTitle}>建议在WLAN环境下进行升级</Text>

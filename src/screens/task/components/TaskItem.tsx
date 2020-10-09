@@ -3,11 +3,12 @@ import { StyleSheet, View, Text, TouchableOpacity, Image, Linking } from 'react-
 import { ad } from 'react-native-ad';
 import { userStore, appStore, adStore } from '@src/store';
 import { getTaskReward, getUserReward, getNewUserReward } from '@src/apollo';
-import { authNavigate } from '@src/router';
 import { SafeText, HxfButton, RewardOverlay, Loading, PopOverlay } from '@src/components';
 import { useNavigation } from '@react-navigation/native';
 import { Overlay } from 'teaset';
 import VideoTeaching from '../VideoTeaching';
+
+let navigation = {};
 
 export default function TaskItem({ task }) {
     const [taskState, taskHandler] = useTaskState(task);
@@ -104,7 +105,7 @@ export default function TaskItem({ task }) {
 }
 
 function useTaskState(task) {
-    const navigation = useNavigation();
+    navigation = useNavigation();
     const taskInterval = useRef(task?.next_reward_video_time || 0);
     const [countdown, setCountdown] = useState(taskInterval.current);
 
@@ -260,7 +261,7 @@ function resolveVideo() {
     if (!appStore.spiderVideoTaskGuided) {
         appStore.setAppStorage('spiderVideoTaskGuided', true);
         appStore.spiderVideoTaskGuided = true;
-        authNavigate('SpiderVideoTask');
+        navigation.navigate('SpiderVideoTask');
     } else {
         //TODO 唤起抖音，scheme可能存在一旦更改无法唤起的风险
         const scheme = Device.IOS ? 'itms-apps://itunes.apple.com/app/id1142110895' : 'snssdk1128://';
@@ -326,11 +327,11 @@ function inReview() {
 }
 
 function nationalDayTask({ collection }) {
-    authNavigate('CollectionDetail', { collection });
+    navigation.navigate('CollectionDetail', { collection });
 }
 
 function midAutumnFestivalTask({ collection }) {
-    authNavigate('CollectionDetail', { collection });
+    navigation.navigate('CollectionDetail', { collection });
 }
 
 // resolve.submit_name

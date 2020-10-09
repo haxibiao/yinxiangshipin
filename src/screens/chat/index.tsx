@@ -1,6 +1,5 @@
 import React, { Component, useEffect, useCallback, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import { authNavigate } from '@src/router';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { GiftedChat, Bubble, Send, Composer, InputToolbar } from 'hxf-react-native-gifted-chat';
 import { PageContainer, LoadingError, SpinnerLoading, HeaderRight, Header, TouchFeedback } from '@src/components';
@@ -114,7 +113,7 @@ const Chat = observer((props: Props) => {
             title={chat.withUser.name}
             titleStyle={{ fontSize: font(16) }}
             rightView={
-                <TouchFeedback onPress={() => authNavigate('ChatSetting', { user: chat.withUser })} style={{}}>
+                <TouchFeedback onPress={() => navigation.navigate('ChatSetting', { user: chat.withUser })} style={{}}>
                     <Text style={{ fontSize: font(16), color: Theme.navBarTitleColor || '#666' }}>设置</Text>
                 </TouchFeedback>
             }>

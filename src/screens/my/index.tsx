@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { StyleSheet, View, ScrollView, Text, Image, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { observer, adStore, userStore, Keys, Storage } from '@src/store';
-import { PageContainer, Iconfont, Row, Avatar, SafeText } from '@src/components';
-import { FocusAwareStatusBar, authNavigate, useNavigation } from '@src/router';
+import { PageContainer, Iconfont, Row, Avatar, SafeText, FocusAwareStatusBar } from '@src/components';
 import { GQL, useQuery, useApolloClient } from '@src/apollo';
 
 export default observer((props: any) => {
@@ -86,7 +86,7 @@ export default observer((props: any) => {
             </View>
             <TouchableOpacity
                 style={styles.positionSetting}
-                onPress={() => authNavigate('Setting', { user: userProfile })}>
+                onPress={() => authNavigator('Setting', { user: userProfile })}>
                 <Iconfont name="shezhi1" size={font(22)} color="#fff" />
             </TouchableOpacity>
             <ScrollView
@@ -224,7 +224,7 @@ export default observer((props: any) => {
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.columnItem}
-                        onPress={() => authNavigate('Setting', { user: userProfile })}>
+                        onPress={() => authNavigator('Setting', { user: userProfile })}>
                         <View style={styles.columnItemLeft}>
                             <Image
                                 style={styles.columnIcon}

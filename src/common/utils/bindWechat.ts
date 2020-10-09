@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { appStore, userStore } from '@src/store';
-import { GQL, useMutation } from '@src/apollo';
+import { GQL } from '@src/apollo';
 import * as WeChat from 'react-native-wechat-lib';
 
 interface Props {
@@ -23,7 +23,7 @@ export function bindWechat(props: Props) {
                         bindWx(responseCode.code, props);
                         console.log('responseCode', responseCode);
                     })
-                    .catch(err => {
+                    .catch((err) => {
                         onFailed && onFailed();
                         Toast.show({ content: '登录授权发生错误' });
                     });
@@ -32,7 +32,7 @@ export function bindWechat(props: Props) {
                 Toast.show({ content: '请先安装微信客户端在进行登录' });
             }
         })
-        .catch(err => {
+        .catch((err) => {
             onFailed && onFailed();
             Toast.show({ content: '微信授权发生错误，请更新最新版本微信' });
         });

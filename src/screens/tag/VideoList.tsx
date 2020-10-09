@@ -2,8 +2,7 @@ import React, { useRef, useEffect, useMemo, useCallback } from 'react';
 import { StyleSheet, View, Text, StatusBar } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { exceptionCapture } from '@src/common';
-import { FocusAwareStatusBar } from '@src/router';
-import { NavBarHeader } from '@src/components';
+import { NavBarHeader, FocusAwareStatusBar } from '@src/components';
 import { GQL, useApolloClient } from '@src/apollo';
 import { DrawVideoList, DrawVideoStore } from '@src/content';
 

@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { observer, appStore, userStore } from '@src/store';
 import { NavBarHeader, SafeText, Iconfont, Row, Loading } from '@src/components';
+import CollectionShareOverlay from '@src/components/share/CollectionShareOverlay';
 import { syncGetter, count, exceptionCapture } from '@src/common';
 import { GQL, useQuery, useFollowMutation, useMutation } from '@src/apollo';
 import { ContentStatus, QueryList } from '@src/content';
@@ -21,7 +22,6 @@ import { Overlay } from 'teaset';
 import { ApolloProvider } from '@apollo/react-hooks';
 import AddedToCollection from './components/AddedToCollection';
 import StashVideoStore from './store';
-import CollectionShareOverlay from '../share/CollectionShareOverlay';
 
 export default observer((props: any) => {
     const navigation = useNavigation();

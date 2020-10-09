@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, Animated, Easing, TouchableOpacity, BackHandler } from 'react-native';
-import { withNavigation } from '@src/router';
 import Video from 'react-native-video';
 
 import VideoStatus from './VideoStatus';
@@ -28,7 +27,7 @@ class Player extends Component {
         if (Device.Android) {
             BackHandler.addEventListener('hardwareBackPress', this._backButtonPress);
         }
-        this.willBlurSubscription = navigation.addListener('blur', payload => {
+        this.willBlurSubscription = navigation.addListener('blur', (payload) => {
             this.videoStore.paused = true;
         });
     }
@@ -139,4 +138,4 @@ const styles = StyleSheet.create({
         bottom: 0,
     },
 });
-export default withNavigation(Player);
+export default Player;

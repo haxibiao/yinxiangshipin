@@ -6,12 +6,12 @@ import ShareIOS from 'react-native-share';
 import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 // import * as QQAPI from 'react-native-qq';
 import { userStore, appStore } from '@src/store';
-import { download, syncGetter, exceptionCapture, useReport } from '@src/common';
+import { download, syncGetter, exceptionCapture } from '@src/common';
 import { Share } from '@src/native';
-import { GQL, useMutation, errorMessage } from '@src/apollo';
-import QuestionShareCard from '@src/screens/share/QuestionShareCard';
-import QuestionShareCardOverlay from '@src/screens/share/QuestionShareCardOverlay';
-import CollectionShareOverlay from '@src/screens/share/CollectionShareOverlay';
+import { GQL, useMutation, errorMessage, useReport } from '@src/apollo';
+import QuestionShareCard from '../share/QuestionShareCard';
+import QuestionShareCardOverlay from '../share/QuestionShareCardOverlay';
+import CollectionShareOverlay from '../share/CollectionShareOverlay';
 
 const MoreOperation = (props: any) => {
     const shareLink = useRef();

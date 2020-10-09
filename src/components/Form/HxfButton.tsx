@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, TouchableOpacity, View, Text, TouchableWithoutFeedback, ActivityIndicator } from 'react-native';
 import GradientView from '../Basic/GradientView';
-import { SafeText } from '@src/components';
+import SafeText from '../Basic/SafeText';
 
 type Size = 'mini' | 'small' | 'medium' | 'default';
 

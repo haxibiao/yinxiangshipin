@@ -6,7 +6,7 @@
 import { Platform } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import { Storage, Keys } from '@src/store';
-import AppUpdateOverlay from '../../components/Popup/AppUpdateOverlay';
+import AppUpdateOverlay from './AppUpdateOverlay';
 import { contrastVersion } from '../helper';
 
 function manualUpdate(versionData: { version: any }) {

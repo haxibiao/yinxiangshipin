@@ -1,11 +1,13 @@
 import React, { useCallback, useMemo } from 'react';
 import { View, Text, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
 import { StatusView, UserItem } from '@src/components';
+import { useNavigation } from '@react-navigation/native';
 import { GQL, useQuery } from '@src/apollo';
 import { observer } from '@src/store';
 import { observable } from 'mobx';
 
 const index = observer(({ keyword }) => {
+    const navigation = useNavigation();
     const { loading, error, data, fetchMore, refetch } = useQuery(GQL.searchUsersQuery, {
         variables: { keyword, type: 'POST', page: 1 },
         fetchPolicy: 'network-only',
@@ -60,7 +62,7 @@ const index = observer(({ keyword }) => {
                 showsVerticalScrollIndicator={false}
                 data={articles}
                 keyExtractor={(item, i) => String(item.id || i)}
-                renderItem={({ item }) => <UserItem user={item} />}
+                renderItem={({ item }) => <UserItem user={item} navigation={navigation} />}
                 onEndReachedThreshold={0.1}
                 onEndReached={fetchMoreArticles}
                 ListFooterComponent={FooterComponent}

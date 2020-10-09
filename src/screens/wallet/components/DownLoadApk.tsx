@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, PermissionsAndroid, Platform, StyleSheet } from 'react-native';
-import { Row, TouchFeedback, Iconfont } from '@src/components';
-import { downloadManager } from '@src/common';
+import { View, Text, PermissionsAndroid, Platform, StyleSheet, TouchableOpacity } from 'react-native';
 import RNFetchBlob from 'rn-fetch-blob';
 
 const DownLoadApk = (props) => {
@@ -100,7 +98,7 @@ const DownLoadApk = (props) => {
     }
 
     return (
-        <TouchFeedback
+        <TouchableOpacity
             onPress={() => {
                 installDDZ ? openApk() : checkPermission();
             }}
@@ -116,7 +114,7 @@ const DownLoadApk = (props) => {
                 ]}>
                 <Text style={styles.downloadText}>{buttonName}</Text>
             </View>
-        </TouchFeedback>
+        </TouchableOpacity>
     );
 };
 

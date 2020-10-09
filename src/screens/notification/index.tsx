@@ -1,9 +1,8 @@
 import React, { useContext, useState, useCallback, useEffect, useMemo } from 'react';
 import { ScrollView, StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
-import { NavBarHeader, Avatar, Badge, Row, SafeText, StatusView } from '@src/components';
+import { NavBarHeader, Avatar, Badge, Row, SafeText, StatusView, FocusAwareStatusBar } from '@src/components';
 import { GQL, useQuery } from '@src/apollo';
 import { observer, userStore, appStore } from '@src/store';
-import { FocusAwareStatusBar } from '@src/router';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import Chats from './components/Chats';
 

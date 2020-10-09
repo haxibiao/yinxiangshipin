@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, TouchableOpacity, Text } from 'react-native';
-
-import { Iconfont } from '../Iconfont';
+import Iconfont from '../Iconfont';
 
 class Button extends Component {
     render() {

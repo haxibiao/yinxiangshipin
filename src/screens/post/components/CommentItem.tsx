@@ -1,8 +1,8 @@
 import React, { useCallback, useState, useRef, useMemo } from 'react';
 import { StyleSheet, View, Text, Animated, Keyboard, Image, DeviceEventEmitter, TouchableOpacity } from 'react-native';
 import { Iconfont, Avatar, PullChooser, SafeText } from '@src/components';
-import { exceptionCapture, useLinearAnimation, useReport } from '@src/common';
-import { GQL, useMutation, useLikeMutation } from '@src/apollo';
+import { exceptionCapture, useLinearAnimation } from '@src/common';
+import { GQL, useMutation, useLikeMutation, useReport } from '@src/apollo';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { userStore } from '@src/store';
 import { observer } from 'mobx-react';

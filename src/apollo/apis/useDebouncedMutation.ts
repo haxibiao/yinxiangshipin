@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { DocumentNode } from 'graphql';
 import { useMutation, MutationTuple, MutationHookOptions } from '@apollo/react-hooks';
-import { exceptionCapture } from '@src/common';
+import { exceptionCapture } from './exceptionCapture';
 import __ from 'lodash';
 
 export interface MutationProps {

@@ -11,8 +11,8 @@ import {
 } from 'react-native';
 import { Iconfont, SafeText, Avatar, PullChooser, ItemSeparator } from '@src/components';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { exceptionCapture, useLinearAnimation, useReport } from '@src/common';
-import { useMutation, GQL } from '@src/apollo';
+import { exceptionCapture, useLinearAnimation } from '@src/common';
+import { useMutation, GQL, useReport } from '@src/apollo';
 import { userStore } from '@src/store';
 
 import ReplyComments from './ReplyComments';

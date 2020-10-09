@@ -1,10 +1,9 @@
 import React, { useCallback } from 'react';
 import { StyleSheet, View, TouchableWithoutFeedback, Image } from 'react-native';
 import { observer } from 'mobx-react';
-import { NavBarHeader, ScrollTabBar } from '@src/components';
+import { NavBarHeader, ScrollTabBar, FocusAwareStatusBar } from '@src/components';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { FocusAwareStatusBar } from '@src/router';
 import PostList from './PostList';
 import Following from './Following';
 

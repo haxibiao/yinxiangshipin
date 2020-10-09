@@ -1,11 +1,11 @@
 import React, { useRef, useMemo, useCallback } from 'react';
 import { StyleSheet, View, Image, Animated, TouchableOpacity, DeviceEventEmitter } from 'react-native';
-import { Avatar, SafeText } from '@src/components';
+import { Avatar, SafeText, MoreOperation } from '@src/components';
 import { useNavigation } from '@react-navigation/native';
 import { ApolloProvider } from 'react-apollo';
 import { observer, userStore } from '@src/store';
 import { Overlay } from 'teaset';
-import { AnimationLike, MoreOperation } from '../../widget';
+import { AnimationLike } from '../../widget';
 
 const imageSource = {
     liked: require('@app/assets/images/ic_liked.png'),

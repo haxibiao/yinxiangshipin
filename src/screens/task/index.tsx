@@ -9,8 +9,8 @@ import {
     Image,
     StatusBar,
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { Iconfont, Row, HxfButton, NavBarHeader, SafeText } from '@src/components';
-import { authNavigate, useNavigation } from '@src/router';
 import { observer, appStore, userStore, adStore } from '@src/store';
 import { GQL, useMutation, useQuery } from '@src/apollo';
 import AttendanceBook from './attendance/AttendanceBook';

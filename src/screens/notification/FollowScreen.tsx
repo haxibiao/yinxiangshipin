@@ -2,9 +2,11 @@ import React, { useEffect } from 'react';
 import { StyleSheet, View, FlatList } from 'react-native';
 import { PageContainer, StatusView, SpinnerLoading, UserItem } from '@src/components';
 import { Query, GQL, useApolloClient } from '@src/apollo';
+import { useNavigation } from '@react-navigation/native';
 
 export default (props: any) => {
     const client = useApolloClient();
+    const navigation = useNavigation();
 
     useEffect(() => {
         return () => {
@@ -29,7 +31,7 @@ export default (props: any) => {
                         return (
                             <FlatList
                                 data={items}
-                                renderItem={({ item }) => <UserItem user={item.user} />}
+                                renderItem={({ item }) => <UserItem user={item.user} navigation={navigation} />}
                                 onEndReached={() => {
                                     if (hasMorePages) {
                                         fetchMore({
