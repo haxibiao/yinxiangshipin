@@ -1,7 +1,7 @@
 import React, { useCallback, useRef } from 'react';
 import { StyleSheet, View, Text, FlatList, TouchableOpacity } from 'react-native';
-import { PullChooser } from '@src/components';
 import { useMutation } from '@apollo/react-hooks';
+import { Overlay } from 'teaset';
 import { GQL } from '../gqls';
 
 type ChooserItem = {
@@ -9,8 +9,15 @@ type ChooserItem = {
     onPress: Function;
 };
 
-const show = (Choose: Array<ChooserItem>, animateType: AnimateType = 'slide') => {
-    const overlayKey = null;
+let overlayKey = null;
+
+const hideChooser = () => {
+    if (overlayKey) {
+        Overlay.hide(overlayKey);
+    }
+};
+
+const showChooser = (Choose: Array<ChooserItem>) => {
     const overlayView = (
         <Overlay.PullView
             containerStyle={{ backgroundColor: 'transparent' }}
@@ -29,7 +36,7 @@ const show = (Choose: Array<ChooserItem>, animateType: AnimateType = 'slide') =>
                                 key={index}
                                 style={styles.chooserItem}
                                 onPress={() => {
-                                    hide();
+                                    hideChooser();
                                     item.onPress();
                                 }}>
                                 <Text style={styles.chooserItemText}>{item.title}</Text>
@@ -45,7 +52,7 @@ const show = (Choose: Array<ChooserItem>, animateType: AnimateType = 'slide') =>
                     activeOpacity={0.8}
                     style={styles.closeItem}
                     onPress={() => {
-                        Overlay.hide(overlayKey);
+                        hideChooser();
                     }}>
                     <Text style={styles.headerText}>取消</Text>
                 </TouchableOpacity>
@@ -111,7 +118,7 @@ export const useReport = ({ type = 'articles', target }: Props) => {
                 onPress: () => reportAction('政治敏感'),
             },
         ];
-        PullChooser.show(operations);
+        showChooser(operations);
     }, [reportAction]);
 
     return report;

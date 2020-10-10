@@ -4,12 +4,27 @@ import SplashScreen from 'react-native-splash-screen';
 import Orientation from 'react-native-orientation';
 import codePush from 'react-native-code-push';
 import * as WeChat from 'react-native-wechat-lib';
-import { WechatAppId, DisplayName } from '@app/app.json';
-
-import StoreContext, * as store from './store';
-import { Toast } from './components';
-import ApolloApp from './ApolloApp';
 import { ad } from 'react-native-ad';
+import { when } from 'mobx';
+
+import { WechatAppId, DisplayName } from '@app/app.json';
+import StoreContext, * as store from './store';
+import ApolloApp from './ApolloApp';
+import { Toast, BeginnerGuidance } from './components';
+import NewUserTaskGuidance from './screens/guidance/NewUserTaskGuidance';
+
+// 监听新用户登录
+when(
+    () =>
+        store.adStore.enableAd && store.adStore.enableWallet && store.userStore?.me?.id && store.userStore.me.agreement,
+    () => {
+        // 新手指导
+        BeginnerGuidance({
+            guidanceKey: 'NewUserTask',
+            GuidanceView: NewUserTaskGuidance,
+        });
+    },
+);
 
 function App() {
     const appLunch = useRef(true);

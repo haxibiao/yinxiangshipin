@@ -4,11 +4,10 @@
  */
 import React, { useState, useMemo } from 'react';
 import { StyleSheet, Text, View, Image, TouchableWithoutFeedback } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { userStore } from '@src/store';
+import { authNavigate } from '@src/router';
 
 function NewUserTaskGuidance({ onDismiss }) {
-    const navigation = useNavigation();
     const [step, setStep] = useState(0);
     const me = useMemo(() => userStore.me, [userStore]);
     const guidesView = useMemo(() => {
@@ -17,7 +16,7 @@ function NewUserTaskGuidance({ onDismiss }) {
                 key={1}
                 onPress={() => {
                     setStep(1);
-                    navigation.navigate('TaskCenter');
+                    authNavigate('TaskCenter');
                 }}>
                 <View style={styles.container}>
                     <Image
@@ -30,7 +29,7 @@ function NewUserTaskGuidance({ onDismiss }) {
                 key={2}
                 onPress={() => {
                     setStep(2);
-                    navigation.navigate('Wallet');
+                    authNavigate('Wallet');
                 }}>
                 <View style={styles.container}>
                     <Image style={styles.taskGuide} source={require('@app/assets/images/guide/daily_task_guide.png')} />

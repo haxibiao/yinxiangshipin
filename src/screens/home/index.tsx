@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useMemo, useCallback, useState } from 'react';
 import { StyleSheet, View, DeviceEventEmitter } from 'react-native';
-import { observer, appStore, userStore, adStore } from '@src/store';
+import { observer, appStore, userStore } from '@src/store';
 import { useClipboardLink, VideoCaptureData } from '@src/content';
 import { useApolloClient } from '@apollo/react-hooks';
 import { useBeginner, detectPhotos } from '@src/common';
@@ -12,20 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 import RecommendVideos from './RecommendVideos';
 import EnshrinedVideos from './EnshrinedVideos';
 import FriendShipVideos from './FriendShipVideos';
-import NewUserTaskGuidance from './components/NewUserTaskGuidance';
 import { ad } from 'react-native-ad';
-
-// 监听新用户登录
-when(
-    () => adStore.enableAd && adStore.enableWallet && userStore?.me?.id && userStore.me.agreement,
-    () => {
-        // 新手指导
-        BeginnerGuidance({
-            guidanceKey: 'NewUserTask',
-            GuidanceView: NewUserTaskGuidance,
-        });
-    },
-);
 
 export default observer(({}) => {
     useBeginner();
