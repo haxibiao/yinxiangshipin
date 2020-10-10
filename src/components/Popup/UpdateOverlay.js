@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, NativeModules } from 'react-native';
-import { SafeText } from '@src/components';
+import SafeText from '../Basic/SafeText';
 import { appStore } from '@src/store';
 
 import { Overlay } from 'teaset';
