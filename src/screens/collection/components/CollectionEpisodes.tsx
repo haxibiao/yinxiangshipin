@@ -15,6 +15,35 @@ import { GQL, useFollowMutation, useApolloClient, useQuery } from '@src/apollo';
 import { userStore } from '@src/store';
 import { exceptionCapture, mergeProperty } from '@src/common';
 
+function CollectionItem({ collection, onPress, style }) {
+    return (
+        <TouchableWithoutFeedback onPress={onPress}>
+            <View style={[styles.postItem, style]}>
+                <Image style={styles.postCover} source={{ uri: collection?.video?.cover }} />
+                <View style={styles.postInfo}>
+                    <View style={styles.introduction}>
+                        <Text style={styles.postName} numberOfLines={2}>
+                            {`第${collection?.current_episode || index}集￨${collection?.description}`}
+                        </Text>
+                    </View>
+                    <View style={styles.postMeta}>
+                        <SafeText style={[styles.metaText, { marginRight: pixel(15) }]}>
+                            {Helper.moment(collection?.video?.duration)}
+                        </SafeText>
+                        <Iconfont
+                            name={collection?.liked ? 'xihuanfill' : 'xihuan'}
+                            size={pixel(13)}
+                            color={collection?.liked ? '#FE2C54' : '#e4e4e4'}
+                            style={{ marginRight: pixel(4) }}
+                        />
+                        <SafeText style={styles.metaText}>{Helper.count(collection?.count_likes)}</SafeText>
+                    </View>
+                </View>
+            </View>
+        </TouchableWithoutFeedback>
+    );
+}
+
 const VIDEO_QUERY_COUNT = 10;
 
 export default ({ collection, post, onClose, navigation }) => {
@@ -139,7 +168,9 @@ export default ({ collection, post, onClose, navigation }) => {
     const renderItem = useCallback(
         ({ item, index }) => {
             return (
-                <TouchableWithoutFeedback
+                <CollectionItem
+                    collection={item}
+                    style={post?.id === item?.id && { backgroundColor: 'rgba(222,222,222,0.3)' }}
                     onPress={() => {
                         onClose();
                         DeviceEventEmitter.emit('JumpPlayCollectionVideo', {
@@ -147,34 +178,8 @@ export default ({ collection, post, onClose, navigation }) => {
                             data: episodeData,
                             page: paginationInfo.current.nextPage,
                         });
-                    }}>
-                    <View
-                        style={[
-                            styles.postItem,
-                            post?.id === item?.id && { backgroundColor: 'rgba(222,222,222,0.3)' },
-                        ]}>
-                        <Image style={styles.postCover} source={{ uri: item?.video?.cover }} />
-                        <View style={styles.postInfo}>
-                            <View style={styles.introduction}>
-                                <Text style={styles.postName} numberOfLines={2}>
-                                    {`第${item?.current_episode || index}集￨${item?.description}`}
-                                </Text>
-                            </View>
-                            <View style={styles.postMeta}>
-                                <SafeText style={[styles.metaText, { marginRight: pixel(15) }]}>
-                                    {Helper.moment(item?.video?.duration)}
-                                </SafeText>
-                                <Iconfont
-                                    name={item?.liked ? 'xihuanfill' : 'xihuan'}
-                                    size={pixel(13)}
-                                    color={item?.liked ? '#FE2C54' : '#e4e4e4'}
-                                    style={{ marginRight: pixel(4) }}
-                                />
-                                <SafeText style={styles.metaText}>{Helper.count(item?.count_likes)}</SafeText>
-                            </View>
-                        </View>
-                    </View>
-                </TouchableWithoutFeedback>
+                    }}
+                />
             );
         },
         [episodeData],

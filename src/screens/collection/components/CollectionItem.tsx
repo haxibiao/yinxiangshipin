@@ -1,32 +1,12 @@
 import React, { useMemo, useCallback } from 'react';
-import { StyleSheet, View, Image, Text, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
 import { Iconfont, Row, SafeText } from '@src/components';
-import { count } from '@src/common';
+import { count, moment } from '@src/common';
 
-export default function CollectionItem({ collection, navigation }) {
-    return (
-        <TouchableWithoutFeedback onPress={() => navigation.navigate('CollectionDetail', { collection })}>
-            <View style={styles.collectionItem}>
-                <Image
-                    style={styles.collectionCover}
-                    source={{ uri: collection?.cover?.url || 'http://cos.haxibiao.com/images/5f22a1fae6c3f.jpeg' }}
-                />
-                <View style={styles.collectionDetail}>
-                    <View style={styles.goodsIntro}>
-                        <Text style={styles.introduction} numberOfLines={2}>
-                            {`${collection?.name} ${collection?.description}`}
-                        </Text>
-                    </View>
-                </View>
-            </View>
-        </TouchableWithoutFeedback>
-    );
-}
-
-const UserCollectionItem = ({ item, index, navigation, onLongPress }) => {
+export default ({ item, index, navigation, onLongPress }) => {
     return (
         <TouchableOpacity
-            style={styles.rowBoxItem}
+            style={styles.collectionItem}
             onPress={() => navigation.navigate('CollectionDetail', { collection: item })}
             onLongPress={onLongPress && onLongPress}>
             <Image source={{ uri: item.logo }} style={styles.logoImg} />
@@ -51,31 +31,6 @@ const UserCollectionItem = ({ item, index, navigation, onLongPress }) => {
 
 const styles = StyleSheet.create({
     collectionItem: {
-        flexDirection: 'row',
-        paddingVertical: pixel(12),
-        paddingHorizontal: pixel(15),
-        backgroundColor: '#fff',
-        overflow: 'hidden',
-    },
-    collectionCover: {
-        width: pixel(90),
-        height: pixel(90),
-        borderRadius: pixel(2),
-    },
-    collectionDetail: {
-        flex: 1,
-        marginLeft: pixel(12),
-        justifyContent: 'space-between',
-    },
-    goodsIntro: {
-        marginBottom: pixel(4),
-    },
-    introduction: {
-        fontSize: font(15),
-        lineHeight: font(20),
-        color: '#2b2b2b',
-    },
-    rowBoxItem: {
         flexDirection: 'row',
         paddingHorizontal: pixel(Theme.itemSpace),
         paddingVertical: pixel(Theme.itemSpace),
@@ -103,5 +58,3 @@ const styles = StyleSheet.create({
         color: '#666',
     },
 });
-
-export { UserCollectionItem };

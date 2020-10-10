@@ -15,7 +15,7 @@ import { GQL, useMutation } from '@src/apollo';
 import { useApolloClient } from '@apollo/react-hooks';
 import { QueryList } from '@src/content';
 import { userStore } from '@app/src/store';
-import { UserCollectionItem } from './components/CollectionItem';
+import CollectionItem from './components/CollectionItem';
 
 export default function CollectionScreen() {
     const navigation = useNavigation();
@@ -94,7 +94,7 @@ export default function CollectionScreen() {
                     fetchPolicy: 'network-only',
                 }}
                 renderItem={({ item, index }) => (
-                    <UserCollectionItem
+                    <CollectionItem
                         item={item}
                         index={index}
                         navigation={navigation}

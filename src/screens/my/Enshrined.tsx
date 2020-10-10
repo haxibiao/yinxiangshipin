@@ -5,7 +5,7 @@ import { useRoute, useNavigation } from '@react-navigation/native';
 import { GQL } from '@src/apollo';
 import { QueryList, PostItem, CaptureContent } from '@src/content';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
-import { UserCollectionItem } from '@src/screens/collection/components/CollectionItem';
+import CollectionItem from '@src/screens/collection/components/CollectionItem';
 
 export default () => {
     const route = useRoute();
@@ -51,7 +51,7 @@ export default () => {
                     fetchPolicy: 'network-only',
                 }}
                 renderItem={({ item, index }) => (
-                    <UserCollectionItem item={item.collection} index={index} navigation={navigation} />
+                    <CollectionItem item={item.collection} index={index} navigation={navigation} />
                 )}
                 ItemSeparatorComponent={() => <View style={styles.separator} />}
                 contentContainerStyle={styles.container}

@@ -4,8 +4,7 @@ import { StatusView, UserItem } from '@src/components';
 import { GQL, useQuery } from '@src/apollo';
 import { observer } from '@src/store';
 import { QueryList } from '@src/content';
-import { observable } from 'mobx';
-import { UserCollectionItem } from '@src/screens/collection/components/CollectionItem';
+import CollectionItem from '@src/screens/collection/components/CollectionItem';
 
 const index = observer(({ keyword, navigation }) => {
     return (
@@ -21,7 +20,7 @@ const index = observer(({ keyword, navigation }) => {
                 },
                 fetchPolicy: 'network-only',
             }}
-            renderItem={({ item, index }) => <UserCollectionItem item={item} index={index} navigation={navigation} />}
+            renderItem={({ item, index }) => <CollectionItem item={item} index={index} navigation={navigation} />}
         />
     );
 });
