@@ -4,7 +4,7 @@
  */
 import React, { Fragment } from 'react';
 import { StyleSheet, View, Text, ActivityIndicator, Dimensions } from 'react-native';
-import { SafeText } from '@src/components';
+import SafeText from '../Basic/SafeText';
 import { Overlay } from 'teaset';
 
 const { height, width } = Dimensions.get('window');
