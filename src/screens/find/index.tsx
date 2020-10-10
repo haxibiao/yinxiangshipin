@@ -4,7 +4,8 @@ import { observer } from 'mobx-react';
 import { NavBarHeader, ScrollTabBar, FocusAwareStatusBar } from '@src/components';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import PostList from './PostList';
+import FollowedPosts from './FollowedPosts';
+import Collections from './Collections';
 import Following from './Following';
 
 export default observer(() => {
@@ -17,23 +18,28 @@ export default observer(() => {
     return (
         <View style={styles.container}>
             <FocusAwareStatusBar barStyle="dark-content" />
-            <NavBarHeader
-                title="动态"
-                centerStyle={{ marginHorizontal: pixel(12), justifyContent: 'flex-start' }}
-                titleStyle={{ fontSize: font(18) }}
-                hasGoBackButton={false}
-                rightComponent={
-                    <TouchableWithoutFeedback onPress={searchHandle}>
-                        <View style={styles.search}>
-                            <Image
-                                source={require('@app/assets/images/icons/ic_search_b.png')}
-                                style={styles.searchIcon}
-                            />
-                        </View>
-                    </TouchableWithoutFeedback>
-                }
-            />
-            <PostList tabLabel="推荐" />
+            <ScrollableTabView
+                contentProps={{ keyboardShouldPersistTaps: 'always' }}
+                initialPage={1}
+                renderTabBar={(tabBarProps: any) => (
+                    <ScrollTabBar
+                        {...tabBarProps}
+                        tabWidth={pixel(70)}
+                        tabBarStyle={styles.tabBarStyle}
+                        underlineStyle={styles.underlineStyle}
+                        activeTextStyle={styles.activeTextStyle}
+                        tintTextStyle={styles.tintTextStyle}
+                    />
+                )}>
+                <FollowedPosts tabLabel="关注" />
+                <FollowedPosts tabLabel="推荐" />
+                <Collections tabLabel="合集" />
+            </ScrollableTabView>
+            <TouchableWithoutFeedback onPress={searchHandle}>
+                <View style={styles.searchButton}>
+                    <Image source={require('@app/assets/images/icons/ic_search_b.png')} style={styles.searchIcon} />
+                </View>
+            </TouchableWithoutFeedback>
         </View>
     );
 });
@@ -41,12 +47,15 @@ export default observer(() => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        paddingTop: Theme.statusBarHeight,
         backgroundColor: '#fff',
     },
-    search: {
+    searchButton: {
+        position: 'absolute',
+        top: Theme.statusBarHeight,
+        right: pixel(20),
         width: pixel(50),
-        paddingRight: pixel(12),
-        alignSelf: 'stretch',
+        height: Theme.NAVBAR_HEIGHT,
         justifyContent: 'center',
         alignItems: 'flex-end',
     },
@@ -54,5 +63,28 @@ const styles = StyleSheet.create({
         height: pixel(22),
         width: pixel(22),
         resizeMode: 'cover',
+    },
+    tabBarStyle: {
+        height: Theme.NAVBAR_HEIGHT,
+        paddingHorizontal: pixel(42),
+        backgroundColor: 'rgba(255,255,255,1)',
+        borderBottomWidth: pixel(0.5),
+        borderColor: '#f0f0f0',
+        justifyContent: 'center',
+    },
+    underlineStyle: {
+        width: pixel(30),
+        height: pixel(3),
+        left: (Device.WIDTH - pixel(70) * 3) / 2 + pixel(20),
+        bottom: pixel(3),
+    },
+    activeTextStyle: {
+        color: '#212121',
+        fontSize: font(16),
+        fontWeight: 'bold',
+    },
+    tintTextStyle: {
+        color: '#D0D0D0',
+        fontSize: font(16),
     },
 });
