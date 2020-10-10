@@ -1,5 +1,6 @@
 import React, { useCallback, useRef } from 'react';
 import { StyleSheet, View, Text, FlatList, TouchableOpacity } from 'react-native';
+import { PullChooser } from '@src/components';
 import { useMutation } from '@apollo/react-hooks';
 import { GQL } from '../gqls';
 
