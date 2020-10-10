@@ -1,5 +1,89 @@
 #import './mutation.graphql'
 
+# 自定义的推荐合集
+query recommendCollectionsQuery {
+    recommendCollections {
+        topCollection {
+            id
+            logo
+            name
+            description
+            count_articles
+            count_follows
+            count_posts
+            count_views
+            updated_to_episode
+            followed
+            user {
+                id
+                name
+                avatar
+            }
+        }
+        recommendCollectionsA {
+            id
+            logo
+            name
+            description
+            count_articles
+            count_follows
+            count_posts
+            count_views
+            updated_to_episode
+            followed
+            user {
+                id
+                name
+                avatar
+            }
+        }
+        recommendCollectionsB {
+            id
+            logo
+            name
+            description
+            count_articles
+            count_follows
+            count_posts
+            count_views
+            updated_to_episode
+            followed
+            user {
+                id
+                name
+                avatar
+            }
+        }
+    }
+}
+
+# 随机推荐合集
+query randomCollectionsQuery($page: Int, $count: Int) {
+    randomCollections(page: $page, count: $count) {
+        paginatorInfo {
+            hasMorePages
+            currentPage
+        }
+        data {
+            id
+            logo
+            name
+            description
+            count_articles
+            count_follows
+            count_posts
+            count_views
+            updated_to_episode
+            followed
+            user {
+                id
+                name
+                avatar
+            }
+        }
+    }
+}
+
 # 个人合集
 query CollectionsQuery($user_id: Int!, $count: Int, $page: Int) {
     collections(user_id: $user_id, count: $count, page: $page) {

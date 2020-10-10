@@ -11,7 +11,6 @@ import {
     TextInput,
 } from 'react-native';
 import { Iconfont, MediaUploader, HxfButton, DropdownMenu, NavBarHeader, Loading, SafeText } from '@src/components';
-import { BoxShadow } from 'react-native-shadow';
 import { GQL, useQuery, useMutation, useApolloClient, errorMessage } from '@src/apollo';
 import { appStore, userStore } from '@src/store';
 

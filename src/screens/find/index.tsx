@@ -24,7 +24,7 @@ export default observer(() => {
                 renderTabBar={(tabBarProps: any) => (
                     <ScrollTabBar
                         {...tabBarProps}
-                        tabWidth={pixel(70)}
+                        tabWidth={pixel(66)}
                         tabBarStyle={styles.tabBarStyle}
                         underlineStyle={styles.underlineStyle}
                         activeTextStyle={styles.activeTextStyle}
@@ -66,25 +66,24 @@ const styles = StyleSheet.create({
     },
     tabBarStyle: {
         height: Theme.NAVBAR_HEIGHT,
-        paddingHorizontal: pixel(42),
         backgroundColor: 'rgba(255,255,255,1)',
         borderBottomWidth: pixel(0.5),
         borderColor: '#f0f0f0',
         justifyContent: 'center',
     },
     underlineStyle: {
-        width: pixel(30),
+        width: pixel(26),
         height: pixel(3),
-        left: (Device.WIDTH - pixel(70) * 3) / 2 + pixel(20),
-        bottom: pixel(3),
+        left: (Device.WIDTH - pixel(66) * 3) / 2 + pixel(20),
+        bottom: pixel(5),
     },
     activeTextStyle: {
-        color: '#212121',
+        color: '#323232',
         fontSize: font(16),
         fontWeight: 'bold',
     },
     tintTextStyle: {
-        color: '#D0D0D0',
+        color: '#525252',
         fontSize: font(16),
     },
 });
