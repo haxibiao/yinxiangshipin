@@ -96,9 +96,9 @@ export default function TaskItem({ task }) {
                 style={[styles.taskButton, { backgroundColor: taskState.btnColor }]}
                 disabled={task.assignment_status === 3}
                 onPress={optimizedCallback}>
-                <Text numberOfLines={1} style={styles.taskName}>
+                <SafeText numberOfLines={1} style={styles.taskName}>
                     {taskState.countdown > 0 ? taskState.countdown : taskState.btnName}
-                </Text>
+                </SafeText>
             </TouchableOpacity>
         </View>
     );

@@ -10,7 +10,7 @@ import {
     ActivityIndicator,
 } from 'react-native';
 import { useDoubleHandler, syncGetter, moment, useLinearAnimation, useNavigationListener } from '@src/common';
-import { Iconfont } from '@src/components';
+import { Iconfont, SafeText } from '@src/components';
 import Video from 'react-native-video';
 import Slider from '@react-native-community/slider';
 import LinearGradient from 'react-native-linear-gradient';
@@ -206,9 +206,9 @@ export default (props: Props) => {
                         colors={['rgba(000,000,000,0.4)', 'rgba(000,000,000,0.2)', 'rgba(000,000,000,0.0)']}>
                         <View style={styles.playerStatus} onStartShouldSetResponder={(evt) => true}>
                             <View style={styles.momentWrap}>
-                                <Text style={styles.momentText}>
+                                <SafeText style={styles.momentText}>
                                     {moment(sliderIsMoveOn.current ? sliderValue : progress)}
-                                </Text>
+                                </SafeText>
                             </View>
                             <Slider
                                 style={{ flex: 1 }}
@@ -222,7 +222,7 @@ export default (props: Props) => {
                                 onSlidingComplete={onSlidingComplete}
                             />
                             <View style={styles.momentWrap}>
-                                <Text style={styles.momentText}>{moment(duration.current)}</Text>
+                                <SafeText style={styles.momentText}>{moment(duration.current)}</SafeText>
                             </View>
                         </View>
                     </LinearGradient>
@@ -230,7 +230,7 @@ export default (props: Props) => {
                 <Animated.View
                     style={[styles.toast, { opacity: rateOpacity, transform: [{ translateY: rateTranslateY }] }]}>
                     <View style={styles.toastInfo}>
-                        <Text style={styles.toastText}>2倍速播放中</Text>
+                        <SafeText style={styles.toastText}>2倍速播放中</SafeText>
                     </View>
                 </Animated.View>
                 <View style={[styles.loadingStatus, loading && { zIndex: 9, opacity: 1 }]}>

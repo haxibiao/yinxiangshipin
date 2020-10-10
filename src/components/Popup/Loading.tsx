@@ -4,7 +4,7 @@
  */
 import React, { Fragment } from 'react';
 import { StyleSheet, View, Text, ActivityIndicator, Dimensions } from 'react-native';
-
+import { SafeText } from '@src/components';
 import { Overlay } from 'teaset';
 
 const { height, width } = Dimensions.get('window');
@@ -20,7 +20,7 @@ export const show = (content?: any) => {
                 <View style={styles.uploading}>
                     <View style={styles.body}>
                         <ActivityIndicator color="#fff" size={'small'} />
-                        <Text style={styles.text}>{content || `loading...`}</Text>
+                        <SafeText style={styles.text}>{content || `loading...`}</SafeText>
                     </View>
                 </View>
             </View>
