@@ -12,11 +12,11 @@ const minVideoHeight = (itemWidth * 2) / 3;
 const maxVideoHeight = (itemWidth * 16) / 9;
 
 function calculatorHeight({ item }) {
-    if (item.video && item.video.info && item.video.info.width) {
-        if (item.video.info.width >= item.video.info.height) {
-            return Math.max(minVideoHeight, (itemWidth / item.video.info.width) * item.video.info.height);
+    if (item.video && item.video.width) {
+        if (item.video.width >= item.video.height) {
+            return Math.max(minVideoHeight, (itemWidth / item.video.width) * item.video.height);
         } else {
-            return Math.min(maxVideoHeight, (itemWidth / item.video.info.width) * item.video.info.height);
+            return Math.min(maxVideoHeight, (itemWidth / item.video.width) * item.video.height);
         }
     } else if (Array.isArray(item.images) && item.images.length > 0) {
         if (item.images[0].width >= item.images[0].height) {
