@@ -23,16 +23,19 @@ export default observer((props: any) => {
                         style={{ marginVertical: pixel(10) }}
                         onPress={() => navigation.navigate('CollectionDetail', { collection: topCollection })}>
                         <Image style={styles.banner} source={require('@app/assets/images/bg/collection_top_bg.jpg')} />
+                        <View style={styles.bannerLabel}>
+                            <Text style={styles.labelText}> 编辑甄选</Text>
+                        </View>
                     </TouchableOpacity>
                     <CollectionGroup
-                        style={styles.group}
-                        groupName="精选大放送"
+                        style={styles.groupStyle}
+                        groupName="合集精选站🔥"
                         collections={groupA}
                         navigation={navigation}
                     />
                     <CollectionGroup
-                        style={styles.group}
-                        groupName="大家都在看"
+                        style={styles.groupStyle}
+                        groupName="大家都在看🔥"
                         collections={groupB}
                         navigation={navigation}
                     />
@@ -82,7 +85,23 @@ const styles = StyleSheet.create({
         height: Math.floor((Device.WIDTH - pixel(40)) * 0.5),
         borderRadius: pixel(6),
     },
-    group: {
+    bannerLabel: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        height: pixel(20),
+        paddingLeft: pixel(4),
+        paddingRight: pixel(5),
+        borderBottomRightRadius: pixel(6),
+        backgroundColor: 'rgba(255,255,255,0.8)',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    labelText: {
+        fontSize: font(10),
+        color: '#333',
+    },
+    groupStyle: {
         marginVertical: pixel(10),
     },
     collectionWrap: {

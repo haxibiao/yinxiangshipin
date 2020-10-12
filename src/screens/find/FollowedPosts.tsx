@@ -2,24 +2,41 @@ import React, { useCallback } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { GQL } from '@src/apollo';
 import { observer, userStore } from '@src/store';
-import { QueryList } from '@src/content';
+import { QueryList, ContentStatus, Placeholder } from '@src/content';
+import { useNavigation } from '@react-navigation/native';
 import PostWithAD from './components/PostWithAD';
 
 export default observer((props: any) => {
-    const isFeedADList = [];
+    const navigation = useNavigation();
 
+    const isFeedADList = [];
     const adClick = useCallback((index) => {
         if (isFeedADList.indexOf(index) === -1) {
             isFeedADList.push(index);
         }
     }, []);
-
     const renderItem = useCallback(({ item, index }) => {
         return <PostWithAD item={item} index={index} adClick={adClick} />;
     }, []);
 
+    // const emptyView = useCallback(({ status, refetch }) => {
+    //     if (status) {
+    //         if (status === 'empty') {
+    //             return <Placeholder.NoContent style={{ flex: 1 }} onPress={() => navigation.navigate('Login')} />;
+    //         }
+    //         return <ContentStatus status={status} refetch={status === 'error' ? refetch : undefined} />;
+    //     } else {
+    //         return null;
+    //     }
+    // }, []);
+
+    if (!userStore.login) {
+        return <Placeholder.NotLogged style={{ flex: 1 }} onPress={() => navigation.navigate('Login')} />;
+    }
+
     return (
         <QueryList
+            contentContainerStyle={styles.container}
             gqlDocument={GQL.followPostsQuery}
             dataOptionChain="followPosts.data"
             paginateOptionChain="followPosts.paginatorInfo"
@@ -33,7 +50,7 @@ export default observer((props: any) => {
             }}
             renderItem={renderItem}
             ItemSeparatorComponent={() => <View style={styles.separator} />}
-            contentContainerStyle={styles.container}
+            // ListEmptyComponent={emptyView}
         />
     );
 });

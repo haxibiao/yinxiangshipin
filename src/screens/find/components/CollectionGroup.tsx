@@ -1,10 +1,11 @@
 import React, { useState, useCallback } from 'react';
-import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, Image, TouchableOpacity, ImageBackground } from 'react-native';
+import { Iconfont } from '@src/components';
 import { BoxShadow } from 'react-native-shadow';
 
 const GROUP_WIDTH = Device.WIDTH - pixel(40);
 const LOGO_WIDTH = (GROUP_WIDTH - pixel(40)) / 3;
-const GROUP_HEIGHT = pixel(97) + LOGO_WIDTH;
+const GROUP_HEIGHT = pixel(99) + LOGO_WIDTH;
 
 // const shadowOpt = {
 //     width: GROUP_WIDTH,
@@ -33,7 +34,11 @@ function Collection({ collection, navigation }) {
             activeOpacity={1}
             style={styles.collectionItem}
             onPress={() => navigation.navigate('CollectionDetail', { collection })}>
-            <Image style={styles.collectionLogo} source={{ uri: collection?.logo }} />
+            <ImageBackground style={styles.collectionLogo} source={{ uri: collection?.logo }}>
+                <View style={styles.videoMark}>
+                    <Iconfont name="bofang1" size={pixel(10)} color={'#fff'} style={{ opacity: 0.8 }} />
+                </View>
+            </ImageBackground>
             <View style={{ height: pixel(36), marginTop: pixel(6) }}>
                 <Text style={styles.collectionName} numberOfLines={2}>
                     {collection?.name} {collection?.description}
@@ -80,7 +85,7 @@ const styles = StyleSheet.create({
         fontSize: font(16),
         lineHeight: font(20),
         marginTop: pixel(5),
-        marginBottom: pixel(10),
+        marginBottom: pixel(12),
         marginHorizontal: pixel(4),
         fontWeight: 'bold',
         color: '#212121',
@@ -96,6 +101,18 @@ const styles = StyleSheet.create({
         width: LOGO_WIDTH,
         height: LOGO_WIDTH,
         borderRadius: pixel(6),
+        overflow: 'hidden',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    videoMark: {
+        width: pixel(28),
+        height: pixel(28),
+        borderRadius: pixel(14),
+        paddingLeft: pixel(2),
+        backgroundColor: 'rgba(0,0,0,0.3)',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     collectionName: {
         fontSize: font(13),

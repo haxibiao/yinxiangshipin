@@ -1,15 +1,14 @@
 import React, { useCallback, useMemo, useRef, useState, useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { observable, observer, userStore } from '@src/store';
+import { observable, observer } from '@src/store';
 import { QueryList, ContentStatus } from '@src/content';
 import { MasonryList, ListFooter } from '@src/components';
 import { GQL, useQuery } from '@src/apollo';
 import PostItem from './components/PostItem';
 
-const COVER_WIDTH = Device.WIDTH - pixel(Theme.itemSpace) * 3;
-const itemWidth = (Device.WIDTH - pixel(Theme.itemSpace) * 3) / 2;
-const minVideoHeight = (itemWidth * 2) / 3;
-const maxVideoHeight = (itemWidth * 16) / 9;
+const itemWidth = (Device.WIDTH - pixel(6) * 3) / 2;
+const minVideoHeight = itemWidth * 0.6;
+const maxVideoHeight = itemWidth * 1.4;
 
 function calculatorHeight({ item }) {
     if (item.video && item.video.width) {
@@ -30,14 +29,19 @@ function calculatorHeight({ item }) {
 }
 
 export default observer((props: any) => {
-    let currentPage = 0;
     const { loading, error, data, fetchMore, refetch } = useQuery(GQL.publicPostsQuery, {
-        variables: { page: currentPage, count: 10 },
+        variables: { page: 1, count: 10 },
         fetchPolicy: 'network-only',
     });
-    currentPage = useMemo(() => Helper.syncGetter('publicPosts.paginatorInfo.currentPage', data), [data]);
-    const hasMorePages = useMemo(() => Helper.syncGetter('publicPosts.paginatorInfo.hasMorePages', data), [data]);
-    const publicPosts = useMemo(() => Helper.syncGetter('publicPosts.data', data) || [], [data]);
+    const currentPage = useMemo(() => data?.publicPosts?.paginatorInfo?.currentPage, [data]);
+    const hasMorePages = useMemo(() => data?.publicPosts?.paginatorInfo?.hasMorePages, [data]);
+    const publicPosts = useMemo(() => {
+        const posts = data?.publicPosts?.data;
+        if (posts?.length > 0) {
+            return observable(posts);
+        }
+        return [];
+    }, [data]);
     const duringFetched = useRef(false);
 
     const onMomentumScrollBegin = useCallback(() => {
@@ -64,17 +68,9 @@ export default observer((props: any) => {
         }
     }, [hasMorePages, currentPage]);
 
-    const hiddenListFooter = publicPosts && publicPosts.length === 0;
     const renderFooterComponent = useCallback(() => {
-        return <ListFooter hidden={hiddenListFooter} finished={!hasMorePages} />;
-    }, [hiddenListFooter, hasMorePages]);
-
-    const [recommendPosts, setPosts] = useState([]);
-    useEffect(() => {
-        if (Array.isArray(publicPosts)) {
-            setPosts(observable(publicPosts));
-        }
-    }, [publicPosts]);
+        return <ListFooter hidden={loading} finished={!hasMorePages} />;
+    }, [loading, hasMorePages]);
 
     const ListEmptyComponent = useCallback(() => {
         let status = '';
@@ -99,19 +95,18 @@ export default observer((props: any) => {
     }, [error, loading, refetch, publicPosts]);
 
     const renderItem = useCallback(({ item, index }) => {
-        return <PostItem post={item} itemWidth={itemWidth} itemHeight={COVER_WIDTH * 0.6} />;
+        return <PostItem post={item} itemWidth={itemWidth} itemHeight={calculatorHeight({ item })} />;
     }, []);
 
     return (
         <MasonryList
-            data={recommendPosts}
+            data={publicPosts}
             numColumns={2}
             style={styles.masonryStyle}
             contentContainerStyle={styles.container}
-            columnSpace={{ marginRight: pixel(Theme.itemSpace) }}
+            columnSpace={{ marginRight: pixel(6) }}
             showsVerticalScrollIndicator={false}
             renderItem={renderItem}
-            refreshing={loading}
             onRefresh={refetch}
             ListEmptyComponent={ListEmptyComponent}
             keyExtractor={(item) => `id${item.id}`}
@@ -127,11 +122,12 @@ export default observer((props: any) => {
 const styles = StyleSheet.create({
     masonryStyle: {
         flex: 1,
-        backgroundColor: '#ffffff',
+        backgroundColor: '#f6f6f6',
     },
     container: {
-        paddingHorizontal: pixel(Theme.itemSpace),
+        flexGrow: 1,
+        paddingHorizontal: pixel(6),
         paddingBottom: pixel(Theme.BOTTOM_HEIGHT),
-        paddingTop: pixel(Theme.itemSpace),
+        paddingTop: pixel(10),
     },
 });
