@@ -164,7 +164,7 @@ export default observer(
         const renderVideoItem = useCallback(
             ({ item, index }) => {
                 // 显示drawFeed广告
-                if (item?.is_ad && adStore.enableAd) {
+                if (item?.is_ad && adStore.enableAd && store.visibility && index === store.viewableItemIndex) {
                     return (
                         <View style={{ height: store.fullVideoHeight }}>
                             <ad.DrawFeed codeid={adStore.codeid_draw_video} onAdClick={getReward} />
