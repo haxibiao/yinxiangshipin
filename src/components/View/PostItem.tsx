@@ -23,10 +23,10 @@ const SubmitStatus: React.FC<SubmitStatusProps> = (props: SubmitStatusProps) => 
     const audit = useMemo(() => {
         switch (String(props.submit)) {
             case '-1':
-                return { status: '已拒绝', color: Theme.error };
+                return { status: '已拒绝', color: '#FF4C4C' };
                 break;
             case '1':
-                return { status: '已通过', color: Theme.teaGreen };
+                return { status: '已通过', color: '#12E2BB' };
                 break;
             case '0':
                 return { status: '审核中', color: '#FF7233' };

@@ -18,15 +18,15 @@ function WithdrawLogItem(props) {
     switch (item.status) {
         case -1:
             statusText = '提现失败';
-            color = Theme.errorColor;
+            color = '#FF4C4C';
             break;
         case 1:
             statusText = '提现成功';
-            color = Theme.weixin;
+            color = '#47D850';
             break;
         case 0:
             statusText = '待处理';
-            color = Theme.correctColor;
+            color = '#1CACF9';
             break;
     }
 

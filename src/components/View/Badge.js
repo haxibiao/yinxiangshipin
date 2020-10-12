@@ -26,7 +26,7 @@ export default class Badge extends Component {
 
         style = [
             {
-                backgroundColor: Theme.error,
+                backgroundColor: '#FF4C4C',
                 minWidth: width,
                 height: height,
                 borderRadius: borderRadius,

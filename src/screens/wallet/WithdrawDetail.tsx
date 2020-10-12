@@ -7,7 +7,7 @@ import { userStore } from '@src/store';
 
 import { Query, GQL } from '@src/apollo';
 
-const WithdrawDetail = props => {
+const WithdrawDetail = (props) => {
     const { route } = props;
     const item = route?.params?.item;
 
@@ -45,7 +45,7 @@ const WithdrawDetail = props => {
                                         <Text
                                             style={{
                                                 fontSize: font(16),
-                                                color: Theme.errorColor,
+                                                color: '#FF4C4C',
                                             }}>
                                             交易失败
                                         </Text>

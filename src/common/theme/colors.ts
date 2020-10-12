@@ -49,7 +49,7 @@ export default {
     slateGray2: '#ECEAF3',
     confirm: '#3E65E8',
     correct: '#1CACF9',
-    error: '#FF4C4C',
+    errorColor: '#FF4C4C',
     teaGreen: '#12E2BB',
-    weixin: '#12E2df',
+    weixin: '#47D850',
 };
