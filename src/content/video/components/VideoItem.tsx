@@ -10,12 +10,24 @@ import { Commodity } from '../../widget';
 import Player from './Player';
 import SideBar from './SideBar';
 import VideoOperation from './VideoOperation';
+import Question from './Question';
 
 interface Props {
     media: any;
     index: number;
     store: any;
 }
+
+const qd = {
+    id: 1,
+    description: '视频刷动态关联题目，题目类型为纯文本的单选题，并且题干和选项字数不宜过多',
+    answer: ['B'],
+    selections: [
+        { Value: 'A', Text: '刷视频显示题目' },
+        { Value: 'B', Text: '刷视频显示题目' },
+        { Value: 'C', Text: '刷视频显示题目' },
+    ],
+};
 
 export default observer((props: Props) => {
     const { media, index, store } = props;
@@ -199,6 +211,7 @@ export default observer((props: Props) => {
                     </View>
                 </LinearGradient>
             </TouchableWithoutFeedback>
+            <Question question={qd} style={styles.questionSite} />
         </View>
     );
 });
@@ -285,5 +298,12 @@ const styles = StyleSheet.create({
         fontSize: font(14),
         fontWeight: 'bold',
         color: '#ffffff',
+    },
+    questionSite: {
+        position: 'absolute',
+        zIndex: 999,
+        top: Theme.statusBarHeight + Theme.NAVBAR_HEIGHT + pixel(120),
+        left: pixel(20),
+        right: pixel(20),
     },
 });
