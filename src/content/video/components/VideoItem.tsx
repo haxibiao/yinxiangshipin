@@ -18,16 +18,19 @@ interface Props {
     store: any;
 }
 
-const qd = {
-    id: 1,
-    description: '视频刷动态关联题目，题目类型为纯文本的单选题，并且题干和选项字数不宜过多',
-    answer: ['B'],
-    selections: [
-        { Value: 'A', Text: '刷视频显示题目' },
-        { Value: 'B', Text: '刷视频显示题目' },
-        { Value: 'C', Text: '刷视频显示题目' },
-    ],
-};
+// const qd = {
+//     id: 1,
+//     description: '视频刷动态关联题目，题目类型为纯文本的单选题，并且题干和选项字数不宜过多',
+//     answer: ['B'],
+//     selections: [
+//         {
+//             Value: 'A',
+//             Text: '选项字数不宜过多',
+//         },
+//         { Value: 'B', Text: '选项字数不宜过多' },
+//         { Value: 'C', Text: '选项字数不宜过多' },
+//     ],
+// };
 
 export default observer((props: Props) => {
     const { media, index, store } = props;
@@ -211,7 +214,7 @@ export default observer((props: Props) => {
                     </View>
                 </LinearGradient>
             </TouchableWithoutFeedback>
-            <Question question={qd} style={styles.questionSite} />
+            {/* <Question question={qd} style={styles.questionSite} /> */}
         </View>
     );
 });
@@ -303,7 +306,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         zIndex: 999,
         top: Theme.statusBarHeight + Theme.NAVBAR_HEIGHT + pixel(120),
-        left: pixel(20),
-        right: pixel(20),
+        left: pixel(15),
+        right: pixel(70),
     },
 });

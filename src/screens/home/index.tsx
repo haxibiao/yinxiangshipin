@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textShadowColor: 'rgba(0, 0, 0, 0.75)',
         textShadowOffset: { width: 0, height: 0 },
-        textShadowRadius: 10,
+        textShadowRadius: 2,
     },
     tintTextStyle: {
         color: '#ddd',
@@ -178,6 +178,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textShadowColor: 'rgba(0, 0, 0, 0.75)',
         textShadowOffset: { width: 0, height: 0 },
-        textShadowRadius: 1,
+        textShadowRadius: 2,
     },
 });
