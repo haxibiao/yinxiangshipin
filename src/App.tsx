@@ -3,93 +3,101 @@ import { StyleSheet, View, Text, Platform } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import Orientation from 'react-native-orientation';
 import codePush from 'react-native-code-push';
-import * as WeChat from 'react-native-wechat-lib';
 import { ad } from 'react-native-ad';
-import { when } from 'mobx';
+// appContext
+import StoreContext, { observer, appStore, adStore, userStore } from './store';
+// apollo appRouter
+import { ApolloProvider as ClassApolloProvider } from 'react-apollo';
+import { ApolloProvider, useClientBuilder, GQL } from './apollo';
+import AppRouter, { authNavigate } from './router';
+// weChat lib
+import * as WeChat from 'react-native-wechat-lib';
+import { WechatAppId, DisplayName } from '../app.json';
+// overlay
+import { Toast } from './components';
+// business manager
+import useBusinessManager from './useBusinessManager';
 
-import { WechatAppId, DisplayName } from '@app/app.json';
-import StoreContext, * as store from './store';
-import ApolloApp from './ApolloApp';
-import { Toast, BeginnerGuidance } from './components';
-import NewUserTaskGuidance from './screens/guidance/NewUserTaskGuidance';
+const App = observer(() => {
+    const client = useClientBuilder(userStore.me?.token);
+    // 提前加载数据
+    useEffect(() => {
+        // 提现额度列表
+        if (userStore.login && client?.query) {
+            client.query({ query: GQL.getWithdrawAmountList });
+        }
+    }, [userStore.login, client]);
 
-// 监听新用户登录
-when(
-    () =>
-        store.adStore.enableAd && store.adStore.enableWallet && store.userStore?.me?.id && store.userStore.me.agreement,
-    () => {
-        // 新手指导
-        BeginnerGuidance({
-            guidanceKey: 'NewUserTask',
-            GuidanceView: NewUserTaskGuidance,
-        });
-    },
-);
+    // 自动登录
+    const autoSignIn = useCallback(async () => {
+        const uuid = Device.UUID;
+        if (uuid && client?.mutate) {
+            // 调用静默注册接口
+            client
+                .mutate({
+                    mutation: GQL.autoSignInMutation,
+                    variables: { UUID: uuid },
+                })
+                .then((res: any) => {
+                    const userData = res?.data?.autoSignIn;
+                    if (userData?.gold <= 0 && userData?.balance <= 0 && userData?.wallet?.total_withdraw_amount <= 0) {
+                        userData.isNewUser = true;
+                    }
+                    userStore.signIn(userData);
+                })
+                .catch(() => {
+                    // 静默登录失败，引导用户到手动登录页
+                    authNavigate('Login');
+                });
+        } else {
+            // 没有拿到uuid,引导用户到手动登录页
+            authNavigate('Login');
+        }
+    }, [client]);
+    useEffect(() => {
+        // 该APP没有登录过，调用静默登录
+        if (!userStore.login && userStore.firstInstall) {
+            autoSignIn();
+        }
+    }, [userStore.login, userStore.firstInstall]);
 
-function App() {
     const appLunch = useRef(true);
-    // 获取配置时间
-    const responseTime = useRef(0);
-    const timer = useRef();
-
     if (appLunch.current) {
         appLunch.current = false;
         Orientation.lockToPortrait();
         SplashScreen.hide();
         // 启动前，初始化Ad
         ad.init({
-            appid: store.adStore.tt_appid,
+            appid: adStore.tt_appid,
             app: DisplayName,
         });
     }
 
-    // 获取APP的开启配置(广告和钱包)
-    const fetchConfig = useCallback(() => {
-        fetch(Config.ServerRoot + '/api/app-config?os=' + Platform.OS + '&store=' + Config.AppStore)
-            .then((response) => response.json())
-            .then((result) => {
-                clearInterval(timer.current);
-                // 1.保存APP配置(含ad appId, codeId等)
-                store.adStore.setAdConfig(result);
-                // 广告打开，并且接口响应时间小于3000毫秒
-                if (result?.ad === 'on' && responseTime.current <= 3000) {
-                    // 启动个开屏广告
-                    ad.startSplash({
-                        appid: store.adStore.tt_appid,
-                        codeid: store.adStore.codeid_splash,
-                    });
-                }
-            })
-            .catch((err) => {
-                clearInterval(timer.current);
-            });
-    }, []);
+    useBusinessManager();
 
     useEffect(() => {
-        timer.current = setInterval(() => {
-            responseTime.current += 100;
-        }, 100);
-        // 获取广告、钱包配置
-        fetchConfig();
-        // 检查版本更新
-        // checkUpdate('autoCheck');
-        // WeChat注册
+        // WeChat注册（微信分享）
         WeChat.registerApp(WechatAppId, 'http://yxsp.haxifang.cn/');
-        //清除定时器
-        return () => {
-            clearInterval(timer.current);
-        };
     }, []);
 
     return (
         <View style={styles.container}>
-            <StoreContext.Provider value={store}>
-                <ApolloApp />
+            <StoreContext.Provider
+                value={{
+                    appStore,
+                    adStore,
+                    userStore,
+                }}>
+                <ClassApolloProvider client={client}>
+                    <ApolloProvider client={client}>
+                        <AppRouter />
+                    </ApolloProvider>
+                </ClassApolloProvider>
             </StoreContext.Provider>
             <Toast ref={(ref) => (global.Toast = ref)} />
         </View>
     );
-}
+});
 
 const styles = StyleSheet.create({
     container: {
@@ -101,5 +109,7 @@ const styles = StyleSheet.create({
 const codePushOptions = {
     checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
 };
+// const HotUpdateApp = codePush(codePushOptions)(App);
+// export default observer(() => <HotUpdateApp />);
 
-export default codePush(codePushOptions)(App);
+export default App;

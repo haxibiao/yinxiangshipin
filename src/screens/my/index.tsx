@@ -8,8 +8,6 @@ import { GQL, useQuery, useApolloClient } from '@src/apollo';
 export default observer((props: any) => {
     const client = useApolloClient();
     const navigation = useNavigation();
-    // 提前加载提现额度列表
-    useQuery(GQL.getWithdrawAmountList);
     // 个人信息
     const { data, refetch } = useQuery(GQL.MeMetaQuery, {
         fetchPolicy: 'network-only',
@@ -31,39 +29,6 @@ export default observer((props: any) => {
         },
         [userStore.login],
     );
-
-    const autoSignIn = useCallback(async () => {
-        const uuid = Device.UUID;
-        if (uuid) {
-            // 调用静默注册接口
-            client
-                .mutate({
-                    mutation: GQL.autoSignInMutation,
-                    variables: { UUID: uuid },
-                })
-                .then((res: any) => {
-                    const userData = Helper.syncGetter('data.autoSignIn', res);
-                    if (userData?.gold <= 0 && userData?.balance <= 0 && userData?.wallet?.total_withdraw_amount <= 0) {
-                        userData.isNewUser = true;
-                    }
-                    userStore.signIn(userData);
-                })
-                .catch(() => {
-                    // 静默登录失败，引导用户到手动登录页
-                    navigation.navigate('Login');
-                });
-        } else {
-            // 没有拿到uuid,引导用户到手动登录页
-            navigation.navigate('Login');
-        }
-    }, [client]);
-
-    useEffect(() => {
-        // 该APP没有登录过，调用静默登录
-        if (!userStore.login && userStore.firstInstall) {
-            autoSignIn();
-        }
-    }, [userStore.login, userStore.firstInstall]);
 
     useEffect(() => {
         const navFocusListener = navigation.addListener('focus', () => {
