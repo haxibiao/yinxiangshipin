@@ -2,21 +2,28 @@ import React, { useRef, useMemo, useCallback, useEffect } from 'react';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, BackHandler } from 'react-native';
 import { Overlay } from 'teaset';
 import { Storage, userStore } from '@src/store';
-import { useNavigation, useRoute } from '@react-navigation/native';
 const UserAgreementGuide = 'UserAgreementGuide' + Config.Version;
 
-export const useBeginner = () => {
+export const useUserAgreement = () => {
     const backListener = useRef();
     const OverlayKey = useRef();
     const isAgreed = useRef(true);
-    const navigation = useNavigation();
 
-    useEffect(() => {
-        (async function () {
-            isAgreed.current = await Storage.getItem(UserAgreementGuide);
-            addBackListener();
-            onFocus();
-        })();
+    const hideOverlay = useCallback(() => {
+        if (OverlayKey.current) {
+            Overlay.hide(OverlayKey.current);
+            OverlayKey.current = null;
+        }
+    }, []);
+
+    const showOverlay = useCallback(() => {
+        if (!isAgreed.current && !OverlayKey.current) {
+            OverlayKey.current = Overlay.show(
+                <Overlay.View animated={false} modal={true} overlayOpacity={0.1}>
+                    {content}
+                </Overlay.View>,
+            );
+        }
     }, []);
 
     const addBackListener = useCallback(() => {
@@ -27,30 +34,26 @@ export const useBeginner = () => {
         }
     }, []);
 
+    useEffect(() => {
+        (async function () {
+            isAgreed.current = await Storage.getItem(UserAgreementGuide);
+            addBackListener();
+            showOverlay();
+        })();
+    }, []);
+
     const removeBackListener = useCallback(() => {
         if (Device.Android && backListener.current) {
             backListener.current.remove();
         }
     }, []);
 
-    const navigate = useCallback((routeName) => {
-        onBlur();
-        removeBackListener();
-        navigation.navigate(routeName);
-    }, []);
-
     const agreement = useCallback(() => {
         isAgreed.current = true;
         userStore.me.agreement = true;
-        onBlur();
+        hideOverlay();
         removeBackListener();
         Storage.setItem(UserAgreementGuide, JSON.stringify({}));
-    }, []);
-
-    const refused = useCallback(() => {
-        onBlur();
-        removeBackListener();
-        BackHandler.exitApp();
     }, []);
 
     const content = useMemo(() => {
@@ -60,48 +63,44 @@ export const useBeginner = () => {
                     <ScrollView contentContainerStyle={styles.agreementContent} showsVerticalScrollIndicator={false}>
                         <Text style={styles.title}>个人信息保护指引</Text>
                         <View>
-                            <Text style={styles.tintFont}>感谢您信任并使用{Config.AppName}</Text>
+                            <Text style={styles.tintFont}>感谢您的信任和支持：</Text>
                         </View>
                         <View>
                             <Text style={styles.tintFont}>
-                                1.我们会遵循隐私政策收集、使用信息，但不会仅因同意本隐私政策而采取强制捆绑的方式收集信息；
+                                &nbsp;&nbsp;&nbsp;&nbsp;1.我们会遵循隐私政策收集、使用信息，但不会仅因同意本隐私政策而采取强制捆绑的方式收集信息。
                             </Text>
                         </View>
                         <View>
                             <Text style={styles.tintFont}>
-                                2.在仅浏览时，为保障服务所必需，我们会收集设备信息与日志信息用于视频和信息推送；
+                                &nbsp;&nbsp;&nbsp;&nbsp;2.在仅浏览时，为保障服务所必需，我们会收集设备信息与日志信息用于视频和信息推送。
                             </Text>
                         </View>
                         <View>
                             <Text style={styles.tintFont}>
-                                3.GPS、摄像头、麦克风、相册权限均不会默认开启，只有经过明示授权才会在为实现功能或服务时使用，不会在功能或服务不需要时而通过您授权的权限收集信息。
+                                &nbsp;&nbsp;&nbsp;&nbsp;3.GPS、摄像头、麦克风、相册权限均不会默认开启，只有经过明示授权才会在为实现功能或服务时使用，不会在功能或服务不需要时而通过您授权的权限收集信息。
                             </Text>
                         </View>
                         <View>
                             <Text style={styles.tintFont}>
-                                你可以查看完整版
-                                <Text style={styles.link} activeOpacity={0.8} onPress={() => navigate('UserProtocol')}>
-                                    <Text>{`《${Config.AppName}用户协议》`}</Text>
-                                </Text>
-                                和
-                                <Text style={styles.link} activeOpacity={0.8} onPress={() => navigate('PrivacyPolicy')}>
-                                    <Text>{`《${Config.AppName}隐私政策》`}</Text>
-                                </Text>
-                                。我们将竭尽全力保护您的个人信息和合法权益，再次感谢您的信任。
+                                &nbsp;&nbsp;&nbsp;&nbsp;4.您在使用{Config.AppName}
+                                时应自觉遵守法律法规、维护国家利益、社会公共秩序等“七条底线”要求。
                             </Text>
                         </View>
                         <View>
-                            <Text style={styles.tintFont}>如果你同意请点击下面的按钮以接受我们的服务。</Text>
+                            <Text style={styles.tintFont}>
+                                &nbsp;&nbsp;&nbsp;&nbsp;您可以前往App中的设置=>其它查看完整的 《用户协议》和
+                                《隐私政策》
+                            </Text>
+                        </View>
+                        <View>
+                            <Text style={styles.tintFont}>
+                                &nbsp;&nbsp;&nbsp;&nbsp;如果您同意协议请点击下方按钮接受我们的服务，我们将竭尽全力保护您的个人信息和合法权益。
+                            </Text>
                         </View>
                     </ScrollView>
                     <View style={styles.footer}>
-                        {/* <TouchableOpacity
-                            style={[styles.bottomBtn, { borderColor: '#EAEAEA', borderRightWidth: pixel(0.5) }]}
-                            onPress={refused}>
-                            <Text style={{ marginRight: 5, color: '#191919', fontWeight: 'bold' }}>不同意</Text>
-                        </TouchableOpacity> */}
                         <TouchableOpacity style={styles.bottomBtn} onPress={agreement}>
-                            <Text style={{ marginRight: 5, color: Theme.primaryColor, fontWeight: 'bold' }}>
+                            <Text style={{ color: Theme.primaryColor, fontWeight: 'bold', fontSize: font(16) }}>
                                 知道了
                             </Text>
                         </TouchableOpacity>
@@ -110,33 +109,6 @@ export const useBeginner = () => {
             </View>
         );
     }, []);
-
-    const onFocus = useCallback(() => {
-        if (!isAgreed.current && !OverlayKey.current) {
-            OverlayKey.current = Overlay.show(
-                <Overlay.View animated={false} modal={true} overlayOpacity={0.1}>
-                    {content}
-                </Overlay.View>,
-            );
-        }
-    }, []);
-
-    const onBlur = useCallback(() => {
-        if (OverlayKey.current) {
-            Overlay.hide(OverlayKey.current);
-            OverlayKey.current = null;
-        }
-    }, []);
-
-    useEffect(() => {
-        const navFocusListener = navigation.addListener('focus', () => {
-            onFocus();
-            addBackListener();
-        });
-        return () => {
-            navFocusListener();
-        };
-    }, [onFocus]);
 };
 
 const styles = StyleSheet.create({

@@ -16,6 +16,7 @@ type args = {
     leftContent: string,
     rightContent: string,
     leftConfirm: Function,
+    modal: boolean,
 };
 
 function renderContent(content) {
@@ -27,14 +28,15 @@ function renderContent(content) {
 }
 
 function PopOverlay(props: args) {
-    let { title, content, onConfirm, leftContent, rightContent, leftConfirm } = props,
+    let { title, content, onConfirm, leftContent, rightContent, leftConfirm, modal } = props,
         popViewRef,
         overlayView;
     overlayView = (
         <Overlay.PopView
             style={{ alignItems: 'center', justifyContent: 'center' }}
+            modal={modal}
             animated
-            ref={ref => (popViewRef = ref)}>
+            ref={(ref) => (popViewRef = ref)}>
             <View style={styles.overlayInner}>
                 <SafeText style={styles.headerText}>{title || '提示'}</SafeText>
                 {content && renderContent(content)}

@@ -36,7 +36,7 @@ export default (props: any) => {
                     },
                     fetchPolicy: 'network-only',
                 }}
-                contentContainerStyle={styles.container}
+                contentContainerStyle={styles.collectionsContainer}
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
                 renderItem={({ item, index, data }) => (
@@ -50,6 +50,9 @@ export default (props: any) => {
                         <Text style={styles.collectionText}>{item.name}</Text>
                     </TouchableOpacity>
                 )}
+                ListEmptyComponent={() => {
+                    return null;
+                }}
                 ListFooterComponent={() => {
                     return null;
                 }}
@@ -108,21 +111,21 @@ const styles = StyleSheet.create({
         marginRight: pixel(5),
         alignItems: 'center',
         marginTop: pixel(10),
-        paddingHorizontal: pixel(Theme.itemSpace) / 2,
+        padding: pixel(8),
     },
     icon: {
-        width: pixel(12),
-        height: pixel(12),
+        width: pixel(13),
+        height: pixel(13),
         resizeMode: 'cover',
-        marginRight: pixel(2),
+        marginRight: pixel(3),
     },
     collectionText: {
-        fontSize: font(10),
+        fontSize: font(11),
         color: '#666',
     },
-    container: {
+    collectionsContainer: {
         paddingHorizontal: pixel(Theme.itemSpace),
-        height: pixel(40),
+        // height: pixel(40),
     },
     separator: {
         marginHorizontal: pixel(14),

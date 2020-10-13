@@ -252,7 +252,7 @@ function playRewardVideo({ wait }: { wait: number }) {
             }
         });
         rewardVideo.subscribe('onAdError', (event) => {
-            Toast.show({ content: event.message || '视频播放失败！', duration: 1500 });
+            Toast.show({ content: event?.message || '视频播放失败！', duration: 1500 });
         });
     }
 }
