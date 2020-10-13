@@ -2,7 +2,7 @@ import React, { useMemo, useCallback, useState } from 'react';
 import { StyleSheet, View, Text, Image, ImageBackground, TouchableWithoutFeedback, Animated } from 'react-native';
 import { BoxShadow } from 'react-native-shadow';
 import { ad } from 'react-native-ad';
-import { appStore, adStore } from '@src/store';
+import { appStore, adStore, userStore } from '@src/store';
 import { RewardOverlay, SafeText } from '@src/components';
 import { useCirculationAnimation } from '@src/common';
 import { GQL, useMutation, useQuery, getUserReward } from '@src/apollo';
@@ -85,8 +85,30 @@ const AttendanceBook = (): JSX.Element => {
 
     const getDoubleReward = useCallback(() => {
         let called;
-        const rewardVideo = ad.startRewardVideo({ appid: adStore.tt_appid, codeid: adStore.codeid_reward_video });
-
+        let rewardVideo;
+        if (userStore.me?.wallet?.total_withdraw_amount > 0) {
+            rewardVideo = ad.startRewardVideo({ appid: adStore.tt_appid, codeid: adStore.codeid_reward_video });
+        } else {
+            rewardVideo = ad.startFullVideo({ appid: adStore.tt_appid, codeid: adStore.codeid_full_video });
+        }
+        rewardVideo.subscribe('onAdClose', (event) => {
+            if (!called) {
+                called = true;
+                getUserReward('DOUBLE_SIGNIN_REWARD')
+                    .then((res) => {
+                        RewardOverlay.show({
+                            reward: {
+                                gold: res?.gold,
+                                ticket: res?.ticket,
+                            },
+                            title: '签到双倍奖励领取成功',
+                        });
+                    })
+                    .catch((err) => {
+                        Toast.show({ content: err });
+                    });
+            }
+        });
         rewardVideo.subscribe('onAdLoaded', (event) => {
             if (!called) {
                 called = true;
