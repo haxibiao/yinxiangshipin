@@ -15,7 +15,7 @@ import { GQL, useFollowMutation, useApolloClient, useQuery } from '@src/apollo';
 import { userStore } from '@src/store';
 import { exceptionCapture, mergeProperty } from '@src/common';
 
-function CollectionItem({ collection, onPress, style, index }) {
+function PostItem({ collection, onPress, style, index }) {
     return (
         <TouchableWithoutFeedback onPress={onPress}>
             <View style={[styles.postItem, style]}>
@@ -168,7 +168,7 @@ export default ({ collection, post, onClose, navigation }) => {
     const renderItem = useCallback(
         ({ item, index }) => {
             return (
-                <CollectionItem
+                <PostItem
                     index={index}
                     collection={item}
                     style={post?.id === item?.id && { backgroundColor: 'rgba(222,222,222,0.3)' }}

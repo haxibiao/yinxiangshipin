@@ -61,6 +61,7 @@ import TagVideoListScreen from '../screens/tag/VideoList';
 import CollectionScreen from '../screens/collection';
 import CreateCollectionScreen from '../screens/collection/CreateCollectionScreen';
 import CollectionDetailScreen from '../screens/collection/CollectionDetail';
+import CollectionEpisodeVideoListScreen from '../screens/collection/EpisodeVideoList';
 import CollectionVideoListScreen from '../screens/collection/VideoList';
 import AddToCollectionScreen from '../screens/collection/components/AddedToCollection';
 import SelectPostScreen from '../screens/collection/components/SelectPostScreen';
@@ -208,6 +209,9 @@ export default {
     },
     CollectionVideoList: {
         component: CollectionVideoListScreen,
+    },
+    CollectionEpisodeVideoList: {
+        component: CollectionEpisodeVideoListScreen,
     },
     Chat: {
         component: ChatScreen,

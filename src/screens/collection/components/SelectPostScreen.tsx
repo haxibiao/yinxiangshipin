@@ -5,7 +5,6 @@ import { observer } from '@src/store';
 import { GQL } from '@src/apollo';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { QueryList } from '@src/content';
-import PostItem from '@src/screens/collection/components/PostItem';
 import CollectionPost from './CollectionPost';
 
 export default function SelectPostScreen() {

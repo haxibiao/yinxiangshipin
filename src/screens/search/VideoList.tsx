@@ -32,7 +32,6 @@ export default () => {
                     tag_id: tag_id,
                     user_id: user_id,
                     page: nextPage.current,
-                    count: 5,
                 },
             });
         }
@@ -61,6 +60,7 @@ export default () => {
 
     // 视频播放事件处理
     useEffect(() => {
+        fetchData();
         const navWillFocusListener = navigation.addListener('focus', () => {
             store.visibility = true;
         });

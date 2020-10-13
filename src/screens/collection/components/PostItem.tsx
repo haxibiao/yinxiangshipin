@@ -13,7 +13,7 @@ interface Props {
     videoData: any;
 }
 const PostItem = observer((props: Props) => {
-    let { item, index, listData, nextPage, collection, addPostPress, videoData } = props;
+    let { item, index, listData, nextPage, count, collection, addPostPress, videoData } = props;
     const navigation = useNavigation();
     // 创建合集 -> 选择作品页 -> isAddCollection判断能否添加当前作品
     // isStash：添加作品时判断是否已在添加区，true则不可点击添加按钮
@@ -28,25 +28,22 @@ const PostItem = observer((props: Props) => {
         cover = item?.images?.['0']?.url;
     }
 
-    const goToScreen = useCallback(({ item, tag, initData, itemIndex, page }) => {
+    const goToScreen = useCallback(() => {
         if (item?.video?.id) {
-            navigation.push('TagVideoList', { tag, initData, itemIndex, page });
+            navigation.push('CollectionVideoList', {
+                collection,
+                initData: listData,
+                itemIndex: index,
+                page: nextPage,
+                count,
+            });
         } else {
             navigation.push('PostDetail', { post: item });
         }
-    }, []);
+    }, [props]);
+
     return (
-        <TouchableWithoutFeedback
-            onPress={() =>
-                goToScreen({
-                    item,
-                    tag: collection,
-                    initData: listData,
-                    itemIndex: index,
-                    page: nextPage,
-                })
-            }
-            disabled={!collection}>
+        <TouchableWithoutFeedback onPress={goToScreen} disabled={!collection}>
             <View style={styles.itemWrap}>
                 <Image style={styles.videoCover} source={{ uri: cover }} />
                 <View style={{ flex: 1, overflow: 'hidden', justifyContent: 'space-around' }}>

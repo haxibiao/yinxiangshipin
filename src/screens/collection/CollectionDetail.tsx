@@ -23,6 +23,8 @@ import { ApolloProvider } from '@apollo/react-hooks';
 import AddedToCollection from './components/AddedToCollection';
 import StashVideoStore from './store';
 
+const QUERY_COUNT = 10;
+
 export default observer((props: any) => {
     const navigation = useNavigation();
     const route = useRoute();
@@ -265,13 +267,21 @@ export default observer((props: any) => {
                 options={{
                     variables: {
                         collection_id: collection.id,
+                        count: QUERY_COUNT,
                     },
                     fetchPolicy: 'network-only',
                 }}
                 contentContainerStyle={styles.contentContainer}
                 onScroll={onScroll}
                 renderItem={({ item, index, data, page }) => (
-                    <PostItem item={item} index={index} collection={collection} listData={data} nextPage={page} />
+                    <PostItem
+                        item={item}
+                        index={index}
+                        collection={collection}
+                        listData={data}
+                        nextPage={page}
+                        count={QUERY_COUNT}
+                    />
                 )}
                 ListHeaderComponent={({ data }) => listHeader(data)}
             />

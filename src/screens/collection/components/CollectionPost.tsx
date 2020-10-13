@@ -6,7 +6,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { GQL } from '@src/apollo';
 import { userStore } from '@src/store';
 import { QueryList } from '@src/content';
-import PostItem from '@src/screens/collection/components/PostItem';
+import PostItem from './PostItem';
 import { observer } from 'mobx-react';
 
 const CollectionPost = observer(({ user_id, addPostPress, videoData }) => {
