@@ -12,6 +12,8 @@ export default () => {
     const tag = useMemo(() => route?.params?.tag, []);
     const initData = useMemo(() => route?.params?.initData, []);
     const itemIndex = useMemo(() => route?.params?.itemIndex, []);
+    const order = useMemo(() => route?.params?.order, []);
+    const count = useMemo(() => route?.params?.count, []);
     const nextPage = useRef(route?.params?.page);
     const store = useMemo(() => new DrawVideoStore({ initData, itemIndex }), []);
 
@@ -29,11 +31,11 @@ export default () => {
                     tag_id: tag?.id,
                     page: nextPage.current,
                     visibility: 'all',
-                    count: 5,
+                    order,
+                    count,
                 },
             });
         }
-
         if (
             (store.status !== 'loading' || store.status !== 'loadAll') &&
             store.data.length - store.viewableItemIndex <= 3
@@ -58,6 +60,7 @@ export default () => {
 
     // 视频播放事件处理
     useEffect(() => {
+        fetchData();
         const navWillFocusListener = navigation.addListener('focus', () => {
             store.visibility = true;
         });
