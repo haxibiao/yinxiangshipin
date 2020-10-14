@@ -1,4 +1,5 @@
 import { observable, action, runInAction } from 'mobx';
+import App from '../App';
 import { Keys, Storage } from './localStorage';
 
 export interface UserScheme {
@@ -21,6 +22,8 @@ class UserStore {
     @observable me: UserScheme = {};
     @observable login: boolean = false;
     @observable firstInstall: boolean = false;
+    @observable bindAccountRemind: boolean = false;
+    @observable disabledBindAccount: boolean = false;
 
     constructor() {
         this.recall();
@@ -30,6 +33,10 @@ class UserStore {
     async recall() {
         const profile = await Storage.getItem(Keys.me);
         const notFirstInstall = await Storage.getItem(Keys.notFirstInstall);
+        this.bindAccountRemind = await Storage.getItem(
+            (Keys.bindAccountRemind + Config.Version) as 'bindAccountRemind',
+        );
+        this.disabledBindAccount = await Storage.getItem(Keys.disabledBindAccount);
         if (profile && profile.id) {
             this.signIn(profile);
         } else if (!notFirstInstall) {

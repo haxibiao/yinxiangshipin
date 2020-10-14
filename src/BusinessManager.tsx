@@ -3,7 +3,7 @@ import { StyleSheet, Platform } from 'react-native';
 import { Overlay } from 'teaset';
 import { when } from 'mobx';
 import { ad } from 'react-native-ad';
-import { appStore, adStore, userStore, Storage, Keys } from './store';
+import { observer, appStore, adStore, userStore, Storage, Keys } from './store';
 import { GQL, useQuery } from './apollo';
 import { authNavigate } from './router';
 import { useUserAgreement, detectPhotos } from './common';
@@ -23,7 +23,7 @@ when(
     },
 );
 
-export default function useBusinessManager() {
+export default observer(function BusinessManager() {
     // 粘贴板抖音采集
     const [shareContent] = useClipboardLink();
     const showShareContentModal = useMemo(() => {
@@ -59,7 +59,6 @@ export default function useBusinessManager() {
             showShareContentModal(shareContent);
         }
     }, [shareContent]);
-    console.log('shareContent', shareContent);
 
     // 获取分享图片二维码信息跳转详情页
     const detectSharePhoto = useCallback(async () => {
@@ -119,7 +118,43 @@ export default function useBusinessManager() {
             clearInterval(timer.current);
         };
     }, []);
-}
+
+    // 绑定手机号提醒
+    const goldsOrArticlesUpdateCount = useRef(0); //更新次数
+    const me = useMemo(() => userStore.me, [userStore.me]);
+    useEffect(() => {
+        if (userStore?.login && !userStore?.me?.phone && me?.count_articles >= 10) {
+            // (me?.gold >= me?.exchangeRate * 0.3 || me?.balance >= 0.3 || me?.count_articles >= 10)
+            goldsOrArticlesUpdateCount.current++;
+        }
+        // console.log(
+        //     'remindQualification',
+        //     userStore.bindAccountRemind,
+        //     userStore.disabledBindAccount,
+        //     goldsOrArticlesUpdateCount.current,
+        // );
+        if (!userStore.bindAccountRemind && !userStore.disabledBindAccount && goldsOrArticlesUpdateCount.current >= 2) {
+            Storage.setItem(Keys.bindAccountRemind + Config.Version, true);
+            userStore.bindAccountRemind = true;
+            PopOverlay({
+                modal: true,
+                content: '账号还未绑定手机号，退出登录可能会丢失数据！可在【设置】中绑定手机号。',
+                leftContent: '不再提醒',
+                rightContent: '前去绑定',
+                leftConfirm: async () => {
+                    Storage.setItem(Keys.disabledBindAccount, true);
+                    userStore.disabledBindAccount = true;
+                },
+                onConfirm: async () => {
+                    authNavigate('BindingAccount');
+                },
+            });
+        }
+        // me?.gold, me?.count_articles
+    }, [me?.count_articles]);
+
+    return null;
+});
 
 const styles = StyleSheet.create({
     overlay: {

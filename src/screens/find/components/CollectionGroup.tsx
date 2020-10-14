@@ -65,7 +65,7 @@ export default function CollectionGroup({ style = {}, groupName, collections, na
                     <Text style={styles.groupName}>{groupName}</Text>
                     <View style={styles.collectionsWrap}>
                         {collections?.map((collection) => (
-                            <Collection collection={collection} navigation={navigation} />
+                            <Collection key={collection?.id} collection={collection} navigation={navigation} />
                         ))}
                     </View>
                 </View>

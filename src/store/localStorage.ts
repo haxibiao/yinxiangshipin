@@ -9,7 +9,7 @@ export interface ItemKeys {
     taskGuide: string;
     appVersion: string;
     notFirstInstall: string;
-    viewedVersion: any;
+    viewedVersion: string | number;
     createPostGuidance: string;
     agreeCreatePostAgreement: string;
     showSplash: string;
@@ -17,6 +17,8 @@ export interface ItemKeys {
     spiderVideoTaskGuided: string;
     isLocalSpiderVideo: string;
     detectedQRCodeRecord: string;
+    bindAccountRemind: string;
+    disabledBindAccount: string;
 }
 
 export const Keys = {
@@ -32,6 +34,8 @@ export const Keys = {
     spiderVideoTaskGuided: 'spiderVideoTaskGuided',
     isLocalSpiderVideo: 'isLocalSpiderVideo',
     detectedQRCodeRecord: 'detectedQRCodeRecord',
+    bindAccountRemind: 'bindAccountRemind',
+    disabledBindAccount: 'disabledBindAccount',
 } as const;
 
 async function removeItem(key: keyof ItemKeys) {

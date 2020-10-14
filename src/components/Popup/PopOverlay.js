@@ -40,7 +40,7 @@ function PopOverlay(props: args) {
             <View style={styles.overlayInner}>
                 <SafeText style={styles.headerText}>{title || '提示'}</SafeText>
                 {content && renderContent(content)}
-                <View style={styles.control}>
+                <View style={styles.footer}>
                     <TouchFeedback
                         style={styles.cancel}
                         onPress={() => {
@@ -49,6 +49,7 @@ function PopOverlay(props: args) {
                         }}>
                         <Text style={styles.cancelText}>{leftContent || '取消'}</Text>
                     </TouchFeedback>
+                    <View style={styles.line} />
                     <TouchFeedback
                         style={styles.confirm}
                         onPress={() => {
@@ -65,6 +66,12 @@ function PopOverlay(props: args) {
 }
 
 const styles = StyleSheet.create({
+    line: {
+        width: StyleSheet.hairlineWidth,
+        marginVertical: pixel(10),
+        alignSelf: 'stretch',
+        backgroundColor: '#f0f0f0',
+    },
     cancel: {
         flex: 1,
         justifyContent: 'center',
@@ -72,7 +79,7 @@ const styles = StyleSheet.create({
     cancelText: {
         textAlign: 'center',
         fontSize: font(16),
-        color: Theme.subTextColor,
+        color: '#b2b2b2',
         borderRightWidth: pixel(1),
         borderRightColor: Theme.borderColor,
     },
@@ -85,23 +92,23 @@ const styles = StyleSheet.create({
         fontSize: font(16),
         color: Theme.primaryColor,
     },
-    control: {
+    footer: {
         height: pixel(46),
         flexDirection: 'row',
         alignItems: 'stretch',
         borderTopWidth: pixel(1),
-        borderTopColor: Theme.borderColor,
+        borderTopColor: '#f0f0f0',
     },
     headerText: {
         fontSize: font(19),
-        color: Theme.defaultTextColor,
+        color: '#212121',
         textAlign: 'center',
     },
     messageText: {
         fontSize: font(16),
         lineHeight: font(20),
         marginVertical: pixel(20),
-        color: Theme.secondaryTextColor,
+        color: '#212121',
         textAlign: 'center',
     },
     overlayInner: {

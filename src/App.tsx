@@ -16,13 +16,13 @@ import { WechatAppId, DisplayName } from '../app.json';
 // overlay
 import { Toast } from './components';
 // business manager
-import useBusinessManager from './useBusinessManager';
+import BusinessManager from './BusinessManager';
 
 const App = observer(() => {
     const client = useClientBuilder(userStore.me?.token);
     // 提前加载数据
     useEffect(() => {
-        // 提现额度列表
+        // 提现额度
         if (userStore.login && client?.query) {
             client.query({ query: GQL.getWithdrawAmountList });
         }
@@ -73,8 +73,6 @@ const App = observer(() => {
         });
     }
 
-    useBusinessManager();
-
     useEffect(() => {
         // WeChat注册（微信分享）
         WeChat.registerApp(WechatAppId, 'http://yxsp.haxifang.cn/');
@@ -90,6 +88,7 @@ const App = observer(() => {
                 }}>
                 <ClassApolloProvider client={client}>
                     <ApolloProvider client={client}>
+                        <BusinessManager />
                         <AppRouter />
                     </ApolloProvider>
                 </ClassApolloProvider>
