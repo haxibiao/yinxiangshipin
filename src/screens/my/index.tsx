@@ -113,14 +113,17 @@ export default observer((props: any) => {
                         </View>
                     </View>
                 </TouchableWithoutFeedback>
-                {userStore.login && adStore.enableWallet && (
-                    <TouchableWithoutFeedback onPress={() => navigation.navigate('TaskCenter')}>
+                {adStore.enableWallet && (
+                    <TouchableWithoutFeedback
+                        onPress={() => navigation.navigate(userStore.login ? 'TaskCenter' : 'Login')}>
                         <Image style={styles.taskEntry} source={require('@app/assets/images/task_entry.png')} />
                     </TouchableWithoutFeedback>
                 )}
                 <View style={styles.columnItemsWrap}>
-                    {userStore.login && adStore.enableWallet && (
-                        <TouchableOpacity style={styles.columnItem} onPress={() => authNavigator('Wallet')}>
+                    {adStore.enableWallet && (
+                        <TouchableOpacity
+                            style={styles.columnItem}
+                            onPress={() => authNavigator(userStore.login ? 'Wallet' : 'Login')}>
                             <View style={styles.columnItemLeft}>
                                 <Image
                                     style={styles.columnIcon}

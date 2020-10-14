@@ -99,10 +99,10 @@ const RewardProgress = observer(({ store }) => {
                 {progress > 0 && (
                     <Progress.Circle
                         progress={progress / 100}
-                        size={pixel(50)}
+                        size={pixel(46)}
                         borderWidth={0}
                         color="#ff5644"
-                        thickness={pixel(4)}
+                        thickness={pixel(3)}
                         endAngle={1}
                         strokeCap="round"
                     />
@@ -113,16 +113,16 @@ const RewardProgress = observer(({ store }) => {
 });
 const styles = StyleSheet.create({
     circleProgress: {
-        height: pixel(54),
+        height: pixel(50),
         position: 'relative',
-        width: pixel(54),
+        width: pixel(50),
         justifyContent: 'center',
         alignItems: 'center',
     },
     rewardImage: {
         ...StyleSheet.absoluteFill,
-        height: pixel(54),
-        width: pixel(54),
+        height: pixel(50),
+        width: pixel(50),
     },
     rewardText: {
         color: '#FFB100',
