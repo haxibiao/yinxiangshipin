@@ -1,6 +1,6 @@
 import { Platform, PermissionsAndroid } from 'react-native';
 import CameraRoll from '@react-native-community/cameraroll';
-import { QRCodeImage } from 'react-native-vod';
+import { QRCodeImage, VideoMeta } from 'react-native-vod';
 import { appStore } from '@src/store';
 import { parseQuery } from '../helper';
 
@@ -13,21 +13,56 @@ export async function detectPhotos() {
     }
     const result = await CameraRoll.getPhotos({
         first: 3,
-        assetType: 'Photos',
+        assetType: 'All',
     });
     const photos = result.edges;
-    // const firstPhoto = photos[0]?.node.image.uri;
+    return processPhotos(photos);
 
-    return processQRCodePhotos(photos);
-
-    async function processQRCodePhotos(photos: string[]) {
+    async function processPhotos(photos: string[]) {
+        let result;
         for (let index = 0; index < photos.length; index++) {
-            const photo = photos[index]?.node.image.uri;
-            const result = await detectPhotoQRCode(photo);
-            if (result) {
-                return result;
+            const mediaUri = photos[index]?.node.image.uri;
+            const type = photos[index]?.node.type;
+            if (type === 'image/jpeg') {
+                result = await detectPhotoQRCode(mediaUri);
+            } else if (type === 'video/mp4') {
+                // result = await detectVideoMeta(mediaUri);
             }
+            // console.log('result', type, result);
         }
+        return result;
+    }
+
+    function detectVideoMeta(video) {
+        return new Promise((resolve, reject) => {
+            VideoMeta.fetchMeta(video, (res) => {
+                console.log('res', res);
+                // const qrInfo = String(res);
+                // if (qrInfo.indexOf('http') !== -1 && !appStore.detectedQRCodeRecord.includes(qrInfo)) {
+                //     const params = parseQuery(qrInfo);
+                //     // https://yxsp.haxifang.cn/share/post/10394?post_id=2&user_id=1
+                //     // { post_id, user_id }
+                //     if (qrInfo.indexOf('/post/') !== -1 && params?.post_id) {
+                //         resolve({
+                //             type: 'post',
+                //             post_id: params?.post_id,
+                //             user_id: params?.user_id,
+                //             qrInfo,
+                //         });
+                //     } else if (qrInfo.indexOf('/user/') !== -1 && params?.user_id) {
+                //         resolve({
+                //             type: 'user',
+                //             user_id: user_id,
+                //             qrInfo,
+                //         });
+                //     } else {
+                //         resolve(null);
+                //     }
+                // } else {
+                //     resolve(null);
+                // }
+            });
+        });
     }
 
     function detectPhotoQRCode(photo) {
