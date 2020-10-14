@@ -1,26 +1,11 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { StyleSheet, View, Text, Image, TouchableOpacity, ImageBackground } from 'react-native';
 import { Iconfont } from '@src/components';
 import { BoxShadow } from 'react-native-shadow';
 
-const GROUP_WIDTH = Device.WIDTH - pixel(40);
-const LOGO_WIDTH = (GROUP_WIDTH - pixel(40)) / 3;
-const GROUP_HEIGHT = pixel(99) + LOGO_WIDTH;
-
-// const shadowOpt = {
-//     width: GROUP_WIDTH,
-//     color: '#000000',
-//     border: pixel(10),
-//     radius: pixel(6),
-//     opacity: 0.5,
-//     x: 0,
-//     y: 0,
-// };
 const shadowOpt = {
-    width: GROUP_WIDTH,
-    height: GROUP_HEIGHT,
-    color: '#ddd',
-    border: pixel(4),
+    color: '#e4e4e4',
+    border: pixel(2),
     radius: pixel(6),
     opacity: 0.5,
     x: 0,
@@ -28,13 +13,15 @@ const shadowOpt = {
     style: {},
 };
 
-function Collection({ collection, navigation }) {
+function Collection({ collection, navigation, logoWidth }) {
     return (
         <TouchableOpacity
             activeOpacity={1}
-            style={styles.collectionItem}
+            style={[styles.collectionItem, { width: logoWidth }]}
             onPress={() => navigation.navigate('CollectionDetail', { collection })}>
-            <ImageBackground style={styles.collectionLogo} source={{ uri: collection?.logo }}>
+            <ImageBackground
+                style={[styles.collectionLogo, { width: logoWidth, height: logoWidth }]}
+                source={{ uri: collection?.logo }}>
                 <View style={styles.videoMark}>
                     <Iconfont name="bofang1" size={pixel(10)} color={'#fff'} style={{ opacity: 0.8 }} />
                 </View>
@@ -48,7 +35,10 @@ function Collection({ collection, navigation }) {
     );
 }
 
-export default function CollectionGroup({ style = {}, groupName, collections, navigation }) {
+export default function CollectionGroup({ style = {}, groupName, collections, navigation, groupWidth }) {
+    const LOGO_WIDTH = useMemo(() => (groupWidth - pixel(40)) / 3, [groupWidth]);
+    const GROUP_HEIGHT = useMemo(() => pixel(99) + LOGO_WIDTH, [LOGO_WIDTH]);
+
     const [boxShadowHeight, setBoxShadowHeight] = useState(GROUP_HEIGHT);
 
     const onLayoutEffect = useCallback((event) => {
@@ -59,13 +49,19 @@ export default function CollectionGroup({ style = {}, groupName, collections, na
         <View style={style}>
             <BoxShadow
                 setting={Object.assign({}, shadowOpt, {
+                    width: groupWidth,
                     height: GROUP_HEIGHT,
                 })}>
                 <View style={styles.groupContainer} onLayout={onLayoutEffect}>
                     <Text style={styles.groupName}>{groupName}</Text>
                     <View style={styles.collectionsWrap}>
                         {collections?.map((collection) => (
-                            <Collection key={collection?.id} collection={collection} navigation={navigation} />
+                            <Collection
+                                key={collection?.id}
+                                collection={collection}
+                                navigation={navigation}
+                                logoWidth={LOGO_WIDTH}
+                            />
                         ))}
                     </View>
                 </View>
@@ -94,12 +90,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     collectionItem: {
-        width: LOGO_WIDTH,
         marginHorizontal: pixel(4),
     },
     collectionLogo: {
-        width: LOGO_WIDTH,
-        height: LOGO_WIDTH,
         borderRadius: pixel(6),
         overflow: 'hidden',
         justifyContent: 'center',

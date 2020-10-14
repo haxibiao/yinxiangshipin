@@ -75,7 +75,7 @@ export default observer((props: any) => {
                         <Image style={styles.tagLogoWrap} source={{ uri: tagData?.logo }} />
                         <View style={styles.tagInfo}>
                             <View style={styles.modifyInfo}>
-                                <SafeText style={styles.tagName}>#{tagData?.name}</SafeText>
+                                <SafeText style={styles.tagName}>{tagData?.name}</SafeText>
                                 {isSelf && (
                                     <TouchableOpacity
                                         style={styles.editBox}

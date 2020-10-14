@@ -52,7 +52,7 @@ const PostItem = observer((props: Props) => {
             onPress={() => navigation.navigate('PostDetail', { post })}>
             {renderCover}
             <View style={styles.bottomContent}>
-                <View style={{ marginBottom: pixel(5) }}>
+                <View style={{ marginBottom: pixel(6) }}>
                     <SafeText style={styles.contentText} numberOfLines={2}>
                         {content || description}
                     </SafeText>
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
         right: pixel(5),
     },
     bottomContent: {
-        paddingVertical: pixel(6),
+        paddingVertical: pixel(7),
         paddingHorizontal: pixel(5),
         backgroundColor: '#ffffff',
         borderBottomRightRadius: pixel(5),

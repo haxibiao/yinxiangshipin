@@ -107,6 +107,7 @@ export default observer((props: any) => {
             columnSpace={{ marginRight: pixel(6) }}
             showsVerticalScrollIndicator={false}
             renderItem={renderItem}
+            refreshing={!!currentPage && loading}
             onRefresh={refetch}
             ListEmptyComponent={ListEmptyComponent}
             keyExtractor={(item) => `id${item.id}`}
