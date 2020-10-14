@@ -2,6 +2,7 @@ import React, { useState, useCallback, useMemo } from 'react';
 import { StyleSheet, View, Text, Image, TouchableOpacity, ImageBackground } from 'react-native';
 import { Iconfont } from '@src/components';
 import { BoxShadow } from 'react-native-shadow';
+import LinearGradient from 'react-native-linear-gradient';
 
 const shadowOpt = {
     color: '#e4e4e4',
@@ -22,9 +23,16 @@ function Collection({ collection, navigation, logoWidth }) {
             <ImageBackground
                 style={[styles.collectionLogo, { width: logoWidth, height: logoWidth }]}
                 source={{ uri: collection?.logo }}>
-                <View style={styles.videoMark}>
+                <LinearGradient
+                    style={styles.videoMark}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 0, y: 1 }}
+                    colors={['rgba(000,000,000,0.2)', 'rgba(000,000,000,0.1)', 'rgba(000,000,000,0)']}>
                     <Iconfont name="bofang1" size={pixel(10)} color={'#fff'} style={{ opacity: 0.8 }} />
-                </View>
+                    <Text style={styles.countViews} numberOfLines={2}>
+                        {Helper.count((Number(collection?.count_views) + Number(collection?.id)) * 100)}
+                    </Text>
+                </LinearGradient>
             </ImageBackground>
             <View style={{ height: pixel(36), marginTop: pixel(6) }}>
                 <Text style={styles.collectionName} numberOfLines={2}>
@@ -99,13 +107,22 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     videoMark: {
-        width: pixel(28),
-        height: pixel(28),
-        borderRadius: pixel(14),
-        paddingLeft: pixel(2),
-        backgroundColor: 'rgba(0,0,0,0.3)',
-        justifyContent: 'center',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        paddingTop: pixel(3),
+        paddingHorizontal: pixel(5),
+        paddingBottom: pixel(6),
+        flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'flex-end',
+    },
+    countViews: {
+        marginLeft: pixel(4),
+        fontSize: font(11),
+        lineHeight: font(14),
+        color: 'rgba(255,255,255,0.9)',
     },
     collectionName: {
         fontSize: font(13),

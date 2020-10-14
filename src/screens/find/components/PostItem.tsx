@@ -12,7 +12,7 @@ export interface Props {
 
 const Icons = {
     liked: require('@app/assets/images/icons/ic_heart_red.png'),
-    like: require('@app/assets/images/icons/ic_heart_normal.png'),
+    like: require('@app/assets/images/icons/ic_heart_gray.png'),
 };
 
 const PostItem = observer((props: Props) => {
@@ -119,12 +119,13 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     likeIcon: {
-        width: pixel(13),
-        height: pixel(13),
+        width: pixel(12),
+        height: pixel(12),
     },
     lickCountText: {
         marginRight: pixel(3),
         fontSize: pixel(12),
+        lineHeight: pixel(14),
         color: '#b2b2b2',
     },
 });

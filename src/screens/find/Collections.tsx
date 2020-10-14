@@ -9,7 +9,7 @@ import CollectionItem from './components/CollectionItem';
 
 const PADDING = pixel(15);
 const CONTENT_WIDTH = Device.WIDTH - PADDING * 2;
-const LOGO_WIDTH = (CONTENT_WIDTH - pixel(40)) / 3;
+const LOGO_WIDTH = (CONTENT_WIDTH - pixel(60)) / 3;
 
 function TopRecommendCollections({ navigation, data }) {
     const topRecommend = useMemo(() => data?.recommendCollections, [data]);
@@ -24,20 +24,25 @@ function TopRecommendCollections({ navigation, data }) {
                     onPress={() => navigation.navigate('CollectionDetail', { collection: topCollection })}>
                     <Image style={styles.banner} source={require('@app/assets/images/bg/collection_top_bg.jpg')} />
                     <View style={styles.bannerLabel}>
-                        <Text style={styles.labelText}> 编辑甄选</Text>
+                        <Text style={styles.labelText}>精选合集</Text>
+                        <Text
+                            style={[styles.labelText, { fontSize: pixel(14), lineHeigh: pixel(18) }]}
+                            numberOfLines={2}>
+                            {topCollection?.name + topCollection?.description}
+                        </Text>
                     </View>
                 </TouchableOpacity>
                 <CollectionGroup
                     groupWidth={CONTENT_WIDTH}
                     style={styles.groupStyle}
-                    groupName="合集精选站🔥"
+                    groupName="热门推荐"
                     collections={groupA}
                     navigation={navigation}
                 />
                 <CollectionGroup
                     groupWidth={CONTENT_WIDTH}
                     style={styles.groupStyle}
-                    groupName="大家都在看🔥"
+                    groupName="值得看见✨"
                     collections={groupB}
                     navigation={navigation}
                 />
@@ -96,19 +101,26 @@ const styles = StyleSheet.create({
     },
     bannerLabel: {
         position: 'absolute',
-        top: 0,
-        left: 0,
-        height: pixel(20),
-        paddingLeft: pixel(4),
-        paddingRight: pixel(5),
-        borderBottomRightRadius: pixel(6),
-        backgroundColor: 'rgba(255,255,255,0.8)',
-        justifyContent: 'center',
-        alignItems: 'center',
+        top: pixel(15),
+        left: pixel(15),
+        right: CONTENT_WIDTH / 2,
+        bottom: pixel(30),
+        // height: pixel(20),
+        // paddingLeft: pixel(4),
+        // paddingRight: pixel(5),
+        // borderBottomRightRadius: pixel(6),
+        // backgroundColor: 'rgba(255,255,255,0.8)',
+        // justifyContent: 'center',
+        // alignItems: 'center',
     },
     labelText: {
-        fontSize: font(10),
-        color: '#333',
+        fontSize: font(19),
+        lineHeight: font(25),
+        marginBottom: pixel(8),
+        color: 'rgba(255,255,255,0.9)',
+        textShadowColor: 'rgba(0, 0, 0, 0.75)',
+        textShadowOffset: { width: 0, height: 0 },
+        textShadowRadius: 2,
     },
     groupStyle: {
         marginVertical: pixel(10),

@@ -87,7 +87,7 @@ export default observer((props: any) => {
                                 )}
                             </View>
                             <SafeText style={styles.tagCount}>
-                                {`${count(tagData?.count_views || 0)}次播放`}
+                                {`${count((Number(collection?.count_views) + Number(collection?.id)) * 100)}次播放`}
                                 {`· @${tagData?.user?.name}`}
                             </SafeText>
                             <View style={styles.tagInfoBottom}>

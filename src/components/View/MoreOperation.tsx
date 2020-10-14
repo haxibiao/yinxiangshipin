@@ -249,7 +249,7 @@ const MoreOperation = (props: any) => {
                 callback: shield,
             },
             分享合集: {
-                image: require('@app/assets/images/more_large_img.png'),
+                image: require('@app/assets/images/more_content.png'),
                 callback: shareCollection,
             },
         }),

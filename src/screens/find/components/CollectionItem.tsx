@@ -16,15 +16,13 @@ export default function CollectionItem({ collection, navigation, style, logoWidt
                 </ImageBackground>
                 <View style={styles.collectionInfo}>
                     <View>
-                        <Text style={styles.collectionName} numberOfLines={2}>
+                        <Text style={styles.collectionName} numberOfLines={1}>
                             {collection?.name}
                         </Text>
                     </View>
-                    <View style={styles.collectionDescription}>
-                        <Text style={styles.description} numberOfLines={2}>
-                            {collection?.description}
-                        </Text>
-                    </View>
+                    <SafeText style={styles.description} numberOfLines={1}>
+                        {collection?.description}
+                    </SafeText>
                     <View style={styles.collectionMeta}>
                         <Image style={styles.userAvatar} source={{ uri: collection?.user?.avatar }} />
                         <SafeText style={[styles.metaText, { marginRight: pixel(15) }]}>
@@ -81,20 +79,14 @@ const styles = StyleSheet.create({
         color: '#212121',
         fontWeight: 'bold',
     },
-    collectionDescription: {
-        marginTop: pixel(10),
-        marginBottom: pixel(12),
-        // padding: pixel(7),
-        // paddingVertical: pixel(4),
-        // backgroundColor: '#f6f6f6',
-        // borderRadius: pixel(5),
-    },
     description: {
+        marginTop: pixel(10),
         fontSize: font(12),
         lineHeight: font(18),
         color: '#b2b2b2',
     },
     collectionMeta: {
+        marginTop: pixel(12),
         flexDirection: 'row',
         alignItems: 'center',
     },

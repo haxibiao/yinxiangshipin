@@ -1,7 +1,8 @@
 import React, { useCallback } from 'react';
-import { StyleSheet, View, TouchableWithoutFeedback, Image } from 'react-native';
-import { observer } from 'mobx-react';
+import { StyleSheet, View, TouchableWithoutFeedback, Image, Animated } from 'react-native';
 import { NavBarHeader, ScrollTabBar, FocusAwareStatusBar } from '@src/components';
+import { observer, adStore, userStore } from '@src/store';
+import { useCirculationAnimation } from '@src/common';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import FollowedPosts from './FollowedPosts';
@@ -11,10 +12,21 @@ import RecommendPosts from './RecommendPosts';
 export default observer(() => {
     const navigation = useNavigation();
     const route = useRoute();
-    const searchHandle = useCallback(() => {
+    const goSearchCenter = useCallback(() => {
         navigation.navigate('Search');
     }, []);
-
+    const goTaskCenter = useCallback(() => {
+        navigation.navigate(userStore.login ? 'TaskCenter' : 'Login');
+    }, []);
+    const animation = useCirculationAnimation({ duration: 3000, start: true });
+    const scale = animation.interpolate({
+        inputRange: [0, 0.1, 0.2, 0.3, 0.4, 1],
+        outputRange: [1, 1.3, 1.1, 1.3, 1, 1],
+    });
+    // const rotate = animation.interpolate({
+    //     inputRange: [0.4, 0.],
+    //     outputRange: [1, 1.3, 1.1, 1.3, 1, 1],
+    // });
     return (
         <View style={styles.container}>
             <FocusAwareStatusBar barStyle="dark-content" />
@@ -35,11 +47,22 @@ export default observer(() => {
                 <RecommendPosts tabLabel="推荐" />
                 <Collections tabLabel="合集" />
             </ScrollableTabView>
-            <TouchableWithoutFeedback onPress={searchHandle}>
-                <View style={styles.searchButton}>
-                    <Image source={require('@app/assets/images/icons/ic_search_b.png')} style={styles.searchIcon} />
-                </View>
-            </TouchableWithoutFeedback>
+            {adStore.enableWallet ? (
+                <TouchableWithoutFeedback onPress={goTaskCenter}>
+                    <View style={styles.taskButton}>
+                        <Animated.Image
+                            source={require('@app/assets/images/record_reward.png')}
+                            style={[styles.buttonIcon, { transform: [{ scale }] }]}
+                        />
+                    </View>
+                </TouchableWithoutFeedback>
+            ) : (
+                <TouchableWithoutFeedback onPress={goSearchCenter}>
+                    <View style={styles.searchButton}>
+                        <Image source={require('@app/assets/images/icons/ic_search_b.png')} style={styles.buttonIcon} />
+                    </View>
+                </TouchableWithoutFeedback>
+            )}
         </View>
     );
 });
@@ -50,6 +73,15 @@ const styles = StyleSheet.create({
         paddingTop: Theme.statusBarHeight,
         backgroundColor: '#fff',
     },
+    taskButton: {
+        position: 'absolute',
+        top: Theme.statusBarHeight,
+        right: pixel(20),
+        width: pixel(50),
+        height: Theme.NAVBAR_HEIGHT,
+        justifyContent: 'center',
+        alignItems: 'flex-end',
+    },
     searchButton: {
         position: 'absolute',
         top: Theme.statusBarHeight,
@@ -59,7 +91,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'flex-end',
     },
-    searchIcon: {
+    buttonIcon: {
         height: pixel(22),
         width: pixel(22),
         resizeMode: 'cover',

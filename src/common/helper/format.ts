@@ -1,9 +1,11 @@
 export function count(value: any) {
     const num: number = parseFloat(value);
-    if (num >= 1000) {
-        return Number((num / 1000).toFixed(2)) + 'k';
+    if (num >= 10000) {
+        return Number((num / 10000).toFixed(1)) + 'w';
+    } else if (num > 0) {
+        return num.toFixed(0);
     } else {
-        return num || 0;
+        return 0;
     }
 }
 

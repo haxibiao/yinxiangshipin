@@ -93,10 +93,10 @@ export default observer((props: any) => {
                     </View>
                     <View style={styles.tagInfo}>
                         <View style={styles.tagInfoTop}>
-                            <SafeText style={styles.tagName}>#{tagData?.name}</SafeText>
-                            <SafeText style={styles.tagCount}>{`${count(
-                                tagData?.count_views * 100 || 0.0,
-                            )}次播放`}</SafeText>
+                            <SafeText style={styles.tagName}>#{tagData?.name || '视频合集'}</SafeText>
+                            <SafeText style={styles.tagCount}>{`${
+                                count(Number(tagData?.count_views) + Number(tagData?.id)) || '0.0'
+                            }次播放`}</SafeText>
                         </View>
                         <View style={styles.tagInfoBottom}>
                             <SafeText style={styles.tagCount}>{`${count(
