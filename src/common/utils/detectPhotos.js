@@ -22,48 +22,32 @@ export async function detectPhotos() {
         let result;
         for (let index = 0; index < photos.length; index++) {
             const mediaUri = photos[index]?.node.image.uri;
-            const type = photos[index]?.node.type;
-            if (type === 'image/jpeg') {
+            const type = String(photos[index]?.node.type).slice(0, 5);
+            if (type === 'image') {
                 result = await detectPhotoQRCode(mediaUri);
-            } else if (type === 'video/mp4') {
-                // result = await detectVideoMeta(mediaUri);
+            } else if (type === 'video') {
+                // result = await VideoMeta.fetchMeta(mediaUri);
             }
             // console.log('result', type, result);
+            return result || null;
         }
-        return result;
     }
 
-    function detectVideoMeta(video) {
-        return new Promise((resolve, reject) => {
-            VideoMeta.fetchMeta(video, (res) => {
-                console.log('res', res);
-                // const qrInfo = String(res);
-                // if (qrInfo.indexOf('http') !== -1 && !appStore.detectedQRCodeRecord.includes(qrInfo)) {
-                //     const params = parseQuery(qrInfo);
-                //     // https://yxsp.haxifang.cn/share/post/10394?post_id=2&user_id=1
-                //     // { post_id, user_id }
-                //     if (qrInfo.indexOf('/post/') !== -1 && params?.post_id) {
-                //         resolve({
-                //             type: 'post',
-                //             post_id: params?.post_id,
-                //             user_id: params?.user_id,
-                //             qrInfo,
-                //         });
-                //     } else if (qrInfo.indexOf('/user/') !== -1 && params?.user_id) {
-                //         resolve({
-                //             type: 'user',
-                //             user_id: user_id,
-                //             qrInfo,
-                //         });
-                //     } else {
-                //         resolve(null);
-                //     }
-                // } else {
-                //     resolve(null);
-                // }
-            });
-        });
-    }
+    // function detectVideoMeta(video) {
+    //     return new Promise((resolve, reject) => {
+    //         return VideoMeta.fetchMeta(video)
+    //             .then((res) => {
+    //                 if (res) {
+    //                     resolve(res);
+    //                 } else {
+    //                     resolve(null);
+    //                 }
+    //             })
+    //             .catch((err) => {
+    //                 resolve(null);
+    //             });
+    //     });
+    // }
 
     function detectPhotoQRCode(photo) {
         return new Promise((resolve, reject) => {

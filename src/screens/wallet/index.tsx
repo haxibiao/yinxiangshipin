@@ -115,15 +115,16 @@ export default observer((props: any) => {
             Toast.show({ content: error.message.replace('GraphQL error: ', '') || '提现失败' });
         },
     });
-    // 提现金额
+
+    // 未提现过的用户
+    const noWithdrawal = useMemo(
+        () => userProfile?.gold >= userProfile?.exchangeRate * 0.3 && userProfile?.wallet?.total_withdraw_amount <= 0,
+        [userProfile],
+    );
+    // 设置提现金额
     const setWithdrawAmount = useCallback(
         (value) => {
-            // 未提现过的新用户
-            if (
-                value == 0.3 &&
-                userProfile?.gold >= userProfile?.exchangeRate * 0.3 &&
-                userProfile?.wallet?.total_withdraw_amount <= 0
-            ) {
+            if (value == 0.3 && noWithdrawal) {
                 setAmount(value);
             } else {
                 // 正常流程
@@ -140,7 +141,7 @@ export default observer((props: any) => {
                 }
             }
         },
-        [userProfile, wallet],
+        [userProfile, wallet, noWithdrawal],
     );
 
     const onWithdraw = useCallback(__.debounce(withdrawRequest, 500), [withdrawRequest]);
@@ -270,7 +271,7 @@ export default observer((props: any) => {
                         <Text style={styles.withdrawTips}>
                             提现需要消耗相应{Config.goldAlias}，更多疑问请查看页面下方的温馨提示
                         </Text>
-                        {withdrawAmountData.map((data) => {
+                        {withdrawAmountData.map((data, index) => {
                             const selected = data.amount === amount;
                             return (
                                 <View key={data.amount}>
@@ -279,7 +280,11 @@ export default observer((props: any) => {
                                         onPress={() => setWithdrawAmount(data.amount)}>
                                         <Row>
                                             <Image
-                                                source={require('@app/assets/images/wallet/icon_wallet_rmb.png')}
+                                                source={
+                                                    index == 0 && noWithdrawal
+                                                        ? require('@app/assets/images/wallet/icon_wallet_diamond.png')
+                                                        : require('@app/assets/images/wallet/icon_wallet_balance.png')
+                                                }
                                                 style={styles.rmbImage}
                                             />
                                             <SafeText style={[styles.amountItemText, selected && { color: '#34BBFF' }]}>
@@ -296,11 +301,14 @@ export default observer((props: any) => {
                                             </SafeText>
                                         </Row>
                                     </TouchableOpacity>
-                                    <View style={styles.amountItemBadge}>
-                                        <SafeText style={styles.amountItemBadgeText} numberOfLines={1}>
-                                            {data.tips}
-                                        </SafeText>
-                                    </View>
+
+                                    {((index == 0 && noWithdrawal) || !noWithdrawal) && (
+                                        <View style={styles.amountItemBadge}>
+                                            <SafeText style={styles.amountItemBadgeText} numberOfLines={1}>
+                                                {data.tips}
+                                            </SafeText>
+                                        </View>
+                                    )}
                                 </View>
                             );
                         })}
@@ -487,9 +495,8 @@ const styles = StyleSheet.create({
         fontSize: font(12),
     },
     rmbImage: {
-        height: pixel(18),
-        marginRight: pixel(5),
-        width: pixel(18),
+        height: pixel(30),
+        width: pixel(30),
     },
     diamondImage: {
         height: pixel(25),

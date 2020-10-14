@@ -34,6 +34,9 @@ export default (props) => {
     const [phone, setPhoneNumber] = useState('');
     const [images, setImages] = useState([]);
     const uploadResponse = useCallback((response) => {
+        if (response?.length > 0) {
+            Toast.show({ content: '好评字数大于15个通过几率更高哦', duration: 2000 });
+        }
         setImages(response);
     }, []);
 
@@ -122,6 +125,7 @@ export default (props) => {
                             在应用商店给我们评价后并截图，同您在应用商店的账号（手机号）一并提交。
                         </Text>
                         <Text style={styles.ruleText}>后续请留意审核状态，经审核通过后即可领取奖励。</Text>
+                        <Text style={styles.ruleText}>好评字数大于15通过几率更高哦！</Text>
                     </View>
                 </DropdownMenu>
             </ScrollView>
