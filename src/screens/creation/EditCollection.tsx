@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useCallback, useContext, useEffect, useRef } from 'react';
 import { StyleSheet, View, Image, ScrollView, Text, Keyboard, StatusBar, TouchableOpacity } from 'react-native';
-import { PageContainer, HxfTextInput, Iconfont, MediaUploader } from '@src/components';
+import { PageContainer, HxfTextInput, Iconfont, MediaUploader, SafeText, OverlayViewer } from '@src/components';
+import ImageViewer from 'react-native-image-zoom-viewer';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { observer, userStore, appStore } from '@src/store';
 import { useMutation, useQuery, GQL, errorMessage } from '@src/apollo';
@@ -91,6 +92,18 @@ const EditCollection = (props: any) => {
         });
     });
 
+    const showImage = useCallback((url) => {
+        const overlayView = (
+            <ImageViewer
+                onSwipeDown={() => OverlayViewer.hide()}
+                imageUrls={[{ url }]}
+                index={0}
+                enableSwipeDown={true}
+            />
+        );
+        OverlayViewer.show(overlayView);
+    }, []);
+
     return (
         <PageContainer
             submitting={loading}
@@ -101,7 +114,7 @@ const EditCollection = (props: any) => {
                     disabled={isDisableButton}
                     style={[styles.publishButton, isDisableButton && styles.disabledButton]}
                     onPress={editCollection}>
-                    <Text style={styles.publishText}>保 存</Text>
+                    <SafeText style={styles.publishText}>保 存</SafeText>
                 </TouchableOpacity>
             }>
             <View style={styles.container}>
@@ -148,7 +161,7 @@ const EditCollection = (props: any) => {
                         </View>
                         <View style={styles.postCover}>
                             {isOriginLogo ? (
-                                <TouchableOpacity onPress={() => showImage(index)} style={styles.uploadView}>
+                                <TouchableOpacity onPress={() => showImage(collection?.logo)} style={styles.uploadView}>
                                     <Image style={styles.videoCover} source={{ uri: collection?.logo }} />
                                     <TouchableOpacity style={styles.close} onPress={removeLogo}>
                                         <Iconfont name="guanbi1" size={pixel(12)} color="#fff" />

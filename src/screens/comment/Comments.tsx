@@ -34,7 +34,9 @@ const Comments = observer((props: Props) => {
     const replyHandler = useCallback(
         (comment) => {
             fancyInputRef.current.focus();
-            setReplyByComment(comment);
+            if (comment?.id > 0) {
+                setReplyByComment(comment);
+            }
         },
         [fancyInputRef],
     );
