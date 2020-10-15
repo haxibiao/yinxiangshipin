@@ -211,56 +211,57 @@ export default observer(
         useAdReward(store, rewardEnable);
 
         return (
-            <View style={[styles.container, style]}>
-                <View style={styles.listContainer}>
-                    <FlatList
-                        ref={listRef}
-                        onLayout={onLayout}
-                        contentContainerStyle={styles.contentContainerStyle}
-                        data={store.data}
-                        initialScrollIndex={initialIndex}
-                        initialNumToRender={1}
-                        bounces={false}
-                        scrollsToTop={false}
-                        pagingEnabled={true}
-                        removeClippedSubviews={true}
-                        showsVerticalScrollIndicator={false}
-                        keyboardShouldPersistTaps="always"
-                        keyExtractor={(item, index) => String(item?.id || index)}
-                        renderItem={renderVideoItem}
-                        getItemLayout={(data, index) => ({
-                            length: store.fullVideoHeight,
-                            offset: store.fullVideoHeight * index,
-                            index,
-                        })}
-                        ListEmptyComponent={listEmpty}
-                        ListFooterComponent={listFooter}
-                        onMomentumScrollEnd={onMomentumScrollEnd}
-                        onViewableItemsChanged={getVisibleRows}
-                        viewabilityConfig={config}
-                        {...flatListProps}
-                    />
-                </View>
-                {/* 金币奖励悬浮球 */}
-                {rewardEnable && adStore.enableWallet && (
-                    <View style={[styles.rewardProgress, rewardStyle]}>
-                        <RewardProgress store={store} />
+            <>
+                <View style={[styles.container, style]}>
+                    <View style={styles.listContainer}>
+                        <FlatList
+                            ref={listRef}
+                            onLayout={onLayout}
+                            contentContainerStyle={styles.contentContainerStyle}
+                            data={store.data}
+                            initialScrollIndex={initialIndex}
+                            initialNumToRender={1}
+                            bounces={false}
+                            scrollsToTop={false}
+                            pagingEnabled={true}
+                            removeClippedSubviews={true}
+                            showsVerticalScrollIndicator={false}
+                            keyboardShouldPersistTaps="always"
+                            keyExtractor={(item, index) => String(item?.id || index)}
+                            renderItem={renderVideoItem}
+                            getItemLayout={(data, index) => ({
+                                length: store.fullVideoHeight,
+                                offset: store.fullVideoHeight * index,
+                                index,
+                            })}
+                            ListEmptyComponent={listEmpty}
+                            ListFooterComponent={listFooter}
+                            onMomentumScrollEnd={onMomentumScrollEnd}
+                            onViewableItemsChanged={getVisibleRows}
+                            viewabilityConfig={config}
+                            {...flatListProps}
+                        />
                     </View>
-                )}
-                {/* 内部视频列表显示评论框 */}
-                {showBottomInput && (
-                    <TouchableOpacity
-                        activeOpacity={1}
-                        style={styles.commentInput}
-                        onPress={() => {
-                            commentRef.current?.slideUp({ autoFocus: true });
-                        }}>
-                        <CommentInput editable={false} />
-                    </TouchableOpacity>
-                )}
-                {/* 评论模态框 */}
+                    {/* 金币奖励悬浮球 */}
+                    {rewardEnable && adStore.enableWallet && (
+                        <View style={[styles.rewardProgress, rewardStyle]}>
+                            <RewardProgress store={store} />
+                        </View>
+                    )}
+                    {/* 内部视频列表显示评论框 */}
+                    {showBottomInput && (
+                        <TouchableOpacity
+                            activeOpacity={1}
+                            style={styles.commentInput}
+                            onPress={() => {
+                                commentRef.current?.slideUp({ autoFocus: true });
+                            }}>
+                            <CommentInput editable={false} />
+                        </TouchableOpacity>
+                    )}
+                </View>
                 <CommentOverlay ref={commentRef} media={store.currentItem} navigation={navigation} />
-            </View>
+            </>
         );
     },
 );
