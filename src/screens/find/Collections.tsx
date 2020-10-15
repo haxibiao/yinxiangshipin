@@ -13,6 +13,13 @@ const LOGO_WIDTH = (CONTENT_WIDTH - pixel(60)) / 3;
 
 function TopRecommendCollections({ navigation, data }) {
     const topRecommend = useMemo(() => data?.recommendCollections, [data]);
+    const topCover = useMemo(
+        () =>
+            topRecommend?.topCover
+                ? { uri: topRecommend?.topCover }
+                : require('@app/assets/images/bg/collection_top_bg.jpg'),
+        [topRecommend],
+    );
     const topCollection = topRecommend?.topCollection;
     const groupA = topRecommend?.recommendCollectionsA;
     const groupB = topRecommend?.recommendCollectionsB;
@@ -22,20 +29,20 @@ function TopRecommendCollections({ navigation, data }) {
                 <TouchableOpacity
                     style={{ marginVertical: pixel(10) }}
                     onPress={() => navigation.navigate('CollectionDetail', { collection: topCollection })}>
-                    <Image style={styles.banner} source={require('@app/assets/images/bg/collection_top_bg.jpg')} />
+                    <Image style={styles.banner} source={topCover} />
                     <View style={styles.bannerLabel}>
                         <Text style={styles.labelText}>精选合集</Text>
                         <Text
-                            style={[styles.labelText, { fontSize: pixel(14), lineHeigh: pixel(18) }]}
+                            style={[styles.labelText, { fontSize: pixel(14), lineHeight: pixel(18) }]}
                             numberOfLines={2}>
-                            {topCollection?.name + topCollection?.description}
+                            {topCollection?.description || topCollection?.name}
                         </Text>
                     </View>
                 </TouchableOpacity>
                 <CollectionGroup
                     groupWidth={CONTENT_WIDTH}
                     style={styles.groupStyle}
-                    groupName="热门推荐"
+                    groupName="热门推荐🔥"
                     collections={groupA}
                     navigation={navigation}
                 />

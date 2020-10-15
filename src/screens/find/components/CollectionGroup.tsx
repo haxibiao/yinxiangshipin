@@ -35,8 +35,11 @@ function Collection({ collection, navigation, logoWidth }) {
                 </LinearGradient>
             </ImageBackground>
             <View style={{ height: pixel(36), marginTop: pixel(6) }}>
-                <SafeText style={styles.collectionName} numberOfLines={2}>
-                    {collection?.name} {collection?.description}
+                <SafeText style={styles.collectionName} numberOfLines={1}>
+                    {collection?.name}
+                </SafeText>
+                <SafeText style={styles.collectionName} numberOfLines={1}>
+                    {collection?.description}
                 </SafeText>
             </View>
         </TouchableOpacity>

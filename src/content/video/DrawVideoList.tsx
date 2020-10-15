@@ -300,10 +300,11 @@ const styles = StyleSheet.create({
         color: '#fff',
     },
     rewardProgress: {
+        opacity: 0.7,
         position: 'absolute',
-        right: pixel(10),
-        top: Theme.statusBarHeight + Theme.NAVBAR_HEIGHT + pixel(70),
-        // bottom: pixel(360 + Theme.HOME_INDICATOR_HEIGHT),
+        right: pixel(12),
+        // top: Theme.statusBarHeight + Theme.NAVBAR_HEIGHT + pixel(70),
+        bottom: pixel(350 + Theme.HOME_INDICATOR_HEIGHT),
     },
     contentCover: {
         ...StyleSheet.absoluteFillObject,

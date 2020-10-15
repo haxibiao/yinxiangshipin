@@ -99,7 +99,7 @@ const RewardProgress = observer(({ store }) => {
                 {progress > 0 && (
                     <Progress.Circle
                         progress={progress / 100}
-                        size={pixel(46)}
+                        size={pixel(45)}
                         borderWidth={0}
                         color="#ff5644"
                         thickness={pixel(3)}

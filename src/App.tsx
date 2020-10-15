@@ -18,6 +18,20 @@ import { Toast } from './components';
 // business manager
 import BusinessManager from './BusinessManager';
 
+//修复部分安卓手机中文字体丢失
+const defaultFontFamily = {
+    ...Platform.select({
+        android: { fontFamily: '' },
+    }),
+};
+const PreRender = Text.render;
+Text.render = function (...args) {
+    const origin = PreRender.call(this, ...args);
+    return React.cloneElement(origin, {
+        style: [defaultFontFamily, origin.props.style],
+    });
+};
+
 const App = observer(() => {
     const client = useClientBuilder(userStore.me?.token);
     // 提前加载数据
