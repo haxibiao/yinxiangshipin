@@ -25,29 +25,34 @@ export async function detectPhotos() {
             const type = String(photos[index]?.node.type).slice(0, 5);
             if (type === 'image') {
                 result = await detectPhotoQRCode(mediaUri);
-            } else if (type === 'video') {
-                // result = await VideoMeta.fetchMeta(mediaUri);
+            } else if (type === 'video' && Platform.OS === 'android') {
+                result = await detectVideoMeta(mediaUri);
             }
-            // console.log('result', type, result);
-            return result || null;
+            if (result) {
+                return result;
+            }
         }
     }
 
-    // function detectVideoMeta(video) {
-    //     return new Promise((resolve, reject) => {
-    //         return VideoMeta.fetchMeta(video)
-    //             .then((res) => {
-    //                 if (res) {
-    //                     resolve(res);
-    //                 } else {
-    //                     resolve(null);
-    //                 }
-    //             })
-    //             .catch((err) => {
-    //                 resolve(null);
-    //             });
-    //     });
-    // }
+    function detectVideoMeta(video) {
+        return new Promise((resolve, reject) => {
+            return VideoMeta.fetchMeta(video)
+                .then((res) => {
+                    // console.log('detectVideoMeta', res);
+                    if (res) {
+                        resolve({
+                            type: 'post',
+                            vid: res,
+                        });
+                    } else {
+                        resolve(null);
+                    }
+                })
+                .catch((err) => {
+                    resolve(null);
+                });
+        });
+    }
 
     function detectPhotoQRCode(photo) {
         return new Promise((resolve, reject) => {

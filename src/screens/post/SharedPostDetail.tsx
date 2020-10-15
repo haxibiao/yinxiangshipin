@@ -25,6 +25,7 @@ import CommentItem from './components/CommentItem';
 
 export default observer((props) => {
     const { navigation, route } = props;
+    const vid = route.params?.vid;
     const post_id = route.params?.post_id;
     const user_id = route.params?.user_id;
     const isSelf = userStore.me.id === user_id;
@@ -44,13 +45,14 @@ export default observer((props) => {
     }, []);
 
     // 动态详情
-    const { data: postData } = useQuery(GQL.postQuery, {
+    const { data: postData } = useQuery(vid ? GQL.postByVid : GQL.postQuery, {
         variables: { id: post_id },
         fetchPolicy: 'network-only',
     });
     const media = useMemo(() => {
-        if (postData?.post?.id) {
-            return observable(postData?.post);
+        const post = postData?.post || postData?.postByVid;
+        if (post?.id) {
+            return observable(post);
         }
         return {};
     }, [postData]);
