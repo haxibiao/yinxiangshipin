@@ -10,22 +10,41 @@ const itemWidth = (Device.WIDTH - pixel(6) * 3) / 2;
 const minVideoHeight = itemWidth * 0.6;
 const maxVideoHeight = itemWidth * 1.4;
 
-function calculatorHeight({ item }) {
-    if (item.video && item.video.width) {
-        if (item.video.width >= item.video.height) {
-            return Math.max(minVideoHeight, (itemWidth / item.video.width) * item.video.height);
+function calculatorImageHeight({ item }) {
+    const video = item.video;
+    const images = item.images;
+    if (video?.width) {
+        if (video?.width >= video?.height) {
+            return Math.max(minVideoHeight, (itemWidth / video?.width) * video?.height);
         } else {
-            return Math.min(maxVideoHeight, (itemWidth / item.video.width) * item.video.height);
+            return Math.min(maxVideoHeight, (itemWidth / video?.width) * video?.height);
         }
-    } else if (Array.isArray(item.images) && item.images.length > 0) {
-        if (item.images[0].width >= item.images[0].height) {
-            return Math.max(minVideoHeight, (itemWidth / item.images[0].width) * item.images[0].height);
+    } else if (images?.length > 0) {
+        const firstImage = images[0];
+        if (firstImage?.width >= firstImage?.height) {
+            return Math.max(minVideoHeight, (itemWidth / firstImage?.width) * firstImage?.height);
         } else {
-            return Math.min(maxVideoHeight, (itemWidth / item.images[0].width) * item.images[0].height);
+            return Math.min(maxVideoHeight, (itemWidth / firstImage?.width) * firstImage?.height);
         }
     } else {
         return Math.min(maxVideoHeight, itemWidth);
     }
+}
+
+// function calculatorContentHeight({ item }) {
+//     const content = item?.content || item?.description;
+//     const len = content?.length;
+//     // console.log('====================================');
+//     // console.log('len', itemWidth - pixel(10), font(12) * len, font(12), content, len);
+//     // console.log('====================================');
+//     const line = Math.ceil((font(12) * len) / (itemWidth - pixel(10)));
+//     return line >= 2 ? font(18) * 2 : font(18) * line;
+// }
+
+function calculatorItemHeight({ item }) {
+    const imageHeight = calculatorImageHeight({ item });
+    // const contentHeight = calculatorContentHeight({ item });
+    return imageHeight;
 }
 
 export default observer((props: any) => {
@@ -95,7 +114,7 @@ export default observer((props: any) => {
     }, [error, loading, refetch, publicPosts]);
 
     const renderItem = useCallback(({ item, index }) => {
-        return <PostItem post={item} itemWidth={itemWidth} itemHeight={calculatorHeight({ item })} />;
+        return <PostItem post={item} itemWidth={itemWidth} itemHeight={calculatorImageHeight({ item })} />;
     }, []);
 
     return (
@@ -110,8 +129,8 @@ export default observer((props: any) => {
             refreshing={!!currentPage && loading}
             onRefresh={refetch}
             ListEmptyComponent={ListEmptyComponent}
-            keyExtractor={(item) => `id${item.id}`}
-            getHeightForItem={calculatorHeight}
+            keyExtractor={(item, index) => `${item.id * index}`}
+            getHeightForItem={calculatorItemHeight}
             onEndReachedThreshold={0.1}
             onEndReached={onEndReached}
             onMomentumScrollBegin={onMomentumScrollBegin}

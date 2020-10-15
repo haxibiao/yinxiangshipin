@@ -18,7 +18,7 @@ const Icons = {
 const PostItem = observer((props: Props) => {
     const navigation = useNavigation();
     const { post, itemWidth, itemHeight } = props;
-    const { content, description, liked, count_likes, user, images, video } = post;
+    const { content, description, liked, count_likes, user, images, video, tags } = post;
 
     const renderCover = useMemo(() => {
         let cover = 'http://cos.haxibiao.com/images/5f83d367ae609.jpeg';
@@ -45,6 +45,18 @@ const PostItem = observer((props: Props) => {
         );
     }, [images, video]);
 
+    const tagsName = useMemo(() => {
+        const tagsData = tags?.data;
+        if (tagsData?.length > 0) {
+            return tagsData.map((tag: any) => (
+                <SafeText key={tag.id} style={styles.tagName}>
+                    {` #${tag.name} `}
+                </SafeText>
+            ));
+        }
+        return null;
+    }, []);
+
     return (
         <TouchableOpacity
             activeOpacity={1}
@@ -52,9 +64,10 @@ const PostItem = observer((props: Props) => {
             onPress={() => navigation.navigate('PostDetail', { post })}>
             {renderCover}
             <View style={styles.bottomContent}>
-                <View style={{ marginBottom: pixel(6) }}>
+                <View style={{ marginBottom: pixel(6), minHeight: font(36) }}>
                     <SafeText style={styles.contentText} numberOfLines={2}>
-                        {content || description}
+                        {description || content}
+                        {tagsName}
                     </SafeText>
                 </View>
                 <Row style={styles.metaList}>
@@ -93,7 +106,7 @@ const styles = StyleSheet.create({
     },
     contentText: {
         fontSize: font(12),
-        lineHeight: pixel(18),
+        lineHeight: font(18),
         fontWeight: 'bold',
         color: '#212121',
     },
