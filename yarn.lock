@@ -7483,8 +7483,8 @@ react-native-view-shot@^3.1.2:
   integrity sha512-9u9fPtp6a52UMoZ/UCPrCjKZk8tnkI9To0Eh6yYnLKFEGkRZ7Chm6DqwDJbYJHeZrheCCopaD5oEOnRqhF4L2Q==
 
 "react-native-vod@git+http://code.haxibiao.cn/packages/react-native-vod.git":
-  version "1.0.6"
-  resolved "git+http://code.haxibiao.cn/packages/react-native-vod.git#281077fc9f2296878a32e1a03fd2ac750abf359f"
+  version "1.0.7"
+  resolved "git+http://code.haxibiao.cn/packages/react-native-vod.git#3e293817a6708f1c27710c714e95044731cf1d6f"
 
 react-native-webp-format@^1.1.2:
   version "1.1.2"
