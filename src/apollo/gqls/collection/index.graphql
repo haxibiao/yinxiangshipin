@@ -3,6 +3,7 @@
 # 自定义的推荐合集
 query recommendCollectionsQuery {
     recommendCollections {
+        topCover
         topCollection {
             id
             logo
