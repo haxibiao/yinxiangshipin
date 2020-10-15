@@ -399,6 +399,66 @@ query postQuery($id: Int!) {
     }
 }
 
+query postByVid($id: String!) {
+    postByVid(vid: $id) {
+        id
+        spider {
+            id
+        }
+        content
+        description
+        status
+        liked
+        count_likes
+        count_comments
+        review_id
+        review_day
+        is_ad
+        created_at
+        current_episode
+        user {
+            id
+            name
+            avatar
+            followed_status
+            gender
+            age
+            introduction
+        }
+        tags {
+            data {
+                id
+                name
+            }
+        }
+        images {
+            id
+            url
+            width
+            height
+        }
+        video {
+            id
+            url
+            cover
+            duration
+            width
+            height
+        }
+        collections {
+            id
+            logo
+            name
+            description
+            followed
+            count_articles
+            count_follows
+            count_views
+            updated_to_episode
+        }
+    }
+}
+
 #文章详情
 query articleQuery($id: Int!) {
     article(id: $id) {

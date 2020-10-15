@@ -63,11 +63,11 @@ export default observer(function BusinessManager() {
     // 获取分享图片二维码信息跳转详情页
     const detectSharePhoto = useCallback(async () => {
         const photoInfo = await detectPhotos();
-        if (photoInfo?.type == 'post' && photoInfo?.post_id) {
+        if (photoInfo?.type == 'post' && (photoInfo?.post_id || photoInfo?.vid)) {
             setTimeout(() => {
                 PopOverlay({
-                    content: '检测到有被其他用户分享的精彩内容，是否跳转页面查看内容详情?',
-                    rightContent: '查看',
+                    content: '检测到被其他用户分享的动态，是否查看内容?',
+                    rightContent: '查看详情',
                     onConfirm: async () => {
                         appStore.detectedQRCodeRecord.push(photoInfo?.qrInfo);
                         appStore.setAppStorage('detectedQRCodeRecord', appStore.detectedQRCodeRecord);
