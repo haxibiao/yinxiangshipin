@@ -156,7 +156,7 @@ const AttendanceBook = (): JSX.Element => {
                 elem.checked !== false &&
                 elem.reward_rate === 1 &&
                 new Date(elem.date).getDay() === new Date().getDay() &&
-                !appStore.disableAd
+                adStore.enableAd
             ) {
                 return <View key={elem + index}>{doubleCheckInReward}</View>;
             }
