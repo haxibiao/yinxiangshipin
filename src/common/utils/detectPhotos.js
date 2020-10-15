@@ -26,7 +26,7 @@ export async function detectPhotos() {
             if (type === 'image') {
                 result = await detectPhotoQRCode(mediaUri);
             } else if (type === 'video' && Platform.OS === 'android') {
-                result = await detectVideoMeta(mediaUri);
+                // result = await detectVideoMeta(mediaUri);
             }
             if (result) {
                 return result;
