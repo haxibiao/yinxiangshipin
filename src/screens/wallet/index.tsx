@@ -117,15 +117,18 @@ export default observer((props: any) => {
     });
 
     // 未提现过的用户
-    const noWithdrawal = useMemo(
-        () => userProfile?.gold >= userProfile?.exchangeRate * 0.3 && userProfile?.wallet?.total_withdraw_amount <= 0,
-        [userProfile],
-    );
+    const noWithdrawal = useMemo(() => userProfile?.gold >= 30 && userProfile?.wallet?.total_withdraw_amount <= 0, [
+        userProfile,
+    ]);
     // 设置提现金额
     const setWithdrawAmount = useCallback(
         (value) => {
             if (value == 0.3 && noWithdrawal) {
-                setAmount(value);
+                if (userProfile?.gold >= userProfile?.exchangeRate * 0.3) {
+                    setAmount(value);
+                } else {
+                    Toast.show({ content: `${Config.goldAlias}不足，去做任务吧` });
+                }
             } else {
                 // 正常流程
                 if (userProfile.balance < value) {
