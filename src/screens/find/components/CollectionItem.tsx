@@ -16,9 +16,9 @@ export default function CollectionItem({ collection, navigation, style, logoWidt
                 </ImageBackground>
                 <View style={styles.collectionInfo}>
                     <View>
-                        <Text style={styles.collectionName} numberOfLines={1}>
+                        <SafeText style={styles.collectionName} numberOfLines={1}>
                             {collection?.name}
-                        </Text>
+                        </SafeText>
                     </View>
                     <SafeText style={styles.description} numberOfLines={1}>
                         {collection?.description}

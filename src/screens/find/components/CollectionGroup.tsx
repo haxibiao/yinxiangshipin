@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { StyleSheet, View, Text, Image, TouchableOpacity, ImageBackground } from 'react-native';
-import { Iconfont } from '@src/components';
+import { Iconfont, SafeText } from '@src/components';
 import { BoxShadow } from 'react-native-shadow';
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -29,15 +29,15 @@ function Collection({ collection, navigation, logoWidth }) {
                     end={{ x: 0, y: 1 }}
                     colors={['rgba(000,000,000,0.2)', 'rgba(000,000,000,0.1)', 'rgba(000,000,000,0)']}>
                     <Iconfont name="bofang1" size={pixel(10)} color={'#fff'} style={{ opacity: 0.8 }} />
-                    <Text style={styles.countViews} numberOfLines={2}>
+                    <SafeText style={styles.countViews} numberOfLines={1}>
                         {Helper.count((Number(collection?.count_views) + Number(collection?.id)) * 100)}
-                    </Text>
+                    </SafeText>
                 </LinearGradient>
             </ImageBackground>
             <View style={{ height: pixel(36), marginTop: pixel(6) }}>
-                <Text style={styles.collectionName} numberOfLines={2}>
+                <SafeText style={styles.collectionName} numberOfLines={2}>
                     {collection?.name} {collection?.description}
-                </Text>
+                </SafeText>
             </View>
         </TouchableOpacity>
     );

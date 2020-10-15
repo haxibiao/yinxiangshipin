@@ -1,10 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, TouchableOpacity, Image, Text } from 'react-native';
-
-import { Avatar, PageContainer } from '@src/components';
-
+import { Avatar, PageContainer, SafeText } from '@src/components';
 import { userStore } from '@src/store';
-
 import { Query, GQL } from '@src/apollo';
 
 const WithdrawDetail = (props) => {
@@ -29,41 +26,41 @@ const WithdrawDetail = (props) => {
                             <View style={{ paddingHorizontal: pixel(15) }}>
                                 <View style={styles.header}>
                                     <Avatar size={38} source={userStore.me.avatar} />
-                                    <Text style={styles.name}>{userStore.me.name}</Text>
+                                    <SafeText style={styles.name}>{userStore.me.name}</SafeText>
                                 </View>
                                 <View style={styles.info}>
-                                    <Text style={styles.money}>{withdraw.amount}</Text>
+                                    <SafeText style={styles.money}>{withdraw.amount}</SafeText>
                                     {withdraw.status === 1 ? (
-                                        <Text
+                                        <SafeText
                                             style={{
                                                 fontSize: font(16),
                                                 color: Theme.teaGreen,
                                             }}>
                                             交易成功
-                                        </Text>
+                                        </SafeText>
                                     ) : (
-                                        <Text
+                                        <SafeText
                                             style={{
                                                 fontSize: font(16),
                                                 color: '#FF4C4C',
                                             }}>
                                             交易失败
-                                        </Text>
+                                        </SafeText>
                                     )}
                                 </View>
                                 <View style={styles.row}>
-                                    <Text style={styles.textLeft}>提现平台 </Text>
-                                    <Text style={styles.textRight}>{item.platform} </Text>
+                                    <SafeText style={styles.textLeft}>提现平台 </SafeText>
+                                    <SafeText style={styles.textRight}>{item.platform} </SafeText>
                                 </View>
                                 <View style={styles.row}>
-                                    <Text style={styles.textLeft}>提现单号 </Text>
-                                    <Text style={styles.textRight}>
+                                    <SafeText style={styles.textLeft}>提现单号 </SafeText>
+                                    <SafeText style={styles.textRight}>
                                         {withdraw.status === 1 ? withdraw.biz_no : '无'}
-                                    </Text>
+                                    </SafeText>
                                 </View>
                                 <View style={styles.row}>
-                                    <Text style={styles.textLeft}>转帐备注 </Text>
-                                    <Text style={styles.textRight}>{`${Config.goldAlias}提现`} </Text>
+                                    <SafeText style={styles.textLeft}>转帐备注 </SafeText>
+                                    <SafeText style={styles.textRight}>{`${Config.goldAlias}提现`} </SafeText>
                                 </View>
 
                                 {withdraw.to_platform == 'Alipay' && (
@@ -74,13 +71,13 @@ const WithdrawDetail = (props) => {
                                                 paddingBottom: pixel(15),
                                             },
                                         ]}>
-                                        <Text style={styles.textLeft}>收款账户</Text>
-                                        <Text style={styles.textRight}> {withdraw.to_account}</Text>
+                                        <SafeText style={styles.textLeft}>收款账户</SafeText>
+                                        <SafeText style={styles.textRight}> {withdraw.to_account}</SafeText>
                                     </View>
                                 )}
                                 <View style={styles.borderRow}>
-                                    <Text style={styles.textLeft}>提现时间</Text>
-                                    <Text style={styles.textRight}>{withdraw.created_at}</Text>
+                                    <SafeText style={styles.textLeft}>提现时间</SafeText>
+                                    <SafeText style={styles.textRight}>{withdraw.created_at}</SafeText>
                                 </View>
                             </View>
                             <View
@@ -91,9 +88,11 @@ const WithdrawDetail = (props) => {
                                         paddingHorizontal: pixel(15),
                                     },
                                 ]}>
-                                <Text style={styles.textLeft}>订单号</Text>
+                                <SafeText style={styles.textLeft}>订单号</SafeText>
                                 <View style={{ flex: 1, marginLeft: 20 }}>
-                                    <Text style={styles.text}>{withdraw.status === 1 ? withdraw.trade_no : '无'}</Text>
+                                    <SafeText style={styles.text}>
+                                        {withdraw.status === 1 ? withdraw.trade_no : '无'}
+                                    </SafeText>
                                 </View>
                             </View>
 
@@ -104,15 +103,16 @@ const WithdrawDetail = (props) => {
                                     borderTopColor: '#F0F0F0',
                                 }}>
                                 <View style={styles.footer}>
-                                    <Text
+                                    <SafeText
                                         style={[
                                             styles.textLeft,
                                             {
                                                 lineHeight: font(22),
                                             },
                                         ]}>
-                                        回执信息 {'   '} <Text style={[styles.textRight]}> {withdraw.remark}</Text>
-                                    </Text>
+                                        回执信息 {'   '}{' '}
+                                        <SafeText style={[styles.textRight]}> {withdraw.remark}</SafeText>
+                                    </SafeText>
                                 </View>
                             </View>
                         </View>
