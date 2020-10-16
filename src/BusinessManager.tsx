@@ -111,10 +111,10 @@ export default observer(function BusinessManager() {
                 // 广告打开，并且接口响应时间小于3000毫秒
                 if (result?.ad === 'on' && responseTime.current <= 3000) {
                     // 启动个开屏广告
-                    // ad.startSplash({
-                    //     appid: adStore.tt_appid,
-                    //     codeid: adStore.codeid_splash,
-                    // });
+                    ad.startSplash({
+                        appid: adStore.tt_appid,
+                        codeid: adStore.codeid_splash,
+                    });
                 }
             })
             .catch((err) => {
