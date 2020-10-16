@@ -114,7 +114,7 @@ export const VideoCaptureData = observer(({ client, shareLink, shareBody, onSucc
     );
 });
 
-const CARD_WIDTH = percent(84) > pixel(300) ? pixel(300) : percent(84);
+const CARD_WIDTH = percent(80) > pixel(290) ? pixel(290) : percent(80);
 
 const styles = StyleSheet.create({
     container: {
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     shareBtn: {
         marginHorizontal: pixel(20),
         marginBottom: pixel(15),
-        height: pixel(42),
+        height: pixel(40),
         borderRadius: pixel(4),
         backgroundColor: '#FE1966',
         justifyContent: 'center',

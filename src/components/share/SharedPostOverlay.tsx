@@ -42,7 +42,7 @@ const SharedPost = ({ url, type, onPress, onClose }: Props) => {
                 <TouchableOpacity style={styles.shareBtn} onPress={onPress}>
                     <Text style={styles.shareBtnText}>打开看看</Text>
                 </TouchableOpacity>
-                <Text style={styles.tips}>来自印象视频好友分享</Text>
+                <Text style={styles.tips}>来自印象视频的好友分享</Text>
             </View>
         </ScrollView>
     );

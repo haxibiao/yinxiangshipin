@@ -1,4 +1,4 @@
-import React, { useRef, useMemo, useEffect, useCallback } from 'react';
+import React, { useRef, useMemo, useEffect, useCallback, useState } from 'react';
 import { StyleSheet, Platform } from 'react-native';
 import { Overlay } from 'teaset';
 import { when } from 'mobx';
@@ -27,6 +27,12 @@ when(
 );
 
 export default observer(function BusinessManager() {
+    // app准备好了：recalled userStore、用户协议
+    const appIsReady = useMemo(() => userStore.launched && appStore.guides[UserAgreementGuide], [
+        userStore.launched,
+        appStore.guides[UserAgreementGuide],
+    ]);
+    const [detected, setDetected] = useState(false);
     // 粘贴板抖音采集
     const [shareContent] = useClipboardLink();
     const showShareContentModal = useMemo(() => {
@@ -58,36 +64,54 @@ export default observer(function BusinessManager() {
     }, []);
     // 显示采集模态框
     useEffect(() => {
-        if (userStore.login && shareContent && appStore.currentRouteName !== 'CreatePost') {
+        if (detected && userStore.login && shareContent && appStore.currentRouteName !== 'CreatePost') {
             showShareContentModal(shareContent);
         }
-    }, [shareContent]);
+    }, [detected, shareContent]);
 
     // 获取分享图片二维码/视频vid信息，跳转详情页
     const detectPhotoAlbum = useCallback(async () => {
+        let timer;
         const photoInfo = await detectPhotos();
+        if (!photoInfo) {
+            setDetected(true);
+        }
+        function delaySetDetected() {
+            timer = setTimeout(() => {
+                setDetected(true);
+            }, 5000);
+        }
         function onPress() {
+            delaySetDetected();
             appStore.detectedFileInfo.push(photoInfo?.url);
             appStore.setAppStorage('detectedFileInfo', appStore.detectedFileInfo);
             authNavigate('SharedPostDetail', { ...photoInfo });
         }
         function onClose() {
+            delaySetDetected();
             appStore.detectedFileInfo.push(photoInfo?.url);
             appStore.setAppStorage('detectedFileInfo', appStore.detectedFileInfo);
         }
         if (photoInfo?.type == 'post' && (photoInfo?.post_id || photoInfo?.vid)) {
             SharedPostOverlay.show({ url: photoInfo?.url, type: photoInfo?.fileType, onPress, onClose });
         }
+        return () => {
+            if (timer) {
+                clearTimeout(timer);
+            }
+        };
     }, []);
     useEffect(() => {
         let timer;
         // App初始化完成，同意了用户协议
-        if (userStore.launched && appStore.guides[UserAgreementGuide]) {
-            const unableNewUserTask = !userStore?.me?.id || !(adStore.enableAd && adStore.enableWallet);
+        if (appIsReady) {
+            const unableShowNewUserTask = !userStore?.me?.id || !(adStore.enableAd && adStore.enableWallet);
             timer = setTimeout(() => {
                 // 新人任务引导完成 / 无法展示新人用户引导
-                if (appStore.guides.NewUserTask || unableNewUserTask) {
+                if (appStore.guides.NewUserTask || unableShowNewUserTask) {
                     detectPhotoAlbum();
+                } else {
+                    setDetected(true);
                 }
             }, 2000);
         }
@@ -96,7 +120,7 @@ export default observer(function BusinessManager() {
                 clearTimeout(timer);
             }
         };
-    }, [userStore.launched, appStore.guides[UserAgreementGuide], appStore.guides.NewUserTask]);
+    }, [appIsReady, appStore.guides.NewUserTask]);
 
     // 获取APP的开启配置(广告和钱包)
     const timer = useRef(); // 防止获取配置超时
