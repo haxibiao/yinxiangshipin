@@ -21,12 +21,15 @@ export async function detectPhotos() {
     async function processPhotos(photos: string[]) {
         let result;
         for (let index = 0; index < photos.length; index++) {
-            const mediaUri = photos[index]?.node.image.uri;
+            const mediaUrl = photos[index]?.node.image.uri;
             const type = String(photos[index]?.node.type).slice(0, 5);
+            if (appStore.detectedFileInfo.includes(mediaUrl)) {
+                continue;
+            }
             if (type === 'image') {
-                result = await detectPhotoQRCode(mediaUri);
+                result = await detectPhotoQRCode(mediaUrl);
             } else if (type === 'video' && Platform.OS === 'android') {
-                result = await detectVideoMeta(mediaUri);
+                result = await detectVideoMeta(mediaUrl);
             }
             if (result) {
                 return result;
@@ -34,15 +37,17 @@ export async function detectPhotos() {
         }
     }
 
-    function detectVideoMeta(video) {
+    function detectVideoMeta(videoUrl) {
         return new Promise((resolve, reject) => {
-            return VideoMeta.fetchMeta(video)
+            return VideoMeta.fetchMeta(videoUrl)
                 .then((res) => {
                     // console.log('detectVideoMeta', video, res);
                     if (res) {
                         resolve({
                             type: 'post',
                             vid: res,
+                            url: videoUrl,
+                            fileType: 'video',
                         });
                     } else {
                         resolve(null);
@@ -54,11 +59,11 @@ export async function detectPhotos() {
         });
     }
 
-    function detectPhotoQRCode(photo) {
+    function detectPhotoQRCode(photoUrl) {
         return new Promise((resolve, reject) => {
-            QRCodeImage.decode(photo, (res) => {
+            QRCodeImage.decode(photoUrl, (res) => {
                 const qrInfo = String(res);
-                if (qrInfo.indexOf('http') !== -1 && !appStore.detectedQRCodeRecord.includes(qrInfo)) {
+                if (qrInfo.indexOf('http') !== -1) {
                     const params = parseQuery(qrInfo);
                     // https://yxsp.haxifang.cn/share/post/10394?post_id=2&user_id=1
                     // { post_id, user_id }
@@ -67,13 +72,15 @@ export async function detectPhotos() {
                             type: 'post',
                             post_id: params?.post_id,
                             user_id: params?.user_id,
-                            qrInfo,
+                            url: photoUrl,
+                            fileType: 'image',
                         });
                     } else if (qrInfo.indexOf('/user/') !== -1 && params?.user_id) {
                         resolve({
                             type: 'user',
                             user_id: user_id,
-                            qrInfo,
+                            url: photoUrl,
+                            fileType: 'image',
                         });
                     } else {
                         resolve(null);

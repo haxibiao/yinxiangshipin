@@ -46,7 +46,7 @@ export default observer((props) => {
 
     // 动态详情
     const { data: postData } = useQuery(vid ? GQL.postByVid : GQL.postQuery, {
-        variables: { id: post_id },
+        variables: { id: vid ? vid : post_id },
         fetchPolicy: 'network-only',
     });
     const media = useMemo(() => {

@@ -10,10 +10,13 @@ import { useUserAgreement, detectPhotos } from './common';
 import { useClipboardLink, VideoCaptureData } from './content';
 import { PopOverlay, BeginnerGuidance } from './components';
 import NewUserTaskGuidance from './screens/guidance/NewUserTaskGuidance';
+import SharedPostOverlay from './components/share/SharedPostOverlay';
+
+const UserAgreementGuide = 'UserAgreementGuide' + Config.Version;
 
 // 监听新用户登录
 when(
-    () => adStore.enableAd && adStore.enableWallet && userStore?.me?.id && userStore.me.agreement,
+    () => adStore.enableAd && adStore.enableWallet && userStore?.me?.id && appStore.guides[UserAgreementGuide],
     () => {
         // 新手指导
         BeginnerGuidance({
@@ -60,23 +63,40 @@ export default observer(function BusinessManager() {
         }
     }, [shareContent]);
 
-    // 获取分享图片二维码信息跳转详情页
-    const detectSharePhoto = useCallback(async () => {
+    // 获取分享图片二维码/视频vid信息，跳转详情页
+    const detectPhotoAlbum = useCallback(async () => {
         const photoInfo = await detectPhotos();
+        function onPress() {
+            appStore.detectedFileInfo.push(photoInfo?.url);
+            appStore.setAppStorage('detectedFileInfo', appStore.detectedFileInfo);
+            authNavigate('SharedPostDetail', { ...photoInfo });
+        }
+        function onClose() {
+            appStore.detectedFileInfo.push(photoInfo?.url);
+            appStore.setAppStorage('detectedFileInfo', appStore.detectedFileInfo);
+        }
         if (photoInfo?.type == 'post' && (photoInfo?.post_id || photoInfo?.vid)) {
-            setTimeout(() => {
-                PopOverlay({
-                    content: '检测到被其他用户分享的动态，是否查看内容?',
-                    rightContent: '查看详情',
-                    onConfirm: async () => {
-                        appStore.detectedQRCodeRecord.push(photoInfo?.qrInfo);
-                        appStore.setAppStorage('detectedQRCodeRecord', appStore.detectedQRCodeRecord);
-                        authNavigate('SharedPostDetail', { ...photoInfo });
-                    },
-                });
-            }, 5000);
+            SharedPostOverlay.show({ url: photoInfo?.url, type: photoInfo?.fileType, onPress, onClose });
         }
     }, []);
+    useEffect(() => {
+        let timer;
+        // App初始化完成，同意了用户协议
+        if (userStore.launched && appStore.guides[UserAgreementGuide]) {
+            const unableNewUserTask = !userStore?.me?.id || !(adStore.enableAd && adStore.enableWallet);
+            timer = setTimeout(() => {
+                // 新人任务引导完成 / 无法展示新人用户引导
+                if (appStore.guides.NewUserTask || unableNewUserTask) {
+                    detectPhotoAlbum();
+                }
+            }, 2000);
+        }
+        return () => {
+            if (timer) {
+                clearTimeout(timer);
+            }
+        };
+    }, [userStore.launched, appStore.guides[UserAgreementGuide], appStore.guides.NewUserTask]);
 
     // 获取APP的开启配置(广告和钱包)
     const timer = useRef(); // 防止获取配置超时
@@ -103,7 +123,7 @@ export default observer(function BusinessManager() {
     }, []);
 
     // 显示用户协议
-    useUserAgreement();
+    useUserAgreement(UserAgreementGuide);
 
     useEffect(() => {
         timer.current = setInterval(() => {
@@ -111,8 +131,6 @@ export default observer(function BusinessManager() {
         }, 100);
         // 获取广告、钱包配置
         fetchConfig();
-        // 解析相册图片二维码
-        detectSharePhoto();
         //清除定时器
         return () => {
             clearInterval(timer.current);

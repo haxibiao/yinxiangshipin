@@ -16,7 +16,7 @@ export interface ItemKeys {
     searchRecord: string;
     spiderVideoTaskGuided: string;
     isLocalSpiderVideo: string;
-    detectedQRCodeRecord: string;
+    detectedFileInfo: string;
     bindAccountRemind: string;
     disabledBindAccount: string;
 }
@@ -33,7 +33,7 @@ export const Keys = {
     searchRecord: 'searchRecord',
     spiderVideoTaskGuided: 'spiderVideoTaskGuided',
     isLocalSpiderVideo: 'isLocalSpiderVideo',
-    detectedQRCodeRecord: 'detectedQRCodeRecord',
+    detectedFileInfo: 'detectedFileInfo',
     bindAccountRemind: 'bindAccountRemind',
     disabledBindAccount: 'disabledBindAccount',
 } as const;
