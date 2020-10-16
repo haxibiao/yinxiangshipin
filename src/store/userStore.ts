@@ -77,12 +77,6 @@ class UserStore {
         this.me.avatar = avatarUrl;
         Storage.setItem(Keys.me, this.me);
     }
-
-    @action.bound
-    changeUserStatus(status: boolean) {
-        this.me.isNewUser = status;
-        Storage.setItem(Keys.me, this.me);
-    }
 }
 
 export default new UserStore();

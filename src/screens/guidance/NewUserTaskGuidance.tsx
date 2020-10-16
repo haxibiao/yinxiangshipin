@@ -4,12 +4,10 @@
  */
 import React, { useState, useMemo } from 'react';
 import { StyleSheet, Text, View, Image, TouchableWithoutFeedback } from 'react-native';
-import { userStore } from '@src/store';
 import { authNavigate } from '@src/router';
 
 function NewUserTaskGuidance({ onDismiss }) {
     const [step, setStep] = useState(0);
-    const me = useMemo(() => userStore.me, [userStore]);
     const guidesView = useMemo(() => {
         return [
             <TouchableWithoutFeedback
@@ -38,7 +36,6 @@ function NewUserTaskGuidance({ onDismiss }) {
             <TouchableWithoutFeedback
                 key={3}
                 onPress={() => {
-                    userStore.changeUserStatus(false);
                     onDismiss();
                 }}>
                 <Image

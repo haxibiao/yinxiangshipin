@@ -7,7 +7,7 @@
 import React from 'react';
 import { StyleSheet, View, TouchableWithoutFeedback, Text, BackHandler } from 'react-native';
 import { Overlay } from 'teaset';
-import { Storage } from '@src/store';
+import { Storage, appStore } from '@src/store';
 
 interface Props {
     guidanceKey: string; //指导标识
@@ -53,7 +53,7 @@ export default (props: Props) => {
     (async function () {
         // OverlayKey = Overlay.show(overlayView);
         const result = await Storage.getItem(guidanceType);
-        console.log('result', result);
+        appStore.guides[guidanceKey] = result;
         if (!result) {
             OverlayKey = Overlay.show(overlayView);
             if (Device.Android) {
@@ -65,7 +65,10 @@ export default (props: Props) => {
     })();
 
     function handleDismiss() {
-        recordable && Storage.setItem(guidanceType, JSON.stringify({}));
+        if (recordable) {
+            appStore.guides[guidanceKey] = true;
+            Storage.setItem(guidanceType, JSON.stringify({}));
+        }
         removeBackListener();
         Overlay.hide(OverlayKey);
     }

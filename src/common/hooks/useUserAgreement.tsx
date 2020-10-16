@@ -1,10 +1,9 @@
 import React, { useRef, useMemo, useCallback, useEffect } from 'react';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, BackHandler } from 'react-native';
 import { Overlay } from 'teaset';
-import { Storage, userStore } from '@src/store';
-const UserAgreementGuide = 'UserAgreementGuide' + Config.Version;
+import { Storage, userStore, appStore } from '@src/store';
 
-export const useUserAgreement = () => {
+export const useUserAgreement = (guideKey) => {
     const backListener = useRef();
     const OverlayKey = useRef();
     const isAgreed = useRef(true);
@@ -36,7 +35,8 @@ export const useUserAgreement = () => {
 
     useEffect(() => {
         (async function () {
-            isAgreed.current = await Storage.getItem(UserAgreementGuide);
+            isAgreed.current = await Storage.getItem(guideKey);
+            appStore.guides[guideKey] = isAgreed.current;
             addBackListener();
             showOverlay();
         })();
@@ -50,10 +50,10 @@ export const useUserAgreement = () => {
 
     const agreement = useCallback(() => {
         isAgreed.current = true;
-        userStore.me.agreement = true;
+        appStore.guides[guideKey] = isAgreed.current;
         hideOverlay();
         removeBackListener();
-        Storage.setItem(UserAgreementGuide, JSON.stringify({}));
+        Storage.setItem(guideKey, JSON.stringify({}));
     }, []);
 
     const content = useMemo(() => {
