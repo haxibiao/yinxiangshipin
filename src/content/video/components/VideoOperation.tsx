@@ -88,19 +88,19 @@ const VideoOperation = (props: any) => {
     const operation = useMemo(
         () => ({
             下载: {
-                image: require('@app/assets/images/more_video_download.png'),
+                image: require('@app/assets/images/operation/more_video_download.png'),
                 callback: downloadVideo,
             },
             举报: {
-                image: require('@app/assets/images/more_report.png'),
+                image: require('@app/assets/images/operation/more_report.png'),
                 callback: reportArticle,
             },
             删除: {
-                image: require('@app/assets/images/more_delete.png'),
+                image: require('@app/assets/images/operation/more_delete.png'),
                 callback: deleteArticle,
             },
             不感兴趣: {
-                image: require('@app/assets/images/more_dislike.png'),
+                image: require('@app/assets/images/operation/more_dislike.png'),
                 callback: dislike,
             },
         }),

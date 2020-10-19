@@ -45,7 +45,10 @@ class CollectionShareOverlay {
                                 }
                             }}
                             style={{ alignItems: 'center' }}>
-                            <Image source={require('@app/assets/images/share_wx.png')} style={styles.imageStyle} />
+                            <Image
+                                source={require('@app/assets/images/share/share_wx.png')}
+                                style={styles.imageStyle}
+                            />
 
                             <Text style={{ color: Theme.grey, fontSize: 12 }}>微信好友</Text>
                         </TouchableOpacity>
@@ -74,7 +77,10 @@ class CollectionShareOverlay {
                                 }
                             }}
                             style={{ alignItems: 'center' }}>
-                            <Image source={require('@app/assets/images/share_pyq.png')} style={styles.imageStyle} />
+                            <Image
+                                source={require('@app/assets/images/share/share_pyq.png')}
+                                style={styles.imageStyle}
+                            />
                             <Text style={{ color: Theme.grey, fontSize: 12 }}>朋友圈</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
@@ -93,7 +99,10 @@ class CollectionShareOverlay {
                                 // }
                             }}
                             style={{ alignItems: 'center' }}>
-                            <Image source={require('@app/assets/images/share_qq.png')} style={styles.imageStyle} />
+                            <Image
+                                source={require('@app/assets/images/share/share_qq.png')}
+                                style={styles.imageStyle}
+                            />
                             <Text style={{ color: Theme.grey, fontSize: 12 }}>QQ好友</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
@@ -111,7 +120,10 @@ class CollectionShareOverlay {
                                 // }
                             }}
                             style={{ alignItems: 'center' }}>
-                            <Image source={require('@app/assets/images/share_wb.png')} style={styles.imageStyle} />
+                            <Image
+                                source={require('@app/assets/images/share/share_wb.png')}
+                                style={styles.imageStyle}
+                            />
                             <Text style={{ color: Theme.grey, fontSize: 12 }}>微博</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
@@ -130,7 +142,10 @@ class CollectionShareOverlay {
                                 // }
                             }}
                             style={{ alignItems: 'center' }}>
-                            <Image source={require('@app/assets/images/share_qqz.png')} style={styles.imageStyle} />
+                            <Image
+                                source={require('@app/assets/images/share/share_qqz.png')}
+                                style={styles.imageStyle}
+                            />
                             <Text style={{ color: Theme.grey, fontSize: 12 }}>QQ空间</Text>
                         </TouchableOpacity>
                     </View>

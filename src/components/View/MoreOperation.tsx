@@ -221,35 +221,35 @@ const MoreOperation = (props: any) => {
     const operation = useMemo(
         () => ({
             下载: {
-                image: require('@app/assets/images/more_video_download.png'),
+                image: require('@app/assets/images/operation/more_video_download.png'),
                 callback: downloadVideo,
             },
             复制链接: {
-                image: require('@app/assets/images/more_links.png'),
+                image: require('@app/assets/images/operation/more_links.png'),
                 callback: copyLink,
             },
             分享长图: {
-                image: require('@app/assets/images/more_large_img.png'),
+                image: require('@app/assets/images/operation/more_large_img.png'),
                 callback: shareCard,
             },
             举报: {
-                image: require('@app/assets/images/more_report.png'),
+                image: require('@app/assets/images/operation/more_report.png'),
                 callback: reportArticle,
             },
             删除: {
-                image: require('@app/assets/images/more_delete.png'),
+                image: require('@app/assets/images/operation/more_delete.png'),
                 callback: deleteArticle,
             },
             不感兴趣: {
-                image: require('@app/assets/images/more_dislike.png'),
+                image: require('@app/assets/images/operation/more_dislike.png'),
                 callback: dislike,
             },
             拉黑: {
-                image: require('@app/assets/images/more_shield.png'),
+                image: require('@app/assets/images/operation/more_shield.png'),
                 callback: shield,
             },
             分享合集: {
-                image: require('@app/assets/images/more_content.png'),
+                image: require('@app/assets/images/operation/more_content.png'),
                 callback: shareCollection,
             },
         }),
@@ -427,23 +427,23 @@ const MoreOperation = (props: any) => {
     const share = useMemo(
         () => ({
             微信: {
-                image: require('@app/assets/images/share_wx.png'),
+                image: require('@app/assets/images/share/share_wx.png'),
                 callback: shareToWechat,
             },
             QQ好友: {
-                image: require('@app/assets/images/share_qq.png'),
+                image: require('@app/assets/images/share/share_qq.png'),
                 callback: shareToQQ,
             },
             微博: {
-                image: require('@app/assets/images/share_wb.png'),
+                image: require('@app/assets/images/share/share_wb.png'),
                 callback: shareToWeiBo,
             },
             朋友圈: {
-                image: require('@app/assets/images/share_pyq.png'),
+                image: require('@app/assets/images/share/share_pyq.png'),
                 callback: shareToTimeline,
             },
             QQ空间: {
-                image: require('@app/assets/images/share_qqz.png'),
+                image: require('@app/assets/images/share/share_qqz.png'),
                 callback: shareToQQZone,
             },
         }),
