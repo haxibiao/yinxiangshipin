@@ -154,3 +154,8 @@ mutation addArticleBlockMutation($id: Int!) {
         id
     }
 }
+
+# 下载接口
+mutation downloadVideoMutation($video_id: Int!) {
+    downloadVideo(video_id: $video_id)
+}

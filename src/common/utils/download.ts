@@ -2,20 +2,44 @@ import { Dimensions, Platform, StatusBar, PixelRatio } from 'react-native';
 import Loading from '../../components/Popup/Loading';
 import RNFetchBlob from 'rn-fetch-blob';
 import CameraRoll from '@react-native-community/cameraroll';
+import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 
 const { fs } = RNFetchBlob;
 const { dirs } = fs;
 const FILE_PATH = Platform.OS === 'android' ? dirs.DCIMDir : dirs.DocumentDir;
 
-interface Props {
+interface VideoInfo {
     url: string;
     title?: string;
+}
+
+interface DownloadProps extends VideoInfo {
     onSuccess?: (p?: any) => any;
     onFailed?: (p?: any) => any;
 }
 
-export function download({ url, title, onSuccess, onFailed }: Props) {
+// 外部储存读取权限
+// PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE
+
+export function download({ url, title, onSuccess, onFailed }: DownloadProps) {
     title = String(title || new Date().getTime()).trim();
+    if (Platform.OS === 'android') {
+        // 外部储存写入权限
+        check(PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE).then((result: any) => {
+            if (result === RESULTS.GRANTED) {
+                downloadVideo({ url, title });
+            } else {
+                request(PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE).then(() => {
+                    download({ url, title, onSuccess, onFailed });
+                });
+            }
+        });
+    } else {
+        downloadVideo({ url, title });
+    }
+}
+
+function downloadVideo({ url, title }: VideoInfo) {
     return new Promise((resolve, reject) => {
         fs.exists(FILE_PATH + '/' + title + '.mp4')
             .then((exist) => {

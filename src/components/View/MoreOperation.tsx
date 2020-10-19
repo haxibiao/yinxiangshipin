@@ -14,20 +14,9 @@ import QuestionShareCardOverlay from '../share/QuestionShareCardOverlay';
 import CollectionShareOverlay from '../share/CollectionShareOverlay';
 
 const MoreOperation = (props: any) => {
+    const { shares, options, type, target, closeOverlay, onRemove, client, navigation } = props;
+    const collection = target?.collections?.[0];
     const shareLink = useRef();
-    const {
-        shares,
-        options,
-        type,
-        target,
-        videoUrl,
-        videoTitle,
-        closeOverlay,
-        onRemove,
-        client,
-        navigation,
-        collection,
-    } = props;
     const report = useReport({ target, type });
 
     const [deleteArticleMutation] = useMutation(GQL.deleteArticle, {
@@ -87,41 +76,27 @@ const MoreOperation = (props: any) => {
         report();
     }, [report]);
 
-    const toDownloadVideo = () => {
-        download({ url: videoUrl, title: videoTitle || Config.AppID + '_' + target.id });
-    };
-
-    const downloadVideo = useCallback(() => {
+    const downloadVideo = useCallback(async () => {
         closeOverlay();
-        // Android 保存文件权限检查
-        if (Platform.OS === 'android') {
-            // FIXME: By Bin 这里之前是申请了读取权限，但是没有写入权限导致闪退问题
-            // // 外部储存读取权限获取
-            // check(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE).then((result: any) => {
-            //     console.log('测试', result);
-            //     if (result === RESULTS.GRANTED) {
-            //         // 获取权限成功
-            //     } else {
-            //         request(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE).then((result: any) => {
-            //             // 申请权限之后
-            //         });
-            //     }
-            // });
-
-            // 外部储存写入权限获取
-            check(PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE).then((result: any) => {
-                if (result === RESULTS.GRANTED) {
-                    toDownloadVideo();
+        client
+            .mutate({
+                mutation: GQL.downloadVideoMutation,
+                variables: {
+                    video_id: target?.video?.id,
+                },
+            })
+            .then((result: any) => {
+                const url = result?.data?.downloadVideo;
+                if (url) {
+                    download({ url, title: target?.description || Config.AppID + '_video_' + target.id });
                 } else {
-                    request(PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE).then((result: any) => {
-                        downloadVideo();
-                    });
+                    Toast.show({ content: '下载失败' });
                 }
+            })
+            .catch((error: any) => {
+                Toast.show({ content: '下载失败' });
             });
-        } else {
-            toDownloadVideo();
-        }
-    }, [videoUrl]);
+    }, []);
 
     const dislike = useCallback(() => {
         closeOverlay();
@@ -192,32 +167,36 @@ const MoreOperation = (props: any) => {
         QuestionShareCardOverlay.show(image, target);
     }, [shareCardRef]);
 
-    const shareCollectionLink = useRef();
     const fetchShareCollection = useCallback(async () => {
         const [error, result] = await exceptionCapture(() =>
-            appStore.client.query({
+            client.query({
                 query: GQL.shareCollectionMutation,
                 variables: {
                     collection_id: collection?.id,
                 },
             }),
         );
+        const collectionUrl = syncGetter('data.shareCollection', result);
+        if (collectionUrl) {
+            return collectionUrl;
+        }
         if (error) {
-            Toast.show({ content: error?.message });
             return null;
-        } else if (syncGetter('data.shareCollection', result)) {
-            shareCollectionLink.current = syncGetter('data.shareCollection', result);
-            return shareCollectionLink.current;
         }
     }, []);
 
     const shareCollection = useCallback(async () => {
         closeOverlay();
-        let collectionLink = await fetchShareCollection();
-        // 解析合集网址
-        let image = await [...collectionLink.match(/#http.*?#/g)][0].replace(/#/g, '');
-        CollectionShareOverlay.show(collectionLink, image, collection);
+        const collectionUrl = await fetchShareCollection();
+        if (collectionUrl) {
+            // 解析合集网址
+            const image = [...collectionUrl.match(/#http.*?#/g)][0].replace(/#/g, '');
+            CollectionShareOverlay.show(collectionUrl, image, collection);
+        } else {
+            Toast.show({ content: '分享出错' });
+        }
     }, []);
+
     const operation = useMemo(
         () => ({
             下载: {
@@ -258,7 +237,7 @@ const MoreOperation = (props: any) => {
 
     const optionsView = useMemo(() => {
         return options.map((option: any, index: number) => {
-            if ((option === '下载' || option === '复制链接') && !videoUrl) {
+            if ((option === '下载' || option === '复制链接') && !target?.video?.url) {
                 return;
             } else if (option === '分享合集' && !collection) {
                 return;

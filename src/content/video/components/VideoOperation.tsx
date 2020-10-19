@@ -5,8 +5,9 @@ import { GQL, useMutation, errorMessage, useReport } from '@src/apollo';
 import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 
 const VideoOperation = (props: any) => {
-    const { options, type, target, videoUrl, videoTitle, closeOverlay, onRemove, client, navigation } = props;
+    const { options, type, target, closeOverlay, onRemove, client, navigation } = props;
     const report = useReport({ target, type });
+
     const [deleteArticleMutation] = useMutation(GQL.deleteArticle, {
         variables: {
             id: target.id,
@@ -36,29 +37,27 @@ const VideoOperation = (props: any) => {
         report();
     }, [report]);
 
-    const toDownloadVideo = () => {
-        download({ url: videoUrl, title: videoTitle || Config.AppID + '_' + target.id });
-    };
-
-    const downloadVideo = useCallback(() => {
+    const downloadVideo = useCallback(async () => {
         closeOverlay();
-
-        // TODO: 之后这里的权限判断代码要迁移到下载函数中实现
-        if (Platform.OS === 'android') {
-            // 外部储存写入权限获取
-            check(PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE).then((result: any) => {
-                if (result === RESULTS.GRANTED) {
-                    toDownloadVideo();
+        client
+            .mutate({
+                mutation: GQL.downloadVideoMutation,
+                variables: {
+                    video_id: target?.video?.id,
+                },
+            })
+            .then((result: any) => {
+                const url = result?.data?.downloadVideo;
+                if (url) {
+                    download({ url, title: target?.description || Config.AppID + '_video_' + target.id });
                 } else {
-                    request(PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE).then((result: any) => {
-                        downloadVideo();
-                    });
+                    Toast.show({ content: '下载失败' });
                 }
+            })
+            .catch((error: any) => {
+                Toast.show({ content: '下载失败' });
             });
-        } else {
-            toDownloadVideo();
-        }
-    }, [videoUrl]);
+    }, []);
 
     const dislike = useCallback(() => {
         closeOverlay();
