@@ -142,14 +142,11 @@ export default observer((props) => {
                         navigation={navigation}
                         closeOverlay={() => overlayRef.close()}
                         target={media}
-                        videoUrl={Helper.syncGetter('video.url', media)}
-                        videoTitle={Helper.syncGetter('body', media)}
                         options={
                             isSelf
                                 ? ['删除', '下载', '分享长图', '分享合集', '复制链接']
                                 : ['下载', '举报', '不感兴趣', '分享长图', '分享合集', '复制链接']
                         }
-                        collection={Helper.syncGetter('collections', media)?.[0]}
                         onRemove={() => {
                             navigation.goBack();
                             DeviceEventEmitter.emit('deletePost', media);

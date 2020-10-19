@@ -1,28 +1,14 @@
 import React, { Component, useMemo } from 'react';
-import { StyleSheet, View, Text, Image, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, Image, ScrollView, ImageBackground } from 'react-native';
 import Avatar from '../Basic/Avatar';
 import SafeText from '../Basic/SafeText';
-import { BoxShadow } from 'react-native-shadow';
 import QRCode from 'react-native-qrcode-svg';
 import { userStore } from '@src/store';
 import viewShotUtil from './viewShotUtil';
 
-const marginWidth = pixel(40);
-const contentWidth = Device.WIDTH - marginWidth * 2;
-const imageWidth = contentWidth - marginWidth;
-
-const shadowOpt = {
-    width: contentWidth,
-    color: '#E8E8E8',
-    border: pixel(10),
-    radius: pixel(10),
-    opacity: 0.5,
-    x: 0,
-    y: 0,
-    style: {
-        marginVertical: pixel(20),
-    },
-};
+const contentWidth = Device.WIDTH * 0.76;
+const contentHeight = (contentWidth * 1040) / 1450;
+const imageWidth = contentWidth * 0.5;
 
 class QuestionShareCard extends Component {
     constructor(props) {
@@ -31,15 +17,16 @@ class QuestionShareCard extends Component {
 
     render() {
         const { post } = this.props;
-        const images = post?.images;
-        const video = post?.video;
+        const imageUri = post?.video?.cover || post?.images?.[0]?.url;
         return (
-            <ScrollView style={styles.container}>
-                <View style={styles.content} ref={(ref) => (this.shareCard = ref)}>
-                    {(video || (images && Array.isArray(images), images.length > 0)) && (
+            <View style={styles.container} ref={(ref) => (this.shareCard = ref)}>
+                <ImageBackground
+                    style={styles.contentCover}
+                    source={require('@app/assets/images/capture_video_cover.png')}>
+                    {imageUri && (
                         <Image
                             source={{
-                                uri: video?.cover || video?.cover_url || images[0]?.url,
+                                uri: imageUri,
                             }}
                             style={{
                                 width: imageWidth,
@@ -85,8 +72,11 @@ class QuestionShareCard extends Component {
                             />
                         </View>
                     </View>
-                </View>
-            </ScrollView>
+                    <View style={styles.bottomInfo}>
+                        <Text style={styles.bottomText}>保存长图到手机，打开印象视频App可查看内容详情</Text>
+                    </View>
+                </ImageBackground>
+            </View>
         );
     }
 
@@ -110,25 +100,34 @@ function correctRate(correct, count) {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    content: {
+    container: {},
+    contentCover: {
         width: contentWidth,
-        padding: pixel(20),
-        marginTop: pixel(30),
-        marginHorizontal: marginWidth,
+        height: contentHeight,
         backgroundColor: '#fff',
+        justifyContent: 'flex-end',
     },
     questionBody: {
-        marginTop: pixel(20),
         flexDirection: 'row',
         alignItems: 'center',
+        paddingHorizontal: pixel(15),
+        paddingVertical: pixel(20),
     },
     description: {
         color: '#2b2b2b',
         fontSize: pixel(15),
         lineHeight: pixel(22),
+    },
+    bottomInfo: {
+        backgroundColor: '#f0f0f0',
+        paddingHorizontal: pixel(15),
+        paddingVertical: pixel(20),
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    bottomText: {
+        color: '#b2b2b2',
+        fontSize: pixel(15),
     },
 });
 

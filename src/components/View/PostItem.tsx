@@ -144,9 +144,6 @@ const PostItem: React.FC<Props> = observer((props: Props) => {
                         navigation={navigation}
                         closeOverlay={() => overlayRef.close()}
                         target={post}
-                        videoUrl={Helper.syncGetter('video.url', post)}
-                        videoTitle={Helper.syncGetter('body', post)}
-                        collection={Helper.syncGetter('collections', post)?.[0]}
                         options={
                             isSelf
                                 ? ['删除', '下载', '分享长图', '分享合集', '复制链接']

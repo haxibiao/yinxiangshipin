@@ -115,9 +115,6 @@ export default observer(
                     <MoreOperation
                         target={post}
                         options={['删除', '下载', '分享长图', '分享合集', '复制链接']}
-                        collection={post?.collections?.[0]}
-                        videoUrl={post?.video?.url}
-                        videoTitle={post?.body}
                         closeOverlay={hideMoreOperation}
                         onRemove={fadeOut}
                         client={client}

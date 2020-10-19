@@ -32,9 +32,6 @@ export default observer(({ media, store, client, removeMedia }) => {
                             ? ['下载', '分享长图', '分享合集', '复制链接']
                             : ['举报', '不感兴趣', '下载', '分享长图', '分享合集', '复制链接']
                     }
-                    collection={media?.collections?.[0]}
-                    videoUrl={media?.video?.url}
-                    videoTitle={media?.body}
                     closeOverlay={() => overlayRef.current?.close()}
                     onRemove={removeMedia}
                     client={client}

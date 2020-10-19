@@ -158,9 +158,6 @@ export default observer((props) => {
                         navigation={navigation}
                         closeOverlay={() => overlayRef.close()}
                         target={media}
-                        videoUrl={Helper.syncGetter('video.url', media)}
-                        videoTitle={Helper.syncGetter('body', media)}
-                        collection={Helper.syncGetter('collections', media)?.[0]}
                         options={
                             isSelf
                                 ? ['删除', '下载', '分享长图', '分享合集', '复制链接']
