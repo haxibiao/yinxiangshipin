@@ -4,37 +4,35 @@ import { Overlay } from 'teaset';
 import { Share } from '@src/native';
 import * as WeChat from 'react-native-wechat-lib';
 import viewShotUtil from './viewShotUtil';
-import QuestionShareCard from './QuestionShareCard';
+import ContentShareCard from './ContentShareCard';
 
-class QuestionShareCardOverlay {
-    static show(image, post) {
+class ContentShareCardOverlay {
+    static shareCardRef;
+
+    static show(post) {
         let overlayView = (
             <Overlay.View animated>
                 <View style={styles.container}>
-                    <QuestionShareCard post={post} />
-                    <View
-                        style={{
-                            backgroundColor: '#FFF',
-                            paddingBottom: Theme.HOME_INDICATOR_HEIGHT ? pixel(30) : pixel(5),
-                        }}>
+                    <ContentShareCard post={post} ref={(ref) => (this.shareCardRef = ref)} />
+                    <View style={styles.bottomOperation}>
                         <View style={styles.sharePlatforms}>
                             <TouchableOpacity
-                                style={{ alignItems: 'center' }}
+                                style={styles.shareButton}
                                 onPress={async () => {
-                                    QuestionShareCardOverlay.hide();
-                                    await viewShotUtil.saveImage(image, true);
+                                    this.hide();
+                                    const image = await this.shareCardRef.onCapture(true);
+                                    viewShotUtil.saveImage(image, true);
                                 }}>
                                 <Image
                                     source={require('@app/assets/images/icons/ic_download.png')}
                                     style={styles.imageStyle}
                                 />
 
-                                <Text style={{ color: Theme.grey, fontSize: 12 }}>保存至本地</Text>
+                                <Text style={styles.shareName}>保存至本地</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
                                 onPress={async () => {
-                                    QuestionShareCardOverlay.hide();
-                                    console.log('result ', image);
+                                    this.hide();
                                     try {
                                         WeChat.shareImage({
                                             type: 'imageFile',
@@ -44,23 +42,22 @@ class QuestionShareCardOverlay {
                                             scene: 0,
                                         });
                                     } catch (e) {
-                                        console.log('e', e);
                                         Toast.show({
                                             content: '未安装微信或当前微信版本较低',
                                         });
                                     }
                                 }}
-                                style={{ alignItems: 'center' }}>
+                                style={styles.shareButton}>
                                 <Image
                                     source={require('@app/assets/images/share/share_wx.png')}
                                     style={styles.imageStyle}
                                 />
 
-                                <Text style={{ color: Theme.grey, fontSize: 12 }}>微信好友</Text>
+                                <Text style={styles.shareName}>微信好友</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
                                 onPress={async () => {
-                                    QuestionShareCardOverlay.hide();
+                                    this.hide();
                                     try {
                                         await WeChat.shareImage({
                                             type: 'imageFile',
@@ -75,16 +72,16 @@ class QuestionShareCardOverlay {
                                         });
                                     }
                                 }}
-                                style={{ alignItems: 'center' }}>
+                                style={styles.shareButton}>
                                 <Image
                                     source={require('@app/assets/images/share/share_pyq.png')}
                                     style={styles.imageStyle}
                                 />
-                                <Text style={{ color: Theme.grey, fontSize: 12 }}>朋友圈</Text>
+                                <Text style={styles.shareName}>朋友圈</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
                                 onPress={async () => {
-                                    QuestionShareCardOverlay.hide();
+                                    this.hide();
                                     let callback = await Share.shareImageToQQ(result);
                                     if (callback == false) {
                                         Toast.show({
@@ -92,16 +89,16 @@ class QuestionShareCardOverlay {
                                         });
                                     }
                                 }}
-                                style={{ alignItems: 'center' }}>
+                                style={styles.shareButton}>
                                 <Image
                                     source={require('@app/assets/images/share/share_qq.png')}
                                     style={styles.imageStyle}
                                 />
-                                <Text style={{ color: Theme.grey, fontSize: 12 }}>QQ好友</Text>
+                                <Text style={styles.shareName}>QQ好友</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
                                 onPress={async () => {
-                                    QuestionShareCardOverlay.hide();
+                                    this.hide();
                                     let callback = await Share.shareToSinaFriends(result);
                                     if (callback == false) {
                                         Toast.show({
@@ -109,16 +106,16 @@ class QuestionShareCardOverlay {
                                         });
                                     }
                                 }}
-                                style={{ alignItems: 'center' }}>
+                                style={styles.shareButton}>
                                 <Image
                                     source={require('@app/assets/images/share/share_wb.png')}
                                     style={styles.imageStyle}
                                 />
-                                <Text style={{ color: Theme.grey, fontSize: 12 }}>微博</Text>
+                                <Text style={styles.shareName}>微博</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
                                 onPress={async () => {
-                                    QuestionShareCardOverlay.hide();
+                                    this.hide();
                                     let callback = await Share.shareImageToQQZone(result);
                                     if (callback == false) {
                                         Toast.show({
@@ -126,18 +123,18 @@ class QuestionShareCardOverlay {
                                         });
                                     }
                                 }}
-                                style={{ alignItems: 'center' }}>
+                                style={styles.shareButton}>
                                 <Image
                                     source={require('@app/assets/images/share/share_qqz.png')}
                                     style={styles.imageStyle}
                                 />
-                                <Text style={{ color: Theme.grey, fontSize: 12 }}>QQ空间</Text>
+                                <Text style={styles.shareName}>QQ空间</Text>
                             </TouchableOpacity>
                         </View>
                         <TouchableOpacity
-                            style={styles.closeItem}
+                            style={styles.closeBar}
                             onPress={() => {
-                                QuestionShareCardOverlay.hide();
+                                this.hide();
                             }}>
                             <Text style={styles.closeText}>取消</Text>
                         </TouchableOpacity>
@@ -156,32 +153,45 @@ class QuestionShareCardOverlay {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        width: Device.WIDTH,
+        height: Device.HEIGHT,
         justifyContent: 'flex-end',
+        alignItems: 'center',
+    },
+    bottomOperation: {
+        marginTop: pixel(20),
+        alignSelf: 'stretch',
+        backgroundColor: '#FFF',
+        padding: pixel(10),
+        paddingBottom: Theme.HOME_INDICATOR_HEIGHT ? pixel(30) : pixel(10),
     },
     sharePlatforms: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        paddingVertical: pixel(Theme.itemSpace),
-        paddingHorizontal: pixel(Theme.itemSpace),
+    },
+    shareButton: {
+        paddingTop: pixel(10),
+        paddingHorizontal: pixel(5),
+        marginBottom: pixel(10),
+        alignItems: 'center',
     },
     imageStyle: {
-        width: pixel(44),
-        height: pixel(44),
-        borderRadius: pixel(22),
+        width: pixel(48),
+        height: pixel(48),
+        borderRadius: pixel(24),
         marginBottom: pixel(10),
+    },
+    shareName: { color: '#2b2b2b', fontSize: font(12) },
+    closeBar: {
+        height: pixel(40),
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     closeText: {
         fontSize: pixel(15),
-        color: Theme.confirmColor,
-        textAlign: 'center',
-    },
-    closeItem: {
-        height: pixel(40),
-        borderRadius: pixel(6),
-        justifyContent: 'center',
-        backgroundColor: '#fff',
+        color: '#2b2b2b',
     },
 });
 
-export default QuestionShareCardOverlay;
+export default ContentShareCardOverlay;

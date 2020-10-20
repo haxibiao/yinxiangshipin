@@ -7,10 +7,10 @@ import { userStore } from '@src/store';
 import viewShotUtil from './viewShotUtil';
 
 const contentWidth = Device.WIDTH * 0.76;
-const contentHeight = (contentWidth * 1040) / 1450;
+const contentHeight = (contentWidth * 1450) / 1040;
 const imageWidth = contentWidth * 0.5;
 
-class QuestionShareCard extends Component {
+class ContentShareCard extends Component {
     constructor(props) {
         super(props);
     }
@@ -40,17 +40,18 @@ class QuestionShareCard extends Component {
                                 style={{
                                     flexDirection: 'row',
                                     alignItems: 'center',
+                                    marginBottom: pixel(5),
                                 }}>
                                 <Avatar
                                     source={{ uri: post?.user?.avatar }}
-                                    size={pixel(40)}
-                                    style={{ backgroundColor: '#b2b2b2' }}
+                                    size={pixel(32)}
+                                    style={{ backgroundColor: '#f0f0f0' }}
                                 />
-                                <View style={{ marginLeft: pixel(15) }}>
+                                <View style={{ marginLeft: pixel(10) }}>
                                     <SafeText
                                         style={{
-                                            color: '#363636',
-                                            fontSize: pixel(18),
+                                            color: '#2b2b2b',
+                                            fontSize: font(15),
                                             fontWeight: 'bold',
                                         }}>
                                         @{post?.user?.name}
@@ -58,7 +59,7 @@ class QuestionShareCard extends Component {
                                 </View>
                             </View>
                             <Text
-                                style={{ color: '#363636', fontSize: pixel(15), lineHeight: pixel(22) }}
+                                style={{ color: '#2b2b2b', fontSize: pixel(14), lineHeight: pixel(22) }}
                                 numberOfLines={2}>
                                 {post?.description || post?.content}
                             </Text>
@@ -73,7 +74,8 @@ class QuestionShareCard extends Component {
                         </View>
                     </View>
                     <View style={styles.bottomInfo}>
-                        <Text style={styles.bottomText}>保存长图到手机，打开印象视频App可查看内容详情</Text>
+                        <Text style={styles.bottomText}>保存图片到手机</Text>
+                        <Text style={styles.bottomText}>打开印象视频App</Text>
                     </View>
                 </ImageBackground>
             </View>
@@ -100,12 +102,16 @@ function correctRate(correct, count) {
 }
 
 const styles = StyleSheet.create({
-    container: {},
-    contentCover: {
+    container: {
         width: contentWidth,
         height: contentHeight,
         backgroundColor: '#fff',
+    },
+    contentCover: {
+        width: contentWidth,
+        height: contentHeight,
         justifyContent: 'flex-end',
+        alignItems: 'center',
     },
     questionBody: {
         flexDirection: 'row',
@@ -119,16 +125,17 @@ const styles = StyleSheet.create({
         lineHeight: pixel(22),
     },
     bottomInfo: {
-        backgroundColor: '#f0f0f0',
-        paddingHorizontal: pixel(15),
-        paddingVertical: pixel(20),
+        alignSelf: 'stretch',
+        backgroundColor: '#f6f6f6',
+        padding: pixel(12),
         justifyContent: 'center',
         alignItems: 'center',
     },
     bottomText: {
         color: '#b2b2b2',
-        fontSize: pixel(15),
+        fontSize: pixel(13),
+        lineHeight: pixel(18),
     },
 });
 
-export default QuestionShareCard;
+export default ContentShareCard;

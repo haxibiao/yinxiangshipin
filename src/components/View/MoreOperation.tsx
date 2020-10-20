@@ -9,8 +9,7 @@ import { userStore, appStore } from '@src/store';
 import { download, syncGetter, exceptionCapture } from '@src/common';
 import { Share } from '@src/native';
 import { GQL, useMutation, errorMessage, useReport } from '@src/apollo';
-import QuestionShareCard from '../share/QuestionShareCard';
-import QuestionShareCardOverlay from '../share/QuestionShareCardOverlay';
+import ContentShareCardOverlay from '../share/ContentShareCardOverlay';
 import CollectionShareOverlay from '../share/CollectionShareOverlay';
 
 const MoreOperation = (props: any) => {
@@ -154,18 +153,10 @@ const MoreOperation = (props: any) => {
         }
     }, []);
 
-    let shareCardRef: any;
     const shareCard = useCallback(async () => {
         closeOverlay();
-        // if (TOKEN) {
-        //     let image = await shareCardRef.onCapture(true);
-        //     QuestionShareCardOverlay.show(image, target);
-        // } else {
-        //     navigation.navigate('Login');
-        // }
-        let image = await shareCardRef.onCapture(true);
-        QuestionShareCardOverlay.show(image, target);
-    }, [shareCardRef]);
+        ContentShareCardOverlay.show(target);
+    }, []);
 
     const fetchShareCollection = useCallback(async () => {
         const [error, result] = await exceptionCapture(() =>
@@ -461,9 +452,6 @@ const MoreOperation = (props: any) => {
             <TouchableOpacity style={styles.footer} onPress={closeOverlay}>
                 <Text style={styles.footerText}>取消</Text>
             </TouchableOpacity>
-            {type === 'articles' && (
-                <QuestionShareCard post={target} ref={(ref) => (shareCardRef = ref)} shareMiniProgram />
-            )}
         </View>
     );
 };

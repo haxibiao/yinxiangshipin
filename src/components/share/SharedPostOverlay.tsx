@@ -15,7 +15,7 @@ const SharedPost = ({ url, type, onPress, onClose }: Props) => {
     return (
         <ScrollView contentContainerStyle={styles.container}>
             <View style={styles.card}>
-                <View style={styles.cover}>
+                <View style={styles.contentCover}>
                     {type === 'image' ? (
                         <Image style={styles.coverImage} source={{ uri: url }} resizeMode="cover" />
                     ) : (
@@ -23,7 +23,7 @@ const SharedPost = ({ url, type, onPress, onClose }: Props) => {
                             source={{
                                 uri: url,
                             }}
-                            style={styles.coverImage}
+                            style={styles.coverVideo}
                             muted={true}
                             paused={false}
                             resizeMode="cover"
@@ -103,11 +103,19 @@ const styles = StyleSheet.create({
         borderRadius: pixel(5),
         overflow: 'hidden',
     },
-    cover: {
+    contentCover: {
+        overflow: 'hidden',
         height: CARD_WIDTH,
         marginBottom: pixel(15),
     },
     coverImage: {
+        flex: 1,
+        width: null,
+        height: null,
+        marginBottom: -(CARD_WIDTH * ((1450 / 1040) * 0.6)),
+        // marginTop: -pixel(15),
+    },
+    coverVideo: {
         flex: 1,
         width: null,
         height: null,
