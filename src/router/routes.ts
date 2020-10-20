@@ -75,7 +75,7 @@ import CategoryScreen from '../screens/category';
 import ChatScreen from '../screens/chat';
 import ChatSettingScreen from '../screens/chat/ChatSetting';
 import CommentsScreen from '../screens/notification/CommentsScreen';
-import BeLikedScreen from '../screens/notification/BeLikedScreen';
+import BeLikedScreen from '../screens/notification/BeLiked';
 import FollowNotificationsScreen from '../screens/notification/FollowScreen';
 import OtherRemindScreen from '../screens/notification/OtherRemindScreen';
 
