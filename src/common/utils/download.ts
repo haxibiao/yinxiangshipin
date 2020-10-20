@@ -22,7 +22,6 @@ interface DownloadProps extends VideoInfo {
 // PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE
 
 export function download({ url, title, onSuccess, onFailed }: DownloadProps) {
-    title = String(title || new Date().getTime()).trim();
     if (Platform.OS === 'android') {
         // 外部储存写入权限
         check(PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE).then((result: any) => {
@@ -39,56 +38,54 @@ export function download({ url, title, onSuccess, onFailed }: DownloadProps) {
     }
 }
 
+// fs.exists(FILE_PATH + '/' + title + '.mp4')
+//     .then((exist) => {
+//         if (exist) {
+//             Toast.show({
+//                 content: '视频已经存在',
+//             });
+//         } else {
+//             downloadVideo();
+//         }
+//     })
+//     .catch(() => {
+//         downloadVideo();
+//     });
+
 function downloadVideo({ url, title }: VideoInfo) {
     return new Promise((resolve, reject) => {
-        fs.exists(FILE_PATH + '/' + title + '.mp4')
-            .then((exist) => {
-                if (exist) {
-                    Toast.show({
-                        content: '视频已经存在',
-                    });
+        Loading.show('正在下载...');
+        RNFetchBlob.config({
+            // useDownloadManager: true,
+            fileCache: true,
+            path: FILE_PATH + '/' + title + '.mp4',
+        })
+            .fetch('GET', url, {
+                'Content-Type': 'video/mp4',
+            })
+            .progress((received, total) => {
+                // (received / total) * 100
+            })
+            .then((res) => {
+                const filePath = res.path();
+                // console.log('The file saved to ', filePath);
+                if (Platform.OS === 'android') {
+                    fs.scanFile([{ path: filePath, mime: 'video/mp4' }]);
                 } else {
-                    startDownload();
+                    CameraRoll.save(filePath, 'video');
                 }
-            })
-            .catch(() => {
-                startDownload();
-            });
-
-        function startDownload() {
-            Loading.show('正在下载...');
-            RNFetchBlob.config({
-                // useDownloadManager: true,
-                fileCache: true,
-                path: FILE_PATH + '/' + title + '.mp4',
-            })
-                .fetch('GET', url, {
-                    'Content-Type': 'video/mp4',
-                })
-                .progress((received, total) => {
-                    // (received / total) * 100
-                })
-                .then((res) => {
-                    const filePath = res.path();
-                    // console.log('The file saved to ', filePath);
-                    if (Platform.OS === 'android') {
-                        fs.scanFile([{ path: filePath, mime: 'video/mp4' }]);
-                    } else {
-                        CameraRoll.save(filePath, 'video');
-                    }
-                    Loading.hide();
-                    Toast.show({
-                        content: '下载成功',
-                    });
-                    resolve(filePath);
-                })
-                .catch((error) => {
-                    Loading.hide();
-                    Toast.show({
-                        content: '下载失败',
-                    });
-                    reject(error);
+                Loading.hide();
+                Toast.show({
+                    content: '下载成功',
                 });
-        }
+                resolve(filePath);
+            })
+            .catch((error) => {
+                Loading.hide();
+                Toast.show({
+                    content: '下载失败',
+                });
+                reject(error);
+            });
     });
 }

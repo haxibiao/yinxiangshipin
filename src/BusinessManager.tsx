@@ -62,7 +62,7 @@ export default observer(function BusinessManager() {
             }
         };
     }, []);
-    // 显示采集模态框
+    // 采集模态框：解析是否有被分享内容、用户登录、有准备分享的内容、不能在发布页
     useEffect(() => {
         if (detected && userStore.login && shareContent && appStore.currentRouteName !== 'CreatePost') {
             showShareContentModal(shareContent);
@@ -73,9 +73,11 @@ export default observer(function BusinessManager() {
     const detectPhotoAlbum = useCallback(async () => {
         let timer;
         const photoInfo = await detectPhotos();
+        // 没有解析到被分享内容，直接设置状态
         if (!photoInfo) {
             setDetected(true);
         }
+        // 查看/关闭分享内容都延迟设置解析状态
         function delaySetDetected() {
             timer = setTimeout(() => {
                 setDetected(true);

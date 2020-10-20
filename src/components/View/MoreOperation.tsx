@@ -11,6 +11,7 @@ import { Share } from '@src/native';
 import { GQL, useMutation, errorMessage, useReport } from '@src/apollo';
 import ContentShareCardOverlay from '../share/ContentShareCardOverlay';
 import CollectionShareOverlay from '../share/CollectionShareOverlay';
+import Loading from '../Popup/Loading';
 
 const MoreOperation = (props: any) => {
     const { shares, options, type, target, closeOverlay, onRemove, client, navigation } = props;
@@ -77,25 +78,24 @@ const MoreOperation = (props: any) => {
 
     const downloadVideo = useCallback(async () => {
         closeOverlay();
-        client
-            .mutate({
+        Loading.show();
+        const [err, res] = await exceptionCapture(() =>
+            client.mutate({
                 mutation: GQL.downloadVideoMutation,
                 variables: {
                     video_id: target?.video?.id,
                 },
-            })
-            .then((result: any) => {
-                const url = result?.data?.downloadVideo;
-                if (url) {
-                    download({ url, title: target?.description || Config.AppID + '_video_' + target.id });
-                } else {
-                    Toast.show({ content: '下载失败' });
-                }
-            })
-            .catch((error: any) => {
-                Toast.show({ content: '下载失败' });
-            });
-    }, []);
+            }),
+        );
+        const url = res?.data?.downloadVideo;
+        Loading.hide();
+        if (url) {
+            const title = String(target?.description || Config.AppID + '-' + target.id).replace(/\s+/g, '');
+            download({ url, title });
+        } else {
+            Toast.show({ content: '下载失败' });
+        }
+    }, [target]);
 
     const dislike = useCallback(() => {
         closeOverlay();
@@ -323,7 +323,6 @@ const MoreOperation = (props: any) => {
         //     webpageUrl: Config.ServerRoot + `/share/post/${target.id}?user_id=${userStore.me.id}`,
         //     imageUrl: Config.ServerRoot + `/logo/${Config.PackageName}.com.png`,
         // }).then((data: any) => {
-        //     console.log('data', data);
         // });
 
         // const callback = await QQAPI.shareToQQ({
@@ -382,7 +381,6 @@ const MoreOperation = (props: any) => {
         //     webpageUrl: Config.ServerRoot + `/share/post/${target.id}?user_id=${userStore.me.id}`,
         //     imageUrl: Config.ServerRoot + `/logo/${Config.PackageName}.com.png`,
         // }).then((data: any) => {
-        //     console.log('data', data);
         // });
 
         // const callback = await Share.shareImageToQQZone(link);
