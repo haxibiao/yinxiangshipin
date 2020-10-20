@@ -11,13 +11,9 @@ export default observer((props: any) => {
     // 个人信息
     const { data, refetch } = useQuery(GQL.MeMetaQuery, {
         fetchPolicy: 'network-only',
+        skip: !userStore.login,
     });
-    const metaData = useMemo(() => {
-        const me = Helper.syncGetter('me', data);
-        userStore.changeProfile(me);
-        return me;
-    }, [data]);
-    const userProfile = Object.assign({}, userStore.me, metaData);
+    const userProfile = useMemo(() => Object.assign({}, userStore.me, data?.me), [data]);
 
     const authNavigator = useCallback(
         (route, params?) => {
@@ -32,7 +28,9 @@ export default observer((props: any) => {
 
     useEffect(() => {
         const navFocusListener = navigation.addListener('focus', () => {
-            refetch();
+            if (userStore.login) {
+                refetch();
+            }
         });
 
         return () => {

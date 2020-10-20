@@ -23,7 +23,7 @@ class UserStore {
     @observable login: boolean = false;
     @observable firstInstall: boolean = false;
     @observable bindAccountRemind: boolean = false;
-    @observable disabledBindAccount: boolean = false;
+    @observable disabledBindAccountRemind: boolean = false;
 
     constructor() {
         this.recall();
@@ -31,17 +31,18 @@ class UserStore {
 
     @action.bound
     async recall() {
-        const profile = await Storage.getItem(Keys.me);
-        const notFirstInstall = await Storage.getItem(Keys.notFirstInstall);
+        this.firstInstall = !(await Storage.getItem(Keys.notFirstInstall));
         this.bindAccountRemind = await Storage.getItem(
             (Keys.bindAccountRemind + Config.Version) as 'bindAccountRemind',
         );
-        this.disabledBindAccount = await Storage.getItem(Keys.disabledBindAccount);
-        if (profile && profile.id) {
-            this.signIn(profile);
-        } else if (!notFirstInstall) {
-            this.firstInstall = true;
-        }
+        this.disabledBindAccountRemind = await Storage.getItem(Keys.disabledBindAccountRemind);
+    }
+
+    @action.bound
+    recallUser(me: UserScheme) {
+        TOKEN = me.token;
+        this.me = me;
+        this.login = true;
         this.launched = true;
     }
 
