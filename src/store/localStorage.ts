@@ -18,7 +18,7 @@ export interface ItemKeys {
     isLocalSpiderVideo: string;
     detectedFileInfo: string;
     bindAccountRemind: string;
-    disabledBindAccount: string;
+    disabledBindAccountRemind: string;
 }
 
 export const Keys = {
@@ -35,7 +35,7 @@ export const Keys = {
     isLocalSpiderVideo: 'isLocalSpiderVideo',
     detectedFileInfo: 'detectedFileInfo',
     bindAccountRemind: 'bindAccountRemind',
-    disabledBindAccount: 'disabledBindAccount',
+    disabledBindAccountRemind: 'disabledBindAccountRemind',
 } as const;
 
 async function removeItem(key: keyof ItemKeys) {

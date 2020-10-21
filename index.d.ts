@@ -14,6 +14,7 @@ interface DeviceInfo {
     UUID: string;
     isLandscape: boolean;
     statusBarHeight: number;
+    Brand: string;
 }
 
 interface AppConfig {
