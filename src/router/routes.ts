@@ -71,7 +71,6 @@ import EditCollectionScreen from '../screens/creation/EditCollection';
 import CategoryScreen from '../screens/category';
 
 // notification
-// import NewChatScreen from '../screens/chat/NewChatScreen';
 import ChatScreen from '../screens/chat';
 import ChatSettingScreen from '../screens/chat/ChatSetting';
 import CommentsScreen from '../screens/notification/CommentsScreen';
@@ -219,9 +218,6 @@ export default {
     ChatSetting: {
         component: ChatSettingScreen,
     },
-    // 新消息: {
-    //     component:NewChatScreen,
-    // },
     User: {
         component: UserHomeScreen,
     },
