@@ -20,7 +20,7 @@ export function shareClipboardLink(clipboardString: string): Promise<any> {
     function validateLink(linkString: string): boolean {
         if (
             linkString.indexOf('http') !== -1 &&
-            (linkString.indexOf('douyin') !== -1 || linkString.indexOf('chenzhongtech') !== -1)
+            (linkString.indexOf('douyin') !== -1 || linkString.indexOf('tiktok') !== -1)
         ) {
             return true;
         } else {
@@ -46,7 +46,8 @@ export function shareClipboardLink(clipboardString: string): Promise<any> {
                         cover,
                     },
                 };
-            });
+            })
+            .catch((err) => {});
     }
 }
 
@@ -54,14 +55,10 @@ export const useClipboardLink = (): [{ link: string; content: any }, (p: any) =>
     const [shareContent, setShareContent] = useState<any>();
 
     const validateLink = useCallback((linkString) => {
-        // console.log('====================================');
-        // console.log('shareLinkCache', shareLinkCache);
-        // console.log('linkString', linkString);
-        // console.log('====================================');
         if (
             !shareLinkCache[linkString] &&
             linkString.indexOf('http') !== -1 &&
-            (linkString.indexOf('douyin') !== -1 || linkString.indexOf('chenzhongtech') !== -1)
+            (linkString.indexOf('douyin') !== -1 || linkString.indexOf('tiktok') !== -1)
         ) {
             return true;
         } else {
@@ -91,7 +88,6 @@ export const useClipboardLink = (): [{ link: string; content: any }, (p: any) =>
 
     const getClipboardString = useCallback(async () => {
         const clipboardString = await Clipboard.getString();
-
         if (validateLink(clipboardString)) {
             const urls = getURLsFromString(clipboardString);
             if (urls[0]) {

@@ -82,7 +82,10 @@ export const VideoCaptureData = observer(({ client, shareLink, shareBody, onSucc
         <ScrollView contentContainerStyle={styles.container}>
             <View style={styles.card}>
                 <View style={styles.cover}>
-                    <Image style={styles.coverImage} source={{ uri: shareBody?.cover }} />
+                    <Image
+                        style={styles.coverImage}
+                        source={{ uri: shareBody?.cover || 'http://cos.haxibiao.com/images/5f83d367ae609.jpeg' }}
+                    />
                     <View style={styles.videoMark}>
                         <Iconfont name="bofang1" size={font(20)} color={'#fff'} style={{ opacity: 0.8 }} />
                     </View>
