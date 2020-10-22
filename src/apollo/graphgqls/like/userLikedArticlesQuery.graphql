@@ -1,0 +1,20 @@
+#import "../post/articleFragment.graphql"
+#import "../collection/collectionFragment.graphql"
+
+# 用户喜欢的动态
+query userLikedArticlesQuery($user_id: Int!, $page: Int) {
+    likes(user_id: $user_id, page: $page, liked_type: "articles") {
+        paginatorInfo {
+            currentPage
+            hasMorePages
+        }
+        data {
+            article {
+                ...articleFragment
+                collections {
+                    ...collection
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,6 @@
+# 删除合集
+mutation deleteCollectionMutation($id: Int!) {
+    deleteCollection(id: $id) {
+        id
+    }
+}

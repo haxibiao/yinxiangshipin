@@ -1,0 +1,22 @@
+#import "../post/postFragment.graphql"
+#import "./collectionFragment.graphql"
+
+# gql TODO: CollectionPostsQuery
+# 合集内的视频
+query CollectionQuery($collection_id: Int!, $page: Int, $count: Int) {
+    collection(collection_id: $collection_id) {
+        type
+        status
+        ...collectionFragment
+        posts(page: $page, count: $count) {
+            paginatorInfo {
+                lastPage
+                currentPage
+                hasMorePages
+            }
+            data {
+                ...postFragment
+            }
+        }
+    }
+}

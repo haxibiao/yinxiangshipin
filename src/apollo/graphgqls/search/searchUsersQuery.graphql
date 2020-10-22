@@ -1,0 +1,18 @@
+# 搜索用户
+query searchUsersQuery($keyword: String!, $page: Int, $count: Int) {
+    searchUsers(keyword: $keyword, page: $page, count: $count) {
+        paginatorInfo {
+            hasMorePages
+            currentPage
+        }
+        data {
+            id
+            name
+            avatar
+            introduction
+            followed_status
+            count_likes
+            count_articles
+        }
+    }
+}

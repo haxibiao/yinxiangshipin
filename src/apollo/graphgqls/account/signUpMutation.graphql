@@ -1,0 +1,8 @@
+#import "./signFragment.graphql"
+
+# 注册
+mutation signUpMutation($account: String!, $password: String!, $name: String, $uuid: String) {
+    signUp(email: "123", account: $account, password: $password, name: $name, uuid: $uuid) {
+        ...signFragment
+    }
+}

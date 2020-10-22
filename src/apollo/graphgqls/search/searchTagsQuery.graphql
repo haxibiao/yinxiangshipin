@@ -1,0 +1,16 @@
+# 搜索标签
+query searchTagsQuery($query: String!, $page: Int, $count: Int) {
+    searchTags(query: $query, page: $page, count: $count) {
+        paginatorInfo {
+            hasMorePages
+            currentPage
+        }
+        data {
+            id
+            name
+            count_plays
+            count_posts
+            count_views
+        }
+    }
+}

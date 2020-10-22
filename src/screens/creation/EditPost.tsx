@@ -49,7 +49,7 @@ export default (props: any) => {
         },
         refetchQueries: () => [
             {
-                query: GQL.userProfileQuery,
+                query: GQL.userQuery,
                 variables: { id: userStore.me.id },
                 fetchPolicy: 'network-only',
             },

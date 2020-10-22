@@ -7,11 +7,11 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { userStore, observer } from '@src/store';
 import { GQL, useApolloClient, useQuery } from '@src/apollo';
 
-const ReplaceImage = props => {
+const ReplaceImage = (props) => {
     const client = useApolloClient();
     const navigation = useNavigation();
     let { me: user } = userStore;
-    const { data: walletData } = useQuery(GQL.userProfileQuery, {
+    const { data: walletData } = useQuery(GQL.userQuery, {
         variables: { id: user.id },
         fetchPolicy: 'network-only',
     });
@@ -34,12 +34,12 @@ const ReplaceImage = props => {
             body: data,
         };
         fetch(Config.ServerRoot + '/api/user/save-avatar?api_token=' + token, config)
-            .then(response => response.text())
-            .then(res => {
+            .then((response) => response.text())
+            .then((res) => {
                 console.log('avatar：', res);
                 userStore.changeAvatar(res);
             })
-            .catch(err => {
+            .catch((err) => {
                 console.log(err);
             });
     };
@@ -55,11 +55,11 @@ const ReplaceImage = props => {
             showCropGuidelines: false,
             enableRotationGesture: true,
         })
-            .then(image => {
+            .then((image) => {
                 saveAvatarImage(image.path);
                 console.log(image.path, '用户选择的头像');
             })
-            .catch(error => {});
+            .catch((error) => {});
     };
     // 相机拍照
     function clickOpenCamera() {
@@ -67,7 +67,7 @@ const ReplaceImage = props => {
             width: pixel(300),
             height: pixel(400),
             cropping: true,
-        }).then(image => {
+        }).then((image) => {
             navigation.goBack();
             console.log(image, '相机拍照的头像');
         });

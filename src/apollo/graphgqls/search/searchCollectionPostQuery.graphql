@@ -1,0 +1,15 @@
+#import "../post/postFragment.graphql"
+
+# 搜索合集中动态
+query searchCollectionPostQuery($query: String!, $page: Int, $collection_id: Int) {
+    searchPosts(query: $query, page: $page, collection_id: $collection_id) {
+        paginatorInfo {
+            currentPage
+            hasMorePages
+            total
+        }
+        data {
+            ...postFragment
+        }
+    }
+}

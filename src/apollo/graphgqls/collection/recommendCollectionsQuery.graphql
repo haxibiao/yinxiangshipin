@@ -1,0 +1,17 @@
+#import "./collectionFragment.graphql"
+
+# 置顶的推荐合集
+query recommendCollectionsQuery {
+    recommendCollections {
+        topCover
+        topCollection {
+            ...collectionFragment
+        }
+        recommendCollectionsA {
+            ...collectionFragment
+        }
+        recommendCollectionsB {
+            ...collectionFragment
+        }
+    }
+}

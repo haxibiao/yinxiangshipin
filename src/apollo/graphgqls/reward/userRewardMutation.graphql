@@ -1,0 +1,10 @@
+#签到额外奖励接口
+# SIGNIN_VIDEO_REWARD 签到奖励
+# DOUBLE_SIGNIN_REWARD 双倍奖励
+# WATCH_REWARD_VIDEO 激励视频奖励
+mutation UserRewardMutation($reason: RewardEnum) {
+    reward(reason: $reason) {
+        gold
+        ticket
+    }
+}

@@ -1,0 +1,14 @@
+#import "./collectionFragment.graphql"
+
+# 随机推荐合集
+query randomCollectionsQuery($page: Int, $count: Int) {
+    randomCollections(page: $page, count: $count) {
+        paginatorInfo {
+            hasMorePages
+            currentPage
+        }
+        data {
+            ...collectionFragment
+        }
+    }
+}

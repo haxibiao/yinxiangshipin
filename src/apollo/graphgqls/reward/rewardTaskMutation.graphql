@@ -1,0 +1,12 @@
+# 任务领取奖励
+mutation rewardTaskMutation($id: ID!) {
+    rewardTask(id: $id) {
+        id
+        reward_info {
+            gold
+            ticket
+            gold_high
+            ticket_high
+        }
+    }
+}

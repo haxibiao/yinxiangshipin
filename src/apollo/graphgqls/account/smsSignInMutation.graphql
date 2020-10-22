@@ -1,0 +1,8 @@
+#import "./signFragment.graphql"
+
+# 手机验证码登陆
+mutation smsSignInMutation($code: String!, $phone: String!) {
+    smsSignIn(sms_code: $code, phone: $phone) {
+        ...signFragment
+    }
+}

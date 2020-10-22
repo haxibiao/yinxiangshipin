@@ -1,0 +1,18 @@
+#import "./postFragment.graphql"
+#import "../collection/collectionFragment.graphql"
+
+# 动态详情
+query postsQuery($user_id: Int!, $count: Int, $page: Int) {
+    posts(user_id: $user_id, count: $count, page: $page) {
+        paginatorInfo {
+            hasMorePages
+            currentPage
+        }
+        data {
+            ...postFragment
+            collections {
+                ...collection
+            }
+        }
+    }
+}

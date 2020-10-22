@@ -1,0 +1,7 @@
+# 删除功能只从列表删除聊天对话框
+# 重新创建对话框时，可以查询出之前的历史记录
+mutation deleteChatMutation($id: ID!) {
+    deleteChat(id: $id) {
+        id
+    }
+}

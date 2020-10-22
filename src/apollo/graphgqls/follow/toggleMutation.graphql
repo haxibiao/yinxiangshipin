@@ -1,0 +1,8 @@
+# gql TODO: toggleFollowMutation
+# 关注用户、收藏合集
+mutation toggleMutation($followed_id: Int!, $followed_type: FollowType!) {
+    toggleFollow(followed_id: $followed_id, followed_type: $followed_type) {
+        id
+        isFollowed
+    }
+}

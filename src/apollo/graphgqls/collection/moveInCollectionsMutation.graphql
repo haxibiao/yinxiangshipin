@@ -1,0 +1,4 @@
+# 添加动态至个人合集
+mutation moveInCollectionsMutation($collection_id: Int!, $collectable_ids: [Int!]) {
+    moveInCollections(collection_id: $collection_id, collectable_ids: $collectable_ids)
+}

@@ -1,0 +1,7 @@
+# 点击动态广场信息流广告
+mutation clickFeedAD {
+    clickFeedAD2 {
+        amount
+        message
+    }
+}

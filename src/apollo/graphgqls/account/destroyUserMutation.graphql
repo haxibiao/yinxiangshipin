@@ -1,0 +1,5 @@
+#注销账号
+# destory 后端单词拼写错了
+mutation destroyUserMutation {
+    destoryUser
+}

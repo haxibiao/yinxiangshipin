@@ -1,0 +1,12 @@
+# 热门标签
+query HotTagQuery($page: Int, $count: Int) {
+    tags(filter: HOT, page: $page, count: $count) {
+        data {
+            id
+            name
+            count_plays
+            count_posts
+            count_views
+        }
+    }
+}

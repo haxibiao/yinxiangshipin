@@ -1,0 +1,15 @@
+# 用户的标签
+query userTags($id: Int!, $page: Int) {
+    user(id: $id) {
+        tags(page: $page) {
+            paginatorInfo {
+                total
+                count
+            }
+            data {
+                id
+                name
+            }
+        }
+    }
+}

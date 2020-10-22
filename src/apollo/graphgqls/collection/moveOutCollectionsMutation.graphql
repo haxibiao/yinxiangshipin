@@ -1,0 +1,4 @@
+# 将动态从个人合集中移除
+mutation moveOutCollectionsMutation($collection_id: Int!, $collectable_ids: [Int!]!) {
+    moveOutCollections(collection_id: $collection_id, collectable_ids: $collectable_ids)
+}

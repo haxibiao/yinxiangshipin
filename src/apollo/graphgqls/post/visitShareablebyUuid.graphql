@@ -1,0 +1,19 @@
+#import "./postFragment.graphql"
+#import "../collection/collectionFragment.graphql"
+
+query visitShareablebyUuid($id: String!) {
+    visitShareablebyUuid(uuid: $id) {
+        id
+        user {
+            id
+            name
+            avatar
+        }
+        post {
+            ...postFragment
+            collections {
+                ...collection
+            }
+        }
+    }
+}

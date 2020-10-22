@@ -1,0 +1,41 @@
+# 修改用户资料
+mutation updateUserProfile($id: Int!, $data: updateUserInfo!) {
+    updateUserInfo(id: $id, input: $data) {
+        id
+        name
+        gender
+        birthday_msg
+        introduction
+        phone
+        password
+    }
+}
+
+mutation updateUserName($id: Int!, $input: updateUserInfo!) {
+    updateUserInfo(id: $id, input: $input) {
+        name
+    }
+}
+
+mutation updateUserGender($id: Int!, $gender: String!) {
+    updateUserInfo(id: $id, input: { gender: $gender }) {
+        id
+        name
+        gender
+        introduction
+    }
+}
+
+# 修改生日
+mutation updateUserBirthday($id: Int!, $input: updateUserInfo!) {
+    updateUserInfo(id: $id, input: $input) {
+        birthday_msg
+    }
+}
+
+# 修改签名
+mutation updateUserIntroduction($id: Int!, $input: updateUserInfo!) {
+    updateUserInfo(id: $id, input: $input) {
+        introduction
+    }
+}

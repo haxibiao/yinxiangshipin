@@ -1,0 +1,17 @@
+#import "./userFragment.graphql"
+#import "../wallet/walletFragment.graphql"
+
+fragment signFragment on Account {
+    token
+    uuid
+    ...userFragment
+    ...walletFragment
+    gold
+    ticket
+    balance
+    exchangeRate
+    total_contributes
+    today_contributes
+    phone
+    title_phone
+}

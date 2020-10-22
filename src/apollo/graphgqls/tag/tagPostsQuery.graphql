@@ -1,0 +1,23 @@
+#import "../post/postFragment.graphql"
+
+# 标签下的内容
+query tagPostsQuery($tag_id: Int!, $page: Int, $count: Int, $order: PostOrderEnum, $visibility: TagVisibilityEnum) {
+    tag(id: $tag_id) {
+        id
+        name
+        count_posts
+        count_plays
+        count_views
+        posts(visibility: $visibility, page: $page, count: $count, order: $order) {
+            paginatorInfo {
+                total
+                currentPage
+                lastPage
+                hasMorePages
+            }
+            data {
+                ...postFragment
+            }
+        }
+    }
+}

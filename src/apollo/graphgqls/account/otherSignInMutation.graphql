@@ -1,0 +1,8 @@
+#import "./signFragment.graphql"
+
+# 第三方账号登陆
+mutation otherSignInMutation($code: String!, $type: OAuthType!) {
+    authSignIn(code: $code, type: $type) {
+        ...signFragment
+    }
+}

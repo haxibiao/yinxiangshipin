@@ -53,7 +53,7 @@ function bindWx(code: any, props: Props) {
             errorPolicy: 'all',
             refetchQueries: () => [
                 {
-                    query: GQL.userProfileQuery,
+                    query: GQL.userQuery,
                     variables: { id: userStore.me.id },
                     fetchPolicy: 'network-only',
                 },

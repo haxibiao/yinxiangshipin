@@ -1,0 +1,12 @@
+#import "./postFragment.graphql"
+#import "../collection/collectionFragment.graphql"
+
+#推荐视频
+query recommendPostsQuery {
+    recommendPosts {
+        ...postFragment
+        collections {
+            ...collection
+        }
+    }
+}

@@ -1,0 +1,8 @@
+# 提现金额
+query getWithdrawAmountList {
+    getWithdrawAmountList {
+        tips
+        amount
+        description
+    }
+}

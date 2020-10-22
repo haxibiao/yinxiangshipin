@@ -1,0 +1,45 @@
+# 获取全部任务列表
+query tasksQuery {
+    tasks(type: All) {
+        id
+        name
+        icon
+        group
+        review_flow {
+            id
+            name
+        }
+        assignment_status
+        assignment_progress
+        progress_details
+        next_reward_video_time
+        type
+        details
+        reward_info {
+            gold
+            ticket
+            contribute
+        }
+        resolve {
+            submit_name
+        }
+        collection {
+            id
+            logo
+            name
+            description
+            count_articles
+            count_follows
+            count_posts
+            count_views
+            updated_to_episode
+            followed
+            type
+            status
+            user {
+                id
+                name
+            }
+        }
+    }
+}

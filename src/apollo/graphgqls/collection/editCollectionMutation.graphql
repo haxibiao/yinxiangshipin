@@ -1,0 +1,22 @@
+# 修改合集信息   type:"POST"
+mutation editCollectionMutation(
+    $collection_id: Int!
+    $name: String!
+    $logo: String
+    $description: String
+    $type: CollectType
+) {
+    editCollection(collection_id: $collection_id, name: $name, logo: $logo, description: $description, type: $type) {
+        id
+        logo
+        name
+        description
+        count_articles
+        count_follows
+        count_views
+        updated_to_episode
+        followed
+        type
+        status
+    }
+}

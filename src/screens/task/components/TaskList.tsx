@@ -9,15 +9,15 @@ import TaskItem from './TaskItem';
 // const tasksType = [
 //     {
 //         type: '每日任务',
-//         gql: GQL.dailyTasksQuery,
+//         gql: GQL.1,
 //     },
 //     {
 //         type: '新人任务',
-//         gql: GQL.userTasksQuery,
+//         gql: GQL.2,
 //     },
 //     {
 //         type: '奖励任务',
-//         gql: GQL.customTasksQuery,
+//         gql: GQL.3,
 //     },
 // ];
 

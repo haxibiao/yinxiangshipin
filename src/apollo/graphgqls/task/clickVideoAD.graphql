@@ -1,0 +1,9 @@
+# 点击视频流广告
+mutation clickVideoAD {
+    clickAD {
+        id
+        created_at
+        amount
+        message
+    }
+}

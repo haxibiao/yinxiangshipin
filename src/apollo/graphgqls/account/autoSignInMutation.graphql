@@ -1,0 +1,8 @@
+#import "./signFragment.graphql"
+
+# 自动登录
+mutation autoSignInMutation($UUID: String!, $PHONE: String) {
+    autoSignIn(uuid: $UUID, phone: $PHONE) {
+        ...signFragment
+    }
+}

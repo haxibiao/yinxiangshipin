@@ -1,0 +1,17 @@
+#import "./articleFragment.graphql"
+
+# gql TODO:visitPostsQuery
+# 浏览记录
+query userVisitsQuery($user_id: Int!, $page: Int) {
+    visits(user_id: $user_id, page: $page) {
+        paginatorInfo {
+            currentPage
+            hasMorePages
+        }
+        data {
+            article {
+                ...articleFragment
+            }
+        }
+    }
+}

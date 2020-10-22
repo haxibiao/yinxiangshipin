@@ -1,0 +1,8 @@
+#静默注册用户绑定手机号，设置初始密码
+mutation updateUserInfoSecurity($id: Int!, $phone: String!, $password: String!) {
+    updateUserInfo(id: $id, input: { phone: $phone, password: $password }) {
+        id
+        name
+        phone
+    }
+}

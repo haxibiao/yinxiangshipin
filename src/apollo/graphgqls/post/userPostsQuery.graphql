@@ -1,0 +1,27 @@
+#import "./postFragment.graphql"
+#import "../collection/collectionFragment.graphql"
+
+# 个人动态
+# filter 筛选动态类型
+# enum PostFilter {
+# spider
+# 用户爬取的动态
+# normal
+# 用户发布的动态
+# all
+# 全部
+# }
+query userPostsQuery($user_id: Int!, $filter: PostFilter, $count: Int, $page: Int) {
+    userPosts(user_id: $user_id, filter: $filter, count: $count, page: $page) {
+        paginatorInfo {
+            hasMorePages
+            currentPage
+        }
+        data {
+            ...postFragment
+            collections {
+                ...collection
+            }
+        }
+    }
+}

@@ -1,0 +1,41 @@
+fragment articleFragment on Article {
+    id
+    type
+    body
+    description
+    created_at
+    cover
+    hits
+    count_likes
+    count_comments
+    count_tips
+    liked
+    user {
+        avatar
+        name
+        id
+    }
+    category {
+        id
+        name
+        logo
+    }
+    images {
+        id
+        url
+        width
+        height
+    }
+    video {
+        id
+        url
+        duration
+        info {
+            width
+            height
+            rotate
+            covers
+        }
+        cover_url
+    }
+}

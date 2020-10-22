@@ -1,0 +1,16 @@
+fragment userFragment on User {
+    id
+    age
+    name
+    avatar
+    gender
+    birthday_msg
+    introduction
+    background
+    count_likes
+    count_articles
+    count_followers
+    count_followings
+    count_favorites
+    followed_status
+}

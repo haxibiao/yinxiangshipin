@@ -24,7 +24,7 @@ const RewardProgress = observer(({ store }) => {
         },
         refetchQueries: (): array => [
             {
-                query: GQL.userProfileQuery,
+                query: GQL.userQuery,
                 variables: { id: userId },
             },
         ],

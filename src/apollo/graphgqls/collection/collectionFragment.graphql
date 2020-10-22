@@ -1,0 +1,17 @@
+fragment collectionFragment on Collection {
+    id
+    logo
+    name
+    description
+    count_articles
+    count_follows
+    count_posts
+    count_views
+    updated_to_episode
+    followed
+    user {
+        id
+        name
+        avatar
+    }
+}

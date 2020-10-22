@@ -1,0 +1,18 @@
+fragment walletFragment on Wallet {
+    id
+    type
+    balance
+    real_name
+    pay_account
+    total_withdraw_amount
+    available_balance
+    today_withdraw_left
+    bind_platforms {
+        alipay
+        wechat
+    }
+    platforms {
+        alipay
+        wechat
+    }
+}

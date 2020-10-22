@@ -1,0 +1,6 @@
+mutation CreateWithdrawMutation($amount: Float!, $platform: Platform, $useWithdrawBadges: Boolean) {
+    createWithdraw(amount: $amount, platform: $platform, useWithdrawBadges: $useWithdrawBadges) {
+        id
+        created_at
+    }
+}

@@ -1,0 +1,39 @@
+#import "../post/articleFragment.graphql"
+
+# 评论通知
+query commentNotificationQuery($page: Int) {
+    notifications(type: GROUP_OTHERS, page: $page) {
+        paginatorInfo {
+            currentPage
+            hasMorePages
+        }
+        data {
+            id
+            type
+            time_ago
+            article {
+                ...articleFragment
+            }
+            comment {
+                id
+                body
+                lou
+                created_at
+                user {
+                    id
+                    avatar
+                    name
+                }
+            }
+            user {
+                id
+                name
+                avatar
+                followed_status
+                gender
+                age
+                introduction
+            }
+        }
+    }
+}
