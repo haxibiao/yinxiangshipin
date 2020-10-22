@@ -56,10 +56,10 @@ export default observer((props: any) => {
 
     // 首次加载视频数据
     useEffect(() => {
-        if (userStore.launched) {
+        if (userStore.login && userStore.recalledUser) {
             fetchData();
         }
-    }, [userStore.login, userStore.launched]);
+    }, [userStore.login, userStore.recalledUser]);
 
     useEffect(() => {
         const onChangeVideoTab = DeviceEventEmitter.addListener('onChangeVideoTab', (activePage) => {

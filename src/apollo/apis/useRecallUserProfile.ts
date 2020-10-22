@@ -17,9 +17,7 @@ export function useRecallUserProfile() {
     useEffect(() => {
         (async function getMeFormStorage() {
             const profile = await Storage.getItem(Keys.me);
-            if (profile?.id) {
-                userStore.recallUser(profile);
-            }
+            userStore.recallUser(profile);
         })();
     }, []);
 }

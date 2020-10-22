@@ -4,13 +4,34 @@ import { QRCodeImage, VideoMeta } from 'react-native-vod';
 import { appStore } from '@src/store';
 import { parseQuery } from '../helper';
 
+function checkPermission() {
+    return new Promise((resolve, reject) => {
+        if (Platform.OS === 'android') {
+            PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE, {
+                title: '需要访问您的相册',
+                message: '为了更好的体验，需要您开启该权限',
+            }).then((granted) => {
+                if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                    // console.log('安卓 权限OK');\
+                    resolve();
+                } else {
+                    // console.log('安卓 Photos permission denied');
+                    reject();
+                }
+            });
+        } else {
+            resolve();
+        }
+    });
+}
+
 export async function detectPhotos() {
-    if (Platform.OS === 'android') {
-        await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE, {
-            title: '需要访问您的相册',
-            message: '为了更好的体验，需要您开启该权限',
-        });
+    try {
+        await checkPermission();
+    } catch (error) {
+        return;
     }
+
     const result = await CameraRoll.getPhotos({
         first: 3,
         assetType: 'All',
@@ -28,34 +49,31 @@ export async function detectPhotos() {
             }
             if (type === 'image') {
                 result = await detectPhotoQRCode(mediaUrl);
-            } else if (type === 'video' && Platform.OS === 'android') {
+            } else if (type === 'video' && Platform.OS !== 'android') {
+                // TODO: android detectVideoMeta crash
                 result = await detectVideoMeta(mediaUrl);
             }
             if (result) {
-                return result;
+                break;
             }
         }
+        return result;
     }
 
     function detectVideoMeta(videoUrl) {
         return new Promise((resolve, reject) => {
-            return VideoMeta.fetchMeta(videoUrl)
-                .then((res) => {
-                    // console.log('detectVideoMeta', video, res);
-                    if (res) {
-                        resolve({
-                            type: 'post',
-                            vid: res,
-                            url: videoUrl,
-                            fileType: 'video',
-                        });
-                    } else {
-                        resolve(null);
-                    }
-                })
-                .catch((err) => {
+            return VideoMeta.fetchMeta(videoUrl, (res) => {
+                if (res) {
+                    resolve({
+                        type: 'post',
+                        uuid: String(res).slice(5),
+                        url: videoUrl,
+                        fileType: 'video',
+                    });
+                } else {
                     resolve(null);
-                });
+                }
+            });
         });
     }
 

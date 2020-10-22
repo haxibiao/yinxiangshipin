@@ -13,8 +13,9 @@ import NewUserTaskGuidance from './screens/guidance/NewUserTaskGuidance';
 import SharedPostOverlay from './components/share/SharedPostOverlay';
 
 const UserAgreementGuide = 'UserAgreementGuide' + Config.Version;
+const fetchConfigTimeout = 4000;
 
-const fetchConfigTimeout = fetchConfigTimeout;
+// 弹窗顺序：用户协议、新人任务引导、分享弹窗、采集弹窗
 
 // 监听新用户登录
 when(
@@ -33,11 +34,6 @@ export default observer(function BusinessManager() {
     useRecallUserProfile();
     // 显示用户协议
     useUserAgreement(UserAgreementGuide);
-    // recalled userStore、UserAgreement
-    const appIsReady = useMemo(() => userStore.launched && appStore.guides[UserAgreementGuide], [
-        userStore.launched,
-        appStore.guides[UserAgreementGuide],
-    ]);
 
     // 获取APP的开启配置(广告和钱包)
     const timer = useRef(); // 防止获取配置超时
@@ -63,6 +59,7 @@ export default observer(function BusinessManager() {
                 }
             })
             .catch((err) => {
+                adStore.setAdConfig();
                 clearInterval(timer.current);
             });
     }, []);
@@ -111,7 +108,7 @@ export default observer(function BusinessManager() {
             appStore.detectedFileInfo.push(photoInfo?.url);
             appStore.setAppStorage('detectedFileInfo', appStore.detectedFileInfo);
         }
-        if (photoInfo?.type == 'post' && (photoInfo?.post_id || photoInfo?.vid)) {
+        if (photoInfo?.type == 'post' && (photoInfo?.post_id || photoInfo?.uuid)) {
             SharedPostOverlay.show({ url: photoInfo?.url, type: photoInfo?.fileType, onPress, onClose });
         }
         return () => {
@@ -121,25 +118,18 @@ export default observer(function BusinessManager() {
         };
     }, []);
     useEffect(() => {
-        let timer;
         // App初始化完成，用户同意协议
+        const appIsReady = userStore.recalledUser && appStore.guides[UserAgreementGuide] && adStore.loadedConfig;
         if (appIsReady) {
-            const unableShowNewUserTask = !userStore?.me?.id || !(adStore.enableAd && adStore.enableWallet);
-            timer = setTimeout(() => {
-                // 新人任务引导完成 / 假如用户未登录或者关闭了广告/钱包（为避免超时，所以延迟执行）
-                if (appStore.guides.NewUserTask || unableShowNewUserTask) {
-                    detectPhotoAlbum();
-                } else {
-                    setDetected(true);
-                }
-            }, fetchConfigTimeout);
-        }
-        return () => {
-            if (timer) {
-                clearTimeout(timer);
+            // 新人任务引导完成 / 用户未登录
+            if ((appStore.guides.NewUserTask || !userStore?.login) && !detectPhotoAlbum.called) {
+                detectPhotoAlbum.called = true;
+                detectPhotoAlbum();
+            } else {
+                setDetected(true);
             }
-        };
-    }, [appIsReady, appStore.guides.NewUserTask]);
+        }
+    }, [userStore.recalledUse, appStore.guides[UserAgreementGuide], adStore.loadedConfig, appStore.guides.NewUserTask]);
 
     // 粘贴板抖音采集
     const [shareContent] = useClipboardLink();

@@ -17,8 +17,7 @@ export interface UserScheme {
 }
 
 class UserStore {
-    // launched ==> 从Storage获取用户数据完成，避免重复创建client
-    @observable launched: boolean = false;
+    @observable recalledUser: boolean = false; //从Storage获取用户数据完成，避免重复创建client
     @observable me: UserScheme = {};
     @observable login: boolean = false;
     @observable firstInstall: boolean = false;
@@ -39,11 +38,13 @@ class UserStore {
     }
 
     @action.bound
-    recallUser(me: UserScheme) {
-        TOKEN = me.token;
-        this.me = me;
-        this.login = true;
-        this.launched = true;
+    recallUser(me?: UserScheme) {
+        if (me?.id) {
+            TOKEN = me.token;
+            this.me = me;
+            this.login = true;
+        }
+        this.recalledUser = true;
     }
 
     @action.bound

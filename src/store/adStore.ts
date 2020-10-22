@@ -3,12 +3,12 @@ import { observable, action, computed } from 'mobx';
 import AppJson from '@app/app.json';
 
 class AdStore {
+    @observable loadedConfig: boolean = false; //config请求是否完成
     /**
      **********************
      *  广告相关的 store
      **********************
      */
-
     @observable tt_appid: string = Platform.OS === 'ios' ? AppJson.tt_appid_ios : AppJson.tt_appid; // 头条APPID
     // @observable tx_appid: string = Platform.OS === 'ios' ? AppJson.tx_appid_ios : AppJson.tx_appid; // 腾讯APPID
     // @observable bd_appid: string = Platform.OS === 'ios' ? AppJson.bd_appid_ios : AppJson.bd_appid; // 百度APPID
@@ -43,6 +43,7 @@ class AdStore {
     setAdConfig(config: any) {
         // this.enableAd = true;
         // this.enableWallet = true;
+        this.loadedConfig = true;
         this.enableAd = config?.ad === 'on';
         this.enableWallet = config?.wallet === 'on';
         // for (var p in config) {

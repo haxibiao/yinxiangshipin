@@ -25,7 +25,7 @@ import CommentItem from './components/CommentItem';
 
 export default observer((props) => {
     const { navigation, route } = props;
-    const vid = route.params?.vid;
+    const uuid = route.params?.uuid;
     const post_id = route.params?.post_id;
     const user_id = route.params?.user_id;
     const isSelf = userStore.me.id === user_id;
@@ -45,12 +45,12 @@ export default observer((props) => {
     }, []);
 
     // 动态详情
-    const { data: postData } = useQuery(vid ? GQL.postByVid : GQL.postQuery, {
-        variables: { id: vid ? vid : post_id },
+    const { data: postData } = useQuery(uuid ? GQL.visitShareablebyUuid : GQL.postQuery, {
+        variables: { id: uuid ? uuid : post_id },
         fetchPolicy: 'network-only',
     });
     const media = useMemo(() => {
-        const post = postData?.post || postData?.postByVid;
+        const post = postData?.post || postData?.visitShareablebyUuid?.post;
         if (post?.id) {
             return observable(post);
         }

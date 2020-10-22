@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { StyleSheet, View, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, Image, TouchableOpacity, ScrollView, Platform } from 'react-native';
 import { Iconfont } from '@src/components';
 import Video from 'react-native-video';
 import { Overlay } from 'teaset';
@@ -11,24 +11,32 @@ interface Props {
     onClose: (p?: any) => any;
 }
 
+const ContentCover = React.memo(({ url, type }) => {
+    if (Platform.OS === 'ios') {
+        return <Image style={styles.coverImage} source={{ uri: url }} resizeMode="cover" />;
+    } else {
+        return type === 'image' ? (
+            <Image style={styles.coverImage} source={{ uri: url }} resizeMode="cover" />
+        ) : (
+            <Video
+                source={{
+                    uri: url,
+                }}
+                style={styles.coverVideo}
+                muted={true}
+                paused={false}
+                resizeMode="cover"
+            />
+        );
+    }
+});
+
 const SharedPost = ({ url, type, onPress, onClose }: Props) => {
     return (
         <ScrollView contentContainerStyle={styles.container}>
             <View style={styles.card}>
                 <View style={styles.contentCover}>
-                    {type === 'image' ? (
-                        <Image style={styles.coverImage} source={{ uri: url }} resizeMode="cover" />
-                    ) : (
-                        <Video
-                            source={{
-                                uri: url,
-                            }}
-                            style={styles.coverVideo}
-                            muted={true}
-                            paused={false}
-                            resizeMode="cover"
-                        />
-                    )}
+                    <ContentCover url={url} type={type} />
                     <View style={styles.videoMark}>
                         <Iconfont name="bofang1" size={font(20)} color={'#fff'} style={{ opacity: 0.8 }} />
                     </View>
