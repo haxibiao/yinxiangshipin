@@ -18,7 +18,7 @@ export default observer((props) => {
         },
         refetchQueries: () => [
             {
-                query: GQL.MyFeedbackQuery,
+                query: GQL.myFeedbackQuery,
                 variables: { id: userStore.me.id },
                 fetchPolicy: 'network-only',
             },

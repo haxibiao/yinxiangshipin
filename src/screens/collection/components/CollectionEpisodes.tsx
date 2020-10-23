@@ -85,7 +85,7 @@ export default ({ collection, post, onClose, navigation }) => {
         })(),
     );
 
-    const { loading, error, data, fetchMore, refetch } = useQuery(GQL.CollectionQuery, {
+    const { loading, error, data, fetchMore, refetch } = useQuery(GQL.collectionPostsQuery, {
         variables: {
             collection_id: collection?.id,
             count: VIDEO_QUERY_COUNT,

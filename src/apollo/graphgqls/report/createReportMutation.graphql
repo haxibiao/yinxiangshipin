@@ -6,7 +6,7 @@
 # user
 # post（新）
 # }
-mutation createReport($id: Int!, $reason: String, $type: ReportType) {
+mutation createReportMutation($id: Int!, $reason: String, $type: ReportType) {
     createReport(id: $id, reason: $reason, type: $type) {
         id
     }

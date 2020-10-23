@@ -2,7 +2,7 @@
 #import "../collection/collectionFragment.graphql"
 
 #推荐视频
-query recommendPostsQuery {
+query publicVideosQuery {
     recommendPosts {
         ...postFragment
         collections {

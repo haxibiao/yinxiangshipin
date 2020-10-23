@@ -38,13 +38,13 @@ mutation createFeedbackMutation($content: String!, $images: [String], $contact: 
 # user
 # post（新）
 # }
-mutation createReport($id: Int!, $reason: String, $type: ReportType) {
+mutation createReportMutation($id: Int!, $reason: String, $type: ReportType) {
     createReport(id: $id, reason: $reason, type: $type) {
         id
     }
 }
 
-query MyFeedbackQuery($id: Int!, $count: Int, $page: Int) {
+query myFeedbackQuery($id: Int!, $count: Int, $page: Int) {
     feedback(user_id: $id, page: $page, count: $count, orderBy: { field: "created_at", order: DESC }) {
         paginatorInfo {
             count
@@ -80,7 +80,7 @@ query MyFeedbackQuery($id: Int!, $count: Int, $page: Int) {
 }
 
 #反馈查询
-query FeedbacksQuery($page: Int, $count: Int) {
+query feedbacksQuery($page: Int, $count: Int) {
     feedbacks(count: $count, page: $page) {
         paginatorInfo {
             count

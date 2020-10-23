@@ -1,5 +1,5 @@
 #反馈查询
-query FeedbacksQuery($page: Int, $count: Int) {
+query feedbacksQuery($page: Int, $count: Int) {
     feedbacks(count: $count, page: $page) {
         paginatorInfo {
             count

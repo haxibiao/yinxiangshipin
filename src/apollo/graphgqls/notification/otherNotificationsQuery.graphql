@@ -1,7 +1,7 @@
 #import "../post/articleFragment.graphql"
 
 # 评论通知
-query commentNotificationQuery($page: Int) {
+query otherNotificationsQuery($page: Int) {
     notifications(type: GROUP_OTHERS, page: $page) {
         paginatorInfo {
             currentPage

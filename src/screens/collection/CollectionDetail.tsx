@@ -158,7 +158,7 @@ export default observer((props: any) => {
                 },
                 refetchQueries: () => [
                     {
-                        query: GQL.CollectionQuery,
+                        query: GQL.collectionPostsQuery,
                         variables: { collection_id: collection_id },
                         fetchPolicy: 'network-only',
                     },
@@ -174,7 +174,7 @@ export default observer((props: any) => {
                 },
                 refetchQueries: () => [
                     {
-                        query: GQL.CollectionQuery,
+                        query: GQL.collectionPostsQuery,
                         variables: { collection_id: collection_id },
                         fetchPolicy: 'network-only',
                     },
@@ -261,7 +261,7 @@ export default observer((props: any) => {
                 }
             />
             <QueryList
-                gqlDocument={GQL.CollectionQuery}
+                gqlDocument={GQL.collectionPostsQuery}
                 dataOptionChain="collection.posts.data"
                 paginateOptionChain="collection.posts.paginatorInfo"
                 options={{

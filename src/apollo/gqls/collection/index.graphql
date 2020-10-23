@@ -86,7 +86,7 @@ query randomCollectionsQuery($page: Int, $count: Int) {
 }
 
 # 个人合集
-query CollectionsQuery($user_id: Int!, $count: Int, $page: Int) {
+query collectionsQuery($user_id: Int!, $count: Int, $page: Int) {
     collections(user_id: $user_id, count: $count, page: $page) {
         paginatorInfo {
             currentPage
@@ -114,7 +114,7 @@ query CollectionsQuery($user_id: Int!, $count: Int, $page: Int) {
 }
 
 # 合集内的视频
-query CollectionQuery($collection_id: Int!, $page: Int, $count: Int) {
+query collectionPostsQuery($collection_id: Int!, $page: Int, $count: Int) {
     collection(collection_id: $collection_id) {
         id
         logo

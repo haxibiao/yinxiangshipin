@@ -69,7 +69,7 @@ interface Props {
 
 export const useReport = ({ type = 'articles', target }: Props) => {
     const reason = useRef();
-    const [reportMutation] = useMutation(GQL.createReport, {
+    const [reportMutation] = useMutation(GQL.createReportMutation, {
         variables: {
             type,
             id: target?.id,

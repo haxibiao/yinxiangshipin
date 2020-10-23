@@ -3,7 +3,7 @@
 
 # gql TODO: CollectionPostsQuery
 # 合集内的视频
-query CollectionQuery($collection_id: Int!, $page: Int, $count: Int) {
+query collectionPostsQuery($collection_id: Int!, $page: Int, $count: Int) {
     collection(collection_id: $collection_id) {
         type
         status

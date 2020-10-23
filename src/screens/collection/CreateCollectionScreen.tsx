@@ -72,7 +72,7 @@ export default function CreateCollectionScreen(props) {
 
         function createPostCollection() {
             return appStore.client.mutate({
-                mutation: GQL.CreateCollectionMutation,
+                mutation: GQL.createCollectionMutation,
                 variables: {
                     name: formData.title,
                     logo: formData.cover,
@@ -81,7 +81,7 @@ export default function CreateCollectionScreen(props) {
                 },
                 refetchQueries: () => [
                     {
-                        query: GQL.CollectionsQuery,
+                        query: GQL.collectionsQuery,
                         variables: {
                             user_id: userStore.me.id,
                         },

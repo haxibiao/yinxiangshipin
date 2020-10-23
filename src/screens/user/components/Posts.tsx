@@ -27,7 +27,7 @@ export default (props: any) => {
     const headerComponent = useCallback(() => {
         return (
             <QueryList
-                gqlDocument={GQL.CollectionsQuery}
+                gqlDocument={GQL.collectionsQuery}
                 dataOptionChain="collections.data"
                 paginateOptionChain="collections.paginatorInfo"
                 options={{

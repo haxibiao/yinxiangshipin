@@ -1,5 +1,5 @@
 #看视频奖励
-mutation VideoPlayReward($input: videoPlayReport) {
+mutation VideoPlayRewardMutation($input: videoPlayReport) {
     videoPlayReward(input: $input) {
         gold
     }

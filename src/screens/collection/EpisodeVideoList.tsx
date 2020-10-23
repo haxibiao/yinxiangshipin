@@ -62,7 +62,7 @@ export default observer(() => {
         // console.log('isTopReached', isTopReached, prevPage);
         async function postsQuery() {
             return client.query({
-                query: GQL.CollectionQuery,
+                query: GQL.collectionPostsQuery,
                 variables: {
                     collection_id: collection?.id,
                     page: isTopReached ? prevPage : nextPage.current,

@@ -103,22 +103,22 @@ mutation updatePostMutation($id: Int!, $content: String, $description: String, $
 }
 
 # 删除
-mutation deletePost($id: Int!) {
-    deletePost(id: $id) {
+mutation deletePostMutation($id: Int!) {
+    deletePostMutation(id: $id) {
         id
     }
 }
 
 #看视频奖励
-mutation VideoPlayReward($input: videoPlayReport) {
+mutation VideoPlayRewardMutation($input: videoPlayReport) {
     videoPlayReward(input: $input) {
         gold
     }
 }
 
 # 删除
-mutation deleteArticle($id: Int!) {
-    deleteArticle(id: $id) {
+mutation deleteArticleMutation($id: Int!) {
+    deleteArticleMutation(id: $id) {
         id
     }
 }

@@ -44,7 +44,7 @@ const EditCollection = (props: any) => {
         },
         refetchQueries: () => [
             {
-                query: GQL.CollectionsQuery,
+                query: GQL.collectionsQuery,
                 variables: { user_id: userStore.me.id },
                 fetchPolicy: 'network-only',
             },

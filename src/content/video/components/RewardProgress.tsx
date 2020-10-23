@@ -16,7 +16,7 @@ const RewardProgress = observer(({ store }) => {
     const [rewardGold, setReward] = useState();
     const [imageAnimation, startImageAnimation] = useBounceAnimation({ value: 0, toValue: 1 });
     const [textAnimation, startTextAnimation] = useLinearAnimation({ duration: 2000 });
-    const [playReward] = useMutation(GQL.VideoPlayReward, {
+    const [playReward] = useMutation(GQL.VideoPlayRewardMutation, {
         variables: {
             input: {
                 video_ids: [...new Set(store.playedVideos)],

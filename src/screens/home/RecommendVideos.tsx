@@ -15,7 +15,7 @@ export default observer((props: any) => {
     const fetchData = useCallback(async () => {
         async function postsQuery() {
             return appStore.client.query({
-                query: GQL.recommendPostsQuery,
+                query: GQL.publicVideosQuery,
                 fetchPolicy: 'network-only',
             });
         }

@@ -1,6 +1,6 @@
 # 删除
-mutation deletePost($id: Int!) {
-    deletePost(id: $id) {
+mutation deletePostMutation($id: Int!) {
+    deletePostMutation(id: $id) {
         id
     }
 }

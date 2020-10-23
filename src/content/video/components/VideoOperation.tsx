@@ -9,7 +9,7 @@ const VideoOperation = (props: any) => {
     const { options, type, target, closeOverlay, onRemove, client, navigation } = props;
     const report = useReport({ target, type });
 
-    const [deleteArticleMutation] = useMutation(GQL.deleteArticle, {
+    const [deleteArticleMutation] = useMutation(GQL.deleteArticleMutation, {
         variables: {
             id: target.id,
         },

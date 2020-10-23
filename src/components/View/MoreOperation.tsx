@@ -19,7 +19,7 @@ const MoreOperation = (props: any) => {
     const shareLink = useRef();
     const report = useReport({ target, type });
 
-    const [deleteArticleMutation] = useMutation(GQL.deleteArticle, {
+    const [deleteArticleMutation] = useMutation(GQL.deleteArticleMutation, {
         variables: {
             id: target.id,
         },
@@ -49,7 +49,7 @@ const MoreOperation = (props: any) => {
         }
         const [error, result] = await exceptionCapture(() =>
             client.query({
-                query: GQL.shareQuery,
+                query: GQL.sharePostQuery,
                 variables: {
                     id: target.id,
                 },
@@ -136,7 +136,7 @@ const MoreOperation = (props: any) => {
                             query: GQL.publicPostsQuery,
                         },
                         {
-                            query: GQL.recommendPostsQuery,
+                            query: GQL.publicVideosQuery,
                         },
                     ],
                 })

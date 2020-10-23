@@ -1,7 +1,7 @@
 #import "./collectionFragment.graphql"
 
 # 个人合集
-query CollectionsQuery($user_id: Int!, $count: Int, $page: Int) {
+query collectionsQuery($user_id: Int!, $count: Int, $page: Int) {
     collections(user_id: $user_id, count: $count, page: $page) {
         paginatorInfo {
             currentPage

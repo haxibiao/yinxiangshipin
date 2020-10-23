@@ -32,7 +32,7 @@ export default function CollectionScreen() {
                 },
                 refetchQueries: () => [
                     {
-                        query: GQL.CollectionsQuery,
+                        query: GQL.collectionsQuery,
                         variables: {
                             user_id: user_id,
                         },
@@ -84,7 +84,7 @@ export default function CollectionScreen() {
                 )
             }>
             <QueryList
-                gqlDocument={GQL.CollectionsQuery}
+                gqlDocument={GQL.collectionsQuery}
                 dataOptionChain="collections.data"
                 paginateOptionChain="collections.paginatorInfo"
                 options={{

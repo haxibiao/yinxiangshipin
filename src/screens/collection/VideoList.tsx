@@ -25,7 +25,7 @@ export default () => {
     const fetchData = useCallback(async () => {
         async function postsQuery() {
             return client.query({
-                query: GQL.CollectionQuery,
+                query: GQL.collectionPostsQuery,
                 variables: {
                     collection_id: collection?.id,
                     page: nextPage.current,

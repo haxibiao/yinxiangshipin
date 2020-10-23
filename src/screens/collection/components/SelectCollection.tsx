@@ -40,7 +40,7 @@ export default ({ onClose, onClick, navigation }) => {
                 </TouchableOpacity>
             </View>
             <QueryList
-                gqlDocument={GQL.CollectionsQuery}
+                gqlDocument={GQL.collectionsQuery}
                 dataOptionChain="collections.data"
                 paginateOptionChain="collections.paginatorInfo"
                 options={{

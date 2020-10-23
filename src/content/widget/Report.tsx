@@ -21,7 +21,7 @@ interface Props {
 // }, []);
 
 export default function Report({ id, type, close, successful, failure }: Props) {
-    const [createReport, { loading }] = useDebouncedMutation(GQL.createReport, { successful, failure });
+    const [createReportMutation, { loading }] = useDebouncedMutation(GQL.createReportMutation, { successful, failure });
     const [reasonType, setReasonType] = useState('');
     const [description, setDescription] = useState('');
     const reasons = useMemo(() => {
@@ -65,7 +65,7 @@ export default function Report({ id, type, close, successful, failure }: Props) 
                     activeOpacity={0.8}
                     disabled={!reason}
                     onPress={() =>
-                        createReport({
+                        createReportMutation({
                             variables: {
                                 id,
                                 type,

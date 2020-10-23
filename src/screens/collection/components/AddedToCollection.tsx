@@ -88,7 +88,7 @@ export default observer(({ onClose, onClick, navigation, operation, collection, 
                 />
             ) : (
                 <QueryList
-                    gqlDocument={GQL.CollectionQuery}
+                    gqlDocument={GQL.collectionPostsQuery}
                     dataOptionChain="collection.posts.data"
                     paginateOptionChain="collection.posts.paginatorInfo"
                     options={{

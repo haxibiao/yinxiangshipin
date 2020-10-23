@@ -1,7 +1,7 @@
 #import './mutation.graphql'
 
 #视频列表（新）
-query recommendPostsQuery {
+query publicVideosQuery {
     recommendPosts {
         id
         spider {
@@ -571,6 +571,6 @@ query articleQuery($id: Int!) {
     }
 }
 #复制视频链接
-query shareQuery($id: ID!) {
+query sharePostQuery($id: ID!) {
     sharePost(id: $id)
 }

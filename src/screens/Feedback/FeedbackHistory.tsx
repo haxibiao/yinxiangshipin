@@ -8,7 +8,7 @@ import { observer, userStore } from '@src/store';
 import FeedbackItem from './FeedbackItem';
 
 export default observer((props) => {
-    const { loading, error, data, fetchMore, refetch } = useQuery(GQL.MyFeedbackQuery, {
+    const { loading, error, data, fetchMore, refetch } = useQuery(GQL.myFeedbackQuery, {
         variables: { id: userStore.me.id },
         fetchPolicy: 'network-only',
     });
