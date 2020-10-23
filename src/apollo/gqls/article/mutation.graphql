@@ -104,7 +104,7 @@ mutation updatePostMutation($id: Int!, $content: String, $description: String, $
 
 # 删除
 mutation deletePostMutation($id: Int!) {
-    deletePostMutation(id: $id) {
+    deletePost(id: $id) {
         id
     }
 }
@@ -118,7 +118,7 @@ mutation VideoPlayRewardMutation($input: videoPlayReport) {
 
 # 删除
 mutation deleteArticleMutation($id: Int!) {
-    deleteArticleMutation(id: $id) {
+    deleteArticle(id: $id) {
         id
     }
 }

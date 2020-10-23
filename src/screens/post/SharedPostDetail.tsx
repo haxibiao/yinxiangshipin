@@ -165,7 +165,7 @@ export default observer((props) => {
                         }
                         onRemove={() => {
                             navigation.goBack();
-                            DeviceEventEmitter.emit('deletePostMutation', media);
+                            DeviceEventEmitter.emit('deletePost', media);
                         }}
                     />
                 </ApolloProvider>
