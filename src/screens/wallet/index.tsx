@@ -12,8 +12,8 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { PageContainer, Iconfont, Row, HxfButton, SafeText } from '@src/components';
-import { observer, userStore } from '@src/store';
-import { GQL, useMutation, useQuery } from '@src/apollo';
+import { observer, userStore, notificationStore } from '@src/store';
+import { GQL, useMutation, useQuery, errorMessage } from '@src/apollo';
 import { bindWechat, syncGetter, useNavigationListener } from '@src/common';
 
 const fakeAmountListData = [
@@ -112,7 +112,10 @@ export default observer((props: any) => {
             });
         },
         onError: (error) => {
-            Toast.show({ content: error.message.replace('GraphQL error: ', '') || '提现失败' });
+            notificationStore.sendWalletNotice({
+                title: '提现失败',
+                content: errorMessage(error) || '提现时间为09:00-20:00的整点前十分钟哦，您可以下个时间段再来提现哦',
+            });
         },
     });
 
@@ -140,14 +143,14 @@ export default observer((props: any) => {
                         Toast.show({ content: `今日提现额度已用完` });
                     }
                 } else {
-                    Toast.show({ content: `请先完善信息` });
+                    Toast.show({ content: `请先绑定提现账号` });
                 }
             }
         },
         [userProfile, wallet, noWithdrawal],
     );
 
-    const onWithdraw = useCallback(__.debounce(withdrawRequest, 500), [withdrawRequest]);
+    const onWithdraw = useCallback(__.debounce(withdrawRequest, 100), [withdrawRequest]);
     // 绑定提现账号
     const bindWithdrawAccount = useMemo(() => {
         return {

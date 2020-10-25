@@ -46,6 +46,7 @@ export const AutonomousModal = React.forwardRef(
                 transparent={true}
                 visible={modalVisible}
                 onRequestClose={toggleModalVisible}
+                hardwareAccelerated={true}
                 {...modalProps}>
                 <View style={[styles.centeredView, style]}>{children(visible, toggleModalVisible)}</View>
                 {/* <KeyboardSpacer /> */}

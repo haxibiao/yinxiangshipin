@@ -141,6 +141,7 @@ const styles = StyleSheet.create({
         width: null,
         height: null,
         resizeMode: 'cover',
+        backgroundColor: '#f0f0f0',
     },
     videoMark: {
         ...StyleSheet.absoluteFill,

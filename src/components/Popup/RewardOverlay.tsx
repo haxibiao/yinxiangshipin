@@ -110,21 +110,23 @@ const RewardOverlay = (props) => {
                     }}
                 />
             )}
-            <View style={styles.adContainer}>
-                <ad.Feed
-                    codeid={adStore.codeid_feed}
-                    adWidth={Device.WIDTH - pixel(50)}
-                    onAdLayout={() => {
-                        setAdShown(true);
-                    }}
-                    onAdError={() => {
-                        setAdShown(false);
-                    }}
-                    onAdClose={() => {
-                        setAdShown(false);
-                    }}
-                />
-            </View>
+            {adShown && (
+                <View style={styles.adContainer}>
+                    <ad.Feed
+                        codeid={adStore.codeid_feed}
+                        adWidth={Device.WIDTH - pixel(50)}
+                        onAdLayout={() => {
+                            setAdShown(true);
+                        }}
+                        onAdError={() => {
+                            setAdShown(false);
+                        }}
+                        onAdClose={() => {
+                            setAdShown(false);
+                        }}
+                    />
+                </View>
+            )}
         </View>
     );
 };

@@ -5,7 +5,7 @@ import Orientation from 'react-native-orientation';
 import codePush from 'react-native-code-push';
 import { ad } from 'react-native-ad';
 // appContext
-import StoreContext, { observer, appStore, adStore, userStore } from './store';
+import { observer, appStore, adStore, userStore } from './store';
 // apollo appRouter
 import { ApolloProvider as ClassApolloProvider } from 'react-apollo';
 import { ApolloProvider, useClientBuilder, GQL } from './apollo';
@@ -13,10 +13,9 @@ import AppRouter, { authNavigate } from './router';
 // weChat lib
 import * as WeChat from 'react-native-wechat-lib';
 import { WechatAppId, DisplayName } from '../app.json';
-// overlay
-import { Toast } from './components';
-// business manager
+// app component
 import BusinessManager from './BusinessManager';
+import { Toast, TaskNotificationModal, WalletNotificationModal, RewardNotificationModal } from './components';
 
 //修复部分安卓手机中文字体丢失
 const defaultFontFamily = {
@@ -94,19 +93,15 @@ const App = observer(() => {
 
     return (
         <View style={styles.container}>
-            <StoreContext.Provider
-                value={{
-                    appStore,
-                    adStore,
-                    userStore,
-                }}>
-                <ClassApolloProvider client={client}>
-                    <ApolloProvider client={client}>
-                        <BusinessManager />
-                        <AppRouter />
-                    </ApolloProvider>
-                </ClassApolloProvider>
-            </StoreContext.Provider>
+            <ClassApolloProvider client={client}>
+                <ApolloProvider client={client}>
+                    <BusinessManager />
+                    <AppRouter />
+                    <TaskNotificationModal />
+                    <WalletNotificationModal />
+                    <RewardNotificationModal />
+                </ApolloProvider>
+            </ClassApolloProvider>
             <Toast ref={(ref) => (global.Toast = ref)} />
         </View>
     );
@@ -115,7 +110,6 @@ const App = observer(() => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
     },
 });
 
