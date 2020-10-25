@@ -10,7 +10,7 @@ import { Commodity } from '../../widget';
 import Player from './Player';
 import SideBar from './SideBar';
 import VideoOperation from './VideoOperation';
-import Question from './Question';
+import AnswerQuestion from './AnswerQuestion';
 
 interface Props {
     media: any;
@@ -18,19 +18,19 @@ interface Props {
     store: any;
 }
 
-// const qd = {
-//     id: 1,
-//     description: '视频刷动态关联题目，题目类型为纯文本的单选题，并且题干和选项字数不宜过多',
-//     answer: ['B'],
-//     selections: [
-//         {
-//             Value: 'A',
-//             Text: '选项字数不宜过多',
-//         },
-//         { Value: 'B', Text: '选项字数不宜过多' },
-//         { Value: 'C', Text: '选项字数不宜过多' },
-//     ],
-// };
+const qd = {
+    id: 1,
+    description: '视频刷动态关联题目，题目类型为纯文本的单选题，并且题干和选项字数不宜过多',
+    answer: ['B'],
+    selections: [
+        {
+            Value: 'A',
+            Text: '选项字数不宜过多',
+        },
+        { Value: 'B', Text: '选项字数不宜过多' },
+        { Value: 'C', Text: '选项字数不宜过多' },
+    ],
+};
 
 export default observer((props: Props) => {
     const { media, index, store } = props;
@@ -68,8 +68,6 @@ export default observer((props: Props) => {
                     client={client}
                     navigation={navigation}
                     target={media}
-                    videoUrl={media?.video?.url}
-                    videoTitle={media?.body}
                     options={isMe ? ['下载'] : ['下载', '不感兴趣', '举报']}
                     closeOverlay={() => overlayRef.current?.close()}
                     onRemove={removeMedia}
@@ -218,7 +216,7 @@ export default observer((props: Props) => {
                     </View>
                 </LinearGradient>
             </TouchableWithoutFeedback>
-            {/* <Question question={qd} style={styles.questionSite} /> */}
+            {/* <AnswerQuestion question={qd} style={styles.questionSite} /> */}
         </View>
     );
 });
@@ -309,8 +307,8 @@ const styles = StyleSheet.create({
     questionSite: {
         position: 'absolute',
         zIndex: 999,
-        top: Theme.statusBarHeight + Theme.NAVBAR_HEIGHT + pixel(120),
-        left: pixel(15),
-        right: pixel(70),
+        width: '64%',
+        left: '5%',
+        bottom: '25%',
     },
 });
