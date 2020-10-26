@@ -1,5 +1,5 @@
 import React from 'react';
-import { appStore, userStore } from '@src/store';
+import { appStore, userStore, notificationStore } from '@src/store';
 import { GQL, errorMessage } from '@src/apollo';
 import * as WeChat from 'react-native-wechat-lib';
 
@@ -36,6 +36,7 @@ export function bindWeChat(props: Props) {
 
 function bindingWeChatWallet(code: any, props: Props) {
     const { onSuccess, onFailed } = props;
+    notificationStore.toggleLoadingVisible();
     appStore.client
         .mutate({
             mutation: GQL.BindOAuth,
@@ -59,6 +60,7 @@ function bindingWeChatWallet(code: any, props: Props) {
             ],
         })
         .then((result: any) => {
+            notificationStore.toggleLoadingVisible();
             if (result.errors) {
                 onFailed && onFailed(result.errors?.[0]?.message);
             } else {
@@ -66,6 +68,7 @@ function bindingWeChatWallet(code: any, props: Props) {
             }
         })
         .catch((error: any) => {
+            notificationStore.toggleLoadingVisible();
             onFailed && onFailed(errorMessage(error));
         });
 }

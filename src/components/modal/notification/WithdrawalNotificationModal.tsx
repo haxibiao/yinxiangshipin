@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
     },
     adContainer: {
         width: MODAL_WIDTH,
-        minHeight: MODAL_WIDTH * 0.6,
+        minHeight: MODAL_WIDTH * 0.65,
         justifyContent: 'center',
         backgroundColor: '#FFF',
         borderBottomLeftRadius: pixel(10),

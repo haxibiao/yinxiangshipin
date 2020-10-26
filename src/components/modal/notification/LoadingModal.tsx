@@ -4,7 +4,7 @@ import { observer, autorun, notificationStore } from '@src/store';
 import LottieView from 'lottie-react-native';
 const animation = require('../../../../assets/json/loading_spinner.json');
 
-const MODAL_WIDTH = Device.WIDTH * 0.8 > pixel(290) ? pixel(290) : Device.WIDTH * 0.8;
+const MODAL_WIDTH = Device.WIDTH * 0.8 > pixel(300) ? pixel(300) : Device.WIDTH * 0.8;
 const LOTTIE_WIDTH = MODAL_WIDTH * 0.5;
 
 export const LoadingModal = observer(() => {

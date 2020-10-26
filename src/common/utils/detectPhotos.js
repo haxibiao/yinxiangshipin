@@ -42,15 +42,14 @@ export async function detectPhotos() {
     async function processPhotos(photos: string[]) {
         let result;
         for (let index = 0; index < photos.length; index++) {
-            const mediaUrl = photos[index]?.node.image.uri;
+            const mediaUrl = photos[index]?.node.image.uri?.replace('file://', '');
             const type = String(photos[index]?.node.type).slice(0, 5);
             if (appStore.detectedFileInfo.includes(mediaUrl)) {
                 continue;
             }
             if (type === 'image') {
                 result = await detectPhotoQRCode(mediaUrl);
-            } else if (type === 'video' && Platform.OS !== 'android') {
-                // TODO: android detectVideoMeta crash
+            } else if (type === 'video') {
                 result = await detectVideoMeta(mediaUrl);
             }
             if (result) {

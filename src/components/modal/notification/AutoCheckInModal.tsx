@@ -57,18 +57,15 @@ export const AutoCheckInModal = observer(() => {
             if (!todayChecked) {
                 const result = await createCheckIn();
                 const todayReturns = result?.data?.createCheckIn;
+                const walletBalance =
+                    Number(userStore.me.balance) +
+                    Number(
+                        Helper.goldExchange(todayReturns.gold_reward + userStore.me.gold, userStore.me.exchangeRate),
+                    );
                 if (todayReturns) {
                     setCheckInData({
                         keepCheckInDays: todayReturns.keep_checkin_days,
-                        balance: Math.floor(
-                            Number(userStore.me.balance) +
-                                Number(
-                                    Helper.goldExchange(
-                                        todayReturns.gold_reward + userStore.me.gold,
-                                        userStore.me?.exchangeRate,
-                                    ),
-                                ),
-                        ).toFixed(1),
+                        balance: Math.max(walletBalance, 0.3).toFixed(1),
                     });
                     showModal();
                 }
@@ -107,8 +104,8 @@ export const AutoCheckInModal = observer(() => {
                         <Text style={styles.modalContent}>连续签到奖励更多,记得每天来看看我</Text>
                         <Text style={styles.assetsText}>当天所得的金币会在次日转换成余额</Text>
                         <Text style={styles.assetsText}>
-                            当前大约可提现
-                            <Text style={{ color: '#FCE03D' }}>{checkInData.balance || 0.3}</Text>元
+                            目前大约可提现
+                            <Text style={{ color: '#FCE03D' }}>{checkInData.balance}</Text>元
                         </Text>
                         <DebouncedPressable
                             style={styles.modalBtn}
