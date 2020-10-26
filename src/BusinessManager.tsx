@@ -12,14 +12,13 @@ import { PopOverlay, BeginnerGuidance } from './components';
 import NewUserTaskGuidance from './screens/guidance/NewUserTaskGuidance';
 import SharedPostOverlay from './components/share/SharedPostOverlay';
 
-const UserAgreementGuide = 'UserAgreementGuide' + Config.Version;
 const fetchConfigTimeout = 4000;
 
 // 弹窗顺序：用户协议、新人任务引导、分享弹窗、采集弹窗
 
 // 监听新用户登录
 when(
-    () => adStore.enableAd && adStore.enableWallet && userStore?.me?.id && appStore.guides[UserAgreementGuide],
+    () => adStore.enableAd && adStore.enableWallet && userStore?.me?.id && appStore.guides.UserAgreementGuide,
     () => {
         // 新手指导
         BeginnerGuidance({
@@ -32,8 +31,8 @@ when(
 export default observer(function BusinessManager() {
     // 恢复登录状态、监听MeMetaQuery更新MeStorage
     useRecallUserProfile();
-    // 显示用户协议
-    useUserAgreement(UserAgreementGuide);
+    // 用户协议
+    useUserAgreement();
 
     // 获取APP的开启配置(广告和钱包)
     const timer = useRef(); // 防止获取配置超时
@@ -51,7 +50,7 @@ export default observer(function BusinessManager() {
                     result?.ad === 'on' &&
                     responseTime.current <= fetchConfigTimeout
                 ) {
-                    // 启动个开屏广告
+                    // 启动开屏广告
                     ad.startSplash({
                         appid: adStore.tt_appid,
                         codeid: adStore.codeid_splash,
@@ -69,7 +68,7 @@ export default observer(function BusinessManager() {
         }, 100);
         // 获取广告、钱包配置
         fetchConfig();
-        // 除了华为外直接启动启动个开屏广告
+        // 除了华为外直接启动启动开屏广告
         if (String(Device.Brand).toLocaleUpperCase !== 'HUAWEI') {
             ad.startSplash({
                 appid: adStore.tt_appid,
@@ -119,7 +118,7 @@ export default observer(function BusinessManager() {
     }, []);
     useEffect(() => {
         // App初始化完成，用户同意协议
-        const appIsReady = userStore.recalledUser && appStore.guides[UserAgreementGuide] && adStore.loadedConfig;
+        const appIsReady = userStore.recalledUser && appStore.guides.UserAgreementGuide && adStore.loadedConfig;
         if (appIsReady) {
             // 新人任务引导完成 / 用户未登录
             if ((appStore.guides.NewUserTask || !userStore?.login) && !detectPhotoAlbum.called) {
@@ -129,7 +128,7 @@ export default observer(function BusinessManager() {
                 setDetected(true);
             }
         }
-    }, [userStore.recalledUse, appStore.guides[UserAgreementGuide], adStore.loadedConfig, appStore.guides.NewUserTask]);
+    }, [userStore.recalledUse, appStore.guides.UserAgreementGuide, adStore.loadedConfig, appStore.guides.NewUserTask]);
 
     // 粘贴板抖音采集
     const [shareContent] = useClipboardLink();

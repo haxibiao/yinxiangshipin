@@ -3,7 +3,6 @@ mutation CreateCheckInMutation {
     createCheckIn {
         id
         gold_reward
-        contribute_reward
         keep_checkin_days
     }
 }

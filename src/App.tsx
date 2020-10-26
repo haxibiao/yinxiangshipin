@@ -15,7 +15,13 @@ import * as WeChat from 'react-native-wechat-lib';
 import { WechatAppId, DisplayName } from '../app.json';
 // app component
 import BusinessManager from './BusinessManager';
-import { Toast, LoadingModal, WithdrawalNotificationModal, RewardNotificationModal } from './components';
+import {
+    Toast,
+    LoadingModal,
+    AutoCheckInModal,
+    WithdrawalNotificationModal,
+    RewardNotificationModal,
+} from './components';
 
 //修复部分安卓手机中文字体丢失
 const defaultFontFamily = {
@@ -98,6 +104,7 @@ const App = observer(() => {
                     <BusinessManager />
                     <AppRouter />
                     <LoadingModal />
+                    <AutoCheckInModal />
                     <WithdrawalNotificationModal />
                     <RewardNotificationModal />
                 </ApolloProvider>

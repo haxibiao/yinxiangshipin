@@ -9,7 +9,6 @@ query CheckInsQuery($days: Int) {
             created_at
             checked
             gold_reward
-            contribute_reward
             reward_rate
         }
     }
@@ -20,7 +19,6 @@ mutation CreateCheckInMutation {
     createCheckIn {
         id
         gold_reward
-        contribute_reward
         keep_checkin_days
     }
 }
