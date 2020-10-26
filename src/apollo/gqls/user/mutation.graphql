@@ -14,7 +14,8 @@ mutation signInMutation($account: String!, $password: String!, $uuid: String) {
             id
             pay_account
             real_name
-            bind_platforms {
+            platforms {
+                alipay
                 wechat
             }
         }
@@ -63,7 +64,8 @@ mutation autoSignInMutation($UUID: String!, $PHONE: String) {
             id
             pay_account
             real_name
-            bind_platforms {
+            platforms {
+                alipay
                 wechat
             }
         }
@@ -112,7 +114,8 @@ mutation otherSignInMutation($code: String!, $type: OAuthType!) {
             id
             pay_account
             real_name
-            bind_platforms {
+            platforms {
+                alipay
                 wechat
             }
         }
@@ -161,7 +164,8 @@ mutation smsSignInMutation($code: String!, $phone: String!) {
             id
             pay_account
             real_name
-            bind_platforms {
+            platforms {
+                alipay
                 wechat
             }
         }
@@ -224,10 +228,6 @@ mutation signUpMutation($account: String, $password: String!, $name: String, $uu
             total_withdraw_amount
             available_balance
             today_withdraw_left
-            bind_platforms {
-                alipay
-                wechat
-            }
             platforms {
                 alipay
                 wechat

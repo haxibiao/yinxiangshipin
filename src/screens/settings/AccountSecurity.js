@@ -4,12 +4,12 @@ import Clipboard from '@react-native-community/clipboard';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { PageContainer, Iconfont, Avatar, ListItem, PopOverlay } from '@src/components';
 import { userStore, appStore, observer } from '@src/store';
-import { bindWechat } from '@src/common';
+import { bindWeChat } from '@src/common';
 
 const AccountSecurity = observer(() => {
     const navigation = useNavigation();
     const user = React.useMemo(() => userStore.me, [userStore]);
-    const [isBindWechat, setIsBindWechat] = React.useState(!!Helper.syncGetter('wallet.bind_platforms.wechat', user));
+    const [isBindWechat, setIsBindWechat] = React.useState(!!Helper.syncGetter('wallet.platforms.wechat', user));
     const isBindAliPay = React.useMemo(() => !!Helper.syncGetter('wallet.platforms.alipay', user), [user]);
 
     const aliPayHandler = () => {
@@ -50,7 +50,7 @@ const AccountSecurity = observer(() => {
                 content: '已绑定微信',
             });
         } else {
-            bindWechat({
+            bindWeChat({
                 onSuccess: () => {
                     Toast.show({
                         content: '绑定成功',

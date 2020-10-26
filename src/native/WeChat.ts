@@ -8,23 +8,23 @@ import { NativeModules, Alert, Platform } from 'react-native';
 const ISIOS = Platform.OS === 'ios';
 import * as WeChat from 'react-native-wechat-lib';
 
-import { bindWechat } from '@src/common';
+import { bindWeChat } from '@src/common';
 
 const WXLogin = () => {
     const scope = 'snsapi_userinfo';
     const state = 'skit_wx_login';
     // const wechat = WeChat;
     // 判断微信是否安装
-    WeChat.isWXAppInstalled().then(isInstalled => {
+    WeChat.isWXAppInstalled().then((isInstalled) => {
         if (isInstalled) {
             // 发送授权请求
             WeChat.sendAuthRequest(scope, state)
-                .then(responseCode => {
+                .then((responseCode) => {
                     // 返回code码，通过code获取access_token
-                    // bindWechat({ code: responseCode.code });
+                    // bindWeChat({ code: responseCode.code });
                     console.log('responseCode', responseCode);
                 })
-                .catch(err => {
+                .catch((err) => {
                     Alert.alert('登录授权发生错误：', err.message, [{ text: '确定' }]);
                 });
         } else {

@@ -9,4 +9,4 @@ export * from './Header';
 export * from './Popup';
 export * from './Other';
 
-export { AutonomousModal, TaskNotificationModal, WalletNotificationModal, RewardNotificationModal } from './modal';
+export { AutonomousModal, LoadingModal, WithdrawalNotificationModal, RewardNotificationModal } from './modal';

@@ -4,8 +4,7 @@ import { ad } from 'react-native-ad';
 import { authNavigate } from '@src/router';
 import { observer, autorun, adStore, userStore, notificationStore } from '@src/store';
 import Iconfont from '../../../components/Iconfont';
-import { DebouncedPressable } from '../../../components/Basic/DebouncedPreesable';
-import { pixel } from '@app/src/common/scale';
+import { DebouncedPressable } from '../../../components/Basic/DebouncedPressable';
 
 const MODAL_WIDTH = Device.WIDTH * 0.84 > pixel(320) ? pixel(320) : Device.WIDTH * 0.84;
 const BUTTON_WIDTH = MODAL_WIDTH * 0.66;
@@ -26,7 +25,7 @@ export const RewardNotificationModal = observer(() => {
 
     const hideModal = useCallback(() => {
         if (shown.current) {
-            notificationStore.reduceWalletNotice();
+            notificationStore.reduceRewardNotice();
             setVisible(false);
             setNoticeData({});
             shown.current = false;
@@ -36,8 +35,8 @@ export const RewardNotificationModal = observer(() => {
     useEffect(
         () =>
             autorun(() => {
-                if (notificationStore.walletNotice.length > 0) {
-                    showModal(notificationStore.walletNotice[0]);
+                if (notificationStore.rewardNotice.length > 0) {
+                    showModal(notificationStore.rewardNotice[0]);
                 }
             }),
         [],

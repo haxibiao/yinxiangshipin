@@ -14,7 +14,7 @@ import { useNavigation } from '@react-navigation/native';
 import { PageContainer, Iconfont, Row, HxfButton, SafeText } from '@src/components';
 import { observer, userStore, notificationStore } from '@src/store';
 import { GQL, useMutation, useQuery, errorMessage } from '@src/apollo';
-import { bindWechat, syncGetter, useNavigationListener } from '@src/common';
+import { bindWeChat, syncGetter, useNavigationListener } from '@src/common';
 
 const fakeAmountListData = [
     {
@@ -41,11 +41,11 @@ const WithdrawalPlatforms = [
         name: '支付宝',
         icon: require('@app/assets/images/alipay.png'),
     },
-    // {
-    //     type: 'WECHAT',
-    //     name: '微信',
-    //     icon: require('@app/assets/images/wechat.png'),
-    // },
+    {
+        type: 'WECHAT',
+        name: '微信',
+        icon: require('@app/assets/images/wechat.png'),
+    },
 ];
 
 const fakeWallet = {
@@ -70,7 +70,6 @@ export default observer((props: any) => {
         userStore.me,
         userMetaData,
     ]);
-    const wallet = useMemo(() => userProfile?.wallet || fakeWallet, [userProfile]);
     // 提现额度
     const { data: withdrawAmountListData } = useQuery(GQL.getWithdrawAmountList);
     const withdrawAmountData = useMemo(() => {
@@ -90,9 +89,9 @@ export default observer((props: any) => {
         }
     }, [withdrawAmountData]);
     // 提现请求
-    const [withdrawRequest, { loading }] = useMutation(GQL.CreateWithdrawMutation, {
+    const [withdrawRequest] = useMutation(GQL.CreateWithdrawMutation, {
         variables: {
-            amount,
+            amount: 10000,
             platform: withdrawType,
         },
         errorPolicy: 'all',
@@ -112,45 +111,55 @@ export default observer((props: any) => {
             });
         },
         onError: (error) => {
-            notificationStore.sendWalletNotice({
+            notificationStore.sendWithdrawalNotice({
                 title: '提现失败',
                 content: errorMessage(error) || '提现时间为09:00-20:00的整点前十分钟哦，您可以下个时间段再来提现哦',
             });
         },
     });
 
-    // 未提现过的用户
-    const noWithdrawal = useMemo(() => userProfile?.gold >= 30 && userProfile?.wallet?.total_withdraw_amount <= 0, [
-        userProfile,
-    ]);
+    // 未提现过
+    const noWithdrawal = useMemo(() => userProfile?.wallet?.total_withdraw_amount <= 0, [userProfile]);
     // 设置提现金额
     const setWithdrawAmount = useCallback(
         (value) => {
+            // 首次提现
             if (value == 0.3 && noWithdrawal) {
                 if (userProfile?.gold >= userProfile?.exchangeRate * 0.3) {
                     setAmount(value);
                 } else {
-                    Toast.show({ content: `${Config.goldAlias}不足，去做任务吧` });
+                    notificationStore.sendWithdrawalNotice({
+                        title: `${Config.goldAlias}不足`,
+                        content: `可通过任务赚取${Config.goldAlias}，首次提现直接消耗${Config.goldAlias}`,
+                    });
                 }
             } else {
-                // 正常流程
+                // 往后提现
                 if (userProfile.balance < value) {
-                    Toast.show({ content: `余额不足，去做任务吧` });
-                } else if (wallet.id) {
-                    if (wallet.today_withdraw_left >= value) {
+                    notificationStore.sendWithdrawalNotice({
+                        title: '余额不足',
+                        content: `可通过任务赚取${Config.goldAlias}，${Config.goldAlias}在次日会转换成余额`,
+                    });
+                } else {
+                    if (userProfile?.wallet.today_withdraw_left >= value) {
                         setAmount(value);
                     } else {
-                        Toast.show({ content: `今日提现额度已用完` });
+                        notificationStore.sendWithdrawalNotice({
+                            title: '提现额度不足',
+                            content: `一天只能提现一次，可通过任务积攒更多${Config.goldAlias}`,
+                        });
                     }
-                } else {
-                    Toast.show({ content: `请先绑定提现账号` });
                 }
             }
         },
-        [userProfile, wallet, noWithdrawal],
+        [userProfile, noWithdrawal],
     );
 
-    const onWithdraw = useCallback(__.debounce(withdrawRequest, 100), [withdrawRequest]);
+    const onWithdraw = useCallback(async () => {
+        notificationStore.toggleLoadingVisible();
+        await withdrawRequest();
+        notificationStore.toggleLoadingVisible();
+    }, [withdrawRequest]);
     // 绑定提现账号
     const bindWithdrawAccount = useMemo(() => {
         return {
@@ -158,15 +167,13 @@ export default observer((props: any) => {
                 return navigation.navigate(userProfile.phone ? 'VerifyAliPay' : 'BindingAccount');
             },
             WECHAT() {
-                bindWechat({
-                    onSuccess: () => {
-                        Toast.show({
-                            content: '绑定微信成功',
-                        });
+                bindWeChat({
+                    onSuccess: (oauth_id) => {
+                        userStore.me.wallet.platforms.wechat = oauth_id;
                     },
-                    onFailed: () => {
+                    onFailed: (errMessage) => {
                         Toast.show({
-                            content: '绑定微信失败',
+                            content: errMessage,
                         });
                     },
                 });
@@ -177,9 +184,7 @@ export default observer((props: any) => {
     const buttonInfo = useMemo(() => {
         const platformName = withdrawType === 'ALIPAY' ? '支付宝' : '微信';
         const isBound =
-            platformName === '支付宝'
-                ? syncGetter('wallet.platforms.alipay', userProfile)
-                : syncGetter('wallet.bind_platforms.wechat', userProfile);
+            platformName === '支付宝' ? userProfile?.wallet?.platforms?.alipay : userProfile?.wallet?.platforms?.wechat;
         const disabled = isBound && amount <= 0;
         if (isBound) {
             return {
@@ -196,8 +201,6 @@ export default observer((props: any) => {
         }
     }, [amount, withdrawType, userProfile, onWithdraw]);
 
-    // useNavigationListener({ onFocus: refetch });
-
     return (
         <PageContainer
             title="提现"
@@ -206,14 +209,12 @@ export default observer((props: any) => {
                     style={styles.logButton}
                     onPress={() => {
                         navigation.navigate('WithdrawHistory', {
-                            wallet_id: wallet.id,
+                            wallet_id: userProfile?.wallet.id,
                         });
                     }}>
                     <Text style={styles.logText}>账单</Text>
                 </TouchableOpacity>
-            }
-            submitting={loading}
-            submitTips="请稍后...">
+            }>
             <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
                 <View style={styles.statistics}>
                     <ImageBackground
@@ -262,7 +263,7 @@ export default observer((props: any) => {
                             </View>
                             <View style={styles.earnings}>
                                 <SafeText style={styles.earningsText}>
-                                    {wallet.total_withdraw_amount || '0.00'}
+                                    {userProfile?.wallet.total_withdraw_amount || '0.00'}
                                 </SafeText>
                             </View>
                         </View>
@@ -539,13 +540,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     platformImage: {
-        height: pixel(18),
+        height: pixel(20),
         marginRight: pixel(6),
-        width: pixel(18),
+        width: pixel(20),
     },
     platformName: {
         color: '#212121',
         fontSize: font(14),
+        lineHeight: pixel(18),
     },
     withdrawBtn: {
         marginTop: pixel(15),

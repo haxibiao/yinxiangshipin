@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { appStore, userStore } from '@src/store';
-import { GQL } from '@src/apollo';
+import { GQL, errorMessage } from '@src/apollo';
 import * as WeChat from 'react-native-wechat-lib';
 
 interface Props {
@@ -8,7 +8,7 @@ interface Props {
     onFailed?: Function;
 }
 
-export function bindWechat(props: Props) {
+export function bindWeChat(props: Props) {
     const scope = 'snsapi_userinfo';
     const state = 'skit_wx_login';
     const { onSuccess, onFailed } = props;
@@ -20,27 +20,22 @@ export function bindWechat(props: Props) {
                 WeChat.sendAuthRequest(scope, state)
                     .then((responseCode: any) => {
                         // 返回code码，通过code获取access_token
-                        bindWx(responseCode.code, props);
-                        console.log('responseCode', responseCode);
+                        bindingWeChatWallet(responseCode.code, props);
                     })
                     .catch((err) => {
-                        onFailed && onFailed();
-                        Toast.show({ content: '登录授权发生错误' });
+                        onFailed && onFailed('登录授权发生错误');
                     });
             } else {
-                onFailed && onFailed();
-                Toast.show({ content: '请先安装微信客户端在进行登录' });
+                onFailed && onFailed('请先安装微信客户端在进行登录');
             }
         })
         .catch((err) => {
-            onFailed && onFailed();
-            Toast.show({ content: '微信授权发生错误，请更新最新版本微信' });
+            onFailed && onFailed('微信授权发生错误，请更新最新版本微信');
         });
 }
 
-function bindWx(code: any, props: Props) {
+function bindingWeChatWallet(code: any, props: Props) {
     const { onSuccess, onFailed } = props;
-    console.log(' appStore.client', appStore.client);
     appStore.client
         .mutate({
             mutation: GQL.BindOAuth,
@@ -53,6 +48,10 @@ function bindWx(code: any, props: Props) {
             errorPolicy: 'all',
             refetchQueries: () => [
                 {
+                    query: GQL.MeMetaQuery,
+                    fetchPolicy: 'network-only',
+                },
+                {
                     query: GQL.userQuery,
                     variables: { id: userStore.me.id },
                     fetchPolicy: 'network-only',
@@ -60,17 +59,13 @@ function bindWx(code: any, props: Props) {
             ],
         })
         .then((result: any) => {
-            console.log('result', result);
             if (result.errors) {
-                onFailed && onFailed(result.errors[0].message);
-                Toast.show({ content: result.errors[0].message });
+                onFailed && onFailed(result.errors?.[0]?.message);
             } else {
-                onSuccess && onSuccess(result);
+                onSuccess && onSuccess(result?.data?.bindOAuth?.oauth_id);
             }
         })
         .catch((error: any) => {
-            console.log('error', error);
-            onFailed && onFailed(error);
-            Toast.show({ content: error.toString().replace(/Error: GraphQL error: /, '') });
+            onFailed && onFailed(errorMessage(error));
         });
 }

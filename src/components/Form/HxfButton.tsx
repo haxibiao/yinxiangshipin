@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { StyleSheet, TouchableOpacity, View, Text, TouchableWithoutFeedback, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, Text, TouchableWithoutFeedback, ActivityIndicator } from 'react-native';
 import GradientView from '../Basic/GradientView';
 import SafeText from '../Basic/SafeText';
+import { DebouncedPressable } from '../Basic/DebouncedPressable';
 
 type Size = 'mini' | 'small' | 'medium' | 'default';
 
@@ -72,21 +73,21 @@ class HxfButton extends Component<Props, any> {
             }
             return (
                 <GradientView colors={disabled ? ['#787878', '#a4a4a4'] : colors} style={[styles.buttonWrap, style]}>
-                    <TouchableOpacity style={[{ flex: 1 }, styles.buttonWrap]} disabled={disabled} onPress={onPress}>
+                    <DebouncedPressable style={[{ flex: 1 }, styles.buttonWrap]} disabled={disabled} onPress={onPress}>
                         {this.renderIcon()}
                         {children || <SafeText style={titleStyle}>{title}</SafeText>}
-                    </TouchableOpacity>
+                    </DebouncedPressable>
                 </GradientView>
             );
         }
         return (
-            <TouchableOpacity
+            <DebouncedPressable
                 style={[styles.buttonWrap, buttonStyle, style, disabled && { backgroundColor: '#a8a8a8' }]}
                 disabled={disabled}
                 onPress={onPress}>
                 {this.renderIcon()}
                 {children || <SafeText style={titleStyle}>{title}</SafeText>}
-            </TouchableOpacity>
+            </DebouncedPressable>
         );
     }
 }
