@@ -1,13 +1,7 @@
 import { Platform } from 'react-native';
 import { observable, action, computed } from 'mobx';
 
-interface TaskNotification {
-    title: string;
-    content: string;
-    guideHandler?: () => void;
-}
-
-interface WalletNotification {
+interface WithdrawNotification {
     title: string;
     content: string;
     gold: string | number;
@@ -25,31 +19,24 @@ interface RewardNotification {
 }
 
 class NotificationStore {
-    @observable taskNotice: TaskNotification[] = [];
-    @observable walletNotice: WalletNotification[] = [];
+    @observable loadingVisible = false;
+    @observable withdrawalNotice: WithdrawNotification[] = [];
     @observable rewardNotice: RewardNotification[] = [];
 
     @action.bound
-    sendTaskNotice(Notice: TaskNotification) {
-        this.taskNotice = [...this.taskNotice, Notice];
+    toggleLoadingVisible() {
+        this.loadingVisible = !this.loadingVisible;
     }
 
     @action.bound
-    reduceTaskNotice() {
-        if (this.taskNotice.length > 0) {
-            this.taskNotice = [...this.taskNotice.slice(1)];
-        }
+    sendWithdrawalNotice(Notice: WithdrawNotification) {
+        this.withdrawalNotice = [...this.withdrawalNotice, Notice];
     }
 
     @action.bound
-    sendWalletNotice(Notice: WalletNotification) {
-        this.walletNotice = [...this.walletNotice, Notice];
-    }
-
-    @action.bound
-    reduceWalletNotice() {
-        if (this.walletNotice.length > 0) {
-            this.walletNotice = [...this.walletNotice.slice(1)];
+    reduceWithdrawalNotice() {
+        if (this.withdrawalNotice.length > 0) {
+            this.withdrawalNotice = [...this.withdrawalNotice.slice(1)];
         }
     }
 

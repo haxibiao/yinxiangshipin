@@ -10,4 +10,4 @@ export { default as Placeholder } from './Placeholder';
 export { default as PlaceholderImage } from './PlaceholderImage';
 export { default as HxfRadio } from './HxfRadio';
 export { default as MasonryList } from './MasonryList';
-export { DebouncedPressable } from './DebouncedPreesable';
+export { DebouncedPressable } from './DebouncedPressable';
