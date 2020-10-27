@@ -2,7 +2,7 @@ import React, { useRef, useState, useMemo, useEffect, useCallback } from 'react'
 import { StyleSheet, View, Text, Image, Modal, ImageBackground } from 'react-native';
 import { ad } from 'react-native-ad';
 import { authNavigate } from '@src/router';
-import { observer, autorun, adStore, userStore, appStore } from '@src/store';
+import { observer, adStore, userStore, appStore } from '@src/store';
 import { GQL, useQuery, useMutation } from '@src/apollo';
 import Iconfont from '../../../components/Iconfont';
 import { DebouncedPressable } from '../../../components/Basic/DebouncedPressable';

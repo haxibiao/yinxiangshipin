@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Keys, Storage, userStore } from '@src/store';
-import { GQL, useQuery } from '@src/apollo';
+import { useQuery } from '@apollo/react-hooks';
+import { GQL } from '../gqls';
 
 export function useRecallUserProfile() {
     const { data } = useQuery(GQL.MeMetaQuery, {

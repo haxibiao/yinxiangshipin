@@ -42,7 +42,7 @@ export async function detectPhotos() {
     async function processPhotos(photos: string[]) {
         let result;
         for (let index = 0; index < photos.length; index++) {
-            const mediaUrl = photos[index]?.node.image.uri?.replace('file://', '');
+            const mediaUrl = photos[index]?.node.image.uri;
             const type = String(photos[index]?.node.type).slice(0, 5);
             if (appStore.detectedFileInfo.includes(mediaUrl)) {
                 continue;
@@ -61,7 +61,7 @@ export async function detectPhotos() {
 
     function detectVideoMeta(videoUrl) {
         return new Promise((resolve, reject) => {
-            return VideoMeta.fetchMeta(videoUrl, (res) => {
+            return VideoMeta.fetchMeta(videoUrl?.replace('file://', ''), (res) => {
                 if (res) {
                     resolve({
                         type: 'post',

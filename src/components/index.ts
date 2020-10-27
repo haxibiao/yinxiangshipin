@@ -8,11 +8,3 @@ export * from './Form';
 export * from './Header';
 export * from './Popup';
 export * from './Other';
-
-export {
-    AutonomousModal,
-    LoadingModal,
-    AutoCheckInModal,
-    WithdrawalNotificationModal,
-    RewardNotificationModal,
-} from './modal';
