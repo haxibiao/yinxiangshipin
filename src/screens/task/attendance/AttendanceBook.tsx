@@ -2,6 +2,7 @@ import React, { useMemo, useCallback, useState } from 'react';
 import { StyleSheet, View, Text, Image, ImageBackground, TouchableWithoutFeedback, Animated } from 'react-native';
 import { BoxShadow } from 'react-native-shadow';
 import { ad } from 'react-native-ad';
+import { useNavigation } from '@react-navigation/native';
 import { appStore, adStore, userStore, notificationStore } from '@src/store';
 import { SafeText } from '@src/components';
 import { useCirculationAnimation } from '@src/common';
@@ -15,6 +16,7 @@ interface SignInReturns {
 }
 
 const AttendanceBook = (): JSX.Element => {
+    const navigation = useNavigation();
     const [boxShadowHeight, setBoxShadowHeight] = useState(150);
 
     const onLayoutEffect = useCallback((event) => {
@@ -69,6 +71,7 @@ const AttendanceBook = (): JSX.Element => {
     const checkInSuccess = useCallback(
         (returns: SignInReturns) => {
             SignedReturnOverlay.show({
+                navigation,
                 gold: returns.gold_reward,
                 ticket: returns.ticket_reward,
                 signInDays: keepCheckInDays + 1,

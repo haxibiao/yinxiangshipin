@@ -9,5 +9,4 @@ export { default as PullChooser } from './PullChooser';
 export { default as WheelPicker } from './WheelPicker';
 export { default as OperationModal } from './OperationModal';
 export { default as Loading } from './Loading';
-export { default as RewardOverlay } from './RewardOverlay';
 export { default as UserAgreementOverlay } from './UserAgreementOverlay';

@@ -1,7 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
 import { ad } from 'react-native-ad';
-import { authNavigate } from '@src/router';
 import { userStore, adStore, notificationStore } from '@src/store';
 import { getUserReward } from '@src/apollo';
 import { Iconfont, Row, HxfButton, SafeText } from '@src/components';
@@ -25,7 +24,7 @@ const rewardTitle = (rewardList: { value: any; name: any }[]) => {
 };
 
 const SignedReturnOverlay = (props) => {
-    const { gold, ticket, signInDays } = props;
+    const { navigation, gold, ticket, signInDays } = props;
     const [adShown, setAdShown] = useState(false);
     const currentGold = userStore.me?.gold;
 
@@ -55,7 +54,7 @@ const SignedReturnOverlay = (props) => {
     );
 
     const navigateAction = useCallback(() => {
-        authNavigate('BillingRecord', {
+        navigation.navigate('BillingRecord', {
             initialPage: 2,
         });
     }, []);
