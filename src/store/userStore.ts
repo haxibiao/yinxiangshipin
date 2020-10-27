@@ -1,6 +1,5 @@
 import { observable, action, runInAction } from 'mobx';
-import App from '../App';
-import { Keys, Storage } from './localStorage';
+import { RecordKeys, Storage } from './storage';
 
 export interface UserScheme {
     id?: string;
@@ -17,24 +16,15 @@ export interface UserScheme {
 }
 
 class UserStore {
-    @observable recalledUser: boolean = false; //从Storage获取用户数据完成，避免重复创建client
     @observable me: UserScheme = {};
     @observable login: boolean = false;
+    @observable recalledUser: boolean = false;
     @observable firstInstall: boolean = false;
-    @observable bindAccountRemind: boolean = false;
-    @observable disabledBindAccountRemind: boolean = false;
 
     constructor() {
-        this.recall();
-    }
-
-    @action.bound
-    async recall() {
-        this.firstInstall = !(await Storage.getItem(Keys.notFirstInstall));
-        this.bindAccountRemind = await Storage.getItem(
-            (Keys.bindAccountRemind + Config.Version) as 'bindAccountRemind',
-        );
-        this.disabledBindAccountRemind = await Storage.getItem(Keys.disabledBindAccountRemind);
+        (async () => {
+            this.firstInstall = !(await Storage.getItem(RecordKeys.notFirstInstall));
+        })();
     }
 
     @action.bound
@@ -44,6 +34,7 @@ class UserStore {
             this.me = me;
             this.login = true;
         }
+        //从Storage获取用户数据完成，避免重复创建client
         this.recalledUser = true;
     }
 
@@ -53,8 +44,8 @@ class UserStore {
         this.me = user;
         this.login = true;
         this.firstInstall = false;
-        Storage.setItem(Keys.me, user);
-        Storage.setItem(Keys.notFirstInstall, true);
+        Storage.setItem(RecordKeys.me, user);
+        Storage.setItem(RecordKeys.notFirstInstall, true);
     }
 
     @action.bound
@@ -62,8 +53,8 @@ class UserStore {
         TOKEN = null;
         this.me = {};
         this.login = false;
-        Storage.removeItem(Keys.me);
-        Storage.setItem(Keys.notFirstInstall, true);
+        Storage.removeItem(RecordKeys.me);
+        Storage.setItem(RecordKeys.notFirstInstall, true);
     }
 
     @action.bound
@@ -71,13 +62,13 @@ class UserStore {
         if (userMetaData !== null && typeof userMetaData === 'object') {
             this.me = Object.assign(this.me, userMetaData);
         }
-        Storage.setItem(Keys.me, this.me);
+        Storage.setItem(RecordKeys.me, this.me);
     }
 
     @action.bound
     changeAvatar(avatarUrl: string) {
         this.me.avatar = avatarUrl;
-        Storage.setItem(Keys.me, this.me);
+        Storage.setItem(RecordKeys.me, this.me);
     }
 }
 

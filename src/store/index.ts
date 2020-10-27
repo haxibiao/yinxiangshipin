@@ -2,7 +2,7 @@ import 'mobx-react-lite/batchingOptOut';
 export { observer } from 'mobx-react';
 export { observable, when, autorun, computed } from 'mobx';
 
-export { Keys, Storage } from './localStorage';
+export { Storage, RecordKeys, GuideKeys, ItemKeys } from './storage';
 export { default as adStore } from './adStore';
 export { default as appStore } from './appStore';
 export { default as notificationStore } from './notificationStore';

@@ -1,5 +1,6 @@
 import { Platform } from 'react-native';
 import { observable, action, computed } from 'mobx';
+import { RecordKeys, GuideKeys, Storage } from './storage';
 
 interface WithdrawNotification {
     title: string;
@@ -19,12 +20,35 @@ interface RewardNotification {
 }
 
 class NotificationStore {
-    @observable loadingVisible = false;
+    // notice
     @observable withdrawalNotice: WithdrawNotification[] = [];
     @observable rewardNotice: RewardNotification[] = [];
+    @observable loadingVisible: boolean = false;
+    @observable loadingTips: string = '';
+    detectedSharedContent = false;
+    // guides
+    inGuidance: boolean = false; // 正在显示用户引导
+    @observable bindAccountRemind: boolean = false; // 提醒绑定账号
+    @observable disabledBindAccountRemind: boolean = false; // 不再提醒绑定账号
+    @observable guides = {} as { -readonly [k in keyof typeof GuideKeys]: any }; // 用户引导（弹窗）
+
+    constructor() {
+        this.recall();
+    }
 
     @action.bound
-    toggleLoadingVisible() {
+    async recall() {
+        this.bindAccountRemind = !!(await Storage.getItem(GuideKeys.bindAccountRemind));
+        this.disabledBindAccountRemind = !!(await Storage.getItem(GuideKeys.disabledBindAccountRemind));
+        this.guides[GuideKeys.UserAgreementGuide] = !!(await Storage.getItem(GuideKeys.UserAgreementGuide));
+        this.guides[GuideKeys.NewUserTask] = !!(await Storage.getItem(GuideKeys.NewUserTask));
+    }
+
+    @action.bound
+    toggleLoadingVisible(tips?: string) {
+        if (typeof tips === 'string') {
+            this.loadingTips = tips;
+        }
         this.loadingVisible = !this.loadingVisible;
     }
 

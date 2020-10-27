@@ -1,7 +1,7 @@
 import { Platform } from 'react-native';
 import { observable, action, computed } from 'mobx';
 import NetInfo from '@react-native-community/netinfo';
-import { Keys, Storage, ItemKeys } from './localStorage';
+import { Storage, RecordKeys, ItemKeys } from './storage';
 
 class App {
     @observable viewportHeight: number = Device.HEIGHT;
@@ -12,38 +12,23 @@ class App {
     @observable client: Record<string, any> = {};
     @observable modalIsShow: boolean = false;
     @observable currentRouteName: string = '';
-    // storage record
-    @observable createPostGuidance: boolean = true; // 用户引导,现在默认关闭
-    @observable agreeCreatePostAgreement: boolean = false; // 用户协议观看记录
-    @observable spiderVideoTaskGuided: boolean = false; // 是否指导过采集任务
-    @observable isLocalSpiderVideo: boolean = false; // 是否启用本地采集
-    detectedFileInfo: string[] = []; // 是否启用本地采集
-    // user guides
-    @observable guides: Record<string, any> = {};
+    // storage
+    @observable agreeCreatePostAgreement: boolean = false; // 用户协议（发布内容）
+    @observable spiderVideoTaskGuided: boolean = false; // 采集功能使用指导
+    @observable isLocalSpiderVideo: boolean = false; // 启用本地采集
+    detectedFileInfo: string[] = []; // 相册解析记录
 
     constructor() {
-        this.recall();
+        this.restore();
         NetInfo.addEventListener(this.handleConnectivityChange);
     }
 
     @action.bound
-    async recall() {
-        const agreeCreatePostAgreement = await Storage.getItem(Keys.agreeCreatePostAgreement);
-        const spiderVideoTaskGuided = await Storage.getItem(Keys.spiderVideoTaskGuided);
-        const isLocalSpiderVideo = await Storage.getItem(Keys.isLocalSpiderVideo);
-        const detectedFileInfo = await Storage.getItem(Keys.detectedFileInfo);
-        if (agreeCreatePostAgreement) {
-            this.agreeCreatePostAgreement = true;
-        }
-        if (spiderVideoTaskGuided) {
-            this.spiderVideoTaskGuided = true;
-        }
-        if (isLocalSpiderVideo !== null) {
-            this.isLocalSpiderVideo = isLocalSpiderVideo;
-        }
-        if (Array.isArray(detectedFileInfo)) {
-            this.detectedFileInfo = detectedFileInfo;
-        }
+    async restore() {
+        this.agreeCreatePostAgreement = !!(await Storage.getItem(RecordKeys.agreeCreatePostAgreement));
+        this.spiderVideoTaskGuided = !!(await Storage.getItem(RecordKeys.spiderVideoTaskGuided));
+        this.isLocalSpiderVideo = !!(await Storage.getItem(RecordKeys.isLocalSpiderVideo));
+        this.detectedFileInfo = (await Storage.getItem(RecordKeys.detectedFileInfo)) || [];
     }
 
     @action.bound
@@ -60,16 +45,11 @@ class App {
     // 记录已查看的版本更新提示
     @action.bound
     async updateViewedVersion(viewedVersion: string) {
-        await Storage.setItem(Keys.viewedVersion, viewedVersion);
+        await Storage.setItem(RecordKeys.viewedVersion, viewedVersion);
     }
 
     changeAppVersion(version: string) {
-        Storage.setItem(Keys.appVersion, version);
-    }
-
-    @action.bound
-    appGuides(guideName: string) {
-        this.guides[guideName] = true;
+        Storage.setItem(RecordKeys.appVersion, version);
     }
 }
 
