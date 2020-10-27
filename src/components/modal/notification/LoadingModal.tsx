@@ -5,7 +5,7 @@ import LottieView from 'lottie-react-native';
 const animation = require('../../../../assets/json/loading_spinner.json');
 
 const MODAL_WIDTH = Device.WIDTH * 0.8 > pixel(300) ? pixel(300) : Device.WIDTH * 0.8;
-const LOTTIE_WIDTH = MODAL_WIDTH * 0.5;
+const LOTTIE_WIDTH = MODAL_WIDTH * 0.4;
 
 export const LoadingModal = observer(() => {
     return (
@@ -23,6 +23,9 @@ export const LoadingModal = observer(() => {
                         autoPlay
                         loop
                     />
+                    {notificationStore.loadingTips?.length > 0 && (
+                        <Text style={styles.loadingTips}>{notificationStore.loadingTips}</Text>
+                    )}
                 </View>
             </View>
         </Modal>
@@ -41,5 +44,11 @@ const styles = StyleSheet.create({
         height: MODAL_WIDTH,
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    loadingTips: {
+        color: '#fff',
+        fontSize: font(15),
+        lineHeight: font(20),
+        marginTop: pixel(15),
     },
 });

@@ -63,6 +63,7 @@ export const DetectPhotoAlbumModal = observer(() => {
 
     const hideModal = useCallback(() => {
         if (shown.current) {
+            notificationStore.detectedSharedContent = true;
             shown.current = false;
             setVisible(false);
             record();
@@ -81,17 +82,21 @@ export const DetectPhotoAlbumModal = observer(() => {
 
     useEffect(() => {
         // App初始化完成，用户同意协议
-        const appIsReady = userStore.recalledUser && appStore.guides.UserAgreementGuide && adStore.loadedConfig;
-        if (appIsReady) {
-            // 新人任务引导完成 / 用户未登录
-            if ((appStore.guides.NewUserTask || !userStore?.login) && !detectPhotoAlbum.called) {
-                detectPhotoAlbum.called = true;
-                detectPhotoAlbum();
-            } else {
-                notificationStore.detectedSharedContent = true;
-            }
+        const appIsReady =
+            userStore.recalledUser &&
+            adStore.loadedConfig &&
+            notificationStore.guides.UserAgreementGuide &&
+            notificationStore.guides.NewUserTask;
+        if (appIsReady && !detectPhotoAlbum.called) {
+            detectPhotoAlbum.called = true;
+            detectPhotoAlbum();
         }
-    }, [userStore.recalledUser, appStore.guides.UserAgreementGuide, adStore.loadedConfig, appStore.guides.NewUserTask]);
+    }, [
+        userStore.recalledUser,
+        adStore.loadedConfig,
+        notificationStore.guides.UserAgreementGuide,
+        notificationStore.guides.NewUserTask,
+    ]);
 
     return (
         <Modal

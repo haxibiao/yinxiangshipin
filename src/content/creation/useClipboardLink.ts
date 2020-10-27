@@ -3,8 +3,7 @@ import { AppState } from 'react-native';
 import Clipboard from '@react-native-community/clipboard';
 import { getURLsFromString } from '@src/common';
 
-const shareLinkCache: { [key: string]: any } = {};
-
+//主动调用（发布页）
 export function shareClipboardLink(clipboardString: string): Promise<any> {
     if (validateLink(clipboardString)) {
         const urls = getURLsFromString(clipboardString);
@@ -32,7 +31,6 @@ export function shareClipboardLink(clipboardString: string): Promise<any> {
         return fetch(`http://media.haxibiao.com/api/v1/spider/parse?share_link=${link}`)
             .then((response) => response.json())
             .then((content: any) => {
-                shareLinkCache[clipboardString] = content;
                 const item = content?.raw?.raw?.item_list[0];
                 const title = item?.share_info?.share_title;
                 const cover = item?.video?.dynamic_cover?.url_list[0];
@@ -51,12 +49,15 @@ export function shareClipboardLink(clipboardString: string): Promise<any> {
     }
 }
 
+//监听AppState（弹窗）
+const maxRecursion = 5;
+let recursionCount = maxRecursion;
 export const useClipboardLink = (): [{ link: string; content: any }, (p: any) => void] => {
-    const [shareContent, setShareContent] = useState<any>();
+    const [shareContent, setShareContent] = useState<any>({});
 
     const validateLink = useCallback((linkString) => {
+        recursionCount = maxRecursion;
         if (
-            !shareLinkCache[linkString] &&
             linkString.indexOf('http') !== -1 &&
             (linkString.indexOf('douyin') !== -1 || linkString.indexOf('tiktok') !== -1)
         ) {
@@ -70,7 +71,6 @@ export const useClipboardLink = (): [{ link: string; content: any }, (p: any) =>
         fetch(`http://media.haxibiao.com/api/v1/spider/parse?share_link=${link}`)
             .then((response) => response.json())
             .then((content: any) => {
-                shareLinkCache[clipboardString] = content;
                 const item = content?.raw?.raw?.item_list[0];
                 const play_url = content?.raw?.video?.play_url;
                 setShareContent({
@@ -87,8 +87,11 @@ export const useClipboardLink = (): [{ link: string; content: any }, (p: any) =>
     }, []);
 
     const getClipboardString = useCallback(async () => {
+        recursionCount--;
         const clipboardString = await Clipboard.getString();
-        if (validateLink(clipboardString)) {
+        if (!clipboardString && recursionCount > 0) {
+            getClipboardString();
+        } else if (validateLink(clipboardString)) {
             const urls = getURLsFromString(clipboardString);
             if (urls[0]) {
                 getLinkContent(urls[0], clipboardString);
@@ -96,14 +99,11 @@ export const useClipboardLink = (): [{ link: string; content: any }, (p: any) =>
         }
     }, []);
 
-    const stateChangeHandle = useCallback(
-        async (event) => {
-            if (event === 'active') {
-                getClipboardString();
-            }
-        },
-        [getLinkContent],
-    );
+    const stateChangeHandle = useCallback(async (event) => {
+        if (event === 'active') {
+            getClipboardString();
+        }
+    }, []);
 
     useEffect(() => {
         getClipboardString();
@@ -114,7 +114,7 @@ export const useClipboardLink = (): [{ link: string; content: any }, (p: any) =>
         return () => {
             AppState.removeEventListener('change', stateChangeHandle);
         };
-    }, [stateChangeHandle]);
+    }, []);
 
     return [shareContent, setShareContent];
 };

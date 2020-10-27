@@ -90,7 +90,7 @@ const MoreOperation = (props: any) => {
         const url = res?.data?.downloadVideo;
         Loading.hide();
         if (url) {
-            const title = String(target?.description || Config.AppID + '-' + target.id).replace(/\s+/g, '');
+            const title = String(Config.AppID + '' + target?.id + '-' + target?.video?.id).replace(/\s+/g, '');
             download({ url, title });
         } else {
             Toast.show({ content: '下载失败' });

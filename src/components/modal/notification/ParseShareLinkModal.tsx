@@ -9,6 +9,7 @@ import { DebouncedPressable } from '../../../components/Basic/DebouncedPressable
 import Iconfont from '../../../components/Iconfont';
 import KeyboardSpacer from '../../../components/Other/KeyboardSpacer';
 
+const shareLinkCache = {};
 const MODAL_WIDTH = Device.WIDTH * 0.8 > pixel(290) ? pixel(290) : Device.WIDTH * 0.8;
 
 // 采集分享链接视频内容
@@ -38,16 +39,22 @@ export const ParseShareLinkModal = observer(() => {
     }, []);
 
     useEffect(() => {
-        // 有分享链接、完成了内容解析业务、用户已经登录、不能在发布页
+        // 用户已经登录、有分享链接、完成了内容解析业务、不能进行用户引导或者在发布页中
         if (
             shareLink &&
-            notificationStore.detectedSharedContent &&
+            shareBody &&
             userStore.login &&
-            appStore.currentRouteName !== 'CreatePost'
+            notificationStore.guides.UserAgreementGuide &&
+            notificationStore.detectedSharedContent &&
+            notificationStore.inGuidance !== true &&
+            appStore.currentRouteName !== 'CreatePost' &&
+            shareLinkCache[shareLink] == undefined
         ) {
+            shareLinkCache[shareLink] = shareBody;
+            setVideoTitle(shareBody?.title);
             showModal();
         }
-    }, [shareLink, notificationStore.detectedSharedContent]);
+    }, [shareLink, shareBody, userStore.login, notificationStore.guides.UserAgreementGuide]);
 
     // 采集成功
     const resolveContentSuccess = useCallback(
