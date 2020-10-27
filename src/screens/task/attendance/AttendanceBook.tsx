@@ -2,8 +2,8 @@ import React, { useMemo, useCallback, useState } from 'react';
 import { StyleSheet, View, Text, Image, ImageBackground, TouchableWithoutFeedback, Animated } from 'react-native';
 import { BoxShadow } from 'react-native-shadow';
 import { ad } from 'react-native-ad';
-import { appStore, adStore, userStore } from '@src/store';
-import { RewardOverlay, SafeText } from '@src/components';
+import { appStore, adStore, userStore, notificationStore } from '@src/store';
+import { SafeText } from '@src/components';
 import { useCirculationAnimation } from '@src/common';
 import { GQL, useMutation, useQuery, getUserReward } from '@src/apollo';
 import * as SignedReturnOverlay from './SignedReturnOverlay';
@@ -96,12 +96,10 @@ const AttendanceBook = (): JSX.Element => {
                 called = true;
                 getUserReward('DOUBLE_SIGNIN_REWARD')
                     .then((res) => {
-                        RewardOverlay.show({
-                            reward: {
-                                gold: res?.gold,
-                                ticket: res?.ticket,
-                            },
-                            title: '签到双倍奖励领取成功',
+                        notificationStore.sendRewardNotice({
+                            title: '获得签到双倍奖励',
+                            gold: res?.gold,
+                            ticket: res?.ticket,
                         });
                     })
                     .catch((err) => {
@@ -114,12 +112,10 @@ const AttendanceBook = (): JSX.Element => {
                 called = true;
                 getUserReward('DOUBLE_SIGNIN_REWARD')
                     .then((res) => {
-                        RewardOverlay.show({
-                            reward: {
-                                gold: res?.gold,
-                                ticket: res?.ticket,
-                            },
-                            title: '签到双倍奖励领取成功',
+                        notificationStore.sendRewardNotice({
+                            title: '获得签到双倍奖励',
+                            gold: res?.gold,
+                            ticket: res?.ticket,
                         });
                     })
                     .catch((err) => {

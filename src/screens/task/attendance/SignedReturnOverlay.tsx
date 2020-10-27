@@ -2,9 +2,9 @@ import React, { useState, useCallback } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
 import { ad } from 'react-native-ad';
 import { authNavigate } from '@src/router';
-import { userStore, adStore } from '@src/store';
+import { userStore, adStore, notificationStore } from '@src/store';
 import { getUserReward } from '@src/apollo';
-import { Iconfont, Row, HxfButton, RewardOverlay, SafeText } from '@src/components';
+import { Iconfont, Row, HxfButton, SafeText } from '@src/components';
 import { Overlay } from 'teaset';
 
 interface Reward {
@@ -40,12 +40,10 @@ const SignedReturnOverlay = (props) => {
                 called = true;
                 getUserReward('SIGNIN_VIDEO_REWARD')
                     .then((res) => {
-                        RewardOverlay.show({
-                            reward: {
-                                gold: res?.gold,
-                                ticket: res?.ticket,
-                            },
-                            title: '额外奖励领取成功',
+                        notificationStore.sendRewardNotice({
+                            title: '获得额外签到奖励',
+                            gold: res?.gold,
+                            ticket: res?.ticket,
                         });
                     })
                     .catch((err) => {

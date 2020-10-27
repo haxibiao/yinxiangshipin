@@ -59,24 +59,26 @@ export const RewardNotificationModal = observer(() => {
                         source={require('@app/assets/images/wallet/bg_reward_overlay_top.png')}
                     />
                     <View style={styles.modalHeader}>
-                        <Text style={styles.modalTitle}>{noticeData?.title}</Text>
+                        <Text style={styles.modalTitle}>{noticeData?.title || '获得奖励'}</Text>
                     </View>
                     <View style={styles.modalBody}>
-                        <Text style={styles.modalContent}>{noticeData?.content}</Text>
+                        <Text style={styles.modalContent}>
+                            {noticeData?.gold > 0 ? Config.goldAlias + '+' + noticeData?.gold : ''}
+                            {noticeData?.ticket > 0 ? Config.ticketAlias + '+' + noticeData?.ticket : ''}
+                        </Text>
                         <View style={styles.walletInfo}>
-                            <Text style={styles.assetsText}>
-                                当前{Config.goldAlias}:{userStore.me.gold}
-                            </Text>
+                            <Text style={styles.assetsText}>当前{Config.goldAlias}</Text>
                             <Image
                                 source={require('@app/assets/images/wallet/icon_wallet_diamond.png')}
                                 style={styles.currentDiamond}
                             />
-                            <Text style={styles.assetsText}>≈ </Text>
-                            <Text style={styles.assetsText}>
-                                <Text style={{ color: '#FCE03D' }}>
-                                    {Helper.goldExchange(userStore.me.gold, userStore.me?.exchangeRate)}元
-                                </Text>
-                            </Text>
+                            <Text style={[styles.assetsText, { marginRight: pixel(15) }]}>{userStore.me.gold}</Text>
+                            <Text style={styles.assetsText}>账户余额</Text>
+                            <Image
+                                source={require('@app/assets/images/wallet/icon_wallet_balance.png')}
+                                style={styles.currentDiamond}
+                            />
+                            <Text style={styles.assetsText}>{userStore.me.balance}</Text>
                         </View>
                         <DebouncedPressable
                             style={styles.modalBtn}
@@ -139,11 +141,12 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     modalBody: {
+        alignItems: 'center',
         paddingHorizontal: pixel(16),
         paddingVertical: pixel(10),
     },
     modalContent: {
-        color: '#7B7B7B',
+        color: '#FCE03D',
         fontSize: font(15),
         lineHeight: font(22),
     },
@@ -161,18 +164,6 @@ const styles = StyleSheet.create({
     currentDiamond: {
         width: pixel(25),
         height: pixel(25),
-    },
-    guidanceContainer: {
-        alignItems: 'center',
-    },
-    guidanceBtn: {
-        padding: pixel(10),
-    },
-    guidanceText: {
-        color: Theme.primaryColor,
-        fontSize: font(14),
-        lineHeight: font(18),
-        marginRight: pixel(4),
     },
     modalBtn: {
         marginTop: pixel(10),
@@ -195,7 +186,7 @@ const styles = StyleSheet.create({
     },
     adContainer: {
         width: MODAL_WIDTH,
-        minHeight: MODAL_WIDTH * 0.6,
+        minHeight: MODAL_WIDTH * 0.65,
         justifyContent: 'center',
         backgroundColor: '#FFF',
         borderBottomLeftRadius: pixel(10),

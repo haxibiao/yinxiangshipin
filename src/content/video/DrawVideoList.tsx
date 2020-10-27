@@ -118,49 +118,6 @@ export default observer(
             }
         }, [store.status]);
 
-        // TODO:领取广告奖励接口
-        // const [onClickReward] = useMutation(GQL.RewardMutation, {
-        //     variables: {
-        //         reason: 'DRAW_FEED_ADVIDEO_REWARD',
-        //     },
-        //     refetchQueries: () => [
-        //         {
-        //             query: GQL.MeMetaQuery,
-        //         },
-        //     ],
-        // });
-
-        // TODO:点击领取奖励
-        const getReward = useCallback(async () => {
-            // const drawFeedAdId = media.id.toString();
-            // if (videoStore.rewardedVideos.indexOf(drawFeedAdId) === -1) {
-            //     videoStore.addRewardedId(drawFeedAdId);
-            //     // 发放给精力奖励
-            //     const [error, res] = await Helper.exceptionCapture(onClickReward);
-            //     if (error) {
-            //         Toast.show({
-            //             content: '遇到未知错误，领取失败',
-            //         });
-            //     } else {
-            //         const gold = Helper.syncGetter('data.reward.gold', res);
-            //         RewardOverlay.show({
-            //             reward: {
-            //                 gold: gold,
-            //             },
-            //             title: '领取点击详情奖励成功',
-            //         });
-            //         rewardTrack({
-            //             name: `点击drawFeed广告奖励`,
-            //         });
-            //     }
-            // } else {
-            //     Toast.show({
-            //         content: `该视频已获取过点击奖励`,
-            //         duration: 2000,
-            //     });
-            // }
-        }, []);
-
         const renderVideoItem = useCallback(
             ({ item, index }) => {
                 // 显示drawFeed广告
@@ -168,14 +125,6 @@ export default observer(
                     return (
                         <View style={{ height: store.fullVideoHeight }}>
                             <ad.DrawFeed codeid={adStore.codeid_draw_video} onAdClick={getReward} />
-                            {/* TODO: 引导用户点击*/}
-                            {/* <View style={styles.adClickTip}>
-                            <Image
-                                source={require('@app/assets/images/click_tips.png')}
-                                style={styles.adClickTipImage}
-                            />
-                            <Text style={styles.adClickTipText}>戳一戳，领取奖励</Text>
-                        </View> */}
                         </View>
                     );
                 }

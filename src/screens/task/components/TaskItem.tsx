@@ -1,9 +1,9 @@
 import React, { useRef, useMemo, useState, useCallback, useEffect } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Image, Linking } from 'react-native';
 import { ad } from 'react-native-ad';
-import { userStore, appStore, adStore } from '@src/store';
+import { userStore, appStore, adStore, notificationStore } from '@src/store';
 import { getTaskReward, getUserReward, getNewUserReward } from '@src/apollo';
-import { SafeText, HxfButton, RewardOverlay, Loading, PopOverlay } from '@src/components';
+import { SafeText, HxfButton, PopOverlay } from '@src/components';
 import { useNavigation } from '@react-navigation/native';
 import { Overlay } from 'teaset';
 import VideoTeaching from '../VideoTeaching';
@@ -166,20 +166,18 @@ function useTaskState(task) {
 
     // 领取任务奖励
     const gotTaskReward = useCallback((id) => {
-        Loading.show();
+        notificationStore.toggleLoadingVisible();
         getTaskReward(id)
             .then((res) => {
-                Loading.hide();
-                RewardOverlay.show({
-                    reward: {
-                        gold: res?.gold,
-                        ticket: res?.ticket,
-                    },
-                    title: '任务奖励领取成功',
+                notificationStore.toggleLoadingVisible();
+                notificationStore.sendRewardNotice({
+                    title: '获得任务奖励',
+                    gold: res?.gold,
+                    ticket: res?.ticket,
                 });
             })
             .catch((err) => {
-                Loading.hide();
+                notificationStore.toggleLoadingVisible();
                 Toast.show({ content: err });
             });
     }, []);
@@ -220,12 +218,10 @@ function playRewardVideo({ wait }: { wait: number }) {
                 called = true;
                 getUserReward('WATCH_REWARD_VIDEO')
                     .then((res) => {
-                        RewardOverlay.show({
-                            reward: {
-                                gold: res?.gold,
-                                ticket: res?.ticket,
-                            },
-                            title: '看视频奖励领取成功',
+                        notificationStore.sendRewardNotice({
+                            title: '获得看视频奖励',
+                            gold: res?.gold,
+                            ticket: res?.ticket,
                         });
                     })
                     .catch((err) => {
@@ -238,12 +234,10 @@ function playRewardVideo({ wait }: { wait: number }) {
                 called = true;
                 getUserReward('WATCH_REWARD_VIDEO')
                     .then((res) => {
-                        RewardOverlay.show({
-                            reward: {
-                                gold: res?.gold,
-                                ticket: res?.ticket,
-                            },
-                            title: '看视频奖励领取成功',
+                        notificationStore.sendRewardNotice({
+                            title: '获得看视频奖励',
+                            gold: res?.gold,
+                            ticket: res?.ticket,
                         });
                     })
                     .catch((err) => {

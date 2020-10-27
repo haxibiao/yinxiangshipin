@@ -35,14 +35,6 @@ export function getUserReward(reason: RewardReason) {
                 })
                 .then((data: any) => {
                     resolve(data?.data?.reward);
-                    // const reward = Helper.syncGetter('data.reward', data);
-                    // RewardOverlay.show({
-                    //     reward: {
-                    //         gold: reward.gold,
-                    //         ticket: reward.ticket,
-                    //     },
-                    //     title: '奖励领取成功',
-                    // });
                 })
                 .catch((err: any) => {
                     reject(errorMessage(err, '奖励领取失败'));
@@ -76,14 +68,6 @@ export function getTaskReward(id: number) {
                 })
                 .then((data: any) => {
                     resolve(data?.data?.rewardTask?.reward_info);
-                    // const rewardTask = Helper.syncGetter('data.rewardTask', data);
-                    // RewardOverlay.show({
-                    //     reward: {
-                    //         gold: rewardTask.reward_info.gold,
-                    //         ticket: rewardTask.reward_info.ticket,
-                    //     },
-                    //     title: '任务奖励领取成功',
-                    // });
                 })
                 .catch((err: any) => {
                     reject(errorMessage(err, '奖励领取失败'));
