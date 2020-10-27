@@ -1,12 +1,11 @@
 import React, { useRef, useState, useMemo, useEffect, useCallback } from 'react';
 import { StyleSheet, View, Text, Image, Modal, ScrollView, BackHandler } from 'react-native';
-import { observer, Storage, appStore, userStore, notificationStore } from '@src/store';
+import { observer, Storage, GuideKeys, appStore, userStore, notificationStore } from '@src/store';
 import { GQL, useApolloClient } from '@src/apollo';
 import { authNavigate } from '@src/router';
 import { DebouncedPressable } from '../../../components/Basic/DebouncedPressable';
 import Iconfont from '../../../components/Iconfont';
 
-const UserAgreementGuide = 'UserAgreementGuide' + Config.Version;
 const MODAL_WIDTH = Device.WIDTH * 0.82 > pixel(300) ? pixel(300) : Device.WIDTH * 0.82;
 
 // 用户协议
@@ -45,15 +44,15 @@ export const AppUserAgreementModal = observer(() => {
     // }, []);
 
     const agreement = useCallback(() => {
-        appStore.guides.UserAgreementGuide = isAgreed.current = true;
-        Storage.setItem(UserAgreementGuide, JSON.stringify({}));
+        notificationStore.guides.UserAgreementGuide = isAgreed.current = true;
+        Storage.setItem(GuideKeys.UserAgreementGuide, JSON.stringify({}));
         hideModal();
     }, []);
 
     useEffect(() => {
         (async function () {
-            isAgreed.current = await Storage.getItem(UserAgreementGuide);
-            appStore.guides.UserAgreementGuide = isAgreed.current;
+            isAgreed.current = await Storage.getItem(GuideKeys.UserAgreementGuide);
+            notificationStore.guides.UserAgreementGuide = !!isAgreed.current;
             if (!isAgreed.current) {
                 showModal();
             }
@@ -69,7 +68,10 @@ export const AppUserAgreementModal = observer(() => {
             hardwareAccelerated={true}>
             <View style={styles.modalView}>
                 <View style={styles.modalContainer}>
-                    <ScrollView contentContainerStyle={styles.modalContent} showsVerticalScrollIndicator={false}>
+                    <ScrollView
+                        contentContainerStyle={styles.modalContent}
+                        showsVerticalScrollIndicator={false}
+                        bounces={false}>
                         <Text style={styles.title}>个人信息保护指引</Text>
                         <View>
                             <Text style={styles.tintFont}>感谢您的信任和支持：</Text>
@@ -128,12 +130,12 @@ const styles = StyleSheet.create({
     modalContainer: {
         width: MODAL_WIDTH,
         height: MODAL_WIDTH * 1.35,
-        borderRadius: pixel(5),
+        borderRadius: pixel(10),
         overflow: 'hidden',
+        backgroundColor: '#FFF',
     },
     modalContent: {
         flexGrow: 1,
-        backgroundColor: '#FFF',
         padding: pixel(15),
     },
     title: {
@@ -155,20 +157,23 @@ const styles = StyleSheet.create({
         lineHeight: font(20),
     },
     footer: {
-        height: pixel(46),
-        backgroundColor: '#FFF',
+        paddingVertical: pixel(6),
         borderColor: '#EAEAEA',
         borderTopWidth: StyleSheet.hairlineWidth,
         flexDirection: 'row',
-        alignSelf: 'stretch',
-    },
-    bottomBtn: {
-        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
     },
+    bottomBtn: {
+        width: MODAL_WIDTH * 0.36,
+        height: MODAL_WIDTH * 0.12,
+        borderRadius: MODAL_WIDTH * 0.12,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: Theme.primaryColor,
+    },
     bottomBtnText: {
-        color: Theme.primaryColor,
+        color: '#fff',
         fontWeight: 'bold',
         fontSize: font(16),
     },

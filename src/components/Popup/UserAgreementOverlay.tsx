@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Image, ViewStyle, ScrollView } from 'react-native';
-import { appStore, Keys, Storage } from '@src/store';
+import { appStore, RecordKeys, Storage } from '@src/store';
 import SafeText from '../Basic/SafeText';
 // import Row from '../Basic/Row';
 
@@ -89,7 +89,7 @@ const UserAgreementOverlay = (onHide?: () => void, onRefused?: () => void) => {
                 }}>
                 <UserAgreementOverlayView
                     hide={() => {
-                        appStore.setAppStorage(Keys.agreeCreatePostAgreement, true);
+                        appStore.setAppStorage(RecordKeys.agreeCreatePostAgreement, true);
                         appStore.agreeCreatePostAgreement = true;
                         overlayRef.close();
                         onHide && onHide();

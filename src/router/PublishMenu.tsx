@@ -1,6 +1,6 @@
 import React, { useMemo, useRef, useEffect, useCallback } from 'react';
 import { StyleSheet, View, Text, Image, TouchableOpacity, TouchableWithoutFeedback, Animated } from 'react-native';
-import { observer, userStore, appStore, Keys, Storage } from '@src/store';
+import { observer, userStore, appStore } from '@src/store';
 import * as PermissionChecker from '../screens/live/CommonWidgetPermissionChecker';
 
 const items = [

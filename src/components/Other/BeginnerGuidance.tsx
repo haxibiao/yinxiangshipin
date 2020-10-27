@@ -1,13 +1,10 @@
 /*
- * @flow
  * created by wyk made in 2018-12-05 20:53:57
  */
-'use strict';
-
 import React from 'react';
 import { StyleSheet, View, TouchableWithoutFeedback, Text, BackHandler } from 'react-native';
 import { Overlay } from 'teaset';
-import { Storage, appStore } from '@src/store';
+import { Storage, notificationStore } from '@src/store';
 
 interface Props {
     guidanceKey: string; //指导标识
@@ -27,7 +24,6 @@ export default (props: Props) => {
         skipEnabled,
         skipGuidanceKeys = [guidanceKey],
     } = props;
-    const guidanceType = `BeginnerGuidance_${guidanceKey}`;
     let backListener;
     let OverlayKey;
 
@@ -52,9 +48,10 @@ export default (props: Props) => {
 
     (async function () {
         // OverlayKey = Overlay.show(overlayView);
-        const result = await Storage.getItem(guidanceType);
-        appStore.guides[guidanceKey] = result;
+        const result = await Storage.getItem(guidanceKey);
+        notificationStore.guides[guidanceKey] = !!result;
         if (!result) {
+            notificationStore.inGuidance = true;
             OverlayKey = Overlay.show(overlayView);
             if (Device.Android) {
                 backListener = BackHandler.addEventListener('hardwareBackPress', () => {
@@ -65,9 +62,10 @@ export default (props: Props) => {
     })();
 
     function handleDismiss() {
+        notificationStore.inGuidance = false;
         if (recordable) {
-            appStore.guides[guidanceKey] = true;
-            Storage.setItem(guidanceType, JSON.stringify({}));
+            notificationStore.guides[guidanceKey] = true;
+            Storage.setItem(guidanceKey, JSON.stringify({}));
         }
         removeBackListener();
         Overlay.hide(OverlayKey);
@@ -76,7 +74,7 @@ export default (props: Props) => {
     function skipGuidance() {
         if (recordable) {
             skipGuidanceKeys.forEach((skipGuidanceKey) => {
-                Storage.setItem(`BeginnerGuidance_${skipGuidanceKey}`, JSON.stringify({}));
+                Storage.setItem(skipGuidanceKey, JSON.stringify({}));
             });
         }
         removeBackListener();

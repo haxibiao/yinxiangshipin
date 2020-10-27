@@ -3,7 +3,7 @@ import { StyleSheet, Platform } from 'react-native';
 import { Overlay } from 'teaset';
 import { when } from 'mobx';
 import { ad } from 'react-native-ad';
-import { observer, appStore, adStore, userStore, Storage, Keys } from './store';
+import { observer, appStore, adStore, userStore, Storage, RecordKeys, notificationStore } from './store';
 import { useRecallUserProfile } from './apollo';
 import { authNavigate } from './router';
 import { PopOverlay, BeginnerGuidance } from './components';
@@ -19,7 +19,7 @@ const fetchConfigTimeout = 4000;
 
 // 监听新用户登录
 when(
-    () => adStore.enableWallet && userStore.login && appStore.guides.UserAgreementGuide,
+    () => adStore.enableWallet && userStore.login && notificationStore.guides.UserAgreementGuide,
     () => {
         // 新手指导
         BeginnerGuidance({
@@ -90,20 +90,20 @@ export default observer(function Preparation() {
         }
 
         if (
-            !userStore.bindAccountRemind &&
-            !userStore.disabledBindAccountRemind &&
+            !notificationStore.bindAccountRemind &&
+            !notificationStore.disabledBindAccountRemind &&
             goldsOrArticlesUpdateCount.current >= 2
         ) {
-            Storage.setItem(Keys.bindAccountRemind + Config.Version, true);
-            userStore.bindAccountRemind = true;
+            Storage.setItem(RecordKeys.bindAccountRemind + Config.Version, true);
+            notificationStore.bindAccountRemind = true;
             PopOverlay({
                 modal: true,
                 content: '账号还未绑定手机号，退出登录可能会丢失数据！可在【设置】中绑定手机号。',
                 leftContent: '不再提醒',
                 rightContent: '前去绑定',
                 leftConfirm: async () => {
-                    Storage.setItem(Keys.disabledBindAccountRemind, true);
-                    userStore.disabledBindAccountRemind = true;
+                    Storage.setItem(RecordKeys.disabledBindAccountRemind, true);
+                    notificationStore.disabledBindAccountRemind = true;
                 },
                 onConfirm: async () => {
                     authNavigate('BindingAccount');

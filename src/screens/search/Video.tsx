@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { StyleSheet, View, Text, FlatList, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { PageContainer, Iconfont, HxfTextInput, ScrollTabBar, SafeText, FocusAwareStatusBar } from '@src/components';
-import { Storage, Keys } from '@src/store';
+import { Storage, RecordKeys } from '@src/store';
 import { useApolloClient, GQL } from '@src/apollo';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import __ from 'lodash';

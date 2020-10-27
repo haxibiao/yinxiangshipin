@@ -1,13 +1,13 @@
 import React, { useMemo, useState, useCallback, useEffect } from 'react';
 import { StyleSheet, View, Text, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
 import { Iconfont, Row } from '@src/components';
-import { Storage, Keys } from '@src/store';
+import { Storage, RecordKeys } from '@src/store';
 
 const SearchRecord = ({ searchKeyword, search, color = '#2b2b2b' }) => {
     const [recordData, setRecordData] = useState([]);
 
     const getRecord = useCallback(async () => {
-        const record = await Storage.getItem(Keys.searchRecord);
+        const record = await Storage.getItem(RecordKeys.searchRecord);
         console.log('record', record);
         if (Array.isArray(record)) {
             setRecordData(record);
@@ -17,7 +17,7 @@ const SearchRecord = ({ searchKeyword, search, color = '#2b2b2b' }) => {
     const addRecord = useCallback((newKeyword) => {
         setRecordData((oldData) => {
             const newData = new Set([newKeyword, ...oldData]);
-            Storage.setItem(Keys.searchRecord, [...newData]);
+            Storage.setItem(RecordKeys.searchRecord, [...newData]);
             return [...newData];
         });
     }, []);
@@ -26,7 +26,7 @@ const SearchRecord = ({ searchKeyword, search, color = '#2b2b2b' }) => {
         setRecordData((oldData) => {
             const newData = new Set(oldData);
             newData.delete(keyword);
-            Storage.setItem(Keys.searchRecord, [...newData]);
+            Storage.setItem(RecordKeys.searchRecord, [...newData]);
             return [...newData];
         });
     }, []);

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Keys, Storage, userStore } from '@src/store';
+import { RecordKeys, Storage, userStore } from '@src/store';
 import { useQuery } from '@apollo/react-hooks';
 import { GQL } from '../gqls';
 
@@ -17,7 +17,7 @@ export function useRecallUserProfile() {
 
     useEffect(() => {
         (async function getMeFormStorage() {
-            const profile = await Storage.getItem(Keys.me);
+            const profile = await Storage.getItem(RecordKeys.me);
             userStore.recallUser(profile);
         })();
     }, []);

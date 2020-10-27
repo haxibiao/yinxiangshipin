@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { StyleSheet, View, ScrollView, Text, Image, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { observer, adStore, userStore, Keys, Storage } from '@src/store';
+import { observer, adStore, userStore } from '@src/store';
 import { PageContainer, Iconfont, Row, Avatar, SafeText, FocusAwareStatusBar } from '@src/components';
 import { GQL, useQuery, useApolloClient } from '@src/apollo';
 
