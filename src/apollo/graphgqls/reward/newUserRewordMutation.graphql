@@ -1,4 +1,4 @@
-#新用户奖励接口
+#新用户观看视频教学奖励
 # "rewardType": "VIDEO"
 mutation newUserRewordMutation($rewardType: RewardType!) {
     newUserReword(type: $rewardType)

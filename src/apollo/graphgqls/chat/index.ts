@@ -3,7 +3,7 @@ import chatsQuery from './chatsQuery.graphql';
 import createChatMutation from './createChatMutation.graphql';
 import deleteChatMutation from './deleteChatMutation.graphql';
 import messagesQuery from './messagesQuery.graphql';
-import sendMessageMutation from './sendMessageMutation.qraphql';
+import sendMessageMutation from './sendMessageMutation.graphql';
 
 export const chat = {
     chatsQuery,

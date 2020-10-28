@@ -1,5 +1,4 @@
 // 用户账号
-
 import autoSignInMutation from './autoSignInMutation.graphql';
 import destroyUserMutation from './destroyUserMutation.graphql';
 import otherSignInMutation from './otherSignInMutation.graphql';

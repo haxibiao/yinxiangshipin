@@ -1,4 +1,4 @@
-#import "./postFragment.graphql"
+#import "../post/postFragment.graphql"
 #import "../collection/collectionFragment.graphql"
 
 #我的关注列表的收藏动态

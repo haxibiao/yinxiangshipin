@@ -1,4 +1,4 @@
-#import "./userFragment.graphql"
+#import "../user/userFragment.graphql"
 #import "../wallet/walletFragment.graphql"
 
 fragment signFragment on Account {

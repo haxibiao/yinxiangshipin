@@ -13,7 +13,7 @@ const BUTTON_HEIGHT = BUTTON_WIDTH * 0.2;
 
 export const AutoCheckInModal = observer(() => {
     const [visible, setVisible] = useState(false);
-    const [checkInData, setCheckInData] = useState({ balance: 0.3, keepCheckInDays: 1 });
+    const [checkInData, setCheckInData] = useState({ balance: 0.3, goldReward: 10, keepCheckInDays: 1 });
     const shown = useRef(false);
 
     const showModal = useCallback((data) => {
@@ -65,6 +65,7 @@ export const AutoCheckInModal = observer(() => {
             Number(Helper.goldExchange(todayReturns.gold_reward + userStore.me.gold, userStore.me.exchangeRate));
         if (todayReturns) {
             setCheckInData({
+                goldReward: todayReturns.gold_reward,
                 keepCheckInDays: todayReturns.keep_checkin_days,
                 balance: Math.max(walletBalance, 0.3).toFixed(1),
             });
@@ -101,12 +102,13 @@ export const AutoCheckInModal = observer(() => {
                     <View style={styles.modalHeader}>
                         <Text style={styles.modalTitle}>连续签到{checkInData.keepCheckInDays}天</Text>
                     </View>
+                    <Text style={styles.goldReward}>{`奖励${checkInData.goldReward}${Config.goldAlias}`}</Text>
                     <View style={styles.modalBody}>
                         <Text style={styles.modalContent}>连续签到奖励更多,记得每天来看看我</Text>
                         <Text style={styles.assetsText}>当天所得的金币会在次日转换成余额</Text>
                         <Text style={styles.assetsText}>
                             目前大约可提现
-                            <Text style={{ color: '#FCE03D' }}>{checkInData.balance}</Text>元
+                            <Text style={{ color: '#FFCF3C', fontWeight: 'bold' }}>{checkInData.balance}元</Text>
                         </Text>
                         <DebouncedPressable
                             style={styles.modalBtn}
@@ -118,13 +120,7 @@ export const AutoCheckInModal = observer(() => {
                                     authNavigate('TaskCenter');
                                 }
                             }}>
-                            <Text style={styles.modalBtnText}>
-                                {!notificationStore.guides.NewUserTask
-                                    ? '知道了'
-                                    : checkInData.balance >= 0.3
-                                    ? '去提现'
-                                    : '去做任务'}
-                            </Text>
+                            <Text style={styles.modalBtnText}>{checkInData.balance >= 0.3 ? '去提现' : '做任务'}</Text>
                         </DebouncedPressable>
                     </View>
                 </ImageBackground>
@@ -169,6 +165,17 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
     },
+    goldReward: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        marginTop: pixel(50),
+        color: '#FFCF3C',
+        fontSize: font(15),
+        lineHeight: font(20),
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
     modalBody: {
         flex: 1,
         alignItems: 'center',
@@ -183,7 +190,7 @@ const styles = StyleSheet.create({
         marginBottom: pixel(15),
     },
     assetsText: {
-        color: '#b2b2b2',
+        color: '#7B7B7B',
         fontSize: font(13),
         lineHeight: font(20),
     },

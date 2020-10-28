@@ -233,6 +233,9 @@ export default observer((props: any) => {
                             </View>
                             <View style={styles.earnings}>
                                 <SafeText style={styles.earningsText}>{userProfile.gold || '0.00'}</SafeText>
+                                <Text style={styles.goldExchange}>
+                                    {' ≈ ' + Helper.goldExchange(userProfile.gold, userProfile.exchangeRate)}元
+                                </Text>
                             </View>
                         </View>
                         <View style={styles.assetItem}>
@@ -274,10 +277,8 @@ export default observer((props: any) => {
                     <View style={styles.sectionHeader}>
                         <SafeText style={styles.sectionHeaderTitle}>提现金额</SafeText>
                     </View>
+                    <Text style={styles.withdrawTips}>今天所得{Config.goldAlias}会在次日转成余额，账单可查看明细</Text>
                     <View style={styles.amountOptions}>
-                        <Text style={styles.withdrawTips}>
-                            提现需要消耗相应{Config.goldAlias}，更多疑问请查看页面下方的温馨提示
-                        </Text>
                         {withdrawAmountData.map((data, index) => {
                             const selected = data.amount === amount;
                             return (
@@ -440,13 +441,19 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         lineHeight: font(18),
     },
+    goldExchange: {
+        color: '#fff',
+        fontSize: font(12),
+        fontWeight: 'bold',
+        lineHeight: font(16),
+    },
     assetDescription: {
         color: '#fff',
         fontSize: font(12),
         lineHeight: font(14),
     },
     earnings: {
-        minWidth: pixel(55),
+        minWidth: pixel(60),
         alignItems: 'flex-end',
     },
     earningsText: {

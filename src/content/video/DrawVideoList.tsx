@@ -11,6 +11,7 @@ import {
     BackHandler,
     FlatListProperties,
     ViewStyle,
+    Platform,
 } from 'react-native';
 import { ad } from 'react-native-ad';
 import LottieView from 'lottie-react-native';
@@ -121,14 +122,18 @@ export default observer(
         const renderVideoItem = useCallback(
             ({ item, index }) => {
                 // 显示drawFeed广告
-                if (item?.is_ad && adStore.enableAd && store.visibility && index === store.viewableItemIndex) {
-                    return (
-                        <View style={{ height: store.fullVideoHeight }}>
-                            <ad.DrawFeed codeid={adStore.codeid_draw_video} />
-                        </View>
-                    );
+                if (item?.is_ad && adStore.enableAd) {
+                    if (Platform.OS === 'android' || (store.visibility && index === store.viewableItemIndex)) {
+                        return (
+                            <View style={{ height: store.fullVideoHeight }}>
+                                <ad.DrawFeed codeid={adStore.codeid_draw_video} />
+                            </View>
+                        );
+                    }
+                    return <View style={{ height: store.fullVideoHeight }} />;
+                } else {
+                    return <VideoItem store={store} media={item} index={index} />;
                 }
-                return <VideoItem store={store} media={item} index={index} />;
             },
             [adStore.enableAd],
         );

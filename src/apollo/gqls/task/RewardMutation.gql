@@ -2,6 +2,7 @@
 # SIGNIN_VIDEO_REWARD 签到奖励
 # DOUBLE_SIGNIN_REWARD 双倍奖励
 # WATCH_REWARD_VIDEO 激励视频奖励
+# NEW_USER_REWARD 新人红包奖励
 mutation UserRewardMutation($reason: RewardEnum) {
     reward(reason: $reason) {
         gold
@@ -22,7 +23,7 @@ mutation rewardTaskMutation($id: ID!) {
     }
 }
 
-#新用户奖励接口
+#新用户观看教学视频奖励
 # "rewardType": "VIDEO"
 mutation newUserRewordMutation($rewardType: RewardType!) {
     newUserReword(type: $rewardType)

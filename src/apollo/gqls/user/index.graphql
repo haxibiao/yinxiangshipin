@@ -74,3 +74,8 @@ query showUserBlockQuery($user_id: Int!) {
         }
     }
 }
+
+# 新人红包：true代表可以领取新人奖励，false代表已经领取过了，不能再领取了
+query hasNewUserReward($user_id: Int!) {
+    hasNewUserReward(user_id: $user_id)
+}

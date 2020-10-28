@@ -41,11 +41,18 @@ export default observer((props: any) => {
                 isTransparent={true}
                 statusbarProperties={{ barStyle: 'light-content' }}
                 navBarStyle={{ position: 'absolute', left: 0, right: 0, zIndex: 1 }}
+                rightComponent={
+                    <TouchableOpacity
+                        style={styles.withdrawBtn}
+                        onPress={() => navigation.navigate('Wallet', { user: userProfile })}>
+                        <Text style={styles.withdrawText}>去提现</Text>
+                    </TouchableOpacity>
+                }
             />
             <TouchableWithoutFeedback
                 onPress={() => {
                     if (adStore.enableWallet) {
-                        authNavigator('Wallet', { user: userProfile });
+                        navigation.navigate('Wallet', { user: userProfile });
                     }
                 }}>
                 <View style={styles.assetContainer}>
@@ -68,20 +75,29 @@ export default observer((props: any) => {
                         </TouchableOpacity>
                         <View style={styles.assetItem}>
                             <Image
-                                source={require('@app/assets/images/wallet/icon_wallet_giftAward.png')}
+                                source={require('@app/assets/images/wallet/icon_wallet_balance.png')}
                                 style={styles.walletItemIcon}
                             />
-                            <Text style={styles.assetName}>{Config.ticketAlias}</Text>
-                            <SafeText style={styles.assetCount}>{userProfile?.ticket || 0}</SafeText>
+                            <Text style={styles.assetName}>余额</Text>
+                            <SafeText style={styles.assetCount}>{userProfile?.balance || 0}</SafeText>
                         </View>
                     </Row>
                     <View style={styles.assetTip}>
-                        <Text style={{ color: '#fff', fontSize: font(13) }}>
-                            每天凌晨自动将{Config.goldAlias}兑换为余额
-                        </Text>
                         <SafeText style={styles.assetRate}>
-                            今日汇率：{userProfile.exchangeRate || '500'} {Config.goldAlias} / 1元
+                            大约可提现
+                            {Number(userStore.me.balance) +
+                                Number(Helper.goldExchange(userStore.me.gold, userStore.me.exchangeRate))}
+                            元
                         </SafeText>
+                        <View style={styles.ticketItem}>
+                            <Image
+                                source={require('@app/assets/images/wallet/icon_wallet_giftAward.png')}
+                                style={styles.ticketIcon}
+                            />
+                            <Text style={styles.ticketText}>
+                                今天剩余{userProfile?.ticket || 0}点{Config.ticketAlias}，部分任务需要消耗
+                            </Text>
+                        </View>
                     </View>
                 </View>
             </TouchableWithoutFeedback>
@@ -96,6 +112,15 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         backgroundColor: '#F5F6FB',
         paddingBottom: Theme.HOME_INDICATOR_HEIGHT + pixel(30),
+    },
+    withdrawBtn: {
+        alignSelf: 'stretch',
+        justifyContent: 'center',
+        paddingHorizontal: pixel(12),
+    },
+    withdrawText: {
+        color: '#F6DB4A',
+        fontSize: font(16),
     },
     assetContainer: {
         backgroundColor: '#FE4966',
@@ -140,8 +165,26 @@ const styles = StyleSheet.create({
     },
     assetRate: {
         color: '#F6DB4A',
-        fontSize: font(13),
+        fontSize: font(12),
         marginTop: pixel(5),
         fontWeight: 'bold',
+    },
+    ticketItem: {
+        marginTop: pixel(10),
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    ticketIcon: {
+        height: pixel(16),
+        width: pixel(16),
+        borderRadius: pixel(8),
+        marginRight: pixel(4),
+        backgroundColor: '#FFF',
+    },
+    ticketText: {
+        fontSize: font(12),
+        color: '#FFF',
     },
 });

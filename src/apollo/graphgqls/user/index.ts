@@ -1,8 +1,8 @@
 // 用户信息模块
-import MeMateQuery from './MeMateQuery.graphql';
+import MeMateQuery from './meMateQuery.graphql';
 import showUserBlockQuery from './showUserBlockQuery.graphql';
 import userFragment from './userFragment.graphql';
-import userQuery from './userQuery';
+import userQuery from './userQuery.graphql';
 
 export const user = {
     MeMateQuery,
