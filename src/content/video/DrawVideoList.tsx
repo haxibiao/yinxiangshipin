@@ -124,7 +124,7 @@ export default observer(
                 if (item?.is_ad && adStore.enableAd && store.visibility && index === store.viewableItemIndex) {
                     return (
                         <View style={{ height: store.fullVideoHeight }}>
-                            <ad.DrawFeed codeid={adStore.codeid_draw_video} onAdClick={getReward} />
+                            <ad.DrawFeed codeid={adStore.codeid_draw_video} />
                         </View>
                     );
                 }
