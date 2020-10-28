@@ -5,6 +5,7 @@
 import React, { useState, useMemo } from 'react';
 import { StyleSheet, Text, View, Image, TouchableWithoutFeedback } from 'react-native';
 import { authNavigate } from '@src/router';
+import { userStore } from '@src/store';
 
 function NewUserTaskGuidance({ onDismiss }) {
     const [step, setStep] = useState(0);
@@ -37,6 +38,7 @@ function NewUserTaskGuidance({ onDismiss }) {
                 key={3}
                 onPress={() => {
                     onDismiss();
+                    userStore.isNewUser = false;
                 }}>
                 <Image
                     style={styles.walletGuide}

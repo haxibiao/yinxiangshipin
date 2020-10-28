@@ -2,24 +2,28 @@ import { observable, action, runInAction } from 'mobx';
 import { RecordKeys, Storage } from './storage';
 
 export interface UserScheme {
-    id?: string;
-    name?: string;
-    avatar?: string;
-    token?: string;
-    count_articles?: number;
-    count_followings?: number;
-    count_followers?: number;
+    id: number;
+    name: string;
+    avatar: string;
+    token: string;
+    count_articles: number;
+    count_followings: number;
+    count_followers: number;
     introduction?: string;
     phone?: string;
-    wallet?: object;
+    wallet: {
+        id: number;
+        total_withdraw_amount: number;
+    };
     [key: string]: any;
 }
 
 class UserStore {
-    @observable me: UserScheme = {};
+    @observable me = {} as UserScheme;
     @observable login: boolean = false;
     @observable recalledUser: boolean = false;
     @observable firstInstall: boolean = false;
+    @observable isNewUser: boolean = false;
 
     constructor() {
         (async () => {
@@ -33,6 +37,7 @@ class UserStore {
             TOKEN = me.token;
             this.me = me;
             this.login = true;
+            this.isNewUser = me?.balance <= 0 && me?.wallet?.total_withdraw_amount <= 0;
         }
         //从Storage获取用户数据完成，避免重复创建client
         this.recalledUser = true;
@@ -44,6 +49,7 @@ class UserStore {
         this.me = user;
         this.login = true;
         this.firstInstall = false;
+        this.isNewUser = user?.balance <= 0 && user?.wallet?.total_withdraw_amount <= 0;
         Storage.setItem(RecordKeys.me, user);
         Storage.setItem(RecordKeys.notFirstInstall, true);
     }
@@ -51,7 +57,7 @@ class UserStore {
     @action.bound
     signOut() {
         TOKEN = null;
-        this.me = {};
+        this.me = {} as UserScheme;
         this.login = false;
         Storage.removeItem(RecordKeys.me);
         Storage.setItem(RecordKeys.notFirstInstall, true);

@@ -62,13 +62,13 @@ export default (props: Props) => {
     })();
 
     function handleDismiss() {
-        notificationStore.inGuidance = false;
-        if (recordable) {
-            notificationStore.guides[guidanceKey] = true;
-            Storage.setItem(guidanceKey, JSON.stringify({}));
-        }
         removeBackListener();
         Overlay.hide(OverlayKey);
+        notificationStore.inGuidance = false;
+        if (recordable) {
+            Storage.setItem(guidanceKey, JSON.stringify({}));
+            notificationStore.guides[guidanceKey] = true;
+        }
     }
 
     function skipGuidance() {

@@ -34,14 +34,6 @@ Text.render = function (...args) {
 
 const App = observer(() => {
     const client = useClientBuilder(userStore.me?.token);
-    // 提前加载数据
-    useEffect(() => {
-        // 提现额度
-        if (userStore.login && client?.query) {
-            client.query({ query: GQL.getWithdrawAmountList });
-        }
-    }, [userStore.login, client]);
-
     // 自动登录
     const autoSignIn = useCallback(async () => {
         const uuid = Device.UUID;

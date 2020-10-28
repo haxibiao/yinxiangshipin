@@ -4,7 +4,7 @@ import { Overlay } from 'teaset';
 import { when } from 'mobx';
 import { ad } from 'react-native-ad';
 import { observer, appStore, adStore, userStore, Storage, RecordKeys, notificationStore } from './store';
-import { useRecallUserProfile } from './apollo';
+import { GQL, useQuery, useRecallUserProfile } from './apollo';
 import { authNavigate } from './router';
 import { PopOverlay, BeginnerGuidance } from './components';
 import NewUserTaskGuidance from './screens/guidance/NewUserTaskGuidance';
@@ -19,7 +19,11 @@ const fetchConfigTimeout = 4000;
 
 // 监听新用户登录
 when(
-    () => adStore.enableWallet && userStore.login && notificationStore.guides.UserAgreementGuide,
+    () =>
+        notificationStore.guides.UserAgreementGuide &&
+        adStore.enableWallet &&
+        userStore.login &&
+        notificationStore.isCheckIn,
     () => {
         // 新手指导
         BeginnerGuidance({
@@ -31,7 +35,12 @@ when(
 
 export default observer(function Preparation() {
     // 恢复登录状态、监听MeMetaQuery更新MeStorage
-    useRecallUserProfile();
+    useRecallUserProfile({ login: userStore.login });
+    // 提前加载数据
+    useQuery(GQL.getWithdrawAmountList, {
+        fetchPolicy: 'network-only',
+        skip: !userStore.login,
+    });
 
     // 获取APP的开启配置(广告和钱包)
     const timer = useRef(); // 防止获取配置超时
@@ -115,8 +124,8 @@ export default observer(function Preparation() {
 
     return (
         <>
-            <AutoCheckInModal />
             <AppUserAgreementModal />
+            <AutoCheckInModal />
             <DetectPhotoAlbumModal />
             <ParseShareLinkModal />
         </>

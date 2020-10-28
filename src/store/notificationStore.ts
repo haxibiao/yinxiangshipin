@@ -25,9 +25,10 @@ class NotificationStore {
     @observable rewardNotice: RewardNotification[] = [];
     @observable loadingVisible: boolean = false;
     @observable loadingTips: string = '';
-    detectedSharedContent = false;
     // guides
-    inGuidance: boolean = false; // 正在显示用户引导
+    inGuidance: boolean = false; // 是否正在显示用户引导
+    detectedSharedContent = false; // 是否已经解析了相册文件
+    @observable isCheckIn = false; // 是否签到
     @observable bindAccountRemind: boolean = false; // 提醒绑定账号
     @observable disabledBindAccountRemind: boolean = false; // 不再提醒绑定账号
     @observable guides = {} as { -readonly [k in keyof typeof GuideKeys]: any }; // 用户引导（弹窗）

@@ -86,10 +86,15 @@ export const DetectPhotoAlbumModal = observer(() => {
             userStore.recalledUser &&
             adStore.loadedConfig &&
             notificationStore.guides.UserAgreementGuide &&
-            notificationStore.guides.NewUserTask;
-        if (appIsReady && !detectPhotoAlbum.called) {
-            detectPhotoAlbum.called = true;
-            detectPhotoAlbum();
+            !detectPhotoAlbum.called;
+        if (appIsReady) {
+            if (!userStore.login || !adStore.enableWallet) {
+                detectPhotoAlbum.called = true;
+                detectPhotoAlbum();
+            } else if (notificationStore.guides.NewUserTask) {
+                detectPhotoAlbum.called = true;
+                detectPhotoAlbum();
+            }
         }
     }, [
         userStore.recalledUser,

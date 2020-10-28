@@ -3,10 +3,10 @@ import { RecordKeys, Storage, userStore } from '@src/store';
 import { useQuery } from '@apollo/react-hooks';
 import { GQL } from '../gqls';
 
-export function useRecallUserProfile() {
+export function useRecallUserProfile({ login }: { login: boolean }) {
     const { data } = useQuery(GQL.MeMetaQuery, {
         fetchPolicy: 'network-only',
-        skip: !userStore.login,
+        skip: !login,
     });
 
     useEffect(() => {

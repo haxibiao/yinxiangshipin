@@ -27,6 +27,7 @@ export const AutoCheckInModal = observer(() => {
         if (shown.current) {
             setVisible(false);
             shown.current = false;
+            notificationStore.isCheckIn = true;
         }
     }, []);
 
@@ -49,48 +50,42 @@ export const AutoCheckInModal = observer(() => {
         ],
     });
     const todayChecked = useMemo(() => {
-        return data?.checkIns?.today_checked;
+        const today_checked = data?.checkIns?.today_checked;
+        if (today_checked) {
+            notificationStore.isCheckIn = true;
+        }
+        return today_checked;
     }, [data]);
 
-    const toDaySignIn = useCallback(
-        __.throttle(async () => {
-            if (!todayChecked) {
-                const result = await createCheckIn();
-                const todayReturns = result?.data?.createCheckIn;
-                const walletBalance =
-                    Number(userStore.me.balance) +
-                    Number(
-                        Helper.goldExchange(todayReturns.gold_reward + userStore.me.gold, userStore.me.exchangeRate),
-                    );
-                if (todayReturns) {
-                    setCheckInData({
-                        keepCheckInDays: todayReturns.keep_checkin_days,
-                        balance: Math.max(walletBalance, 0.3).toFixed(1),
-                    });
-                    showModal();
-                }
-            }
-        }),
-        [todayChecked, createCheckIn],
-    );
+    const toDaySignIn = useCallback(async () => {
+        const result = await createCheckIn();
+        const todayReturns = result?.data?.createCheckIn;
+        const walletBalance =
+            Number(userStore.me.balance) +
+            Number(Helper.goldExchange(todayReturns.gold_reward + userStore.me.gold, userStore.me.exchangeRate));
+        if (todayReturns) {
+            setCheckInData({
+                keepCheckInDays: todayReturns.keep_checkin_days,
+                balance: Math.max(walletBalance, 0.3).toFixed(1),
+            });
+            showModal();
+        } else {
+            notificationStore.isCheckIn = true;
+        }
+    }, [createCheckIn]);
 
     useEffect(() => {
         if (
-            adStore.enableWallet &&
-            userStore.login &&
             notificationStore.guides.UserAgreementGuide &&
-            notificationStore.guides.NewUserTask &&
-            todayChecked === false
+            userStore.login &&
+            adStore.enableWallet &&
+            todayChecked === false &&
+            !toDaySignIn.called
         ) {
+            toDaySignIn.called = true;
             toDaySignIn();
         }
-    }, [
-        userStore.login,
-        notificationStore.guides.UserAgreementGuide,
-        notificationStore.guides.NewUserTask,
-        todayChecked,
-        toDaySignIn,
-    ]);
+    }, [notificationStore.guides.UserAgreementGuide, userStore.login, adStore.enableWallet, todayChecked, toDaySignIn]);
 
     return (
         <Modal
@@ -124,7 +119,11 @@ export const AutoCheckInModal = observer(() => {
                                 }
                             }}>
                             <Text style={styles.modalBtnText}>
-                                {checkInData.balance >= 0.3 ? '去提现' : '去做任务'}
+                                {!notificationStore.guides.NewUserTask
+                                    ? '知道了'
+                                    : checkInData.balance >= 0.3
+                                    ? '去提现'
+                                    : '去做任务'}
                             </Text>
                         </DebouncedPressable>
                     </View>

@@ -44,9 +44,7 @@ export const ParseShareLinkModal = observer(() => {
             shareLink &&
             shareBody &&
             userStore.login &&
-            notificationStore.guides.UserAgreementGuide &&
             notificationStore.detectedSharedContent &&
-            notificationStore.inGuidance !== true &&
             appStore.currentRouteName !== 'CreatePost' &&
             shareLinkCache[shareLink] == undefined
         ) {
@@ -54,7 +52,7 @@ export const ParseShareLinkModal = observer(() => {
             setVideoTitle(shareBody?.title);
             showModal();
         }
-    }, [shareLink, shareBody, userStore.login, notificationStore.guides.UserAgreementGuide]);
+    }, [shareLink, shareBody, userStore.login]);
 
     // 采集成功
     const resolveContentSuccess = useCallback(

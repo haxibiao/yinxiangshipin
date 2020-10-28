@@ -3,8 +3,8 @@ import { StyleSheet, View, Text, Image, Modal, ScrollView, BackHandler } from 'r
 import { observer, Storage, GuideKeys, appStore, userStore, notificationStore } from '@src/store';
 import { GQL, useApolloClient } from '@src/apollo';
 import { authNavigate } from '@src/router';
-import { DebouncedPressable } from '../../../components/Basic/DebouncedPressable';
-import Iconfont from '../../../components/Iconfont';
+import { DebouncedPressable } from '../../Basic/DebouncedPressable';
+import Iconfont from '../../Iconfont';
 
 const MODAL_WIDTH = Device.WIDTH * 0.82 > pixel(300) ? pixel(300) : Device.WIDTH * 0.82;
 
@@ -44,9 +44,9 @@ export const AppUserAgreementModal = observer(() => {
     // }, []);
 
     const agreement = useCallback(() => {
-        notificationStore.guides.UserAgreementGuide = isAgreed.current = true;
-        Storage.setItem(GuideKeys.UserAgreementGuide, JSON.stringify({}));
         hideModal();
+        Storage.setItem(GuideKeys.UserAgreementGuide, JSON.stringify({}));
+        notificationStore.guides.UserAgreementGuide = isAgreed.current = true;
     }, []);
 
     useEffect(() => {
