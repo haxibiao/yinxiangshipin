@@ -7,7 +7,6 @@
 import { NativeModules, Alert, Platform } from 'react-native';
 const ISIOS = Platform.OS === 'ios';
 import * as WeChat from 'react-native-wechat-lib';
-
 import { bindWeChat } from '@src/common';
 
 const WXLogin = () => {

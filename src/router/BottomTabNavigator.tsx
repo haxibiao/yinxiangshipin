@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from '@src/screens/home';
 import Find from '@src/screens/find';
-// import Task from '@src/screens/task';
+import Task from '@src/screens/task';
 import Notification from '@src/screens/notification';
 import Profile from '@src/screens/my';
 import BottomTabBar from './BottomTabBar';
@@ -33,6 +33,13 @@ export default function MainTabNavigator() {
                 component={Find}
                 options={{
                     tabBarLabel: '发现',
+                }}
+            />
+            <Tab.Screen
+                name="TaskCenter"
+                component={Task}
+                options={{
+                    tabBarLabel: '任务',
                 }}
             />
             <Tab.Screen

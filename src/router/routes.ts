@@ -71,6 +71,7 @@ import EditCollectionScreen from '../screens/creation/EditCollection';
 import CategoryScreen from '../screens/category';
 
 // notification
+import NotificationScreen from '../screens/notification';
 import ChatScreen from '../screens/chat';
 import ChatSettingScreen from '../screens/chat/ChatSetting';
 import CommentsScreen from '../screens/notification/CommentsScreen';
@@ -211,6 +212,9 @@ export default {
     },
     CollectionEpisodeVideoList: {
         component: CollectionEpisodeVideoListScreen,
+    },
+    NotificationCenter: {
+        component: NotificationScreen,
     },
     Chat: {
         component: ChatScreen,

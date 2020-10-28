@@ -38,6 +38,7 @@ export default observer((props: any) => {
         <ScrollView contentContainerStyle={styles.container}>
             <NavBarHeader
                 title="任务中心"
+                hasGoBackButton={false}
                 isTransparent={true}
                 statusbarProperties={{ barStyle: 'light-content' }}
                 navBarStyle={{ position: 'absolute', left: 0, right: 0, zIndex: 1 }}
@@ -95,7 +96,7 @@ export default observer((props: any) => {
                                 style={styles.ticketIcon}
                             />
                             <Text style={styles.ticketText}>
-                                今天剩余{userProfile?.ticket || 0}点{Config.ticketAlias}，部分任务需要消耗
+                                今天还剩余{userProfile?.ticket || 0}点{Config.ticketAlias}，部分任务需要消耗
                             </Text>
                         </View>
                     </View>

@@ -56,6 +56,11 @@ const iconSource = {
         videoActive: require('@app/assets/images/icons/ic_find_inactive_gray.png'),
         inactive: require('@app/assets/images/icons/ic_find_inactive.png'),
     },
+    TaskCenter: {
+        active: require('@app/assets/images/icons/ic_task_active.png'),
+        videoActive: require('@app/assets/images/icons/ic_task_inactive_gray.png'),
+        inactive: require('@app/assets/images/icons/ic_task_inactive.png'),
+    },
     Notification: {
         active: require('@app/assets/images/icons/ic_message_active.png'),
         videoActive: require('@app/assets/images/icons/ic_message_inactive_gray.png'),
@@ -194,10 +199,10 @@ export default observer(
 
         const tabBarItems = React.useMemo(() => {
             return routes.map((route: any, index: number) => {
-                {
-                    /* if (!adStore.enableWallet && route.name === 'Task') {
+                if (!adStore.enableWallet && route.name === 'TaskCenter') {
                     return;
-                    }*/
+                } else if (adStore.enableWallet && route.name === 'Notification') {
+                    return;
                 }
 
                 const focused = index === state.index;

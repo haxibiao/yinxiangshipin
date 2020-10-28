@@ -4,6 +4,6 @@
  */
 export * from './checkUpdate';
 export * from './download';
-export * from './bindWeChat';
+export * from './bindingWeChat';
 export { fileHash } from './fileMD5Hash';
 export { detectPhotos } from './detectPhotos';
