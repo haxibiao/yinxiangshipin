@@ -2,7 +2,6 @@ import React, { useCallback } from 'react';
 import { StyleSheet, View, TouchableWithoutFeedback, Image, Animated } from 'react-native';
 import { NavBarHeader, ScrollTabBar, FocusAwareStatusBar } from '@src/components';
 import { observer, adStore, userStore } from '@src/store';
-import { useCirculationAnimation } from '@src/common';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import FollowedPosts from './FollowedPosts';
@@ -15,18 +14,7 @@ export default observer(() => {
     const goSearchCenter = useCallback(() => {
         navigation.navigate('Search');
     }, []);
-    const goTaskCenter = useCallback(() => {
-        navigation.navigate(userStore.login ? 'TaskCenter' : 'Login');
-    }, []);
-    const animation = useCirculationAnimation({ duration: 3000, start: true });
-    const scale = animation.interpolate({
-        inputRange: [0, 0.1, 0.2, 0.3, 0.4, 1],
-        outputRange: [1, 1.3, 1.1, 1.3, 1, 1],
-    });
-    // const rotate = animation.interpolate({
-    //     inputRange: [0.4, 0.],
-    //     outputRange: [1, 1.3, 1.1, 1.3, 1, 1],
-    // });
+
     return (
         <View style={styles.container}>
             <FocusAwareStatusBar barStyle="dark-content" />
@@ -47,22 +35,11 @@ export default observer(() => {
                 <RecommendPosts tabLabel="推荐" />
                 <Collections tabLabel="合集" />
             </ScrollableTabView>
-            {adStore.enableWallet ? (
-                <TouchableWithoutFeedback onPress={goTaskCenter}>
-                    <View style={styles.taskButton}>
-                        <Animated.Image
-                            source={require('@app/assets/images/record_reward.png')}
-                            style={[styles.buttonIcon, { transform: [{ scale }] }]}
-                        />
-                    </View>
-                </TouchableWithoutFeedback>
-            ) : (
-                <TouchableWithoutFeedback onPress={goSearchCenter}>
-                    <View style={styles.searchButton}>
-                        <Image source={require('@app/assets/images/icons/ic_search_b.png')} style={styles.buttonIcon} />
-                    </View>
-                </TouchableWithoutFeedback>
-            )}
+            <TouchableWithoutFeedback onPress={goSearchCenter}>
+                <View style={styles.searchButton}>
+                    <Image source={require('@app/assets/images/icons/ic_search_b.png')} style={styles.buttonIcon} />
+                </View>
+            </TouchableWithoutFeedback>
         </View>
     );
 });

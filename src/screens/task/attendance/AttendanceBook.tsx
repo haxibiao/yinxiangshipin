@@ -205,22 +205,26 @@ const AttendanceBook = (): JSX.Element => {
     }, [keepCheckInDays, checkIns]);
 
     return (
-        <BoxShadow
-            setting={Object.assign({}, shadowOpt, {
-                height: boxShadowHeight,
-            })}>
-            <View style={styles.attendanceBook} onLayout={onLayoutEffect}>
-                <View style={styles.header}>
-                    <SafeText style={styles.signInText}>
-                        已签到
-                        <SafeText style={styles.keepSignInText}>{` ${keepCheckInDays}/${checkIns.length} `}</SafeText>天
-                    </SafeText>
+        <View style={{ marginHorizontal: pixel(15) }}>
+            <BoxShadow
+                setting={Object.assign({}, shadowOpt, {
+                    height: boxShadowHeight,
+                })}>
+                <View style={styles.attendanceBook} onLayout={onLayoutEffect}>
+                    <View style={styles.header}>
+                        <SafeText style={styles.signInText}>
+                            已签到
+                            <SafeText
+                                style={styles.keepSignInText}>{` ${keepCheckInDays}/${checkIns.length} `}</SafeText>
+                            天
+                        </SafeText>
+                    </View>
+                    <TouchableWithoutFeedback onPress={toDaySignIn} disabled={loading}>
+                        <View style={styles.attendance}>{checkInRecord}</View>
+                    </TouchableWithoutFeedback>
                 </View>
-                <TouchableWithoutFeedback onPress={toDaySignIn} disabled={loading}>
-                    <View style={styles.attendance}>{checkInRecord}</View>
-                </TouchableWithoutFeedback>
-            </View>
-        </BoxShadow>
+            </BoxShadow>
+        </View>
     );
 };
 
@@ -238,9 +242,6 @@ const shadowOpt = {
     opacity: 0.5,
     x: 0,
     y: 0,
-    style: {
-        margin: pixel(15),
-    },
 };
 
 const fakeChecksData = {
