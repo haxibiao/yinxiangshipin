@@ -4,10 +4,9 @@ import { BoxShadow } from 'react-native-shadow';
 import { ad } from 'react-native-ad';
 import { useNavigation } from '@react-navigation/native';
 import { appStore, adStore, userStore, notificationStore } from '@src/store';
-import { SafeText } from '@src/components';
-import { useCirculationAnimation } from '@src/common';
-import { GQL, useMutation, useQuery, getUserReward } from '@src/apollo';
-import * as SignedReturnOverlay from './SignedReturnOverlay';
+import { SafeText, DebouncedPressable } from '@src/components';
+import { useCirculationAnimation, useNavigationListener } from '@src/common';
+import { GQL, useMutation, useQuery, getUserReward, errorMessage } from '@src/apollo';
 
 interface SignInReturns {
     id: any;
@@ -18,13 +17,13 @@ interface SignInReturns {
 const AttendanceBook = (): JSX.Element => {
     const navigation = useNavigation();
     const [boxShadowHeight, setBoxShadowHeight] = useState(150);
-
     const onLayoutEffect = useCallback((event) => {
         setBoxShadowHeight(event.nativeEvent.layout.height);
     }, []);
 
     const { data, loading, refetch } = useQuery(GQL.CheckInsQuery, {
         fetchPolicy: 'network-only',
+        skip: !userStore.me?.id,
     });
     const [createCheckIn] = useMutation(GQL.CreateCheckInMutation, {
         refetchQueries: (): array => [
@@ -49,36 +48,56 @@ const AttendanceBook = (): JSX.Element => {
         return data?.checkIns?.checks || fakeChecksData.checks;
     }, [data]);
 
-    const toDaySignIn = useCallback(
-        __.debounce(async () => {
-            if (!todayChecked) {
-                try {
-                    const result = await createCheckIn();
-                    const todayReturns = Helper.syncGetter('data.createCheckIn', result);
-                    checkInSuccess(todayReturns);
-                    refetch();
-                } catch (e) {
-                    const str = e.toString().replace(/Error: GraphQL error: /, '');
-                    Toast.show({ content: str || '签到失败' });
-                }
-            } else {
-                Toast.show({ content: '今天已经签到过了哦' });
-            }
-        }, 500),
-        [todayChecked, refetch],
-    );
-
-    const checkInSuccess = useCallback(
-        (returns: SignInReturns) => {
-            SignedReturnOverlay.show({
-                navigation,
-                gold: returns.gold_reward,
-                ticket: returns.ticket_reward,
-                signInDays: keepCheckInDays + 1,
+    const toDaySignIn = useCallback(async ({ focusCheckIn }) => {
+        if (!userStore.login) {
+            navigation.navigate('Login');
+            return;
+        }
+        try {
+            const result = await createCheckIn();
+            const todayReturns = result?.data?.createCheckIn;
+            notificationStore.sendRewardNotice({
+                title: '每日签到奖励',
+                gold: todayReturns.gold_reward,
+                ticket: todayReturns.ticket_reward,
+                buttonName: '领取额外奖励',
+                buttonHandler: () => {
+                    let called;
+                    // const rewardVideo = ad.startRewardVideo({ appid: adStore.tt_appid, codeid: adStore.codeid_reward_video });
+                    const rewardVideo = ad.startFullVideo({
+                        appid: adStore.tt_appid,
+                        codeid: adStore.codeid_full_video,
+                    });
+                    if (!called) {
+                        called = true;
+                        getUserReward('SIGNIN_VIDEO_REWARD')
+                            .then((res) => {
+                                notificationStore.sendRewardNotice({
+                                    title: '额外签到奖励',
+                                    gold: res?.gold,
+                                    ticket: res?.ticket,
+                                });
+                            })
+                            .catch((err) => {
+                                Toast.show({ content: errorMessage(err) || '领取失败' });
+                            });
+                    }
+                },
             });
-        },
-        [keepCheckInDays],
-    );
+        } catch (err) {
+            if (!focusCheckIn) {
+                Toast.show({ content: errorMessage(err) || '签到失败' });
+            }
+        }
+    }, []);
+
+    const autoCheckIn = useCallback(() => {
+        if (userStore.isNewUser === true && todayChecked === false) {
+            toDaySignIn({ focusCheckIn: true });
+        }
+    }, [todayChecked]);
+
+    useNavigationListener({ onFocus: autoCheckIn });
 
     const animation = useCirculationAnimation({ duration: 2000, start: true });
     const translateY = animation.interpolate({
@@ -100,7 +119,7 @@ const AttendanceBook = (): JSX.Element => {
                 getUserReward('DOUBLE_SIGNIN_REWARD')
                     .then((res) => {
                         notificationStore.sendRewardNotice({
-                            title: '获得签到双倍奖励',
+                            title: '签到奖励翻倍',
                             gold: res?.gold,
                             ticket: res?.ticket,
                         });
@@ -212,16 +231,19 @@ const AttendanceBook = (): JSX.Element => {
                 })}>
                 <View style={styles.attendanceBook} onLayout={onLayoutEffect}>
                     <View style={styles.header}>
-                        <SafeText style={styles.signInText}>
+                        <SafeText style={styles.checkInText}>
                             已签到
                             <SafeText
-                                style={styles.keepSignInText}>{` ${keepCheckInDays}/${checkIns.length} `}</SafeText>
+                                style={styles.keepCheckInText}>{` ${keepCheckInDays}/${checkIns.length} `}</SafeText>
                             天
                         </SafeText>
                     </View>
-                    <TouchableWithoutFeedback onPress={toDaySignIn} disabled={loading}>
-                        <View style={styles.attendance}>{checkInRecord}</View>
-                    </TouchableWithoutFeedback>
+                    <DebouncedPressable
+                        style={styles.attendance}
+                        onPress={toDaySignIn}
+                        disabled={loading || todayChecked}>
+                        {checkInRecord}
+                    </DebouncedPressable>
                 </View>
             </BoxShadow>
         </View>
@@ -254,11 +276,6 @@ const fakeChecksData = {
 };
 
 const styles = StyleSheet.create({
-    attendance: {
-        alignItems: 'flex-end',
-        flexDirection: 'row',
-        paddingTop: pixel(10),
-    },
     attendanceBook: {
         backgroundColor: '#fff',
         borderRadius: pixel(10),
@@ -268,6 +285,11 @@ const styles = StyleSheet.create({
         shadowOffset: { width: pixel(5), height: pixel(5) },
         shadowOpacity: 0.8,
         shadowRadius: pixel(10),
+    },
+    attendance: {
+        alignItems: 'flex-end',
+        flexDirection: 'row',
+        paddingTop: pixel(12),
     },
     coinImage: {
         alignItems: 'center',
@@ -301,9 +323,13 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingHorizontal: pixel(10),
     },
-    keepSignInText: {
-        color: '#FF5733',
-        fontSize: font(18),
+    checkInText: {
+        color: '#2b2b2b',
+        fontSize: font(16),
+        fontWeight: 'bold',
+    },
+    keepCheckInText: {
+        color: '#FE7A02',
     },
     mysticGift: {
         alignItems: 'center',
@@ -333,11 +359,6 @@ const styles = StyleSheet.create({
         color: '#FF5733',
         fontSize: font(13),
         marginRight: pixel(2),
-    },
-    signInText: {
-        color: Theme.defaultTextColor,
-        fontSize: font(18),
-        fontWeight: 'bold',
     },
     signItem: {
         alignItems: 'center',

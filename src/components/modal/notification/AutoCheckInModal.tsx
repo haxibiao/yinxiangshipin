@@ -27,15 +27,15 @@ export const AutoCheckInModal = observer(() => {
         if (shown.current) {
             setVisible(false);
             shown.current = false;
-            notificationStore.isCheckIn = true;
+            userStore.isCheckIn = true;
         }
     }, []);
 
-    const { data } = useQuery(GQL.CheckInsQuery, {
+    const { data, loading } = useQuery(GQL.CheckInsQuery, {
         fetchPolicy: 'network-only',
+        skip: !userStore.me?.id,
     });
     const [createCheckIn] = useMutation(GQL.CreateCheckInMutation, {
-        client: appStore.mutationClient,
         refetchQueries: () => [
             {
                 query: GQL.CheckInsQuery,
@@ -43,50 +43,39 @@ export const AutoCheckInModal = observer(() => {
             },
             {
                 query: GQL.MeMetaQuery,
-                variables: {
-                    refetch: 1,
-                },
+                fetchPolicy: 'network-only',
             },
         ],
     });
-    const todayChecked = useMemo(() => {
-        const today_checked = data?.checkIns?.today_checked;
-        if (today_checked) {
-            notificationStore.isCheckIn = true;
-        }
-        return today_checked;
-    }, [data]);
+    const todayChecked = useMemo(() => (loading ? null : data?.checkIns?.today_checked), [data]);
 
     const toDaySignIn = useCallback(async () => {
-        const result = await createCheckIn();
-        const todayReturns = result?.data?.createCheckIn;
-        const walletBalance =
-            Number(userStore.me.balance) +
-            Number(Helper.goldExchange(todayReturns.gold_reward + userStore.me.gold, userStore.me.exchangeRate));
-        if (todayReturns) {
-            setCheckInData({
-                goldReward: todayReturns.gold_reward,
-                keepCheckInDays: todayReturns.keep_checkin_days,
-                balance: Math.max(walletBalance, 0.3).toFixed(1),
-            });
-            showModal();
-        } else {
-            notificationStore.isCheckIn = true;
-        }
+        try {
+            const result = await createCheckIn();
+            const todayReturns = result?.data?.createCheckIn;
+            const walletBalance =
+                Number(userStore.me.balance) +
+                Number(Helper.goldExchange(todayReturns.gold_reward + userStore.me.gold, userStore.me.exchangeRate));
+            if (todayReturns) {
+                setCheckInData({
+                    goldReward: todayReturns.gold_reward,
+                    keepCheckInDays: todayReturns.keep_checkin_days,
+                    balance: Math.max(walletBalance, 0.3).toFixed(1),
+                });
+                showModal();
+            }
+        } catch (error) {}
     }, [createCheckIn]);
 
     useEffect(() => {
-        if (
-            notificationStore.guides.UserAgreementGuide &&
-            userStore.login &&
-            adStore.enableWallet &&
-            todayChecked === false &&
-            !toDaySignIn.called
-        ) {
-            toDaySignIn.called = true;
-            toDaySignIn();
+        if (userStore.isNewUser === false && todayChecked !== null) {
+            if (todayChecked) {
+                userStore.isCheckIn = true;
+            } else {
+                toDaySignIn();
+            }
         }
-    }, [notificationStore.guides.UserAgreementGuide, userStore.login, adStore.enableWallet, todayChecked, toDaySignIn]);
+    }, [userStore.isNewUser, todayChecked]);
 
     return (
         <Modal
@@ -125,7 +114,7 @@ export const AutoCheckInModal = observer(() => {
                     </View>
                 </ImageBackground>
                 <DebouncedPressable style={styles.closeBtn} onPress={hideModal} activeOpacity={1}>
-                    <Iconfont name="guanbi1" size={font(14)} color={'#fff'} />
+                    <Iconfont name="guanbi1" size={font(14)} color={'#fefefe'} />
                 </DebouncedPressable>
             </View>
         </Modal>
@@ -153,6 +142,8 @@ const styles = StyleSheet.create({
         width: pixel(26),
         height: pixel(26),
         borderRadius: pixel(13),
+        borderWidth: pixel(1),
+        borderColor: '#fefefe',
         backgroundColor: 'rgba(0,0,0,0.5)',
     },
     modalHeader: {

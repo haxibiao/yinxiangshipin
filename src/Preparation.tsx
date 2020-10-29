@@ -1,37 +1,19 @@
 import React, { useRef, useMemo, useEffect, useCallback, useState } from 'react';
 import { StyleSheet, Platform } from 'react-native';
-import { Overlay } from 'teaset';
-import { when } from 'mobx';
 import { ad } from 'react-native-ad';
 import { observer, appStore, adStore, userStore, Storage, RecordKeys, notificationStore } from './store';
 import { GQL, useQuery, useRecallUserProfile } from './apollo';
 import { authNavigate } from './router';
 import { PopOverlay, BeginnerGuidance } from './components';
-import NewUserTaskGuidance from './screens/guidance/NewUserTaskGuidance';
 import {
-    AutoCheckInModal,
     AppUserAgreementModal,
+    NewUserRedEnvelopeModal,
+    AutoCheckInModal,
     DetectPhotoAlbumModal,
     ParseShareLinkModal,
 } from './components/modal';
 
 const fetchConfigTimeout = 4000;
-
-// 监听新用户登录
-when(
-    () =>
-        notificationStore.guides.UserAgreementGuide &&
-        adStore.enableWallet &&
-        userStore.login &&
-        notificationStore.isCheckIn,
-    () => {
-        // 新手指导
-        BeginnerGuidance({
-            guidanceKey: 'NewUserTask',
-            GuidanceView: NewUserTaskGuidance,
-        });
-    },
-);
 
 export default observer(function Preparation() {
     // 恢复登录状态、监听MeMetaQuery更新MeStorage
@@ -125,6 +107,7 @@ export default observer(function Preparation() {
     return (
         <>
             <AppUserAgreementModal />
+            <NewUserRedEnvelopeModal />
             <AutoCheckInModal />
             <DetectPhotoAlbumModal />
             <ParseShareLinkModal />
