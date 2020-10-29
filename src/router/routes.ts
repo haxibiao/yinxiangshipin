@@ -25,7 +25,6 @@ import FeedbackScreen from '../screens/Feedback';
 import FeedbackDetail from '../screens/Feedback/FeedbackDetail';
 
 // Task
-import TaskScreen from '../screens/task';
 import SpiderVideoTaskScreen from '../screens/task/SpiderVideoTask';
 import PraiseScreen from '../screens/task/Praise';
 
@@ -279,9 +278,6 @@ export default {
 
     CancellationAgreement: {
         component: CancellationAgreement,
-    },
-    TaskCenter: {
-        component: TaskScreen,
     },
     SpiderVideoTask: {
         component: SpiderVideoTaskScreen,

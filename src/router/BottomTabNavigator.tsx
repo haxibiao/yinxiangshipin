@@ -39,7 +39,7 @@ export default function MainTabNavigator() {
                 name="TaskCenter"
                 component={Task}
                 options={{
-                    tabBarLabel: '任务',
+                    tabBarLabel: '赚钱',
                 }}
             />
             <Tab.Screen

@@ -29,7 +29,7 @@ export function moment(second: any) {
 }
 
 export function goldExchange(gold: number, rate = 500) {
-    return (gold / rate).toFixed(2);
+    return Number((gold / rate).toFixed(2));
 }
 
 export const numberConvertToUppercase = (function numberConvert() {

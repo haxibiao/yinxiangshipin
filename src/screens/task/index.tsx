@@ -15,7 +15,7 @@ import { Iconfont, Row, HxfButton, NavBarHeader, SafeText } from '@src/component
 import { useCirculationAnimation } from '@src/common';
 import { observer, appStore, userStore, adStore } from '@src/store';
 import { GQL, useMutation, useQuery } from '@src/apollo';
-import AttendanceBook from './attendance/AttendanceBook';
+import AttendanceBook from './components/AttendanceBook';
 import TaskList from './components/TaskList';
 
 export default observer((props: any) => {
@@ -91,10 +91,10 @@ export default observer((props: any) => {
                         <View style={styles.assetTip}>
                             <SafeText style={styles.assetRate}>
                                 大约可提现
-                                {Number(userStore.me?.balance || 0) +
-                                    Number(
-                                        Helper.goldExchange(userStore.me?.gold || 0, userStore.me?.exchangeRate || 500),
-                                    )}
+                                {Number(
+                                    Number(userStore.me?.balance || 0) +
+                                        Helper.goldExchange(userStore.me?.gold || 0, userStore.me?.exchangeRate),
+                                ).toFixed(2)}
                                 元
                             </SafeText>
                             <Animated.View style={{ transform: [{ scale }] }}>
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     taskTopContainer: {
         width: Device.WIDTH,
         height: Device.WIDTH * 0.65,
-        paddingTop: Theme.statusBarHeight + Theme.NAVBAR_HEIGHT - pixel(15),
+        paddingTop: Theme.statusBarHeight + Theme.NAVBAR_HEIGHT - pixel(20),
         paddingBottom: Device.WIDTH * 0.2,
     },
     taskContent: {
@@ -156,6 +156,7 @@ const styles = StyleSheet.create({
     },
     assetName: {
         fontSize: font(16),
+        fontWeight: 'bold',
         color: '#703C0B',
         marginRight: pixel(5),
     },

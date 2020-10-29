@@ -7,7 +7,8 @@ interface WithdrawNotification {
     content: string;
     gold: string | number;
     balance: string | number;
-    guideHandler?: () => void;
+    buttonName?: string;
+    buttonHandler?: () => void;
 }
 
 interface RewardNotification {
@@ -16,7 +17,8 @@ interface RewardNotification {
     gold: string | number;
     balance: string | number;
     ticket: string | number;
-    guideHandler?: () => void;
+    buttonName?: string;
+    buttonHandler?: () => void;
 }
 
 class NotificationStore {
@@ -25,10 +27,9 @@ class NotificationStore {
     @observable rewardNotice: RewardNotification[] = [];
     @observable loadingVisible: boolean = false;
     @observable loadingTips: string = '';
+    @observable hasModalVisible: boolean = false;
     // guides
     inGuidance: boolean = false; // 是否正在显示用户引导
-    detectedSharedContent = false; // 是否已经解析了相册文件
-    @observable isCheckIn = false; // 是否签到
     @observable bindAccountRemind: boolean = false; // 提醒绑定账号
     @observable disabledBindAccountRemind: boolean = false; // 不再提醒绑定账号
     @observable guides = {} as { -readonly [k in keyof typeof GuideKeys]: any }; // 用户引导（弹窗）
@@ -42,7 +43,6 @@ class NotificationStore {
         this.bindAccountRemind = !!(await Storage.getItem(GuideKeys.bindAccountRemind));
         this.disabledBindAccountRemind = !!(await Storage.getItem(GuideKeys.disabledBindAccountRemind));
         this.guides[GuideKeys.UserAgreementGuide] = !!(await Storage.getItem(GuideKeys.UserAgreementGuide));
-        this.guides[GuideKeys.NewUserTask] = !!(await Storage.getItem(GuideKeys.NewUserTask));
     }
 
     @action.bound

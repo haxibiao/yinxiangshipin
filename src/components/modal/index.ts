@@ -1,6 +1,9 @@
 export { AutonomousModal } from './AutonomousModal';
 // guide
+export { BeginnerGuidanceModal } from './guide/BeginnerGuidanceModal';
 export { AppUserAgreementModal } from './guide/AppUserAgreementModal';
+export { NewUserRedEnvelopeModal } from './guide/NewUserRedEnvelopeModal';
+export { TaskGuidance } from './guide/TaskGuidance';
 // notification
 export { LoadingModal } from './notification/LoadingModal';
 export { AutoCheckInModal } from './notification/AutoCheckInModal';

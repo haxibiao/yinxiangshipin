@@ -15,7 +15,6 @@ export const GuideKeys = {
     bindAccountRemind: 'bindAccountRemind',
     disabledBindAccountRemind: 'disabledBindAccountRemind',
     UserAgreementGuide: 'UserAgreementGuide',
-    NewUserTask: 'NewUserTask',
 } as const;
 
 export type ItemKeys = typeof RecordKeys & typeof GuideKeys;

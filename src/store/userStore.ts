@@ -23,7 +23,9 @@ class UserStore {
     @observable login: boolean = false;
     @observable recalledUser: boolean = false;
     @observable firstInstall: boolean = false;
-    @observable isNewUser: boolean = false;
+    @observable isNewUser?: boolean;
+    @observable isCheckIn?: boolean; // 是否签到
+    @observable startParseSharedLink: boolean = false; // 是否开始解析分享链接
 
     constructor() {
         (async () => {
@@ -37,7 +39,6 @@ class UserStore {
             TOKEN = me.token;
             this.me = me;
             this.login = true;
-            this.isNewUser = me?.balance <= 0 && me?.wallet?.total_withdraw_amount <= 0;
         }
         //从Storage获取用户数据完成，避免重复创建client
         this.recalledUser = true;
@@ -48,8 +49,10 @@ class UserStore {
         TOKEN = user.token;
         this.me = user;
         this.login = true;
+        this.recalledUser = true;
         this.firstInstall = false;
-        this.isNewUser = user?.balance <= 0 && user?.wallet?.total_withdraw_amount <= 0;
+        this.isNewUser = undefined;
+        this.isCheckIn = undefined;
         Storage.setItem(RecordKeys.me, user);
         Storage.setItem(RecordKeys.notFirstInstall, true);
     }
@@ -59,8 +62,10 @@ class UserStore {
         TOKEN = null;
         this.me = {} as UserScheme;
         this.login = false;
+        this.isNewUser = undefined;
+        this.isCheckIn = undefined;
+        this.startParseSharedLink = false;
         Storage.removeItem(RecordKeys.me);
-        Storage.setItem(RecordKeys.notFirstInstall, true);
     }
 
     @action.bound

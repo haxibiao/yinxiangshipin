@@ -67,11 +67,11 @@ export const WithdrawalNotificationModal = observer(() => {
                             style={styles.modalBtn}
                             onPress={() => {
                                 hideModal();
-                                if (noticeData.guideHandler instanceof Function) {
-                                    noticeData.guideHandler();
+                                if (noticeData.buttonHandler instanceof Function) {
+                                    noticeData.buttonHandler();
                                 }
                             }}>
-                            <Text style={styles.modalBtnText}>知道了</Text>
+                            <Text style={styles.modalBtnText}>{noticeData?.buttonName || '知道了'}</Text>
                         </DebouncedPressable>
                     </View>
                 </View>
@@ -155,9 +155,12 @@ const styles = StyleSheet.create({
     },
     adContainer: {
         width: MODAL_WIDTH,
-        minHeight: MODAL_WIDTH * 0.65,
+        minHeight: MODAL_WIDTH * 0.66,
+        maxHeight: MODAL_WIDTH * 0.85,
+        overflow: 'hidden',
         justifyContent: 'center',
-        backgroundColor: '#FFF',
+        alignItems: 'center',
+        backgroundColor: '#fff',
         borderBottomLeftRadius: pixel(10),
         borderBottomRightRadius: pixel(10),
     },

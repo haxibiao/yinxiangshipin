@@ -62,10 +62,14 @@ export const RewardNotificationModal = observer(() => {
                         <Text style={styles.modalTitle}>{noticeData?.title || '获得奖励'}</Text>
                     </View>
                     <View style={styles.modalBody}>
-                        <Text style={styles.modalContent}>
-                            {noticeData?.gold > 0 ? Config.goldAlias + '+' + noticeData?.gold : ''}
-                            {noticeData?.ticket > 0 ? Config.ticketAlias + '+' + noticeData?.ticket : ''}
-                        </Text>
+                        <View style={styles.modalContent}>
+                            <Text style={styles.rewardItem}>
+                                {noticeData?.gold > 0 ? Config.goldAlias + '+' + noticeData?.gold : ''}
+                            </Text>
+                            <Text style={styles.rewardItem}>
+                                {noticeData?.ticket > 0 ? Config.ticketAlias + '+' + noticeData?.ticket : ''}
+                            </Text>
+                        </View>
                         <View style={styles.walletInfo}>
                             <Text style={styles.assetsText}>当前{Config.goldAlias}</Text>
                             <Image
@@ -84,9 +88,13 @@ export const RewardNotificationModal = observer(() => {
                             style={styles.modalBtn}
                             onPress={() => {
                                 hideModal();
-                                authNavigate('WithdrawHistory', { tabPage: 2 });
+                                if (noticeData.buttonHandler instanceof Function) {
+                                    noticeData.buttonHandler();
+                                } else {
+                                    authNavigate('WithdrawHistory', { tabPage: 2 });
+                                }
                             }}>
-                            <Text style={styles.modalBtnText}>查看详情</Text>
+                            <Text style={styles.modalBtnText}>{noticeData?.buttonName || '查看详情'}</Text>
                         </DebouncedPressable>
                     </View>
                 </View>
@@ -146,9 +154,16 @@ const styles = StyleSheet.create({
         paddingVertical: pixel(10),
     },
     modalContent: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    rewardItem: {
         color: '#FCE03D',
         fontSize: font(15),
         lineHeight: font(22),
+        fontWeight: 'bold',
+        marginHorizontal: pixel(5),
     },
     walletInfo: {
         marginTop: pixel(10),
@@ -186,8 +201,11 @@ const styles = StyleSheet.create({
     },
     adContainer: {
         width: MODAL_WIDTH,
-        minHeight: MODAL_WIDTH * 0.65,
+        minHeight: MODAL_WIDTH * 0.66,
+        maxHeight: MODAL_WIDTH * 0.85,
+        overflow: 'hidden',
         justifyContent: 'center',
+        alignItems: 'center',
         backgroundColor: '#FFF',
         borderBottomLeftRadius: pixel(10),
         borderBottomRightRadius: pixel(10),

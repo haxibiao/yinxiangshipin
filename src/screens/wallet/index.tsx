@@ -131,6 +131,8 @@ export default observer((props: any) => {
                     notificationStore.sendWithdrawalNotice({
                         title: `${Config.goldAlias}不足`,
                         content: `可通过任务赚取${Config.goldAlias}，首次提现直接消耗${Config.goldAlias}`,
+                        buttonName: `去赚${Config.goldAlias}`,
+                        buttonHandler: () => navigation.navigate('TaskCenter'),
                     });
                 }
             } else {
@@ -139,6 +141,8 @@ export default observer((props: any) => {
                     notificationStore.sendWithdrawalNotice({
                         title: '余额不足',
                         content: `可通过任务赚取${Config.goldAlias}，${Config.goldAlias}在次日会转换成余额`,
+                        buttonName: `去赚${Config.goldAlias}`,
+                        buttonHandler: () => navigation.navigate('TaskCenter'),
                     });
                 } else {
                     if (userProfile?.wallet.today_withdraw_left >= value) {

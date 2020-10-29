@@ -183,6 +183,10 @@ function useTaskState(task) {
     }, []);
 
     const callback = useCallback(() => {
+        if (!userStore.login) {
+            navigation.navigate('Login');
+            return;
+        }
         // 根据任务状态执行不同操作
         switch (task.assignment_status) {
             case 0:

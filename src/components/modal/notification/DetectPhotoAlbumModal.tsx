@@ -1,5 +1,5 @@
 import React, { useRef, useState, useMemo, useEffect, useCallback } from 'react';
-import { StyleSheet, View, Text, Image, Modal, ScrollView, TextInput } from 'react-native';
+import { StyleSheet, View, Text, Image, Modal, ScrollView, TextInput, AppState } from 'react-native';
 import { observer, appStore, adStore, userStore, notificationStore } from '@src/store';
 import { GQL, useApolloClient } from '@src/apollo';
 import { detectPhotos } from '@src/common';
@@ -40,6 +40,7 @@ const ContentCover = React.memo(({ url, type }) => {
 // 获取分享图片二维码/视频vid信息，跳转详情页
 export const DetectPhotoAlbumModal = observer(() => {
     const shown = useRef(false);
+    const appFirstActive = useRef(true);
     const [visible, setVisible] = useState(false);
     const [content, setContent] = useState({});
 
@@ -63,7 +64,6 @@ export const DetectPhotoAlbumModal = observer(() => {
 
     const hideModal = useCallback(() => {
         if (shown.current) {
-            notificationStore.detectedSharedContent = true;
             shown.current = false;
             setVisible(false);
             record();
@@ -76,32 +76,37 @@ export const DetectPhotoAlbumModal = observer(() => {
             setContent(photoInfo);
             showModal();
         } else {
-            notificationStore.detectedSharedContent = true;
+            userStore.startParseSharedLink = true;
         }
     }, []);
 
+    // 进入App 尝试detectPhotoAlbum
     useEffect(() => {
-        // App初始化完成，用户同意协议
-        const appIsReady =
-            userStore.recalledUser &&
-            adStore.loadedConfig &&
-            notificationStore.guides.UserAgreementGuide &&
-            !detectPhotoAlbum.called;
+        const appIsReady = notificationStore.guides.UserAgreementGuide && adStore.loadedConfig;
         if (appIsReady) {
-            if (!userStore.login || !adStore.enableWallet) {
-                detectPhotoAlbum.called = true;
-                detectPhotoAlbum();
-            } else if (notificationStore.guides.NewUserTask) {
+            if ((userStore.isCheckIn || !adStore.enableWallet) && !detectPhotoAlbum.called) {
                 detectPhotoAlbum.called = true;
                 detectPhotoAlbum();
             }
         }
-    }, [
-        userStore.recalledUser,
-        adStore.loadedConfig,
-        notificationStore.guides.UserAgreementGuide,
-        notificationStore.guides.NewUserTask,
-    ]);
+    }, [notificationStore.guides.UserAgreementGuide, adStore.loadedConfig, userStore.isCheckIn]);
+
+    // 从后台再次进入App，尝试解析分享链接
+    useEffect(() => {
+        const stateChangeHandle = (event) => {
+            if (event === 'active' && !shown.current) {
+                if (appFirstActive.current) {
+                    appFirstActive.current = false;
+                } else {
+                    userStore.startParseSharedLink = true;
+                }
+            }
+        };
+        AppState.addEventListener('change', stateChangeHandle);
+        return () => {
+            AppState.removeEventListener('change', stateChangeHandle);
+        };
+    }, []);
 
     return (
         <Modal

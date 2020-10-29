@@ -10,7 +10,7 @@ import Iconfont from '../../../components/Iconfont';
 import KeyboardSpacer from '../../../components/Other/KeyboardSpacer';
 
 const shareLinkCache = {};
-const MODAL_WIDTH = Device.WIDTH * 0.8 > pixel(290) ? pixel(290) : Device.WIDTH * 0.8;
+const MODAL_WIDTH = Device.WIDTH * 0.8 > pixel(300) ? pixel(300) : Device.WIDTH * 0.8;
 
 // 采集分享链接视频内容
 export const ParseShareLinkModal = observer(() => {
@@ -39,20 +39,19 @@ export const ParseShareLinkModal = observer(() => {
     }, []);
 
     useEffect(() => {
-        // 用户已经登录、有分享链接、完成了内容解析业务、不能进行用户引导或者在发布页中
+        // 用户已经登录、有分享链接、完成了内容解析业务、没有进行用户引导
         if (
             shareLink &&
             shareBody &&
             userStore.login &&
-            notificationStore.detectedSharedContent &&
-            appStore.currentRouteName !== 'CreatePost' &&
+            userStore.startParseSharedLink &&
             shareLinkCache[shareLink] == undefined
         ) {
             shareLinkCache[shareLink] = shareBody;
             setVideoTitle(shareBody?.title);
             showModal();
         }
-    }, [shareLink, shareBody, userStore.login]);
+    }, [shareLink, shareBody, userStore.startParseSharedLink]);
 
     // 采集成功
     const resolveContentSuccess = useCallback(
@@ -177,7 +176,7 @@ const styles = StyleSheet.create({
     videoCover: {
         overflow: 'hidden',
         height: MODAL_WIDTH,
-        marginBottom: pixel(15),
+        marginBottom: pixel(12),
     },
     coverImage: {
         flex: 1,
@@ -204,7 +203,7 @@ const styles = StyleSheet.create({
     },
     videoContent: {
         paddingHorizontal: pixel(20),
-        marginBottom: pixel(15),
+        marginBottom: pixel(12),
     },
     inputContent: {
         height: pixel(60),
@@ -226,7 +225,7 @@ const styles = StyleSheet.create({
     },
     shareBtn: {
         marginHorizontal: pixel(20),
-        marginBottom: pixel(15),
+        marginBottom: pixel(12),
         height: pixel(40),
         borderRadius: pixel(4),
         backgroundColor: '#FE1966',
@@ -239,7 +238,7 @@ const styles = StyleSheet.create({
     },
     tips: {
         marginBottom: pixel(12),
-        fontSize: font(13),
+        fontSize: font(12),
         color: '#b2b2b2',
         textAlign: 'center',
     },
