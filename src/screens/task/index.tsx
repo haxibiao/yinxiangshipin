@@ -11,7 +11,7 @@ import {
     Animated,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { Iconfont, Row, HxfButton, NavBarHeader } from '@src/components';
+import { Iconfont, Row, HxfButton, FocusAwareStatusBar } from '@src/components';
 import { useCirculationAnimation } from '@src/common';
 import { observer, appStore, userStore, adStore, notificationStore } from '@src/store';
 import { GQL, useMutation, useQuery } from '@src/apollo';
@@ -56,12 +56,7 @@ export default observer((props: any) => {
 
     return (
         <ScrollView contentContainerStyle={styles.container} bounces={false}>
-            <NavBarHeader
-                hasGoBackButton={false}
-                isTransparent={true}
-                statusbarProperties={{ barStyle: 'light-content' }}
-                navBarStyle={{ position: 'absolute', left: 0, right: 0, zIndex: 1 }}
-            />
+            <FocusAwareStatusBar barStyle="light-content" />
             <TouchableWithoutFeedback onPress={() => authNavigator('Wallet', { user: userProfile })}>
                 <ImageBackground
                     style={styles.taskTopContainer}

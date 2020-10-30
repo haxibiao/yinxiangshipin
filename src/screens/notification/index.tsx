@@ -2,7 +2,7 @@ import React, { useContext, useState, useCallback, useEffect, useMemo } from 're
 import { ScrollView, StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { NavBarHeader, Avatar, Badge, Row, SafeText, StatusView, FocusAwareStatusBar } from '@src/components';
 import { GQL, useQuery } from '@src/apollo';
-import { observer, userStore, appStore, adStore } from '@src/store';
+import { observer, userStore, appStore, adStore, notificationStore } from '@src/store';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import Chats from './components/Chats';
 
@@ -10,58 +10,35 @@ const notifyTypes = ['unread_comments', 'unread_likes', 'unread_follows', 'unrea
 
 export default observer((props: any) => {
     const navigation = useNavigation();
-    const isLogin = Helper.syncGetter('login', userStore);
-    const user = Helper.syncGetter('me', userStore);
-    const userId = Helper.syncGetter('id', user);
+    const user = userStore?.me;
 
-    const { data: notifyData, refetch: fetchUnreadQuery } = useQuery(GQL.unreadsQuery, {
+    const { data, refetch, loading } = useQuery(GQL.chatsQuery, {
         fetchPolicy: 'network-only',
+        variables: { user_id: user.id },
+        skip: !user.id,
     });
-
-    const { data: chatsData, refetch: fetchChatsQuery, loading } = useQuery(GQL.chatsQuery, {
-        fetchPolicy: 'network-only',
-        variables: { user_id: userId },
-        skip: !userId,
-    });
-
-    const unreadNotify = useMemo(() => Helper.syncGetter('me', notifyData) || {}, [notifyData, userStore.login]);
-    const chats = useMemo(() => (userStore.login ? Helper.syncGetter('chats.data', chatsData) : null), [
-        chatsData,
-        userStore.login,
-    ]);
-    appStore.unreadMessages = useMemo(() => {
-        let count = 0;
-        if (unreadNotify) {
-            notifyTypes.forEach((type) => {
-                if (unreadNotify.hasOwnProperty(type)) {
-                    count += unreadNotify[type];
-                }
-            });
-        }
-        return count;
-    }, [unreadNotify]);
+    const chats = useMemo(() => (userStore.login ? data?.chats?.data : null), [data, userStore.login]);
 
     useEffect(() => {
-        if (userId) {
-            const navBlurListener = props.navigation.addListener('focus', (payload) => {
-                fetchUnreadQuery && fetchUnreadQuery();
-                fetchChatsQuery && fetchChatsQuery();
+        if (user.id) {
+            const navBlurListener = navigation.addListener('focus', (payload) => {
+                refetch && refetch();
             });
             return () => {
                 navBlurListener();
             };
         }
-    }, [userId, fetchUnreadQuery, fetchChatsQuery]);
+    }, [user.id, refetch]);
 
     const authNavigator = useCallback(
         (route, params) => {
-            if (isLogin) {
+            if (userStore?.login) {
                 navigation.navigate(route, params);
             } else {
                 navigation.navigate('Login');
             }
         },
-        [isLogin],
+        [userStore?.login],
     );
 
     const PageFooter = useMemo(() => {
@@ -114,7 +91,7 @@ export default observer((props: any) => {
                             <SafeText style={styles.itemName}>评论</SafeText>
                         </View>
                         <View style={styles.pstBadge}>
-                            <Badge count={unreadNotify.unread_comments} />
+                            <Badge count={notificationStore.unreadNotify.unread_comments} />
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity
@@ -128,7 +105,7 @@ export default observer((props: any) => {
                             <SafeText style={styles.itemName}>点赞</SafeText>
                         </View>
                         <View style={styles.pstBadge}>
-                            <Badge count={unreadNotify.unread_likes} />
+                            <Badge count={notificationStore.unreadNotify.unread_likes} />
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity
@@ -142,7 +119,7 @@ export default observer((props: any) => {
                             <SafeText style={styles.itemName}>粉丝</SafeText>
                         </View>
                         <View style={styles.pstBadge}>
-                            <Badge count={unreadNotify.unread_follows} />
+                            <Badge count={notificationStore.unreadNotify.unread_follows} />
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity
@@ -156,7 +133,7 @@ export default observer((props: any) => {
                             <SafeText style={styles.itemName}>通知</SafeText>
                         </View>
                         <View style={styles.pstBadge}>
-                            <Badge count={unreadNotify.unread_others} />
+                            <Badge count={notificationStore.unreadNotify.unread_others} />
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -185,7 +162,7 @@ const styles = StyleSheet.create({
     contentContainer: {
         backgroundColor: Theme.groundColour,
         flexGrow: 1,
-        paddingBottom: pixel(Theme.BOTTOM_HEIGHT),
+        paddingBottom: Theme.HOME_INDICATOR_HEIGHT || pixel(15),
     },
     notifyList: {
         backgroundColor: '#fff',

@@ -1,15 +1,15 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { StyleSheet, View, ScrollView, Text, Image, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { observer, adStore, userStore } from '@src/store';
-import { PageContainer, Iconfont, Row, Avatar, SafeText, FocusAwareStatusBar } from '@src/components';
+import { observer, adStore, userStore, notificationStore } from '@src/store';
+import { PageContainer, Iconfont, Row, Avatar, SafeText, FocusAwareStatusBar, Badge } from '@src/components';
 import { GQL, useQuery, useApolloClient } from '@src/apollo';
 
 export default observer((props: any) => {
     const client = useApolloClient();
     const navigation = useNavigation();
     // 个人信息
-    const { data, refetch } = useQuery(GQL.MeMetaQuery, {
+    const { data } = useQuery(GQL.MeMetaQuery, {
         fetchPolicy: 'network-only',
         skip: !userStore.login,
     });
@@ -26,17 +26,17 @@ export default observer((props: any) => {
         [userStore.login],
     );
 
-    useEffect(() => {
-        const navFocusListener = navigation.addListener('focus', () => {
-            if (userStore.login) {
-                refetch();
-            }
-        });
+    // useEffect(() => {
+    //     const navFocusListener = navigation.addListener('focus', () => {
+    //         if (userStore.login) {
+    //             refetch();
+    //         }
+    //     });
 
-        return () => {
-            navFocusListener();
-        };
-    }, [refetch]);
+    //     return () => {
+    //         navFocusListener();
+    //     };
+    // }, [refetch]);
 
     return (
         <View style={styles.container}>
@@ -121,7 +121,15 @@ export default observer((props: any) => {
                                 />
                                 <Text style={styles.columnName}>消息通知</Text>
                             </View>
-                            <Iconfont name="right" size={pixel(16)} color="#969696" />
+                            <View style={styles.columnItemRight}>
+                                <Badge count={notificationStore.unreadMessages} />
+                                <Iconfont
+                                    name="right"
+                                    size={pixel(16)}
+                                    color="#969696"
+                                    style={{ marginLeft: pixel(5) }}
+                                />
+                            </View>
                         </TouchableOpacity>
                     )}
                     {adStore.enableWallet && (
@@ -298,21 +306,13 @@ const styles = StyleSheet.create({
         lineHeight: font(22),
         fontWeight: 'bold',
     },
-    taskEntry: {
-        marginTop: pixel(20),
-        marginBottom: -taskEntryHeight * 0.1,
-        width: taskEntryWidth,
-        height: taskEntryHeight,
-        marginHorizontal: pixel(20),
-        resizeMode: 'stretch',
-    },
     columnItemsWrap: {
         marginTop: pixel(20),
         backgroundColor: '#fff',
     },
     columnItem: {
-        paddingVertical: pixel(15),
-        paddingHorizontal: pixel(20),
+        padding: pixel(15),
+        paddingLeft: pixel(20),
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -322,6 +322,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         marginRight: pixel(15),
+    },
+    columnItemRight: {
+        flexDirection: 'row',
+        alignItems: 'center',
     },
     columnIcon: {
         height: pixel(24),

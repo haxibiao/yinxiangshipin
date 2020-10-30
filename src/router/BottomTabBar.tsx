@@ -16,7 +16,8 @@ import {
 import { CommonActions, useTheme } from '@react-navigation/native';
 import { useSafeArea } from 'react-native-safe-area-context';
 import { BoxShadow } from 'react-native-shadow';
-import { observer, userStore, appStore, adStore } from '@src/store';
+import { observer, userStore, appStore, adStore, notificationStore } from '@src/store';
+import { useUnreadNotification } from '@src/apollo';
 import { Overlay } from 'teaset';
 import PublishMenu from './PublishMenu';
 
@@ -95,6 +96,7 @@ export default observer(
     }: Props) => {
         const { colors } = useTheme();
         const defaultInsets = useSafeArea();
+        useUnreadNotification(userStore.login);
 
         const focusedRoute = state.routes[state.index];
         const focusedDescriptor = descriptors[focusedRoute.key];
@@ -197,62 +199,62 @@ export default observer(
             left: safeAreaInsets?.left ?? defaultInsets.left,
         };
 
-        const tabBarItems = React.useMemo(() => {
-            return routes.map((route: any, index: number) => {
-                if (!adStore.enableWallet && route.name === 'TaskCenter') {
-                    return;
-                } else if (adStore.enableWallet && route.name === 'Notification') {
-                    return;
+        const tabBarItems = routes.map((route: any, index: number) => {
+            if (!adStore.enableWallet && route.name === 'TaskCenter') {
+                return;
+            } else if (adStore.enableWallet && route.name === 'Notification') {
+                return;
+            }
+
+            const focused = index === state.index;
+            const { options } = descriptors[route.key];
+            const color = focused ? activeTintColor : inactiveTintColor;
+            const tabBarLabel = descriptors[route.key].options.tabBarLabel || route.name;
+
+            const onPress = () => {
+                const event = navigation.emit({
+                    type: 'tabPress',
+                    target: route.key,
+                    canPreventDefault: true,
+                });
+
+                if (!focused && !event.defaultPrevented) {
+                    navigation.dispatch({
+                        ...CommonActions.navigate(route.name),
+                        target: state.key,
+                    });
                 }
+            };
 
-                const focused = index === state.index;
-                const { options } = descriptors[route.key];
-                const color = focused ? activeTintColor : inactiveTintColor;
-                const tabBarLabel = descriptors[route.key].options.tabBarLabel || route.name;
+            const onLongPress = () => {
+                navigation.emit({
+                    type: 'tabLongPress',
+                    target: route.key,
+                });
+            };
 
-                const onPress = () => {
-                    const event = navigation.emit({
-                        type: 'tabPress',
-                        target: route.key,
-                        canPreventDefault: true,
-                    });
+            const showBadge =
+                (adStore.enableWallet ? tabBarLabel === '我的' : tabBarLabel === '通知') &&
+                notificationStore.unreadMessages > 0;
 
-                    if (!focused && !event.defaultPrevented) {
-                        navigation.dispatch({
-                            ...CommonActions.navigate(route.name),
-                            target: state.key,
-                        });
-                    }
-                };
-
-                const onLongPress = () => {
-                    navigation.emit({
-                        type: 'tabLongPress',
-                        target: route.key,
-                    });
-                };
-
-                return (
-                    <TouchableOpacity
-                        style={styles.tabItem}
-                        activeOpacity={0.9}
-                        key={route.key}
-                        onPress={onPress}
-                        onLongPress={onLongPress}>
-                        <TabBarIcon
-                            name={route.name}
-                            translucent={state.index === 0}
-                            focused={focused}
-                            activeTintColor={activeTintColor}
-                            inactiveTintColor={inactiveTintColor}
-                        />
-                        <Text style={[styles.label, { color: state.index === 0 ? '#fff' : '#2b2b2b' }]}>
-                            {tabBarLabel}
-                        </Text>
-                        {tabBarLabel === '通知' && appStore.unreadMessages > 0 && <View style={styles.pstBadge} />}
-                    </TouchableOpacity>
-                );
-            });
+            return (
+                <TouchableOpacity
+                    style={styles.tabItem}
+                    activeOpacity={0.9}
+                    key={route.key}
+                    onPress={onPress}
+                    onLongPress={onLongPress}>
+                    <TabBarIcon
+                        name={route.name}
+                        translucent={state.index === 0}
+                        focused={focused}
+                        activeTintColor={activeTintColor}
+                        inactiveTintColor={inactiveTintColor}
+                    />
+                    <Text style={[styles.label, { color: state.index === 0 ? '#fff' : '#2b2b2b' }]}>{tabBarLabel}</Text>
+                    {showBadge && <View style={styles.pstBadge} />}
+                </TouchableOpacity>
+            );
         });
 
         tabBarItems.splice(2, 0, <PublishButton key="publishButton" navigation={navigation} />);

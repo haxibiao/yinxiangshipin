@@ -17,7 +17,7 @@ const fetchConfigTimeout = 4000;
 
 export default observer(function Preparation() {
     // 恢复登录状态、监听MeMetaQuery更新MeStorage
-    useRecallUserProfile({ login: userStore.login });
+    useRecallUserProfile(userStore.login);
     // 提前加载数据
     useQuery(GQL.getWithdrawAmountList, {
         fetchPolicy: 'network-only',

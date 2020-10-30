@@ -2,29 +2,25 @@ import { Platform } from 'react-native';
 import { observable, action, computed } from 'mobx';
 import { RecordKeys, GuideKeys, Storage } from './storage';
 
-interface WithdrawNotification {
+interface NotificationData {
     title: string;
     content: string;
+    ticket: string | number;
     gold: string | number;
     balance: string | number;
     buttonName?: string;
     buttonHandler?: () => void;
 }
 
-interface RewardNotification {
-    title: string;
-    content: string;
-    gold: string | number;
-    balance: string | number;
-    ticket: string | number;
-    buttonName?: string;
-    buttonHandler?: () => void;
-}
+type unreadNotifyTypes = 'unread_comments' | 'unread_likes' | 'unread_follows' | 'unread_others' | 'unread_chat';
 
 class NotificationStore {
     // notice
-    @observable withdrawalNotice: WithdrawNotification[] = [];
-    @observable rewardNotice: RewardNotification[] = [];
+    @observable withdrawalNotice: NotificationData[] = [];
+    @observable rewardNotice: NotificationData[] = [];
+    @observable remindNotice: NotificationData[] = [];
+    @observable unreadNotify: unreadNotifyTypes = {} as unreadNotifyTypes;
+    @observable unreadMessages: number = 0;
     @observable loadingVisible: boolean = false;
     @observable loadingTips: string = '';
     @observable hasModalShown: boolean = false;
@@ -54,7 +50,7 @@ class NotificationStore {
     }
 
     @action.bound
-    sendWithdrawalNotice(Notice: WithdrawNotification) {
+    sendWithdrawalNotice(Notice: NotificationData) {
         this.withdrawalNotice = [...this.withdrawalNotice, Notice];
     }
 
@@ -66,7 +62,7 @@ class NotificationStore {
     }
 
     @action.bound
-    sendRewardNotice(Notice: RewardNotification) {
+    sendRewardNotice(Notice: NotificationData) {
         this.rewardNotice = [...this.rewardNotice, Notice];
     }
 
@@ -74,6 +70,18 @@ class NotificationStore {
     reduceRewardNotice() {
         if (this.rewardNotice.length > 0) {
             this.rewardNotice = [...this.rewardNotice.slice(1)];
+        }
+    }
+
+    @action.bound
+    sendRemindNotice(Notice: NotificationData) {
+        this.remindNotice = [...this.remindNotice, Notice];
+    }
+
+    @action.bound
+    reduceRemindNotice() {
+        if (this.remindNotice.length > 0) {
+            this.remindNotice = [...this.remindNotice.slice(1)];
         }
     }
 }

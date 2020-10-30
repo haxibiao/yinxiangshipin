@@ -5,7 +5,6 @@ import { Storage, RecordKeys, ItemKeys } from './storage';
 
 class App {
     @observable viewportHeight: number = Device.HEIGHT;
-    @observable unreadMessages: number = 0;
     @observable deviceOffline: boolean = false;
     @observable connectionInfoType: Record<string, any> = {};
     @observable isFullScreen: boolean = false;
