@@ -11,9 +11,9 @@ import {
     Animated,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { Iconfont, Row, HxfButton, NavBarHeader, SafeText } from '@src/components';
+import { Iconfont, Row, HxfButton, NavBarHeader } from '@src/components';
 import { useCirculationAnimation } from '@src/common';
-import { observer, appStore, userStore, adStore } from '@src/store';
+import { observer, appStore, userStore, adStore, notificationStore } from '@src/store';
 import { GQL, useMutation, useQuery } from '@src/apollo';
 import AttendanceBook from './components/AttendanceBook';
 import TaskList from './components/TaskList';
@@ -42,8 +42,20 @@ export default observer((props: any) => {
         outputRange: [1, 1.09, 1.03, 1.09, 1, 1],
     });
 
+    const withdrawTips = useMemo(() => {
+        if (userStore.me?.balance) {
+            const accountMoney = Number(
+                Number(userStore.me?.balance || 0) +
+                    Helper.goldExchange(userStore.me?.gold || 0, userStore.me?.exchangeRate),
+            ).toFixed(2);
+            return `大约可提现${accountMoney}元`;
+        } else {
+            return `新用户当日提现秒到账，最高可提现10元`;
+        }
+    }, []);
+
     return (
-        <ScrollView contentContainerStyle={styles.container}>
+        <ScrollView contentContainerStyle={styles.container} bounces={false}>
             <NavBarHeader
                 hasGoBackButton={false}
                 isTransparent={true}
@@ -69,34 +81,26 @@ export default observer((props: any) => {
                                     style={styles.walletItemIcon}
                                 />
                                 <Text style={styles.assetName}>{Config.goldAlias}</Text>
-                                <SafeText style={styles.assetCount}>{userProfile?.gold || 0}</SafeText>
+                                <Text style={styles.assetCount}>{userProfile?.gold || 0}</Text>
                             </TouchableOpacity>
-                            <View style={styles.assetItem}>
+                            <TouchableOpacity
+                                style={styles.assetItem}
+                                onPress={() =>
+                                    notificationStore.sendRemindNotice({
+                                        title: `${Config.ticketAlias}描述`,
+                                        content: `部分任务的进行需要消耗相应${Config.ticketAlias}，次日恢复满额${Config.ticketAlias}，不可累积`,
+                                    })
+                                }>
                                 <Image
                                     source={require('@app/assets/images/wallet/icon_wallet_giftAward.png')}
                                     style={styles.walletItemIcon}
                                 />
                                 <Text style={styles.assetName}>{Config.ticketAlias}</Text>
-                                <SafeText style={styles.assetCount}>{userProfile?.ticket || 0}</SafeText>
-                            </View>
-                            {/* <View style={styles.assetItem}>
-                            <Image
-                                source={require('@app/assets/images/wallet/icon_wallet_balance.png')}
-                                style={styles.walletItemIcon}
-                            />
-                            <Text style={styles.assetName}>余额</Text>
-                            <SafeText style={styles.assetCount}>{userProfile?.balance || 0}</SafeText>
-                        </View> */}
+                                <Text style={styles.assetCount}>{userProfile?.ticket || 0}</Text>
+                            </TouchableOpacity>
                         </View>
                         <View style={styles.assetTip}>
-                            <SafeText style={styles.assetRate}>
-                                大约可提现
-                                {Number(
-                                    Number(userStore.me?.balance || 0) +
-                                        Helper.goldExchange(userStore.me?.gold || 0, userStore.me?.exchangeRate),
-                                ).toFixed(2)}
-                                元
-                            </SafeText>
+                            <Text style={styles.assetRate}>{withdrawTips}</Text>
                             <Animated.View style={{ transform: [{ scale }] }}>
                                 <HxfButton
                                     gradient={true}
@@ -130,7 +134,7 @@ const styles = StyleSheet.create({
     taskTopContainer: {
         width: Device.WIDTH,
         height: Device.WIDTH * 0.65,
-        paddingTop: Theme.statusBarHeight + Theme.NAVBAR_HEIGHT - pixel(20),
+        paddingTop: Theme.statusBarHeight + Theme.NAVBAR_HEIGHT - pixel(35),
         paddingBottom: Device.WIDTH * 0.2,
     },
     taskContent: {
@@ -139,10 +143,10 @@ const styles = StyleSheet.create({
     assetContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: pixel(15),
     },
     assetItem: {
         flex: 1,
+        paddingVertical: pixel(15),
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',

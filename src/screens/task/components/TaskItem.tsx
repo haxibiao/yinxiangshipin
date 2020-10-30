@@ -1,9 +1,19 @@
 import React, { useRef, useMemo, useState, useCallback, useEffect } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Image, Linking } from 'react-native';
+import {
+    StyleSheet,
+    View,
+    Text,
+    TouchableOpacity,
+    Image,
+    Linking,
+    TouchableWithoutFeedback,
+    Animated,
+} from 'react-native';
 import { ad } from 'react-native-ad';
 import { userStore, appStore, adStore, notificationStore } from '@src/store';
 import { getTaskReward, getUserReward, getNewUserReward } from '@src/apollo';
 import { SafeText, HxfButton, PopOverlay } from '@src/components';
+import { useCirculationAnimation } from '@src/common';
 import { useNavigation } from '@react-navigation/native';
 import { Overlay } from 'teaset';
 import VideoTeaching from '../VideoTeaching';
@@ -23,84 +33,82 @@ export default function TaskItem({ task }) {
         return require('@app/assets/images/task_gift.png');
     }, [task]);
 
-    // const showTaskDetail = useCallback(() => {
-    //     const overlayView = (
-    //         <Overlay.View animated={true}>
-    //             <View style={styles.overlayInner}>
-    //                 <View style={styles.overlayContent}>
-    //                     <Text style={styles.overlayTitle}>{task.name}</Text>
-    //                     <View style={{ marginVertical: 10 }}>
-    //                         <Text style={styles.promptDetails}>{task.details}</Text>
-    //                     </View>
-    //                     <HxfButton
-    //                         size="medium"
-    //                         title="知道了"
-    //                         style={styles.promptBtn}
-    //                         titleStyle={styles.promptBtnTitle}
-    //                         onPress={() => Overlay.hide(OverlayKey)}
-    //                     />
-    //                 </View>
-    //             </View>
-    //         </Overlay.View>
-    //     );
-    //     const OverlayKey = Overlay.show(overlayView);
-    // }, [task]);
+    const showTaskDetail = useCallback(() => {
+        if (task.details) {
+            notificationStore.sendRemindNotice({
+                title: task.name,
+                content: task.details,
+            });
+        }
+    }, [task]);
+
+    const animation = useCirculationAnimation({ duration: 3000, start: task.assignment_status === 2 });
+    const scale = animation.interpolate({
+        inputRange: [0, 0.1, 0.2, 0.3, 0.4, 1],
+        outputRange: [1, 1.09, 1.03, 1.09, 1, 1],
+    });
 
     return (
-        <View style={styles.taskItem}>
-            <Image source={taskIcon} style={styles.taskIcon} />
-            <View style={styles.taskInfo}>
-                <View style={styles.taskTitleWrap}>
-                    <SafeText style={styles.taskTitle} numberOfLines={1}>
-                        {String(task.name).slice(0, 8)}
+        <TouchableWithoutFeedback onPress={showTaskDetail}>
+            <View style={styles.taskItem}>
+                <Image source={taskIcon} style={styles.taskIcon} />
+                <View style={styles.taskInfo}>
+                    <View style={styles.taskTitleWrap}>
+                        <SafeText style={styles.taskTitle} numberOfLines={1}>
+                            {String(task.name).slice(0, 8)}
+                        </SafeText>
+                        {task?.reward_info?.gold > 0 && (
+                            <View style={styles.taskReward}>
+                                <Image
+                                    source={require('@app/assets/images/wallet/icon_wallet_diamond.png')}
+                                    style={styles.taskRewardIcon}
+                                />
+                                <SafeText numberOfLines={1} style={styles.taskRewardGold}>
+                                    {task?.reward_info?.gold}
+                                </SafeText>
+                            </View>
+                        )}
+                        {task?.reward_info?.ticket > 0 && (
+                            <View style={styles.taskReward}>
+                                <Image
+                                    source={require('@app/assets/images/wallet/icon_wallet_giftAward.png')}
+                                    style={styles.taskRewardIcon}
+                                />
+                                <SafeText numberOfLines={1} style={styles.taskRewardGold}>
+                                    {task?.reward_info?.ticket}
+                                </SafeText>
+                            </View>
+                        )}
+                    </View>
+                    <SafeText numberOfLines={1} style={styles.taskDetails}>
+                        {task.details}
                     </SafeText>
-                    {task?.reward_info?.gold > 0 && (
-                        <View style={styles.taskReward}>
-                            <Image
-                                source={require('@app/assets/images/wallet/icon_wallet_diamond.png')}
-                                style={styles.taskRewardIcon}
-                            />
-                            <SafeText numberOfLines={1} style={styles.taskRewardGold}>
-                                {task?.reward_info?.gold}
-                            </SafeText>
-                        </View>
-                    )}
-                    {task?.reward_info?.ticket > 0 && (
-                        <View style={styles.taskReward}>
-                            <Image
-                                source={require('@app/assets/images/wallet/icon_wallet_giftAward.png')}
-                                style={styles.taskRewardIcon}
-                            />
-                            <SafeText numberOfLines={1} style={styles.taskRewardGold}>
-                                {task?.reward_info?.ticket}
+                    {!!task.progress_details && (
+                        <View style={styles.taskProgress}>
+                            <View style={styles.progressBar}>
+                                <View
+                                    style={[styles.completedProgress, { width: `${task.assignment_progress * 100}%` }]}
+                                />
+                            </View>
+                            <SafeText
+                                style={[styles.progressDetails, task.assignment_status === 2 && { color: '#FF5E7D' }]}>
+                                {task.progress_details}
                             </SafeText>
                         </View>
                     )}
                 </View>
-                <SafeText numberOfLines={1} style={styles.taskDetails}>
-                    {task.details}
-                </SafeText>
-                {!!task.progress_details && (
-                    <View style={styles.taskProgress}>
-                        <View style={styles.progressBar}>
-                            <View style={[styles.completedProgress, { width: `${task.assignment_progress * 100}%` }]} />
-                        </View>
-                        <SafeText
-                            style={[styles.progressDetails, task.assignment_status === 2 && { color: '#FF5E7D' }]}>
-                            {task.progress_details}
+                <Animated.View style={{ transform: [{ scale }] }}>
+                    <TouchableOpacity
+                        style={[styles.taskButton, { backgroundColor: taskState.btnColor }]}
+                        disabled={task.assignment_status === 3}
+                        onPress={optimizedCallback}>
+                        <SafeText numberOfLines={1} style={styles.taskName}>
+                            {taskState.countdown > 0 ? taskState.countdown : taskState.btnName}
                         </SafeText>
-                    </View>
-                )}
+                    </TouchableOpacity>
+                </Animated.View>
             </View>
-            <TouchableOpacity
-                style={[styles.taskButton, { backgroundColor: taskState.btnColor }]}
-                disabled={task.assignment_status === 3}
-                onPress={optimizedCallback}>
-                <SafeText numberOfLines={1} style={styles.taskName}>
-                    {taskState.countdown > 0 ? taskState.countdown : taskState.btnName}
-                </SafeText>
-            </TouchableOpacity>
-        </View>
+        </TouchableWithoutFeedback>
     );
 }
 
@@ -129,7 +137,7 @@ function useTaskState(task) {
         } else if (taskColor[task.group]) {
             return taskColor[task.group];
         } else {
-            return '#0584FF';
+            return '#2FC6FC';
         }
     }, [task, countdown]);
 
@@ -335,8 +343,8 @@ function midAutumnFestivalTask({ collection }) {
 // resolve.submit_name
 const taskColor = {
     活动任务: '#2FC6FC',
-    新人任务: '#12E2BB',
-    每日任务: '#FF5E7D',
+    新人任务: '#2FC6FC',
+    每日任务: '#2FC6FC',
 };
 const taskRouteInfo = {
     去观看: playRewardVideo,

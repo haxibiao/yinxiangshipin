@@ -11,3 +11,4 @@ export { WithdrawalNotificationModal } from './notification/WithdrawalNotificati
 export { RewardNotificationModal } from './notification/RewardNotificationModal';
 export { DetectPhotoAlbumModal } from './notification/DetectPhotoAlbumModal';
 export { ParseShareLinkModal } from './notification/ParseShareLinkModal';
+export { AppRemindModal } from './notification/AppRemindModal';

@@ -15,7 +15,7 @@ import * as WeChat from 'react-native-wechat-lib';
 import { WechatAppId, DisplayName } from '../app.json';
 // app component
 import Preparation from './Preparation';
-import { LoadingModal, WithdrawalNotificationModal, RewardNotificationModal } from './components/modal';
+import { LoadingModal, WithdrawalNotificationModal, RewardNotificationModal, AppRemindModal } from './components/modal';
 import { Toast } from './components';
 
 //修复部分安卓手机中文字体丢失
@@ -87,6 +87,7 @@ const App = observer(() => {
                 <ApolloProvider client={client}>
                     <Preparation />
                     <AppRouter />
+                    <AppRemindModal />
                     <WithdrawalNotificationModal />
                     <RewardNotificationModal />
                     <LoadingModal />
