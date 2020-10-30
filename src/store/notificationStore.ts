@@ -27,7 +27,7 @@ class NotificationStore {
     @observable rewardNotice: RewardNotification[] = [];
     @observable loadingVisible: boolean = false;
     @observable loadingTips: string = '';
-    @observable hasModalVisible: boolean = false;
+    @observable hasModalShown: boolean = false;
     // guides
     inGuidance: boolean = false; // 是否正在显示用户引导
     @observable bindAccountRemind: boolean = false; // 提醒绑定账号

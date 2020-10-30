@@ -2,7 +2,7 @@ import React, { useRef, useState, useMemo, useEffect, useCallback } from 'react'
 import { StyleSheet, View, Text, Image, Modal, ImageBackground } from 'react-native';
 import { ad } from 'react-native-ad';
 import { authNavigate } from '@src/router';
-import { observer, adStore, userStore, appStore, notificationStore } from '@src/store';
+import { observer, adStore, userStore, notificationStore } from '@src/store';
 import { GQL, useQuery, useMutation } from '@src/apollo';
 import Iconfont from '../../../components/Iconfont';
 import { DebouncedPressable } from '../../../components/Basic/DebouncedPressable';
@@ -25,9 +25,10 @@ export const AutoCheckInModal = observer(() => {
 
     const hideModal = useCallback(() => {
         if (shown.current) {
-            setVisible(false);
             shown.current = false;
-            userStore.isCheckIn = true;
+            setVisible(false);
+            notificationStore.hasModalShown = false;
+            userStore.startDetectPhotoAlbum = true;
         }
     }, []);
 
@@ -47,7 +48,7 @@ export const AutoCheckInModal = observer(() => {
             },
         ],
     });
-    const todayChecked = useMemo(() => (loading ? null : data?.checkIns?.today_checked), [data]);
+    const todayChecked = useMemo(() => data?.checkIns?.today_checked, [data]);
 
     const toDaySignIn = useCallback(async () => {
         try {
@@ -56,26 +57,28 @@ export const AutoCheckInModal = observer(() => {
             const walletBalance =
                 Number(userStore.me.balance) +
                 Number(Helper.goldExchange(todayReturns.gold_reward + userStore.me.gold, userStore.me.exchangeRate));
-            if (todayReturns) {
-                setCheckInData({
-                    goldReward: todayReturns.gold_reward,
-                    keepCheckInDays: todayReturns.keep_checkin_days,
-                    balance: Math.max(walletBalance, 0.3).toFixed(1),
-                });
-                showModal();
-            }
-        } catch (error) {}
+            setCheckInData({
+                goldReward: todayReturns.gold_reward,
+                keepCheckInDays: todayReturns.keep_checkin_days,
+                balance: Math.max(walletBalance, 0.3).toFixed(1),
+            });
+            showModal();
+        } catch (error) {
+            notificationStore.hasModalShown = false;
+            userStore.startDetectPhotoAlbum = true;
+        }
     }, [createCheckIn]);
 
     useEffect(() => {
-        if (userStore.isNewUser === false && todayChecked !== null) {
-            if (todayChecked) {
-                userStore.isCheckIn = true;
-            } else {
+        if (userStore.isNewUser === false && !notificationStore.hasModalShown && todayChecked !== undefined) {
+            if (!todayChecked && adStore.enableWallet) {
+                notificationStore.hasModalShown = true;
                 toDaySignIn();
+            } else {
+                userStore.startDetectPhotoAlbum = true;
             }
         }
-    }, [userStore.isNewUser, todayChecked]);
+    }, [userStore.isNewUser, adStore.enableWallet, todayChecked]);
 
     return (
         <Modal

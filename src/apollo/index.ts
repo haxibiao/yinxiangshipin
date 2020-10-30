@@ -39,12 +39,15 @@ deviceHeaders.referrer = Config.AppStore; // 应用商店来源
 deviceHeaders.version = Config.Version; // 手动修改的App版本号
 deviceHeaders.appid = Config.AppID; // app id
 deviceHeaders.package = Config.PackageName; // 手动修改的包名
-if (!DeviceInfo.isEmulator()) {
-    deviceHeaders.brand = DeviceInfo.getBrand(); // 设备品牌
-    deviceHeaders.deviceId = DeviceInfo.getDeviceId(); // 获取设备ID
-    deviceHeaders.systemVersion = DeviceInfo.getSystemVersion(); // 系统版本
-    deviceHeaders.uniqueId = DeviceInfo.getUniqueId(); // uniqueId
-}
+(async function () {
+    const isEmulator = await DeviceInfo.isEmulator();
+    if (!isEmulator) {
+        deviceHeaders.brand = DeviceInfo.getBrand(); // 设备品牌
+        deviceHeaders.deviceId = DeviceInfo.getDeviceId(); // 获取设备ID
+        deviceHeaders.systemVersion = DeviceInfo.getSystemVersion(); // 系统版本
+        deviceHeaders.uniqueId = DeviceInfo.getUniqueId(); // uniqueId
+    }
+});
 
 let netInfo: any;
 

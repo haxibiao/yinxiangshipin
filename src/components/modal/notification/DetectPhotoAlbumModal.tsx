@@ -40,7 +40,6 @@ const ContentCover = React.memo(({ url, type }) => {
 // 获取分享图片二维码/视频vid信息，跳转详情页
 export const DetectPhotoAlbumModal = observer(() => {
     const shown = useRef(false);
-    const appFirstActive = useRef(true);
     const [visible, setVisible] = useState(false);
     const [content, setContent] = useState({});
 
@@ -67,6 +66,7 @@ export const DetectPhotoAlbumModal = observer(() => {
             shown.current = false;
             setVisible(false);
             record();
+            userStore.startParseSharedLink = true;
         }
     }, [record]);
 
@@ -84,29 +84,16 @@ export const DetectPhotoAlbumModal = observer(() => {
     useEffect(() => {
         const appIsReady = notificationStore.guides.UserAgreementGuide && adStore.loadedConfig;
         if (appIsReady) {
-            if ((userStore.isCheckIn || !adStore.enableWallet) && !detectPhotoAlbum.called) {
-                detectPhotoAlbum.called = true;
-                detectPhotoAlbum();
-            }
-        }
-    }, [notificationStore.guides.UserAgreementGuide, adStore.loadedConfig, userStore.isCheckIn]);
-
-    // 从后台再次进入App，尝试解析分享链接
-    useEffect(() => {
-        const stateChangeHandle = (event) => {
-            if (event === 'active' && !shown.current) {
-                if (appFirstActive.current) {
-                    appFirstActive.current = false;
+            if ((userStore.startDetectPhotoAlbum || !adStore.enableWallet) && !notificationStore.hasModalShown) {
+                if (!detectPhotoAlbum.called) {
+                    detectPhotoAlbum.called = true;
+                    detectPhotoAlbum();
                 } else {
                     userStore.startParseSharedLink = true;
                 }
             }
-        };
-        AppState.addEventListener('change', stateChangeHandle);
-        return () => {
-            AppState.removeEventListener('change', stateChangeHandle);
-        };
-    }, []);
+        }
+    }, [notificationStore.guides.UserAgreementGuide, adStore.loadedConfig, userStore.startDetectPhotoAlbum]);
 
     return (
         <Modal

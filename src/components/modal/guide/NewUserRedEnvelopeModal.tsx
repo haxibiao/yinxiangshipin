@@ -37,7 +37,8 @@ export const NewUserRedEnvelopeModal = observer(() => {
             showModal();
         },
         onError: (err) => {
-            userStore.isNewUser = true;
+            notificationStore.hasModalShown = false;
+            userStore.startDetectPhotoAlbum = true;
         },
     });
 
@@ -50,9 +51,10 @@ export const NewUserRedEnvelopeModal = observer(() => {
 
     const hideModal = useCallback(() => {
         if (shown.current) {
-            setVisible(false);
             shown.current = false;
-            userStore.isNewUser = true;
+            setVisible(false);
+            notificationStore.hasModalShown = false;
+            userStore.startDetectPhotoAlbum = true;
         }
     }, []);
 
@@ -60,21 +62,25 @@ export const NewUserRedEnvelopeModal = observer(() => {
         hideModal();
         authNavigate('Wallet');
     }, []);
+
     useEffect(() => {
         if (
-            data?.hasNewUserReward !== undefined &&
             notificationStore.guides.UserAgreementGuide &&
-            adStore.enableWallet &&
-            userStore.login &&
-            userStore.isNewUser === undefined
+            adStore.loadedConfig &&
+            userStore.isNewUser === undefined &&
+            data?.hasNewUserReward !== undefined
         ) {
             if (data?.hasNewUserReward) {
-                getNewUserReward();
+                userStore.isNewUser = true;
+                if (adStore.enableWallet) {
+                    notificationStore.hasModalShown = true;
+                    getNewUserReward();
+                }
             } else {
                 userStore.isNewUser = false;
             }
         }
-    }, [data, notificationStore.guides.UserAgreementGuide, adStore.enableWallet, userStore.login, userStore.isNewUser]);
+    }, [notificationStore.guides.UserAgreementGuide, adStore.loadedConfig, userStore.isNewUser, data]);
 
     return (
         <Modal

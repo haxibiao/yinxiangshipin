@@ -45,13 +45,14 @@ export const ParseShareLinkModal = observer(() => {
             shareBody &&
             userStore.login &&
             userStore.startParseSharedLink &&
+            !notificationStore.hasModalShown &&
             shareLinkCache[shareLink] == undefined
         ) {
             shareLinkCache[shareLink] = shareBody;
             setVideoTitle(shareBody?.title);
             showModal();
         }
-    }, [shareLink, shareBody, userStore.startParseSharedLink]);
+    }, [shareLink, shareBody]);
 
     // 采集成功
     const resolveContentSuccess = useCallback(

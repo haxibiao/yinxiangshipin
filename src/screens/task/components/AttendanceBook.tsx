@@ -84,15 +84,18 @@ const AttendanceBook = (): JSX.Element => {
                     }
                 },
             });
+            notificationStore.hasModalShown = false;
         } catch (err) {
             if (!focusCheckIn) {
                 Toast.show({ content: errorMessage(err) || '签到失败' });
             }
+            notificationStore.hasModalShown = false;
         }
     }, []);
 
     const autoCheckIn = useCallback(() => {
-        if (userStore.isNewUser === true && todayChecked === false) {
+        if (!notificationStore.hasModalShown && userStore.isNewUser && adStore.enableWallet && todayChecked === false) {
+            notificationStore.hasModalShown = true;
             toDaySignIn({ focusCheckIn: true });
         }
     }, [todayChecked]);
