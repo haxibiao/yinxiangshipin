@@ -41,10 +41,10 @@ export default observer(function Preparation() {
                     responseTime.current <= fetchConfigTimeout
                 ) {
                     // 启动开屏广告
-                    // ad.startSplash({
-                    //     appid: adStore.tt_appid,
-                    //     codeid: adStore.codeid_splash,
-                    // });
+                    ad.startSplash({
+                        appid: adStore.tt_appid,
+                        codeid: adStore.codeid_splash,
+                    });
                 }
             })
             .catch((err) => {
@@ -60,10 +60,10 @@ export default observer(function Preparation() {
         fetchConfig();
         // 除了华为外直接启动启动开屏广告
         if (String(Device.Brand).toLocaleUpperCase !== 'HUAWEI') {
-            // ad.startSplash({
-            //     appid: adStore.tt_appid,
-            //     codeid: adStore.codeid_splash,
-            // });
+            ad.startSplash({
+                appid: adStore.tt_appid,
+                codeid: adStore.codeid_splash,
+            });
         }
         //清除定时器
         return () => {

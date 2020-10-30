@@ -19,7 +19,9 @@ export function shareClipboardLink(clipboardString: string): Promise<any> {
     function validateLink(linkString: string): boolean {
         if (
             linkString.indexOf('http') !== -1 &&
-            (linkString.indexOf('douyin') !== -1 || linkString.indexOf('tiktok') !== -1)
+            (linkString.indexOf('douyin') !== -1 ||
+                linkString.indexOf('tiktok') !== -1 ||
+                linkString.indexOf('kuaishou') !== -1)
         ) {
             return true;
         } else {
@@ -59,7 +61,9 @@ export const useClipboardLink = (): [{ link: string; content: any }, (p: any) =>
         recursionCount = maxRecursion;
         if (
             linkString.indexOf('http') !== -1 &&
-            (linkString.indexOf('douyin') !== -1 || linkString.indexOf('tiktok') !== -1)
+            (linkString.indexOf('douyin') !== -1 ||
+                linkString.indexOf('tiktok') !== -1 ||
+                linkString.indexOf('kuaishou') !== -1)
         ) {
             return true;
         } else {

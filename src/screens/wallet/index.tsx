@@ -91,7 +91,7 @@ export default observer((props: any) => {
     // 提现请求
     const [withdrawRequest] = useMutation(GQL.CreateWithdrawMutation, {
         variables: {
-            amount: 10000,
+            amount,
             platform: withdrawType,
         },
         errorPolicy: 'all',
