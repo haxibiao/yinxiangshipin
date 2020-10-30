@@ -334,7 +334,7 @@ PODS:
     - React
   - react-native-viewpager (2.0.2):
     - React
-  - react-native-vod (1.0.5):
+  - react-native-vod (1.0.8):
     - React
   - react-native-webview (10.4.0):
     - React
@@ -780,7 +780,7 @@ SPEC CHECKSUMS:
   react-native-video: d01ed7ff1e38fa7dcc6c15c94cf505e661b7bfd0
   react-native-view-shot: 4475fde003fe8a210053d1f98fb9e06c1d834e1c
   react-native-viewpager: 88f4269c19d626d2ccd5f7c7f5f7f76422ddb9e3
-  react-native-vod: d28ace1fc7d6f6d048c723dda7f818bd07ffe566
+  react-native-vod: 8751eeb5cd92bdbcf5bc998c7a10008376d4de2a
   react-native-webview: 1ad70b21fb9e44811e33a99e43a4b68b94806a6d
   React-RCTActionSheet: 910163b6b09685a35c4ebbc52b66d1bfbbe39fc5
   React-RCTAnimation: 9a883bbe1e9d2e158d4fb53765ed64c8dc2200c6

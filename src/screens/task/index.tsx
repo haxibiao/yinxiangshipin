@@ -82,7 +82,7 @@ export default observer((props: any) => {
                                 style={styles.assetItem}
                                 onPress={() =>
                                     notificationStore.sendRemindNotice({
-                                        title: `${Config.ticketAlias}描述`,
+                                        title: `${Config.ticketAlias}说明`,
                                         content: `部分任务的进行需要消耗相应${Config.ticketAlias}，次日恢复满额${Config.ticketAlias}，不可累积`,
                                     })
                                 }>

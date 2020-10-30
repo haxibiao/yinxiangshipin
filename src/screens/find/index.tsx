@@ -32,7 +32,7 @@ export default observer(() => {
                     />
                 )}>
                 <FollowedPosts tabLabel="关注" />
-                <RecommendPosts tabLabel="推荐" />
+                <RecommendPosts tabLabel="最新" />
                 <Collections tabLabel="合集" />
             </ScrollableTabView>
             <TouchableWithoutFeedback onPress={goSearchCenter}>

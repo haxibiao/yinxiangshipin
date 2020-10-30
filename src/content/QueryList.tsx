@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo, useRef } from 'react';
 import { StyleSheet, View, Text, FlatList, FlatListProperties, ViewStyle, RefreshControl } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { QueryHookOptions } from '@apollo/react-hooks';
 import { DocumentNode } from 'graphql';
 import { GQL, useQuery } from '@src/apollo';
@@ -12,6 +13,7 @@ interface Props extends FlatListProperties {
     paginateOptionChain?: string;
     style?: ViewStyle;
     options?: QueryHookOptions;
+    focusRefresh?: boolean;
 }
 
 export default React.forwardRef(function ContentList(
@@ -20,6 +22,7 @@ export default React.forwardRef(function ContentList(
         dataOptionChain = 'publicPosts.data',
         paginateOptionChain = 'publicPosts.paginatorInfo',
         options,
+        focusRefresh,
         renderItem,
         ListHeaderComponent,
         ListFooterComponent,
@@ -48,6 +51,16 @@ export default React.forwardRef(function ContentList(
             });
         }
     }, [nextPage, hasMore]);
+
+    useFocusEffect(
+        useCallback(() => {
+            if (focusRefresh) {
+                if (refetch instanceof Function) {
+                    refetch();
+                }
+            }
+        }, [focusRefresh, refetch]),
+    );
 
     const renderItemComponent = useCallback(
         ({ item, index }) => {

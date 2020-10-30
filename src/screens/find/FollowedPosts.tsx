@@ -36,6 +36,7 @@ export default observer((props: any) => {
 
     return (
         <QueryList
+            focusRefresh={true}
             contentContainerStyle={styles.container}
             gqlDocument={GQL.followPostsQuery}
             dataOptionChain="followPosts.data"
@@ -45,6 +46,7 @@ export default observer((props: any) => {
                     user_id: userStore?.me?.id,
                     page: 1,
                     count: 10,
+                    filter: 'all',
                 },
                 fetchPolicy: 'network-only',
             }}
