@@ -3,7 +3,6 @@ import { useNavigation, useFocusEffect, useIsFocused } from '@react-navigation/n
 import { useQuery } from '@apollo/react-hooks';
 import { appStore, notificationStore } from '@src/store';
 import { GQL } from '../gqls';
-import { Time } from 'hxf-react-native-gifted-chat';
 
 const unreadNotifyTypes = {
     unread_comments: 0,

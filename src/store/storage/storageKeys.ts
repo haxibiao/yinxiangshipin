@@ -13,7 +13,6 @@ export const RecordKeys = {
 // 'UserAgreementGuide' + Config.Version
 export const GuideKeys = {
     bindAccountRemind: 'bindAccountRemind',
-    disabledBindAccountRemind: 'disabledBindAccountRemind',
     UserAgreementGuide: 'UserAgreementGuide',
 } as const;
 

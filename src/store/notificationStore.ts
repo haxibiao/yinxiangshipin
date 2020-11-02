@@ -5,9 +5,9 @@ import { RecordKeys, GuideKeys, Storage } from './storage';
 interface NotificationData {
     title: string;
     content: string;
-    ticket: string | number;
-    gold: string | number;
-    balance: string | number;
+    ticket?: string | number;
+    gold?: string | number;
+    balance?: string | number;
     buttonName?: string;
     buttonHandler?: () => void;
 }
@@ -27,7 +27,6 @@ class NotificationStore {
     // guides
     inGuidance: boolean = false; // 是否正在显示用户引导
     @observable bindAccountRemind: boolean = false; // 提醒绑定账号
-    @observable disabledBindAccountRemind: boolean = false; // 不再提醒绑定账号
     @observable guides = {} as { -readonly [k in keyof typeof GuideKeys]: any }; // 用户引导（弹窗）
 
     constructor() {
@@ -37,7 +36,6 @@ class NotificationStore {
     @action.bound
     async recall() {
         this.bindAccountRemind = !!(await Storage.getItem(GuideKeys.bindAccountRemind));
-        this.disabledBindAccountRemind = !!(await Storage.getItem(GuideKeys.disabledBindAccountRemind));
         this.guides[GuideKeys.UserAgreementGuide] = !!(await Storage.getItem(GuideKeys.UserAgreementGuide));
     }
 

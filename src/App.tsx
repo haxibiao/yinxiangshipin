@@ -1,22 +1,20 @@
 import React, { Component, useState, useEffect, useRef, useCallback } from 'react';
 import { StyleSheet, View, Text, Platform } from 'react-native';
-import SplashScreen from 'react-native-splash-screen';
-import Orientation from 'react-native-orientation';
 import codePush from 'react-native-code-push';
-import { ad } from 'react-native-ad';
-// appContext
-import { observer, appStore, adStore, userStore } from './store';
-// apollo appRouter
+// apollo && Router
 import { ApolloProvider as ClassApolloProvider } from 'react-apollo';
 import { ApolloProvider, useClientBuilder, GQL } from './apollo';
-import AppRouter, { authNavigate } from './router';
-// weChat lib
+import AppRouter from './router';
+// WeChat
 import * as WeChat from 'react-native-wechat-lib';
-import { WechatAppId, DisplayName } from '../app.json';
-// app component
-import Preparation from './Preparation';
+import { WechatAppId } from '../app.json';
+// appContext
+import { observer, appStore, adStore, userStore } from './store';
+// apNotification
 import { LoadingModal, WithdrawalNotificationModal, RewardNotificationModal, AppRemindModal } from './components/modal';
 import { Toast } from './components';
+//appPreparation
+import Preparation from './Preparation';
 
 //修复部分安卓手机中文字体丢失
 const defaultFontFamily = {
@@ -32,49 +30,9 @@ Text.render = function (...args) {
     });
 };
 
+// launch app
 const App = observer(() => {
     const client = useClientBuilder(userStore.me?.token);
-    // 自动登录
-    const autoSignIn = useCallback(async () => {
-        const uuid = Device.UUID;
-        if (uuid && client?.mutate) {
-            // 调用静默注册接口
-            client
-                .mutate({
-                    mutation: GQL.autoSignInMutation,
-                    variables: { UUID: uuid },
-                })
-                .then((res: any) => {
-                    const userData = res?.data?.autoSignIn;
-                    userStore.signIn(userData);
-                })
-                .catch(() => {
-                    // 静默登录失败，引导用户到手动登录页
-                    authNavigate('Login');
-                });
-        } else {
-            // 没有拿到uuid,引导用户到手动登录页
-            authNavigate('Login');
-        }
-    }, [client]);
-    useEffect(() => {
-        // 该APP没有登录过，调用静默登录
-        if (!userStore.login && userStore.firstInstall) {
-            autoSignIn();
-        }
-    }, [userStore.login, userStore.firstInstall]);
-
-    const appLunch = useRef(true);
-    if (appLunch.current) {
-        appLunch.current = false;
-        Orientation.lockToPortrait();
-        SplashScreen.hide();
-        // 启动前，初始化Ad
-        ad.init({
-            appid: adStore.tt_appid,
-            app: DisplayName,
-        });
-    }
 
     useEffect(() => {
         // WeChat注册（微信分享）
@@ -98,13 +56,6 @@ const App = observer(() => {
     );
 });
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-    },
-});
-
 const codePushOptions = {
     checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
 };
@@ -112,3 +63,10 @@ const codePushOptions = {
 // export default observer(() => <HotUpdateApp />);
 
 export default App;
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#fff',
+    },
+});

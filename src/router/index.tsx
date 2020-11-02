@@ -59,7 +59,7 @@ export function setRootNavigation(ref: any) {
     rootNavigation = ref;
 }
 
-export const authNavigate = (routeName: string, params?: object, auth: boolean) => {
+export const authNavigate = (routeName: string, params?: object, auth?: boolean) => {
     const authAction = CommonActions.navigate('Login');
 
     const navigateAction = CommonActions.navigate(routeName, params);

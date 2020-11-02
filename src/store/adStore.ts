@@ -2,13 +2,10 @@ import { Platform } from 'react-native';
 import { observable, action, computed } from 'mobx';
 import AppJson from '@app/app.json';
 
+// 广告相关的 store
 class AdStore {
     @observable loadedConfig: boolean = false; //config请求是否完成
-    /**
-     **********************
-     *  广告相关的 store
-     **********************
-     */
+    
     @observable tt_appid: string = Platform.OS === 'ios' ? AppJson.tt_appid_ios : AppJson.tt_appid; // 头条APPID
     // @observable tx_appid: string = Platform.OS === 'ios' ? AppJson.tx_appid_ios : AppJson.tx_appid; // 腾讯APPID
     // @observable bd_appid: string = Platform.OS === 'ios' ? AppJson.bd_appid_ios : AppJson.bd_appid; // 百度APPID
