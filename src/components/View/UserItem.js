@@ -26,35 +26,38 @@ type Props = {
     navigation: any,
 };
 
-export default function UserItem<Props>(props: Props) {
-    const { user, style, navigation } = props;
-    return (
-        <TouchableOpacity style={[styles.item, style]} onPress={() => navigation.navigate('User', { user })}>
-            <Avatar source={user?.avatar} size={pixel(50)} />
-            <View style={styles.right}>
-                <View style={styles.info}>
-                    <SafeText style={styles.nameText} numberOfLines={1}>
-                        {user?.name}
-                    </SafeText>
-                    {!!user?.introduction && (
-                        <View style={{ flex: 1 }}>
-                            <SafeText style={styles.introduction} numberOfLines={1}>
-                                {user?.introduction}
-                            </SafeText>
-                        </View>
-                    )}
+class UserItem extends Component<Props> {
+    render() {
+        const { user, style, navigation } = this.props;
+
+        return (
+            <TouchableOpacity style={[styles.item, style]} onPress={() => navigation.navigate('User', { user })}>
+                <Avatar source={user?.avatar} size={pixel(50)} />
+                <View style={styles.right}>
+                    <View style={styles.info}>
+                        <SafeText style={styles.nameText} numberOfLines={1}>
+                            {user?.name}
+                        </SafeText>
+                        {!!user?.introduction && (
+                            <View style={{ flex: 1 }}>
+                                <SafeText style={styles.introduction} numberOfLines={1}>
+                                    {user?.introduction}
+                                </SafeText>
+                            </View>
+                        )}
+                    </View>
+                    <FollowButton
+                        user={user}
+                        style={{
+                            width: pixel(70),
+                            height: pixel(30),
+                            borderRadius: pixel(15),
+                        }}
+                    />
                 </View>
-                <FollowButton
-                    user={user}
-                    style={{
-                        width: pixel(70),
-                        height: pixel(30),
-                        borderRadius: pixel(15),
-                    }}
-                />
-            </View>
-        </TouchableOpacity>
-    );
+            </TouchableOpacity>
+        );
+    }
 }
 
 const styles = StyleSheet.create({
@@ -88,3 +91,5 @@ const styles = StyleSheet.create({
         borderBottomColor: Theme.borderColor,
     },
 });
+
+export default UserItem;

@@ -4,7 +4,6 @@
  */
 
 import React from 'react';
-import { StyleSheet } from 'react-native';
 import { GQL } from '@src/apollo';
 import { QueryList } from '@src/content';
 import { UserItem } from '@src/components';
