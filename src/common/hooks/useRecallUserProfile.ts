@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/react-hooks';
 import { GQL } from '@src/apollo';
 
 export const useRecallUserProfile = (isLogin: boolean) => {
-    const { data } = useQuery(GQL.meMateQuery, {
+    const { data } = useQuery(GQL.meMetaQuery, {
         fetchPolicy: 'network-only',
         skip: !isLogin,
     });

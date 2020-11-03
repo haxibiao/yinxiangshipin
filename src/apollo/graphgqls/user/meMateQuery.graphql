@@ -2,7 +2,7 @@
 #import "../wallet/walletFragment.graphql"
 
 # 个人信息
-query meMateQuery {
+query meMetaQuery {
     me {
         token
         uuid

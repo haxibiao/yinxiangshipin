@@ -28,7 +28,7 @@ export const NewUserRedEnvelopeModal = observer(() => {
         },
         refetchQueries: () => [
             {
-                query: GQL.meMateQuery,
+                query: GQL.meMetaQuery,
                 fetchPolicy: 'network-only',
             },
         ],

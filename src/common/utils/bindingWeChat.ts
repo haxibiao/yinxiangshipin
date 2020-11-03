@@ -49,7 +49,7 @@ function bindingWeChatWallet(code: any, props: Props) {
             errorPolicy: 'all',
             refetchQueries: () => [
                 {
-                    query: GQL.meMateQuery,
+                    query: GQL.meMetaQuery,
                     fetchPolicy: 'network-only',
                 },
                 {
