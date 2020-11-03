@@ -1,13 +1,12 @@
-import React, { useEffect } from 'react';
-import { StyleSheet, View, FlatList } from 'react-native';
-import { PageContainer, StatusView, SpinnerLoading } from '@src/components';
-import { Query, GQL, useApolloClient } from '@src/apollo';
-
+import React, { useEffect, useCallback } from 'react';
+import { StyleSheet, View } from 'react-native';
+import { PageContainer } from '@src/components';
+import { GQL, useApolloClient } from '@src/apollo';
+import { QueryList } from '@src/content';
 import NotificationItem from './components/NotificationItem';
 
 export default (props: any) => {
     const client = useApolloClient();
-
     useEffect(() => {
         return () => {
             client.query({
@@ -16,47 +15,21 @@ export default (props: any) => {
             });
         };
     }, []);
-
+    const renderItem = useCallback(({ item, index }) => {
+        return <NotificationItem data={item} />;
+    }, []);
     return (
         <PageContainer title="评论和@">
             <View style={styles.container}>
-                <Query query={GQL.commentNotificationQuery} variables={{ fetchPolicy: 'network-only' }}>
-                    {({ loading, error, data, refetch, fetchMore }) => {
-                        const items = data?.notifications?.data;
-                        if (error) return <StatusView.ErrorView onPress={refetch} error={error} />;
-                        if (!items && loading) return <SpinnerLoading />;
-                        if (items.length <= 0) return <StatusView.EmptyView />;
-                        const { hasMorePages, currentPage } = data?.notifications?.paginatorInfo;
-                        return (
-                            <FlatList
-                                data={items}
-                                renderItem={({ item }) => <NotificationItem data={item} />}
-                                onEndReached={() => {
-                                    if (hasMorePages) {
-                                        fetchMore({
-                                            variables: {
-                                                page: currentPage + 1,
-                                            },
-                                            updateQuery: (prev, { fetchMoreResult }) => {
-                                                if (fetchMoreResult && fetchMoreResult.notifications) {
-                                                    return Object.assign({}, prev, {
-                                                        notifications: Object.assign({}, prev.notifications, {
-                                                            paginatorInfo: fetchMoreResult.notifications.paginatorInfo,
-                                                            data: [
-                                                                ...prev.notifications.data,
-                                                                ...fetchMoreResult.notifications.data,
-                                                            ],
-                                                        }),
-                                                    });
-                                                }
-                                            },
-                                        });
-                                    }
-                                }}
-                            />
-                        );
+                <QueryList
+                    dataOptionChain="notifications.data"
+                    paginateOptionChain="notifications.paginatorInfo"
+                    gqlDocument={GQL.commentNotificationQuery}
+                    options={{
+                        fetchPolicy: 'network-only',
                     }}
-                </Query>
+                    renderItem={renderItem}
+                />
             </View>
         </PageContainer>
     );
