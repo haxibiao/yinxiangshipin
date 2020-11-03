@@ -89,6 +89,7 @@ export default function TaskList() {
             keyExtractor={(item) => String(item.id)}
             renderItem={({ item }) => <TaskItem task={item} />}
             ListEmptyComponent={() => <View />}
+            // ListFooterComponent={() => <View style={{ height: pixel(30) }} />}
             renderSectionHeader={({ section: { title, data } }) =>
                 data.length > 0 ? <SafeText style={styles.listHeader}>{title}</SafeText> : null
             }
