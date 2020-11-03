@@ -7,7 +7,7 @@ import Config from '@src/common/config';
 import { appStore } from '@src/store';
 
 export * from './apis';
-export { GQL } from './gqls';
+export { GQL } from './graphgqls';
 export {
     useQuery,
     useMutation,

@@ -1,5 +1,5 @@
 import { appStore } from '@src/store';
-import { GQL } from '../gqls';
+import { GQL } from '../graphgqls';
 import { errorMessage } from './errorMessage';
 
 //  视频奖励领取

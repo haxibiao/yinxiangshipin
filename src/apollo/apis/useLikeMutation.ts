@@ -1,6 +1,6 @@
 import { useCallback, useRef } from 'react';
 import { Animated } from 'react-native';
-import { GQL } from '../gqls';
+import { GQL } from '../graphgqls';
 import { useDebouncedMutation, MutationProps } from './useDebouncedMutation';
 
 interface Props extends MutationProps {

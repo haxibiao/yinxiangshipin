@@ -1,7 +1,7 @@
 import React, { useState, useRef, useCallback, useImperativeHandle } from 'react';
 import { useApolloClient } from '@apollo/react-hooks';
 import { userStore } from '@src/store';
-import { GQL } from '../gqls';
+import { GQL } from '../graphgqls';
 
 export const useCommentMutation = (props) => {
     const { commentAbleType, commentAbleId, replyComment, onCompleted, onError } = props;
