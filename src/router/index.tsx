@@ -13,6 +13,7 @@ import BottomTabNavigator from './BottomTabNavigator';
 import SCREENS from './routes';
 import privateRoutes from './privateRoutes';
 
+let rootNavigation: any = null;
 const router: { [key: string]: any } = privateRoutes;
 
 const TransitionScreen = {
@@ -52,8 +53,6 @@ const TransitionScreen = {
 };
 
 export { useNavigation, useRoute, CommonActions };
-
-export let rootNavigation: any = null;
 
 export function setRootNavigation(ref: any) {
     rootNavigation = ref;

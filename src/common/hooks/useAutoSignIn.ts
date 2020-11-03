@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import { useApolloClient } from '@apollo/react-hooks';
 import { authNavigate } from '@src/router';
 import { userStore } from '@src/store';
-import { GQL } from '../gqls';
+import { GQL } from '@src/apollo';
 
 interface Props {
     isLogin: boolean;

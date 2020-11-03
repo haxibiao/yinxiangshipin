@@ -1,5 +1,5 @@
 import React, { useRef, useState, useMemo, useEffect, useCallback } from 'react';
-import { StyleSheet, View, Text, Image, Modal, ScrollView, TextInput, AppState } from 'react-native';
+import { StyleSheet, View, Text, Image, Modal, ScrollView, TextInput } from 'react-native';
 import { observer, appStore, adStore, userStore, notificationStore } from '@src/store';
 import { GQL, useApolloClient } from '@src/apollo';
 import { detectPhotos } from '@src/common';

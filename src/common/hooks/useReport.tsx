@@ -1,8 +1,8 @@
 import React, { useCallback, useRef } from 'react';
 import { StyleSheet, View, Text, FlatList, TouchableOpacity } from 'react-native';
 import { useMutation } from '@apollo/react-hooks';
+import { GQL } from '@src/apollo';
 import { Overlay } from 'teaset';
-import { GQL } from '../gqls';
 
 type ChooserItem = {
     title: string;

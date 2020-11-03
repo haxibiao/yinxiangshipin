@@ -3,11 +3,13 @@ import { StyleSheet, View, ScrollView, Text, Image, TouchableWithoutFeedback, To
 import { useNavigation } from '@react-navigation/native';
 import { observer, adStore, userStore, notificationStore } from '@src/store';
 import { PageContainer, Iconfont, Row, Avatar, SafeText, FocusAwareStatusBar, Badge } from '@src/components';
-import { GQL, useQuery, useApolloClient } from '@src/apollo';
+import { GQL, useQuery } from '@src/apollo';
+import { useUnreadNotification } from '@src/common';
 
 export default observer((props: any) => {
-    const client = useApolloClient();
     const navigation = useNavigation();
+    //未读消息
+    useUnreadNotification();
     // 个人信息
     const { data } = useQuery(GQL.MeMetaQuery, {
         fetchPolicy: 'network-only',
@@ -25,18 +27,6 @@ export default observer((props: any) => {
         },
         [userStore.login],
     );
-
-    // useEffect(() => {
-    //     const navFocusListener = navigation.addListener('focus', () => {
-    //         if (userStore.login) {
-    //             refetch();
-    //         }
-    //     });
-
-    //     return () => {
-    //         navFocusListener();
-    //     };
-    // }, [refetch]);
 
     return (
         <View style={styles.container}>

@@ -1,8 +1,8 @@
 import React, { useRef, useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { observer, userStore, appStore } from './store';
-import { useRecallUserProfile, useAutoSignIn, usePreloadData } from './apollo';
-import { useFetchAppConfig, useAccountRemind } from './common';
+import { usePreloadData } from './apollo';
+import { useFetchAppConfig, useAutoSignIn, useRecallUserProfile, useAccountRemind } from './common';
 import {
     AppUserAgreementModal,
     NewUserRedEnvelopeModal,
@@ -24,8 +24,7 @@ export default observer(function Preparation() {
     useAccountRemind({ gold: userStore.me.gold, articles: userStore.me.count_articles });
     // 提前加载某些数据
     usePreloadData();
-
-    // 功能性弹窗
+    // App功能弹窗
     return (
         <>
             <AppUserAgreementModal />

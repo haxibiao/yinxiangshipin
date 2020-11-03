@@ -12,7 +12,6 @@ export const useDetainment = (navigation: any, isEntry: boolean) => {
     const firstExecute = useRef(isEntry);
     const entryListener = useRef();
     const overlayKey = useRef();
-    // const navigation: any = useRef(Tools.rootNavigation);
     const OverlayContent = useMemo(() => {
         return (
             <View style={styles.overlayInner}>

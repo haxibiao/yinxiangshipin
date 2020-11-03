@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import { useNavigation, useFocusEffect, useIsFocused } from '@react-navigation/native';
 import { useQuery } from '@apollo/react-hooks';
 import { appStore, notificationStore } from '@src/store';
-import { GQL } from '../gqls';
+import { GQL } from '@src/apollo';
 
 const unreadNotifyTypes = {
     unread_comments: 0,

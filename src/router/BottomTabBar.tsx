@@ -17,7 +17,6 @@ import { CommonActions, useTheme } from '@react-navigation/native';
 import { useSafeArea } from 'react-native-safe-area-context';
 import { BoxShadow } from 'react-native-shadow';
 import { observer, userStore, appStore, adStore, notificationStore } from '@src/store';
-import { useUnreadNotification } from '@src/apollo';
 import { Overlay } from 'teaset';
 import PublishMenu from './PublishMenu';
 
@@ -96,7 +95,6 @@ export default observer(
     }: Props) => {
         const { colors } = useTheme();
         const defaultInsets = useSafeArea();
-        useUnreadNotification(userStore.login);
 
         const focusedRoute = state.routes[state.index];
         const focusedDescriptor = descriptors[focusedRoute.key];
