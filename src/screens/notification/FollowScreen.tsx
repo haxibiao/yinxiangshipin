@@ -17,7 +17,10 @@ export default (props: any) => {
         };
     }, []);
     const renderItem = useCallback((item, index) => {
-        return <UserItem user={item.user} navigation={navigation} />;
+        console.log('====================================');
+        console.log('itemitem', item);
+        console.log('====================================');
+        return <UserItem user={item.item.user} navigation={navigation} />;
     }, []);
     return (
         <PageContainer title="新的粉丝">
