@@ -1,21 +1,18 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, ScrollView, TouchableOpacity, Text, Platform } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
-import { Avatar, PageContainer, SettingItem, WriteModal, Iconfont, WheelPicker, Toast } from '@src/components';
-import { Mutation, GQL, useApolloClient, useQuery } from '@src/apollo';
+import { Avatar, PageContainer, SettingItem, WriteModal, Iconfont, WheelPicker } from '@src/components';
+import { Mutation, GQL, useApolloClient, useQuery, useMutation } from '@src/apollo';
 import { observer } from 'mobx-react';
 import { userStore } from '@src/store';
 import RNFetchBlob from 'rn-fetch-blob';
 
 export default observer((props: any) => {
     const client = useApolloClient();
-
-    let nickname = '';
-    let introduction = '';
-    let { me: user } = userStore;
-
+    const [nickname, setName] = useState('');
+    const [introduction, setIntroduction] = useState('');
+    const { me: user } = userStore;
     const qianM = user.introduction || '这个人不是很勤快的亚子，啥也没留下…';
-
     const [nameModalVisible, setNameModalVisible] = useState(false),
         [qianModalVisible, setQianModalVisible] = useState(false),
         [userGender, setUserGender] = useState(user.gender || '女'),
@@ -30,7 +27,7 @@ export default observer((props: any) => {
 
     const saveAvatar = (image: any) => {
         const { token } = userStore.me;
-        var data = new FormData();
+        const data = new FormData();
         data.append('avatar', image);
         const config = {
             method: 'POST',
@@ -151,7 +148,25 @@ export default observer((props: any) => {
                 }
             });
     }
+    // 修改昵称
+    const [updateUserName] = useMutation(GQL.updateUserName, {
+        variables: {
+            input: {
+                name: nickname,
+            },
+            id: user.id,
+        },
+    });
 
+    // 修改签名
+    const [updateUserIntroduction] = useMutation(GQL.updateUserIntroduction, {
+        variables: {
+            input: {
+                introduction: introduction,
+            },
+            id: user.id,
+        },
+    });
     return (
         <PageContainer title="修改资料">
             <View style={styles.container}>
@@ -189,70 +204,46 @@ export default observer((props: any) => {
                     </TouchableOpacity>
                 </ScrollView>
             </View>
-            <Mutation mutation={GQL.updateUserName}>
-                {(updateUserName: any) => {
-                    return (
-                        <WriteModal
-                            modalName="修改昵称"
-                            placeholder={user.name}
-                            visible={nameModalVisible}
-                            value={nickname}
-                            handleVisible={setNameModal}
-                            changeVaule={(val: any) => {
-                                nickname = val;
-                            }}
-                            submit={() => {
-                                if (nickname.length < 1) {
-                                    setNameModal();
-                                    return;
-                                }
-                                setNameModal();
-                                updateUserName({
-                                    variables: {
-                                        input: {
-                                            name: nickname,
-                                        },
-                                        id: user.id,
-                                    },
-                                });
-                                userStore.changeProfile({ name: nickname });
-                            }}
-                        />
-                    );
+
+            <WriteModal
+                modalName="修改昵称"
+                placeholder={user.name}
+                visible={nameModalVisible}
+                value={nickname}
+                handleVisible={setNameModal}
+                changeVaule={(val: any) => {
+                    // nickname = val;
+                    setName(val);
                 }}
-            </Mutation>
-            <Mutation mutation={GQL.updateUserIntroduction}>
-                {(updateUserIntroduction: any) => {
-                    return (
-                        <WriteModal
-                            modalName="修改签名"
-                            placeholder={qianM}
-                            visible={qianModalVisible}
-                            value={introduction}
-                            handleVisible={setQianModal}
-                            changeVaule={(val: any) => {
-                                introduction = val;
-                            }}
-                            submit={() => {
-                                if (introduction.length < 1) {
-                                    setQianModal();
-                                    return;
-                                }
-                                setQianModal();
-                                updateUserIntroduction({
-                                    variables: {
-                                        input: {
-                                            introduction,
-                                        },
-                                        id: user.id,
-                                    },
-                                });
-                                userStore.changeProfile({ introduction });
-                            }}
-                        />
-                    );
+                submit={() => {
+                    if (nickname.length < 1) {
+                        setNameModal();
+                        return;
+                    }
+                    setNameModal();
+                    updateUserName();
+                    userStore.changeProfile({ name: nickname });
                 }}
-            </Mutation>
+            />
+            <WriteModal
+                modalName="修改签名"
+                placeholder={qianM}
+                visible={qianModalVisible}
+                value={introduction}
+                handleVisible={setQianModal}
+                changeVaule={(val: any) => {
+                    setIntroduction(val);
+                }}
+                submit={() => {
+                    if (introduction.length < 1) {
+                        setQianModal();
+                        return;
+                    }
+                    setQianModal();
+                    updateUserIntroduction();
+                    userStore.changeProfile({ introduction: introduction });
+                }}
+            />
         </PageContainer>
     );
 });
