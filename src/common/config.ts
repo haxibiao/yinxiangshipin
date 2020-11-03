@@ -11,9 +11,10 @@ import {
     ServerRoot,
     UploadServer,
     WechatAppId,
+    TheAppStore,
 } from '@app/app.json';
 
-const AppStore = Config && Config.APP_STORE ? Config.APP_STORE : 'haxibiao'; // 应用商店名称
+const AppStore =   Config?.APP_STORE ? Config.APP_STORE : TheAppStore; // 应用商店名称
 
 // let AppVersionNumber = DeviceInfo.getVersion().split('');
 // AppVersionNumber.splice(3, 1);
