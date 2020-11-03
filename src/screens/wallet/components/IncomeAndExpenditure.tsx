@@ -19,6 +19,7 @@ export default function IntegralDetail(props: any) {
             <QueryList
                 gqlDocument={GQL.goldsHistoryQuery}
                 dataOptionChain="golds.data"
+                paginateOptionChain="golds.paginatorInfo"
                 options={{
                     variables: {
                         user_id: user.id,
