@@ -7292,7 +7292,7 @@ react-is@^16.12.0, react-is@^16.13.0, react-is@^16.7.0, react-is@^16.8.1, react-
 
 "react-native-ad@git+http://code.haxibiao.cn/packages/react-native-ad.git":
   version "1.1.3"
-  resolved "git+http://code.haxibiao.cn/packages/react-native-ad.git#23226c663925a387095fcf804a69eaf202940764"
+  resolved "git+http://code.haxibiao.cn/packages/react-native-ad.git#d38ee2c3f8d40a595b4d6eafdbe1ead2faa60253"
 
 react-native-animatable@1.3.3:
   version "1.3.3"

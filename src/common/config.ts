@@ -1,6 +1,5 @@
-import { Platform } from 'react-native';
 import Config from 'react-native-config';
-// import DeviceInfo from 'react-native-device-info';
+import DeviceInfo from 'react-native-device-info';
 import {
     AppID,
     DisplayName as AppName,
@@ -10,11 +9,10 @@ import {
     AppSlogan,
     ServerRoot,
     UploadServer,
-    WechatAppId,
-    TheAppStore,
+    WechatAppId, 
 } from '@app/app.json';
 
-const AppStore =   Config?.APP_STORE ? Config.APP_STORE : TheAppStore; // 应用商店名称
+const AppStore =   Config?.APP_STORE ? Config.APP_STORE : DeviceInfo.getBrand()?.toLowerCase(); // 应用商店名称
 
 // let AppVersionNumber = DeviceInfo.getVersion().split('');
 // AppVersionNumber.splice(3, 1);
