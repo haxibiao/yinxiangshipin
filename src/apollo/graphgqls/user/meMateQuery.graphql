@@ -1,9 +1,8 @@
 #import "./userFragment.graphql"
 #import "../wallet/walletFragment.graphql"
 
-# gql TODO:meQuery
 # 个人信息
-query MeMateQuery {
+query meMateQuery {
     me {
         token
         uuid

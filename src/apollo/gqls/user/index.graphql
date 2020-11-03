@@ -1,6 +1,6 @@
 #import './mutation.graphql'
 # 个人状态
-query MeMetaQuery {
+query meMetaQuery {
     me {
         id
         balance

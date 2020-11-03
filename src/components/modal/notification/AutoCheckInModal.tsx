@@ -43,7 +43,7 @@ export const AutoCheckInModal = observer(() => {
                 fetchPolicy: 'network-only',
             },
             {
-                query: GQL.MeMetaQuery,
+                query: GQL.meMateQuery,
                 fetchPolicy: 'network-only',
             },
         ],

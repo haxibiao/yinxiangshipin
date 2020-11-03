@@ -11,7 +11,7 @@ export default observer((props: any) => {
     //未读消息
     useUnreadNotification();
     // 个人信息
-    const { data } = useQuery(GQL.MeMetaQuery, {
+    const { data } = useQuery(GQL.meMetaQuery, {
         fetchPolicy: 'network-only',
         skip: !userStore.login,
     });

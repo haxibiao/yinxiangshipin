@@ -40,7 +40,7 @@ export const VideoCaptureData = observer(({ client, shareLink, shareBody, onSucc
                             fetchPolicy: 'network-only',
                         },
                         {
-                            query: GQL.MeMetaQuery,
+                            query: GQL.meMetaQuery,
                             fetchPolicy: 'network-only',
                         },
                     ],

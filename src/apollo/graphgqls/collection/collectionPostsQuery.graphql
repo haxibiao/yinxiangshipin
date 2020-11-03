@@ -1,7 +1,6 @@
 #import "../post/postFragment.graphql"
 #import "./collectionFragment.graphql"
 
-# gql TODO: CollectionPostsQuery
 # 合集内的视频
 query collectionPostsQuery($collection_id: Int!, $page: Int, $count: Int) {
     collection(collection_id: $collection_id) {

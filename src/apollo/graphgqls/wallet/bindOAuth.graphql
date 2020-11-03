@@ -1,5 +1,5 @@
 #支付宝微信授权
-mutation BindOAuth($input: bindOAuthInput) {
+mutation bindOAuth($input: bindOAuthInput) {
     bindOAuth(input: $input) {
         oauth_id
         oauth_type

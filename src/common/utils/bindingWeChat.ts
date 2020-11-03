@@ -39,7 +39,7 @@ function bindingWeChatWallet(code: any, props: Props) {
     notificationStore.toggleLoadingVisible();
     appStore.client
         .mutate({
-            mutation: GQL.BindOAuth,
+            mutation: GQL.bindOAuth,
             variables: {
                 input: {
                     code,
@@ -49,7 +49,7 @@ function bindingWeChatWallet(code: any, props: Props) {
             errorPolicy: 'all',
             refetchQueries: () => [
                 {
-                    query: GQL.MeMetaQuery,
+                    query: GQL.meMateQuery,
                     fetchPolicy: 'network-only',
                 },
                 {

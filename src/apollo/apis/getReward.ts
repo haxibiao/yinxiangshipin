@@ -8,7 +8,7 @@ type RewardReason = 'SIGNIN_VIDEO_REWARD' | 'DOUBLE_SIGNIN_REWARD' | 'WATCH_REWA
 export function getUserReward(reason: RewardReason) {
     const refetchQueries = [
         {
-            query: GQL.MeMetaQuery,
+            query: GQL.meMateQuery,
             fetchPolicy: 'network-only',
         },
     ];
@@ -57,7 +57,7 @@ export function getTaskReward(id: number) {
                     },
                     refetchQueries: () => [
                         {
-                            query: GQL.MeMetaQuery,
+                            query: GQL.meMateQuery,
                             fetchPolicy: 'network-only',
                         },
                         {

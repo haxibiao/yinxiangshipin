@@ -32,7 +32,7 @@ const AttendanceBook = (): JSX.Element => {
                 fetchPolicy: 'network-only',
             },
             {
-                query: GQL.MeMetaQuery,
+                query: GQL.meMetaQuery,
                 fetchPolicy: 'network-only',
             },
         ],

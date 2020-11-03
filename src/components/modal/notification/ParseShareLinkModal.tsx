@@ -72,7 +72,7 @@ export const ParseShareLinkModal = observer(() => {
                             fetchPolicy: 'network-only',
                         },
                         {
-                            query: GQL.MeMetaQuery,
+                            query: GQL.meMateQuery,
                             fetchPolicy: 'network-only',
                         },
                     ],

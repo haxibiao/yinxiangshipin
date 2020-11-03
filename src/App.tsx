@@ -2,7 +2,6 @@ import React, { Component, useState, useEffect, useRef, useCallback } from 'reac
 import { StyleSheet, View, Text, Platform } from 'react-native';
 import codePush from 'react-native-code-push';
 // apollo && Router
-import { ApolloProvider as ClassApolloProvider } from 'react-apollo';
 import { ApolloProvider, useClientBuilder, GQL } from './apollo';
 import AppRouter from './router';
 // WeChat
@@ -41,16 +40,14 @@ const App = observer(() => {
 
     return (
         <View style={styles.container}>
-            <ClassApolloProvider client={client}>
-                <ApolloProvider client={client}>
-                    <Preparation />
-                    <AppRouter />
-                    <AppRemindModal />
-                    <WithdrawalNotificationModal />
-                    <RewardNotificationModal />
-                    <LoadingModal />
-                </ApolloProvider>
-            </ClassApolloProvider>
+            <ApolloProvider client={client}>
+                <Preparation />
+                <AppRouter />
+                <AppRemindModal />
+                <WithdrawalNotificationModal />
+                <RewardNotificationModal />
+                <LoadingModal />
+            </ApolloProvider>
             <Toast ref={(ref) => (global.Toast = ref)} />
         </View>
     );

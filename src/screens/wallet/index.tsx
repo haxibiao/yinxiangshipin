@@ -63,7 +63,7 @@ export default observer((props: any) => {
     // 提现方式
     const [withdrawType, setWithdrawType] = useState(WithdrawalPlatforms[0].type);
     // 钱包信息
-    const { data: userMetaData, refetch } = useQuery(GQL.MeMetaQuery, {
+    const { data: userMetaData, refetch } = useQuery(GQL.meMetaQuery, {
         fetchPolicy: 'network-only',
     });
     const userProfile = useMemo(() => Object.assign({ ...userStore.me }, userMetaData?.me), [
@@ -97,7 +97,7 @@ export default observer((props: any) => {
         errorPolicy: 'all',
         refetchQueries: () => [
             {
-                query: GQL.MeMetaQuery,
+                query: GQL.meMetaQuery,
                 fetchPolicy: 'network-only',
             },
             {

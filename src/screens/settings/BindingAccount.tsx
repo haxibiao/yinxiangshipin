@@ -15,7 +15,7 @@ export default observer(() => {
         variables: { id: me.id, phone, password },
         refetchQueries: () => [
             {
-                query: GQL.MeMetaQuery,
+                query: GQL.meMetaQuery,
                 fetchPolicy: 'network-only',
             },
         ],

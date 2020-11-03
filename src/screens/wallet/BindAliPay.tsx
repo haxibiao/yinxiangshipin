@@ -49,7 +49,7 @@ export default observer((props) => {
         },
         refetchQueries: (result) => [
             {
-                query: GQL.MeMetaQuery,
+                query: GQL.meMetaQuery,
                 fetchPolicy: 'network-only',
             },
         ],
