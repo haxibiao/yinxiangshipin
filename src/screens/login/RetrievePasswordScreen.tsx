@@ -60,7 +60,7 @@ const RetrievePasswordScreen = (props: any) => {
         },
         onError: (error: any) => {
             Loading.hide();
-            Toast.show({ content: error });
+            Toast.show({ content: errorMessage(error) });
         },
         errorPolicy: 'all',
     });

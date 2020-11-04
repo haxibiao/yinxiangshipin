@@ -2,7 +2,7 @@ import React, { Component, useState, useContext, useEffect, useCallback } from '
 import { StyleSheet, View, Image, Text, TouchableOpacity, StatusBar } from 'react-native';
 import { PageContainer, HxfTextInput, HxfButton, Row, Center, Iconfont, GradientView, SafeText } from '@src/components';
 import { exceptionCapture, useBounceAnimation } from '@src/common';
-import { GQL, useMutation, useApolloClient } from '@src/apollo';
+import { GQL, useMutation, useApolloClient, errorMessage } from '@src/apollo';
 import { observer, userStore } from '@src/store';
 import * as WeChat from 'react-native-wechat-lib';
 // import Cmicsso from 'react-native-cmicsso';
@@ -45,9 +45,8 @@ export default observer((props: any) => {
                 navigation.goBack();
             })
             .catch((err: any) => {
-                // console.log('微信登陆请求回调 error：', err);
                 closeLoading(); // 关闭登陆加载中动画
-                Toast.show({ content: err, layout: 'top' });
+                Toast.show({ content: errorMessage(err), layout: 'top' });
             });
     }, []);
 

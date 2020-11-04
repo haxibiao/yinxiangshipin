@@ -2,14 +2,13 @@ import React, { useCallback } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { Iconfont } from '@src/components';
 import { useNavigation } from '@react-navigation/native';
-import { GQL } from '@src/apollo';
+import { GQL, errorMessage } from '@src/apollo';
 
 import { exceptionCapture } from '@src/common';
 import { userStore } from '@src/store';
 
-export default function UuidLoginView(porps: { navigation: any; client: any; onClose?: () => void }) {
-    const { onClose, navigation, client } = porps;
-
+export default function UuidLoginView(props: { navigation: any; client: any; onClose?: () => void }) {
+    const { onClose, navigation, client } = props;
     // 使用本机UUID进行静默登录
     const onSilentLogin = useCallback(async () => {
         if (Device.UUID) {
@@ -27,7 +26,7 @@ export default function UuidLoginView(porps: { navigation: any; client: any; onC
                     navigation.goBack();
                 })
                 .catch((err: any) => {
-                    Toast.show({ content: err, layout: 'top' });
+                    Toast.show({ content: errorMessage(err), layout: 'top' });
                 });
         } else {
             Toast.show({ content: '一键登录失败，请手动登录', layout: 'top' });
@@ -101,11 +100,7 @@ export default function UuidLoginView(porps: { navigation: any; client: any; onC
                         textAlign: 'center',
                     }}>
                     登陆即同意
-                    <Text
-                        style={{ color: Theme.primaryColor }}
-                        onPress={() => {
-                            console.log('显示服务条款！');
-                        }}>
+                    <Text style={{ color: Theme.primaryColor }} onPress={() => {}}>
                         《哈希坊科技认证服务条款》
                     </Text>
                     并授权

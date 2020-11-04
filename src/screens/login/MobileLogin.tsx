@@ -7,7 +7,7 @@ import { PageContainer, SafeText } from '@src/components';
 import UserAgreement from './components/UserAgreement';
 
 import { appStore, Storage, userStore } from '@src/store';
-import { GQL, useMutation } from '@src/apollo';
+import { GQL, useMutation, errorMessage } from '@src/apollo';
 
 const MobileLogin = () => {
     const navigation = useNavigation();
@@ -55,7 +55,7 @@ const MobileLogin = () => {
             }, 1000);
         },
         onError: (error: any) => {
-            toast(error.toString().replace('Error: GraphQL error: ', '') || '获取验证码错误！');
+            toast(errorMessage(error, '获取验证码错误！'));
         },
     });
 
@@ -83,7 +83,7 @@ const MobileLogin = () => {
             navigation.goBack();
         },
         onError: (error: any) => {
-            toast(error.toString().replace('Error: GraphQL error: ', '') || '服务器发生错误，请稍后重试！');
+            toast(errorMessage(error, '服务器发生错误，请稍后重试！'));
         },
     });
 

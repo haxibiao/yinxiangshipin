@@ -6,7 +6,7 @@ import { PageContainer, SafeText } from '@src/components';
 
 import { exceptionCapture } from '@src/common';
 import { appStore, Storage, userStore } from '@src/store';
-import { GQL, useMutation } from '@src/apollo';
+import { GQL, useMutation, errorMessage } from '@src/apollo';
 
 const AccountLogin = () => {
     const navigation = useNavigation();
@@ -33,7 +33,7 @@ const AccountLogin = () => {
     const onLogin = useCallback(async () => {
         const [error, result] = await exceptionCapture(signInMutation);
         if (error) {
-            toast(error?.message);
+            toast(errorMessage(error));
         } else if (result.data.signIn) {
             // 登录成功,更新用户全局状态并退出登陆页面
             toast('登陆成功');
