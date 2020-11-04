@@ -20,7 +20,7 @@ query userPostsQuery($user_id: Int!, $filter: PostFilter, $count: Int, $page: In
         data {
             ...postFragment
             collections {
-                ...collection
+                ...collectionFragment
             }
         }
     }

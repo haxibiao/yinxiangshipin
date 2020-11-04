@@ -30,7 +30,7 @@ mutation createPostContent(
     ) {
         ...postFragment
         collections {
-            ...collection
+            ...collectionFragment
         }
     }
 }

@@ -11,7 +11,7 @@ query followPostsQuery($user_id: Int!, $filter: PostFilter, $count: Int, $page: 
         data {
             ...postFragment
             collections {
-                ...collection
+                ...collectionFragment
             }
         }
     }

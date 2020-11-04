@@ -15,6 +15,9 @@ query collectionPostsQuery($collection_id: Int!, $page: Int, $count: Int) {
             }
             data {
                 ...postFragment
+                collections {
+                    ...collectionFragment
+                }
             }
         }
     }

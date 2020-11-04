@@ -1,8 +1,8 @@
-#import "./signFragment.graphql"
+#import "./signInFragment.graphql"
 
 # 登录
 mutation signInMutation($account: String!, $password: String!, $uuid: String) {
     signIn(account: $account, password: $password, uuid: $uuid) {
-        ...signFragment
+        ...signInFragment
     }
 }

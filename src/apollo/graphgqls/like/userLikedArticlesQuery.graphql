@@ -12,7 +12,7 @@ query userLikedArticlesQuery($user_id: Int!, $page: Int) {
             article {
                 ...articleFragment
                 collections {
-                    ...collection
+                    ...collectionFragment
                 }
             }
         }

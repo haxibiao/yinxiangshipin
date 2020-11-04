@@ -12,7 +12,7 @@ query visitShareablebyUuid($id: String!) {
         post {
             ...postFragment
             collections {
-                ...collection
+                ...collectionFragment
             }
         }
     }

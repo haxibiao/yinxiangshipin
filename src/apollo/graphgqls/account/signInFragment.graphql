@@ -1,11 +1,13 @@
 #import "../user/userFragment.graphql"
 #import "../wallet/walletFragment.graphql"
 
-fragment signFragment on Account {
-    token
+fragment signInFragment on User {
     uuid
+    token
     ...userFragment
-    ...walletFragment
+    wallet {
+        ...walletFragment
+    }
     gold
     ticket
     balance

@@ -5,7 +5,7 @@ query postQuery($id: Int!) {
     post(id: $id) {
         ...postFragment
         collections {
-            ...collection
+            ...collectionFragment
         }
     }
 }
