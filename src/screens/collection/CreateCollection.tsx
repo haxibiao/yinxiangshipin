@@ -11,7 +11,7 @@ import Video from 'react-native-video';
 const maxMediaWidth = Device.WIDTH - Theme.itemSpace * 4;
 const mediaWidth = maxMediaWidth / 3;
 
-export default function CreateCollectionScreen(props) {
+export default function CreateCollection(props) {
     const navigation = useNavigation();
     const [formData, setFormData] = useState({ cover: '', title: '', description: '' });
     // video：添加至合集的视频，含空数据

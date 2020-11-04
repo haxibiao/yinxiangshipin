@@ -34,8 +34,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         paddingHorizontal: pixel(Theme.itemSpace),
         paddingVertical: pixel(Theme.itemSpace),
-        borderBottomWidth: pixel(0.5),
-        borderColor: '#666',
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        borderColor: '#f0f0f0',
         alignItems: 'center',
     },
     logoImg: {

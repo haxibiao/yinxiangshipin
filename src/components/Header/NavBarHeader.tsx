@@ -183,8 +183,7 @@ const styles = StyleSheet.create({
     },
     title: {
         color: Theme.primaryFontColor,
-        fontSize: font(17),
-        fontWeight: 'bold',
+        fontSize: font(18),
     },
     textShadow: {
         textShadowColor: 'rgba(0, 0, 0, 0.75)',

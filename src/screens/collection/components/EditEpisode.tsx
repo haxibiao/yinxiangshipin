@@ -46,7 +46,7 @@ export default observer(({ onClose, onClick, navigation, operation, collection, 
     const renderItem = useCallback(
         ({ item, index, data, page }) => {
             return (
-                <PostItem
+                <EpisodeItem
                     item={item}
                     btnName={operation}
                     onClick={onClick}
@@ -106,7 +106,7 @@ export default observer(({ onClose, onClick, navigation, operation, collection, 
     );
 });
 
-export function PostItem({ style, item, navigation, onClick, btnName, operationBtn }) {
+function EpisodeItem({ style, item, navigation, onClick, btnName, operationBtn }) {
     let cover;
     if (item?.video?.id) {
         cover = item?.video?.cover;

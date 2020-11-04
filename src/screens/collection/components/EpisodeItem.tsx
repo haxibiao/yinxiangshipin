@@ -12,7 +12,7 @@ interface Props {
     addPostPress: any;
     videoData: any;
 }
-const PostItem = observer((props: Props) => {
+const EpisodeItem = observer((props: Props) => {
     let { item, index, listData, nextPage, count, collection, addPostPress, videoData } = props;
     const navigation = useNavigation();
     // 创建合集 -> 选择作品页 -> isAddCollection判断能否添加当前作品
@@ -109,4 +109,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default PostItem;
+export default EpisodeItem;

@@ -17,10 +17,10 @@ import { GQL, useQuery, useFollowMutation, useMutation } from '@src/apollo';
 import { ContentStatus, QueryList } from '@src/content';
 import { observable } from 'mobx';
 import { useRoute, useNavigation } from '@react-navigation/native';
-import PostItem from './components/PostItem';
+import EpisodeItem from './components/EpisodeItem';
 import { Overlay } from 'teaset';
 import { ApolloProvider } from '@apollo/react-hooks';
-import AddedToCollection from './components/AddedToCollection';
+import EditEpisode from './components/EditEpisode';
 import StashVideoStore from './store';
 
 const QUERY_COUNT = 10;
@@ -197,7 +197,7 @@ export default observer((props: any) => {
                 containerStyle={{ backgroundColor: 'transparent' }}
                 animated={true}>
                 <ApolloProvider client={appStore.client}>
-                    <AddedToCollection
+                    <EditEpisode
                         onClose={closeCollection}
                         onClick={addCollection}
                         navigation={navigation}
@@ -274,7 +274,7 @@ export default observer((props: any) => {
                 contentContainerStyle={styles.contentContainer}
                 onScroll={onScroll}
                 renderItem={({ item, index, data, page }) => (
-                    <PostItem
+                    <EpisodeItem
                         item={item}
                         index={index}
                         collection={collection}

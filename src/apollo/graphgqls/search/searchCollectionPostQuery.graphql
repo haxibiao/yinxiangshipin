@@ -1,4 +1,5 @@
 #import "../post/postFragment.graphql"
+#import "../collection/collectionFragment.graphql"
 
 # 搜索合集中动态
 query searchCollectionPostQuery($query: String!, $page: Int, $collection_id: Int) {
@@ -10,6 +11,9 @@ query searchCollectionPostQuery($query: String!, $page: Int, $collection_id: Int
         }
         data {
             ...postFragment
+            collections {
+                ...collectionFragment
+            }
         }
     }
 }

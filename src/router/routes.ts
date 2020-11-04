@@ -58,12 +58,11 @@ import TagVideoListScreen from '../screens/tag/VideoList';
 
 // collection
 import CollectionScreen from '../screens/collection';
-import CreateCollectionScreen from '../screens/collection/CreateCollectionScreen';
+import CreateCollectionScreen from '../screens/collection/CreateCollection';
 import CollectionDetailScreen from '../screens/collection/CollectionDetail';
-import CollectionEpisodeVideoListScreen from '../screens/collection/EpisodeVideoList';
+import EpisodeVideoListScreen from '../screens/collection/EpisodeVideoList';
 import CollectionVideoListScreen from '../screens/collection/VideoList';
-import AddToCollectionScreen from '../screens/collection/components/AddedToCollection';
-import SelectPostScreen from '../screens/collection/components/SelectPostScreen';
+import PostsSelectScreen from '../screens/collection/PostsSelect';
 import EditCollectionScreen from '../screens/creation/EditCollection';
 
 // category
@@ -209,8 +208,8 @@ export default {
     CollectionVideoList: {
         component: CollectionVideoListScreen,
     },
-    CollectionEpisodeVideoList: {
-        component: CollectionEpisodeVideoListScreen,
+    EpisodeVideoList: {
+        component: EpisodeVideoListScreen,
     },
     NotificationCenter: {
         component: NotificationScreen,
@@ -239,11 +238,8 @@ export default {
     创建合集: {
         component: CreateCollectionScreen,
     },
-    AddToCollection: {
-        component: AddToCollectionScreen,
-    },
     SelectPost: {
-        component: SelectPostScreen,
+        component: PostsSelectScreen,
     },
     EditCollection: {
         component: EditCollectionScreen,

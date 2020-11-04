@@ -1,15 +1,6 @@
 import React, { useMemo, useCallback } from 'react';
 import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity } from 'react-native';
-import {
-    TouchFeedback,
-    Row,
-    SafeText,
-    NavBarHeader,
-    StatusView,
-    ListFooter,
-    PageContainer,
-    PullChooser,
-} from '@src/components';
+import { Row, SafeText, NavBarHeader, StatusView, ListFooter, PageContainer, PullChooser } from '@src/components';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { GQL, useMutation } from '@src/apollo';
 import { useApolloClient } from '@apollo/react-hooks';
@@ -74,16 +65,16 @@ export default function CollectionScreen() {
 
     return (
         <PageContainer
-            title="我的合集"
-            titleStyle={{ fontSize: font(16) }}
+            title={isSelf ? '我的合集' : 'TA的合集'}
             rightView={
                 isSelf && (
-                    <TouchFeedback onPress={() => navigation.navigate('创建合集')}>
-                        <Text style={{ fontSize: font(14), color: Theme.navBarTitleColor || '#666' }}>创建</Text>
-                    </TouchFeedback>
+                    <TouchableOpacity onPress={() => navigation.navigate('创建合集')}>
+                        <Text style={{ fontSize: font(15), color: Theme.primaryColor }}>创建</Text>
+                    </TouchableOpacity>
                 )
             }>
             <QueryList
+                contentContainerStyle={styles.container}
                 gqlDocument={GQL.collectionsQuery}
                 dataOptionChain="collections.data"
                 paginateOptionChain="collections.paginatorInfo"
@@ -101,7 +92,6 @@ export default function CollectionScreen() {
                         onLongPress={() => isSelf && onLongPress(item.id)}
                     />
                 )}
-                contentContainerStyle={styles.container}
             />
         </PageContainer>
     );
@@ -111,31 +101,5 @@ const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
         backgroundColor: '#fff',
-    },
-    rowBoxItem: {
-        flexDirection: 'row',
-        paddingHorizontal: pixel(Theme.itemSpace),
-        paddingVertical: pixel(Theme.itemSpace),
-        borderBottomWidth: pixel(0.5),
-        borderColor: '#666',
-        alignItems: 'center',
-    },
-    logoImg: {
-        width: pixel(60),
-        height: pixel(60),
-        marginRight: pixel(Theme.itemSpace),
-        resizeMode: 'cover',
-        borderRadius: pixel(3),
-    },
-    collectionIcon: {
-        width: pixel(12),
-        height: pixel(12),
-        resizeMode: 'cover',
-        marginRight: pixel(3),
-    },
-    collectionInfo: {
-        fontSize: font(11),
-        marginTop: pixel(10),
-        color: '#666',
     },
 });

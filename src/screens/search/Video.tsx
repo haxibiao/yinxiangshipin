@@ -7,7 +7,6 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import __ from 'lodash';
 import SearchRecord from './components/SearchRecord';
 import SearchedVideo from './components/SearchedVideo';
-import CollectionPost from '@src/screens/collection/components/CollectionPost';
 
 const Search = () => {
     const route = useRoute();

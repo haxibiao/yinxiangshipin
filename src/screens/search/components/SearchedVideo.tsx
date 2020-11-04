@@ -5,7 +5,7 @@ import { observer } from '@src/store';
 import { GQL } from '@src/apollo';
 import { QueryList } from '@src/content';
 import SearchVideoItem from './SearchVideoItem';
-import PostItem from '@src/screens/collection/components/PostItem';
+import EpisodeItem from '@src/screens/collection/components/EpisodeItem';
 import StashVideoStore from '@src/screens/collection/store';
 
 // selectable:区分个人合集和公共合集入口
@@ -69,7 +69,13 @@ const index = observer(({ navigation, keyword, tag_id, user_id, collection_id })
             }}
             numColumns={1}
             renderItem={({ item, index, data, page }) => (
-                <PostItem item={item} index={index} listData={data} nextPage={page} collection={item?.collections[0]} />
+                <EpisodeItem
+                    item={item}
+                    index={index}
+                    listData={data}
+                    nextPage={page}
+                    collection={item?.collections[0]}
+                />
             )}
             ListHeaderComponent={listHeader}
         />

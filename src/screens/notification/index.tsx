@@ -76,7 +76,6 @@ export default observer((props: any) => {
                 centerStyle={{
                     marginHorizontal: pixel(12),
                 }}
-                titleStyle={adStore.enableWallet ? null : { fontSize: font(18) }}
             />
             <ScrollView contentContainerStyle={styles.contentContainer}>
                 <View style={styles.notifyList}>

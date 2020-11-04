@@ -48,7 +48,7 @@ const HxfRadio = (props: Props) => {
                 setState(!state);
             }}>
             <Iconfont
-                name={state ? 'radio-check' : 'radio-uncheck'}
+                name={state ? 'radiobuttonchecked' : 'radiobuttonunchecked'}
                 color={state ? Theme.primaryColor : '#d4d4d4'}
                 size={font(20)}
                 style={{ marginRight: pixel(8) }}

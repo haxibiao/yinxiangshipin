@@ -15,10 +15,10 @@ import { GQL, useFollowMutation, useApolloClient, useQuery } from '@src/apollo';
 import { userStore } from '@src/store';
 import { exceptionCapture, mergeProperty } from '@src/common';
 
-function PostItem({ collection, onPress, style, index }) {
+function EpisodeItem({ collection, onPress, style, index }) {
     return (
         <TouchableWithoutFeedback onPress={onPress}>
-            <View style={[styles.postItem, style]}>
+            <View style={[styles.episodeItem, style]}>
                 <Image style={styles.postCover} source={{ uri: collection?.video?.cover }} />
                 <View style={styles.postInfo}>
                     <View style={styles.introduction}>
@@ -168,7 +168,7 @@ export default ({ collection, post, onClose, navigation }) => {
     const renderItem = useCallback(
         ({ item, index }) => {
             return (
-                <PostItem
+                <EpisodeItem
                     index={index}
                     collection={item}
                     style={post?.id === item?.id && { backgroundColor: 'rgba(222,222,222,0.3)' }}
@@ -315,7 +315,7 @@ const styles = StyleSheet.create({
         color: '#ffffff',
         marginLeft: pixel(3),
     },
-    postItem: {
+    episodeItem: {
         flexDirection: 'row',
         alignItems: 'center',
         paddingVertical: pixel(12),

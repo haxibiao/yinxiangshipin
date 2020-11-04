@@ -134,14 +134,14 @@ export default observer((props: Props) => {
         const collectionData = media?.collections?.[0];
         if (
             collectionData &&
-            appStore.currentRouteName !== 'CollectionEpisodeVideoList' &&
+            appStore.currentRouteName !== 'EpisodeVideoList' &&
             appStore.currentRouteName !== 'CollectionVideoList'
         ) {
             const collection = observable(collectionData);
             return (
                 <Pressable
                     onPress={() => {
-                        navigation.navigate('CollectionEpisodeVideoList', {
+                        navigation.navigate('EpisodeVideoList', {
                             collection,
                             post: media,
                         });

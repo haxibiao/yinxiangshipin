@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
     titleText: {
         color: '#333',
         flex: 1,
-        fontSize: font(19),
+        fontSize: font(18),
         textAlign: 'center',
     },
 });
