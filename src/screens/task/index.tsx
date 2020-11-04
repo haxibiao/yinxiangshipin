@@ -20,10 +20,7 @@ import TaskList from './components/TaskList';
 
 export default observer((props: any) => {
     const navigation = useNavigation();
-    const { data, refetch } = useQuery(GQL.meMetaQuery, {
-        fetchPolicy: 'network-only',
-    });
-    const userProfile = useMemo(() => Object.assign(userStore.me, data?.me), [data]);
+    const userProfile = userStore.me;
 
     const authNavigator = useCallback(
         (route, params) => {

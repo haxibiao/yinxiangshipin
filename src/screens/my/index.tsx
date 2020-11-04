@@ -9,14 +9,9 @@ import { useUnreadNotification } from '@src/common';
 export default observer((props: any) => {
     const navigation = useNavigation();
     //未读消息
-    useUnreadNotification();
+    useUnreadNotification(userStore.login);
     // 个人信息
-    const { data } = useQuery(GQL.meMetaQuery, {
-        fetchPolicy: 'network-only',
-        skip: !userStore.login,
-    });
-    const userProfile = useMemo(() => Object.assign({}, userStore.me, data?.me), [data]);
-
+    const userProfile = userStore.me;
     const authNavigator = useCallback(
         (route, params?) => {
             if (userStore.login) {

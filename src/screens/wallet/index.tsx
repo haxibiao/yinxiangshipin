@@ -62,14 +62,8 @@ export default observer((props: any) => {
     const navigation = useNavigation();
     // 提现方式
     const [withdrawType, setWithdrawType] = useState(WithdrawalPlatforms[0].type);
-    // 钱包信息
-    const { data: userMetaData, refetch } = useQuery(GQL.meMetaQuery, {
-        fetchPolicy: 'network-only',
-    });
-    const userProfile = useMemo(() => Object.assign({ ...userStore.me }, userMetaData?.me), [
-        userStore.me,
-        userMetaData,
-    ]);
+    // 账户信息
+    const userProfile = userStore.me;
     // 提现额度
     const { data: withdrawAmountListData } = useQuery(GQL.getWithdrawAmountList);
     const withdrawAmountData = useMemo(() => {
@@ -89,7 +83,7 @@ export default observer((props: any) => {
         }
     }, [withdrawAmountData]);
     // 提现请求
-    const [withdrawRequest] = useMutation(GQL.CreateWithdrawMutation, {
+    const [withdrawRequest] = useMutation(GQL.createWithdrawMutation, {
         variables: {
             amount,
             platform: withdrawType,

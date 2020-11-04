@@ -29,7 +29,7 @@ const index = (props: Props) => {
     const route = useRoute();
     const user = route.params?.user;
 
-    const isSelf = useMemo(() => userStore.me.id === user.id, []);
+    const isSelf = useMemo(() => userStore.me.id === user.id, [userStore.me.id, user]);
 
     const headerOnLayout = useCallback((event: any) => {
         const { height } = event.nativeEvent.layout;

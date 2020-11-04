@@ -30,7 +30,7 @@ export default observer((props: any) => {
     const route = useRoute();
     let collection = route?.params?.collection;
     let tagData = collection;
-    const isSelf = useMemo(() => tagData?.user?.id === userStore.me.id, [tagData]);
+    const isSelf = useMemo(() => tagData?.user?.id === userStore.me.id, [tagData, userStore.me.id]);
 
     const scrollAnimateValue = useRef(new Animated.Value(0));
     const onScroll = useMemo(() => {

@@ -29,7 +29,7 @@ const index = (props: Props) => {
     const flatListRef = useRef();
     const fancyInputRef = useRef();
 
-    const isQuestioner = useMemo(() => feedback.user.id === userStore.me.id, [feedback, userStore]);
+    const isQuestioner = useMemo(() => feedback.user.id === userStore.me.id, [feedback, userStore.me.id]);
 
     const increaseCountComments = useCallback(() => {
         feedback.count_comments++;
@@ -45,7 +45,7 @@ const index = (props: Props) => {
     }, [flatListRef]);
 
     const replyHandler = useCallback(
-        comment => {
+        (comment) => {
             fancyInputRef.current.focus();
             setReplyByComment(comment);
         },
@@ -82,7 +82,7 @@ const index = (props: Props) => {
     }, [hasMorePages, currentPage]);
 
     const onScroll = useCallback(
-        e => {
+        (e) => {
             const { contentOffset, contentSize } = e.nativeEvent;
             // fetchMore触发条件
             if (contentSize.height - contentOffset.y < Device.HEIGHT - pixel(50)) {
@@ -120,7 +120,7 @@ const index = (props: Props) => {
                             />
                         );
                     }}
-                    keyExtractor={item => item.id.toString()}
+                    keyExtractor={(item) => item.id.toString()}
                     ListEmptyComponent={() => (
                         <StatusView.EmptyView imageSource={require('@app/assets/images/default_comment.png')} />
                     )}

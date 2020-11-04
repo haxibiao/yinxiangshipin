@@ -8,7 +8,7 @@ import { bindWeChat } from '@src/common';
 
 const AccountSecurity = observer(() => {
     const navigation = useNavigation();
-    const user = React.useMemo(() => userStore.me, [userStore]);
+    const user = userStore.me;
     const [isBindWechat, setIsBindWechat] = React.useState(!!Helper.syncGetter('wallet.platforms.wechat', user));
     const isBindAliPay = React.useMemo(() => !!Helper.syncGetter('wallet.platforms.alipay', user), [user]);
 
