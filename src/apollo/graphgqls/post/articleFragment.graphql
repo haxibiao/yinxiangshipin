@@ -30,12 +30,8 @@ fragment articleFragment on Article {
         id
         url
         duration
-        info {
-            width
-            height
-            rotate
-            covers
-        }
-        cover_url
+        width
+        height
+        cover
     }
 }

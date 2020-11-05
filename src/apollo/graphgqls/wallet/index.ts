@@ -6,7 +6,6 @@ import goldsHistoryQuery from './goldsHistoryQuery.graphql';
 import sendVerifyCodeMutation from './sendVerifyCodeMutation.graphql';
 import setWalletPaymentInfoMutation from './setWalletPaymentInfoMutation.graphql';
 import userWithdraws from './userWithdraws.graphql';
-import walletFragment from './walletFragment.graphql';
 import withdrawDetailQuery from './withdrawDetailQuery.graphql';
 
 export const wallet = {
@@ -17,6 +16,5 @@ export const wallet = {
     sendVerifyCodeMutation,
     setWalletPaymentInfoMutation,
     userWithdraws,
-    walletFragment,
     withdrawDetailQuery,
 };

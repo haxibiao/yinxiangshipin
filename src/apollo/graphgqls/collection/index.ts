@@ -1,5 +1,4 @@
 // 采集功能模块graphql
-import collectionFragment from './collectionFragment.graphql';
 import collectionPostsQuery from './collectionPostsQuery.graphql';
 import collectionsQuery from './collectionsQuery.graphql';
 import createCollectionMutation from './createCollectionMutation.graphql';
@@ -11,7 +10,6 @@ import randomCollectionsQuery from './randomCollectionsQuery.graphql';
 import recommendCollectionsQuery from './recommendCollectionsQuery.graphql';
 
 export const collection = {
-    collectionFragment,
     collectionPostsQuery,
     collectionsQuery,
     createCollectionMutation,

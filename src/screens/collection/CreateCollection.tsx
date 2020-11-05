@@ -1,168 +1,91 @@
 import React, { useCallback, useState, useMemo, useEffect } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView } from 'react-native';
-import { NavBarHeader, MediaUploader, PageContainer, Row, Iconfont, Loading, SafeText } from '@src/components';
-import { userStore, appStore } from '@src/store';
+import { StyleSheet, ScrollView, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
+import { NavBarHeader, MediaUploader, Iconfont, SafeText } from '@src/components';
+import { appStore, userStore, notificationStore } from '@src/store';
 import { useNavigation } from '@react-navigation/native';
 import { GQL, useMutation, errorMessage } from '@src/apollo';
-import { exceptionCapture } from '@src/common';
-import StashVideoStore from '@src/screens/collection/store';
+import { openImagePicker } from '@src/native';
 import Video from 'react-native-video';
 
-const maxMediaWidth = Device.WIDTH - Theme.itemSpace * 4;
-const mediaWidth = maxMediaWidth / 3;
+const mediaWidth = Device.WIDTH * 0.3;
 
 export default function CreateCollection(props) {
     const navigation = useNavigation();
-    const [formData, setFormData] = useState({ cover: '', title: '', description: '' });
-    // video：添加至合集的视频，含空数据
-    const [video, setVideo] = useState([]);
-    // videoData存储处理过的video数据
-    const [videoData, setVideoData] = useState([]);
-    const uploadResponse = useCallback((response) => {
-        setFormData((prevFormData) => {
-            return { ...prevFormData, cover: response[0] ? response[0] : '' };
-        });
-    }, []);
+    const [formData, setFormData] = useState({ cover: '', title: '', description: '', videoPosts: [] });
 
-    const uploadVideoResponse = useCallback(
-        (addedVideo) => {
-            addedVideo &&
-                setVideo(() => {
-                    return [...videoData, ...addedVideo];
-                });
+    const [createCollectionMutation] = useMutation(GQL.createCollectionMutation, {
+        variables: {
+            name: formData.title,
+            logo: formData.cover,
+            description: formData.description,
+            collectable_ids: formData.videoPosts.map((v) => v.id),
         },
-        [video, videoData],
-    );
-
-    const deleteVideo = useCallback(
-        (index) => {
-            setVideoData((prevData) => {
-                prevData.splice(index, 1);
-                return [...prevData];
-            });
-        },
-        [videoData],
-    );
-
-    useEffect(
-        () =>
-            setVideoData(() => {
-                return video.filter(function (obj) {
-                    return !!obj.videoUrl && obj.post_id > 0;
-                });
-            }),
-        [video],
-    );
-
-    const createCollection = useCallback(async () => {
-        Loading.show();
-        const [error, res] = await exceptionCapture(createPostCollection);
-        Loading.hide();
-        if (error) {
-            Toast.show({
-                content: errorMessage(error) || '创建失败',
-            });
-            console.log('创建合集error', error);
-        } else if (res) {
+        onCompleted: () => {
+            notificationStore.toggleLoadingVisible();
             Toast.show({
                 content: '创建成功',
             });
             navigation.goBack();
-        }
-
-        function createPostCollection() {
-            return appStore.client.mutate({
-                mutation: GQL.createCollectionMutation,
-                variables: {
-                    name: formData.title,
-                    logo: formData.cover,
-                    description: formData.description,
-                    collectable_ids: videoData.map((v) => v.post_id),
-                },
-                refetchQueries: () => [
-                    {
-                        query: GQL.collectionsQuery,
-                        variables: {
-                            user_id: userStore.me.id,
-                        },
-                    },
-                ],
+        },
+        onError: (error) => {
+            notificationStore.toggleLoadingVisible();
+            Toast.show({
+                content: errorMessage(error, '创建失败'),
             });
-        }
-    }, [formData, videoData]);
+        },
+        refetchQueries: () => [
+            {
+                query: GQL.collectionsQuery,
+                variables: {
+                    user_id: userStore.me.id,
+                },
+            },
+        ],
+    });
 
-    const topComponent = useCallback(() => {
-        return (
-            <View>
-                <Text style={{ fontSize: font(16) }}>创建合集</Text>
-                <View style={{ flexDirection: 'row', marginTop: pixel(10) }}>
-                    <MediaUploader
-                        type="image"
-                        maximum={1}
-                        onResponse={uploadResponse}
-                        maxWidth={Device.WIDTH / 2}
-                        style={styles.mediaItem}
-                    />
-                    <View style={{ flex: 1, overflow: 'hidden' }}>
-                        <View style={styles.titleInput}>
-                            <TextInput
-                                style={{ fontSize: font(12), flex: 1, width: 0, padding: 0 }}
-                                onChangeText={(val) =>
-                                    setFormData((prevFormData) => {
-                                        return { ...prevFormData, title: val };
-                                    })
-                                }
-                                value={formData.title}
-                                placeholder="请输入合集的标题（必填）"
-                                numberOfLines={1}
-                                maxLength={10}
-                            />
-                            <Text style={[styles.wordCount, { marginLeft: pixel(5) }]}>{formData.title.length}/10</Text>
-                        </View>
-                        <View style={styles.descriptionView}>
-                            <TextInput
-                                style={{ fontSize: font(12), flex: 1, padding: 0, height: 0 }}
-                                onChangeText={(val) =>
-                                    setFormData((prevFormData) => {
-                                        return { ...prevFormData, description: val };
-                                    })
-                                }
-                                multiline
-                                value={formData.description}
-                                placeholder="请输入合集的简介"
-                                numberOfLines={4}
-                                maxLength={100}
-                            />
-                            <Text style={styles.wordCount}>{formData.description.length}/100</Text>
-                        </View>
-                    </View>
-                </View>
-            </View>
-        );
-    }, [formData]);
+    const pickCollectionLogo = useCallback(() => {
+        openImagePicker({ mediaType: 'photo', includeBase64: true })
+            .then((image) => {
+                const imagePath = `data:${image.mime};base64,${image.data}`;
+                setFormData((prevFormData) => {
+                    return { ...prevFormData, cover: imagePath };
+                });
+            })
+            .catch((err) => {
+                Toast.show({ content: '选择封面出错' });
+            });
+    }, []);
 
-    const Album = useMemo(() => {
-        if (Array.isArray(videoData) && videoData.length > 0) {
-            return videoData.map((item, i) => {
+    const selectVideoPosts = useCallback((posts: Array) => {
+        setFormData((data) => {
+            data.videoPosts = [...posts, ...data.videoPosts];
+            return { ...data };
+        });
+    }, []);
+
+    const deleteVideoPost = useCallback((index) => {
+        setFormData((data) => {
+            const cloneVideoPosts = [...data.videoPosts];
+            cloneVideoPosts.splice(index, 1);
+            data.videoPosts = cloneVideoPosts;
+            return { ...data };
+        });
+    }, []);
+
+    const VideoPostsList = useMemo(() => {
+        if (formData.videoPosts?.length > 0) {
+            return formData.videoPosts.map((item, i) => {
                 return (
-                    <TouchableOpacity
-                        activeOpacity={1}
-                        style={{
-                            marginRight: (i + 1) % 3 !== 0 ? pixel(Theme.itemSpace) : 0,
-                            marginBottom: pixel(Theme.itemSpace),
-                        }}
-                        key={String(item.id || i)}>
-                        <Video
-                            muted={true}
-                            repeat={true}
-                            style={styles.uploadView}
+                    <TouchableOpacity activeOpacity={1} style={styles.postItem} key={String(item.id || i)}>
+                        <Image
+                            style={{ ...StyleSheet.absoluteFillObject }}
                             resizeMode="cover"
                             source={{
-                                uri: item.videoUrl,
+                                uri: item.cover,
                             }}
                         />
                         <View style={styles.playMark}>
-                            <TouchableOpacity style={styles.close} onPress={() => deleteVideo(i)}>
+                            <TouchableOpacity style={styles.reduceBtn} onPress={() => deleteVideoPost(i)}>
                                 <Iconfont name="guanbi1" size={pixel(12)} color="#fff" />
                             </TouchableOpacity>
                         </View>
@@ -170,158 +93,209 @@ export default function CreateCollection(props) {
                 );
             });
         }
-    }, [video, videoData]);
+    }, [formData.videoPosts]);
 
-    const disabledBtn = !(formData.title && formData.description && formData.cover && videoData.length > 0);
-    const disabledOnPress = useCallback(() => {
-        if (!formData.title) {
-            Toast.show({ content: '请完善标题' });
-        } else if (!formData.description) {
-            Toast.show({ content: '请完善简介' });
-        } else if (!formData.cover) {
-            Toast.show({ content: '请上传封面' });
-        } else if (!videoData.length > 0) {
-            Toast.show({ content: '至少添加一个作品' });
+    const onSubmit = useCallback(() => {
+        if (validator()) {
+            notificationStore.toggleLoadingVisible();
+            createCollectionMutation();
         }
-    }, [formData, videoData]);
+        function validator() {
+            const tips = {
+                title: '请填写合集标题',
+                description: '请补充合集简介',
+                cover: '请上传合集封面',
+                videoPosts: '请上传合集封面',
+            };
+            for (const k of Object.keys(tips)) {
+                if (!formData[k]) {
+                    Toast.show({
+                        content: tips[k],
+                    });
+                    return false;
+                } else if (k === 'videoPosts' && formData.videoPosts.length < 1) {
+                    Toast.show({
+                        content: '至少添加一个作品',
+                    });
+                    return false;
+                }
+            }
+            return true;
+        }
+    }, [formData]);
+
+    const inactiveBtn = !(formData.title && formData.description && formData.cover && formData.videoPosts.length > 0);
+
     return (
-        <PageContainer>
-            <ScrollView showsVerticalScrollIndicator={false}>
-                <View style={styles.bodyView}>
-                    {topComponent()}
-                    <View style={{ marginTop: pixel(30) }}>
-                        <Text style={styles.uploadCount}>合集内作品{videoData.length}</Text>
-                        <View style={styles.albumContainer}>
-                            {Album}
-                            <TouchableOpacity
-                                activeOpacity={0.8}
-                                onPress={() => {
-                                    navigation.navigate('SelectPost', {
-                                        user_id: userStore.me.id,
-                                        uploadVideoResponse,
-                                        videoData: videoData,
-                                    });
-                                }}
-                                style={styles.addPost}>
-                                <Iconfont name="iconfontadd" size={pixel(30)} color={Theme.slateGray1} />
-                            </TouchableOpacity>
-                        </View>
-                        <Row style={{ marginTop: pixel(20) }}>
-                            <TouchableOpacity
-                                activeOpacity={0.8}
-                                style={[styles.btnStyle, styles.leftBtn, disabledBtn && styles.disabledBtn]}
-                                onPress={disabledBtn ? disabledOnPress : createCollection}>
-                                <SafeText style={[styles.btnTextStyle, disabledBtn && { color: 'red' }]}>创建</SafeText>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.btnStyle} onPress={() => navigation.goBack()}>
-                                <SafeText style={styles.btnTextStyle}>取消</SafeText>
-                            </TouchableOpacity>
-                        </Row>
-                    </View>
+        <View style={styles.container}>
+            <NavBarHeader
+                title={'新建合集'}
+                rightComponent={
+                    <TouchableOpacity style={styles.publishButton} onPress={onSubmit}>
+                        <Text style={[styles.publishText, inactiveBtn && { color: '#b2b2b2' }]}>创建</Text>
+                    </TouchableOpacity>
+                }
+            />
+            <ScrollView contentContainerStyle={styles.formView} showsVerticalScrollIndicator={false}>
+                <View style={styles.collectionLogo}>
+                    <TouchableOpacity style={styles.logoArea} onPress={pickCollectionLogo}>
+                        {formData.cover ? (
+                            <Image source={{ uri: formData.cover }} style={styles.logoImage} />
+                        ) : (
+                            <Iconfont name="xiangji" size={pixel(20)} color="#fff" />
+                        )}
+                    </TouchableOpacity>
+                    <Text style={styles.collectionLogoTitle}>为您的合集选择一张封面</Text>
                 </View>
+                <TextInput
+                    style={styles.fromInput}
+                    onChangeText={(val) =>
+                        setFormData((prevFormData) => {
+                            return { ...prevFormData, title: val };
+                        })
+                    }
+                    value={formData.title}
+                    maxLength={20}
+                    numberOfLines={1}
+                    placeholder="请输入合集的标题(不超过20字)"
+                />
+                <View style={styles.collectionDescription}>
+                    <TextInput
+                        style={[styles.fromInput, { height: pixel(120) }]}
+                        onChangeText={(val) =>
+                            setFormData((prevFormData) => {
+                                return { ...prevFormData, description: val };
+                            })
+                        }
+                        value={formData.description}
+                        textAlignVertical="top"
+                        multiline
+                        numberOfLines={4}
+                        maxLength={100}
+                        placeholder="请输入合集的简介"
+                    />
+                    <Text style={styles.wordCount}>{formData.description.length}/100</Text>
+                </View>
+                <Text style={styles.labelTitle}>添加作品</Text>
+                <ScrollView
+                    contentContainerStyle={styles.videoPostContainer}
+                    horizontal={true}
+                    showsHorizontalScrollIndicator={false}>
+                    <TouchableOpacity
+                        style={styles.postItem}
+                        activeOpacity={0.8}
+                        onPress={() => {
+                            navigation.navigate('SelectPost', {
+                                selectVideoPosts,
+                                videoPosts: formData.videoPosts,
+                            });
+                        }}>
+                        <Iconfont name="iconfontadd" size={pixel(30)} color={'#fff'} />
+                    </TouchableOpacity>
+                    {VideoPostsList}
+                </ScrollView>
             </ScrollView>
-        </PageContainer>
+        </View>
     );
 }
 
 const styles = StyleSheet.create({
-    bodyView: {
+    container: {
+        flex: 1,
+    },
+    publishButton: {
+        height: pixel(28),
+        paddingHorizontal: pixel(12),
+        justifyContent: 'center',
+    },
+    publishText: {
+        color: Theme.watermelon,
+        fontSize: font(15),
+    },
+    formView: {
         flexGrow: 1,
         backgroundColor: '#fff',
-        padding: pixel(Theme.itemSpace),
     },
-    mediaItem: {
-        width: Device.WIDTH * 0.3,
-        height: Device.WIDTH * 0.3,
-        marginRight: pixel(10),
-        backgroundColor: Theme.slateGray2,
-        borderRadius: pixel(5),
+    collectionLogo: {
+        paddingVertical: pixel(40),
+        alignItems: 'center',
     },
-    titleInput: {
-        padding: pixel(5),
-        borderWidth: pixel(0.5),
-        borderColor: '#9996',
+    logoArea: {
+        width: Device.WIDTH * 0.2,
+        height: Device.WIDTH * 0.2,
+        borderWidth: StyleSheet.hairlineWidth,
+        borderColor: '#f0f0f0',
         borderRadius: pixel(5),
-        fontSize: font(12),
-        flexDirection: 'row',
+        overflow: 'hidden',
+        backgroundColor: '#ddd',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    logoImage: {
+        ...StyleSheet.absoluteFillObject,
+        width: null,
+        height: null,
+    },
+    collectionLogoTitle: {
+        marginTop: pixel(12),
+        fontSize: font(10),
+        color: '#b2b2b2',
+    },
+    fromInput: {
+        padding: pixel(12),
+        borderTopWidth: StyleSheet.hairlineWidth,
+        borderColor: '#eee',
+        fontSize: font(15),
+        color: '#212121',
+    },
+    collectionDescription: {
+        paddingBottom: pixel(12),
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        borderColor: '#eee',
     },
     wordCount: {
+        paddingHorizontal: pixel(12),
         fontSize: font(10),
-        color: '#666',
+        color: '#b2b2b2',
         alignSelf: 'flex-end',
     },
-    descriptionView: {
-        paddingHorizontal: pixel(5),
-        borderWidth: pixel(0.5),
-        borderColor: '#9996',
-        borderRadius: pixel(5),
-        marginTop: pixel(10),
-        flex: 1,
-        overflow: 'hidden',
-    },
-    btnStyle: {
-        backgroundColor: '#b2b2b2',
-        paddingVertical: pixel(5),
-        paddingHorizontal: pixel(20),
-        borderRadius: pixel(3),
-    },
-    leftBtn: {
-        backgroundColor: 'red',
-        marginRight: pixel(Theme.itemSpace),
-    },
-    disabledBtn: {
+    inactiveBtn: {
         backgroundColor: '#fff',
         borderColor: '#9996',
         borderWidth: pixel(1),
     },
-    btnTextStyle: {
-        fontSize: font(12),
-        color: '#fff',
+    labelTitle: {
+        fontSize: font(15),
+        color: '#212121',
+        paddingHorizontal: pixel(12),
+        marginTop: pixel(12),
+    },
+    videoPostContainer: {
+        padding: pixel(12),
+    },
+    postItem: {
+        width: mediaWidth,
+        height: mediaWidth * 1.3,
+        marginRight: pixel(12),
+        overflow: 'hidden',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#ddd',
+        borderRadius: pixel(5),
     },
     playMark: {
         ...StyleSheet.absoluteFill,
-        alignItems: 'center',
-        backgroundColor: 'rgba(0,0,0,0.2)',
         borderRadius: pixel(5),
-        justifyContent: 'center',
     },
-    uploadView: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: Theme.slateGray2,
-        borderRadius: pixel(5),
-        width: mediaWidth,
-        height: mediaWidth * 1.4,
-        overflow: 'hidden',
-    },
-    addPost: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: Theme.slateGray2,
-        borderRadius: pixel(5),
-        width: mediaWidth,
-        height: mediaWidth * 1.4,
-        overflow: 'hidden',
-    },
-    close: {
-        alignItems: 'center',
-        backgroundColor: 'rgba(32,30,51,0.8)',
-        borderRadius: pixel(18) / 2,
-        height: pixel(18),
-        justifyContent: 'center',
+    reduceBtn: {
         position: 'absolute',
-        right: pixel(3),
-        top: pixel(3),
+        right: pixel(4),
+        top: pixel(4),
         width: pixel(18),
-    },
-    uploadCount: {
-        fontSize: font(12),
-        color: '#666',
-        marginBottom: pixel(10),
-    },
-    albumContainer: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
+        height: pixel(18),
+        borderRadius: pixel(18) / 2,
+        backgroundColor: 'rgba(32,30,51,0.6)',
         alignItems: 'center',
+        justifyContent: 'center',
     },
 });
