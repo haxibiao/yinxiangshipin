@@ -140,7 +140,7 @@ module.exports = {
         'react/jsx-filename-extension': [
             2,
             {
-                extensions: ['.js', '.ts', '.jsx', '.tsx'],
+                extensions: ['.js', '.jsx', '.ts', '.tsx'],
             },
         ],
         'react-hooks/rules-of-hooks': 'error', // Checks rules of Hooks

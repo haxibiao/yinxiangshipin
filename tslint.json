@@ -1,7 +1,6 @@
 {
     "extends": [
-        "tslint-eslint-rules",
-        "tslint-react",
+        "tslint-react",  
         "tslint-config-prettier"
     ],
     "rules": {
