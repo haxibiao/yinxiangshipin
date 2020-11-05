@@ -1,5 +1,5 @@
 # 修改用户资料（涵盖所有）
-mutation updateUserProfile($id: Int!, $data: updateUserInfo!) {
+mutation updateUserProfileMutation($id: Int!, $data: updateUserInfo!) {
     updateUserInfo(id: $id, input: $data) {
         id
         name

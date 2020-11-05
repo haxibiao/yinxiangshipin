@@ -252,7 +252,7 @@ mutation deleteQueryLogMutation($id: Int) {
     }
 }
 
-mutation updateUserProfile($id: Int!, $data: updateUserInfo!) {
+mutation updateUserProfileMutation($id: Int!, $data: updateUserInfo!) {
     updateUserInfo(id: $id, input: $data) {
         id
         name
