@@ -9,7 +9,9 @@ export default ({ item, index, navigation, onLongPress }) => {
             style={styles.collectionItem}
             onPress={() => navigation.navigate('CollectionDetail', { collection: item })}
             onLongPress={onLongPress && onLongPress}>
-            <Image source={{ uri: item.logo }} style={styles.logoImg} />
+            <View style={styles.collectionLogo}>
+                <Image source={{ uri: item.logo }} style={styles.logoImg} />
+            </View>
             <View style={{ flex: 1 }}>
                 <Row>
                     <Image
@@ -21,7 +23,6 @@ export default ({ item, index, navigation, onLongPress }) => {
                     </SafeText>
                 </Row>
                 <SafeText style={styles.collectionInfo} numberOfLines={1}>
-                    {`${count(item.count_views || 0)}播放`}
                     {item.updated_to_episode > 0 && `·更新至第${item.updated_to_episode}集`}
                 </SafeText>
             </View>
@@ -32,23 +33,29 @@ export default ({ item, index, navigation, onLongPress }) => {
 const styles = StyleSheet.create({
     collectionItem: {
         flexDirection: 'row',
-        paddingHorizontal: pixel(Theme.itemSpace),
-        paddingVertical: pixel(Theme.itemSpace),
+        paddingHorizontal: pixel(12),
+        paddingVertical: pixel(12),
         borderBottomWidth: StyleSheet.hairlineWidth,
         borderColor: '#f0f0f0',
         alignItems: 'center',
     },
-    logoImg: {
+    collectionLogo: {
         width: pixel(70),
         height: pixel(70),
-        marginRight: pixel(Theme.itemSpace),
+        marginRight: pixel(10),
         resizeMode: 'cover',
         borderRadius: pixel(3),
-        backgroundColor: '#000',
+        backgroundColor: '#f0f0f0',
+        overflow: 'hidden',
+    },
+    logoImg: {
+        ...StyleSheet.absoluteFillObject,
+        width: null,
+        height: null,
     },
     collectionIcon: {
-        width: pixel(12),
-        height: pixel(12),
+        width: pixel(14),
+        height: pixel(14),
         resizeMode: 'cover',
         marginRight: pixel(3),
     },

@@ -21,7 +21,7 @@ const TagItem = (props) => {
             <View style={styles.tagNameWrap}>
                 <SafeText style={styles.tagName}>#{tagData?.name}</SafeText>
             </View>
-            <Text style={styles.countPlays}>{count(tagData?.count_views)}次播放</Text>
+            <Text style={styles.countPlays}>{count(tagData?.count_views + Number(tagData?.id))}次播放</Text>
         </TouchableOpacity>
     );
 };
