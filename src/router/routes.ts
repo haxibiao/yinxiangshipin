@@ -43,7 +43,7 @@ import UserBlockScreen from '../screens/user/UserBlock';
 // my
 import BrowsingHistoryScreen from '../screens/my/HistoryScreen';
 import EnshrinedScreen from '../screens/my/Enshrined';
-import EditProfileScreen from '../screens/profile/HomeScreen';
+import EditProfileScreen from '../screens/profile/EditProfile';
 
 // comment
 import CommentScreen from '../screens/comment/CommentScreen';
