@@ -7,42 +7,44 @@ import { QueryList } from '@src/content';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import lodashUtil from 'lodash';
 
-function PostItem({ cover, id, selectedPosts, pickPosts }) {
-    const isSelected = useMemo(() => {
-        return lodashUtil.find(selectedPosts, function (p) {
-            return p.id === id;
+function PostItem({ cover, id, pickedPosts, pickPosts }) {
+    const pickedIndex = useMemo(() => {
+        return lodashUtil.findIndex(pickedPosts, function (p) {
+            return p.id == id;
         });
-    }, [selectedPosts]);
-    const [checked, setChecked] = useState(isSelected);
+    }, [pickedPosts]);
+
     const onPress = useCallback(() => {
-        setChecked((c) => {
-            if (c) {
-                pickPosts((posts) => {
-                    const postIndex = lodashUtil.findIndex(posts, function (p) {
-                        return p.id == id;
-                    });
-                    if (postIndex >= 0) {
-                        posts.splice(postIndex, 1);
-                    }
-                    return [...posts];
-                });
-            } else {
-                pickPosts((posts) => {
-                    return [...posts, { id, cover }];
-                });
-            }
-            return !c;
-        });
-    }, []);
-    const trackImage = checked
-        ? require('@app/assets/images/icons/ic_radio_check.png')
-        : require('@app/assets/images/icons/ic_radio_uncheck.png');
+        if (pickedIndex >= 0) {
+            pickPosts((posts) => {
+                posts.splice(pickedIndex, 1);
+                return [...posts];
+            });
+        } else {
+            pickPosts((posts) => {
+                return [...posts, { id, cover }];
+            });
+        }
+    }, [pickedIndex]);
+
+    const trackImage = useMemo(() => {
+        if (pickedIndex >= 0) {
+            return (
+                <View style={[styles.itemRadio, { backgroundColor: '#FE2E55' }]}>
+                    <Text style={styles.pickedIndex}>{pickedIndex + 1}</Text>
+                </View>
+            );
+        } else {
+            return <Image source={require('@app/assets/images/icons/ic_radio_uncheck.png')} style={styles.itemRadio} />;
+        }
+    }, [pickedIndex]);
+
     return (
-        <TouchableWithoutFeedback disabled={isSelected} onPress={onPress}>
+        <TouchableWithoutFeedback onPress={onPress}>
             <View style={styles.itemWrap}>
                 <Image style={styles.videoCover} source={{ uri: cover }} />
-                <Image source={trackImage} style={styles.itemRadio} />
-                {isSelected && <View style={styles.shade} />}
+                {pickedIndex >= 0 && <View style={styles.shade} />}
+                {trackImage}
             </View>
         </TouchableWithoutFeedback>
     );
@@ -51,11 +53,12 @@ function PostItem({ cover, id, selectedPosts, pickPosts }) {
 export default function EditPosts() {
     const route = useRoute();
     const navigation = useNavigation();
-    const [stagingPosts, pickPosts] = useState([]);
     // 待添加的视频作品
     const videoPosts = useMemo(() => route?.params?.videoPosts, []);
     // 添加至创建合集
     const selectVideoPosts = useMemo(() => route?.params?.selectVideoPosts, []);
+    // 选择视频
+    const [pickedPosts, pickPosts] = useState(videoPosts);
 
     const renderItem = useCallback(
         ({ item }) => {
@@ -65,9 +68,9 @@ export default function EditPosts() {
             } else {
                 cover = item?.images?.['0']?.url;
             }
-            return <PostItem cover={cover} id={item.id} selectedPosts={videoPosts} pickPosts={pickPosts} />;
+            return <PostItem cover={cover} id={item.id} pickedPosts={pickedPosts} pickPosts={pickPosts} />;
         },
-        [videoPosts],
+        [videoPosts, pickedPosts],
     );
 
     return (
@@ -75,11 +78,11 @@ export default function EditPosts() {
             <NavBarHeader
                 title={'添加视频'}
                 rightComponent={
-                    stagingPosts.length > 0 && (
+                    pickedPosts.length > 0 && (
                         <TouchableOpacity
                             style={styles.publishButton}
                             onPress={() => {
-                                selectVideoPosts(stagingPosts);
+                                selectVideoPosts(pickedPosts);
                                 navigation.goBack();
                             }}>
                             <Text style={styles.publishText}>选好了</Text>
@@ -100,7 +103,6 @@ export default function EditPosts() {
                         user_id: userStore.me.id,
                         count: 12,
                     },
-                    fetchPolicy: 'network-only',
                 }}
                 renderItem={renderItem}
             />
@@ -176,10 +178,12 @@ const styles = StyleSheet.create({
         height: pixel(18),
         borderRadius: pixel(9),
         backgroundColor: '#fff',
-        // borderWidth: pixel(1),
-        // borderRadius: pixel(13),
-        // justifyContent:'center',
-        // alignItems:'center'
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    pickedIndex: {
+        fontSize: pixel(10),
+        color: '#fff',
     },
     shade: {
         ...StyleSheet.absoluteFillObject,

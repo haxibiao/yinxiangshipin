@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useMemo, useEffect } from 'react';
+import React, { useCallback, useState, useMemo, useRef } from 'react';
 import { StyleSheet, ScrollView, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
 import { NavBarHeader, MediaUploader, Iconfont, SafeText } from '@src/components';
 import { appStore, userStore, notificationStore } from '@src/store';
@@ -7,11 +7,13 @@ import { GQL, useMutation, errorMessage } from '@src/apollo';
 import { openImagePicker } from '@src/native';
 import Video from 'react-native-video';
 
-const mediaWidth = Device.WIDTH * 0.3;
+const mediaWidth = Device.WIDTH * 0.28;
 
 export default function CreateCollection(props) {
     const navigation = useNavigation();
     const [formData, setFormData] = useState({ cover: '', title: '', description: '', videoPosts: [] });
+    const scrollRef = useRef();
+    const updateOffset = useRef();
 
     const [createCollectionMutation] = useMutation(GQL.createCollectionMutation, {
         variables: {
@@ -51,14 +53,13 @@ export default function CreateCollection(props) {
                     return { ...prevFormData, cover: imagePath };
                 });
             })
-            .catch((err) => {
-                Toast.show({ content: '选择封面出错' });
-            });
+            .catch((err) => {});
     }, []);
 
-    const selectVideoPosts = useCallback((posts: Array) => {
+    const selectVideoPosts = useCallback((posts) => {
         setFormData((data) => {
-            data.videoPosts = [...posts, ...data.videoPosts];
+            updateOffset.current = true;
+            data.videoPosts = posts;
             return { ...data };
         });
     }, []);
@@ -70,6 +71,15 @@ export default function CreateCollection(props) {
             data.videoPosts = cloneVideoPosts;
             return { ...data };
         });
+    }, []);
+
+    const onContentSizeChange = useCallback((contentWidth, contentHeight) => {
+        if (updateOffset.current) {
+            updateOffset.current = false;
+            scrollRef.current?.scrollToEnd({
+                animated: true,
+            });
+        }
     }, []);
 
     const VideoPostsList = useMemo(() => {
@@ -102,10 +112,10 @@ export default function CreateCollection(props) {
         }
         function validator() {
             const tips = {
-                title: '请填写合集标题',
-                description: '请补充合集简介',
-                cover: '请上传合集封面',
-                videoPosts: '请上传合集封面',
+                title: '给合集取个名字哦',
+                description: '简单介绍一下合集吧',
+                cover: '请上传一张图片作为合集的封面',
+                videoPosts: '请往合集添加至少一个作品',
             };
             for (const k of Object.keys(tips)) {
                 if (!formData[k]) {
@@ -115,7 +125,7 @@ export default function CreateCollection(props) {
                     return false;
                 } else if (k === 'videoPosts' && formData.videoPosts.length < 1) {
                     Toast.show({
-                        content: '至少添加一个作品',
+                        content: tips[k],
                     });
                     return false;
                 }
@@ -178,9 +188,12 @@ export default function CreateCollection(props) {
                 </View>
                 <Text style={styles.labelTitle}>添加作品</Text>
                 <ScrollView
+                    ref={scrollRef}
+                    onContentSizeChange={onContentSizeChange}
                     contentContainerStyle={styles.videoPostContainer}
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}>
+                    {VideoPostsList}
                     <TouchableOpacity
                         style={styles.postItem}
                         activeOpacity={0.8}
@@ -192,7 +205,6 @@ export default function CreateCollection(props) {
                         }}>
                         <Iconfont name="iconfontadd" size={pixel(30)} color={'#fff'} />
                     </TouchableOpacity>
-                    {VideoPostsList}
                 </ScrollView>
             </ScrollView>
         </View>
