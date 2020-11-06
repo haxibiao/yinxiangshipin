@@ -10,7 +10,7 @@ const imageSource = {
     unlike: require('@app/assets/images/ic_like.png'),
 };
 
-export default observer(({ media, store, client, removeMedia }) => {
+export default observer(({ media, store }) => {
     const navigation = useNavigation();
     const isMe = useMemo(() => userStore?.me?.id === media?.user?.id, []);
     const showComment = useCallback(() => {

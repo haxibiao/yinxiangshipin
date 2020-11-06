@@ -96,7 +96,7 @@ export const ShareModal = observer(() => {
 
     const shareQRCard = useCallback(async () => {
         try {
-            const image = await cardRef.current.onCapture(true);
+            const image = await cardRef.current.onCapture();
             setImageRef(image);
         } catch (error) {
             hideModal();
@@ -180,7 +180,7 @@ export const ShareModal = observer(() => {
                                 <DebouncedPressable
                                     style={styles.optionItem}
                                     onPress={() => {
-                                        viewShotUtil.saveImage(imageRef, true);
+                                        viewShotUtil.saveImage(imageRef, noticeData?.id);
                                         hideModal();
                                     }}>
                                     <View style={{ margin: pixel(3) }}>
@@ -197,9 +197,10 @@ export const ShareModal = observer(() => {
                                     <DebouncedPressable
                                         key={index}
                                         style={styles.optionItem}
-                                        onPress={() => {
+                                        onPress={async () => {
                                             if (imageRef) {
-                                                item.shareImage(imageRef);
+                                                const filePath = await viewShotUtil.saveImage(imageRef, noticeData?.id);
+                                                item.shareImage(filePath);
                                             } else {
                                                 item.shareContent(noticeData, sharedTargetType);
                                             }

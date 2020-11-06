@@ -82,23 +82,10 @@ class ContentShareCard extends Component {
         );
     }
 
-    onCapture = async (isShow) => {
-        let image = await viewShotUtil.capture(this.shareCard);
-        // let result = await viewShotUtil.saveImage(image, isShow);
-        console.log('Api.viewShotUtil.saveImage(image);', image);
-        // this.props.navigation.goBack();
+    onCapture = async () => {
+        const image = await viewShotUtil.screenshots(this.shareCard);
         return image;
     };
-}
-
-function correctRate(correct, count) {
-    if (typeof correct === 'number' && typeof count === 'number') {
-        let result = (correct / count) * 100;
-        if (result) {
-            return result.toFixed(1) + '%';
-        }
-        return '0';
-    }
 }
 
 const styles = StyleSheet.create({

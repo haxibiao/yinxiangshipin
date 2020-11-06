@@ -147,17 +147,35 @@ export default observer(
                 }
                 return false;
             });
-            DeviceEventEmitter.addListener('showCommentModal', () => {
+            const showCommentListener = DeviceEventEmitter.addListener('showCommentModal', () => {
                 commentRef.current?.slideUp();
             });
-            DeviceEventEmitter.addListener('hideCommentModal', () => {
+            const hideCommentListener = DeviceEventEmitter.addListener('hideCommentModal', () => {
                 commentRef.current?.slideDown();
             });
 
             return () => {
                 hardwareBackPress.remove();
-                DeviceEventEmitter.removeListener('showCommentModal');
-                DeviceEventEmitter.removeListener('hideCommentModal');
+                showCommentListener.remove();
+                hideCommentListener.remove();
+            };
+        }, []);
+
+        // 监听删除/不感兴趣，remove item
+        useEffect(() => {
+            const deleteListener = DeviceEventEmitter.addListener('DeletePost', (targetId) => {
+                if (targetId === store.currentItem?.id) {
+                    store.removeItem(store.currentItem);
+                }
+            });
+            const dislikeListener = DeviceEventEmitter.addListener('DislikePost', (targetId) => {
+                if (targetId === store.currentItem?.id) {
+                    store.removeItem(store.currentItem);
+                }
+            });
+            return () => {
+                deleteListener.remove();
+                dislikeListener.remove();
             };
         }, []);
 

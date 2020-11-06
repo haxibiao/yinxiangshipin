@@ -1,15 +1,11 @@
 import React, { useRef, useMemo, useState, useCallback } from 'react';
 import { StyleSheet, Text, View, Image, TouchableWithoutFeedback, Pressable, DeviceEventEmitter } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { useApolloClient, ApolloProvider } from '@src/apollo';
 import LinearGradient from 'react-native-linear-gradient';
 import { SafeText, Iconfont } from '@src/components';
-import { observable, observer, userStore, appStore } from '@src/store';
-import { Overlay } from 'teaset';
-import { Commodity } from '../../widget';
+import { observable, observer, userStore, appStore, notificationStore } from '@src/store';
 import Player from './Player';
 import SideBar from './SideBar';
-import VideoOperation from './VideoOperation';
 import AnswerQuestion from './AnswerQuestion';
 
 interface Props {
@@ -45,7 +41,6 @@ export default observer((props: Props) => {
         return false;
     }, [index, store.viewableItemIndex, viewable]);
 
-    const client = useApolloClient();
     const route = useRoute();
     const navigation = useNavigation();
     // 获取播放器实例，控制视频播放状态
@@ -55,36 +50,10 @@ export default observer((props: Props) => {
             playerRef.current.togglePause();
         }
     }, []);
-    // 删除/不感兴趣 操作回调
-    const removeMedia = useCallback(() => {
-        store.removeItem(media);
-    }, [media]);
     // 长按操作
-    const overlayRef = useRef();
-    const operation = useMemo(() => {
-        return (
-            <ApolloProvider client={client}>
-                <VideoOperation
-                    client={client}
-                    navigation={navigation}
-                    target={media}
-                    options={isMe ? ['下载'] : ['下载', '不感兴趣', '举报']}
-                    closeOverlay={() => overlayRef.current?.close()}
-                    onRemove={removeMedia}
-                />
-            </ApolloProvider>
-        );
-    }, [client, media, removeMedia]);
     const showOperation = useCallback(() => {
-        const MoreOperationOverlay = (
-            <Overlay.PopView
-                style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.6)' }}
-                ref={(ref) => (overlayRef.current = ref)}>
-                {operation}
-            </Overlay.PopView>
-        );
-        Overlay.show(MoreOperationOverlay);
-    }, [operation]);
+        notificationStore.sendShareNotice({ target: media, type: 'post' });
+    }, []);
 
     const resizeMode = useMemo(() => {
         const videoHeight = media?.video?.height;
@@ -190,13 +159,6 @@ export default observer((props: Props) => {
                         }}>
                         <View style={styles.postInfo}>
                             <View style={styles.videoInfo}>
-                                {media?.product && (
-                                    <Commodity
-                                        style={styles.goodsItem}
-                                        product={media?.product}
-                                        navigation={navigation}
-                                    />
-                                )}
                                 <View style={styles.userInfo}>
                                     <SafeText style={styles.userName}>@{media?.user?.name}</SafeText>
                                     <SafeText shadowText={true} style={styles.createdAt}>
@@ -210,7 +172,7 @@ export default observer((props: Props) => {
                                     </SafeText>
                                 </View>
                             </View>
-                            <SideBar media={media} store={store} client={client} removeMedia={removeMedia} />
+                            <SideBar media={media} store={store} />
                         </View>
                         {Collection}
                     </View>

@@ -81,7 +81,7 @@ export default observer(
                 }
             });
             return () => {
-                DeviceEventEmitter.removeListener('DeletePost');
+                removedListener.remove();
             };
         }, [post]);
 
