@@ -117,6 +117,7 @@ export const ParseShareLinkModal = observer(() => {
         <Modal
             animationType="fade"
             visible={visible}
+            animated={true}
             transparent={true}
             statusBarTranslucent={true}
             hardwareAccelerated={true}>

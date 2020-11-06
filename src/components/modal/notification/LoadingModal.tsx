@@ -12,6 +12,7 @@ export const LoadingModal = observer(() => {
         <Modal
             animationType="fade"
             visible={notificationStore.loadingVisible}
+            animated={true}
             transparent={true}
             statusBarTranslucent={true}
             hardwareAccelerated={true}>
