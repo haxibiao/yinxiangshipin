@@ -23,6 +23,7 @@ export default ({ item, index, navigation, onLongPress }) => {
                     </SafeText>
                 </Row>
                 <SafeText style={styles.collectionInfo} numberOfLines={1}>
+                    {`${count(Number(item?.count_views) + Number(item?.id))}次播放`}
                     {item.updated_to_episode > 0 && `·更新至第${item.updated_to_episode}集`}
                 </SafeText>
             </View>

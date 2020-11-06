@@ -105,6 +105,8 @@ const styles = StyleSheet.create({
     container: {
         width: contentWidth,
         height: contentHeight,
+        borderRadius: pixel(2),
+        overflow: 'hidden',
         backgroundColor: '#fff',
     },
     contentCover: {
@@ -127,12 +129,12 @@ const styles = StyleSheet.create({
     bottomInfo: {
         alignSelf: 'stretch',
         backgroundColor: '#f6f6f6',
-        padding: pixel(12),
+        padding: pixel(10),
         justifyContent: 'center',
         alignItems: 'center',
     },
     bottomText: {
-        color: '#b2b2b2',
+        color: '#a1a1a1',
         fontSize: pixel(13),
         lineHeight: pixel(18),
     },

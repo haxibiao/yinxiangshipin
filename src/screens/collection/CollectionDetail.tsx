@@ -9,9 +9,8 @@ import {
     TouchableWithoutFeedback,
     Animated,
 } from 'react-native';
-import { observer, appStore, userStore } from '@src/store';
+import { observer, appStore, userStore, notificationStore } from '@src/store';
 import { NavBarHeader, SafeText, Iconfont, Row, Loading } from '@src/components';
-import CollectionShareOverlay from '@src/components/share/CollectionShareOverlay';
 import { syncGetter, count, exceptionCapture } from '@src/common';
 import { GQL, useQuery, useFollowMutation, useMutation } from '@src/apollo';
 import { ContentStatus, QueryList } from '@src/content';
@@ -218,30 +217,10 @@ export default observer((props: any) => {
     }, []);
 
     // 分享合集
-    const shareLink = useRef();
-    const fetchShareLink = useCallback(async () => {
-        const [error, result] = await exceptionCapture(() =>
-            appStore.client.query({
-                query: GQL.shareCollectionMutation,
-                variables: {
-                    collection_id: collection.id,
-                },
-            }),
-        );
-        if (error) {
-            Toast.show({ content: error?.message });
-            return null;
-        } else if (syncGetter('data.shareCollection', result)) {
-            shareLink.current = syncGetter('data.shareCollection', result);
-            return shareLink.current;
-        }
-    }, []);
     const shareOnPress = __.debounce(async () => {
-        const collectionLink = await fetchShareLink();
-        // 解析合集网址
-        const image = await [...collectionLink.match(/#http.*?#/g)][0].replace(/#/g, '');
-        CollectionShareOverlay.show(collectionLink, image, collection);
-    }, 500);
+        const description = `${collection.name}：${collection.description}`;
+        notificationStore.sendShareNotice({ target: { ...collection, description }, type: 'collection' });
+    }, 100);
 
     return (
         <View style={styles.container}>

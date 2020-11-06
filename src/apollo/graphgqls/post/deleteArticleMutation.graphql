@@ -1,6 +1,6 @@
 # 删除
 mutation deleteArticleMutation($id: Int!) {
-    deleteArticleMutation(id: $id) {
+    deleteArticle(id: $id) {
         id
     }
 }

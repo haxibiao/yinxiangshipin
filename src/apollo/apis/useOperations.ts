@@ -56,13 +56,13 @@ export function useOperations(post) {
                 }),
             );
             if (res) {
-                DeviceEventEmitter.emit(`'DeletePost`, target?.id);
+                DeviceEventEmitter.emit('DeletePost', target?.id);
                 Toast.show({
                     content: '删除成功',
                 });
             } else {
                 Toast.show({
-                    content: errorMessage(error, '删除失败'),
+                    content: errorMessage(err, '删除失败'),
                 });
             }
         },
@@ -80,7 +80,7 @@ export function useOperations(post) {
                 }),
             );
             if (res) {
-                DeviceEventEmitter.emit(`'DislikePost`, target?.id);
+                DeviceEventEmitter.emit('DislikePost', target?.id);
                 Toast.show({ content: '操作成功，将减少此类型内容的推荐！' });
             } else {
                 Toast.show({

@@ -1,10 +1,8 @@
 import React, { useRef, useMemo, useCallback } from 'react';
 import { StyleSheet, View, Image, Animated, TouchableOpacity, DeviceEventEmitter } from 'react-native';
-import { Avatar, SafeText, MoreOperation } from '@src/components';
+import { Avatar, SafeText } from '@src/components';
 import { useNavigation } from '@react-navigation/native';
-import { ApolloProvider } from 'react-apollo';
-import { observer, userStore } from '@src/store';
-import { Overlay } from 'teaset';
+import { observer, userStore, notificationStore } from '@src/store';
 import { AnimationLike } from '../../widget';
 
 const imageSource = {
@@ -15,44 +13,9 @@ const imageSource = {
 export default observer(({ media, store, client, removeMedia }) => {
     const navigation = useNavigation();
     const isMe = useMemo(() => userStore?.me?.id === media?.user?.id, []);
-
     const showComment = useCallback(() => {
         DeviceEventEmitter.emit('showCommentModal');
     }, []);
-
-    const overlayRef = useRef();
-
-    const moreOperation = useMemo(() => {
-        return (
-            <ApolloProvider client={client}>
-                <MoreOperation
-                    target={media}
-                    options={
-                        isMe
-                            ? ['下载', '分享长图', '分享合集', '复制链接']
-                            : ['举报', '不感兴趣', '下载', '分享长图', '分享合集', '复制链接']
-                    }
-                    closeOverlay={() => overlayRef.current?.close()}
-                    onRemove={removeMedia}
-                    client={client}
-                    navigation={navigation}
-                />
-            </ApolloProvider>
-        );
-    }, [client, media, removeMedia]);
-
-    const showMoreOperation = useCallback(() => {
-        const MoreOperationOverlay = (
-            <Overlay.PullView
-                style={{ flexDirection: 'column', justifyContent: 'flex-end' }}
-                containerStyle={{ backgroundColor: 'transparent' }}
-                animated={true}
-                ref={(ref: any) => (overlayRef.current = ref)}>
-                {moreOperation}
-            </Overlay.PullView>
-        );
-        Overlay.show(MoreOperationOverlay);
-    }, [moreOperation]);
 
     return (
         <View style={styles.sideBar}>
@@ -83,7 +46,7 @@ export default observer(({ media, store, client, removeMedia }) => {
                 </TouchableOpacity>
             </View>
             <View style={styles.itemWrap}>
-                <TouchableOpacity onPress={showMoreOperation}>
+                <TouchableOpacity onPress={() => notificationStore.sendShareNotice({ target: media, type: 'post' })}>
                     <Image source={require('@app/assets/images/more_item.png')} style={styles.imageSize} />
                 </TouchableOpacity>
             </View>

@@ -17,8 +17,11 @@ type unreadNotifyTypes = 'unread_comments' | 'unread_likes' | 'unread_follows' |
 
 // 更多操作
 interface ShareData {
-    id: number;
-    [k: string]: any;
+    target: {
+        id: number;
+        [k: string]: any;
+    };
+    type: 'post' | 'collection';
 }
 
 // 举报

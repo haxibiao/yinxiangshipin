@@ -2,8 +2,7 @@ import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import { View, StyleSheet, Image, Text, TouchableOpacity, Animated, ScrollView } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Avatar, Iconfont, SafeText, PlaceholderImage, GridImage, MoreOperation } from '@src/components';
-import { observer, userStore } from '@src/store';
-import { GQL, useApolloClient, ApolloProvider } from '@src/apollo';
+import { observer, userStore, notificationStore } from '@src/store';
 import { AnimationLike, Commodity } from '../../widget';
 import { Overlay } from 'teaset';
 
@@ -18,17 +17,14 @@ const HeartIcon = {
 
 interface Props {
     post: any;
-    fadeOut?: () => void;
 }
 
 export default observer(
     (props: Props): JSX.Element => {
-        const { post, fadeOut } = props;
+        const { post } = props;
         const { user } = post;
-        const overlayKey = useRef();
         const navigation = useNavigation();
         const route = useRoute();
-        const client = useApolloClient();
 
         const goToScreen = useCallback(() => {
             if (route.params?.user?.id === post?.user?.id) {
@@ -88,42 +84,6 @@ export default observer(
             }
         }, [post]);
 
-        const hideMoreOperation = useCallback(() => {
-            Overlay.hide(overlayKey.current);
-        }, []);
-
-        const userOperation = useMemo(() => {
-            const isMe = userStore?.me?.id === post?.user?.id;
-            return (
-                <ApolloProvider client={client}>
-                    <MoreOperation
-                        target={post}
-                        options={
-                            isMe
-                                ? ['删除', '下载', '分享长图', '分享合集', '复制链接']
-                                : ['举报', '不感兴趣', '下载', '分享长图', '分享合集', '复制链接']
-                        }
-                        closeOverlay={hideMoreOperation}
-                        onRemove={fadeOut}
-                        client={client}
-                        navigation={navigation}
-                    />
-                </ApolloProvider>
-            );
-        }, [post, fadeOut, client]);
-
-        const showMoreOperation = useCallback(() => {
-            const Operation = (
-                <Overlay.PullView
-                    style={{ flexDirection: 'column', justifyContent: 'flex-end' }}
-                    containerStyle={{ backgroundColor: 'transparent' }}
-                    animated={true}>
-                    {userOperation}
-                </Overlay.PullView>
-            );
-            overlayKey.current = Overlay.show(Operation);
-        }, [userOperation]);
-
         return (
             <>
                 <View style={styles.header}>
@@ -167,7 +127,9 @@ export default observer(
                             <SafeText style={styles.countText}>{post?.count_comments || 0}</SafeText>
                         </TouchableOpacity>
                     </View>
-                    <TouchableOpacity activeOpacity={0.6} onPress={showMoreOperation}>
+                    <TouchableOpacity
+                        activeOpacity={0.6}
+                        onPress={() => notificationStore.sendShareNotice({ target: post, type: 'post' })}>
                         <Image
                             style={{ width: pixel(22), height: pixel(22) }}
                             source={require('@app/assets/images/icons/ic_share_normal.png')}

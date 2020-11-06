@@ -5,8 +5,8 @@ import { useOperations } from '@src/apollo';
 import { ShareUtil } from '@src/common';
 import Iconfont from '../../Iconfont';
 import { DebouncedPressable } from '../../Basic/DebouncedPressable';
-import ContentShareCardOverlay from '../../share/ContentShareCardOverlay';
-import CollectionShareOverlay from '../../share/CollectionShareOverlay';
+import ContentShareCard from '../../share/ContentShareCard';
+import viewShotUtil from '../../share/viewShotUtil';
 
 const MODAL_WIDTH = Device.WIDTH * 0.84 > pixel(320) ? pixel(320) : Device.WIDTH * 0.84;
 const BUTTON_WIDTH = MODAL_WIDTH * 0.66;
@@ -16,27 +16,32 @@ const sharePlatForm = [
     {
         name: '微信好友',
         image: require('@app/assets/images/share/share_wx.png'),
-        callback: (o) => ShareUtil.shareToWeChat(o),
+        shareContent: ShareUtil.shareToWeChat,
+        shareImage: ShareUtil.shareImageToWeChat,
     },
     {
         name: '朋友圈',
         image: require('@app/assets/images/share/share_pyq.png'),
-        callback: (o) => ShareUtil.shareToTimeline(o),
+        shareContent: ShareUtil.shareToTimeline,
+        shareImage: ShareUtil.shareImageToTimeline,
     },
     {
         name: 'QQ好友',
         image: require('@app/assets/images/share/share_qq.png'),
-        callback: (o) => ShareUtil.shareToQQ(o),
+        shareContent: ShareUtil.shareToQQ,
+        shareImage: ShareUtil.shareImageToQQ,
     },
     {
         name: '微博',
         image: require('@app/assets/images/share/share_wb.png'),
-        callback: (o) => ShareUtil.shareToSina(o),
+        shareContent: ShareUtil.shareToSina,
+        shareImage: ShareUtil.shareImageToSina,
     },
     {
         name: 'QQ空间',
         image: require('@app/assets/images/share/share_qqz.png'),
-        callback: (o) => ShareUtil.shareToQQZone(o),
+        shareContent: ShareUtil.shareToQQZone,
+        shareImage: ShareUtil.shareImageToQQZone,
     },
 ];
 
@@ -54,13 +59,17 @@ const operationIcon = {
 export const ShareModal = observer(() => {
     const [visible, setVisible] = useState(false);
     const [noticeData, setNoticeData] = useState({});
+    const [sharedTargetType, setSharedTargetType] = useState();
+    const [imageRef, setImageRef] = useState();
     const shown = useRef(false);
+    const cardRef = useRef();
 
     const showModal = useCallback((data) => {
         if (!shown.current) {
             shown.current = true;
             setVisible(true);
-            setNoticeData(data);
+            setNoticeData(data?.target);
+            setSharedTargetType(data?.type);
         }
     }, []);
 
@@ -69,6 +78,8 @@ export const ShareModal = observer(() => {
             notificationStore.reduceShareNotice();
             setVisible(false);
             setNoticeData({});
+            setSharedTargetType('');
+            setImageRef();
             shown.current = false;
         }
     }, []);
@@ -84,16 +95,23 @@ export const ShareModal = observer(() => {
     );
 
     const shareQRCard = useCallback(async () => {
-        ContentShareCardOverlay.show(noticeData);
-    }, [noticeData]);
+        try {
+            const image = await cardRef.current.onCapture(true);
+            setImageRef(image);
+        } catch (error) {
+            hideModal();
+            Toast.show({ content: '保存长图失败' });
+        }
+    }, []);
 
     const shareCollection = useCallback(async () => {
         const collection = noticeData?.collections?.[0];
+        hideModal();
         if (collection) {
-            const uri = Config.ServerRoot + `/share/collection/${collection?.id}?user_id=${userStore.me.id}`;
-            CollectionShareOverlay.show(uri, collection?.logo, collection);
+            const description = `${collection.name}：${collection.description}`;
+            notificationStore.sendShareNotice({ target: { ...collection, description }, type: 'collection' });
         } else {
-            Toast.show({ content: '分享出错' });
+            Toast.show({ content: '分享合集失败' });
         }
     }, [noticeData]);
 
@@ -138,23 +156,54 @@ export const ShareModal = observer(() => {
             hardwareAccelerated={true}>
             <View style={styles.modalView}>
                 <DebouncedPressable style={{ flex: 1 }} onPress={hideModal} />
+                {sharedTargetType === 'post' && (
+                    <View
+                        style={{
+                            position: 'absolute',
+                            left: 0,
+                            right: 0,
+                            bottom: Device.WIDTH * 0.6,
+                            alignItems: 'center',
+                            zIndex: imageRef ? 1 : -10,
+                            opacity: imageRef ? 1 : 0,
+                        }}>
+                        <ContentShareCard post={noticeData} ref={cardRef} />
+                    </View>
+                )}
                 <View style={styles.modalContainer}>
-                    {/* <View style={styles.header}>
-                            <Text style={styles.headerText}>取消</Text>
-                        </View> */}
                     <View style={styles.modalBody}>
                         <ScrollView
                             contentContainerStyle={styles.rowContainer}
                             horizontal={true}
                             showsHorizontalScrollIndicator={false}>
+                            {imageRef && (
+                                <DebouncedPressable
+                                    style={styles.optionItem}
+                                    onPress={() => {
+                                        viewShotUtil.saveImage(imageRef, true);
+                                        hideModal();
+                                    }}>
+                                    <View style={{ margin: pixel(3) }}>
+                                        <Image
+                                            style={styles.platformIcon}
+                                            source={require('@app/assets/images/icons/ic_download.png')}
+                                        />
+                                    </View>
+                                    <Text style={styles.optionName}>保存到本地</Text>
+                                </DebouncedPressable>
+                            )}
                             {sharePlatForm.map((item: any, index: number) => {
                                 return (
                                     <DebouncedPressable
                                         key={index}
                                         style={styles.optionItem}
                                         onPress={() => {
+                                            if (imageRef) {
+                                                item.shareImage(imageRef);
+                                            } else {
+                                                item.shareContent(noticeData, sharedTargetType);
+                                            }
                                             hideModal();
-                                            item.callback(noticeData);
                                         }}>
                                         <View style={{ margin: pixel(3) }}>
                                             <Image style={styles.platformIcon} source={item.image} />
@@ -164,25 +213,29 @@ export const ShareModal = observer(() => {
                                 );
                             })}
                         </ScrollView>
-                        <ScrollView
-                            contentContainerStyle={styles.rowContainer}
-                            horizontal={true}
-                            showsHorizontalScrollIndicator={false}>
-                            {operationList.map((item: any, index: number) => {
-                                return (
-                                    <DebouncedPressable
-                                        key={index}
-                                        style={styles.optionItem}
-                                        onPress={() => {
-                                            hideModal();
-                                            item.handler(noticeData);
-                                        }}>
-                                        <Image style={styles.optionIcon} source={operationIcon[item.name]} />
-                                        <Text style={styles.optionName}>{item.name}</Text>
-                                    </DebouncedPressable>
-                                );
-                            })}
-                        </ScrollView>
+                        {sharedTargetType === 'post' && !imageRef && (
+                            <ScrollView
+                                contentContainerStyle={styles.rowContainer}
+                                horizontal={true}
+                                showsHorizontalScrollIndicator={false}>
+                                {operationList.map((item: any, index: number) => {
+                                    return (
+                                        <DebouncedPressable
+                                            key={index}
+                                            style={styles.optionItem}
+                                            onPress={() => {
+                                                if (item.name !== '分享长图') {
+                                                    hideModal();
+                                                }
+                                                item.handler(noticeData);
+                                            }}>
+                                            <Image style={styles.optionIcon} source={operationIcon[item.name]} />
+                                            <Text style={styles.optionName}>{item.name}</Text>
+                                        </DebouncedPressable>
+                                    );
+                                })}
+                            </ScrollView>
+                        )}
                     </View>
                     <DebouncedPressable style={styles.footer} onPress={hideModal}>
                         <Text style={styles.footerText}>取消</Text>
@@ -197,7 +250,7 @@ const styles = StyleSheet.create({
     modalView: {
         flex: 1,
         justifyContent: 'flex-end',
-        backgroundColor: 'rgba(0,0,0,3)',
+        backgroundColor: 'rgba(0,0,0,0.3)',
     },
     modalContainer: {
         overflow: 'hidden',

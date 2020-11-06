@@ -1,5 +1,5 @@
-import React, { useCallback, useState, useRef, useMemo, ReactChild } from 'react';
-import { StyleSheet, TouchableWithoutFeedback, ViewStyle, Animated } from 'react-native';
+import React, { useCallback, useState, useRef, useMemo, useEffect, ReactChild } from 'react';
+import { StyleSheet, TouchableWithoutFeedback, ViewStyle, Animated, DeviceEventEmitter } from 'react-native';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { useNavigation } from '@react-navigation/native';
@@ -69,17 +69,21 @@ export default observer(
             if (React.isValidElement(props.children)) {
                 return React.cloneElement(props.children, { fadeOut, post });
             } else {
-                return <PostContent post={post} fadeOut={fadeOut} />;
+                return <PostContent post={post} />;
             }
         }, [props.children, post, fadeOut]);
 
-        // 执行动画，隐藏内容(2)
-        // 数据监听：删除成功修改 post.visible = true。
-        // useEffect(() => {
-        //     if (post.visible) {
-        //         fadeOut();
-        //     }
-        // }, [post.visible]);
+        // 监听删除事件，执行隐藏动画
+        useEffect(() => {
+            const removedListener = DeviceEventEmitter.addListener('DeletePost', (targetId) => {
+                if (targetId === post?.id) {
+                    fadeOut();
+                }
+            });
+            return () => {
+                DeviceEventEmitter.removeListener('DeletePost');
+            };
+        }, [post]);
 
         if (!visible || !post?.id) {
             return null;
