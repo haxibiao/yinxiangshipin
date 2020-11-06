@@ -52,15 +52,15 @@ export default React.forwardRef(function ContentList(
         }
     }, [nextPage, hasMore]);
 
-    useFocusEffect(
-        useCallback(() => {
-            if (focusRefresh) {
-                if (refetch instanceof Function) {
-                    refetch();
-                }
-            }
-        }, [focusRefresh, refetch]),
-    );
+    // useFocusEffect(
+    //     useCallback(() => {
+    //         if (focusRefresh) {
+    //             if (refetch instanceof Function) {
+    //                 refetch();
+    //             }
+    //         }
+    //     }, [focusRefresh, refetch]),
+    // );
 
     const renderItemComponent = useCallback(
         ({ item, index }) => {
