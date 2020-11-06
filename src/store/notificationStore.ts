@@ -12,13 +12,31 @@ interface NotificationData {
     buttonHandler?: () => void;
 }
 
+// 系统通知
 type unreadNotifyTypes = 'unread_comments' | 'unread_likes' | 'unread_follows' | 'unread_others' | 'unread_chat';
+
+// 更多操作
+interface ShareData {
+    id: number;
+    [k: string]: any;
+}
+
+// 举报
+interface ReportData {
+    target: {
+        id: number;
+        [k: string]: any;
+    };
+    type: 'comments' | 'user' | 'post';
+}
 
 class NotificationStore {
     // notice
     @observable withdrawalNotice: NotificationData[] = [];
     @observable rewardNotice: NotificationData[] = [];
     @observable remindNotice: NotificationData[] = [];
+    @observable shareNotice: ShareData[] = [];
+    @observable reportNotice: ReportData[] = [];
     @observable unreadNotify: unreadNotifyTypes = {} as unreadNotifyTypes;
     @observable unreadMessages: number = 0;
     @observable loadingVisible: boolean = false;
@@ -80,6 +98,30 @@ class NotificationStore {
     reduceRemindNotice() {
         if (this.remindNotice.length > 0) {
             this.remindNotice = [...this.remindNotice.slice(1)];
+        }
+    }
+
+    @action.bound
+    sendShareNotice(Notice: ShareData) {
+        this.shareNotice = [...this.shareNotice, Notice];
+    }
+
+    @action.bound
+    reduceShareNotice() {
+        if (this.shareNotice.length > 0) {
+            this.shareNotice = [...this.shareNotice.slice(1)];
+        }
+    }
+
+    @action.bound
+    sendReportNotice(Notice: ReportData) {
+        this.reportNotice = [...this.reportNotice, Notice];
+    }
+
+    @action.bound
+    reduceReportNotice() {
+        if (this.reportNotice.length > 0) {
+            this.reportNotice = [...this.reportNotice.slice(1)];
         }
     }
 }

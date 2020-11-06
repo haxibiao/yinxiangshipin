@@ -10,7 +10,14 @@ import { WechatAppId } from '../app.json';
 // appContext
 import { observer, appStore, adStore, userStore } from './store';
 // apNotification
-import { LoadingModal, WithdrawalNotificationModal, RewardNotificationModal, AppRemindModal } from './components/modal';
+import {
+    LoadingModal,
+    WithdrawalNotificationModal,
+    RewardNotificationModal,
+    AppRemindModal,
+    ShareModal,
+    ReportModal,
+} from './components/modal';
 import { Toast } from './components';
 //appPreparation
 import Preparation from './Preparation';
@@ -46,6 +53,8 @@ const App = observer(() => {
                 <AppRemindModal />
                 <WithdrawalNotificationModal />
                 <RewardNotificationModal />
+                <ShareModal />
+                <ReportModal />
                 <LoadingModal />
             </ApolloProvider>
             <Toast ref={(ref) => (global.Toast = ref)} />

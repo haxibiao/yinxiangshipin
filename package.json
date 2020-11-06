@@ -49,6 +49,7 @@
         "react-apollo": "^3.1.5",
         "react-native": "0.63.2",
         "react-native-ad": "git+http://code.haxibiao.cn/packages/react-native-ad.git",
+        "react-native-app-utils": "git+http://code.haxibiao.cn/packages/react-native-app-utils.git",
         "react-native-camera": "^3.39.0",
         "react-native-code-push": "^6.2.1",
         "react-native-config": "^1.3.1",

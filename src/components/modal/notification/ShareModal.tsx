@@ -1,9 +1,12 @@
-import React, { useRef, useState, useEffect, useCallback } from 'react';
+import React, { useRef, useState, useEffect, useCallback, useMemo } from 'react';
 import { StyleSheet, View, Text, Image, Modal, ScrollView } from 'react-native';
-import { authNavigate } from '@src/router';
 import { observer, autorun, adStore, userStore, notificationStore } from '@src/store';
-import Iconfont from '../../../components/Iconfont';
-import { DebouncedPressable } from '../../../components/Basic/DebouncedPressable';
+import { useOperations } from '@src/apollo';
+import { ShareUtil } from '@src/common';
+import Iconfont from '../../Iconfont';
+import { DebouncedPressable } from '../../Basic/DebouncedPressable';
+import ContentShareCardOverlay from '../../share/ContentShareCardOverlay';
+import CollectionShareOverlay from '../../share/CollectionShareOverlay';
 
 const MODAL_WIDTH = Device.WIDTH * 0.84 > pixel(320) ? pixel(320) : Device.WIDTH * 0.84;
 const BUTTON_WIDTH = MODAL_WIDTH * 0.66;
@@ -13,87 +16,42 @@ const sharePlatForm = [
     {
         name: '微信好友',
         image: require('@app/assets/images/share/share_wx.png'),
-        callback: () => null,
-        // callback: shareToWechat,
+        callback: (o) => ShareUtil.shareToWeChat(o),
     },
     {
         name: '朋友圈',
         image: require('@app/assets/images/share/share_pyq.png'),
-        callback: () => null,
-        // callback: shareToTimeline,
+        callback: (o) => ShareUtil.shareToTimeline(o),
     },
     {
         name: 'QQ好友',
         image: require('@app/assets/images/share/share_qq.png'),
-        callback: () => null,
-        // callback: shareToQQ,
+        callback: (o) => ShareUtil.shareToQQ(o),
     },
     {
         name: '微博',
         image: require('@app/assets/images/share/share_wb.png'),
-        callback: () => null,
-        // callback: shareToWeiBo,
+        callback: (o) => ShareUtil.shareToSina(o),
     },
     {
         name: 'QQ空间',
         image: require('@app/assets/images/share/share_qqz.png'),
-        callback: () => null,
-        // callback: shareToQQZone,
+        callback: (o) => ShareUtil.shareToQQZone(o),
     },
 ];
 
-const options = [
-    {
-        name: '下载',
-        image: require('@app/assets/images/operation/more_video_download.png'),
-        callback: () => null,
-        // callback: downloadVideo,
-    },
-    {
-        name: '复制链接',
-        image: require('@app/assets/images/operation/more_links.png'),
-        callback: () => null,
-        // callback: copyLink,
-    },
-    {
-        name: '分享长图',
-        image: require('@app/assets/images/operation/more_large_img.png'),
-        callback: () => null,
-        // callback: shareCard,
-    },
-    {
-        name: '举报',
-        image: require('@app/assets/images/operation/more_report.png'),
-        callback: () => null,
-        // callback: reportArticle,
-    },
-    {
-        name: '删除',
-        image: require('@app/assets/images/operation/more_delete.png'),
-        callback: () => null,
-        // callback: deleteArticle,
-    },
-    {
-        name: '不感兴趣',
-        image: require('@app/assets/images/operation/more_dislike.png'),
-        callback: () => null,
-        // callback: dislike,
-    },
-    {
-        name: '拉黑',
-        image: require('@app/assets/images/operation/more_shield.png'),
-        callback: () => null,
-        // callback: shield,
-    },
-    {
-        name: '分享合集',
-        image: require('@app/assets/images/operation/more_content.png'),
-        callback: () => null,
-        // callback: shareCollection,
-    },
-];
+const operationIcon = {
+    下载视频: require('@app/assets/images/operation/more_video_download.png'),
+    分享合集: require('@app/assets/images/operation/more_content.png'),
+    复制链接: require('@app/assets/images/operation/more_links.png'),
+    分享长图: require('@app/assets/images/operation/more_large_img.png'),
+    不感兴趣: require('@app/assets/images/operation/more_dislike.png'),
+    举报: require('@app/assets/images/operation/more_report.png'),
+    删除: require('@app/assets/images/operation/more_delete.png'),
+    拉黑: require('@app/assets/images/operation/more_shield.png'),
+};
 
-export const OperationModal = observer(() => {
+export const ShareModal = observer(() => {
     const [visible, setVisible] = useState(false);
     const [noticeData, setNoticeData] = useState({});
     const shown = useRef(false);
@@ -108,7 +66,7 @@ export const OperationModal = observer(() => {
 
     const hideModal = useCallback(() => {
         if (shown.current) {
-            notificationStore.reduceOperationNotice();
+            notificationStore.reduceShareNotice();
             setVisible(false);
             setNoticeData({});
             shown.current = false;
@@ -118,17 +76,63 @@ export const OperationModal = observer(() => {
     useEffect(
         () =>
             autorun(() => {
-                if (notificationStore.operationNotice.length > 0) {
-                    showModal(notificationStore.operationNotice[0]);
+                if (notificationStore.shareNotice.length > 0) {
+                    showModal(notificationStore.shareNotice[0]);
                 }
             }),
         [],
     );
 
+    const shareQRCard = useCallback(async () => {
+        ContentShareCardOverlay.show(noticeData);
+    }, [noticeData]);
+
+    const shareCollection = useCallback(async () => {
+        const collection = noticeData?.collections?.[0];
+        if (collection) {
+            const uri = Config.ServerRoot + `/share/collection/${collection?.id}?user_id=${userStore.me.id}`;
+            CollectionShareOverlay.show(uri, collection?.logo, collection);
+        } else {
+            Toast.show({ content: '分享出错' });
+        }
+    }, [noticeData]);
+
+    const { copyLink, downloadVideo, deleteArticle, addArticleBlock, addUserBlock } = useOperations(noticeData);
+
+    const showReportModal = useCallback(() => {
+        hideModal();
+        notificationStore.sendReportNotice({ target: noticeData, type: 'post' });
+    }, [noticeData]);
+
+    const operationList = useMemo(() => {
+        const result = [
+            { name: '分享长图', handler: shareQRCard },
+            { name: '复制链接', handler: copyLink },
+        ];
+        const collection = noticeData?.collections?.[0];
+        const videoUrl = noticeData?.video?.url;
+        const isSelf = noticeData?.user?.id == userStore.me.id;
+        if (isSelf) {
+            result.push({ name: '删除', handler: deleteArticle });
+        } else {
+            result.splice(1, 0, { name: '举报', handler: showReportModal });
+            result.splice(2, 0, { name: '不感兴趣', handler: addArticleBlock });
+        }
+        if (collection) {
+            result.unshift({ name: '分享合集', handler: shareCollection });
+        }
+        if (videoUrl) {
+            result.unshift({ name: '下载视频', handler: downloadVideo });
+        }
+        return result;
+    }, [noticeData]);
+
     return (
         <Modal
             animationType="slide"
             visible={visible}
+            onRequestClose={hideModal}
+            animated={true}
             transparent={true}
             statusBarTranslucent={true}
             hardwareAccelerated={true}>
@@ -164,16 +168,16 @@ export const OperationModal = observer(() => {
                             contentContainerStyle={styles.rowContainer}
                             horizontal={true}
                             showsHorizontalScrollIndicator={false}>
-                            {options.map((item: any, index: number) => {
+                            {operationList.map((item: any, index: number) => {
                                 return (
                                     <DebouncedPressable
                                         key={index}
                                         style={styles.optionItem}
                                         onPress={() => {
                                             hideModal();
-                                            item.callback(noticeData);
+                                            item.handler(noticeData);
                                         }}>
-                                        <Image style={styles.optionIcon} source={item.image} />
+                                        <Image style={styles.optionIcon} source={operationIcon[item.name]} />
                                         <Text style={styles.optionName}>{item.name}</Text>
                                     </DebouncedPressable>
                                 );
@@ -193,7 +197,7 @@ const styles = StyleSheet.create({
     modalView: {
         flex: 1,
         justifyContent: 'flex-end',
-        backgroundColor: 'rgba(0,0,0,0.3)',
+        backgroundColor: 'rgba(0,0,0,3)',
     },
     modalContainer: {
         overflow: 'hidden',

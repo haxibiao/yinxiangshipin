@@ -7301,6 +7301,10 @@ react-native-animatable@1.3.3:
   dependencies:
     prop-types "^15.7.2"
 
+"react-native-app-utils@git+http://code.haxibiao.cn/packages/react-native-app-utils.git":
+  version "1.0.1"
+  resolved "git+http://code.haxibiao.cn/packages/react-native-app-utils.git#a0f7bb018bd881aaa3f368a29c56503351e258ed"
+
 react-native-camera@^3.39.0:
   version "3.39.0"
   resolved "https://registry.yarnpkg.com/react-native-camera/-/react-native-camera-3.39.0.tgz#5e60638eb9d45bf36a65adc199e92ff152a55ac3"
