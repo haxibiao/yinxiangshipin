@@ -4,3 +4,4 @@ export { useLikeMutation } from './useLikeMutation';
 export { useFollowMutation } from './useFollowMutation';
 export { useCommentMutation } from './useCommentMutation';
 export { usePreloadData } from './usePreloadData';
+export { useOperations } from './useOperations';
