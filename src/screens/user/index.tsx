@@ -1,6 +1,5 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useRef } from 'react';
 import {
-    TouchableOpacity,
     Image,
     StyleSheet,
     View,
@@ -8,11 +7,14 @@ import {
     StatusBar,
     Animated,
     ScrollView,
+    TouchableOpacity,
     DeviceEventEmitter,
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Iconfont, ScrollTabBar } from '@src/components';
-import { userStore } from '@src/store';
+import { AutonomousModal } from '@src/components/modal';
+import { userStore, notificationStore } from '@src/store';
+import { GQL, useMutation, errorMessage } from '@src/apollo';
 import { TabView } from '@src/components/ScrollHeaderTabView';
 import UserProfile from './components/UserProfile';
 import Posts from './components/Posts';
@@ -28,6 +30,33 @@ const index = (props: Props) => {
     const navigation = useNavigation();
     const route = useRoute();
     const user = route.params?.user;
+    const [modalVisible, setModalVisible] = useState(false);
+    const [addUserBlock] = useMutation(GQL.addUserBlockMutation, {
+        variables: {
+            id: user.id,
+        },
+        refetchQueries: () => [
+            {
+                query: GQL.publicPostsQuery,
+                fetchPolicy: 'network-only',
+            },
+        ],
+        onCompleted: () => {
+            Toast.show({ content: '拉黑成功，系统将屏蔽此用户的内容！' });
+        },
+        onError: () => {
+            Toast.show({ content: errorMessage(error) });
+        },
+    });
+
+    const addUserBlockHandler = useCallback(() => {
+        setModalVisible(true);
+        if (userStore.login) {
+            addUserBlock();
+        } else {
+            navigation.navigate('Login');
+        }
+    }, [addUserBlock]);
 
     const isSelf = useMemo(() => userStore.me.id === user.id, [userStore.me.id, user]);
 
@@ -43,7 +72,7 @@ const index = (props: Props) => {
     const _renderScrollHeader = useCallback(() => {
         return (
             <View onLayout={headerOnLayout}>
-                <UserProfile user={user} isSelf={isSelf} />
+                <UserProfile user={user} isSelf={isSelf} showUserActionModal={() => setModalVisible(true)} />
             </View>
         );
     }, [user, isSelf]);
@@ -81,7 +110,7 @@ const index = (props: Props) => {
                     {!isSelf && (
                         <TouchableOpacity
                             activeOpacity={1}
-                            onPress={() => DeviceEventEmitter.emit('userOperation')}
+                            onPress={() => setModalVisible(true)}
                             style={styles.navBarButton}>
                             <Iconfont name="daohanggengduoanzhuo" size={pixel(22)} color={'#000'} />
                         </TouchableOpacity>
@@ -122,6 +151,36 @@ const index = (props: Props) => {
                     <Likes user={user} label="喜欢" style={styles.listContainer} />
                 </TabView>
             </View>
+            <AutonomousModal visible={modalVisible} onToggleVisible={setModalVisible} style={styles.modalContainer}>
+                {(visible, changeVisible) => {
+                    return (
+                        <View style={styles.modalBody}>
+                            <View style={styles.modalHeader}>
+                                <Text style={styles.modalTitle}>{user.name}</Text>
+                                <Text style={styles.modalSubText} numberOfLines={2}>
+                                    {user.description || '这个人很懒什么信息也没留下'}
+                                </Text>
+                            </View>
+                            <TouchableOpacity style={styles.actionItem} onPress={addUserBlockHandler}>
+                                <Text style={styles.actionName}>拉黑</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={styles.actionItem}
+                                onPress={() => {
+                                    changeVisible(false);
+                                    notificationStore.sendReportNotice({ target: user, type: 'user' });
+                                }}>
+                                <Text style={styles.actionName}>举报</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={[styles.actionItem, styles.actionCloseItem]}
+                                onPress={() => changeVisible(false)}>
+                                <Text style={styles.actionName}>取消</Text>
+                            </TouchableOpacity>
+                        </View>
+                    );
+                }}
+            </AutonomousModal>
         </View>
     );
 };
@@ -197,5 +256,44 @@ const styles = StyleSheet.create({
     listContainer: {
         flex: 1,
         backgroundColor: '#FFF',
+    },
+    modalContainer: {
+        justifyContent: 'flex-end',
+    },
+    modalBody: {
+        overflow: 'hidden',
+        backgroundColor: '#fff',
+        borderTopLeftRadius: pixel(10),
+        borderTopRightRadius: pixel(10),
+    },
+    modalHeader: {
+        padding: pixel(25),
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    modalTitle: {
+        color: '#212121',
+        fontSize: font(20),
+        fontWeight: 'bold',
+    },
+    modalSubText: {
+        color: '#b2b2b2',
+        fontSize: font(12),
+        marginTop: pixel(4),
+    },
+    actionItem: {
+        paddingVertical: pixel(20),
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderTopWidth: StyleSheet.hairlineWidth,
+        borderColor: '#f0f0f0',
+    },
+    actionCloseItem: {
+        borderTopWidth: pixel(8),
+        borderColor: '#eee',
+    },
+    actionName: {
+        color: '#212121',
+        fontSize: font(16),
     },
 });

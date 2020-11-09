@@ -10,11 +10,9 @@ import {
     ScrollView,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { Avatar, Iconfont, SafeText, PlaceholderImage, GridImage, MoreOperation } from '@src/components';
-import { observer, userStore } from '@src/store';
-import { GQL, useApolloClient, ApolloProvider } from '@src/apollo';
-import { AnimationLike, Commodity } from '../../widget';
-import { Overlay } from 'teaset';
+import { Avatar, Iconfont, SafeText, PlaceholderImage, GridImage } from '@src/components';
+import { observer, userStore, notificationStore } from '@src/store';
+import { AnimationLike } from '../../widget';
 
 const videoWidth = Device.WIDTH * 0.6;
 const videoHeight = videoWidth * 1.33;
@@ -35,9 +33,7 @@ export default observer(
     (props: Props): JSX.Element => {
         const { post, fadeOut } = props;
         const { user } = post;
-        const overlayKey = useRef();
         const navigation = useNavigation();
-        const client = useApolloClient();
 
         const ContentStatus = useMemo(() => {
             const statusInfo = POST_STATUS[String(post?.status)] || POST_STATUS['0'];
@@ -104,37 +100,9 @@ export default observer(
             return null;
         }, [post]);
 
-        const hideMoreOperation = useCallback(() => {
-            Overlay.hide(overlayKey.current);
-        }, []);
-
-        const userOperation = useMemo(() => {
-            const isMe = userStore?.me?.id === post?.user?.id;
-            return (
-                <ApolloProvider client={client}>
-                    <MoreOperation
-                        target={post}
-                        options={['删除', '下载', '分享长图', '分享合集', '复制链接']}
-                        closeOverlay={hideMoreOperation}
-                        onRemove={fadeOut}
-                        client={client}
-                        navigation={navigation}
-                    />
-                </ApolloProvider>
-            );
-        }, [post, fadeOut, client]);
-
         const showMoreOperation = useCallback(() => {
-            const Operation = (
-                <Overlay.PullView
-                    style={{ flexDirection: 'column', justifyContent: 'flex-end' }}
-                    containerStyle={{ backgroundColor: 'transparent' }}
-                    animated={true}>
-                    {userOperation}
-                </Overlay.PullView>
-            );
-            overlayKey.current = Overlay.show(Operation);
-        }, [userOperation]);
+            notificationStore.sendShareNotice({ target: post, type: 'post' });
+        }, [post]);
 
         return (
             <>

@@ -11,44 +11,20 @@ import {
     TextStyle,
     ViewStyle,
 } from 'react-native';
-import { FollowButton, Row, Iconfont, MoreOperation, GenderLabel, SafeText } from '@src/components';
-import { GQL, useQuery, useApolloClient, ApolloProvider } from '@src/apollo';
+import { FollowButton, Row, Iconfont, GenderLabel, SafeText } from '@src/components';
+import { GQL, useQuery } from '@src/apollo';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { observer } from '@src/store';
+import { observer, notificationStore } from '@src/store';
 import { Overlay } from 'teaset';
 
 export default observer((props: { user: any }) => {
-    const { user, isSelf } = props;
+    const { user, isSelf, showUserActionModal } = props;
     const navigation = useNavigation();
-    const client = useApolloClient();
     const { data: userQueryResult, refetch } = useQuery(GQL.userQuery, {
         variables: { id: user.id },
         fetchPolicy: 'network-only',
     });
     const userProfile = useMemo(() => Object.assign(user, userQueryResult?.user), [userQueryResult]);
-
-    const showMoreOperation = useCallback(() => {
-        let overlayRef: any;
-        const MoreOperationOverlay = (
-            <Overlay.PullView
-                style={{ flexDirection: 'column', justifyContent: 'flex-end' }}
-                containerStyle={{ backgroundColor: 'transparent' }}
-                animated={true}
-                ref={(ref: any) => (overlayRef = ref)}>
-                <ApolloProvider client={client}>
-                    <MoreOperation
-                        client={client}
-                        closeOverlay={() => overlayRef.close()}
-                        navigation={navigation}
-                        target={userProfile}
-                        options={['举报', '拉黑']}
-                        type="user"
-                    />
-                </ApolloProvider>
-            </Overlay.PullView>
-        );
-        Overlay.show(MoreOperationOverlay);
-    }, [client, userProfile]);
 
     const goToSearch = useCallback(() => {
         navigation.push('SearchVideo', {
@@ -72,12 +48,7 @@ export default observer((props: { user: any }) => {
         const navigationFocus = navigation.addListener('focus', () => {
             refetch();
         });
-        DeviceEventEmitter.addListener('userOperation', showMoreOperation);
-        return () => {
-            navigationFocus();
-            DeviceEventEmitter.removeListener('userOperation', showMoreOperation);
-        };
-    }, [showMoreOperation]);
+    }, []);
 
     return (
         <View style={styles.profileContainer}>
@@ -145,7 +116,7 @@ export default observer((props: { user: any }) => {
                         <Iconfont name="fangdajing" size={pixel(22)} color={'#fff'} />
                     </View>
                     {!isSelf && (
-                        <TouchableOpacity style={styles.navBarButton} activeOpacity={1} onPress={showMoreOperation}>
+                        <TouchableOpacity style={styles.navBarButton} activeOpacity={1} onPress={showUserActionModal}>
                             <Iconfont name="daohanggengduoanzhuo" size={pixel(22)} color={'#fff'} />
                         </TouchableOpacity>
                     )}

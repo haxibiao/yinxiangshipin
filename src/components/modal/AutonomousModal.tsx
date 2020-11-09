@@ -1,4 +1,12 @@
-import React, { useState, useCallback, useImperativeHandle, ReactChildren, ReactNode, RefObject } from 'react';
+import React, {
+    useEffect,
+    useState,
+    useCallback,
+    useImperativeHandle,
+    ReactChildren,
+    ReactNode,
+    RefObject,
+} from 'react';
 import { StyleSheet, Modal, View, ViewStyle, ModalProps, Platform } from 'react-native';
 import KeyboardSpacer from '../Other/KeyboardSpacer';
 
@@ -6,7 +14,7 @@ const useControllableProp = ({ value, updater, defaultValue }) => {
     const isControlled = value !== undefined;
     const [internalValue, setInternalValue] = useState(isControlled ? value : defaultValue);
     const currentValue = isControlled ? value : internalValue;
-    const currentUpdater = isControlled ? updater : (e) => setInternalValue(e);
+    const currentUpdater = isControlled ? updater : setInternalValue;
 
     useEffect(() => {
         if (isControlled) {
@@ -25,7 +33,7 @@ export interface AutonomousModalProps extends ModalProps {
 
 export const AutonomousModal = React.forwardRef(
     ({ style, visible, onToggleVisible, children, ...modalProps }: AutonomousModalProps, ref: RefObject) => {
-        const [modalVisible, toggleModalVisible] = useControllableProp({
+        const [modalVisible, setModalVisible] = useControllableProp({
             value: visible,
             updater: onToggleVisible,
             defaultValue: false,
@@ -35,20 +43,20 @@ export const AutonomousModal = React.forwardRef(
             ref,
             () => ({
                 visible,
-                onToggle: toggleModalVisible,
+                onToggle: setModalVisible,
             }),
-            [toggleModalVisible],
+            [setModalVisible],
         );
-
         return (
             <Modal
                 animationType="slide"
                 transparent={true}
                 visible={modalVisible}
-                onRequestClose={toggleModalVisible}
+                onRequestClose={setModalVisible}
+                statusBarTranslucent={true}
                 hardwareAccelerated={true}
                 {...modalProps}>
-                <View style={[styles.centeredView, style]}>{children(visible, toggleModalVisible)}</View>
+                <View style={[styles.centeredView, style]}>{children(visible, setModalVisible)}</View>
                 {/* <KeyboardSpacer /> */}
             </Modal>
         );
@@ -58,8 +66,6 @@ export const AutonomousModal = React.forwardRef(
 const styles = StyleSheet.create({
     centeredView: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
         backgroundColor: 'rgba(0,0,0,0.3)',
     },
 });

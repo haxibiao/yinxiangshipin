@@ -11,9 +11,9 @@ import {
     StatusBar,
     ActivityIndicator,
 } from 'react-native';
-import { Player, Avatar, ListFooter, StatusView, HxfTextInput, KeyboardSpacer, MoreOperation } from '@src/components';
-import { GQL, useQuery, useCommentMutation, ApolloProvider, useApolloClient } from '@src/apollo';
-import { observable, observer, userStore } from '@src/store';
+import { Player, Avatar, ListFooter, StatusView, HxfTextInput, KeyboardSpacer } from '@src/components';
+import { GQL, useQuery, useCommentMutation } from '@src/apollo';
+import { observable, observer, userStore, notificationStore } from '@src/store';
 import { Placeholder } from '@src/content';
 import { BoxShadow } from 'react-native-shadow';
 import { Overlay } from 'teaset';
@@ -142,44 +142,14 @@ export default observer((props) => {
         };
     }, [onReplyComment]);
 
-    // 分享/更多
-    const client = useApolloClient();
-    const PostOperation = useMemo(() => {
-        let overlayRef;
-        return (
-            <Overlay.PullView
-                style={{ flexDirection: 'column', justifyContent: 'flex-end' }}
-                containerStyle={{ backgroundColor: 'transparent' }}
-                animated={true}
-                ref={(ref) => (overlayRef = ref)}>
-                <ApolloProvider client={client}>
-                    <MoreOperation
-                        client={client}
-                        navigation={navigation}
-                        closeOverlay={() => overlayRef.close()}
-                        target={media}
-                        options={
-                            isSelf
-                                ? ['删除', '下载', '分享长图', '分享合集', '复制链接']
-                                : ['下载', '举报', '不感兴趣', '分享长图', '分享合集', '复制链接']
-                        }
-                        onRemove={() => {
-                            navigation.goBack();
-                            DeviceEventEmitter.emit('deletePost', media);
-                        }}
-                    />
-                </ApolloProvider>
-            </Overlay.PullView>
-        );
-    }, [client, media]);
     const forwardPost = useCallback(() => {
-        Overlay.show(PostOperation);
-    }, [PostOperation]);
-    useEffect(() => {
-        DeviceEventEmitter.addListener('forwardPost', forwardPost);
+        notificationStore.sendShareNotice({ target: media, type: 'post' });
+    }, [media]);
 
+    useEffect(() => {
+        const forwardPostListener = DeviceEventEmitter.addListener('forwardPost', forwardPost);
         return () => {
-            DeviceEventEmitter.removeListener('forwardPost', forwardPost);
+            forwardPostListener.remove();
         };
     }, [forwardPost]);
 

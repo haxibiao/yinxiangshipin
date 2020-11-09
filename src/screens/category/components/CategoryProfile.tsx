@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ImageBackground, Image, Animated } from 'react-native';
-import { HxfButton, FollowButton, Row, Iconfont, Avatar, NavigatorBar, MoreOperation } from '@src/components';
+import { HxfButton, FollowButton, Row, Iconfont, Avatar, NavigatorBar } from '@src/components';
 import { GQL, useApolloClient, ApolloProvider } from '@src/apollo';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { userStore, observer } from '@src/store';
@@ -9,29 +9,7 @@ import { Overlay } from 'teaset';
 export default observer(({ category, titleStyle, nameStyle }) => {
     const navigation = useNavigation();
     const client = useApolloClient();
-    // const showMoreOperation = useCallback(() => {
-    //     let overlayRef;
-    //     const MoreOperationOverlay = (
-    //         <Overlay.PullView
-    //             style={{ flexDirection: 'column', justifyContent: 'flex-end' }}
-    //             containerStyle={{ backgroundColor: 'transparent' }}
-    //             animated={true}
-    //             ref={(ref) => (overlayRef = ref)}>
-    //             <ApolloProvider client={client}>
-    //                 <MoreOperation
-    //                     type="category"
-    //                     client={client}
-    //                     navigation={navigation}
-    //                     closeOverlay={() => overlayRef.close()}
-    //                     target={category}
-    //                     options={['举报']}
-    //                     onRemove={() => startAnimation(1, 0)}
-    //                 />
-    //             </ApolloProvider>
-    //         </Overlay.PullView>
-    //     );
-    //     Overlay.show(MoreOperationOverlay);
-    // }, [client, category]);
+
     return (
         <View style={styles.profileContainer}>
             <ImageBackground source={require('@app/assets/images/category_default_bg.png')} style={styles.categoryBg}>

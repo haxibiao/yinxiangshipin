@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
-import { View, StyleSheet, Image, Text, Dimensions, Animated, Platform } from 'react-native';
+import { View, StyleSheet, Image, Text, Animated, Platform, DeviceEventEmitter } from 'react-native';
 import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import Avatar from '../Basic/Avatar';
 import PlaceholderImage from '../Basic/PlaceholderImage';
@@ -8,12 +8,9 @@ import SafeText from '../Basic/SafeText';
 import Iconfont from '../Iconfont';
 import GridImage from './GridImage';
 import Like from './Like';
-import MoreOperation from './MoreOperation';
 
-import { observer, appStore, userStore } from '@src/store';
-import { useApolloClient, ApolloProvider } from '@src/apollo';
+import { observer, appStore, userStore, notificationStore } from '@src/store';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { Overlay } from 'teaset';
 
 interface SubmitStatusProps {
     submit: number;
@@ -57,7 +54,6 @@ const COVER_WIDTH = Device.WIDTH - pixel(Theme.itemSpace) * 2;
 const PostItem: React.FC<Props> = observer((props: Props) => {
     const { showSubmitStatus, showSeparator, post = {}, showComment } = props;
     const navigation = useNavigation();
-    const client = useApolloClient();
     const {
         type,
         user,
@@ -131,31 +127,20 @@ const PostItem: React.FC<Props> = observer((props: Props) => {
     }, []);
 
     const showMoreOperation = useCallback(() => {
-        let overlayRef;
-        const MoreOperationOverlay = (
-            <Overlay.PullView
-                style={{ flexDirection: 'column', justifyContent: 'flex-end' }}
-                containerStyle={{ backgroundColor: 'transparent' }}
-                animated={true}
-                ref={(ref) => (overlayRef = ref)}>
-                <ApolloProvider client={client}>
-                    <MoreOperation
-                        client={client}
-                        navigation={navigation}
-                        closeOverlay={() => overlayRef.close()}
-                        target={post}
-                        options={
-                            isSelf
-                                ? ['删除', '下载', '分享长图', '分享合集', '复制链接']
-                                : ['下载', '举报', '不感兴趣', '分享长图', '分享合集', '复制链接']
-                        }
-                        onRemove={() => startAnimation(1, 0)}
-                    />
-                </ApolloProvider>
-            </Overlay.PullView>
-        );
-        Overlay.show(MoreOperationOverlay);
-    }, [client, post]);
+        notificationStore.sendShareNotice({ target: post, type: 'post' });
+    }, [post]);
+
+    // 监听删除事件，执行隐藏动画
+    useEffect(() => {
+        const removedListener = DeviceEventEmitter.addListener('DeletePost', (targetId) => {
+            if (targetId === post?.id) {
+                startAnimation(1, 0);
+            }
+        });
+        return () => {
+            removedListener.remove();
+        };
+    }, [post]);
 
     const onPress = useCallback(() => {
         if (showComment) {

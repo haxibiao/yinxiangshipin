@@ -102,15 +102,13 @@ export function useOperations(post) {
                     refetchQueries: () => [
                         {
                             query: GQL.publicPostsQuery,
-                        },
-                        {
-                            query: GQL.publicVideosQuery,
+                            fetchPolicy: 'network-only',
                         },
                     ],
                 }),
             );
             if (res) {
-                Toast.show({ content: '拉黑成功，下拉刷新将减少此用户内容的推荐！' });
+                Toast.show({ content: '拉黑成功，系统将屏蔽此用户的内容！' });
             } else {
                 Toast.show({
                     content: errorMessage(error),

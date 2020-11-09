@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { View, StyleSheet, Image, Text, TouchableOpacity, Animated, ScrollView } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { Avatar, Iconfont, SafeText, PlaceholderImage, GridImage, MoreOperation } from '@src/components';
+import { Avatar, Iconfont, SafeText, PlaceholderImage, GridImage } from '@src/components';
 import { observer, userStore, notificationStore } from '@src/store';
 import { AnimationLike, Commodity } from '../../widget';
 import { Overlay } from 'teaset';
