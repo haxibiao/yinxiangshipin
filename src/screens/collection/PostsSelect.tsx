@@ -22,6 +22,10 @@ function PostItem({ cover, id, pickedPosts, pickPosts }) {
             });
         } else {
             pickPosts((posts) => {
+                if (posts.length >= 30) {
+                    Toast.show({ content: '一次最多添加30个作品哦' });
+                    return [...posts];
+                }
                 return [...posts, { id, cover }];
             });
         }

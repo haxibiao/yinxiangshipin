@@ -11,16 +11,15 @@ const mediaWidth = Device.WIDTH * 0.28;
 
 export default function CreateCollection(props) {
     const navigation = useNavigation();
-    const [formData, setFormData] = useState({ cover: '', title: '', description: '', videoPosts: [] });
-    const scrollRef = useRef();
-    const updateOffset = useRef();
+    const [formData, setFormData] = useState({ cover: '', title: '', description: '' });
+    const [postIds, setPostIds] = useState([]);
 
     const [createCollectionMutation] = useMutation(GQL.createCollectionMutation, {
         variables: {
             name: formData.title,
             logo: formData.cover,
             description: formData.description,
-            collectable_ids: formData.videoPosts.map((v) => v.id),
+            collectable_ids: postIds,
         },
         onCompleted: () => {
             notificationStore.toggleLoadingVisible();
@@ -56,56 +55,7 @@ export default function CreateCollection(props) {
             .catch((err) => {});
     }, []);
 
-    const selectVideoPosts = useCallback((posts) => {
-        setFormData((data) => {
-            updateOffset.current = true;
-            data.videoPosts = posts;
-            return { ...data };
-        });
-    }, []);
-
-    const deleteVideoPost = useCallback((index) => {
-        setFormData((data) => {
-            const cloneVideoPosts = [...data.videoPosts];
-            cloneVideoPosts.splice(index, 1);
-            data.videoPosts = cloneVideoPosts;
-            return { ...data };
-        });
-    }, []);
-
-    const onContentSizeChange = useCallback((contentWidth, contentHeight) => {
-        if (updateOffset.current) {
-            updateOffset.current = false;
-            scrollRef.current?.scrollToEnd({
-                animated: true,
-            });
-        }
-    }, []);
-
-    const VideoPostsList = useMemo(() => {
-        if (formData.videoPosts?.length > 0) {
-            return formData.videoPosts.map((item, i) => {
-                return (
-                    <TouchableOpacity activeOpacity={1} style={styles.postItem} key={String(item.id || i)}>
-                        <Image
-                            style={{ ...StyleSheet.absoluteFillObject }}
-                            resizeMode="cover"
-                            source={{
-                                uri: item.cover,
-                            }}
-                        />
-                        <View style={styles.playMark}>
-                            <TouchableOpacity style={styles.reduceBtn} onPress={() => deleteVideoPost(i)}>
-                                <Iconfont name="guanbi1" size={pixel(12)} color="#fff" />
-                            </TouchableOpacity>
-                        </View>
-                    </TouchableOpacity>
-                );
-            });
-        }
-    }, [formData.videoPosts]);
-
-    const onSubmit = useCallback(() => {
+    const onSubmit = () => {
         if (validator()) {
             notificationStore.toggleLoadingVisible();
             createCollectionMutation();
@@ -115,26 +65,27 @@ export default function CreateCollection(props) {
                 title: '给合集取个名字哦',
                 description: '简单介绍一下合集吧',
                 cover: '请上传一张图片作为合集的封面',
-                videoPosts: '请往合集添加至少一个作品',
             };
-            for (const k of Object.keys(tips)) {
-                if (!formData[k]) {
-                    Toast.show({
-                        content: tips[k],
-                    });
-                    return false;
-                } else if (k === 'videoPosts' && formData.videoPosts.length < 1) {
-                    Toast.show({
-                        content: tips[k],
-                    });
-                    return false;
+            if (postIds.length < 1) {
+                Toast.show({
+                    content: '请往合集添加至少一个作品',
+                });
+                return false;
+            } else {
+                for (const k of Object.keys(tips)) {
+                    if (!formData[k]) {
+                        Toast.show({
+                            content: tips[k],
+                        });
+                        return false;
+                    }
                 }
             }
             return true;
         }
-    }, [formData]);
+    };
 
-    const inactiveBtn = !(formData.title && formData.description && formData.cover && formData.videoPosts.length > 0);
+    const inactiveBtn = !(formData.title && formData.description && formData.cover && postIds.length > 0);
 
     return (
         <View style={styles.container}>
@@ -174,7 +125,7 @@ export default function CreateCollection(props) {
                         style={[styles.fromInput, { height: pixel(120) }]}
                         onChangeText={(val) =>
                             setFormData((prevFormData) => {
-                                return { ...prevFormData, description: val };
+                                return { ...prevFormData, description: String(val).trim() };
                             })
                         }
                         value={formData.description}
@@ -187,27 +138,77 @@ export default function CreateCollection(props) {
                     <Text style={styles.wordCount}>{formData.description.length}/100</Text>
                 </View>
                 <Text style={styles.labelTitle}>添加作品</Text>
-                <ScrollView
-                    ref={scrollRef}
-                    onContentSizeChange={onContentSizeChange}
-                    contentContainerStyle={styles.videoPostContainer}
-                    horizontal={true}
-                    showsHorizontalScrollIndicator={false}>
-                    {VideoPostsList}
-                    <TouchableOpacity
-                        style={styles.postItem}
-                        activeOpacity={0.8}
-                        onPress={() => {
-                            navigation.navigate('SelectPost', {
-                                selectVideoPosts,
-                                videoPosts: formData.videoPosts,
-                            });
-                        }}>
-                        <Iconfont name="iconfontadd" size={pixel(30)} color={'#fff'} />
-                    </TouchableOpacity>
-                </ScrollView>
+                <PostSelector changePostIds={setPostIds} navigation={navigation} />
             </ScrollView>
         </View>
+    );
+}
+
+function PostSelector({ changePostIds, navigation }) {
+    const [posts, setPosts] = useState([]);
+    const scrollRef = useRef();
+    const updateOffset = useRef();
+
+    const selectVideoPosts = useCallback((data) => {
+        updateOffset.current = true;
+        setPosts([...data]);
+        changePostIds(data.map((v) => v.id));
+    }, []);
+
+    const deleteVideoPost = useCallback((index) => {
+        setPosts((data) => {
+            data.splice(index, 1);
+            changePostIds(data.map((v) => v.id));
+            return [...data];
+        });
+    }, []);
+
+    const onContentSizeChange = useCallback((contentWidth, contentHeight) => {
+        if (updateOffset.current) {
+            updateOffset.current = false;
+            scrollRef.current?.scrollToEnd({
+                animated: true,
+            });
+        }
+    }, []);
+
+    return (
+        <ScrollView
+            ref={scrollRef}
+            onContentSizeChange={onContentSizeChange}
+            contentContainerStyle={styles.videoPostContainer}
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}>
+            {posts.map((item, i) => {
+                return (
+                    <TouchableOpacity activeOpacity={1} style={styles.postItem} key={String(item.id || i)}>
+                        <Image
+                            style={{ ...StyleSheet.absoluteFillObject }}
+                            resizeMode="cover"
+                            source={{
+                                uri: item.cover,
+                            }}
+                        />
+                        <View style={styles.playMark}>
+                            <TouchableOpacity style={styles.reduceBtn} onPress={() => deleteVideoPost(i)}>
+                                <Iconfont name="guanbi1" size={pixel(12)} color="#fff" />
+                            </TouchableOpacity>
+                        </View>
+                    </TouchableOpacity>
+                );
+            })}
+            <TouchableOpacity
+                style={styles.postItem}
+                activeOpacity={0.8}
+                onPress={() => {
+                    navigation.navigate('SelectPost', {
+                        selectVideoPosts,
+                        videoPosts: posts,
+                    });
+                }}>
+                <Iconfont name="iconfontadd" size={pixel(30)} color={'#fff'} />
+            </TouchableOpacity>
+        </ScrollView>
     );
 }
 
