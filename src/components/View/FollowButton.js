@@ -51,10 +51,16 @@ const FollowButton = (props: Props) => {
                 query: GQL.followedUsersQuery,
                 variables: { user_id: userStore.me?.id },
             },
-            // {
-            //     query: GQL.userQuery,
-            //     variables: { id: user?.id },
-            // },
+            {
+                query: GQL.followPostsQuery,
+                variables: {
+                    user_id: userStore?.me?.id,
+                    page: 1,
+                    count: 10,
+                    filter: 'all',
+                },
+                fetchPolicy: 'network-only',
+            },
         ],
     });
 
