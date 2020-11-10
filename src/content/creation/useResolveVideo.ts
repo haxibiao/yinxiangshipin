@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useMemo } from 'react';
 import { GQL } from '@src/apollo';
 import { exceptionCapture } from '@src/common';
-import { notificationStore } from '@src/store';
 
 interface Props {
     shareLink: string;
@@ -14,27 +13,29 @@ interface Props {
 export const useResolveVideo = (props: Props): (() => Promise<void>) => {
     const { shareLink, content, client, onSuccess, onFailed } = props;
 
-    const resolveDyVideo = useCallback(async () => {
-        notificationStore.toggleLoadingVisible();
-        const [error, res] = await exceptionCapture(() =>
-            client.mutate({
-                mutation: GQL.resolveDouyinVideo,
-                variables: {
-                    share_link: shareLink,
-                    content,
-                },
-            }),
-        );
-        notificationStore.toggleLoadingVisible();
-        if (error) {
-            if (onFailed instanceof Function) {
-                onFailed('收藏失败');
+    const resolveDyVideo = useCallback(() => {
+        return new Promise(async (resolve, reject) => {
+            const [err, res] = await exceptionCapture(() =>
+                client.mutate({
+                    mutation: GQL.resolveDouyinVideo,
+                    variables: {
+                        share_link: shareLink,
+                        content,
+                    },
+                }),
+            );
+            if (err) {
+                reject();
+                if (onFailed instanceof Function) {
+                    onFailed('收藏失败');
+                }
+            } else if (res) {
+                resolve();
+                if (onSuccess instanceof Function) {
+                    onSuccess('收藏成功');
+                }
             }
-        } else if (res) {
-            if (onSuccess instanceof Function) {
-                onSuccess('收藏成功');
-            }
-        }
+        });
     }, [client, shareLink, content, onSuccess, onFailed]);
 
     return resolveDyVideo;

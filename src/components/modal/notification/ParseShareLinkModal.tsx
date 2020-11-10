@@ -1,8 +1,8 @@
 import React, { useRef, useState, useMemo, useEffect, useCallback } from 'react';
-import { StyleSheet, View, Text, Image, Modal, ScrollView, TextInput } from 'react-native';
+import { StyleSheet, View, Text, Image, Modal, ScrollView, TextInput, ActivityIndicator } from 'react-native';
 import { observer, appStore, userStore, notificationStore } from '@src/store';
 import { GQL, useApolloClient } from '@src/apollo';
-import { useClipboardLink, useResolveVideo, useResolveContent } from '@src/content';
+import { useClipboardLink, useResolveVideo } from '@src/content';
 import { authNavigate } from '@src/router';
 import { useNavigationListener } from '@src/common';
 import { DebouncedPressable } from '../../../components/Basic/DebouncedPressable';
@@ -16,6 +16,7 @@ const MODAL_WIDTH = Device.WIDTH * 0.8 > pixel(300) ? pixel(300) : Device.WIDTH 
 export const ParseShareLinkModal = observer(() => {
     const shown = useRef(false);
     const [visible, setVisible] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const client = useApolloClient();
     const [{ shareLink, shareBody }] = useClipboardLink();
@@ -97,21 +98,14 @@ export const ParseShareLinkModal = observer(() => {
         onFailed: hideModal,
     });
 
-    // 客户端采集
-    const resolveContent = useResolveContent({
-        shareBody,
-        onSuccess: resolveContentSuccess,
-        onFailed: resolveVideo,
-    });
-
     // 采集视频
-    const collectVideo = useCallback(() => {
-        if (appStore.isLocalSpiderVideo) {
-            resolveContent();
-        } else {
-            resolveVideo();
-        }
-    }, [resolveVideo, resolveContent]);
+    const collectVideo = useCallback(async () => {
+        setLoading(true);
+        try {
+            await resolveVideo();
+        } catch (error) {}
+        setLoading(false);
+    }, [resolveVideo]);
 
     return (
         <Modal
@@ -121,7 +115,7 @@ export const ParseShareLinkModal = observer(() => {
             transparent={true}
             statusBarTranslucent={true}
             hardwareAccelerated={true}>
-            <ScrollView contentContainerStyle={styles.modalView}>
+            <ScrollView contentContainerStyle={styles.modalView} bounces={false}>
                 <View style={styles.modalContainer}>
                     <View style={styles.videoCover}>
                         <Image
@@ -140,6 +134,7 @@ export const ParseShareLinkModal = observer(() => {
                     <View style={styles.videoContent}>
                         {/* <Text style={styles.title}>{shareBody?.title}</Text> */}
                         <TextInput
+                            editable={!loading}
                             style={styles.inputContent}
                             onChangeText={(val) => setVideoTitle(val)}
                             value={videoTitle}
@@ -151,8 +146,12 @@ export const ParseShareLinkModal = observer(() => {
                             placeholderTextColor="#b2b2b2"
                         />
                     </View>
-                    <DebouncedPressable style={styles.shareBtn} onPress={collectVideo}>
-                        <Text style={styles.shareBtnText}>收藏视频</Text>
+                    <DebouncedPressable style={styles.shareBtn} onPress={collectVideo} disabled={loading}>
+                        {loading ? (
+                            <ActivityIndicator size={'small'} color={'#fff'} />
+                        ) : (
+                            <Text style={styles.shareBtnText}>收藏视频</Text>
+                        )}
                     </DebouncedPressable>
                     <Text style={styles.tips}>来自您复制的分享链接</Text>
                 </View>
