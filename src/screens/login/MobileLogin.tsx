@@ -39,7 +39,7 @@ const MobileLogin = () => {
         }
     };
 
-    const [VerifyCode] = useMutation(GQL.SendVerifyCodeMutation, {
+    const [VerifyCode] = useMutation(GQL.sendVerifyCodeMutation, {
         variables: {
             phone: Account,
             action: 'USER_LOGIN',
