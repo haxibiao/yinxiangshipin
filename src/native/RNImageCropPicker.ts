@@ -29,12 +29,18 @@ export interface Options {
 export async function openImagePicker(props?: Options) {
     return RNImageCropPicker.openPicker({
         ...props,
-    }).then((media: any) => {
-        if (props?.mediaType === 'video') {
-            media.uploadPath = media?.path?.substr(7);
-        }
-        return media;
-    });
+    })
+        .then((media: any) => {
+            if (props?.mediaType === 'video') {
+                media.uploadPath = media?.path?.substr(7);
+            }
+            return media;
+        })
+        .catch((e) => {
+            Toast.show({
+                content: '打开相册出错',
+            });
+        });
 }
 
 export default RNImageCropPicker;

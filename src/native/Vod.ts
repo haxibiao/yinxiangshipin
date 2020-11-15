@@ -30,25 +30,29 @@ function upload(props: UploadOption) {
             if (onStarted instanceof Function) {
                 onStarted(res);
             }
-            VodUpload({
-                signature: res,
-                videoPath,
-                onError: (error) => {
-                    if (onError instanceof Function) {
-                        onError(error);
-                    }
-                },
-                onProcess: (progress: number) => {
-                    if (onProcess instanceof Function) {
-                        onProcess(progress);
-                    }
-                },
-                onCompleted: (data: any) => {
-                    if (onCompleted instanceof Function) {
-                        onCompleted(data);
-                    }
-                },
-            });
+            try {
+                VodUpload({
+                    signature: res,
+                    videoPath,
+                    onError: (error) => {
+                        if (onError instanceof Function) {
+                            onError(error);
+                        }
+                    },
+                    onProcess: (progress: number) => {
+                        if (onProcess instanceof Function) {
+                            onProcess(progress);
+                        }
+                    },
+                    onCompleted: (data: any) => {
+                        if (onCompleted instanceof Function) {
+                            onCompleted(data);
+                        }
+                    },
+                });
+            } catch (error) {
+                onError('上传视频出错');
+            }
         })
         .catch((error) => {
             if (onError instanceof Function) {

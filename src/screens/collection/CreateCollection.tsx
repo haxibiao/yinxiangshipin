@@ -52,7 +52,11 @@ export default function CreateCollection(props) {
                     return { ...prevFormData, cover: imagePath };
                 });
             })
-            .catch((err) => {});
+            .catch((err) => {
+                Toast.show({
+                    content: '上传出错',
+                });
+            });
     }, []);
 
     const onSubmit = () => {
