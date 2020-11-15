@@ -61,18 +61,22 @@ export async function detectPhotos() {
 
     function detectVideoMeta(videoUrl) {
         return new Promise((resolve, reject) => {
-            return VideoMeta.fetchMeta(videoUrl?.replace('file://', ''), (res) => {
-                if (res) {
-                    resolve({
-                        type: 'post',
-                        uuid: String(res).slice(5),
-                        url: videoUrl,
-                        fileType: 'video',
-                    });
-                } else {
-                    resolve(null);
-                }
-            });
+            try {
+                return VideoMeta.fetchMeta(videoUrl?.replace('file://', ''), (res) => {
+                    if (res) {
+                        resolve({
+                            type: 'post',
+                            uuid: String(res).slice(5),
+                            url: videoUrl,
+                            fileType: 'video',
+                        });
+                    } else {
+                        resolve(null);
+                    }
+                });
+            } catch (err) {
+                resolve(null);
+            }
         });
     }
 
