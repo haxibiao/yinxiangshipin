@@ -7,7 +7,7 @@ import { observer, userStore } from '@src/store';
 export default observer(({ navigation }) => {
     const phone = userStore?.me?.phone;
 
-    const [sendVerifyCodeMutation, { loading }] = useMutation(GQL.SendVerifyCodeMutation, {
+    const [sendVerifyCodeMutation, { loading }] = useMutation(GQL.sendVerifyCodeMutation, {
         variables: {
             phone,
             action: 'USER_INFO_CHANGE',

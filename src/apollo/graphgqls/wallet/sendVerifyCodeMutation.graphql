@@ -1,4 +1,4 @@
-mutation SendVerifyCodeMutation($phone: String!, $action: verifyType!) {
+mutation sendVerifyCodeMutation($phone: String!, $action: verifyType!) {
     sendVerifyCode(phone: $phone, action: $action) {
         id
         code
