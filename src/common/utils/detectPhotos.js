@@ -82,34 +82,38 @@ export async function detectPhotos() {
 
     function detectPhotoQRCode(photoUrl) {
         return new Promise((resolve, reject) => {
-            QRCodeImage.decode(photoUrl, (res) => {
-                const qrInfo = String(res);
-                if (qrInfo.indexOf('http') !== -1) {
-                    const params = parseQuery(qrInfo);
-                    // https://yxsp.haxifang.cn/share/post/10394?post_id=2&user_id=1
-                    // { post_id, user_id }
-                    if (qrInfo.indexOf('/post/') !== -1 && params?.post_id) {
-                        resolve({
-                            type: 'post',
-                            post_id: params?.post_id,
-                            user_id: params?.user_id,
-                            url: photoUrl,
-                            fileType: 'image',
-                        });
-                    } else if (qrInfo.indexOf('/user/') !== -1 && params?.user_id) {
-                        resolve({
-                            type: 'user',
-                            user_id: user_id,
-                            url: photoUrl,
-                            fileType: 'image',
-                        });
+            try {
+                QRCodeImage.decode(photoUrl, (res) => {
+                    const qrInfo = String(res);
+                    if (qrInfo.indexOf('http') !== -1) {
+                        const params = parseQuery(qrInfo);
+                        // https://yxsp.haxifang.cn/share/post/10394?post_id=2&user_id=1
+                        // { post_id, user_id }
+                        if (qrInfo.indexOf('/post/') !== -1 && params?.post_id) {
+                            resolve({
+                                type: 'post',
+                                post_id: params?.post_id,
+                                user_id: params?.user_id,
+                                url: photoUrl,
+                                fileType: 'image',
+                            });
+                        } else if (qrInfo.indexOf('/user/') !== -1 && params?.user_id) {
+                            resolve({
+                                type: 'user',
+                                user_id: user_id,
+                                url: photoUrl,
+                                fileType: 'image',
+                            });
+                        } else {
+                            resolve(null);
+                        }
                     } else {
                         resolve(null);
                     }
-                } else {
-                    resolve(null);
-                }
-            });
+                });
+            } catch (error) {
+                resolve(null);
+            }
         });
     }
 }

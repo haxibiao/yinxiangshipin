@@ -7,7 +7,7 @@
     "SocketServer": "ws://socket.yinxiangshipin.com:6004",
     "AppSlogan": "专注短视频，知识变现的app",
     "Version": "1.4.4",
-    "VersionCode": 10,
+    "VersionCode": 11,
     "Build": 1,
     "WechatAppId": "wx058fb6b32fc2b7c0",
 
