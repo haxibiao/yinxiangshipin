@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, ScrollView, TouchableOpacity, Text, Platform } from 'react-native';
+import React, { useState, useCallback } from 'react';
+import { StyleSheet, View, ScrollView, TouchableOpacity, Text, Platform, TextInput, Image } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
-import { Avatar, PageContainer, SettingItem, WriteModal, Iconfont, WheelPicker } from '@src/components';
+import { Avatar, PageContainer, SettingItem, WriteModal, Iconfont, WheelPicker, HxfModal } from '@src/components';
 import { Mutation, GQL, useApolloClient, useQuery, useMutation } from '@src/apollo';
 import { observer } from 'mobx-react';
 import { userStore } from '@src/store';
 import RNFetchBlob from 'rn-fetch-blob';
+import { useNavigation } from '@react-navigation/native';
+import { AutonomousModal } from '@src/components/modal';
 
 export default observer((props: any) => {
     const client = useApolloClient();
@@ -16,13 +18,18 @@ export default observer((props: any) => {
     const [nameModalVisible, setNameModalVisible] = useState(false),
         [qianModalVisible, setQianModalVisible] = useState(false),
         [userGender, setUserGender] = useState(user.gender || '女'),
-        [userBirthday, setUserBirthday] = useState(user.birthday_msg || '2000-01-01');
+        [userBirthday, setUserBirthday] = useState(user.birthday_msg || '2000-01-01'),
+        [signatureHeight, setSignatureHeight] = useState(18),
+        [sexModalVisible, setSexModalVisible] = useState(false);
 
     const setNameModal = () => {
         setNameModalVisible(!nameModalVisible);
     };
     const setQianModal = () => {
         setQianModalVisible(!qianModalVisible);
+    };
+    const setSexModal = () => {
+        setSexModalVisible(!sexModalVisible);
     };
 
     const saveAvatar = (image: any) => {
@@ -119,13 +126,17 @@ export default observer((props: any) => {
         Picker._showDatePicker(parseBirthday());
     };
 
-    function setGender() {
-        let Gender = '';
-        if (userGender === '女') {
-            Gender = '男';
-        } else {
-            Gender = '女';
-        }
+    // 修改性别
+
+    function setGender(selectGender) {
+        let Gender = selectGender;
+        // if (userGender === user.gender) {
+        //     Gender = user.gender;
+        // } else if (userGender !== user.gender && userGender == '女') {
+        //     Gender = '女';
+        // } else {
+        //     Gender = '男';
+        // }
         client
             .mutate({
                 mutation: GQL.updateUserGender,
@@ -136,6 +147,7 @@ export default observer((props: any) => {
                 setUserGender(gender);
                 // 更新store里的me
                 userStore.changeProfile({ gender });
+                // setSexModalVisible(!sexModalVisible);
             })
             .catch((error) => {
                 Toast.show({ content: '性别修改失败,服务器内部错误' });
@@ -146,8 +158,20 @@ export default observer((props: any) => {
                     // 用户性别是男 ，改成女
                     setUserGender('女');
                 }
+                // setSexModalVisible(!sexModalVisible);
             });
     }
+    const genderHandle = useCallback(
+        (man) => {
+            setUserGender(man);
+            setGender(man);
+            setTimeout(() => {
+                setSexModalVisible(!sexModalVisible);
+            }, 300);
+        },
+        [setUserGender, setGender],
+    );
+    console.log(userGender, user.gender);
     // 修改昵称
     const [updateUserName] = useMutation(GQL.updateUserName, {
         variables: {
@@ -166,46 +190,131 @@ export default observer((props: any) => {
             },
             id: user.id,
         },
+        // onCompleted: () => {
+        //     console.log(123);
+        // },
     });
+
+    const navigation = useNavigation();
+
+    const finishButton = useCallback(() => {
+        introduction && updateUserIntroduction() && userStore.changeProfile({ introduction: introduction });
+        nickname && updateUserName() && userStore.changeProfile({ name: nickname });
+        navigation.goBack();
+    }, [introduction, updateUserIntroduction, nickname, setName]);
+
     return (
-        <PageContainer title="修改资料">
+        <PageContainer
+            title="编辑资料"
+            rightView={
+                <TouchableOpacity onPress={() => finishButton()}>
+                    <Text>完成</Text>
+                </TouchableOpacity>
+            }>
             <View style={styles.container}>
-                <ScrollView style={styles.container} bounces={false} removeClippedSubviews={true}>
-                    <View style={styles.settingType}>
+                <ScrollView style={styles.container} bounces={false}>
+                    {/* removeClippedSubviews={true} */}
+                    {/* <View style={styles.settingType}>
                         <View>
                             <Text style={styles.settingTypeText}>常规设置</Text>
                         </View>
-                    </View>
+                    </View> */}
                     <TouchableOpacity onPress={_changeAvatar}>
-                        <SettingItem itemName="更改头像" rightComponent={<Avatar source={user.avatar} size={34} />} />
-                    </TouchableOpacity>
-
-                    <TouchableOpacity onPress={setNameModal}>
-                        <View style={styles.settingItem}>
-                            <SettingItem itemName="修改昵称" rightContent={user.name} />
+                        {/* <SettingItem itemName="更改头像" rightComponent={<Avatar source={user.avatar} size={34} />} /> */}
+                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: pixel(25) }}>
+                            <Avatar source={user.avatar} size={102} />
+                            <Text style={{ marginTop: pixel(8), fontSize: font(14), color: '#d0d0d0' }}>
+                                点击更换头像
+                            </Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={setGender}>
+
+                    <TouchableOpacity>
+                        {/* onPress={setNameModal} */}
                         <View style={styles.settingItem}>
-                            <SettingItem itemName="性别" rightContent={user.gender || userGender} />
+                            <SettingItem
+                                itemName="昵称"
+                                column={true}
+                                itemNameStyle={styles.itemNameStyle}
+                                rightComponent={
+                                    <TextInput
+                                        style={{
+                                            fontSize: font(16),
+                                            paddingHorizontal: pixel(0),
+                                        }}
+                                        autoFocus={true}
+                                        placeholder={user.name}
+                                        onChangeText={(value) => setName(value)}
+                                    />
+                                }
+                            />
+                            {/* rightContent={user.name} */}
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={setSexModal}>
+                        <View style={styles.settingItem}>
+                            <SettingItem
+                                itemName="性别"
+                                itemNameStyle={styles.itemNameStyle}
+                                rightContent={user.gender + ' >' || userGender + ' >'}
+                            />
                         </View>
                     </TouchableOpacity>
 
                     <TouchableOpacity onPress={showDatePicker}>
                         <View style={styles.settingItem}>
-                            <SettingItem itemName="生日" rightContent={userBirthday} />
+                            <SettingItem
+                                itemNameStyle={styles.itemNameStyle}
+                                itemName="生日"
+                                rightContent={userBirthday + ' >'}
+                                endItem={true}
+                            />
                         </View>
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={setQianModal}>
+                    {/* <TouchableOpacity>
                         <View style={styles.settingItem}>
-                            <SettingItem itemName="签名" rightContent={qianM} />
+                            <SettingItem itemNameStyle={styles.itemNameStyle} itemName="所在地" rightContent={'>'} />
+                        </View>
+                    </TouchableOpacity> */}
+                    <View style={styles.line} />
+
+                    <TouchableOpacity>
+                        {/* onPress={setQianModal} */}
+                        <View style={styles.settingItem}>
+                            <SettingItem itemNameStyle={styles.itemNameStyle} itemName="个性签名" endItem={true} />
+                            <View style={{ flex: 1, alignItems: 'center' }}>
+                                <View
+                                    style={{
+                                        backgroundColor: '#F0F0F0',
+                                        minHeight: pixel(145),
+                                        position: 'relative',
+                                    }}>
+                                    <TextInput
+                                        style={{
+                                            backgroundColor: '#F0F0F0',
+                                            width: Device.WIDTH - pixel(30),
+                                            paddingVertical: pixel(8),
+                                            paddingHorizontal: pixel(8),
+                                            height: pixel(signatureHeight),
+                                            fontSize: font(16),
+                                        }}
+                                        placeholder={qianM}
+                                        multiline={true}
+                                        onContentSizeChange={(e) => {
+                                            setSignatureHeight(e.nativeEvent.contentSize.height);
+                                        }}
+                                        onChangeText={(value) => setIntroduction(value)}
+                                    />
+                                    {/* <Text style={{ position: 'absolute', right: 8, bottom: 16 }}>0/20</Text> */}
+                                </View>
+                            </View>
                         </View>
                     </TouchableOpacity>
                 </ScrollView>
             </View>
 
-            <WriteModal
+            {/* <WriteModal
                 modalName="修改昵称"
                 placeholder={user.name}
                 visible={nameModalVisible}
@@ -224,8 +333,8 @@ export default observer((props: any) => {
                     updateUserName();
                     userStore.changeProfile({ name: nickname });
                 }}
-            />
-            <WriteModal
+            /> */}
+            {/* <WriteModal
                 modalName="修改签名"
                 placeholder={qianM}
                 visible={qianModalVisible}
@@ -243,7 +352,48 @@ export default observer((props: any) => {
                     updateUserIntroduction();
                     userStore.changeProfile({ introduction: introduction });
                 }}
-            />
+            /> */}
+            <AutonomousModal
+                style={{ position: 'relative' }}
+                visible={sexModalVisible}
+                onToggleVisible={setSexModalVisible}>
+                {(visible, changeVisible) => {
+                    return (
+                        <View style={styles.modalBody}>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+                                <TouchableOpacity onPress={() => genderHandle('男')}>
+                                    <View style={[styles.selectGender]}>
+                                        <Image
+                                            source={
+                                                userGender == '男'
+                                                    ? require('@app/assets/images/selectGender/icon_selectedBoy.png')
+                                                    : require('@app/assets/images/selectGender/icon_selectBoy.png')
+                                            }
+                                        />
+                                        <Text style={[styles.GenderText, userGender == '男' && { color: '#1296db' }]}>
+                                            男
+                                        </Text>
+                                    </View>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => genderHandle('女')}>
+                                    <View style={styles.selectGender}>
+                                        <Image
+                                            source={
+                                                userGender == '女'
+                                                    ? require('@app/assets/images/selectGender/icon_selectedGirl.png')
+                                                    : require('@app/assets/images/selectGender/icon_selectGirl.png')
+                                            }
+                                        />
+                                        <Text style={[styles.GenderText, userGender == '女' && { color: '#d81e06' }]}>
+                                            女
+                                        </Text>
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    );
+                }}
+            </AutonomousModal>
         </PageContainer>
     );
 });
@@ -273,4 +423,34 @@ const styles = StyleSheet.create({
     //     fontSize: font(17),
     //     color: Theme.tintFontColor,
     // },
+    itemNameStyle: {
+        fontWeight: 'bold',
+        fontSize: font(16),
+        color: Theme.defaultTextColor,
+    },
+    line: {
+        height: pixel(8),
+        backgroundColor: '#F0F0F0',
+        // width
+    },
+    modalBody: {
+        overflow: 'hidden',
+        backgroundColor: '#fff',
+        borderTopLeftRadius: pixel(10),
+        borderTopRightRadius: pixel(10),
+        position: 'absolute',
+        bottom: 0,
+        width: Device.WIDTH,
+        height: pixel(180),
+        justifyContent: 'center',
+    },
+    selectGender: {
+        justifyContent: 'space-between',
+        // alignContent: 'center',
+        alignItems: 'center',
+        height: pixel(90),
+    },
+    GenderText: {
+        color: '#d0d0d0',
+    },
 });

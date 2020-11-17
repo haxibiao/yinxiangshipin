@@ -11,6 +11,8 @@ class SettingItem extends Component {
             rightComponent = null,
             endItem = false,
             horizontal = false,
+            column = false,
+            itemNameStyle = '',
         } = this.props;
         return (
             <View
@@ -18,12 +20,13 @@ class SettingItem extends Component {
                     styles.settingItem,
                     endItem && { borderBottomColor: 'transparent' },
                     horizontal && { justifyContent: 'flex-start' },
+                    column && { flexDirection: 'column', alignItems: 'flex-start', height: 80, marginTop: 15 },
                 ]}>
                 {leftComponent ? (
                     leftComponent
                 ) : (
                     <View style={{ flex: 1 }}>
-                        <Text numberOfLines={1} style={styles.itemName}>
+                        <Text numberOfLines={1} style={itemNameStyle ? itemNameStyle : styles.itemName}>
                             {itemName}
                         </Text>
                         {explain && (
@@ -37,7 +40,7 @@ class SettingItem extends Component {
                     rightComponent
                 ) : (
                     <View style={{ flex: 1 }}>
-                        <Text numberOfLines={1} style={styles.rightContent}>
+                        <Text numberOfLines={1} style={[styles.rightContent, column && { paddingLeft: 0 }]}>
                             {rightContent}
                         </Text>
                     </View>
@@ -64,8 +67,8 @@ const styles = StyleSheet.create({
         paddingLeft: 15,
     },
     settingItem: {
-        height: 60,
-        borderBottomWidth: 0.5,
+        minHeight: 60,
+        borderBottomWidth: 1,
         borderBottomColor: '#F0F0F0',
         flexDirection: 'row',
         alignItems: 'center',
