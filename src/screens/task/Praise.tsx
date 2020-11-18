@@ -35,7 +35,7 @@ export default (props) => {
     const [images, setImages] = useState([]);
     const uploadResponse = useCallback((response) => {
         if (response?.length > 0) {
-            Toast.show({ content: '好评字数大于15个通过几率更高哦', duration: 2000 });
+            Toast.show({ content: '提交前请仔细阅读下方温馨提示，以免审核失败无法发放奖励', duration: 2000 });
         }
         setImages(response);
     }, []);

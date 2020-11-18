@@ -18,6 +18,8 @@ class AdStore {
     @observable codeid_splash: string = Platform.OS === 'ios' ? AppJson.codeid_splash_ios : AppJson.codeid_splash;
     // feed
     @observable codeid_feed: string = Platform.OS === 'ios' ? AppJson.codeid_feed_ios : AppJson.codeid_feed;
+    @observable codeid_fedd_vertical: string = Platform.OS === 'ios' ? AppJson.codeid_feed_vertical_ios: AppJson.codeid_feed_vertical;
+    @observable codeid_feed_imgLeft: string = Platform.OS === 'ios' ? AppJson.codeid_feed_imgLeft_ios: AppJson.codeid_feed_imgLeft;
     // draw video
     @observable codeid_draw_video: string =
         Platform.OS === 'ios' ? AppJson.codeid_draw_video_ios : AppJson.codeid_draw_video;

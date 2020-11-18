@@ -1,11 +1,12 @@
 import React, { useCallback, useMemo } from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { GQL, useQuery } from '@src/apollo';
-import { observer, userStore } from '@src/store';
+import { observer, userStore, adStore } from '@src/store';
 import { QueryList } from '@src/content';
 import CollectionGroup from './components/CollectionGroup';
 import CollectionItem from './components/CollectionItem';
+import { ad } from 'react-native-ad';
 
 const PADDING = pixel(15);
 const CONTENT_WIDTH = Device.WIDTH - PADDING * 2;
@@ -64,14 +65,68 @@ export default observer((props: any) => {
     const { data } = useQuery(GQL.recommendCollectionsQuery);
 
     const renderItem = useCallback(({ item, index }) => {
-        return (
-            <CollectionItem
-                collection={item}
-                navigation={navigation}
-                style={styles.collectionWrap}
-                logoWidth={LOGO_WIDTH}
-            />
-        );
+        if (index !== 0 && index % 10 == 0) {
+            return (
+                <View>
+                    {adStore.enableAd ? (
+                        <View>
+                            <View
+                                style={[
+                                    {
+                                        width: Device.WIDTH - pixel(30),
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        // backgroundColor: 'skyblue',
+                                        marginLeft: 0,
+                                    },
+                                    Platform.select({
+                                        ios: {
+                                            maxHeight: LOGO_WIDTH,
+                                            marginTop: pixel(70),
+                                            marginBottom: pixel(-40),
+                                        },
+                                    }),
+                                ]}>
+                                <ad.Feed
+                                    codeid={adStore.codeid_feed_imgLeft}
+                                    adWidth={Device.WIDTH - pixel(30)}
+                                    onLoad={(smg) => {
+                                        // 广告加载成功回调
+                                        console.log('头条 Feed 广告加载成功！', smg);
+                                    }}
+                                    onError={(err) => {
+                                        // 广告加载失败回调
+                                        console.log('头条 Feed 广告加载失败！', err);
+                                    }}
+                                    onClick={(val) => {
+                                        // 广告点击回调
+                                        console.log('头条 Feed 广告被用户点击！', val);
+                                    }}
+                                />
+                            </View>
+                            <View style={[styles.separator, { marginTop: pixel(4) }]} />
+                        </View>
+                    ) : (
+                        <View />
+                    )}
+                    <CollectionItem
+                        collection={item}
+                        navigation={navigation}
+                        style={styles.collectionWrap}
+                        logoWidth={LOGO_WIDTH}
+                    />
+                </View>
+            );
+        } else {
+            return (
+                <CollectionItem
+                    collection={item}
+                    navigation={navigation}
+                    style={styles.collectionWrap}
+                    logoWidth={LOGO_WIDTH}
+                />
+            );
+        }
     }, []);
 
     return (

@@ -1,10 +1,11 @@
 import React, { useCallback, useMemo, useRef, useState, useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { observable, observer } from '@src/store';
+import { Platform, StyleSheet, Text, View } from 'react-native';
+import { observable, observer, adStore } from '@src/store';
 import { QueryList, ContentStatus } from '@src/content';
 import { MasonryList, ListFooter } from '@src/components';
 import { GQL, useQuery } from '@src/apollo';
 import PostItem from './components/PostItem';
+import { ad } from 'react-native-ad';
 
 const itemWidth = (Device.WIDTH - pixel(6) * 3) / 2;
 const minVideoHeight = itemWidth * 0.6;
@@ -114,7 +115,42 @@ export default observer((props: any) => {
     }, [error, loading, refetch, publicPosts]);
 
     const renderItem = useCallback(({ item, index }) => {
-        return <PostItem post={item} itemWidth={itemWidth} itemHeight={calculatorImageHeight({ item })} />;
+        console.log('====================================');
+        console.log('item', item);
+        console.log('====================================');
+        if (index !== 0 && index % 10 === 0 && adStore.enableAd) {
+            return (
+                <View
+                    style={[
+                        {
+                            width: itemWidth,
+                            height: calculatorImageHeight({ item }),
+                            borderRadius: pixel(5),
+                            overflow: 'hidden',
+                            marginBottom: pixel(10),
+                        },
+                    ]}>
+                    <ad.Feed
+                        codeid={adStore.codeid_fedd_vertical}
+                        adWidth={Platform.OS === 'ios' ? itemWidth * 14 : itemWidth}
+                        onLoad={(smg) => {
+                            // 广告加载成功回调
+                            console.log('头条 Feed 广告加载成功！', smg);
+                        }}
+                        onError={(err) => {
+                            // 广告加载失败回调
+                            console.log('头条 Feed 广告加载失败！', err);
+                        }}
+                        onClick={(val) => {
+                            // 广告点击回调
+                            console.log('头条 Feed 广告被用户点击！', val);
+                        }}
+                    />
+                </View>
+            );
+        } else {
+            return <PostItem post={item} itemWidth={itemWidth} itemHeight={calculatorImageHeight({ item })} />;
+        }
     }, []);
 
     return (

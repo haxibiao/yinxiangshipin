@@ -72,10 +72,10 @@ const PostItem = observer((props: Props) => {
                 </View>
                 <Row style={styles.metaList}>
                     <TouchableOpacity style={styles.userInfo} onPress={() => navigation.navigate('User', { user })}>
-                        <Avatar source={user.avatar} size={pixel(16)} />
+                        <Avatar source={user?.avatar} size={pixel(16)} />
                         <View style={{ flex: 1 }}>
                             <SafeText style={styles.nameText} numberOfLines={1}>
-                                {user.name}
+                                {user?.name}
                             </SafeText>
                         </View>
                     </TouchableOpacity>
