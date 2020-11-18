@@ -22,6 +22,9 @@ export default observer((props: any) => {
         [signatureHeight, setSignatureHeight] = useState(18),
         [sexModalVisible, setSexModalVisible] = useState(false);
 
+    // 设置头像审核提示,前端假提示改变状态
+    const [iconStatus, setIconStatus] = useState(true);
+
     const setNameModal = () => {
         setNameModalVisible(!nameModalVisible);
     };
@@ -68,6 +71,10 @@ export default observer((props: any) => {
                     Toast.show({ content: '头像上传失败，图片质量过大' });
                 } else {
                     saveAvatar(`data:${image.mime};base64,${image.data}`);
+                    setIconStatus(!iconStatus);
+                    setTimeout(() => {
+                        setIconStatus(!iconStatus);
+                    }, 60000);
                 }
             })
             .catch((error) => {
@@ -219,12 +226,12 @@ export default observer((props: any) => {
                             <Text style={styles.settingTypeText}>常规设置</Text>
                         </View>
                     </View> */}
-                    <TouchableOpacity onPress={_changeAvatar}>
+                    <TouchableOpacity disabled={iconStatus ? false : true} onPress={_changeAvatar}>
                         {/* <SettingItem itemName="更改头像" rightComponent={<Avatar source={user.avatar} size={34} />} /> */}
                         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: pixel(25) }}>
                             <Avatar source={user.avatar} size={102} />
                             <Text style={{ marginTop: pixel(8), fontSize: font(14), color: '#d0d0d0' }}>
-                                点击更换头像
+                                {iconStatus ? '点击更换头像' : '审核中...'}
                             </Text>
                         </View>
                     </TouchableOpacity>
