@@ -1,5 +1,5 @@
 import React, { useState, useRef, useMemo, useCallback } from 'react';
-import { StyleSheet, View, FlatList, Keyboard } from 'react-native';
+import { StyleSheet, View, FlatList, Keyboard, RefreshControl } from 'react-native';
 import { ItemSeparator, KeyboardSpacer, ListFooter, StatusView } from '@src/components';
 import { GQL, useQuery } from '@src/apollo';
 import { observer, userStore } from '@src/store';
@@ -41,7 +41,7 @@ const Comments = observer((props: Props) => {
         [fancyInputRef],
     );
 
-    const { data, refetch, fetchMore } = useQuery(GQL.commentsQuery, {
+    const { data, refetch, fetchMore, loading } = useQuery(GQL.commentsQuery, {
         variables: { commentable_type: commentAbleType, commentable_id: commentAbleId, replyCount: 3 },
         fetchPolicy: 'network-only',
     });
@@ -56,6 +56,9 @@ const Comments = observer((props: Props) => {
                 showsVerticalScrollIndicator={false}
                 ref={flatListRef}
                 data={commentsData}
+                refreshControl={
+                    <RefreshControl onRefresh={refetch} refreshing={loading} colors={[Theme.primaryColor]} />
+                }
                 renderItem={({ item }) => {
                     return (
                         <CommentItem
