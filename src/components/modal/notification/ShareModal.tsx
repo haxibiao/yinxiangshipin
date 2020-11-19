@@ -50,6 +50,7 @@ const operationIcon = {
     分享合集: require('@app/assets/images/operation/more_content.png'),
     复制链接: require('@app/assets/images/operation/more_links.png'),
     分享长图: require('@app/assets/images/operation/more_large_img.png'),
+    保存长图: require('@app/assets/images/operation/more_large_img.png'),
     不感兴趣: require('@app/assets/images/operation/more_dislike.png'),
     举报: require('@app/assets/images/operation/more_report.png'),
     删除: require('@app/assets/images/operation/more_delete.png'),
@@ -97,12 +98,17 @@ export const ShareModal = observer(() => {
     const shareQRCard = useCallback(async () => {
         try {
             const image = await cardRef.current.onCapture();
-            setImageRef(image);
+            if (Platform.OS === 'ios') {
+                viewShotUtil.saveImage(image, noticeData?.id);
+                hideModal();
+            } else {
+                setImageRef(image);
+            }
         } catch (error) {
             hideModal();
             Toast.show({ content: '保存长图失败' });
         }
-    }, []);
+    }, [noticeData]);
 
     const shareCollection = useCallback(async () => {
         const collection = noticeData?.collections?.[0];
@@ -124,7 +130,7 @@ export const ShareModal = observer(() => {
 
     const operationList = useMemo(() => {
         const result = [
-            { name: '分享长图', handler: shareQRCard },
+            { name: Platform.OS === 'ios' ? '保存长图' : '分享长图', handler: shareQRCard },
             { name: '复制链接', handler: copyLink },
         ];
         const collection = noticeData?.collections?.[0];
@@ -197,14 +203,19 @@ export const ShareModal = observer(() => {
                                     <DebouncedPressable
                                         key={index}
                                         style={styles.optionItem}
-                                        onPress={async () => {
-                                            if (imageRef) {
-                                                const filePath = await viewShotUtil.saveImage(imageRef, noticeData?.id);
-                                                item.shareImage(filePath);
-                                            } else {
-                                                item.shareContent(noticeData, sharedTargetType);
-                                            }
+                                        onPress={() => {
                                             hideModal();
+                                            setTimeout(async () => {
+                                                if (imageRef) {
+                                                    const filePath = await viewShotUtil.saveImage(
+                                                        imageRef,
+                                                        noticeData?.id,
+                                                    );
+                                                    item.shareImage(filePath);
+                                                } else {
+                                                    item.shareContent(noticeData, sharedTargetType);
+                                                }
+                                            }, 100);
                                         }}>
                                         <View style={{ margin: pixel(3) }}>
                                             <Image style={styles.platformIcon} source={item.image} />
@@ -225,7 +236,7 @@ export const ShareModal = observer(() => {
                                             key={index}
                                             style={styles.optionItem}
                                             onPress={() => {
-                                                if (item.name !== '分享长图') {
+                                                if (item.name !== '分享长图' && item.name !== '保存长图') {
                                                     hideModal();
                                                 }
                                                 item.handler(noticeData);
