@@ -77,13 +77,14 @@ export default observer((props: any) => {
                                         justifyContent: 'center',
                                         alignItems: 'center',
                                         // backgroundColor: 'skyblue',
-                                        marginLeft: 0,
+                                        marginLeft: -pixel(18),
                                     },
                                     Platform.select({
                                         ios: {
                                             maxHeight: LOGO_WIDTH,
                                             marginTop: pixel(70),
                                             marginBottom: pixel(-40),
+                                            marginLeft: -pixel(16),
                                         },
                                     }),
                                 ]}>

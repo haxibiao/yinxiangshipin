@@ -11,10 +11,12 @@ const itemWidth = (Device.WIDTH - pixel(6) * 3) / 2;
 const minVideoHeight = itemWidth * 0.6;
 const maxVideoHeight = itemWidth * 1.4;
 
-function calculatorImageHeight({ item }) {
+function calculatorImageHeight({ item, index }) {
     const video = item.video;
     const images = item.images;
-    if (video?.width) {
+    if (index !== 0 && index % 10 === 0 && adStore.enableAd) {
+        return itemWidth * 1.4 + (Device.IOS ? pixel(36) : pixel(50));
+    } else if (video?.width) {
         if (video?.width >= video?.height) {
             return Math.max(minVideoHeight, (itemWidth / video?.width) * video?.height);
         } else {
@@ -42,8 +44,8 @@ function calculatorImageHeight({ item }) {
 //     return line >= 2 ? font(18) * 2 : font(18) * line;
 // }
 
-function calculatorItemHeight({ item }) {
-    const imageHeight = calculatorImageHeight({ item });
+function calculatorItemHeight({ item, index }) {
+    const imageHeight = calculatorImageHeight({ item, index });
     // const contentHeight = calculatorContentHeight({ item });
     return imageHeight;
 }
@@ -115,37 +117,39 @@ export default observer((props: any) => {
     }, [error, loading, refetch, publicPosts]);
 
     const renderItem = useCallback(({ item, index }) => {
-        console.log('====================================');
-        console.log('item', item);
-        console.log('====================================');
         if (index !== 0 && index % 10 === 0 && adStore.enableAd) {
             return (
                 <View
                     style={[
                         {
                             width: itemWidth,
-                            height: calculatorImageHeight({ item }),
+                            height: calculatorImageHeight({ item, index }),
                             borderRadius: pixel(5),
                             overflow: 'hidden',
                             marginBottom: pixel(10),
+                            backgroundColor: '#fff',
                         },
                     ]}>
-                    <ad.Feed
-                        codeid={adStore.codeid_fedd_vertical}
-                        adWidth={Platform.OS === 'ios' ? itemWidth * 14 : itemWidth}
-                        onLoad={(smg) => {
-                            // 广告加载成功回调
-                            console.log('头条 Feed 广告加载成功！', smg);
-                        }}
-                        onError={(err) => {
-                            // 广告加载失败回调
-                            console.log('头条 Feed 广告加载失败！', err);
-                        }}
-                        onClick={(val) => {
-                            // 广告点击回调
-                            console.log('头条 Feed 广告被用户点击！', val);
-                        }}
-                    />
+                    <View style={[Platform.OS === 'ios' ? { marginLeft: pixel(-98) } : { marginTop: pixel(-2) }]}>
+                        {/* Platform.OS === 'ios' ? itemWidth * 2 + 110 : */}
+                        {/* style={Platform.OS === 'ios' && { marginLeft: pixel(-98) }} */}
+                        <ad.Feed
+                            codeid={adStore.codeid_fedd_vertical}
+                            adWidth={Platform.OS === 'ios' ? itemWidth * 2 + 110 : itemWidth}
+                            onLoad={(smg) => {
+                                // 广告加载成功回调
+                                console.log('头条 Feed 广告加载成功！', smg);
+                            }}
+                            onError={(err) => {
+                                // 广告加载失败回调
+                                console.log('头条 Feed 广告加载失败！', err);
+                            }}
+                            onClick={(val) => {
+                                // 广告点击回调
+                                console.log('头条 Feed 广告被用户点击！', val);
+                            }}
+                        />
+                    </View>
                 </View>
             );
         } else {
