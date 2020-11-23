@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import {
     StyleSheet,
     View,
@@ -34,13 +34,21 @@ export default (props) => {
     const [phone, setPhoneNumber] = useState('');
     const [images, setImages] = useState([]);
     const uploadResponse = useCallback((response) => {
-        if (response?.length > 0) {
-            Toast.show({ content: '提交前请仔细阅读下方温馨提示，以免审核失败无法发放奖励', duration: 2000 });
-        }
+        // if (response?.length > 0) {
+        //     Toast.show({ content: '提交前请仔细阅读下方温馨提示，以免审核失败无法发放奖励', duration: 2000 });
+        // }
         setImages(response);
     }, []);
 
     const client = useApolloClient();
+
+    const onLoadToast = useCallback(() => {
+        Toast.show({ content: '提交前请仔细阅读下方温馨提示，以免审核失败无法发放奖励', duration: 2000 });
+    }, []);
+
+    useEffect(() => {
+        onLoadToast();
+    }, [onLoadToast]);
 
     const highPraiseTask = useCallback(() => {
         Loading.show();
@@ -124,12 +132,12 @@ export default (props) => {
                         <Text style={styles.ruleText}>
                             在应用商店给我们评价后并截图，同您在应用商店的账号（手机号）一并提交。上传虚假评价与无关图片将不予通过!
                         </Text>
-                        <Text style={styles.ruleText}>后续请留意审核状态，经审核通过后即可领取奖励。</Text>
                         <Text style={styles.ruleText}>评价内容需大于15字，随意编写、复制他人评论粘贴将不予通过！</Text>
                         <Text style={styles.ruleText}>优质好评内容将优先进行审核与奖励发放。</Text>
                         <Text style={styles.ruleText}>
                             后续当您的评论在应用商店给其他人带来良好的参考价值时，系统将会根据点赞数给您发放追加奖励！
                         </Text>
+                        <Text style={styles.ruleText}>后续请留意审核状态，经审核通过后即可领取奖励。</Text>
                     </View>
                 </DropdownMenu>
             </ScrollView>
