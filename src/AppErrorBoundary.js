@@ -1,13 +1,9 @@
-/*
- * @flow
- * created by wyk made in 2019-01-24 15:08:42
- */
-'use strict';
-
 import React, { Component } from 'react';
 import { StyleSheet, View, Image, Text } from 'react-native';
+import LottieView from 'lottie-react-native';
+import * as Sentry from '@sentry/react-native';
 
-class ErrorBoundary extends React.Component {
+class AppErrorBoundary extends React.Component {
     constructor(props) {
         super(props);
         this.state = { hasError: false };
@@ -21,16 +17,30 @@ class ErrorBoundary extends React.Component {
     componentDidCatch(error, info) {
         // You can also log the error to an error reporting service
         // logErrorToMyService(error, info);
+        const code = error.toString().indexOf('Network error');
+        if (code < 0 && !__DEV__) {
+            Sentry.captureException(error);
+        }
+
         this.setState({ hasError: true });
+    }
+
+    componentWillUnmount() {
+        this.setState({ hasError: false });
     }
 
     render() {
         if (this.state.hasError) {
-            // You can render any custom fallback UI
             return (
                 <View style={styles.container}>
-                    <Image style={styles.image} source={require('@app/assets/images/default_error.png')} />
-                    <Text style={styles.title}>糟糕，出错了。我们会尽快修复！</Text>
+                    <LottieView
+                        source={require('@app/assets/json/error_screen.json')}
+                        style={{ width: '60%' }}
+                        loop
+                        autoPlay
+                    />
+                    <Text style={styles.title}>出了一点问题，我们会尽快修复</Text>
+                    <Text style={styles.title}>请尝试重启App或更新到最新版</Text>
                 </View>
             );
         }
@@ -54,10 +64,10 @@ const styles = StyleSheet.create({
         resizeMode: 'cover',
     },
     title: {
-        fontSize: font(12),
+        fontSize: pixel(12),
         marginTop: pixel(10),
         color: Theme.subTextColor,
     },
 });
 
-export default ErrorBoundary;
+export default AppErrorBoundary;
