@@ -340,6 +340,12 @@ function midAutumnFestivalTask({ collection }) {
     navigation.navigate('CollectionDetail', { collection });
 }
 
+// 浏览合集的方法,目的主要在于增加提示
+function browseCollection(params) {
+    navigation.navigate('Find');
+    Toast.show({ content: '请挑选自己喜欢的合集开始浏览吧~' });
+}
+
 // resolve.submit_name
 const taskColor = {
     活动任务: '#2FC6FC',
@@ -358,21 +364,23 @@ const taskRouteInfo = {
     去绑定: 'BindingAccount',
     去修改: 'EditProfile',
     去好评: 'Praise',
+    去评论: 'Home',
+    去浏览: browseCollection,
 };
 
 const styles = StyleSheet.create({
     taskItem: {
         marginHorizontal: pixel(15),
-        paddingVertical: pixel(18),
-        paddingHorizontal: pixel(12),
+        paddingVertical: pixel(10),
+        paddingHorizontal: pixel(2),
         borderRadius: pixel(6),
         flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: '#ffffff',
     },
     taskIcon: {
-        height: pixel(48),
-        width: pixel(48),
+        height: pixel(42),
+        width: pixel(42),
         borderRadius: pixel(24),
         backgroundColor: '#f0f0f0',
     },
@@ -418,7 +426,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
-        marginTop: pixel(8),
+        marginTop: pixel(6),
     },
     progressBar: {
         flex: 1,

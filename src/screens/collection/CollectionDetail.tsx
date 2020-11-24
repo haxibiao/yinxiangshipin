@@ -222,6 +222,15 @@ export default observer((props: any) => {
         notificationStore.sendShareNotice({ target: { ...collection, description }, type: 'collection' });
     }, 100);
 
+    // 浏览合集任务弹窗提示以及计时器的实现
+    // let [durationStatus, setDurationStatus] = useState(0);
+    // const timeValue = 600000;
+    // useEffect(() => {
+    //     setTimeout(() => {}, timeValue);
+    // }, [setDurationStatus]);
+
+    // console.log('durationStatus', durationStatus);
+
     return (
         <View style={styles.container}>
             <NavBarHeader

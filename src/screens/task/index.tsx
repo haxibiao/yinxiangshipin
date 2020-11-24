@@ -120,7 +120,7 @@ const BUTTON_WIDTH = Math.max(Device.WIDTH * 0.48, pixel(168));
 const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
-        backgroundColor: '#F5F6FB',
+        backgroundColor: '#ffffff',
         paddingBottom: Theme.BOTTOM_HEIGHT + Theme.HOME_INDICATOR_HEIGHT + pixel(15),
     },
     taskTopContainer: {
