@@ -4,9 +4,6 @@ import codePush from 'react-native-code-push';
 // apollo && Router
 import { ApolloProvider, useClientBuilder, GQL } from './apollo';
 import AppRouter from './router';
-// WeChat
-import * as WeChat from 'react-native-wechat-lib';
-import { WechatAppId } from '../app.json';
 // appContext
 import { observer, appStore, adStore, userStore } from './store';
 // apNotification
@@ -21,6 +18,7 @@ import {
 import { Toast } from './components';
 //appPreparation
 import Preparation from './Preparation';
+import AppErrorBoundary from './AppErrorBoundary';
 
 //修复部分安卓手机中文字体丢失
 const defaultFontFamily = {
@@ -40,23 +38,20 @@ Text.render = function (...args) {
 const App = observer(() => {
     const client = useClientBuilder(userStore.me?.token);
 
-    useEffect(() => {
-        // WeChat注册（微信分享）
-        WeChat.registerApp(WechatAppId, 'http://yxsp.haxifang.cn/');
-    }, []);
-
     return (
         <View style={styles.container}>
-            <ApolloProvider client={client}>
-                <Preparation />
-                <AppRouter />
-                <AppRemindModal />
-                <WithdrawalNotificationModal />
-                <RewardNotificationModal />
-                <ShareModal />
-                <ReportModal />
-                <LoadingModal />
-            </ApolloProvider>
+            <AppErrorBoundary>
+                <ApolloProvider client={client}>
+                    <Preparation />
+                    <AppRouter />
+                    <AppRemindModal />
+                    <WithdrawalNotificationModal />
+                    <RewardNotificationModal />
+                    <ShareModal />
+                    <ReportModal />
+                    <LoadingModal />
+                </ApolloProvider>
+            </AppErrorBoundary>
             <Toast ref={(ref) => (global.Toast = ref)} />
         </View>
     );

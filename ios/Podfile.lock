@@ -10,13 +10,13 @@ PODS:
     - AppCenter/Crashes
     - AppCenterReactNativeShared
     - React
-  - AppCenter/Analytics (3.3.2):
+  - AppCenter/Analytics (4.0.0):
     - AppCenter/Core
-  - AppCenter/Core (3.3.2)
-  - AppCenter/Crashes (3.3.2):
+  - AppCenter/Core (4.0.0)
+  - AppCenter/Crashes (4.0.0):
     - AppCenter/Core
-  - AppCenterReactNativeShared (3.1.1):
-    - AppCenter/Core (= 3.3.2)
+  - AppCenterReactNativeShared (4.0.0):
+    - AppCenter/Core (= 4.0.0)
   - Base64 (1.1.2)
   - boost-for-react-native (1.63.0)
   - BVLinearGradient (2.5.6):
@@ -42,12 +42,12 @@ PODS:
     - Flipper-Folly (~> 2.2)
     - Flipper-RSocket (~> 1.1)
   - Flipper-DoubleConversion (1.1.7)
-  - Flipper-Folly (2.2.0):
+  - Flipper-Folly (2.3.0):
     - boost-for-react-native
     - CocoaLibEvent (~> 1.0)
     - Flipper-DoubleConversion
     - Flipper-Glog
-    - OpenSSL-Universal (= 1.0.2.19)
+    - OpenSSL-Universal (= 1.0.2.20)
   - Flipper-Glog (0.3.6)
   - Flipper-PeerTalk (0.0.4)
   - Flipper-RSocket (1.1.0):
@@ -109,9 +109,9 @@ PODS:
   - lottie-react-native (3.5.0):
     - lottie-ios (~> 3.1.8)
     - React
-  - OpenSSL-Universal (1.0.2.19):
-    - OpenSSL-Universal/Static (= 1.0.2.19)
-  - OpenSSL-Universal/Static (1.0.2.19)
+  - OpenSSL-Universal (1.0.2.20):
+    - OpenSSL-Universal/Static (= 1.0.2.20)
+  - OpenSSL-Universal/Static (1.0.2.20)
   - Permission-Camera (2.1.5):
     - RNPermissions
   - Permission-Contacts (2.1.5):
@@ -430,24 +430,24 @@ PODS:
     - React
   - RNScreens (2.10.1):
     - React
-  - RNSentry (1.7.1):
-    - React
-    - Sentry (~> 5.2.0)
+  - RNSentry (2.0.2):
+    - React-Core
+    - Sentry (= 6.0.9)
   - RNShare (3.7.0):
     - React
   - RNSVG (9.13.6):
     - React
   - RNVectorIcons (6.7.0):
     - React
-  - SDWebImage/Core (5.8.4)
-  - SDWebImageWebPCoder (0.6.1):
+  - SDWebImage/Core (5.10.0)
+  - SDWebImageWebPCoder (0.7.0):
     - libwebp (~> 1.0)
-    - SDWebImage/Core (~> 5.7)
-  - Sentry (5.2.2):
-    - Sentry/Core (= 5.2.2)
-  - Sentry/Core (5.2.2)
+    - SDWebImage/Core (~> 5.10)
+  - Sentry (6.0.9):
+    - Sentry/Core (= 6.0.9)
+  - Sentry/Core (6.0.9)
   - SSZipArchive (2.2.3)
-  - TOCropViewController (2.5.4)
+  - TOCropViewController (2.5.5)
   - toolbar-android (0.1.0-rc.2):
     - React
   - Yoga (1.14.0)
@@ -725,11 +725,11 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  AppCenter: aba7de06e4c2184f90dc84f7866bd07f82427d69
+  AppCenter: 51351e0121e40ba75e28ecb7de5c2e69d480df5e
   appcenter-analytics: bce201b504c8138d235e6f42de1f36d30d2cd7f5
   appcenter-core: 086ab16077baef60368c6a119af6e9e127406286
   appcenter-crashes: 10790bf670f79150f1654d79f76c10a8b4936688
-  AppCenterReactNativeShared: b9fa50d999e830e03f086f487b1aa0f9772088c1
+  AppCenterReactNativeShared: 69aedc15c136e5f76a0cc9eb2ad84d3cefc6e64f
   Base64: cecfb41a004124895a7bcee567a89bae5a89d49b
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   BVLinearGradient: e3aad03778a456d77928f594a649e96995f1c872
@@ -742,7 +742,7 @@ SPEC CHECKSUMS:
   FBReactNativeSpec: dc7fa9088f0f2a998503a352b0554d69a4391c5a
   Flipper: 33585e2d9810fe5528346be33bcf71b37bb7ae13
   Flipper-DoubleConversion: 38631e41ef4f9b12861c67d17cb5518d06badc41
-  Flipper-Folly: c12092ea368353b58e992843a990a3225d4533c3
+  Flipper-Folly: e4493b013c02d9347d5e0cb4d128680239f6c78a
   Flipper-Glog: 1dfd6abf1e922806c52ceb8701a3599a79a200a6
   Flipper-PeerTalk: 116d8f857dc6ef55c7a5a75ea3ceaafe878aadc9
   Flipper-RSocket: 64e7431a55835eb953b0bf984ef3b90ae9fdddd7
@@ -753,7 +753,7 @@ SPEC CHECKSUMS:
   libwebp: 946cb3063cea9236285f7e9a8505d806d30e07f3
   lottie-ios: 48fac6be217c76937e36e340e2d09cf7b10b7f5f
   lottie-react-native: 1fb4ce21d6ad37dab8343eaff8719df76035bd93
-  OpenSSL-Universal: 8b48cc0d10c1b2923617dfe5c178aa9ed2689355
+  OpenSSL-Universal: ff34003318d5e1163e9529b08470708e389ffcdd
   Permission-Camera: afad27bf90337684d4a86f3825112d648c8c4d3b
   Permission-Contacts: edde2d433382b3118f0d4c9ebc7708d5d87c4f17
   Permission-LocationAlways: 155e6251b757b380f6354737cae8e8d59c472495
@@ -809,15 +809,15 @@ SPEC CHECKSUMS:
   RNImageCropPicker: f0557a908758c4a3f83978894ec7227651529b45
   RNPermissions: ad71dd4f767ec254f2cd57592fbee02afee75467
   RNScreens: b748efec66e095134c7166ca333b628cd7e6f3e2
-  RNSentry: 2bae4ffee2e66376ef42cb845a494c3bde17bc56
+  RNSentry: 5ebc2926dbcbb9b77857ba6df0754a869037123d
   RNShare: a1d5064df7a0ebe778d001869b3f0a124bf0a491
   RNSVG: 8ba35cbeb385a52fd960fd28db9d7d18b4c2974f
   RNVectorIcons: 368d6d8b8301224e5ffb6254191f4f8876c2be0d
-  SDWebImage: cf6922231e95550934da2ada0f20f2becf2ceba9
-  SDWebImageWebPCoder: d0dac55073088d24b2ac1b191a71a8f8d0adac21
-  Sentry: 8fa58a051237554f22507fb483b9a1de0171a2dc
+  SDWebImage: 9169792e9eec3e45bba2a0c02f74bf8bd922d1ee
+  SDWebImageWebPCoder: c359317c2e7cfec85d7ea137521c7a36ed239674
+  Sentry: 388c9dc093b2fd3a264466a5c5b21e25959610a9
   SSZipArchive: 62d4947b08730e4cda640473b0066d209ff033c9
-  TOCropViewController: 2a1ae1242600b1f2d996fd91a5268b2309a33b5c
+  TOCropViewController: da59f531f8ac8a94ef6d6c0fc34009350f9e8bfe
   toolbar-android: 85f3ef4d691469f2d304e7dee4bca013aa1ba1ff
   Yoga: 7740b94929bbacbddda59bf115b5317e9a161598
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
