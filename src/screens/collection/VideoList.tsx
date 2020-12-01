@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useMemo, useCallback } from 'react';
 import { StyleSheet, View, Text, StatusBar } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
-import { exceptionCapture } from '@src/common';
+import { exceptionCapture, useStayTime } from '@src/common';
 import { NavBarHeader, FocusAwareStatusBar } from '@src/components';
 import { GQL, useApolloClient } from '@src/apollo';
 import { DrawVideoList, DrawVideoStore } from '@src/content';
@@ -71,6 +71,26 @@ export default () => {
             navWillBlurListener();
         };
     }, []);
+
+    const addVisitWithDuration = useCallback((duration) => {
+        client.mutate({
+            mutation: GQL.addVisitWithDurationMutation,
+            variables: {
+                duration: Math.round(duration / 1000),
+                visited_id: collection.id,
+            },
+            refetchQueries: () => [
+                {
+                    query: GQL.tasksQuery,
+                    variables: {
+                        fetchPolicy: 'network-only',
+                    },
+                },
+            ],
+        });
+    }, []);
+
+    useStayTime({ record: addVisitWithDuration });
 
     return (
         <View style={styles.container}>

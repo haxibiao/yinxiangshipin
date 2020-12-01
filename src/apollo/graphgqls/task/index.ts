@@ -5,6 +5,7 @@ import clickVideoAD from './clickVideoAD.graphql';
 import CreateCheckInMutation from './CreateCheckInMutation.graphql';
 import highPraiseTaskMutation from './highPraiseTaskMutation.graphql';
 import tasksQuery from './tasksQuery.graphql';
+import addVisitWithDurationMutation from './addVisitWithDurationMutation.graphql';
 
 export const task = {
     CheckInsQuery,
@@ -13,4 +14,5 @@ export const task = {
     CreateCheckInMutation,
     highPraiseTaskMutation,
     tasksQuery,
+    addVisitWithDurationMutation,
 };

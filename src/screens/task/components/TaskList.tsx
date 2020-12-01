@@ -87,18 +87,13 @@ export default function TaskList() {
         <SectionList
             sections={tasksMap}
             keyExtractor={(item) => String(item.id)}
-            renderItem={({ item }) => (
-                <View>
-                    <TaskItem task={item} />
-                    <View style={styles.taskItemSeparator} />
-                </View>
-            )}
+            renderItem={({ item }) => <TaskItem task={item} />}
             ListEmptyComponent={() => <View />}
             // ListFooterComponent={() => <View style={{ height: pixel(30) }} />}
             renderSectionHeader={({ section: { title, data } }) =>
                 data.length > 0 ? <SafeText style={styles.listHeader}>{title}</SafeText> : null
             }
-            // ItemSeparatorComponent={() => <View style={styles.taskItemSeparator} />}
+            ItemSeparatorComponent={() => <View style={styles.taskItemSeparator} />}
         />
     );
 }
@@ -114,10 +109,10 @@ const styles = StyleSheet.create({
     },
     taskItemSeparator: {
         // height: pixel(12),
-        height: pixel(0.8),
+        height: StyleSheet.hairlineWidth,
         backgroundColor: '#F5F6FB',
-        width: Device.WIDTH - pixel(68),
-        marginLeft: pixel(68),
-        overflow: 'hidden',
+        // width: Device.WIDTH - pixel(68),
+        // marginLeft: pixel(68),
+        // overflow: 'hidden',
     },
 });

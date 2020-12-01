@@ -379,8 +379,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffffff',
     },
     taskIcon: {
-        height: pixel(42),
-        width: pixel(42),
+        height: pixel(44),
+        width: pixel(44),
         borderRadius: pixel(24),
         backgroundColor: '#f0f0f0',
     },

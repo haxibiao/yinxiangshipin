@@ -1,0 +1,7 @@
+# 浏览时长统计接口
+mutation addVisitWithDurationMutation($visited_id: Int!, $visited_type: VisitType = COLLECTION, $duration: Int) {
+    addVisitWithDuration(visited_id: $visited_id, visited_type: $visited_type, duration: $duration) {
+        id
+        duration
+    }
+}
