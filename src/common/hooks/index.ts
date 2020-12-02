@@ -11,4 +11,4 @@ export { useRecallUserProfile } from './useRecallUserProfile';
 export { useUnreadNotification } from './useUnreadNotification';
 export { useAutoSignIn } from './useAutoSignIn';
 export { useReport } from './useReport';
-export { useStayTime } from './useStayTime';
+export { useVisitDurationReport } from './useVisitDurationReport';

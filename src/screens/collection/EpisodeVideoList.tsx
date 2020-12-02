@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, TouchableWithoutFeedback, DeviceEventEmitter } 
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { useApolloClient, ApolloProvider } from '@src/apollo';
 import { observer } from '@src/store';
-import { exceptionCapture } from '@src/common';
+import { exceptionCapture, useVisitDurationReport } from '@src/common';
 import { NavBarHeader, SafeText, Iconfont, FocusAwareStatusBar } from '@src/components';
 import { GQL } from '@src/apollo';
 import { DrawVideoList, DrawVideoStore } from '@src/content';
@@ -217,6 +217,8 @@ export default observer(() => {
             navWillBlurListener();
         };
     }, []);
+
+    useVisitDurationReport({ visited_id: collection.id });
 
     return (
         <View style={styles.container}>
