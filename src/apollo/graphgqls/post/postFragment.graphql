@@ -14,6 +14,7 @@ fragment postFragment on Post {
     review_day
     is_ad
     created_at
+    current_episode
     user {
         id
         name

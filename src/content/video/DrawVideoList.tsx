@@ -122,6 +122,7 @@ export default observer(
         const renderVideoItem = useCallback(
             ({ item, index }) => {
                 // 显示drawFeed广告
+                // console.log('显示drawFeed广告', item?.is_ad, adStore.enableAd);
                 if (item?.is_ad && adStore.enableAd) {
                     if (Platform.OS === 'android' || (store.visibility && index === store.viewableItemIndex)) {
                         return (
@@ -181,6 +182,7 @@ export default observer(
 
         // 视频奖励进度
         useAdReward(store, rewardEnable);
+        // console.log('data', store.data);
 
         return (
             <>
