@@ -92,6 +92,9 @@ import PhoneVerification from '../screens/settings/PhoneVerification';
 import VersionInformation from '../screens/settings/VersionInformation'; // 版本信息
 import CommonQuestionScreen from '../screens/settings/CommonQuestionScreen'; // 版本信息
 
+// movie of neihandianying.com
+import MoviePlayerScreen from '../screens/movie/moviePlayer';
+
 export default {
     Login: {
         component: LoginScreen,
@@ -287,4 +290,7 @@ export default {
     UserBlockList: {
         component: UserBlockScreen,
     },
+    MoviePlayer:{
+        component: MoviePlayerScreen,
+    }
 };

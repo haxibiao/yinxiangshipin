@@ -7,6 +7,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import FollowedPosts from './FollowedPosts';
 import Collections from './Collections';
 import RecommendPosts from './RecommendPosts';
+import Movie from '../../screens/movie';
 
 export default observer(() => {
     const navigation = useNavigation();
@@ -34,6 +35,7 @@ export default observer(() => {
                 <FollowedPosts tabLabel="关注" />
                 <RecommendPosts tabLabel="最新" />
                 <Collections tabLabel="合集" />
+                <Movie tabLabel="影视" />
             </ScrollableTabView>
             <TouchableWithoutFeedback onPress={goSearchCenter}>
                 <View style={styles.searchButton}>
@@ -83,7 +85,7 @@ const styles = StyleSheet.create({
     underlineStyle: {
         width: pixel(26),
         height: pixel(3),
-        left: (Device.WIDTH - pixel(66) * 3) / 2 + pixel(20),
+        left: (Device.WIDTH - pixel(66) * 4) / 2 + pixel(20),
         bottom: pixel(5),
     },
     activeTextStyle: {
