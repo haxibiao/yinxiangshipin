@@ -292,5 +292,5 @@ export default {
     },
     MoviePlayer:{
         component: MoviePlayerScreen,
-    }
+    },
 };

@@ -76,10 +76,6 @@ const ApplicationMenu = () => {
                     </View>
                     <Text style={styles.menuText}>泰剧</Text>
                 </TouchableOpacity>
-                {/* <Text>123</Text>
-                <Text>123</Text>
-                <Text>123</Text>
-                <Text>123</Text> */}
             </ScrollView>
         </View>
     );
@@ -88,7 +84,7 @@ const ApplicationMenu = () => {
 const styles = StyleSheet.create({
     listPage: {
         width: Device.WIDTH,
-        marginVertical: pixel(24),
+        marginVertical: pixel(16),
         height: pixel(80),
     },
     menuList: {

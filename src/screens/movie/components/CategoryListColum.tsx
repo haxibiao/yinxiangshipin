@@ -19,18 +19,18 @@ import { ScrollView } from 'react-native-gesture-handler';
 interface props {
     pageViewStyle: ViewStyle;
     categoryData: any;
-    moduleData: any;
     hasMore: boolean;
     refetchMore: any;
+    moduleData: any;
 }
 
-const CategoryList = (props: Props) => {
+const CategoryListColum = (props: Props) => {
     const { pageViewStyle, categoryData, hasMore, refetchMore, moduleData } = props;
     const [moreStatus, setMoreStatus] = useState(false);
     const [spinAction, setSpinAction] = useState(false);
     useEffect(() => {
         hasMore === true ? setMoreStatus(true) : setMoreStatus(false);
-    }, []);
+    }, [hasMore]);
     const navigation = useNavigation();
     const navigateHandle = useCallback(
         (playUrl) => {
@@ -61,60 +61,59 @@ const CategoryList = (props: Props) => {
         spinTiming();
         refetchMore();
     }, [spinTiming, refetchMore]);
-
     return (
         <View style={[styles.pageView, { ...pageViewStyle }]}>
             <View style={styles.pageHead}>
                 <Text style={styles.pageTitle}>title</Text>
-                <Text style={styles.pageMore}>more</Text>
+                {moreStatus ? <Text style={styles.pageMore}>more</Text> : <Text />}
             </View>
             <View style={styles.pageShow}>
                 <FlatList
                     style={{ flexGrow: 1 }}
-                    contentContainerStyle={{
-                        justifyContent: 'space-between',
-                        flexDirection: 'row',
-                        width: maxWidth,
-                    }}
-                    horizontal={true}
                     data={categoryData}
+                    numColumns={2}
+                    bounces={true}
+                    contentContainerStyle={{ justifyContent: 'space-between', alignItems: 'center' }}
                     renderItem={(item) => {
                         return (
-                            <TouchableOpacity
-                                onPress={() => {
-                                    navigateHandle(item.item.movieUrl);
-                                }}>
-                                <View style={styles.pageItem}>
+                            <TouchableOpacity onPress={() => navigateHandle(item.item.movieUrl)}>
+                                <View style={{ marginHorizontal: pixel(5), marginTop: 0, marginBottom: pixel(8) }}>
                                     <Image
-                                        style={styles.pageImage}
+                                        style={styles.pageImage_colum}
                                         resizeMode="cover"
                                         source={{ uri: item.item.cover }}
                                     />
                                     <Text numberOfLines={1} ellipsizeMode="tail" style={styles.itemTitle}>
                                         {item.item.movieTitle}
                                     </Text>
-                                    <Text numberOfLines={1} ellipsizeMode="tail" style={styles.itemDescription}>
+                                    <Text numberOfLines={2} ellipsizeMode="tail" style={styles.itemDescription_colum}>
                                         {item.item.description}
                                     </Text>
                                 </View>
                             </TouchableOpacity>
                         );
                     }}
+                    ListFooterComponent={
+                        moreStatus ? (
+                            <TouchableOpacity
+                                onPress={() => {
+                                    spinFetchMore();
+                                }}>
+                                <View style={styles.pageFetchMore}>
+                                    <View style={styles.pageRefresh}>
+                                        <Animated.Image
+                                            style={[styles.refreshImage, { transform: [{ rotate: spin }] }]}
+                                            source={require('@app/assets/images/movie/refresh_icon.png')}></Animated.Image>
+                                        <Text style={styles.refreshText}>换一换</Text>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                        ) : (
+                            <View />
+                        )
+                    }
                 />
             </View>
-            <TouchableOpacity
-                onPress={() => {
-                    spinFetchMore();
-                }}>
-                <View style={styles.pageFetchMore}>
-                    <View style={styles.pageRefresh}>
-                        <Animated.Image
-                            style={[styles.refreshImage, { transform: [{ rotate: spin }] }]}
-                            source={require('@app/assets/images/movie/refresh_icon.png')}></Animated.Image>
-                        <Text style={styles.refreshText}>换一换</Text>
-                    </View>
-                </View>
-            </TouchableOpacity>
         </View>
     );
 };
@@ -197,4 +196,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default CategoryList;
+export default CategoryListColum;

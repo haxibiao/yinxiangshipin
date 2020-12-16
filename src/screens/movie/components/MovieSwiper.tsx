@@ -1,9 +1,16 @@
 import Theme from '@app/src/common/theme';
-import React, { Component } from 'react';
-import { View, Text, StyleSheet, AppRegistry } from 'react-native';
+import React, { Component, useCallback } from 'react';
+import { View, Text, StyleSheet, AppRegistry, Image, ImageBackground } from 'react-native';
+import { Props } from 'react-native-image-zoom-viewer/built/image-viewer.type';
 import Swiper from 'react-native-swiper';
 
-const MovieSwiper = () => {
+interface props {
+    swiperDataList: Array;
+}
+
+const MovieSwiper = (props: Props) => {
+    const { swiperDataList } = props;
+    const imageArray = Array.isArray(swiperDataList);
     /**
      * dot={
                 <View
@@ -41,6 +48,38 @@ const MovieSwiper = () => {
             }
      */
 
+    const SwiperItem = useCallback((item) => {
+        return (
+            <View style={styles.slide1}>
+                {/* <Text style={styles.text}>Hello Swiper</Text> */}
+                <ImageBackground
+                    imageStyle={{ borderRadius: pixel(5) }}
+                    style={{
+                        flex: 1,
+                        borderRadius: pixel(5),
+                        width: Device.WIDTH - pixel(20),
+                        height: pixel(185),
+                        position: 'relative',
+                    }}
+                    resizeMode="cover"
+                    source={{ uri: item.data.cover }}>
+                    <View
+                        style={{
+                            position: 'absolute',
+                            bottom: 0,
+                            height: pixel(30),
+                            width: pixel(Device.WIDTH - pixel(20)),
+                            backgroundColor: 'rgba(0,0,0,0.2)',
+                        }}>
+                        <Text style={{ flex: 1, lineHeight: pixel(30), color: '#fff', paddingHorizontal: pixel(8) }}>
+                            {item.data.description}
+                        </Text>
+                    </View>
+                </ImageBackground>
+            </View>
+        );
+    }, []);
+
     return (
         <Swiper
             style={styles.wrapper}
@@ -49,19 +88,17 @@ const MovieSwiper = () => {
             index={0}
             showsButtons={false}
             autoplay={true}
-            dotStyle={styles.dotStyle}
+            dotStyle={[styles.dotStyle, { backgroundColor: '#fff' }]}
             activeDotStyle={styles.dotStyle}
             activeDotColor={Theme.secondaryColor}
-            paginationStyle={{ marginBottom: pixel(-15), marginRight: -pixel(Device.WIDTH / 1.4) }}>
-            <View style={styles.slide1}>
-                <Text style={styles.text}>Hello Swiper</Text>
-            </View>
-            <View style={styles.slide2}>
-                <Text style={styles.text}>Beautiful</Text>
-            </View>
-            <View style={styles.slide3}>
-                <Text style={styles.text}>And simple</Text>
-            </View>
+            paginationStyle={{
+                marginBottom: pixel(-20),
+                marginRight: -pixel(Device.WIDTH - swiperDataList.length * 30),
+            }}>
+            {imageArray &&
+                swiperDataList.map((item, index) => {
+                    return <SwiperItem data={item} />;
+                })}
         </Swiper>
     );
 };
@@ -75,7 +112,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#9DD6EB',
+        // backgroundColor: '#9DD6EB',
         borderRadius: pixel(5),
         resizeMode: 'cover',
     },
@@ -105,7 +142,7 @@ const styles = StyleSheet.create({
         // position: 'absolute',
         // right: pixel(15),
         // bottom: pixel(0),
-        // backgroundColor: 'rgba(0,0,0,.2)',
+        // backgroundColor: '#fff',
         // width: 8,
         // height: 8,
         // borderRadius: 4,
