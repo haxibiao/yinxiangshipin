@@ -19,13 +19,13 @@ import { ScrollView } from 'react-native-gesture-handler';
 interface props {
     pageViewStyle: ViewStyle;
     categoryData: any;
-    moduleData: any;
+    moduleTitle: string;
     hasMore: boolean;
     refetchMore: any;
 }
 
 const CategoryList = (props: Props) => {
-    const { pageViewStyle, categoryData, hasMore, refetchMore, moduleData } = props;
+    const { pageViewStyle, categoryData, hasMore, refetchMore, moduleTitle } = props;
     const [moreStatus, setMoreStatus] = useState(false);
     const [spinAction, setSpinAction] = useState(false);
     useEffect(() => {
@@ -65,8 +65,8 @@ const CategoryList = (props: Props) => {
     return (
         <View style={[styles.pageView, { ...pageViewStyle }]}>
             <View style={styles.pageHead}>
-                <Text style={styles.pageTitle}>title</Text>
-                <Text style={styles.pageMore}>more</Text>
+                <Text style={styles.pageTitle}>{moduleTitle ? moduleTitle : '热门播放'}</Text>
+                <Text style={styles.pageMore}>更多</Text>
             </View>
             <View style={styles.pageShow}>
                 <FlatList

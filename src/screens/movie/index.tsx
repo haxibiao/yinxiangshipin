@@ -5,6 +5,7 @@ import ApplicationMenu from './components/ApplicationMenu';
 import CategoryList from './components/CategoryList';
 import MyFavorite from './components/MyFavorite';
 import CategoryListColum from './components/CategoryListColum';
+import { GQL, useQuery, useMutation } from '@src/apollo';
 
 const index = () => {
     const categoryData = [
@@ -121,12 +122,14 @@ const index = () => {
                     categoryData={categoryData_three}
                     refetchMore={() => console.log(1)}
                     pageViewStyle={{ marginTop: pixel(-12) }}
+                    moduleTitle="家有儿女"
                 />
                 <CategoryListColum
                     refetchMore={() => console.log(1)}
                     pageViewStyle={{ borderTopWidth: pixel(0) }}
                     categoryData={categoryData}
                     hasMore={true}
+                    moduleTitle="伍湘祁"
                 />
                 <CategoryList
                     categoryData={categoryData_three}

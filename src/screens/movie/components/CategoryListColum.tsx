@@ -21,11 +21,11 @@ interface props {
     categoryData: any;
     hasMore: boolean;
     refetchMore: any;
-    moduleData: any;
+    moduleTitle: any;
 }
 
 const CategoryListColum = (props: Props) => {
-    const { pageViewStyle, categoryData, hasMore, refetchMore, moduleData } = props;
+    const { pageViewStyle, categoryData, hasMore, refetchMore, moduleData, moduleTitle } = props;
     const [moreStatus, setMoreStatus] = useState(false);
     const [spinAction, setSpinAction] = useState(false);
     useEffect(() => {
@@ -64,7 +64,7 @@ const CategoryListColum = (props: Props) => {
     return (
         <View style={[styles.pageView, { ...pageViewStyle }]}>
             <View style={styles.pageHead}>
-                <Text style={styles.pageTitle}>title</Text>
+                <Text style={styles.pageTitle}>{moduleTitle ? moduleTitle : '精选剧场'}</Text>
                 {moreStatus ? <Text style={styles.pageMore}>more</Text> : <Text />}
             </View>
             <View style={styles.pageShow}>
