@@ -16,7 +16,7 @@ import { tag } from './tag';
 import { task } from './task';
 import { user } from './user';
 import { wallet } from './wallet';
-
+import { movie } from './movie';
 export const GQL = {
     ...account,
     ...chat,
@@ -36,4 +36,5 @@ export const GQL = {
     ...task,
     ...user,
     ...wallet,
+    ...movie,
 };
