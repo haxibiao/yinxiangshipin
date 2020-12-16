@@ -5,6 +5,8 @@ import { useNavigation } from '@react-navigation/native';
 import { GQL, useQuery, useMutation, errorMessage } from '@src/apollo';
 import { observable } from 'mobx';
 import MovieItem from './MovieItem';
+import MovieInfoModal from './MovieInfoModal';
+import movieStore from '../store';
 
 export default function VideoContent({ movie }) {
     const navigation = useNavigation();
@@ -59,7 +61,7 @@ export default function VideoContent({ movie }) {
 
     return (
         <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-            <TouchableOpacity style={styles.areaStyle}>
+            <TouchableOpacity style={styles.areaStyle} onPress={() => movieStore.setMovieData(movie)}>
                 <Text style={styles.title}>{name}</Text>
                 <Text numberOfLines={1} style={styles.description}>
                     <Text style={{ color: '#F3583F' }}>🔥4564</Text>
@@ -85,7 +87,9 @@ export default function VideoContent({ movie }) {
             </TouchableOpacity>
             {/* 选集 */}
             <View style={{ marginBottom: pixel(20) }}>
-                <TouchableOpacity style={[styles.header, { marginBottom: pixel(10) }]}>
+                <TouchableOpacity
+                    style={[styles.header, { marginBottom: pixel(10) }]}
+                    onPress={() => movieStore.setMovieData(movie)}>
                     <Text style={styles.episodeTitle}>选集</Text>
                     <View style={styles.right}>
                         <Text numberOfLines={1} style={styles.description}>
@@ -114,6 +118,7 @@ export default function VideoContent({ movie }) {
                     keyExtractor={(item, index) => item.id.toString()}
                 />
             </View>
+            <MovieInfoModal />
         </ScrollView>
     );
 }
