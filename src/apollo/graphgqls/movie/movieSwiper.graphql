@@ -1,0 +1,21 @@
+# Write your query or mutation here
+query movieSwiper($type: ActivityType) {
+    activities(type: $type) {
+        paginatorInfo {
+            total
+            hasMorePages
+            currentPage
+        }
+        data {
+            id
+            movie {
+                id
+                producer
+                introduction
+                name
+            }
+            image_url
+            title
+        }
+    }
+}

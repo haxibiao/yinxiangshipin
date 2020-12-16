@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useMemo } from 'react';
 import { View, Text, StyleSheet, AppRegistry, FlatList, ScrollView } from 'react-native';
 import MovieSwiper from './components/MovieSwiper';
 import ApplicationMenu from './components/ApplicationMenu';
@@ -8,6 +8,13 @@ import CategoryListColum from './components/CategoryListColum';
 import { GQL, useQuery, useMutation } from '@src/apollo';
 
 const index = () => {
+    const { data: swiperData, refetch, fetchMore, loading } = useQuery(GQL.movieSwiper, {
+        fetchPolicy: 'network-only',
+    });
+    const swiperList = useMemo(() => Helper.syncGetter('activities.data', swiperData), [swiperData]);
+    console.log('====================================');
+    console.log('data', swiperData, swiperList);
+    console.log('====================================');
     const categoryData = [
         {
             movieTitle: '寒战1',
@@ -54,25 +61,28 @@ const index = () => {
             description: '疯狂仙三大队撒平静的劈开,劈开了撒娇都是仿佛能看到失联飞机阿里斯顿啦什么',
         },
     ];
-    const swiperData = [
-        { cover: 'https://p2.ssl.qhimgs1.com/bdr/460__/t01ad0e9f6b314c4c52.jpg', description: '这是一首简单的小情歌~' },
-        {
-            cover: 'https://p5.ssl.qhimgs1.com/bdr/460__/t013d81a7107ae6c95f.jpg',
-            description: '你像个人气高居不下的天后~',
-        },
-        {
-            cover: 'https://p2.ssl.qhimgs1.com/bdr/460__/t0154d135d0cadd778c.jpg',
-            description: '太多的、太重的、太伤心的话~',
-        },
-        {
-            cover: 'https://p0.ssl.qhimgs1.com/bdr/460__/t01a3b565741a40064a.webp',
-            description: '你想要的、我却不能够、给你我所有!',
-        },
-        // 'https://p3.ssl.qhimgs1.com/bdr/460__/t01c84d6ed1c7db21dd.webp',
-        // 'https://p0.ssl.qhimgs1.com/bdr/460__/t01ef8b1b1ac9c7db96.webp',
-        // 'https://p0.ssl.qhimgs1.com/bdr/460__/t014cac9bd90230a2e6.webp',
-        // 'https://p2.ssl.qhimgs1.com/bdr/460__/t0146ad6054c6fa4a42.webp',
-    ];
+    // const swiperData = [
+    //     {
+    //         image_url: 'https://p2.ssl.qhimgs1.com/bdr/460__/t01ad0e9f6b314c4c52.jpg',
+    //         description: '这是一首简单的小情歌~',
+    //     },
+    //     {
+    //         image_url: 'https://p5.ssl.qhimgs1.com/bdr/460__/t013d81a7107ae6c95f.jpg',
+    //         title: '你像个人气高居不下的天后~',
+    //     },
+    //     {
+    //         image_url: 'https://p2.ssl.qhimgs1.com/bdr/460__/t0154d135d0cadd778c.jpg',
+    //         title: '太多的、太重的、太伤心的话~',
+    //     },
+    //     {
+    //         image_url: 'https://p0.ssl.qhimgs1.com/bdr/460__/t01a3b565741a40064a.webp',
+    //         title: '你想要的、我却不能够、给你我所有!',
+    //     },
+    //     // 'https://p3.ssl.qhimgs1.com/bdr/460__/t01c84d6ed1c7db21dd.webp',
+    //     // 'https://p0.ssl.qhimgs1.com/bdr/460__/t01ef8b1b1ac9c7db96.webp',
+    //     // 'https://p0.ssl.qhimgs1.com/bdr/460__/t014cac9bd90230a2e6.webp',
+    //     // 'https://p2.ssl.qhimgs1.com/bdr/460__/t0146ad6054c6fa4a42.webp',
+    // ];
     const FavoriteData = [
         {
             title: '姜子牙',
@@ -115,7 +125,7 @@ const index = () => {
                 {/* <View style={styles.page}>
                     
                 </View> */}
-                <MovieSwiper swiperDataList={swiperData} />
+                <MovieSwiper swiperDataList={swiperList} />
                 <ApplicationMenu />
                 <MyFavorite favoriteList={FavoriteData} />
                 <CategoryList

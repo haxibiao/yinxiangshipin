@@ -2,12 +2,15 @@ import React, { useCallback } from 'react';
 import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity, ScrollView } from 'react-native';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
 import { ScrollTabBar, Iconfont } from '@src/components';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import VideoContent from './components/VideoContent';
 import CommentContent from './components/CommentContent';
 
 export default function MovieDetail() {
     const navigation = useNavigation();
+    const route = useRoute();
+    const movieId = route.params.movie_id;
+    console.log(movieId);
     return (
         <View style={styles.container}>
             <TouchableOpacity activeOpacity={1} style={styles.goBack} onPress={() => navigation.goBack()}>
