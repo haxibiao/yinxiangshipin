@@ -1,3 +1,5 @@
+#import "./movieFragment.graphql"
+
 # 分类筛选出来的电影
 query categoryMovieQuery(
     $region: MovieCategory
@@ -22,22 +24,7 @@ query categoryMovieQuery(
             currentPage
         }
         data {
-            id
-            name
-            introduction
-            cover
-            producer
-            year
-            type
-            style
-            region
-            actors
-            count_series
-            country
-            lang
-            hits
-            score
-            data
+            ...movieFragment
         }
     }
 }

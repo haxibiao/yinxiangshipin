@@ -1,0 +1,19 @@
+fragment movieFragment on Movie {
+    id
+    name
+    introduction
+    cover
+    producer
+    year
+    type
+    style
+    region
+    actors
+    count_series
+    country
+    lang
+    hits
+    score
+    data
+    favorited
+}
