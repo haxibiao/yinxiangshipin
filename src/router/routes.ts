@@ -94,6 +94,7 @@ import CommonQuestionScreen from '../screens/settings/CommonQuestionScreen'; // 
 
 // movie of neihandianying.com
 import MoviePlayerScreen from '../screens/movie/moviePlayer';
+import MovieCategoryListScreen from '../screens/movie/MovieCategoryList';
 
 export default {
     Login: {
@@ -292,5 +293,8 @@ export default {
     },
     MoviePlayer:{
         component: MoviePlayerScreen,
+    },
+    MovieCategoryListScreen: {
+        component: MovieCategoryListScreen,
     },
 };

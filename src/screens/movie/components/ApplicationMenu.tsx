@@ -1,7 +1,9 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 const ApplicationMenu = () => {
+    const navigation = useNavigation();
     return (
         <View style={styles.listPage}>
             <ScrollView
@@ -15,7 +17,7 @@ const ApplicationMenu = () => {
                     style={styles.menuPress}
                     activeOpacity={0.1}
                     onPress={() => {
-                        console.log(1);
+                        navigation.navigate('MovieCategoryListScreen');
                     }}>
                     <View style={styles.menuBox}>
                         <Image
