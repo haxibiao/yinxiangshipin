@@ -1,16 +1,25 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity, ScrollView } from 'react-native';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
-import { ScrollTabBar, Iconfont } from '@src/components';
+import { ScrollTabBar, Iconfont, StatusView, SpinnerLoading } from '@src/components';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { GQL, useQuery } from '@src/apollo';
 import VideoContent from './components/VideoContent';
 import CommentContent from './components/CommentContent';
 
 export default function MovieDetail() {
     const navigation = useNavigation();
     const route = useRoute();
-    const movieId = route.params.movie_id;
-    console.log(movieId);
+    const movie_id = route.params?.movie_id || Math.round(Math.random() * 10);
+    const { loading, error, data, fetchMore, refetch } = useQuery(GQL.movieQuery, {
+        variables: {
+            movie_id: movie_id,
+        },
+    });
+    const movie = useMemo(() => Helper.syncGetter('movie', data), [data]);
+    if (error) return <StatusView.ErrorView onPress={refetch} error={error} />;
+    if (loading) return <SpinnerLoading />;
+
     return (
         <View style={styles.container}>
             <TouchableOpacity activeOpacity={1} style={styles.goBack} onPress={() => navigation.goBack()}>
@@ -78,8 +87,8 @@ const styles = StyleSheet.create({
     },
 });
 
-const movie = {
-    id: 24612,
+const movieData = {
+    id: 3,
     cover: 'https://r1.ykimg.com/052600005D230490425BD935255B9C83',
     title: '狐妖小红娘',
     description:

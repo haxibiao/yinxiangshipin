@@ -1,0 +1,8 @@
+#import "./movieFragment.graphql"
+
+# 影视推荐
+query recommendMovieQuery {
+    recommendMovie {
+        ...movieFragment
+    }
+}

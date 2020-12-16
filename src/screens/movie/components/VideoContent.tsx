@@ -1,32 +1,86 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState, useMemo } from 'react';
 import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity, ScrollView } from 'react-native';
 import { Iconfont } from '@src/components';
+import { useNavigation } from '@react-navigation/native';
+import { GQL, useQuery, useMutation, errorMessage } from '@src/apollo';
+import { observable } from 'mobx';
 import MovieItem from './MovieItem';
 
 export default function VideoContent({ movie }) {
-    const episodeItem = useCallback((item, index) => {
-        return (
-            <View style={[styles.episodeBox, item === movie.latestEpisode && { borderColor: '#92CAEE' }]}>
-                <Text style={styles.episodeText}>{item}</Text>
-            </View>
-        );
-    }, []);
+    const navigation = useNavigation();
+    const { id, name, count_series, data, favorited } = movie;
+    const { loading, error, data: recommendData, fetchMore, refetch } = useQuery(GQL.recommendMovieQuery, {
+        fetchPolicy: 'network-only',
+    });
+    const recommendMovies = useMemo(() => Helper.syncGetter('recommendMovie', recommendData), [recommendData]);
+
+    const [currentEpisode, setEpisode] = useState(0);
+    const [toggleFavorite] = useMutation(GQL.toggleFavoriteMutation, {
+        variables: {
+            id: id,
+            type: 'movies',
+        },
+        refetchQueries: () => [
+            {
+                query: GQL.movieQuery,
+                variables: { movie_id: id },
+            },
+        ],
+    });
+    const toggleFavoriteOnPress = __.debounce(async function () {
+        if (TOKEN) {
+            movie.favorited = !movie?.favorited;
+            const [error, result] = await Helper.exceptionCapture(toggleFavorite);
+            if (error) {
+                Toast.show({ content: errorMessage(error) || '操作失败' });
+            } else if (result) {
+                Toast.show({ content: result?.data?.toggleFavorite?.favorited ? '已收藏' : '已取消收藏' });
+            }
+        } else {
+            navigation.navigate('Login');
+        }
+    }, 200);
+
+    const episodeItem = useCallback(
+        (item, index) => {
+            return (
+                <TouchableOpacity
+                    activeOpacity={0.8}
+                    style={[styles.episodeBox, currentEpisode === index && { borderColor: '#92CAEE' }]}
+                    onPress={() => setEpisode(index)}>
+                    <Text style={[styles.episodeText, currentEpisode === index && { color: '#92CAEE' }]}>
+                        {item.name}
+                    </Text>
+                </TouchableOpacity>
+            );
+        },
+        [currentEpisode],
+    );
 
     return (
         <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
             <TouchableOpacity style={styles.areaStyle}>
-                <Text style={styles.title}>迷雾追踪</Text>
+                <Text style={styles.title}>{name}</Text>
                 <Text numberOfLines={1} style={styles.description}>
                     <Text style={{ color: '#F3583F' }}>🔥4564</Text>
-                    ·更新至第{movie.latestEpisode}集&nbsp;共{movie.totalEpisodes}集·简介
+                    ·更新至第{count_series}集·简介
                     <Iconfont name="zuojiantou" color={'#BBBBBB'} size={pixel(12)} />
                 </Text>
                 <View style={[styles.header, { marginTop: pixel(10) }]}>
                     <View style={styles.row}>
                         <Image source={require('@app/assets/images/ic_comment.png')} style={styles.operationIcon} />
-                        <Text style={styles.description}>{movie.count_comments}人参与讨论</Text>
+                        <Text style={[styles.description, { marginLeft: pixel(3) }]}>0人参与讨论</Text>
                     </View>
-                    <Image source={require('@app/assets/images/ic_collect.png')} style={styles.operationIcon} />
+                    <TouchableOpacity onPress={toggleFavoriteOnPress}>
+                        <Image
+                            source={
+                                favorited
+                                    ? require('@app/assets/images/ic_collected.png')
+                                    : require('@app/assets/images/ic_collect.png')
+                            }
+                            style={styles.operationIcon}
+                        />
+                    </TouchableOpacity>
                 </View>
             </TouchableOpacity>
             {/* 选集 */}
@@ -35,14 +89,14 @@ export default function VideoContent({ movie }) {
                     <Text style={styles.episodeTitle}>选集</Text>
                     <View style={styles.right}>
                         <Text numberOfLines={1} style={styles.description}>
-                            {movie.updateTime}
+                            每周三、周四更新一集
                         </Text>
                         <Iconfont name="zuojiantou" color={'#BBBBBB'} size={pixel(12)} />
                     </View>
                 </TouchableOpacity>
                 <FlatList
                     contentContainerStyle={styles.episodesContentStyle}
-                    data={Array.from({ length: movie.totalEpisodes }, (v, k) => k + 1)}
+                    data={data}
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}
                     renderItem={({ item, index }) => episodeItem(item, index)}
@@ -54,7 +108,7 @@ export default function VideoContent({ movie }) {
                 <Text style={styles.title}>为你推荐</Text>
                 <FlatList
                     numColumns={3}
-                    data={recommendData}
+                    data={recommendMovies}
                     showsHorizontalScrollIndicator={false}
                     renderItem={({ item, index }) => <MovieItem movie={item} boxStyle={styles.boxStyle} />}
                     keyExtractor={(item, index) => item.id.toString()}
@@ -113,8 +167,8 @@ const styles = StyleSheet.create({
     },
     episodeBox: {
         minWidth: pixel(50),
-        height: pixel(50),
-        paddingHorizontal: pixel(16),
+        height: pixel(40),
+        paddingHorizontal: pixel(10),
         borderWidth: 1,
         borderColor: '#DDDDDD',
         justifyContent: 'center',
@@ -125,6 +179,7 @@ const styles = StyleSheet.create({
     episodeText: {
         fontSize: font(14),
         lineHeight: pixel(18),
+        color: '#333',
     },
     episodesContentStyle: {
         paddingRight: pixel(9),

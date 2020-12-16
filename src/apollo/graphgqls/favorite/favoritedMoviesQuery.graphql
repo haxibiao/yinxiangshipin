@@ -1,0 +1,17 @@
+#import "../movie/movieFragment.graphql"
+
+# 收藏的影视
+query favoritedMoviesQuery($user_id: Int, $type: FavorableEnum, $count: Int, $page: Int) {
+    myFavorite(user_id: $user_id, type: $type, count: $count, page: $page) {
+        paginatorInfo {
+            currentPage
+            hasMorePages
+        }
+        data {
+            id
+            movie {
+                ...movieFragment
+            }
+        }
+    }
+}

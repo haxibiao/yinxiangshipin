@@ -2,28 +2,30 @@ import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { SafeText } from '@src/components';
+import { useNavigation } from '@react-navigation/native';
 
-export default function movieItem(props) {
-    const { movie, boxStyle } = props;
+export default function movieItem({ movie, boxStyle }) {
+    const navigation = useNavigation();
+    const { name, cover, introduction, count_series } = movie;
     return (
-        <TouchableOpacity style={[boxStyle]}>
+        <TouchableOpacity style={boxStyle} onPress={() => navigation.navigate('MovieDetail', { movie_id: movie.id })}>
             <View style={{ borderRadius: pixel(5), overflow: 'hidden' }}>
-                <Image style={styles.cover} resizeMode="cover" source={{ uri: movie.cover }} />
+                <Image style={styles.cover} resizeMode="cover" source={{ uri: cover }} />
                 <LinearGradient
                     colors={['rgba(0, 0, 0, 0.4)', 'transparent']}
                     start={{ x: 0, y: 1 }}
                     end={{ x: 0, y: 0 }}
                     style={styles.gradientStyle}>
                     <View style={{ width: itemWidth }}>
-                        <Text style={styles.totalEpisodes}>{movie.totalEpisodes}</Text>
+                        <Text style={styles.totalEpisodes}>{count_series}</Text>
                     </View>
                 </LinearGradient>
             </View>
             <SafeText numberOfLines={1} style={styles.movieTitle}>
-                {movie.title}
+                {name}
             </SafeText>
             <SafeText numberOfLines={1} style={styles.description}>
-                {movie.description}
+                {introduction}
             </SafeText>
         </TouchableOpacity>
     );
