@@ -34,7 +34,8 @@ const CategoryList = (props: Props) => {
     const navigation = useNavigation();
     const navigateHandle = useCallback(
         (playUrl) => {
-            navigation.navigate('MoviePlayer', { playUrl });
+            // navigation.navigate('MoviePlayer', { playUrl });
+            navigation.navigate('MovieDetail');
         },
         [navigation],
     );
