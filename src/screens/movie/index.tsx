@@ -62,12 +62,13 @@ const index = () => {
     }, [hasMoreFavorite, currentPage]);
 
     // 猜你喜欢的接口
-    const {
-        data: mayLikeData,
-        fetchMore: mayLikeFetch,
-        refetch: mayLikeRefetch,
-        loading: mayLikeLoading,
-    } = useQuery(GQL.recommendMovieQuery, { fetchPolicy: 'network-only' });
+    const { data: mayLikeData, fetchMore: mayLikeFetch, refetch: mayLikeRefetch, loading: mayLikeLoading } = useQuery(
+        GQL.recommendMovieQuery,
+        {
+            variables: { count: 4 },
+            fetchPolicy: 'network-only',
+        },
+    );
     const mayLikeList = useMemo(() => Helper.syncGetter('recommendMovie', mayLikeData), [mayLikeData]);
     console.log('mayLikeData', mayLikeData, mayLikeList);
 

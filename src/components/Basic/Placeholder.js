@@ -10,7 +10,7 @@ import Iconfont from '../Iconfont';
 import Row from './Row';
 
 const render = {
-    post: color => (
+    post: (color) => (
         <View style={styles.placeholder}>
             <Row>
                 <View style={[styles.avatar, { backgroundColor: color }]} />
@@ -29,7 +29,7 @@ const render = {
             </Row>
         </View>
     ),
-    comment: color => (
+    comment: (color) => (
         <View style={[styles.placeholder, { flexDirection: 'row', alignItems: 'flex-start' }]}>
             <View style={[styles.avatar, { backgroundColor: color }]} />
             <View style={{ flex: 1 }}>
@@ -50,7 +50,7 @@ const render = {
             </View>
         </View>
     ),
-    chat: color => (
+    chat: (color) => (
         <View style={styles.placeholder}>
             <Row style={{ flex: 1 }}>
                 <View style={[styles.avatar, styles.bigAvatar, { backgroundColor: color }]} />
@@ -61,7 +61,7 @@ const render = {
             </Row>
         </View>
     ),
-    list: color => (
+    list: (color) => (
         <View style={styles.placeholder}>
             <Row>
                 <View style={[styles.avatar, styles.cover, { backgroundColor: color }]} />
@@ -72,11 +72,20 @@ const render = {
             </Row>
         </View>
     ),
+    movie: (color: string) => (
+        <View style={styles.movieItem}>
+            <View style={[styles.movieCover, { backgroundColor: color }]} />
+            <View style={[styles.movieLabel, { marginVertical: pixel(3), width: pixel(40), backgroundColor: color }]} />
+            <View style={[styles.movieLabel, { backgroundColor: color }]} />
+        </View>
+    ),
 };
 
 const START_VALUE = 0.5;
 const END_VALUE = 1;
 const DURATION = 500;
+
+const movieWidth = (Device.WIDTH - pixel(Theme.itemSpace) * 2 - pixel(20)) / 3;
 
 const AnimatedView = ({ children }) => {
     const animation = new Animated.Value(START_VALUE);
@@ -93,7 +102,7 @@ const AnimatedView = ({ children }) => {
                 duration: DURATION,
                 useNativeDriver: true,
             }),
-        ]).start(e => {
+        ]).start((e) => {
             if (e.finished) {
                 start();
             }
@@ -115,7 +124,7 @@ export default function Placeholder(props: args) {
     let quantity = props.quantity || 4;
     let color = props.color || Theme.groundColour;
     let type = props.type || 'post';
-    return new Array(quantity).fill(0).map(function(elem, index) {
+    return new Array(quantity).fill(0).map(function (elem, index) {
         return <AnimatedView key={index}>{render[type](color)}</AnimatedView>;
     });
 }
@@ -154,6 +163,21 @@ const styles = StyleSheet.create({
     label: {
         flex: 1,
         height: pixel(20),
+        borderRadius: pixel(4),
+        backgroundColor: Theme.groundColour,
+    },
+    movieItem: {
+        width: movieWidth,
+        marginRight: pixel(10),
+        marginBottom: pixel(10),
+    },
+    movieCover: {
+        height: movieWidth * 1.3,
+        borderRadius: pixel(5),
+    },
+    movieLabel: {
+        flex: 1,
+        height: pixel(16),
         borderRadius: pixel(4),
         backgroundColor: Theme.groundColour,
     },

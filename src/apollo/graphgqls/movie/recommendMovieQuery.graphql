@@ -1,8 +1,8 @@
 #import "./movieFragment.graphql"
 
 # 影视推荐
-query recommendMovieQuery {
-    recommendMovie(count: 4) {
+query recommendMovieQuery($count: Int) {
+    recommendMovie(count: $count) {
         ...movieFragment
     }
 }

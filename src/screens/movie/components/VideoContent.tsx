@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useMemo } from 'react';
 import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity, ScrollView } from 'react-native';
-import { Iconfont } from '@src/components';
+import { Iconfont, Placeholder } from '@src/components';
 import { useNavigation } from '@react-navigation/native';
 import { GQL, useQuery, useMutation, errorMessage } from '@src/apollo';
 import { observable } from 'mobx';
@@ -27,6 +27,7 @@ export default function VideoContent({ movie }) {
     const { loading, error: recommendError, data: recommendData, fetchMore, refetch } = useQuery(
         GQL.recommendMovieQuery,
         {
+            variables: { count: 6 },
             fetchPolicy: 'network-only',
         },
     );
@@ -79,6 +80,7 @@ export default function VideoContent({ movie }) {
     return (
         <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
             <TouchableOpacity
+                activeOpacity={0.9}
                 style={[styles.areaStyle, { marginRight: pixel(Theme.itemSpace) }]}
                 onPress={() => movieStore.setMovieData(movie)}>
                 <Text style={styles.title}>
@@ -121,6 +123,7 @@ export default function VideoContent({ movie }) {
             {/* 选集 */}
             <View style={{ marginBottom: pixel(20) }}>
                 <TouchableOpacity
+                    activeOpacity={0.9}
                     style={[styles.header, { marginBottom: pixel(10), marginRight: pixel(Theme.itemSpace) }]}
                     onPress={() => movieStore.setMovieData(movie)}>
                     <Text style={styles.episodeTitle}>选集</Text>
@@ -138,7 +141,6 @@ export default function VideoContent({ movie }) {
                 />
             </View>
             {/* 推荐 */}
-            {/* {!loading && Array.isArray(recommendMovies) && recommendMovies.length > 0 && ( */}
             <View style={styles.areaStyle}>
                 <Text style={styles.title}>为你推荐</Text>
                 <FlatList
@@ -147,9 +149,15 @@ export default function VideoContent({ movie }) {
                     showsHorizontalScrollIndicator={false}
                     renderItem={({ item, index }) => <MovieItem movie={item} boxStyle={styles.boxStyle} />}
                     keyExtractor={(item, index) => item.id.toString()}
+                    ListFooterComponent={() =>
+                        loading ? (
+                            <View style={{ flexDirection: 'row' }}>
+                                <Placeholder type={'movie'} quantity={6} />
+                            </View>
+                        ) : null
+                    }
                 />
             </View>
-            {/* )} */}
             <MovieInfoModal />
         </ScrollView>
     );
