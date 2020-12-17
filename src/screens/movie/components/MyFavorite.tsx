@@ -1,66 +1,94 @@
 import Theme from '@app/src/common/theme';
-import React, { useCallback } from 'react';
-import { View, Text, FlatList, StyleSheet, ImageBackground } from 'react-native';
+import React, { useCallback, useMemo } from 'react';
+import { View, Text, FlatList, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
 import { Props } from 'react-native-image-zoom-viewer/built/image-viewer.type';
+import { GQL, useQuery, useMutation } from '@src/apollo';
+import { userStore } from '@src/store';
+import { CustomRefreshControl } from '@src/components';
 
 interface props {
     favoriteList: Array;
+    favoriteToMovie: Function;
+    // onEndReached: any;
+    refetch: any;
+    checkMore: Function;
+    hasMorePage: boolean;
 }
 
 const MyFavorite = (props: Props) => {
-    const { favoriteList } = props;
+    const { favoriteList, favoriteToMovie, refetch, checkMore, hasMorePage } = props;
+    const favoriteArray = Array.isArray(favoriteList);
+
     const HeadComponent = useCallback(() => {
         return (
             <View style={styles.headComponent}>
                 <Text style={styles.pageTitle}>我的收藏</Text>
-                {/* <Text>3</Text> */}
+                {favoriteList.length >= 10 && hasMorePage && (
+                    <TouchableOpacity onPress={() => checkMore()}>
+                        <Text style={styles.checkMore}>查看更多</Text>
+                    </TouchableOpacity>
+                )}
             </View>
         );
-    }, []);
+    }, [favoriteList, hasMorePage]);
     return (
-        <View style={styles.favoriteModule}>
-            <HeadComponent />
-            <FlatList
-                horizontal={true}
-                data={favoriteList}
-                showsHorizontalScrollIndicator={false}
-                renderItem={(item) => {
-                    return (
-                        <View style={{ marginHorizontal: pixel(8) }}>
-                            <ImageBackground
-                                source={{ uri: item.item.image }}
-                                imageStyle={{ borderRadius: pixel(5) }}
-                                style={{
-                                    width: pixel(135),
-                                    height: pixel(85),
-                                    justifyContent: 'flex-end',
-                                    flexDirection: 'row',
-                                }}
-                                resizeMode="cover">
-                                <View style={styles.movieType}>
-                                    <Text style={styles.movieTypeText}>{item.item.movieType}</Text>
+        userStore.login &&
+        favoriteArray &&
+        favoriteList.length > 0 && (
+            <View style={styles.favoriteModule}>
+                <HeadComponent />
+                <FlatList
+                    horizontal={true}
+                    data={favoriteList}
+                    showsHorizontalScrollIndicator={false}
+                    // keyExtractor={(index) => {
+                    //     item.item.id.toString() || index.toString();
+                    // }}
+                    // onEndReached={onEndReached}
+                    // onEndReachedThreshold={0.1}
+                    refreshControl={<CustomRefreshControl onRefresh={refetch} />}
+                    keyExtractor={(item, index) => index.toString()}
+                    renderItem={(item) => {
+                        return (
+                            <TouchableOpacity onPress={() => favoriteToMovie(item.item.movie.id)}>
+                                <View style={{ marginHorizontal: pixel(8) }}>
+                                    <ImageBackground
+                                        source={{ uri: item.item.movie.cover }}
+                                        imageStyle={{ borderRadius: pixel(5) }}
+                                        style={{
+                                            width: pixel(135),
+                                            height: pixel(85),
+                                            justifyContent: 'flex-end',
+                                            flexDirection: 'row',
+                                        }}
+                                        resizeMode="cover">
+                                        <View style={styles.movieType}>
+                                            <Text style={styles.movieTypeText}>{item.item.movie.data[0].name}</Text>
+                                        </View>
+                                    </ImageBackground>
+                                    <Text style={styles.favoriteTitle} numberOfLines={1} ellipsizeMode="tail">
+                                        {item.item.movie.name}
+                                    </Text>
+                                    {item.item.favoriteSeriesTime ? (
+                                        <Text
+                                            style={[styles.favoriteSeries, { color: Theme.primaryColor }]}
+                                            numberOfLines={1}
+                                            ellipsizeMode="tail">
+                                            看到 {item.item.favoriteSeriesTime}
+                                        </Text>
+                                    ) : (
+                                        <Text style={[styles.favoriteSeries]} numberOfLines={1} ellipsizeMode="tail">
+                                            {/* {item.item?.movie.introduction} */}
+                                            尚未观看
+                                        </Text>
+                                    )}
                                 </View>
-                            </ImageBackground>
-                            <Text style={styles.favoriteTitle} numberOfLines={1} ellipsizeMode="tail">
-                                {item.item.title}
-                            </Text>
-                            {item.item.favoriteSeriesTime ? (
-                                <Text style={styles.favoriteSeries} numberOfLines={1} ellipsizeMode="tail">
-                                    看到 {item.item.favoriteSeriesTime}
-                                </Text>
-                            ) : (
-                                <Text
-                                    style={[styles.favoriteSeries, { color: Theme.primaryColor }]}
-                                    numberOfLines={1}
-                                    ellipsizeMode="tail">
-                                    {item.item?.favoriteType}
-                                </Text>
-                            )}
-                        </View>
-                    );
-                }}
-            />
-        </View>
+                            </TouchableOpacity>
+                        );
+                    }}
+                />
+            </View>
+        )
     );
 };
 
@@ -98,8 +126,8 @@ const styles = StyleSheet.create({
     },
     movieType: {
         backgroundColor: Theme.primaryColor,
-        minWidth: pixel(135 / 2.5),
-        height: pixel(85 / 4),
+        // minWidth: pixel(135 / 2.5),
+        height: pixel(85 / 5),
         marginVertical: pixel(3),
         marginHorizontal: pixel(4),
         borderRadius: pixel(2),
@@ -107,9 +135,12 @@ const styles = StyleSheet.create({
     },
     movieTypeText: {
         // flex: 1,
-        lineHeight: pixel(85 / 5),
+        lineHeight: pixel(85 / 6),
         margin: pixel(5),
         color: '#fff',
+    },
+    checkMore: {
+        color: '#c8c8c8',
     },
 });
 

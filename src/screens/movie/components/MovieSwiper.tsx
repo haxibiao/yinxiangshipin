@@ -8,10 +8,11 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 
 interface props {
     swiperDataList: Array;
+    swiperToMovie: Function;
 }
 
 const MovieSwiper = (props: Props) => {
-    const { swiperDataList } = props;
+    const { swiperDataList, swiperToMovie } = props;
     const imageArray = Array.isArray(swiperDataList);
     const navigation = useNavigation();
     /**
@@ -51,18 +52,18 @@ const MovieSwiper = (props: Props) => {
             }
      */
 
-    const swiperHandle = useCallback(
-        (movie_id) => {
-            navigation.navigate('MovieDetail', { movie_id });
-        },
-        [navigation],
-    );
+    // const swiperHandle = useCallback(
+    //     (movie_id) => {
+    //         navigation.navigate('MovieDetail', { movie_id });
+    //     },
+    //     [navigation],
+    // );
 
     const SwiperItem = useCallback((item) => {
         return (
             <TouchableWithoutFeedback
                 onPress={() => {
-                    swiperHandle(item.data.movie.id);
+                    swiperToMovie(item.data.movie.id);
                 }}>
                 <View style={styles.slide1}>
                     {/* <Text style={styles.text}>Hello Swiper</Text> */}
