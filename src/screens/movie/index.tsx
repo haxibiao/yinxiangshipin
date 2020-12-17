@@ -132,7 +132,11 @@ const index = () => {
             introduction: '疯狂仙三大队撒平静的劈开,劈开了撒娇都是仿佛能看到失联飞机阿里斯顿啦什么',
         },
     ];
-
+    // 首页推荐
+    const { data: ApplicationResult } = useQuery(GQL.getFiltersQuery, {
+        fetchPolicy: 'network-only',
+    });
+    const ApplicationData = useMemo(() => Helper.syncGetter('getFilters', ApplicationResult), [ApplicationResult]);
     return (
         !swiperLoading &&
         !favoriteLoading && (
@@ -143,10 +147,10 @@ const index = () => {
                     style={styles.pageList}
                     showsVerticalScrollIndicator={false}>
                     {/* <View style={styles.page}>
-                    
+
                 </View> */}
                     <MovieSwiper swiperDataList={swiperList} swiperToMovie={swiperToMovie} />
-                    <ApplicationMenu />
+                    <ApplicationMenu navigation={navigation} data={ApplicationData} />
                     <MyFavorite
                         favoriteList={favoriteList}
                         favoriteToMovie={favoriteToMovie}
