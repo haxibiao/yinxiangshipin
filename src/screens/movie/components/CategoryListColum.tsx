@@ -22,10 +22,11 @@ interface props {
     hasMore: boolean;
     refetchMore: any;
     moduleTitle: any;
+    navigationItem: Function;
 }
 
 const CategoryListColum = (props: Props) => {
-    const { pageViewStyle, categoryData, hasMore, refetchMore, moduleData, moduleTitle } = props;
+    const { pageViewStyle, categoryData, hasMore, refetchMore, moduleData, moduleTitle, navigationItem } = props;
     const [moreStatus, setMoreStatus] = useState(false);
     const [spinAction, setSpinAction] = useState(false);
     useEffect(() => {
@@ -33,10 +34,10 @@ const CategoryListColum = (props: Props) => {
     }, [hasMore]);
     const navigation = useNavigation();
     const navigateHandle = useCallback(
-        (playUrl) => {
-            navigation.navigate('MoviePlayer', { playUrl });
+        (movie_id) => {
+            navigationItem ? navigationItem(movie_id) : console.log('呵呵,天真!!!');
         },
-        [navigation],
+        [navigation, navigationItem],
     );
     const spinValue = new Animated.Value(0);
 
@@ -76,7 +77,7 @@ const CategoryListColum = (props: Props) => {
                     contentContainerStyle={{ justifyContent: 'space-between', alignItems: 'center' }}
                     renderItem={(item) => {
                         return (
-                            <TouchableOpacity onPress={() => navigateHandle(item.item.movieUrl)}>
+                            <TouchableOpacity onPress={() => navigateHandle(item.item.id)}>
                                 <View style={{ marginHorizontal: pixel(5), marginTop: 0, marginBottom: pixel(8) }}>
                                     <Image
                                         style={styles.pageImage_colum}
@@ -84,17 +85,17 @@ const CategoryListColum = (props: Props) => {
                                         source={{ uri: item.item.cover }}
                                     />
                                     <Text numberOfLines={1} ellipsizeMode="tail" style={styles.itemTitle}>
-                                        {item.item.movieTitle}
+                                        {item.item.name}
                                     </Text>
                                     <Text numberOfLines={2} ellipsizeMode="tail" style={styles.itemDescription_colum}>
-                                        {item.item.description}
+                                        {item.item.introduction}
                                     </Text>
                                 </View>
                             </TouchableOpacity>
                         );
                     }}
                     ListFooterComponent={
-                        moreStatus ? (
+                        refetchMore ? (
                             <TouchableOpacity
                                 onPress={() => {
                                     spinFetchMore();
@@ -164,7 +165,8 @@ const styles = StyleSheet.create({
     itemTitle: {
         marginVertical: pixel(3),
         fontSize: font(15),
-        width: maxWidth / 3 - pixel(8),
+        width: maxWidth / 2 - pixel(8),
+        // backgroundColor: 'skyblue',
     },
     itemDescription: {
         fontSize: font(12),

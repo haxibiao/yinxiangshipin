@@ -1,4 +1,4 @@
-import React, { Component, useMemo } from 'react';
+import React, { Component, useMemo, useCallback, useState } from 'react';
 import { View, Text, StyleSheet, AppRegistry, FlatList, ScrollView } from 'react-native';
 import MovieSwiper from './components/MovieSwiper';
 import ApplicationMenu from './components/ApplicationMenu';
@@ -6,153 +6,201 @@ import CategoryList from './components/CategoryList';
 import MyFavorite from './components/MyFavorite';
 import CategoryListColum from './components/CategoryListColum';
 import { GQL, useQuery, useMutation } from '@src/apollo';
+import { userStore } from '@src/store';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 const index = () => {
-    const { data: swiperData, refetch, fetchMore, loading } = useQuery(GQL.movieSwiper, {
-        fetchPolicy: 'network-only',
-    });
+    const navigation = useNavigation();
+    const route = useRoute();
+    // 轮播图接口
+    const { data: swiperData, refetch: swiperRefetch, fetchMore: swiperFetchMore, loading: swiperLoading } = useQuery(
+        GQL.movieSwiper,
+        {
+            fetchPolicy: 'network-only',
+        },
+    );
     const swiperList = useMemo(() => Helper.syncGetter('activities.data', swiperData), [swiperData]);
-    console.log('====================================');
-    console.log('data', swiperData, swiperList);
-    console.log('====================================');
+    // 我的收藏接口
+    const {
+        data: favoriteData,
+        fetchMore: favoriteFetch,
+        refetch: favoriteRefetch,
+        loading: favoriteLoading,
+    } = useQuery(GQL.favoritedMoviesQuery, {
+        fetchPolicy: 'network-only',
+        variables: { user_id: userStore.me.id, type: 'movies' },
+    });
+    const favoriteList = useMemo(() => Helper.syncGetter('myFavorite.data', favoriteData), [favoriteData]);
+    const currentPage = useMemo(() => Helper.syncGetter('myFavorite.paginatorInfo.currentPage', favoriteData), [
+        favoriteData,
+    ]);
+    const hasMoreFavorite = useMemo(() => Helper.syncGetter('myFavorite.paginatorInfo.hasMorePages', favoriteData), [
+        favoriteData,
+    ]);
+    const onEndReached = useCallback(() => {
+        if (hasMoreFavorite && favoriteLoading) {
+            favoriteFetch({
+                fetchPolicy: 'network-only',
+                variables: {
+                    user_id: userStore.me.id,
+                    type: 'movies',
+                    // count: 5,
+                    page: currentPage + 1,
+                },
+                updateQuery: (prev, { fetchMoreResult }) => {
+                    if (fetchMoreResult && fetchMoreResult.myFavorite) {
+                        return Object.assign({}, prev, {
+                            myFavorite: Object.assign({}, prev.myFavorite, {
+                                paginatorInfo: fetchMoreResult.myFavorite.paginatorInfo,
+                                data: [...prev.myFavorite.data, ...fetchMoreResult.myFavorite.data],
+                            }),
+                        });
+                    }
+                },
+            });
+        }
+    }, [hasMoreFavorite, currentPage]);
+
+    // 猜你喜欢的接口
+    const {
+        data: mayLikeData,
+        fetchMore: mayLikeFetch,
+        refetch: mayLikeRefetch,
+        loading: mayLikeLoading,
+    } = useQuery(GQL.recommendMovieQuery, { fetchPolicy: 'network-only' });
+    const mayLikeList = useMemo(() => Helper.syncGetter('recommendMovie', mayLikeData), [mayLikeData]);
+    console.log('mayLikeData', mayLikeData, mayLikeList);
+
+    // 轮播图接口跳转
+    const swiperToMovie = useCallback((movie_id) => {
+        navigation.navigate('MovieDetail', { movie_id });
+    }, []);
+    // 我的收藏接口跳转
+    const favoriteToMovie = useCallback((movie_id) => {
+        navigation.navigate('MovieDetail', { movie_id });
+    }, []);
+    const navigationHandle = useCallback((movie_id) => {
+        navigation.navigate('MovieDetail', { movie_id });
+    }, []);
+    // 我的全部收藏页面跳转
+    const favoriteMovieAll = useCallback(() => {
+        console.log(1);
+    }, []);
     const categoryData = [
         {
-            movieTitle: '寒战1',
+            name: '寒战1',
             movieUrl: 'https://neihandianying.com/movie/52188',
             cover: 'https://mahuapic.com/upload/vod/2020-01-14/15789346381.jpg',
-            description: '疯狂仙三大队撒平静的劈开,劈开了撒娇都是仿佛能看到失联飞机阿里斯顿啦什么',
+            introduction: '疯狂仙三大队撒平静的劈开,劈开了撒娇都是仿佛能看到失联飞机阿里斯顿啦什么',
         },
         {
-            movieTitle: '寒战1',
+            name: '寒战1',
             movieUrl: 'https://neihandianying.com/movie/52188',
             cover: 'https://cdn-youku-com.diudie.com/app/image/image-5fad1ea94e2d30.19733746.jpg',
-            description: '疯狂仙三大队撒平静的劈开,劈开了撒娇都是仿佛能看到失联飞机阿里斯顿啦什么',
+            introduction: '疯狂仙三大队撒平静的劈开,劈开了撒娇都是仿佛能看到失联飞机阿里斯顿啦什么',
         },
         {
-            movieTitle: '寒战1',
+            name: '寒战1',
             movieUrl: 'https://neihandianying.com/movie/52188',
             cover: 'https://mahuapic.com/upload/vod/2020-12-05/16071649900.jpg',
-            description: '疯狂仙三大队撒平静的劈开,劈开了撒娇都是仿佛能看到失联飞机阿里斯顿啦什么',
+            introduction: '疯狂仙三大队撒平静的劈开,劈开了撒娇都是仿佛能看到失联飞机阿里斯顿啦什么',
         },
         {
-            movieTitle: '龙骑士',
+            name: '龙骑士',
             movieUrl: 'https://neihandianying.com/movie/52188',
             cover: 'https://cdn-iqiyi-com.diudie.com/app/image/image-5fbdbf14b27073.21885558.jpg',
-            description: '爱德华·斯皮伊尔斯,杰瑞米·艾恩斯,西耶娜·盖尔利',
+            introduction: '爱德华·斯皮伊尔斯,杰瑞米·艾恩斯,西耶娜·盖尔利',
         },
     ];
     const categoryData_three = [
         {
-            movieTitle: '寒战1',
+            name: '寒战1',
             movieUrl: 'https://neihandianying.com/movie/52188',
             cover: 'https://mahuapic.com/upload/vod/2020-01-14/15789346381.jpg',
-            description: '疯狂仙三大队撒平静的劈开,劈开了撒娇都是仿佛能看到失联飞机阿里斯顿啦什么',
+            introduction: '疯狂仙三大队撒平静的劈开,劈开了撒娇都是仿佛能看到失联飞机阿里斯顿啦什么',
         },
         {
-            movieTitle: '寒战2',
+            name: '寒战2',
             movieUrl: 'https://neihandianying.com/movie/52188',
             cover: 'https://cdn-youku-com.diudie.com/app/image/image-5fad1ea94e2d30.19733746.jpg',
-            description: '疯狂仙三大队撒平静的劈开,劈开了撒娇都是仿佛能看到失联飞机阿里斯顿啦什么',
+            introduction: '疯狂仙三大队撒平静的劈开,劈开了撒娇都是仿佛能看到失联飞机阿里斯顿啦什么',
         },
         {
-            movieTitle: '寒战3',
+            name: '寒战3',
             movieUrl: 'https://neihandianying.com/movie/52188',
             cover: 'https://mahuapic.com/upload/vod/2020-12-05/16071649900.jpg',
-            description: '疯狂仙三大队撒平静的劈开,劈开了撒娇都是仿佛能看到失联飞机阿里斯顿啦什么',
+            introduction: '疯狂仙三大队撒平静的劈开,劈开了撒娇都是仿佛能看到失联飞机阿里斯顿啦什么',
         },
     ];
-    // const swiperData = [
-    //     {
-    //         image_url: 'https://p2.ssl.qhimgs1.com/bdr/460__/t01ad0e9f6b314c4c52.jpg',
-    //         description: '这是一首简单的小情歌~',
-    //     },
-    //     {
-    //         image_url: 'https://p5.ssl.qhimgs1.com/bdr/460__/t013d81a7107ae6c95f.jpg',
-    //         title: '你像个人气高居不下的天后~',
-    //     },
-    //     {
-    //         image_url: 'https://p2.ssl.qhimgs1.com/bdr/460__/t0154d135d0cadd778c.jpg',
-    //         title: '太多的、太重的、太伤心的话~',
-    //     },
-    //     {
-    //         image_url: 'https://p0.ssl.qhimgs1.com/bdr/460__/t01a3b565741a40064a.webp',
-    //         title: '你想要的、我却不能够、给你我所有!',
-    //     },
-    //     // 'https://p3.ssl.qhimgs1.com/bdr/460__/t01c84d6ed1c7db21dd.webp',
-    //     // 'https://p0.ssl.qhimgs1.com/bdr/460__/t01ef8b1b1ac9c7db96.webp',
-    //     // 'https://p0.ssl.qhimgs1.com/bdr/460__/t014cac9bd90230a2e6.webp',
-    //     // 'https://p2.ssl.qhimgs1.com/bdr/460__/t0146ad6054c6fa4a42.webp',
-    // ];
-    const FavoriteData = [
-        {
-            title: '姜子牙',
-            image: 'https://mahuapic.com/upload/vod/2020-10-03/16017027451.jpg',
-            favoriteType: '独家',
-            movieType: '会员专享',
-        },
-        {
-            title: '近邻小王子',
-            image: 'http://images.cnblogsc.com/pic/upload/vod/2019-09/15681978341.jpg',
-            favoriteSeriesTime: '0.46.5',
-            movieType: '免费看',
-        },
-        {
-            title: '乌托邦',
-            image: 'https://cdn-iqiyi-com.diudie.com/app/image/image-5fad28a94d43f3.83440744.jpg',
-            favoriteType: '新系列开播',
-            movieType: '超前点播',
-        },
-        {
-            title: '这份爱是罪恶吗',
-            image: 'https://cdn-xigua-com.diudie.com/app/image/image-5fb62fe62de6b8.87702995.jpg',
-            favoriteSeriesTime: '0.46.5',
-            movieType: '会员专享',
-        },
-        {
-            title: '猫屎妈妈(粤语版)',
-            image: 'https://cdn-v-qq-com.diudie.com/app/image/image-5fbdd05ade6351.37282826.jpg',
-            favoriteSeriesTime: '0.46.5',
-            movieType: '免费看',
-        },
-    ];
+
     return (
-        <View style={styles.pageView}>
-            {/* <FlatList /> */}
-            <ScrollView
-                contentContainerStyle={styles.page}
-                style={styles.pageList}
-                showsVerticalScrollIndicator={false}>
-                {/* <View style={styles.page}>
+        !swiperLoading &&
+        !favoriteLoading && (
+            <View style={styles.pageView}>
+                {/* <FlatList /> */}
+                <ScrollView
+                    contentContainerStyle={styles.page}
+                    style={styles.pageList}
+                    showsVerticalScrollIndicator={false}>
+                    {/* <View style={styles.page}>
                     
                 </View> */}
-                <MovieSwiper swiperDataList={swiperList} />
-                <ApplicationMenu />
-                <MyFavorite favoriteList={FavoriteData} />
-                <CategoryList
-                    categoryData={categoryData_three}
-                    refetchMore={() => console.log(1)}
-                    pageViewStyle={{ marginTop: pixel(-12) }}
-                    moduleTitle="家有儿女"
-                />
-                <CategoryListColum
-                    refetchMore={() => console.log(1)}
-                    pageViewStyle={{ borderTopWidth: pixel(0) }}
-                    categoryData={categoryData}
-                    hasMore={true}
-                    moduleTitle="伍湘祁"
-                />
-                <CategoryList
-                    categoryData={categoryData_three}
-                    refetchMore={() => console.log(1)}
-                    pageViewStyle={{ borderTopWidth: pixel(0) }}
-                />
-                <CategoryListColum
-                    refetchMore={() => console.log(1)}
-                    pageViewStyle={{ borderTopWidth: pixel(0) }}
-                    categoryData={categoryData}
-                />
-            </ScrollView>
-        </View>
+                    <MovieSwiper swiperDataList={swiperList} swiperToMovie={swiperToMovie} />
+                    <ApplicationMenu />
+                    <MyFavorite
+                        favoriteList={favoriteList}
+                        favoriteToMovie={favoriteToMovie}
+                        refetch={favoriteRefetch}
+                        hasMorePage={hasMoreFavorite}
+                        checkMore={favoriteMovieAll}
+                    />
+                    <CategoryListColum
+                        refetchMore={mayLikeRefetch}
+                        pageViewStyle={{ borderTopWidth: pixel(0.5) }}
+                        categoryData={mayLikeList}
+                        hasMore={false}
+                        moduleTitle="猜你喜欢"
+                        navigationItem={navigationHandle}
+                    />
+                    <CategoryListColum
+                        refetchMore={() => console.log(1)}
+                        pageViewStyle={{ borderTopWidth: pixel(0) }}
+                        categoryData={categoryData}
+                        hasMore={true}
+                        moduleTitle="伍湘祁"
+                    />
+                    <CategoryList
+                        categoryData={categoryData_three}
+                        refetchMore={() => console.log(1)}
+                        pageViewStyle={{ borderTopWidth: pixel(0) }}
+                        moduleTitle="家有儿女"
+                    />
+                    {/* <CategoryList
+                        categoryData={categoryData_three}
+                        refetchMore={() => console.log(1)}
+                        pageViewStyle={{ marginTop: pixel(-12) }}
+                        moduleTitle="家有儿女"
+                    />
+                    <CategoryListColum
+                        refetchMore={() => console.log(1)}
+                        pageViewStyle={{ borderTopWidth: pixel(0) }}
+                        categoryData={categoryData}
+                        hasMore={true}
+                        moduleTitle="伍湘祁"
+                    />
+                    <CategoryList
+                        categoryData={categoryData_three}
+                        refetchMore={() => console.log(1)}
+                        pageViewStyle={{ borderTopWidth: pixel(0) }}
+                    />
+                    <CategoryListColum
+                        refetchMore={() => console.log(1)}
+                        pageViewStyle={{ borderTopWidth: pixel(0) }}
+                        categoryData={categoryData}
+                    /> */}
+                </ScrollView>
+            </View>
+        )
     );
 };
 

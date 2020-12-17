@@ -2,7 +2,7 @@
 
 # 影视推荐
 query recommendMovieQuery {
-    recommendMovie {
+    recommendMovie(count: 4) {
         ...movieFragment
     }
 }
