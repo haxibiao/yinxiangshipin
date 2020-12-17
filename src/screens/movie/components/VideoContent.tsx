@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity, ScrollView }
 import { Iconfont, Placeholder } from '@src/components';
 import { useNavigation } from '@react-navigation/native';
 import { GQL, useQuery, useMutation, errorMessage } from '@src/apollo';
+import { userStore } from '@src/store';
 import { observable } from 'mobx';
 import MovieItem from './MovieItem';
 import MovieInfoModal from './MovieInfoModal';
@@ -43,6 +44,10 @@ export default function VideoContent({ movie }) {
             {
                 query: GQL.movieQuery,
                 variables: { movie_id: id },
+            },
+            {
+                query: GQL.favoritedMoviesQuery,
+                variables: { user_id: userStore.me.id, type: 'movies' },
             },
         ],
     });
@@ -245,60 +250,3 @@ const styles = StyleSheet.create({
         marginBottom: pixel(10),
     },
 });
-
-const recommendData = [
-    {
-        id: 0,
-        cover:
-            'https://r1.ykimg.com/058400005FD7031114187C084F409233?x-oss-process=image/resize' +
-            ',w_290/interlace,1/quality,Q_80/sharpen,100',
-        title: '同一屋檐下 第一季',
-        description: '李诞和他的朋友们快问快答大拷问',
-        totalEpisodes: '20集全',
-    },
-    {
-        id: 1,
-        cover:
-            'https://r1.ykimg.com/058400005FD7031114187C084F409233?x-oss-process=image/resize' +
-            ',w_290/interlace,1/quality,Q_80/sharpen,100',
-        title: '同一屋檐下 第一季',
-        description: '李诞和他的朋友们快问快答大拷问',
-        totalEpisodes: '20集全',
-    },
-    {
-        id: 2,
-        cover:
-            'https://r1.ykimg.com/058400005FD7031114187C084F409233?x-oss-process=image/resize' +
-            ',w_290/interlace,1/quality,Q_80/sharpen,100',
-        title: '同一屋檐下 第一季',
-        description: '李诞和他的朋友们快问快答大拷问',
-        totalEpisodes: '20集全',
-    },
-    {
-        id: 3,
-        cover:
-            'https://r1.ykimg.com/058400005FD7031114187C084F409233?x-oss-process=image/resize' +
-            ',w_290/interlace,1/quality,Q_80/sharpen,100',
-        title: '同一屋檐下 第一季',
-        description: '李诞和他的朋友们快问快答大拷问',
-        totalEpisodes: '20集全',
-    },
-    {
-        id: 4,
-        cover:
-            'https://r1.ykimg.com/058400005FD7031114187C084F409233?x-oss-process=image/resize' +
-            ',w_290/interlace,1/quality,Q_80/sharpen,100',
-        title: '同一屋檐下 第一季',
-        description: '李诞和他的朋友们快问快答大拷问',
-        totalEpisodes: '20集全',
-    },
-    {
-        id: 5,
-        cover:
-            'https://r1.ykimg.com/058400005FD7031114187C084F409233?x-oss-process=image/resize' +
-            ',w_290/interlace,1/quality,Q_80/sharpen,100',
-        title: '同一屋檐下 第一季',
-        description: '李诞和他的朋友们快问快答大拷问',
-        totalEpisodes: '20集全',
-    },
-];
