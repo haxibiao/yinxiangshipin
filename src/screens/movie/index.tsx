@@ -161,7 +161,7 @@ const index = () => {
                     />
                     <CategoryListColum
                         refetchMore={mayLikeRefetch}
-                        pageViewStyle={{ borderTopWidth: pixel(0.5) }}
+                        pageViewStyle={{ borderTopWidth: pixel(0.5), marginTop: -pixel(12) }}
                         categoryData={mayLikeList}
                         hasMore={false}
                         moduleTitle="猜你喜欢"
@@ -173,18 +173,17 @@ const index = () => {
                         categoryData={categoryData}
                         hasMore={true}
                         moduleTitle="伍湘祁"
+                        // checkStyleName="伍湘祁爱看"
+                        // checkNameColor="gold"
                     />
                     <CategoryList
                         categoryData={categoryData_three}
                         refetchMore={() => console.log(1)}
                         pageViewStyle={{ borderTopWidth: pixel(0) }}
                         moduleTitle="家有儿女"
-                    />
-                    {/* <CategoryList
-                        categoryData={categoryData_three}
-                        refetchMore={() => console.log(1)}
-                        pageViewStyle={{ marginTop: pixel(-12) }}
-                        moduleTitle="家有儿女"
+                        hasMore={true}
+                        checkStyleName="伍湘祁爱看"
+                        checkNameColor="gold"
                     />
                     <CategoryListColum
                         refetchMore={() => console.log(1)}
@@ -202,7 +201,7 @@ const index = () => {
                         refetchMore={() => console.log(1)}
                         pageViewStyle={{ borderTopWidth: pixel(0) }}
                         categoryData={categoryData}
-                    /> */}
+                    />
                 </ScrollView>
             </View>
         )

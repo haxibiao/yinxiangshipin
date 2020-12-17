@@ -23,10 +23,22 @@ interface props {
     refetchMore: any;
     moduleTitle: any;
     navigationItem: Function;
+    checkStyleName: string;
+    checkNameColor: string;
 }
 
 const CategoryListColum = (props: Props) => {
-    const { pageViewStyle, categoryData, hasMore, refetchMore, moduleData, moduleTitle, navigationItem } = props;
+    const {
+        pageViewStyle,
+        categoryData,
+        hasMore,
+        refetchMore,
+        moduleData,
+        moduleTitle,
+        navigationItem,
+        checkStyleName,
+        checkNameColor,
+    } = props;
     const [moreStatus, setMoreStatus] = useState(false);
     const [spinAction, setSpinAction] = useState(false);
     useEffect(() => {
@@ -66,7 +78,13 @@ const CategoryListColum = (props: Props) => {
         <View style={[styles.pageView, { ...pageViewStyle }]}>
             <View style={styles.pageHead}>
                 <Text style={styles.pageTitle}>{moduleTitle ? moduleTitle : '精选剧场'}</Text>
-                {moreStatus ? <Text style={styles.pageMore}>more</Text> : <Text />}
+                {moreStatus ? (
+                    <Text style={[styles.pageMore, checkNameColor ? { color: checkNameColor } : { color: '#c8c8c8' }]}>
+                        {checkStyleName ? checkStyleName : '查看更多'}
+                    </Text>
+                ) : (
+                    <Text />
+                )}
             </View>
             <View style={styles.pageShow}>
                 <FlatList
