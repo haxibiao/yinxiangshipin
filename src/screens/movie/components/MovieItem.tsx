@@ -17,7 +17,7 @@ export default function movieItem({ movie, boxStyle }) {
                     end={{ x: 0, y: 0 }}
                     style={styles.gradientStyle}>
                     <View style={{ width: itemWidth }}>
-                        <Text style={styles.totalEpisodes}>{count_series}</Text>
+                        <Text style={styles.totalEpisodes}>更新至第{count_series}集</Text>
                     </View>
                 </LinearGradient>
             </View>

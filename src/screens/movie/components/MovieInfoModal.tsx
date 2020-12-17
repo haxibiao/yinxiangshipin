@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { StyleSheet, Text, View, Modal } from 'react-native';
+import { StyleSheet, Text, View, Modal, Image } from 'react-native';
 import { observer, autorun, adStore, userStore } from '@src/store';
 import { DebouncedPressable, Iconfont } from '@src/components';
 import movieStore from '../store';
@@ -48,22 +48,31 @@ export default function MovieInfoModal() {
                     </View>
                     <ScrollView>
                         <View style={{ padding: pixel(Theme.itemSpace) }}>
-                            <Text style={styles.title}>{movie.name}</Text>
-                            <Text style={styles.info}>
-                                {movie.region && `${movie.region}`}
-                                {movie.year && `·${movie.year}`}
-                                {movie.style && `·${movie.style}`}
-                                {movie.count_series && `·更新至第${movie.count_series}集`}
-                            </Text>
-                            {movie.producer && <Text style={styles.info}>导演：{movie.producer}</Text>}
-                            {movie.actors && <Text style={styles.info}>演员：{movie.actors}</Text>}
+                            <View style={{ flexDirection: 'row' }}>
+                                <View>
+                                    <Image source={{ uri: movie?.cover }} style={styles.cover} />
+                                </View>
+                                <View style={styles.right}>
+                                    <Text style={styles.title}>{movie.name}</Text>
+                                    <Text style={styles.info}>
+                                        {movie.region && `${movie.region}`}
+                                        {movie.year && `·${movie.year}`}
+                                        {movie.style && `·${movie.style}`}
+                                        {movie.count_series && `·更新至第${movie.count_series}集`}
+                                    </Text>
+                                    {movie.producer && <Text style={styles.info}>导演：{movie.producer}</Text>}
+                                    {movie.actors && <Text style={styles.info}>演员：{movie.actors}</Text>}
+                                </View>
+                            </View>
                             {movie.introduction && (
                                 <View>
                                     <Text style={[styles.title, { marginTop: pixel(20) }]}>概要</Text>
-                                    <Text style={styles.info}>{movie.introduction}</Text>
+                                    <Text style={[styles.info, { color: '#666666' }]}>{movie.introduction}</Text>
                                 </View>
                             )}
-                            <Text style={styles.info}>20人收藏</Text>
+                            {movie.count_favorites > 0 && (
+                                <Text style={styles.info}>{movie.count_favorites}人收藏</Text>
+                            )}
                         </View>
                     </ScrollView>
                 </View>
@@ -80,7 +89,7 @@ const styles = StyleSheet.create({
     },
     modalContainer: {
         width: Device.WIDTH,
-        height: Device.HEIGHT / 2,
+        height: Device.HEIGHT - Device.WIDTH * 0.6,
         backgroundColor: '#fff',
     },
     header: {
@@ -106,10 +115,22 @@ const styles = StyleSheet.create({
         borderWidth: pixel(1),
         borderColor: '#f0f0f0',
     },
+    cover: {
+        width: Device.WIDTH * 0.35,
+        height: Device.WIDTH * 0.45,
+        borderRadius: pixel(5),
+        resizeMode: 'cover',
+    },
+    right: {
+        flex: 1,
+        height: Device.WIDTH * 0.45,
+        paddingHorizontal: pixel(10),
+        overflow: 'hidden',
+    },
     info: {
         fontSize: font(12),
-        lineHeight: pixel(17),
-        color: '#666666',
+        lineHeight: pixel(20),
+        color: '#333',
         marginBottom: pixel(5),
     },
 });

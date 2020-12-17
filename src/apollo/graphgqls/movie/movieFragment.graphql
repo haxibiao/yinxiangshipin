@@ -16,4 +16,9 @@ fragment movieFragment on Movie {
     score
     data
     favorited
+    created_at
+    last_watch_series
+    last_watch_progress
+    count_comments
+    count_favorites
 }

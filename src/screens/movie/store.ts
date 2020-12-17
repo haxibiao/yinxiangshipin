@@ -1,18 +1,25 @@
 import { observable, action } from 'mobx';
 
 interface MovieData {
+    id: number;
     name?: string;
     introduction?: string;
+    cover: string;
     year: string;
     type: string;
     style: string;
-    actors: string;
+    region: string;
+    score: string;
     country: string;
     count_series: number;
     lang: string;
     producer: string;
-    region: string;
-    score: string;
+    actors: string;
+    count_comments: number;
+    count_favorites: number;
+    favorited: boolean;
+    last_watch_series: number;
+    last_watch_progress: string;
 }
 
 class MovieStore {

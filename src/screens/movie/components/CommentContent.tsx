@@ -17,7 +17,7 @@ import { observer, userStore, notificationStore } from '@src/store';
 import { BoxShadow } from 'react-native-shadow';
 import CommentItem from './CommentItem';
 
-export default function CommentContent({ movie }) {
+const CommentContent = observer(({ movie }) => {
     const isSelf = userStore.me.id === movie?.user?.id;
     const fancyInputRef = useRef();
     const [placeholder, setPlaceholder] = useState();
@@ -27,7 +27,7 @@ export default function CommentContent({ movie }) {
     const disableButton = commentValue.trim().length <= 0;
     // 评论数据
     const { data, error, refetch, loading, fetchMore } = useQuery(GQL.commentsQuery, {
-        variables: { commentable_type: 'articles', commentable_id: movie?.id, replyCount: 3 },
+        variables: { commentable_type: 'movies', commentable_id: movie?.id, replyCount: 3 },
         fetchPolicy: 'network-only',
     });
     const commentsData = useMemo(() => Helper.syncGetter('comments.data', data), [data]);
@@ -74,7 +74,7 @@ export default function CommentContent({ movie }) {
 
     // 添加评论
     const addComment = useCommentMutation({
-        commentAbleType: 'articles',
+        commentAbleType: 'movies',
         commentAbleId: movie?.id,
         replyComment,
         onCompleted,
@@ -144,48 +144,50 @@ export default function CommentContent({ movie }) {
     }, [loading, commentsData, hasMorePages]);
     return (
         <View style={{ flex: 1 }}>
-            <FlatList
-                // keyboardDismissMode="none"
-                contentContainerStyle={styles.contentContainer}
-                showsVerticalScrollIndicator={false}
-                data={commentsData}
-                renderItem={({ item }) => {
-                    return <CommentItem comment={item} onDelete={deleteComment} />;
-                }}
-                refreshing={loading}
-                onRefresh={refetch}
-                // ItemSeparatorComponent={() => <View style={styles.commentSeparator} />}
-                keyExtractor={(item) => item.id.toString()}
-                ListFooterComponent={FooterComponent}
-                onEndReached={onEndReached}
-                onEndReachedThreshold={0.1}
-            />
-            <Animated.View style={[styles.bottomInput, { transform: [{ translateY: inputTranslateY }] }]}>
-                <BoxShadow
-                    setting={Object.assign({}, shadowOpt, {
-                        height: bottomInputHeight,
-                    })}>
-                    <View style={styles.inputContainer}>
-                        <HxfTextInput
-                            ref={fancyInputRef}
-                            style={styles.textInput}
-                            placeholder={placeholder || '说点什么...'}
-                            value={commentValue}
-                            onChangeText={changeCommentText}
-                        />
-                        <TouchableOpacity
-                            style={[styles.sendButton, !disableButton && { backgroundColor: '#0984FD' }]}
-                            onPress={sendComment}
-                            disabled={disableButton}>
-                            <Text style={styles.sendButtonText}>发布</Text>
-                        </TouchableOpacity>
-                    </View>
-                </BoxShadow>
-            </Animated.View>
+            <View style={{ flex: 1 }}>
+                <FlatList
+                    keyboardDismissMode="none"
+                    contentContainerStyle={styles.contentContainer}
+                    showsVerticalScrollIndicator={false}
+                    data={commentsData}
+                    renderItem={({ item }) => {
+                        return <CommentItem comment={item} onDelete={deleteComment} />;
+                    }}
+                    refreshing={loading}
+                    onRefresh={refetch}
+                    // ItemSeparatorComponent={() => <View style={styles.commentSeparator} />}
+                    keyExtractor={(item) => item.id.toString()}
+                    ListFooterComponent={FooterComponent}
+                    onEndReached={onEndReached}
+                    onEndReachedThreshold={0.1}
+                />
+                <Animated.View style={[styles.bottomInput, { transform: [{ translateY: inputTranslateY }] }]}>
+                    <BoxShadow
+                        setting={Object.assign({}, shadowOpt, {
+                            height: bottomInputHeight,
+                        })}>
+                        <View style={styles.inputContainer}>
+                            <HxfTextInput
+                                ref={fancyInputRef}
+                                style={styles.textInput}
+                                placeholder={placeholder || '说点什么...'}
+                                value={commentValue}
+                                onChangeText={changeCommentText}
+                            />
+                            <TouchableOpacity
+                                style={[styles.sendButton, !disableButton && { backgroundColor: '#0984FD' }]}
+                                onPress={sendComment}
+                                disabled={disableButton}>
+                                <Text style={styles.sendButtonText}>发布</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </BoxShadow>
+                </Animated.View>
+            </View>
             <KeyboardSpacer onKeyboardHide={onKeyboardHide} />
         </View>
     );
-}
+});
 
 const shadowOpt = {
     width: Device.WIDTH,
@@ -287,3 +289,5 @@ const styles = StyleSheet.create({
         letterSpacing: pixel(4),
     },
 });
+
+export default CommentContent;
