@@ -4,7 +4,7 @@ import { SafeText, PageContainer, TouchFeedback } from '@src/components';
 import { GQL, useQuery } from '@src/apollo';
 import { ContentStatus, QueryList } from '@src/content';
 import SelectHeader from './SelectHeader';
-import MovieCard from './MovieCard';
+import MovieItem from '../components/MovieItem';
 // 电影分类
 const NumOfLines = 3;
 export default function index() {
@@ -58,7 +58,11 @@ export default function index() {
     };
 
     const _renderItem = ({ item, index }) => {
-        return <MovieCard key={index} movieresult={item} />;
+        return (
+            <View style={styles.areaStyle}>
+                <MovieItem movie={item} boxStyle={styles.boxStyle} key={index} />
+            </View>
+        );
     };
 
     return (
@@ -80,10 +84,18 @@ export default function index() {
         </PageContainer>
     );
 }
-
+const itemWidth = (Device.WIDTH - pixel(Theme.itemSpace) * 2 - pixel(25)) / 3;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         width: Device.WIDTH,
+    },
+    boxStyle: {
+        width: itemWidth,
+        marginBottom: pixel(10),
+    },
+    areaStyle: {
+        marginBottom: pixel(8),
+        paddingLeft: pixel(Theme.itemSpace),
     },
 });
