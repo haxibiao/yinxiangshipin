@@ -96,6 +96,7 @@ import CommonQuestionScreen from '../screens/settings/CommonQuestionScreen'; // 
 import MoviePlayerScreen from '../screens/movie/moviePlayer';
 import MovieCategoryListScreen from '../screens/movie/MovieCategoryList';
 import MovieDetail from '../screens/movie/MovieDetail';
+import ApplicationMenuTable from '../screens/movie/MovieCategoryList/ApplicationMenuTable';
 
 export default {
     Login: {
@@ -300,5 +301,8 @@ export default {
     },
     MovieDetail: {
         component: MovieDetail,
+    },
+    ApplicationMenuTable: {
+        component: ApplicationMenuTable,
     },
 };

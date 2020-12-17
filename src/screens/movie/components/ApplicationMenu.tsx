@@ -1,84 +1,55 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, FlatList } from 'react-native';
 
-const ApplicationMenu = () => {
-    const navigation = useNavigation();
-    return (
-        <View style={styles.listPage}>
-            <ScrollView
-                style={styles.menuList}
-                horizontal={true}
-                alwaysBounceHorizontal={true}
-                centerContent={true}
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center' }}>
+// 频道选择
+const SelectApplicationItem = ({ filter, navigation }) => {
+    const _renderItem = ({ item, index }) => {
+        return (
+            <View>
                 <TouchableOpacity
-                    style={styles.menuPress}
                     activeOpacity={0.1}
-                    onPress={() => {
-                        navigation.navigate('MovieCategoryListScreen');
-                    }}>
-                    <View style={styles.menuBox}>
-                        <Image
-                            style={styles.menuImage}
-                            source={require('@app/assets/images/movie/Application_all.png')}
-                        />
-                    </View>
-                    <Text style={styles.menuText}>全部应用</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.menuPress} activeOpacity={0.1}>
+                    onPress={() => navigation.navigate('ApplicationMenuTable')}
+                    style={styles.menuPress}>
                     <View style={[styles.menuBox, { backgroundColor: '#866ff8' }]}>
                         <Image style={styles.menuImage} source={require('@app/assets/images/movie/Movie_icon.png')} />
                     </View>
-                    <Text style={styles.menuText}>电影</Text>
+                    <Text style={styles.menuText}>{item}</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.menuPress} activeOpacity={0.1}>
-                    <View style={styles.menuBox}>
-                        <Image
-                            style={styles.menuImage}
-                            source={require('@app/assets/images/movie/ScienceFiction_icon.png')}
-                        />
-                    </View>
-                    <Text style={styles.menuText}>科幻</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.menuPress} activeOpacity={0.1}>
-                    <View style={styles.menuBox}>
-                        <Image
-                            style={styles.menuImage}
-                            source={require('@app/assets/images/movie/Application_all.png')}
-                        />
-                    </View>
-                    <Text style={styles.menuText}>美剧</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.menuPress} activeOpacity={0.1}>
-                    <View style={styles.menuBox}>
-                        <Image
-                            style={styles.menuImage}
-                            source={require('@app/assets/images/movie/Application_all.png')}
-                        />
-                    </View>
-                    <Text style={styles.menuText}>韩剧</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.menuPress} activeOpacity={0.1}>
-                    <View style={styles.menuBox}>
-                        <Image
-                            style={styles.menuImage}
-                            source={require('@app/assets/images/movie/Application_all.png')}
-                        />
-                    </View>
-                    <Text style={styles.menuText}>日剧</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.menuPress} activeOpacity={0.1}>
-                    <View style={styles.menuBox}>
-                        <Image
-                            style={styles.menuImage}
-                            source={require('@app/assets/images/movie/Application_all.png')}
-                        />
-                    </View>
-                    <Text style={styles.menuText}>泰剧</Text>
-                </TouchableOpacity>
-            </ScrollView>
+            </View>
+        );
+    };
+    return (
+        <FlatList
+            style={styles.menuList}
+            data={filter?.filterOptions}
+            renderItem={_renderItem}
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            keyExtractor={(item, index) => index.toString()}
+        />
+    );
+};
+
+const ApplicationMenu = (props: any) => {
+    const { navigation } = props;
+    const data = props.data ?? [];
+    const newData = data.slice(1, 2);
+    return (
+        <View style={styles.listPage}>
+            {/* <TouchableOpaci
+                style={styles.menuPress}
+                activeOpacity={0.1}
+                onPress={() => {
+                    navigation.navigate('MovieCategoryListScreen');
+                }}>
+                <View style={styles.menuBox}>
+                    <Image style={styles.menuImage} source={require('@app/assets/images/movie/Application_all.png')} />
+                </View>
+                <Text style={styles.menuText}>全部应用</Text>
+            </TouchableOpacity> */}
+            {newData.map((item, index) => {
+                return <SelectApplicationItem navigation={navigation} filter={item} key={index} />;
+            })}
         </View>
     );
 };
