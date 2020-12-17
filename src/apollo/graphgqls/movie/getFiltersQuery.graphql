@@ -4,5 +4,6 @@ query getFiltersQuery {
         id
         filterName
         filterOptions
+        filterValue
     }
 }

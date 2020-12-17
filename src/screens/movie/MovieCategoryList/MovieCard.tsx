@@ -1,30 +1,15 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
-import { SafeText, PageContainer, TouchFeedback } from '@src/components';
+import { TouchFeedback } from '@src/components';
+import { useNavigation } from '@react-navigation/native';
 
 // 搜索结果
 export default function MovieCard({ movieresult }) {
-    const {
-        id,
-        name,
-        introduction,
-        cover,
-        producer,
-        year,
-        type,
-        style,
-        region,
-        actors,
-        count_series,
-        country,
-        lang,
-        hits,
-        score,
-        data,
-    } = movieresult;
+    const { id, name, cover, count_series } = movieresult;
+    const navigation = useNavigation();
     return (
         <View style={styles.container}>
-            <TouchFeedback style={styles.button}>
+            <TouchFeedback style={styles.button} onPress={() => navigation.navigate('MovieDetail', { movie_id: id })}>
                 <Image source={{ url: cover }} resizeMode="cover" style={styles.pageImage} />
                 <Text style={styles.title} numberOfLines={1}>
                     {name}
