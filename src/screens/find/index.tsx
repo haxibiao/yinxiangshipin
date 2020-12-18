@@ -29,7 +29,7 @@ export default observer(() => {
             <FocusAwareStatusBar barStyle="dark-content" />
             <ScrollableTabView
                 contentProps={{ keyboardShouldPersistTaps: 'always' }}
-                initialPage={2}
+                initialPage={3}
                 ref={scrollTabRef}
                 renderTabBar={(tabBarProps: any) => (
                     <ScrollTabBar

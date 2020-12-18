@@ -1,13 +1,16 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity, ScrollView } from 'react-native';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
-import { ScrollTabBar, Iconfont, StatusView, SpinnerLoading } from '@src/components';
+import { ScrollTabBar, Iconfont, StatusView, SpinnerLoading, NavBarHeader } from '@src/components';
+import { MoviePlayer } from '@src/components/MoviePlayer';
+import { useStatusBarHeight } from '@src/common';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { GQL, useQuery } from '@src/apollo';
 import VideoContent from './components/VideoContent';
 import CommentContent from './components/CommentContent';
 
 export default function MovieDetail() {
+    const topInset = useStatusBarHeight();
     const navigation = useNavigation();
     const route = useRoute();
     const movie_id = route.params?.movie_id || Math.round(Math.random() * 10);
@@ -21,13 +24,16 @@ export default function MovieDetail() {
     if (loading) return <SpinnerLoading />;
 
     return (
-        <View style={styles.container}>
-            <TouchableOpacity activeOpacity={1} style={styles.goBack} onPress={() => navigation.goBack()}>
-                <Iconfont name="fanhui" size={20} color="#fff" />
+        <View style={[styles.container, { paddingTop: topInset }]}>
+            <TouchableOpacity
+                activeOpacity={1}
+                style={[styles.backButton, { top: topInset }]}
+                onPress={() => navigation.goBack()}>
+                <Iconfont style={styles.backIcon} name="fanhui" size={font(18)} color={'#fff'} />
             </TouchableOpacity>
-            <View style={styles.moviePlayer} />
+            <MoviePlayer source={movie?.data?.[0]} series={movie?.data} />
             <ScrollableTabView
-                style={{ flex: 1 }}
+                style={{ flex: 1, backgroundColor: '#fff' }}
                 renderTabBar={(props) => (
                     <ScrollTabBar
                         {...props}
@@ -49,13 +55,21 @@ export default function MovieDetail() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#010101',
+        paddingBottom: pixel(Theme.HOME_INDICATOR_HEIGHT),
     },
-    goBack: {
+    backButton: {
         position: 'absolute',
-        top: Theme.statusBarHeight,
-        left: pixel(Theme.itemSpace),
-        zIndex: 99,
+        left: 0,
+        width: pixel(40),
+        height: Theme.NAVBAR_HEIGHT,
+        paddingLeft: pixel(15),
+        zIndex: 2,
+    },
+    backIcon: {
+        textShadowColor: 'rgba(0, 0, 0, 0.75)',
+        textShadowOffset: { width: 0, height: 0 },
+        textShadowRadius: 2,
     },
     moviePlayer: {
         height: Device.WIDTH * 0.6,

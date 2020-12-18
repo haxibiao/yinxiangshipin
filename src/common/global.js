@@ -44,6 +44,12 @@ Global.TOKEN = null;
 Global.__ = _;
 // toast
 Global.Toast = () => null;
+//xx
+Global.Log = (...args) => {
+    if (__DEV__) {
+        console.log('『Log』:', ...args);
+    }
+};
 
 Object.defineProperties(Global, {
     Scale: {

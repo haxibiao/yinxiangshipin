@@ -44,7 +44,7 @@ class VideoStore {
         }
         reaction(
             () => appStore.connectionInfoType,
-            connectionInfoType => {
+            (connectionInfoType) => {
                 if (connectionInfoType === 'wifi') {
                     this.continueToPlay();
                 }
