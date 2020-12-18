@@ -70,7 +70,44 @@ const index = () => {
         },
     );
     const mayLikeList = useMemo(() => Helper.syncGetter('recommendMovie', mayLikeData), [mayLikeData]);
-    console.log('mayLikeData', mayLikeData, mayLikeList);
+
+    // 分类列表,热门分类
+    // 韩剧
+    const { data: hanJuData, fetchMore: hanJuFetchMore, refetch: hanJuRefetch, loading: hanJuLoading } = useQuery(
+        GQL.categoryMovieQuery,
+        {
+            fetchPolicy: 'network-only',
+            variables: { region: 'HAN', count: 3 },
+        },
+    );
+    const hanJuList = useMemo(() => Helper.syncGetter('categoryMovie.data', hanJuData), [hanJuData]);
+    // 美剧
+    const { data: meiJuData, fetchMore: meiJuFetchMore, refetch: meiJuRefetch, loading: meiJuLoading } = useQuery(
+        GQL.categoryMovieQuery,
+        {
+            fetchPolicy: 'network-only',
+            variables: { region: 'MEI', count: 3 },
+        },
+    );
+    const meiJuList = useMemo(() => Helper.syncGetter('categoryMovie.data', meiJuData), [meiJuData]);
+    // 日剧
+    const { data: riJuData, fetchMore: riJuFetchMore, refetch: riJuRefetch, loading: riJuLoading } = useQuery(
+        GQL.categoryMovieQuery,
+        {
+            fetchPolicy: 'network-only',
+            variables: { region: 'RI', count: 3 },
+        },
+    );
+    const riJuList = useMemo(() => Helper.syncGetter('categoryMovie.data', riJuData), [riJuData]);
+    // 港剧
+    const { data: gangJuData, fetchMore: gangJuFetchMore, refetch: gangJuRefetch, loading: gangJuLoading } = useQuery(
+        GQL.categoryMovieQuery,
+        {
+            fetchPolicy: 'network-only',
+            variables: { region: 'GANG', count: 3 },
+        },
+    );
+    const gangJuList = useMemo(() => Helper.syncGetter('categoryMovie.data', gangJuData), [gangJuData]);
 
     // 轮播图接口跳转
     const swiperToMovie = useCallback((movie_id) => {
@@ -87,52 +124,6 @@ const index = () => {
     const favoriteMovieAll = useCallback(() => {
         console.log(1);
     }, []);
-    const categoryData = [
-        {
-            name: '寒战1',
-            movieUrl: 'https://neihandianying.com/movie/52188',
-            cover: 'https://mahuapic.com/upload/vod/2020-01-14/15789346381.jpg',
-            introduction: '疯狂仙三大队撒平静的劈开,劈开了撒娇都是仿佛能看到失联飞机阿里斯顿啦什么',
-        },
-        {
-            name: '寒战1',
-            movieUrl: 'https://neihandianying.com/movie/52188',
-            cover: 'https://cdn-youku-com.diudie.com/app/image/image-5fad1ea94e2d30.19733746.jpg',
-            introduction: '疯狂仙三大队撒平静的劈开,劈开了撒娇都是仿佛能看到失联飞机阿里斯顿啦什么',
-        },
-        {
-            name: '寒战1',
-            movieUrl: 'https://neihandianying.com/movie/52188',
-            cover: 'https://mahuapic.com/upload/vod/2020-12-05/16071649900.jpg',
-            introduction: '疯狂仙三大队撒平静的劈开,劈开了撒娇都是仿佛能看到失联飞机阿里斯顿啦什么',
-        },
-        {
-            name: '龙骑士',
-            movieUrl: 'https://neihandianying.com/movie/52188',
-            cover: 'https://cdn-iqiyi-com.diudie.com/app/image/image-5fbdbf14b27073.21885558.jpg',
-            introduction: '爱德华·斯皮伊尔斯,杰瑞米·艾恩斯,西耶娜·盖尔利',
-        },
-    ];
-    const categoryData_three = [
-        {
-            name: '寒战1',
-            movieUrl: 'https://neihandianying.com/movie/52188',
-            cover: 'https://mahuapic.com/upload/vod/2020-01-14/15789346381.jpg',
-            introduction: '疯狂仙三大队撒平静的劈开,劈开了撒娇都是仿佛能看到失联飞机阿里斯顿啦什么',
-        },
-        {
-            name: '寒战2',
-            movieUrl: 'https://neihandianying.com/movie/52188',
-            cover: 'https://cdn-youku-com.diudie.com/app/image/image-5fad1ea94e2d30.19733746.jpg',
-            introduction: '疯狂仙三大队撒平静的劈开,劈开了撒娇都是仿佛能看到失联飞机阿里斯顿啦什么',
-        },
-        {
-            name: '寒战3',
-            movieUrl: 'https://neihandianying.com/movie/52188',
-            cover: 'https://mahuapic.com/upload/vod/2020-12-05/16071649900.jpg',
-            introduction: '疯狂仙三大队撒平静的劈开,劈开了撒娇都是仿佛能看到失联飞机阿里斯顿啦什么',
-        },
-    ];
     // 首页推荐
     const { data: ApplicationResult } = useQuery(GQL.getFiltersQuery, {
         fetchPolicy: 'network-only',
@@ -167,41 +158,43 @@ const index = () => {
                         moduleTitle="猜你喜欢"
                         navigationItem={navigationHandle}
                     />
-                    <CategoryListColum
-                        refetchMore={() => console.log(1)}
+                    <CategoryList
+                        categoryData={hanJuList}
+                        refetchMore={hanJuRefetch}
                         pageViewStyle={{ borderTopWidth: pixel(0) }}
-                        categoryData={categoryData}
+                        moduleTitle="热门韩剧"
                         hasMore={true}
-                        moduleTitle="2333"
-                        // checkStyleName="2333爱看"
-                        // checkNameColor="gold"
+                        checkStyleName="更多韩剧"
+                        checkNameColor="pink"
                     />
                     <CategoryList
-                        categoryData={categoryData_three}
-                        refetchMore={() => console.log(1)}
+                        categoryData={meiJuList}
+                        refetchMore={meiJuRefetch}
                         pageViewStyle={{ borderTopWidth: pixel(0) }}
-                        moduleTitle="家有儿女"
+                        moduleTitle="热门美剧"
                         hasMore={true}
-                        checkStyleName="2333爱看"
+                        checkStyleName="更多美剧"
+                        checkNameColor="#FF409F"
+                    />
+                    <CategoryList
+                        categoryData={riJuList}
+                        refetchMore={riJuRefetch}
+                        pageViewStyle={{ borderTopWidth: pixel(0) }}
+                        moduleTitle="热门日剧"
+                        hasMore={true}
+                        checkStyleName="更多日剧"
+                        checkNameColor="#FF40FF"
+                    />
+                    <CategoryList
+                        categoryData={gangJuList}
+                        refetchMore={gangJuRefetch}
+                        pageViewStyle={{ borderTopWidth: pixel(0) }}
+                        moduleTitle="热门港剧"
+                        hasMore={true}
+                        checkStyleName="更多港剧"
                         checkNameColor="gold"
                     />
-                    <CategoryListColum
-                        refetchMore={() => console.log(1)}
-                        pageViewStyle={{ borderTopWidth: pixel(0) }}
-                        categoryData={categoryData}
-                        hasMore={true}
-                        moduleTitle="2333"
-                    />
-                    <CategoryList
-                        categoryData={categoryData_three}
-                        refetchMore={() => console.log(1)}
-                        pageViewStyle={{ borderTopWidth: pixel(0) }}
-                    />
-                    <CategoryListColum
-                        refetchMore={() => console.log(1)}
-                        pageViewStyle={{ borderTopWidth: pixel(0) }}
-                        categoryData={categoryData}
-                    />
+                    <Text style={{ marginTop: pixel(12), color: '#c7c7c7' }}>底都被你看光了~</Text>
                 </ScrollView>
             </View>
         )
