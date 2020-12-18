@@ -1,6 +1,7 @@
 import React, { useCallback, useState, useMemo } from 'react';
 import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity, ScrollView } from 'react-native';
 import { Iconfont, Placeholder } from '@src/components';
+import { playerStore } from '@src/components/MoviePlayer';
 import { useNavigation } from '@react-navigation/native';
 import { GQL, useQuery, useMutation, errorMessage } from '@src/apollo';
 import { userStore } from '@src/store';
@@ -34,7 +35,7 @@ export default function VideoContent({ movie }) {
     );
     const recommendMovies = useMemo(() => Helper.syncGetter('recommendMovie', recommendData), [recommendData]);
 
-    const [currentEpisode, setEpisode] = useState(0);
+    const [currentEpisode, setEpisode] = useState(data?.[0]);
     const [toggleFavorite] = useMutation(GQL.toggleFavoriteMutation, {
         variables: {
             id: id,
@@ -71,9 +72,12 @@ export default function VideoContent({ movie }) {
             return (
                 <TouchableOpacity
                     activeOpacity={0.8}
-                    style={[styles.episodeBox, currentEpisode === index && { borderColor: '#37B7FB' }]}
-                    onPress={() => setEpisode(index)}>
-                    <Text style={[styles.episodeText, currentEpisode === index && { color: '#37B7FB' }]}>
+                    style={[styles.episodeBox, currentEpisode.url === item.url && { borderColor: '#37B7FB' }]}
+                    onPress={() => {
+                        playerStore.setCurrentEpisode(item);
+                        setEpisode(item);
+                    }}>
+                    <Text style={[styles.episodeText, currentEpisode.url === item.url && { color: '#37B7FB' }]}>
                         {item.name}
                     </Text>
                 </TouchableOpacity>

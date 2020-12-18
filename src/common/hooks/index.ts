@@ -12,3 +12,4 @@ export { useUnreadNotification } from './useUnreadNotification';
 export { useAutoSignIn } from './useAutoSignIn';
 export { useReport } from './useReport';
 export { useVisitDurationReport } from './useVisitDurationReport';
+export { useStatusBarHeight } from './useStatusBarHeight';
