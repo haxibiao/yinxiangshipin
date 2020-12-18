@@ -3,29 +3,36 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, FlatList }
 
 const images = [
     {
-        icons: require('@app/assets/images/movie/ScienceFiction_icon.png'),
+        icon: require('@app/assets/images/movie/icon_movieAll.png'),
+        route: 'MovieCategoryListScreen',
     },
     {
-        icons: require('@app/assets/images/movie/Application_all.png'),
+        icon: require('@app/assets/images/movie/ic_hanju.png'),
+        route: 'ApplicationMenuTable',
     },
     {
-        icons: require('@app/assets/images/movie/ic_collect.png'),
+        icon: require('@app/assets/images/movie/ic_riju.png'),
+        route: 'ApplicationMenuTable',
     },
     {
-        icons: require('@app/assets/images/movie/Movie_icon.png'),
+        icon: require('@app/assets/images/movie/ic_meiju.png'),
+        route: 'ApplicationMenuTable',
+    },
+    {
+        icon: require('@app/assets/images/movie/ic_gangju.png'),
+        route: 'ApplicationMenuTable',
     },
 ];
 // 频道选择
 const SelectApplicationItem = ({ filter, navigation }) => {
-    const newFilter = filter?.filterOptions.slice(1, 5);
     const _renderItem = ({ item, index }) => {
         return (
             <TouchableOpacity
                 activeOpacity={0.1}
-                onPress={() => navigation.navigate('ApplicationMenuTable', { index: index })}
+                onPress={() => navigation.navigate(images[index].route, { index: index - 1 })}
                 style={styles.menuPress}>
-                <View style={[styles.menuBox, { backgroundColor: '#FCB80A' }]}>
-                    <Image style={styles.menuImage} source={require('@app/assets/images/movie/Movie_icon.png')} />
+                <View style={[styles.menuBox]}>
+                    <Image style={styles.menuImage} source={images[index].icon} resizeMode="cover" />
                 </View>
                 <Text style={styles.menuText}>{item}</Text>
             </TouchableOpacity>
@@ -35,7 +42,7 @@ const SelectApplicationItem = ({ filter, navigation }) => {
     return (
         <FlatList
             style={styles.menuList}
-            data={newFilter}
+            data={filter?.filterOptions}
             renderItem={_renderItem}
             horizontal={true}
             showsHorizontalScrollIndicator={false}
@@ -49,17 +56,6 @@ const ApplicationMenu = (props: any) => {
     const newData = data.slice(1, 2);
     return (
         <View style={styles.listPage}>
-            <TouchableOpacity
-                style={styles.menuPress}
-                activeOpacity={0.1}
-                onPress={() => {
-                    navigation.navigate('MovieCategoryListScreen');
-                }}>
-                <View style={styles.menuBox}>
-                    <Image style={styles.menuImage} source={require('@app/assets/images/movie/icon_movieAll.png')} />
-                </View>
-                <Text style={styles.menuText}>筛选</Text>
-            </TouchableOpacity>
             {newData.map((item, index) => {
                 return <SelectApplicationItem navigation={navigation} filter={item} key={index} />;
             })}
@@ -79,17 +75,17 @@ const styles = StyleSheet.create({
     },
     menuImage: {
         width: pixel(35),
-        height: pixel(35),
+        height: pixel(30),
+        borderRadius: pixel(5),
     },
     menuBox: {
-        justifyContent: 'center',
+        justifyContent: 'space-around',
         alignItems: 'center',
-        borderRadius: pixel(25),
         padding: pixel(5),
     },
     menuText: {
         color: '#a8a8a8',
-        marginTop: pixel(3),
+        fontFamily: 'HelveticaNeue-CondensedBold',
     },
     menuPress: {
         marginHorizontal: pixel(8),
