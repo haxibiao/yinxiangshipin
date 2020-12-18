@@ -5,10 +5,10 @@ import { observer, adStore, userStore, notificationStore } from '@src/store';
 import { PageContainer, Iconfont, Row, Avatar, SafeText, FocusAwareStatusBar, Badge } from '@src/components';
 import { GQL, useQuery } from '@src/apollo';
 import { useUnreadNotification } from '@src/common';
-
+import MyHistory from '../movie/components/MyHistory';
 export default observer((props: any) => {
     const navigation = useNavigation();
-    //未读消息
+    // 未读消息
     useUnreadNotification(userStore.login);
     // 个人信息
     const userProfile = userStore.me;
@@ -22,6 +22,9 @@ export default observer((props: any) => {
         },
         [userStore.login],
     );
+    // 观看历史
+    const { data: historyReult } = useQuery(GQL.showMovieHistoryQuery);
+    const historyData = useMemo(() => Helper.syncGetter('showMovieHistory.data', historyReult), [historyReult]);
 
     return (
         <View style={styles.container}>
@@ -96,6 +99,9 @@ export default observer((props: any) => {
                         </View>
                     </View>
                 </TouchableWithoutFeedback>
+                {/* 历史记录 */}
+                {userStore.login && <MyHistory historyData={historyData} navigation={navigation} />}
+
                 <View style={styles.columnItemsWrap}>
                     {adStore.enableWallet && (
                         <TouchableOpacity style={styles.columnItem} onPress={() => authNavigator('NotificationCenter')}>
@@ -292,7 +298,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     columnItemsWrap: {
-        marginTop: pixel(20),
         backgroundColor: '#fff',
     },
     columnItem: {
