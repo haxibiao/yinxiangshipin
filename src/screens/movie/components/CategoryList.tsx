@@ -30,6 +30,7 @@ const CategoryList = (props: Props) => {
     const { pageViewStyle, categoryData, hasMore, refetchMore, moduleTitle, checkNameColor, checkStyleName } = props;
     const [moreStatus, setMoreStatus] = useState(false);
     const [spinAction, setSpinAction] = useState(false);
+    const categoryArray = Array.isArray(categoryData);
     useEffect(() => {
         hasMore === true ? setMoreStatus(true) : setMoreStatus(false);
     }, [hasMore]);
@@ -66,69 +67,76 @@ const CategoryList = (props: Props) => {
     }, [spinTiming, refetchMore]);
 
     return (
-        <View style={[styles.pageView, { ...pageViewStyle }]}>
-            <View style={styles.pageHead}>
-                <Text style={styles.pageTitle}>{moduleTitle ? moduleTitle : '热门播放'}</Text>
-                {moreStatus ? (
-                    <Text style={[styles.pageMore, checkNameColor ? { color: checkNameColor } : { color: '#c8c8c8' }]}>
-                        {checkStyleName ? checkStyleName : '查看更多'}
-                    </Text>
+        categoryArray &&
+        categoryData.length > 0 && (
+            <View style={[styles.pageView, { ...pageViewStyle }]}>
+                <View style={styles.pageHead}>
+                    <Text style={styles.pageTitle}>{moduleTitle ? moduleTitle : '热门播放'}</Text>
+                    {moreStatus ? (
+                        <Text
+                            style={[
+                                styles.pageMore,
+                                checkNameColor ? { color: checkNameColor } : { color: '#c8c8c8' },
+                            ]}>
+                            {checkStyleName ? checkStyleName : '查看更多'}
+                        </Text>
+                    ) : (
+                        <Text />
+                    )}
+                </View>
+                <View style={styles.pageShow}>
+                    <FlatList
+                        style={{ flexGrow: 1 }}
+                        contentContainerStyle={{
+                            justifyContent: 'space-between',
+                            flexDirection: 'row',
+                            width: maxWidth,
+                        }}
+                        horizontal={true}
+                        data={categoryData}
+                        renderItem={(item) => {
+                            return (
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        navigateHandle(item.item.movieUrl);
+                                    }}>
+                                    <View style={styles.pageItem}>
+                                        <Image
+                                            style={styles.pageImage}
+                                            resizeMode="cover"
+                                            source={{ uri: item.item.cover }}
+                                        />
+                                        <Text numberOfLines={1} ellipsizeMode="tail" style={styles.itemTitle}>
+                                            {item.item.name}
+                                        </Text>
+                                        <Text numberOfLines={1} ellipsizeMode="tail" style={styles.itemDescription}>
+                                            {item.item.introduction}
+                                        </Text>
+                                    </View>
+                                </TouchableOpacity>
+                            );
+                        }}
+                    />
+                </View>
+                {refetchMore ? (
+                    <TouchableOpacity
+                        onPress={() => {
+                            spinFetchMore();
+                        }}>
+                        <View style={styles.pageFetchMore}>
+                            <View style={styles.pageRefresh}>
+                                <Animated.Image
+                                    style={[styles.refreshImage, { transform: [{ rotate: spin }] }]}
+                                    source={require('@app/assets/images/movie/refresh_icon.png')}></Animated.Image>
+                                <Text style={styles.refreshText}>换一换</Text>
+                            </View>
+                        </View>
+                    </TouchableOpacity>
                 ) : (
-                    <Text />
+                    <View />
                 )}
             </View>
-            <View style={styles.pageShow}>
-                <FlatList
-                    style={{ flexGrow: 1 }}
-                    contentContainerStyle={{
-                        justifyContent: 'space-between',
-                        flexDirection: 'row',
-                        width: maxWidth,
-                    }}
-                    horizontal={true}
-                    data={categoryData}
-                    renderItem={(item) => {
-                        return (
-                            <TouchableOpacity
-                                onPress={() => {
-                                    navigateHandle(item.item.movieUrl);
-                                }}>
-                                <View style={styles.pageItem}>
-                                    <Image
-                                        style={styles.pageImage}
-                                        resizeMode="cover"
-                                        source={{ uri: item.item.cover }}
-                                    />
-                                    <Text numberOfLines={1} ellipsizeMode="tail" style={styles.itemTitle}>
-                                        {item.item.name}
-                                    </Text>
-                                    <Text numberOfLines={1} ellipsizeMode="tail" style={styles.itemDescription}>
-                                        {item.item.introduction}
-                                    </Text>
-                                </View>
-                            </TouchableOpacity>
-                        );
-                    }}
-                />
-            </View>
-            {refetchMore ? (
-                <TouchableOpacity
-                    onPress={() => {
-                        spinFetchMore();
-                    }}>
-                    <View style={styles.pageFetchMore}>
-                        <View style={styles.pageRefresh}>
-                            <Animated.Image
-                                style={[styles.refreshImage, { transform: [{ rotate: spin }] }]}
-                                source={require('@app/assets/images/movie/refresh_icon.png')}></Animated.Image>
-                            <Text style={styles.refreshText}>换一换</Text>
-                        </View>
-                    </View>
-                </TouchableOpacity>
-            ) : (
-                <View />
-            )}
-        </View>
+        )
     );
 };
 
