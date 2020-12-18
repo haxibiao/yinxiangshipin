@@ -42,8 +42,9 @@ const CategoryList = (props: Props) => {
         },
         [navigation],
     );
-    const spinValue = new Animated.Value(0);
 
+    // 换一换动画效果
+    const spinValue = new Animated.Value(0);
     // First set up animation
     const spinTiming = useCallback(() => {
         spinValue.setValue(0);
@@ -51,9 +52,9 @@ const CategoryList = (props: Props) => {
             toValue: 1,
             duration: 1000,
             easing: Easing.linear,
-            useNativeDriver: true,
+            useNativeDriver: false,
         }).start();
-    }, []);
+    }, [spinValue]);
 
     // Second interpolate beginning and end values (in this case 0 and 1)
     const spin = spinValue.interpolate({

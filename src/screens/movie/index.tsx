@@ -138,9 +138,6 @@ const index = () => {
                     contentContainerStyle={styles.page}
                     style={styles.pageList}
                     showsVerticalScrollIndicator={false}>
-                    {/* <View style={styles.page}>
-
-                </View> */}
                     <MovieSwiper swiperDataList={swiperList} swiperToMovie={swiperToMovie} />
                     <ApplicationMenu navigation={navigation} data={ApplicationData} />
                     <MyFavorite
