@@ -39,7 +39,9 @@ const ApplicationMenu = (props: any) => {
                 <TouchableOpacity
                     activeOpacity={0.1}
                     // onPress={() => navigation.navigate(images[index].route, { index: index - 1 })}
-                    onPress={() => navigationHandle({ i: index - 1 })}
+                    onPress={() =>
+                        index != 0 ? navigationHandle({ i: index - 1 }) : navigation.navigate('MovieCategoryListScreen')
+                    }
                     style={styles.menuPress}>
                     <View style={[styles.menuBox]}>
                         <Image style={styles.menuImage} source={images[index].icon} resizeMode="cover" />
