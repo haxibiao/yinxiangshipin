@@ -172,8 +172,8 @@ const index = () => {
                         pageViewStyle={{ borderTopWidth: pixel(0) }}
                         categoryData={categoryData}
                         hasMore={true}
-                        moduleTitle="周子龙"
-                        // checkStyleName="周子龙爱看"
+                        moduleTitle="2333"
+                        // checkStyleName="2333爱看"
                         // checkNameColor="gold"
                     />
                     <CategoryList
@@ -182,7 +182,7 @@ const index = () => {
                         pageViewStyle={{ borderTopWidth: pixel(0) }}
                         moduleTitle="家有儿女"
                         hasMore={true}
-                        checkStyleName="周子龙爱看"
+                        checkStyleName="2333爱看"
                         checkNameColor="gold"
                     />
                     <CategoryListColum
@@ -190,7 +190,7 @@ const index = () => {
                         pageViewStyle={{ borderTopWidth: pixel(0) }}
                         categoryData={categoryData}
                         hasMore={true}
-                        moduleTitle="周子龙"
+                        moduleTitle="2333"
                     />
                     <CategoryList
                         categoryData={categoryData_three}

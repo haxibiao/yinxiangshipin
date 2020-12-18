@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useRef, useEffect } from 'react';
 import { StyleSheet, View, TouchableWithoutFeedback, Image, Animated } from 'react-native';
 import { NavBarHeader, ScrollTabBar, FocusAwareStatusBar } from '@src/components';
 import { observer, adStore, userStore } from '@src/store';
@@ -10,8 +10,16 @@ import RecommendPosts from './RecommendPosts';
 import Movie from '../../screens/movie';
 
 export default observer(() => {
+    const scrollTabRef = useRef();
     const navigation = useNavigation();
     const route = useRoute();
+    const initPage = route?.params?.initPage;
+    useEffect(() => {
+        if (initPage && scrollTabRef.current?.goToPage) {
+            scrollTabRef.current.goToPage(initPage);
+            navigation.setParams({ initPage: 0 });
+        }
+    }, [initPage]);
     const goSearchCenter = useCallback(() => {
         navigation.navigate('Search');
     }, []);
@@ -22,6 +30,7 @@ export default observer(() => {
             <ScrollableTabView
                 contentProps={{ keyboardShouldPersistTaps: 'always' }}
                 initialPage={2}
+                ref={scrollTabRef}
                 renderTabBar={(tabBarProps: any) => (
                     <ScrollTabBar
                         {...tabBarProps}
