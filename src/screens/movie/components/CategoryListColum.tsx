@@ -88,7 +88,7 @@ const CategoryListColum = (props: Props) => {
                     }}>
                     <View style={styles.pageHead}>
                         <Text style={styles.pageTitle}>{moduleTitle ? moduleTitle : '精选剧场'}</Text>
-                        {moreStatus ? (
+                        {moreStatus && (
                             <Text
                                 style={[
                                     styles.pageMore,
@@ -96,8 +96,6 @@ const CategoryListColum = (props: Props) => {
                                 ]}>
                                 {checkStyleName ? checkStyleName : '查看更多'}
                             </Text>
-                        ) : (
-                            <Text />
                         )}
                     </View>
                 </TouchableOpacity>
@@ -107,11 +105,15 @@ const CategoryListColum = (props: Props) => {
                         data={categoryData}
                         numColumns={2}
                         bounces={true}
-                        contentContainerStyle={{ justifyContent: 'space-between', alignItems: 'center' }}
+                        contentContainerStyle={{
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            marginRight: -pixel(10),
+                        }}
                         renderItem={(item) => {
                             return (
                                 <TouchableOpacity onPress={() => navigateHandle(item.item.id)}>
-                                    <View style={{ marginHorizontal: pixel(5), marginTop: 0, marginBottom: pixel(8) }}>
+                                    <View style={{ marginRight: pixel(10), marginTop: 0, marginBottom: pixel(8) }}>
                                         <Image
                                             style={styles.pageImage_colum}
                                             resizeMode="cover"
@@ -131,7 +133,7 @@ const CategoryListColum = (props: Props) => {
                             );
                         }}
                         ListFooterComponent={
-                            refetchMore ? (
+                            refetchMore && (
                                 <TouchableOpacity
                                     onPress={() => {
                                         spinFetchMore();
@@ -145,8 +147,6 @@ const CategoryListColum = (props: Props) => {
                                         </View>
                                     </View>
                                 </TouchableOpacity>
-                            ) : (
-                                <View />
                             )
                         }
                     />
@@ -190,30 +190,30 @@ const styles = StyleSheet.create({
         margin: 0,
     },
     pageImage: {
-        width: maxWidth / 3 - pixel(8),
+        width: (maxWidth - pixel(10)) / 3,
         height: pixel(145),
         borderRadius: pixel(5),
     },
     pageImage_colum: {
         height: pixel(95),
-        width: maxWidth / 2 - pixel(8),
+        width: (maxWidth - pixel(10)) / 2,
         borderRadius: pixel(5),
     },
     itemTitle: {
         marginVertical: pixel(3),
-        fontSize: font(15),
-        width: maxWidth / 2 - pixel(8),
+        fontSize: font(14),
+        width: (maxWidth - pixel(10)) / 2,
         // backgroundColor: 'skyblue',
     },
     itemDescription: {
         fontSize: font(12),
         color: '#c8c8c8',
-        width: maxWidth / 3 - pixel(8),
+        width: (maxWidth - pixel(10)) / 3,
     },
     itemDescription_colum: {
         fontSize: font(12),
         color: '#000',
-        width: maxWidth / 2 - pixel(8),
+        width: (maxWidth - pixel(10)) / 2,
         marginVertical: pixel(5),
     },
     pageRefresh: {
@@ -226,10 +226,11 @@ const styles = StyleSheet.create({
         // backgroundColor: 'skyblue',
     },
     refreshImage: {
-        width: pixel(25),
-        height: pixel(25),
+        width: pixel(24),
+        height: pixel(24),
     },
     refreshText: {
+        fontSize: font(13),
         lineHeight: pixel(25),
         color: '#d81e06',
     },

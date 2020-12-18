@@ -83,7 +83,7 @@ const MovieSwiper = (props: Props) => {
                                 position: 'absolute',
                                 bottom: 0,
                                 height: pixel(30),
-                                width: pixel(Device.WIDTH - pixel(38)),
+                                width: pixel(Device.WIDTH - pixel(22)),
                                 backgroundColor: 'rgba(0,0,0,0.4)',
                                 borderBottomLeftRadius: pixel(5),
                                 borderBottomEndRadius: pixel(5),

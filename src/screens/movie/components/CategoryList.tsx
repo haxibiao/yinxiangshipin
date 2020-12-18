@@ -86,7 +86,7 @@ const CategoryList = (props: Props) => {
             <View style={[styles.pageView, { ...pageViewStyle }]}>
                 <View style={styles.pageHead}>
                     <Text style={styles.pageTitle}>{moduleTitle ? moduleTitle : '热门播放'}</Text>
-                    {moreStatus ? (
+                    {moreStatus && (
                         <TouchableOpacity onPress={() => navigationAll({ i: toIndex })}>
                             <Text
                                 style={[
@@ -96,8 +96,6 @@ const CategoryList = (props: Props) => {
                                 {checkStyleName ? checkStyleName : '查看更多'}
                             </Text>
                         </TouchableOpacity>
-                    ) : (
-                        <Text />
                     )}
                 </View>
                 <View style={styles.pageShow}>
@@ -131,7 +129,7 @@ const CategoryList = (props: Props) => {
                         }}
                     />
                 </View>
-                {refetchMore ? (
+                {refetchMore && (
                     <TouchableOpacity
                         onPress={() => {
                             spinFetchMore();
@@ -145,8 +143,6 @@ const CategoryList = (props: Props) => {
                             </View>
                         </View>
                     </TouchableOpacity>
-                ) : (
-                    <View />
                 )}
             </View>
         )
@@ -198,7 +194,7 @@ const styles = StyleSheet.create({
     },
     itemTitle: {
         marginVertical: pixel(3),
-        fontSize: font(15),
+        fontSize: font(14),
         width: maxWidth / 3 - pixel(8),
     },
     itemDescription: {
@@ -222,10 +218,11 @@ const styles = StyleSheet.create({
         // backgroundColor: 'skyblue',
     },
     refreshImage: {
-        width: pixel(25),
-        height: pixel(25),
+        width: pixel(24),
+        height: pixel(24),
     },
     refreshText: {
+        fontSize: font(13),
         lineHeight: pixel(25),
         color: '#d81e06',
     },

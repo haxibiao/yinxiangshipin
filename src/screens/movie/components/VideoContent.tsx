@@ -105,8 +105,8 @@ export default function VideoContent({ movie }) {
                 {producer && <Text style={styles.description}>导演：{producer}</Text>}
                 {actors && <Text style={styles.description}>演员：{actors}</Text>}
                 <Text numberOfLines={1} style={styles.description}>
-                    🔥4564 ·更新至第{count_series}集·简介
-                    <Iconfont name="zuojiantou" color={'#333'} size={pixel(12)} />
+                    更新至第{count_series}集·简介
+                    <Iconfont name="right" color={'#333'} size={pixel(12)} />
                 </Text>
                 <View style={[styles.header, { marginTop: pixel(8) }]}>
                     <View style={styles.row}>
@@ -137,7 +137,7 @@ export default function VideoContent({ movie }) {
                     onPress={() => movieStore.setMovieData(movie)}>
                     <Text style={styles.episodeTitle}>选集</Text>
                     <View style={styles.right}>
-                        <Iconfont name="zuojiantou" color={'#000'} size={pixel(14)} />
+                        <Iconfont name="right" color={'#000'} size={pixel(14)} />
                     </View>
                 </TouchableOpacity>
                 <FlatList

@@ -46,12 +46,13 @@ const MyFavorite = (props: Props) => {
                     // }}
                     // onEndReached={onEndReached}
                     // onEndReachedThreshold={0.1}
+                    contentContainerStyle={{ paddingHorizontal: pixel(5) }}
                     refreshControl={<CustomRefreshControl onRefresh={refetch} />}
                     keyExtractor={(item, index) => index.toString()}
                     renderItem={(item) => {
                         return (
                             <TouchableOpacity onPress={() => favoriteToMovie(item.item.movie.id)}>
-                                <View style={{ marginHorizontal: pixel(8) }}>
+                                <View style={{ marginHorizontal: pixel(5) }}>
                                     <ImageBackground
                                         source={{ uri: item.item.movie.cover }}
                                         imageStyle={{ borderRadius: pixel(5) }}
@@ -106,7 +107,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         // lineHeight: pixel(18),
         // marginVertical: pixel(6),
-        marginBottom: pixel(10),
+        marginBottom: pixel(5),
         paddingHorizontal: pixel(10),
     },
     pageTitle: {
@@ -115,28 +116,30 @@ const styles = StyleSheet.create({
     },
     favoriteTitle: {
         paddingVertical: pixel(4),
-        fontSize: font(15),
+        fontSize: font(14),
         fontWeight: 'bold',
         width: pixel(135),
     },
     favoriteSeries: {
         color: '#c8c8c8',
         width: pixel(135),
-        fontSize: font(13),
+        fontSize: font(12),
     },
     movieType: {
         backgroundColor: Theme.primaryColor,
         // minWidth: pixel(135 / 2.5),
-        height: pixel(85 / 5),
-        marginVertical: pixel(3),
-        marginHorizontal: pixel(4),
+        height: pixel(22),
+        // justifyContent: 'center',
+        // marginVertical: pixel(3),
+        // marginHorizontal: pixel(4),
         borderRadius: pixel(2),
-        // padding: pixel(5),
+        paddingHorizontal: pixel(3),
     },
     movieTypeText: {
         // flex: 1,
-        lineHeight: pixel(85 / 6),
-        margin: pixel(5),
+        fontSize: font(12),
+        lineHeight: pixel(22),
+        // margin: pixel(5),
         color: '#fff',
     },
     checkMore: {
