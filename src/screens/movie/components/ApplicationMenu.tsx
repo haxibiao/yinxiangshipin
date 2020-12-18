@@ -1,6 +1,20 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, FlatList } from 'react-native';
 
+const images = [
+    {
+        icons: require('@app/assets/images/movie/ScienceFiction_icon.png'),
+    },
+    {
+        icons: require('@app/assets/images/movie/Application_all.png'),
+    },
+    {
+        icons: require('@app/assets/images/movie/ic_collect.png'),
+    },
+    {
+        icons: require('@app/assets/images/movie/Movie_icon.png'),
+    },
+];
 // 频道选择
 const SelectApplicationItem = ({ filter, navigation }) => {
     const newFilter = filter?.filterOptions.slice(1, 5);
@@ -8,15 +22,16 @@ const SelectApplicationItem = ({ filter, navigation }) => {
         return (
             <TouchableOpacity
                 activeOpacity={0.1}
-                onPress={() => navigation.navigate('ApplicationMenuTable', { category: filter.filterValue })}
+                onPress={() => navigation.navigate('ApplicationMenuTable', { index: index })}
                 style={styles.menuPress}>
-                <View style={[styles.menuBox, { backgroundColor: '#866ff8' }]}>
+                <View style={[styles.menuBox, { backgroundColor: '#FCB80A' }]}>
                     <Image style={styles.menuImage} source={require('@app/assets/images/movie/Movie_icon.png')} />
                 </View>
                 <Text style={styles.menuText}>{item}</Text>
             </TouchableOpacity>
         );
     };
+
     return (
         <FlatList
             style={styles.menuList}

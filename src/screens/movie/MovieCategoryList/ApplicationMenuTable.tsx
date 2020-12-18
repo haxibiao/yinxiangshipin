@@ -10,6 +10,9 @@ import Hjitable from './HjCategorytable';
 // table栏
 export default function ApplicationMenuTable() {
     const navigation = useNavigation();
+    const route = useRoute();
+    const index = route.params?.index || [];
+
     return (
         <View style={styles.container}>
             <TouchableOpacity activeOpacity={1} style={styles.goBack} onPress={() => navigation.goBack()}>
@@ -17,13 +20,13 @@ export default function ApplicationMenuTable() {
             </TouchableOpacity>
             <ScrollableTabView
                 style={{ flex: 1 }}
+                initialPage={index}
                 contentProps={{ keyboardShouldPersistTaps: 'always' }}
                 renderTabBar={(props) => (
                     <ScrollTabBar
                         {...props}
                         tabWidth={pixel(66)}
                         style={styles.tabBarStyle}
-                        // tabStyle={styles.tabStyle}
                         underlineStyle={styles.underlineStyle}
                         activeTextStyle={styles.activeTextStyle}
                         tintTextStyle={styles.tintTextStyle}
