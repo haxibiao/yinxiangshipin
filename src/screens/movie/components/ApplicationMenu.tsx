@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, FlatList } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const images = [
     {
@@ -23,37 +24,42 @@ const images = [
         route: 'ApplicationMenuTable',
     },
 ];
-// 频道选择
-const SelectApplicationItem = ({ filter, navigation }) => {
-    const _renderItem = ({ item, index }) => {
-        return (
-            <TouchableOpacity
-                activeOpacity={0.1}
-                onPress={() => navigation.navigate(images[index].route, { index: index - 1 })}
-                style={styles.menuPress}>
-                <View style={[styles.menuBox]}>
-                    <Image style={styles.menuImage} source={images[index].icon} resizeMode="cover" />
-                </View>
-                <Text style={styles.menuText}>{item}</Text>
-            </TouchableOpacity>
-        );
-    };
 
-    return (
-        <FlatList
-            style={styles.menuList}
-            data={filter?.filterOptions}
-            renderItem={_renderItem}
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            keyExtractor={(item, index) => index.toString()}
-        />
-    );
-};
 const ApplicationMenu = (props: any) => {
-    const { navigation } = props;
+    const navigation = useNavigation();
     const data = props.data ?? [];
     const newData = data.slice(1, 2);
+    const navigationHandle = useCallback((i) => {
+        navigation.navigate('ApplicationMenuTable', { i });
+    }, []);
+    // 频道选择
+    const SelectApplicationItem = ({ filter, navigation }) => {
+        const _renderItem = ({ item, index }) => {
+            return (
+                <TouchableOpacity
+                    activeOpacity={0.1}
+                    // onPress={() => navigation.navigate(images[index].route, { index: index - 1 })}
+                    onPress={() => navigationHandle({ i: index - 1 })}
+                    style={styles.menuPress}>
+                    <View style={[styles.menuBox]}>
+                        <Image style={styles.menuImage} source={images[index].icon} resizeMode="cover" />
+                    </View>
+                    <Text style={styles.menuText}>{item}</Text>
+                </TouchableOpacity>
+            );
+        };
+
+        return (
+            <FlatList
+                style={styles.menuList}
+                data={filter?.filterOptions}
+                renderItem={_renderItem}
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+                keyExtractor={(item, index) => index.toString()}
+            />
+        );
+    };
     return (
         <View style={styles.listPage}>
             {newData.map((item, index) => {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Iconfont, StatusView, SpinnerLoading, ScrollTabBar, FocusAwareStatusBar } from '@src/components';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -9,9 +9,16 @@ import HKitable from './HKCategorytable';
 import Hjitable from './HjCategorytable';
 // table栏
 export default function ApplicationMenuTable() {
+    const currentTabRef = useRef();
     const navigation = useNavigation();
     const route = useRoute();
-    const index = route.params?.index || [];
+    const index = route.params?.i || [];
+    useEffect(() => {
+        if (index.i && currentTabRef.current?.goToPage) {
+            currentTabRef.current.goToPage(index.i);
+            navigation.setParams({ i: { i: 0 } });
+        }
+    }, []);
 
     return (
         <View style={styles.container}>
@@ -20,7 +27,8 @@ export default function ApplicationMenuTable() {
             </TouchableOpacity>
             <ScrollableTabView
                 style={{ flex: 1 }}
-                initialPage={index}
+                initialPage={0}
+                ref={currentTabRef}
                 contentProps={{ keyboardShouldPersistTaps: 'always' }}
                 renderTabBar={(props) => (
                     <ScrollTabBar

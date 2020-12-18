@@ -24,10 +24,24 @@ interface props {
     refetchMore: any;
     checkStyleName: string;
     checkNameColor: string;
+    navigationAll: Function;
+    navigationItem: Function;
+    toIndex: Number;
 }
 
 const CategoryList = (props: Props) => {
-    const { pageViewStyle, categoryData, hasMore, refetchMore, moduleTitle, checkNameColor, checkStyleName } = props;
+    const {
+        pageViewStyle,
+        categoryData,
+        hasMore,
+        refetchMore,
+        moduleTitle,
+        checkNameColor,
+        checkStyleName,
+        navigationItem,
+        navigationAll,
+        toIndex,
+    } = props;
     const [moreStatus, setMoreStatus] = useState(false);
     const [spinAction, setSpinAction] = useState(false);
     const categoryArray = Array.isArray(categoryData);
@@ -36,11 +50,10 @@ const CategoryList = (props: Props) => {
     }, [hasMore]);
     const navigation = useNavigation();
     const navigateHandle = useCallback(
-        (playUrl) => {
-            // navigation.navigate('MoviePlayer', { playUrl });
-            navigation.navigate('MovieDetail', { movie_id: 3 });
+        (movie_id) => {
+            navigationItem ? navigationItem(movie_id) : console.log('呵呵,天真!!!');
         },
-        [navigation],
+        [navigation, navigationItem],
     );
 
     // 换一换动画效果
@@ -52,7 +65,7 @@ const CategoryList = (props: Props) => {
             toValue: 1,
             duration: 1000,
             easing: Easing.linear,
-            useNativeDriver: false,
+            useNativeDriver: true,
         }).start();
     }, [spinValue]);
 
@@ -74,13 +87,15 @@ const CategoryList = (props: Props) => {
                 <View style={styles.pageHead}>
                     <Text style={styles.pageTitle}>{moduleTitle ? moduleTitle : '热门播放'}</Text>
                     {moreStatus ? (
-                        <Text
-                            style={[
-                                styles.pageMore,
-                                checkNameColor ? { color: checkNameColor } : { color: '#c8c8c8' },
-                            ]}>
-                            {checkStyleName ? checkStyleName : '查看更多'}
-                        </Text>
+                        <TouchableOpacity onPress={() => navigationAll({ i: toIndex })}>
+                            <Text
+                                style={[
+                                    styles.pageMore,
+                                    checkNameColor ? { color: checkNameColor } : { color: '#c8c8c8' },
+                                ]}>
+                                {checkStyleName ? checkStyleName : '查看更多'}
+                            </Text>
+                        </TouchableOpacity>
                     ) : (
                         <Text />
                     )}
@@ -97,10 +112,7 @@ const CategoryList = (props: Props) => {
                         data={categoryData}
                         renderItem={(item) => {
                             return (
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        navigateHandle(item.item.movieUrl);
-                                    }}>
+                                <TouchableOpacity onPress={() => navigateHandle(item.item.id)}>
                                     <View style={styles.pageItem}>
                                         <Image
                                             style={styles.pageImage}

@@ -25,6 +25,7 @@ interface props {
     navigationItem: Function;
     checkStyleName: string;
     checkNameColor: string;
+    navigationAll: Function;
 }
 
 const CategoryListColum = (props: Props) => {
@@ -38,6 +39,7 @@ const CategoryListColum = (props: Props) => {
         navigationItem,
         checkStyleName,
         checkNameColor,
+        navigationAll,
     } = props;
     const [moreStatus, setMoreStatus] = useState(false);
     const [spinAction, setSpinAction] = useState(false);
@@ -80,20 +82,25 @@ const CategoryListColum = (props: Props) => {
         categoryArray &&
         categoryData.length > 0 && (
             <View style={[styles.pageView, { ...pageViewStyle }]}>
-                <View style={styles.pageHead}>
-                    <Text style={styles.pageTitle}>{moduleTitle ? moduleTitle : '精选剧场'}</Text>
-                    {moreStatus ? (
-                        <Text
-                            style={[
-                                styles.pageMore,
-                                checkNameColor ? { color: checkNameColor } : { color: '#c8c8c8' },
-                            ]}>
-                            {checkStyleName ? checkStyleName : '查看更多'}
-                        </Text>
-                    ) : (
-                        <Text />
-                    )}
-                </View>
+                <TouchableOpacity
+                    onPress={() => {
+                        navigationAll();
+                    }}>
+                    <View style={styles.pageHead}>
+                        <Text style={styles.pageTitle}>{moduleTitle ? moduleTitle : '精选剧场'}</Text>
+                        {moreStatus ? (
+                            <Text
+                                style={[
+                                    styles.pageMore,
+                                    checkNameColor ? { color: checkNameColor } : { color: '#c8c8c8' },
+                                ]}>
+                                {checkStyleName ? checkStyleName : '查看更多'}
+                            </Text>
+                        ) : (
+                            <Text />
+                        )}
+                    </View>
+                </TouchableOpacity>
                 <View style={styles.pageShow}>
                     <FlatList
                         style={{ flexGrow: 1 }}

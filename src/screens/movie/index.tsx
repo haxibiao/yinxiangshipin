@@ -117,6 +117,7 @@ const index = () => {
     const favoriteToMovie = useCallback((movie_id) => {
         navigation.navigate('MovieDetail', { movie_id });
     }, []);
+    // item 跳转播放通用
     const navigationHandle = useCallback((movie_id) => {
         navigation.navigate('MovieDetail', { movie_id });
     }, []);
@@ -124,6 +125,12 @@ const index = () => {
     const favoriteMovieAll = useCallback(() => {
         console.log(1);
     }, []);
+    const ApplicationMenuHandle = useCallback(
+        (i) => {
+            navigation.navigate('ApplicationMenuTable', { i });
+        },
+        [navigation],
+    );
     // 首页推荐
     const { data: ApplicationResult } = useQuery(GQL.getFiltersQuery, {
         fetchPolicy: 'network-only',
@@ -154,42 +161,55 @@ const index = () => {
                         hasMore={false}
                         moduleTitle="猜你喜欢"
                         navigationItem={navigationHandle}
+                        navigationAll={ApplicationMenuHandle}
                     />
                     <CategoryList
                         categoryData={hanJuList}
                         refetchMore={hanJuRefetch}
                         pageViewStyle={{ borderTopWidth: pixel(0) }}
                         moduleTitle="热门韩剧"
+                        navigationItem={navigationHandle}
                         hasMore={true}
                         checkStyleName="更多韩剧"
                         checkNameColor="pink"
+                        navigationAll={ApplicationMenuHandle}
+                        toIndex={0}
                     />
                     <CategoryList
                         categoryData={meiJuList}
                         refetchMore={meiJuRefetch}
                         pageViewStyle={{ borderTopWidth: pixel(0) }}
                         moduleTitle="热门美剧"
+                        navigationItem={navigationHandle}
                         hasMore={true}
                         checkStyleName="更多美剧"
                         checkNameColor="#FF409F"
+                        navigationAll={ApplicationMenuHandle}
+                        toIndex={2}
                     />
                     <CategoryList
                         categoryData={riJuList}
                         refetchMore={riJuRefetch}
                         pageViewStyle={{ borderTopWidth: pixel(0) }}
                         moduleTitle="热门日剧"
+                        navigationItem={navigationHandle}
                         hasMore={true}
                         checkStyleName="更多日剧"
                         checkNameColor="#FF40FF"
+                        navigationAll={ApplicationMenuHandle}
+                        toIndex={1}
                     />
                     <CategoryList
                         categoryData={gangJuList}
                         refetchMore={gangJuRefetch}
                         pageViewStyle={{ borderTopWidth: pixel(0) }}
                         moduleTitle="热门港剧"
+                        navigationItem={navigationHandle}
                         hasMore={true}
                         checkStyleName="更多港剧"
                         checkNameColor="gold"
+                        navigationAll={ApplicationMenuHandle}
+                        toIndex={3}
                     />
                     <Text style={{ marginTop: pixel(12), color: '#c7c7c7' }}>底都被你看光了~</Text>
                 </ScrollView>
