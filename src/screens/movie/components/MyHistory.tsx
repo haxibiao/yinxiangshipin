@@ -12,7 +12,7 @@ export default function MyHistory(props: Props) {
     const HeadComponent = useCallback(() => {
         return (
             <View style={styles.headComponent}>
-                <Text style={styles.pageTitle}>观看历史</Text>
+                <Text style={styles.pageTitle}>观影记录</Text>
                 <TouchableOpacity onPress={() => navigation.navigate('MoreTable')}>
                     <View style={styles.movieHeader}>
                         <Text style={styles.checkMore}>更多</Text>

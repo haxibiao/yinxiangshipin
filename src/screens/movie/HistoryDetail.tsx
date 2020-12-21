@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     },
     content: {
         flexDirection: 'row',
-        marginTop: pixel(8),
+        marginBottom: pixel(Theme.itemSpace),
     },
     dateText: {
         fontSize: font(12),
@@ -64,7 +64,6 @@ const styles = StyleSheet.create({
     coverIcon: {
         width: pixel(135),
         height: pixel(85),
-        borderRadius: pixel(5),
     },
     columnIcon: {
         height: pixel(20),

@@ -147,14 +147,18 @@ const index = () => {
                     showsVerticalScrollIndicator={false}>
                     <MovieSwiper swiperDataList={swiperList} swiperToMovie={swiperToMovie} />
                     <ApplicationMenu navigation={navigation} data={ApplicationData} />
-                    <MyHistory historyData={historyData} navigation={navigation} />
-                    <MyFavorite
-                        favoriteList={favoriteList}
-                        favoriteToMovie={favoriteToMovie}
-                        refetch={favoriteRefetch}
-                        hasMorePage={hasMoreFavorite}
-                        navigation={navigation}
-                    />
+                    {userStore.login && (
+                        <View>
+                            <MyHistory historyData={historyData} navigation={navigation} />
+                            <MyFavorite
+                                favoriteList={favoriteList}
+                                favoriteToMovie={favoriteToMovie}
+                                refetch={favoriteRefetch}
+                                hasMorePage={hasMoreFavorite}
+                                navigation={navigation}
+                            />
+                        </View>
+                    )}
                     <CategoryListColum
                         refetchMore={mayLikeRefetch}
                         pageViewStyle={{ borderTopWidth: pixel(0.5), marginTop: -pixel(12) }}
