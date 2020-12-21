@@ -4,6 +4,7 @@ import MovieSwiper from './components/MovieSwiper';
 import ApplicationMenu from './components/ApplicationMenu';
 import CategoryList from './components/CategoryList';
 import MyFavorite from './components/MyFavorite';
+import MyHistory from './components/MyHistory';
 import CategoryListColum from './components/CategoryListColum';
 import { GQL, useQuery, useMutation } from '@src/apollo';
 import { userStore } from '@src/store';
@@ -121,10 +122,6 @@ const index = () => {
     const navigationHandle = useCallback((movie_id) => {
         navigation.navigate('MovieDetail', { movie_id });
     }, []);
-    // 我的全部收藏页面跳转
-    const favoriteMovieAll = useCallback(() => {
-        console.log(1);
-    }, []);
     const ApplicationMenuHandle = useCallback(
         (i) => {
             navigation.navigate('ApplicationMenuTable', { i });
@@ -136,6 +133,9 @@ const index = () => {
         fetchPolicy: 'network-only',
     });
     const ApplicationData = useMemo(() => Helper.syncGetter('getFilters', ApplicationResult), [ApplicationResult]);
+    // 观看历史
+    const { data: historyReult, loading, error, fetchMore, refetch } = useQuery(GQL.showMovieHistoryQuery);
+    const historyData = useMemo(() => Helper.syncGetter('showMovieHistory.data', historyReult), [historyReult]);
     return (
         !swiperLoading &&
         !favoriteLoading && (
@@ -147,12 +147,13 @@ const index = () => {
                     showsVerticalScrollIndicator={false}>
                     <MovieSwiper swiperDataList={swiperList} swiperToMovie={swiperToMovie} />
                     <ApplicationMenu navigation={navigation} data={ApplicationData} />
+                    <MyHistory historyData={historyData} navigation={navigation} />
                     <MyFavorite
                         favoriteList={favoriteList}
                         favoriteToMovie={favoriteToMovie}
                         refetch={favoriteRefetch}
                         hasMorePage={hasMoreFavorite}
-                        checkMore={favoriteMovieAll}
+                        navigation={navigation}
                     />
                     <CategoryListColum
                         refetchMore={mayLikeRefetch}

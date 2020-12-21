@@ -97,7 +97,8 @@ import MoviePlayerScreen from '../screens/movie/moviePlayer';
 import MovieCategoryListScreen from '../screens/movie/MovieCategoryList';
 import MovieDetail from '../screens/movie/MovieDetail';
 import ApplicationMenuTable from '../screens/movie/MovieCategoryList/ApplicationMenuTable';
-
+import HistoryDetail from '../screens/movie/HistoryDetail';
+import MoreTable from '../screens/movie/MoreTable';
 export default {
     Login: {
         component: LoginScreen,
@@ -304,5 +305,11 @@ export default {
     },
     ApplicationMenuTable: {
         component: ApplicationMenuTable,
+    },
+    HistoryDetail: {
+        component: HistoryDetail,
+    },
+    MoreTable: {
+        component: MoreTable,
     },
 };

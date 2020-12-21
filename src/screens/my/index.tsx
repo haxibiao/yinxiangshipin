@@ -3,9 +3,7 @@ import { StyleSheet, View, ScrollView, Text, Image, TouchableWithoutFeedback, To
 import { useNavigation } from '@react-navigation/native';
 import { observer, adStore, userStore, notificationStore } from '@src/store';
 import { PageContainer, Iconfont, Row, Avatar, SafeText, FocusAwareStatusBar, Badge } from '@src/components';
-import { GQL, useQuery } from '@src/apollo';
 import { useUnreadNotification } from '@src/common';
-import MyHistory from '../movie/components/MyHistory';
 export default observer((props: any) => {
     const navigation = useNavigation();
     // 未读消息
@@ -22,10 +20,6 @@ export default observer((props: any) => {
         },
         [userStore.login],
     );
-    // 观看历史
-    const { data: historyReult } = useQuery(GQL.showMovieHistoryQuery);
-    const historyData = useMemo(() => Helper.syncGetter('showMovieHistory.data', historyReult), [historyReult]);
-
     return (
         <View style={styles.container}>
             <FocusAwareStatusBar barStyle="light-content" />
@@ -99,9 +93,6 @@ export default observer((props: any) => {
                         </View>
                     </View>
                 </TouchableWithoutFeedback>
-                {/* 历史记录 */}
-                {userStore.login && <MyHistory historyData={historyData} navigation={navigation} />}
-
                 <View style={styles.columnItemsWrap}>
                     {adStore.enableWallet && (
                         <TouchableOpacity style={styles.columnItem} onPress={() => authNavigator('NotificationCenter')}>
