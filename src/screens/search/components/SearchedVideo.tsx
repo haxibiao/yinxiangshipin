@@ -6,7 +6,6 @@ import { GQL } from '@src/apollo';
 import { QueryList } from '@src/content';
 import SearchVideoItem from './SearchVideoItem';
 import EpisodeItem from '@src/screens/collection/components/EpisodeItem';
-import StashVideoStore from '@src/screens/collection/store';
 
 // selectable:区分个人合集和公共合集入口
 const index = observer(({ navigation, keyword, tag_id, user_id, collection_id }) => {

@@ -10,17 +10,15 @@ import {
     Animated,
 } from 'react-native';
 import { observer, appStore, userStore, notificationStore } from '@src/store';
-import { NavBarHeader, SafeText, Iconfont, Row, Loading } from '@src/components';
-import { syncGetter, count, exceptionCapture } from '@src/common';
+import { NavBarHeader, SafeText, Iconfont, Loading } from '@src/components';
 import { GQL, useQuery, useFollowMutation, useMutation } from '@src/apollo';
-import { ContentStatus, QueryList } from '@src/content';
-import { observable } from 'mobx';
 import { useRoute, useNavigation } from '@react-navigation/native';
-import EpisodeItem from './components/EpisodeItem';
-import { Overlay } from 'teaset';
 import { ApolloProvider } from '@apollo/react-hooks';
+import { QueryList } from '@src/content';
+import { count } from '@src/common';
+import { Overlay } from 'teaset';
+import EpisodeItem from './components/EpisodeItem';
 import EditEpisode from './components/EditEpisode';
-import StashVideoStore from './store';
 
 const QUERY_COUNT = 10;
 
@@ -128,30 +126,19 @@ export default observer((props: any) => {
         GQL.moveOutCollectionsMutation,
     );
 
-    // 选择合集
-    const [collections, setCollections] = useState(route.params?.collection ? [route.params?.collection] : []);
     const overlayKey = useRef();
 
-    const closeCollection = useCallback(() => {
+    const closeOverlay = useCallback(() => {
         Overlay.hide(overlayKey.current);
     }, []);
 
-    const addCollection = useCallback((value) => {
-        setCollections([value]);
-        closeCollection();
-    }, []);
-
-    const deleteCollection = useCallback(() => {
-        setCollections([]);
-        closeCollection();
-    }, []);
-    const confirmBtn = useCallback(({ operation, collection_id }) => {
-        closeCollection();
+    const confirmBtn = useCallback(({ operation, collection_id, stashVideo }) => {
+        closeOverlay();
         if (operation === '添加') {
             moveInCollection({
                 variables: {
                     collection_id: collection_id,
-                    collectable_ids: StashVideoStore.stashAddVideo.map((item) => {
+                    collectable_ids: stashVideo.map((item) => {
                         return item.post_id;
                     }),
                 },
@@ -167,7 +154,7 @@ export default observer((props: any) => {
             moveOutCollection({
                 variables: {
                     collection_id: collection_id,
-                    collectable_ids: StashVideoStore.stashDeleteVideo.map((item) => {
+                    collectable_ids: stashVideo.map((item) => {
                         return item.post_id;
                     }),
                 },
@@ -181,6 +168,7 @@ export default observer((props: any) => {
             });
         }
     }, []);
+
     useEffect(() => {
         if (addLoading || deleteLoading) {
             Loading.show();
@@ -197,9 +185,7 @@ export default observer((props: any) => {
                 animated={true}>
                 <ApolloProvider client={appStore.client}>
                     <EditEpisode
-                        onClose={closeCollection}
-                        onClick={addCollection}
-                        navigation={navigation}
+                        onClose={closeOverlay}
                         operation={operation}
                         collection={collection}
                         confirmBtn={confirmBtn}
@@ -207,8 +193,6 @@ export default observer((props: any) => {
                 </ApolloProvider>
             </Overlay.PullView>
         );
-        StashVideoStore.setStashAddVideo([]);
-        StashVideoStore.setStashDeleteVideo([]);
         overlayKey.current = Overlay.show(Operation);
     }, []);
 

@@ -1,61 +1,104 @@
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { StyleSheet, View, Text, Image, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { QueryList, ContentStatus, Placeholder } from '@src/content';
 import { userStore } from '@src/store';
 import { Iconfont, SafeText, Row } from '@src/components';
 import { GQL } from '@src/apollo';
-import StashVideoStore from '../store';
 import { observer } from 'mobx-react';
+import lodashUtil from 'lodash';
 
-export default observer(({ onClose, onClick, navigation, operation, collection, confirmBtn }) => {
-    const stashAddVideo = useMemo(() => StashVideoStore.stashAddVideo, [StashVideoStore.stashAddVideo]);
-    const stashDeleteVideo = useMemo(() => StashVideoStore.stashDeleteVideo, [StashVideoStore.stashDeleteVideo]);
+function EpisodeItem({ style, item, btnName, stashVideo, setStashVideo }) {
+    let cover;
+    if (item?.video?.id) {
+        cover = item?.video?.cover;
+    } else {
+        cover = item?.images?.['0']?.url;
+    }
+
+    const pickedIndex = useMemo(() => {
+        return lodashUtil.findIndex(stashVideo, function (v) {
+            return v.post_id == item?.id;
+        });
+    }, [stashVideo]);
 
     const operationBtn = useCallback(
         (name, item) => {
-            if (name === '添加') {
-                if (
-                    __.find(stashAddVideo, function (videoItem) {
-                        return videoItem.post_id === item.id;
-                    })
-                ) {
-                    Toast.show({ content: '该作品已经添加过了' });
-                    item.collections.push(1);
-                } else {
-                    item.collections.push(1);
-                    StashVideoStore.setStashAddVideo([...stashAddVideo, { post_id: item.id }]);
-                }
+            if (pickedIndex >= 0) {
+                setStashVideo((videos) => {
+                    videos.splice(pickedIndex, 1);
+                    return [...videos];
+                });
             } else {
-                if (
-                    __.find(stashDeleteVideo, function (videoItem) {
-                        return videoItem.post_id === item.id;
-                    })
-                ) {
-                    Toast.show({ content: '该作品已经选过了' });
-                    item.collections = [];
-                } else {
-                    item.collections = [];
-                    StashVideoStore.setStashDeleteVideo([...stashDeleteVideo, { post_id: item.id }]);
-                }
+                setStashVideo((videos) => {
+                    if (videos.length >= 30) {
+                        Toast.show({ content: '一次最多添加30个作品哦' });
+                        return [...videos];
+                    }
+                    return [...videos, { post_id: item?.id, content: item?.content }];
+                });
             }
         },
-        [stashAddVideo, stashDeleteVideo],
+        [stashVideo],
     );
+
+    // 已加入合集的动态
+    const isAdded = btnName === '添加' && item.collections.length > 0;
+
+    // 已选中
+    const isSelected = pickedIndex >= 0;
+
+    return (
+        <TouchableWithoutFeedback>
+            <View style={[styles.collectionItem, style]}>
+                <Image style={styles.collectionCover} source={{ uri: cover }} />
+                <View style={styles.postInfo}>
+                    <SafeText style={styles.metaText} numberOfLines={2}>
+                        {item?.current_episode && `第${item?.current_episode}集￨`}
+                        {`${item?.content || item?.description}`}
+                    </SafeText>
+                    <Row>
+                        <SafeText style={[styles.metaText, { marginRight: pixel(15) }]}>
+                            {Helper.moment(item?.video?.duration)}
+                        </SafeText>
+                        <Iconfont
+                            name={item.liked ? 'xihuanfill' : 'xihuan'}
+                            size={pixel(15)}
+                            color={item.liked ? Theme.primaryColor : '#666'}
+                        />
+                        <Text style={[styles.metaText, { marginLeft: pixel(3) }]} numberOfLines={1}>
+                            {item.count_likes}
+                        </Text>
+                    </Row>
+                </View>
+                {btnName && (
+                    <TouchableOpacity
+                        style={[styles.button, (isAdded || isSelected) && { backgroundColor: '#b2b2b2' }]}
+                        onPress={() => operationBtn(btnName, item)}
+                        disabled={isAdded}>
+                        <Text style={styles.btnText}>
+                            {isAdded
+                                ? '已添加'
+                                : isSelected
+                                ? `${btnName === '添加' ? '+' : '-'}${pickedIndex + 1}`
+                                : btnName}
+                        </Text>
+                    </TouchableOpacity>
+                )}
+            </View>
+        </TouchableWithoutFeedback>
+    );
+}
+
+export default observer(({ onClose, operation, collection, confirmBtn }) => {
+    const [stashVideo, setStashVideo] = useState([]);
 
     const renderItem = useCallback(
         ({ item, index, data, page }) => {
             return (
-                <EpisodeItem
-                    item={item}
-                    btnName={operation}
-                    onClick={onClick}
-                    navigation={navigation}
-                    operationBtn={operationBtn}
-                />
+                <EpisodeItem item={item} btnName={operation} stashVideo={stashVideo} setStashVideo={setStashVideo} />
             );
         },
-        [stashAddVideo, stashDeleteVideo],
+        [stashVideo],
     );
 
     return (
@@ -67,8 +110,15 @@ export default observer(({ onClose, onClick, navigation, operation, collection, 
                 <SafeText style={styles.headerText}>批量{operation}</SafeText>
                 <TouchableOpacity
                     style={styles.closeWindow}
-                    onPress={() => confirmBtn({ operation, collection_id: collection.id })}>
-                    <Text style={styles.metaText}>确认</Text>
+                    onPress={() =>
+                        confirmBtn({
+                            operation,
+                            collection_id: collection.id,
+                            stashVideo: stashVideo,
+                        })
+                    }
+                    disabled={stashVideo.length === 0}>
+                    <Text style={[styles.metaText, stashVideo.length === 0 && { color: '#b2b2b2' }]}>确认</Text>
                 </TouchableOpacity>
             </View>
             {operation === '添加' ? (
@@ -105,53 +155,6 @@ export default observer(({ onClose, onClick, navigation, operation, collection, 
         </View>
     );
 });
-
-function EpisodeItem({ style, item, navigation, onClick, btnName, operationBtn }) {
-    let cover;
-    if (item?.video?.id) {
-        cover = item?.video?.cover;
-    } else {
-        cover = item?.images?.['0']?.url;
-    }
-
-    const disabledBtn =
-        (btnName === '添加' && item.collections.length > 0) || (btnName === '删除' && item.collections.length === 0);
-
-    return (
-        <TouchableWithoutFeedback>
-            <View style={[styles.collectionItem, style]}>
-                <Image style={styles.collectionCover} source={{ uri: cover }} />
-                <View style={styles.postInfo}>
-                    <SafeText style={styles.metaText} numberOfLines={2}>
-                        {item?.current_episode && `第${item?.current_episode}集￨`}
-                        {`${item?.content || item?.description}`}
-                    </SafeText>
-                    <Row>
-                        <SafeText style={[styles.metaText, { marginRight: pixel(15) }]}>
-                            {Helper.moment(item?.video?.duration)}
-                        </SafeText>
-                        <Iconfont
-                            name={item.liked ? 'xihuanfill' : 'xihuan'}
-                            size={pixel(15)}
-                            color={item.liked ? Theme.primaryColor : '#666'}
-                        />
-                        <Text style={[styles.metaText, { marginLeft: pixel(3) }]} numberOfLines={1}>
-                            {item.count_likes}
-                        </Text>
-                    </Row>
-                </View>
-                {btnName && onClick && (
-                    <TouchableOpacity
-                        style={[styles.button, disabledBtn && { backgroundColor: '#b2b2b2' }]}
-                        onPress={() => operationBtn(btnName, item)}
-                        disabled={disabledBtn}>
-                        <Text style={styles.btnText}>{btnName}</Text>
-                    </TouchableOpacity>
-                )}
-            </View>
-        </TouchableWithoutFeedback>
-    );
-}
 
 const styles = StyleSheet.create({
     container: {
