@@ -1,17 +1,19 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { StyleSheet, Text, View, Modal, Image } from 'react-native';
+import { StyleSheet, Text, View, Modal, Image, TouchableOpacity, ScrollView } from 'react-native';
 import { observer, autorun, adStore, userStore } from '@src/store';
+import { playerStore } from '@src/components/MoviePlayer';
 import { DebouncedPressable, Iconfont } from '@src/components';
 import movieStore from '../store';
-import { ScrollView } from 'react-native-gesture-handler';
 
-export default function MovieInfoModal() {
+export default function MovieInfoModal({ setEpisode, currentEpisode }) {
     const [visible, setVisible] = useState(false);
     const [movie, setMovie] = useState({});
+    const [showEpisodes, setShow] = useState(false);
 
     const showModal = useCallback((data) => {
         setMovie(data);
         setVisible(true);
+        setShow(data?.selectEpisode || false);
     }, []);
 
     const hideModal = useCallback(() => {
@@ -41,39 +43,68 @@ export default function MovieInfoModal() {
             <View style={styles.modalView}>
                 <View style={styles.modalContainer}>
                     <View style={styles.header}>
-                        <Text style={[styles.title, { marginBottom: 0 }]}>简介</Text>
+                        <Text style={[styles.title, { marginBottom: 0 }]}>{showEpisodes ? '选集' : '简介'}</Text>
                         <DebouncedPressable style={styles.closeBtn} onPress={hideModal} activeOpacity={1}>
                             <Iconfont name="guanbi1" size={font(15)} color={'#333'} />
                         </DebouncedPressable>
                     </View>
-                    <ScrollView>
-                        <View style={{ padding: pixel(Theme.itemSpace) }}>
-                            <View style={{ flexDirection: 'row' }}>
-                                <View>
-                                    <Image source={{ uri: movie?.cover }} style={styles.cover} />
-                                </View>
-                                <View style={styles.right}>
-                                    <Text style={styles.title}>{movie.name}</Text>
-                                    <Text style={styles.info}>
-                                        {movie.region && `${movie.region}`}
-                                        {movie.year && `·${movie.year}`}
-                                        {movie.style && `·${movie.style}`}
-                                        {movie.count_series && `·更新至第${movie.count_series}集`}
-                                    </Text>
-                                    {movie.producer && <Text style={styles.info}>导演：{movie.producer}</Text>}
-                                    {movie.actors && <Text style={styles.info}>演员：{movie.actors}</Text>}
-                                </View>
+                    <ScrollView showsVerticalScrollIndicator={false}>
+                        {/* showEpisodes：展示选集（true）或是简介（false） */}
+                        {showEpisodes ? (
+                            <View style={styles.episodesContentStyle}>
+                                {(movie?.data || []).map((item, index) => {
+                                    return (
+                                        <TouchableOpacity
+                                            activeOpacity={0.8}
+                                            style={[
+                                                styles.episodeBox,
+                                                currentEpisode.url === item.url && { borderColor: '#37B7FB' },
+                                            ]}
+                                            onPress={() => {
+                                                playerStore.setCurrentEpisode(item);
+                                                setEpisode(item);
+                                            }}
+                                            key={(item, index) => String(item.name + index)}>
+                                            <Text
+                                                style={[
+                                                    styles.episodeText,
+                                                    currentEpisode.url === item.url && { color: '#37B7FB' },
+                                                ]}>
+                                                {item.name}
+                                            </Text>
+                                        </TouchableOpacity>
+                                    );
+                                })}
                             </View>
-                            {movie.introduction && (
-                                <View>
-                                    <Text style={[styles.title, { marginTop: pixel(20) }]}>概要</Text>
-                                    <Text style={[styles.info, { color: '#666666' }]}>{movie.introduction}</Text>
+                        ) : (
+                            <View style={{ padding: pixel(Theme.itemSpace) }}>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <View>
+                                        <Image source={{ uri: movie?.cover }} style={styles.cover} />
+                                    </View>
+                                    <View style={styles.right}>
+                                        <Text style={styles.title}>{movie.name}</Text>
+                                        <Text style={styles.info}>
+                                            {movie.region && `${movie.region}`}
+                                            {movie.year && `·${movie.year}`}
+                                            {movie.style && `·${movie.style}`}
+                                            {movie.count_series && `·更新至第${movie.count_series}集`}
+                                        </Text>
+                                        {movie.producer && <Text style={styles.info}>导演：{movie.producer}</Text>}
+                                        {movie.actors && <Text style={styles.info}>演员：{movie.actors}</Text>}
+                                    </View>
                                 </View>
-                            )}
-                            {movie.count_favorites > 0 && (
-                                <Text style={styles.info}>{movie.count_favorites}人收藏</Text>
-                            )}
-                        </View>
+                                {movie.introduction && (
+                                    <View>
+                                        <Text style={[styles.title, { marginTop: pixel(20) }]}>概要</Text>
+                                        <Text style={[styles.info, { color: '#666666' }]}>{movie.introduction}</Text>
+                                    </View>
+                                )}
+                                {movie.count_favorites > 0 && (
+                                    <Text style={styles.info}>{movie.count_favorites}人收藏</Text>
+                                )}
+                            </View>
+                        )}
                     </ScrollView>
                 </View>
             </View>
@@ -132,5 +163,29 @@ const styles = StyleSheet.create({
         lineHeight: pixel(20),
         color: '#333',
         marginBottom: pixel(5),
+    },
+    episodeBox: {
+        minWidth: pixel(50),
+        height: pixel(45),
+        paddingHorizontal: pixel(10),
+        borderWidth: 1,
+        borderColor: '#DDDDDD',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: pixel(5),
+        marginRight: pixel(10),
+        marginBottom: pixel(10),
+    },
+    episodeText: {
+        fontSize: font(13),
+        lineHeight: pixel(18),
+        color: '#333',
+    },
+    episodesContentStyle: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        paddingVertical: pixel(15),
+        paddingRight: pixel(9),
+        paddingHorizontal: pixel(Theme.itemSpace),
     },
 });

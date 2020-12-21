@@ -20,6 +20,7 @@ interface MovieData {
     favorited: boolean;
     last_watch_series: number;
     last_watch_progress: string;
+    selectEpisode: boolean;
 }
 
 class MovieStore {

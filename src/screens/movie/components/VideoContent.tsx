@@ -134,7 +134,7 @@ export default function VideoContent({ movie }) {
                 <TouchableOpacity
                     activeOpacity={0.9}
                     style={[styles.header, { marginBottom: pixel(10), marginRight: pixel(Theme.itemSpace) }]}
-                    onPress={() => movieStore.setMovieData(movie)}>
+                    onPress={() => movieStore.setMovieData(Object.assign({}, { ...movie }, { selectEpisode: true }))}>
                     <Text style={styles.episodeTitle}>选集</Text>
                     <View style={styles.right}>
                         <Iconfont name="right" color={'#000'} size={pixel(14)} />
@@ -167,7 +167,7 @@ export default function VideoContent({ movie }) {
                     }
                 />
             </View>
-            <MovieInfoModal />
+            <MovieInfoModal setEpisode={setEpisode} currentEpisode={currentEpisode} />
         </ScrollView>
     );
 }
