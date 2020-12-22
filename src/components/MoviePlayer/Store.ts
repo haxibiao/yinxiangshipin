@@ -14,6 +14,7 @@ class PlayerStore {
     @observable currentEpisode: EpisodeData = {};
     @observable series: EpisodeData[] = [];
     @observable seriesChooserVisible: boolean = false;
+    @observable controllerBarVisible: boolean = false;
     @observable error: boolean = false;
     @observable locked: boolean = false;
     @observable fullscreen: boolean = false;
@@ -59,6 +60,11 @@ class PlayerStore {
     @action.bound
     toggleSeriesChooserVisible(visible: boolean) {
         this.seriesChooserVisible = visible;
+    }
+
+    @action.bound
+    toggleControllerBarVisible(visible: boolean) {
+        this.controllerBarVisible = visible;
     }
 
     @action.bound

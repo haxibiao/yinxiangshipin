@@ -32,7 +32,6 @@ const PROGRESS_GESTURE_RATIO = [0.7, 0.7, 1, 2, 3];
 const SETTING_GESTURE_RATIO = dww * 0.58;
 const VISIBLE_DURATION = 4000;
 const FADE_VALUE = dww * 0.25;
-let controllerBarIsShown = false;
 
 export default observer(({ playerRef, safeInset }) => {
     // A：控制器显示逻辑
@@ -83,15 +82,14 @@ export default observer(({ playerRef, safeInset }) => {
     const setTimerToControllerBar = useCallback(() => {
         clearTimerToControllerBar();
         timerToControllerBar.current = setTimeout(() => {
-            controllerBarIsShown = false;
+            playerStore.toggleControllerBarVisible(false);
             runControllerBarAnimation(0);
         }, VISIBLE_DURATION);
     }, []);
     // 控制器显示/隐藏
     const toggleControllerBarVisible = useCallback(() => {
-        // Log('controllerBarIsShown', controllerBarIsShown);
-        controllerBarIsShown = !controllerBarIsShown;
-        if (controllerBarIsShown) {
+        playerStore.toggleControllerBarVisible(!playerStore.controllerBarVisible);
+        if (playerStore.controllerBarVisible) {
             runControllerBarAnimation(1);
             setTimerToControllerBar();
         } else {
@@ -101,7 +99,7 @@ export default observer(({ playerRef, safeInset }) => {
     // 每次视频加载完成，显示控制器
     useEffect(() => {
         if (playerStore.loaded) {
-            controllerBarIsShown = true;
+            playerStore.toggleControllerBarVisible(true);
             runControllerBarAnimation(1);
             setTimerToControllerBar();
         }
@@ -209,7 +207,7 @@ export default observer(({ playerRef, safeInset }) => {
     }, []);
     // 设置亮度和音量
     const onPanGestureBrightnessEvent = useCallback(({ nativeEvent }) => {
-        const ty = nativeEvent.translationY;
+        const ty = -nativeEvent.translationY;
         let brightness = brightnessSystemValueRef.current + ty / SETTING_GESTURE_RATIO;
         if (brightness >= 1) brightness = 1;
         if (brightness <= 0) brightness = 0;
@@ -218,7 +216,7 @@ export default observer(({ playerRef, safeInset }) => {
         brightnessAnimationValue.current.setValue(brightness * 100);
     }, []);
     const onPanGestureVolumeEvent = useCallback(({ nativeEvent }) => {
-        const ty = nativeEvent.translationY;
+        const ty = -nativeEvent.translationY;
         // Log(`setting Volume`, ty);
         let volume = volumeSystemValueRef.current + ty / SETTING_GESTURE_RATIO;
         if (volume >= 1) volume = 1;

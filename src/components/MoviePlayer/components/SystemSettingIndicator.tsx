@@ -1,52 +1,76 @@
-import React from 'react';
-import { StyleSheet, View, Text, Animated } from 'react-native';
+import React, { useRef } from 'react';
+import { StyleSheet, View, Text, Animated, ColorValue, ViewStyle } from 'react-native';
 import { SvgIcon, SvgPath } from '@src/components';
+import Theme from '@app/src/common/theme';
 
 interface Props {
-    visible: boolean;
     value: Animated.AnimatedValue;
+    color?: ColorValue;
 }
 
-export function VolumeIndicator({ visible, value }: Props) {
-    if (!visible) {
-        return null;
-    }
+function Indicator({ value, color = Theme.primaryColor }: Props) {
     const animationStyle = {
         width: value.interpolate({
             inputRange: [0, 100],
             outputRange: ['0%', '100%'],
         }),
     };
+    return <Animated.View style={[animationStyle, { height: '100%', backgroundColor: color }]} />;
+}
+
+interface SettingProps extends Props {
+    visible: boolean;
+}
+
+export function VolumeIndicator({ visible, value, color }: SettingProps) {
+    if (!visible) {
+        return null;
+    }
     return (
         <View style={styles.systemSettingContainer}>
             <View style={styles.slider}>
                 <SvgIcon name={SvgPath.volume} size={20} color={'#FFFFFFDD'} />
-                <View style={styles.trackTint}>
-                    <Animated.View style={[animationStyle, styles.trackActive]} />
+                <View style={[styles.trackTint, { marginLeft: pixel(15) }]}>
+                    <Indicator value={value} color={color} />
                 </View>
             </View>
         </View>
     );
 }
 
-export function BrightnessIndicator({ visible, value }: Props) {
+export function BrightnessIndicator({ visible, value, color }: SettingProps) {
     if (!visible) {
         return null;
     }
-    const animationStyle = {
-        width: value.interpolate({
-            inputRange: [0, 100],
-            outputRange: ['0%', '100%'],
-        }),
-    };
     return (
         <View style={styles.systemSettingContainer}>
             <View style={styles.slider}>
                 <SvgIcon name={SvgPath.brightness} size={20} color={'#FFFFFFDD'} />
-                <View style={styles.trackTint}>
-                    <Animated.View style={[animationStyle, styles.trackActive]} />
+                <View style={[styles.trackTint, { marginLeft: pixel(15) }]}>
+                    <Indicator value={value} color={color} />
                 </View>
             </View>
+        </View>
+    );
+}
+
+interface TrackIndicatorProps extends Props {
+    style: ViewStyle;
+}
+
+export function TrackIndicator({ value, color = Theme.primaryColor, style }: TrackIndicatorProps) {
+    const animationValue = useRef(new Animated.Value(value));
+    animationValue.current.setValue(value);
+    const animationStyle = {
+        width: animationValue.current.interpolate({
+            inputRange: [0, 100],
+            outputRange: ['0%', '100%'],
+        }),
+    };
+
+    return (
+        <View style={[styles.trackTint, style]}>
+            <Animated.View style={[animationStyle, { height: '100%', backgroundColor: color }]} />
         </View>
     );
 }
@@ -70,13 +94,8 @@ const styles = StyleSheet.create({
     trackTint: {
         width: pixel(100),
         height: pixel(2),
-        marginLeft: pixel(15),
         borderRadius: pixel(1),
         overflow: 'hidden',
         backgroundColor: '#FFFFFF55',
-    },
-    trackActive: {
-        height: '100%',
-        backgroundColor: Theme.primaryColor,
     },
 });

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useRef, useCallback } from 'react';
 import { StyleSheet, View, Text, Pressable, StatusBar, Platform } from 'react-native';
 import Slider from '@react-native-community/slider';
 import Orientation from 'react-native-device-orientation';
@@ -7,6 +7,7 @@ import { Iconfont } from '@src/components';
 import { HomeIndicator } from '@src/native';
 import { moment } from '@src/common';
 import { observer } from 'mobx-react';
+import { TrackIndicator } from './SystemSettingIndicator';
 import playerStore from '../Store';
 
 const CurrentTime = observer(() => {
@@ -34,17 +35,24 @@ export const SeekingProgress = observer(() => {
 
     return (
         <View style={styles.seekingContainer}>
-            <Text style={{ fontSize: fontSize1, color: Theme.primaryColor }}>
-                {moment(playerStore.seeking ? playerStore.seekProgress : playerStore.progress)}
-            </Text>
-            <Text style={{ fontSize: fontSize2, color: '#ffffff' }}>/{moment(playerStore.duration)}</Text>
+            <View style={styles.timeContainer}>
+                <Text style={{ fontSize: fontSize1, color: Theme.primaryColor }}>
+                    {moment(playerStore.seeking ? playerStore.seekProgress : playerStore.progress)}
+                </Text>
+                <Text style={{ fontSize: fontSize2, color: '#ffffff' }}>/{moment(playerStore.duration)}</Text>
+            </View>
+            {!playerStore.controllerBarVisible && (
+                <TrackIndicator
+                    style={{ width: pixel(120) }}
+                    value={(playerStore.seekProgress / playerStore.duration) * 100}
+                />
+            )}
         </View>
     );
 });
 
 export default observer(({ playerRef, clearTimer, setTimer }) => {
     const onSliderValueChanged = useCallback((sliderValue) => {
-        Log('onSliderValueChanged');
         if (clearTimer instanceof Function) {
             clearTimer();
         }
@@ -53,7 +61,6 @@ export default observer(({ playerRef, clearTimer, setTimer }) => {
         playerStore.setSeekProgress(sliderValue);
     }, []);
     const onSlidingComplete = useCallback((sliderValue) => {
-        Log('onSlidingComplete');
         if (setTimer instanceof Function) {
             setTimer();
         }
@@ -143,9 +150,13 @@ const styles = StyleSheet.create({
     },
     seekingContainer: {
         ...StyleSheet.absoluteFillObject,
-        flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#00000022',
+    },
+    timeContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: pixel(10),
     },
 });
