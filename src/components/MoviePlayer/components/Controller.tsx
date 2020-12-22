@@ -22,6 +22,7 @@ import { setFullscreenMode } from 'react-native-realfullscreen';
 import SystemSetting from 'react-native-system-setting';
 import { VolumeIndicator, BrightnessIndicator } from './SystemSettingIndicator';
 import Buffering from './Buffering';
+import SpeedUpIndicator from './SpeedUpIndicator';
 import ProgressBar, { SeekingProgress } from './ProgressBar';
 import { observer } from 'mobx-react';
 import playerStore from '../Store';
@@ -119,10 +120,25 @@ export default observer(({ playerRef }) => {
         }
     }, []);
 
-    // ### 单击、双击、手势调整视频进度
+    // ### 长按、单击、双击、手势调整视频进度
+    const speedValueRef = useRef(0);
+    const [speedUpIndicatorVisible, setSpeedUpIndicatorVisible] = useState(false);
+    const onSpeedUpPanGestureHandler = useCallback(({ nativeEvent }) => {
+        // console.log('xxx', nativeEvent.state);
+        if (nativeEvent.state === State.ACTIVE) {
+            // console.log('ACTIVE');
+            speedValueRef.current = playerStore.rate;
+            playerStore.setRateValue(3.0);
+            setSpeedUpIndicatorVisible(true);
+        }
+        if (nativeEvent.state == State.END) {
+            // console.log('END');
+            playerStore.setRateValue(speedValueRef.current);
+            setSpeedUpIndicatorVisible(false);
+        }
+    }, []);
     const doublePressHandlerRef = useRef();
     const panGestureStartProgressRef = useRef(0);
-
     const onProgressPanGestureHandler = useCallback(({ nativeEvent }) => {
         if (nativeEvent.state === State.ACTIVE) {
             panGestureStartProgressRef.current = playerStore.progress;
@@ -282,43 +298,47 @@ export default observer(({ playerRef }) => {
                     <View style={styles.row}></View>
                 </View>
             </Animated.View>
-            {/* <LongPressGestureHandler> */}
-            <PanGestureHandler
-                enabled={!playerStore.buffering}
-                activeOffsetX={[-4, 4]}
-                onHandlerStateChange={onProgressPanGestureHandler}
-                onGestureEvent={onProgressPanGestureEvent}>
-                <TapGestureHandler waitFor={doublePressHandlerRef} onHandlerStateChange={onSinglePress}>
-                    <TapGestureHandler
-                        ref={doublePressHandlerRef}
-                        enabled={!playerStore.buffering}
-                        onHandlerStateChange={onDoublePress}
-                        numberOfTaps={2}>
-                        <View style={styles.gestureContainer}>
-                            <SeekingProgress />
-                            <Buffering />
-                            <BrightnessIndicator
-                                visible={brightnessIndicatorVisible}
-                                value={brightnessAnimationValue.current}
-                            />
-                            <VolumeIndicator visible={volumeIndicatorVisible} value={volumeAnimationValue.current} />
-                            <PanGestureHandler
-                                activeOffsetY={[-4, 4]}
-                                onHandlerStateChange={onBrightnessPanGestureHandler}
-                                onGestureEvent={onPanGestureBrightnessEvent}>
-                                <Animated.View style={styles.brightnessSettingArea} />
-                            </PanGestureHandler>
-                            <PanGestureHandler
-                                activeOffsetY={[-4, 4]}
-                                onHandlerStateChange={onVolumePanGestureHandler}
-                                onGestureEvent={onPanGestureVolumeEvent}>
-                                <Animated.View style={styles.volumeSettingArea} />
-                            </PanGestureHandler>
-                        </View>
+            <LongPressGestureHandler onHandlerStateChange={onSpeedUpPanGestureHandler}>
+                <PanGestureHandler
+                    enabled={!playerStore.buffering}
+                    activeOffsetX={[-4, 4]}
+                    onHandlerStateChange={onProgressPanGestureHandler}
+                    onGestureEvent={onProgressPanGestureEvent}>
+                    <TapGestureHandler waitFor={doublePressHandlerRef} onHandlerStateChange={onSinglePress}>
+                        <TapGestureHandler
+                            ref={doublePressHandlerRef}
+                            enabled={!playerStore.buffering}
+                            onHandlerStateChange={onDoublePress}
+                            numberOfTaps={2}>
+                            <View style={styles.gestureContainer}>
+                                <SeekingProgress />
+                                <Buffering />
+                                <SpeedUpIndicator visible={speedUpIndicatorVisible} />
+                                <BrightnessIndicator
+                                    visible={brightnessIndicatorVisible}
+                                    value={brightnessAnimationValue.current}
+                                />
+                                <VolumeIndicator
+                                    visible={volumeIndicatorVisible}
+                                    value={volumeAnimationValue.current}
+                                />
+                                <PanGestureHandler
+                                    activeOffsetY={[-4, 4]}
+                                    onHandlerStateChange={onBrightnessPanGestureHandler}
+                                    onGestureEvent={onPanGestureBrightnessEvent}>
+                                    <Animated.View style={styles.brightnessSettingArea} />
+                                </PanGestureHandler>
+                                <PanGestureHandler
+                                    activeOffsetY={[-4, 4]}
+                                    onHandlerStateChange={onVolumePanGestureHandler}
+                                    onGestureEvent={onPanGestureVolumeEvent}>
+                                    <Animated.View style={styles.volumeSettingArea} />
+                                </PanGestureHandler>
+                            </View>
+                        </TapGestureHandler>
                     </TapGestureHandler>
-                </TapGestureHandler>
-            </PanGestureHandler>
-            {/* </LongPressGestureHandler> */}
+                </PanGestureHandler>
+            </LongPressGestureHandler>
 
             <Animated.View style={[styles.secBottom, { paddingRight: safeInset }, bottomControllerBarAnimationStyle]}>
                 <View style={styles.sectionWrap}>

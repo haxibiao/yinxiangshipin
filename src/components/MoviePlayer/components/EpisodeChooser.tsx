@@ -5,7 +5,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { observer } from 'mobx-react';
 import playerStore from '../Store';
 
-const CHOOSER_WIDTH = Device.HEIGHT * 0.46;
+const CHOOSER_WIDTH = Dimensions.get('window').height * 0.46;
 const PADDING = pixel(20);
 const ITEM_SPACE = pixel(10);
 const ITEM_WIDTH = (CHOOSER_WIDTH - PADDING * 2 - ITEM_SPACE * 4) / 5;
