@@ -20,12 +20,13 @@ class PlayerStore {
     @observable resizeMode: 'contain' | 'cover' = 'contain';
     @observable loaded: boolean = false;
     @observable buffering: boolean = true;
-    @observable seeking: boolean = false;
+    @observable seeking: boolean = false; //更改视频进度seeking=true，播放器onSeek事件seeking=false
+    @observable sliding: boolean = false; //拖动视频进度sliding=true，手指松开sliding=false
     @observable paused: boolean = false;
     @observable rate: number = 1.0;
     @observable rateChooserVisible: boolean = false;
-    @observable progress: number | string = 0;
-    @observable seekProgress: number | string = 0;
+    @observable progress: number | string = 0; //视频播放进度
+    @observable seekProgress: number | string = 0; //视频拖拽进度
     @observable duration: number | string = 0;
     @observable notice: NotificationData[] = [];
 
@@ -37,6 +38,7 @@ class PlayerStore {
         this.loaded = false;
         this.buffering = true;
         this.seeking = false;
+        this.sliding = false;
         this.paused = false;
         this.progress = 0;
         this.seekProgress = 0;
@@ -92,6 +94,11 @@ class PlayerStore {
     @action.bound
     toggleSeeking(isSeeking: boolean) {
         this.seeking = isSeeking;
+    }
+
+    @action.bound
+    toggleSliding(isSliding: boolean) {
+        this.sliding = isSliding;
     }
 
     @action.bound

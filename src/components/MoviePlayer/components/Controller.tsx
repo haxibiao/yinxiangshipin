@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useEffect } from 'react';
+import React, { useRef, useState, useCallback, useEffect } from 'react';
 import {
     StyleSheet,
     View,
@@ -9,25 +9,33 @@ import {
     Easing,
     Dimensions,
     InteractionManager,
+    LogBox,
 } from 'react-native';
 import { PanGestureHandler, TapGestureHandler, State } from 'react-native-gesture-handler';
-import Orientation from 'react-native-orientation';
+import Orientation from 'react-native-device-orientation';
 import LinearGradient from 'react-native-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import LottieView from 'lottie-react-native';
 import { Iconfont } from '@src/components';
-import BrightnessIndicator from './BrightnessIndicator';
-import VolumeIndicator from './VolumeIndicator';
-import ProgressBar from './ProgressBar';
+import { HomeIndicator } from '@src/native';
+import { setFullscreenMode } from 'react-native-realfullscreen';
+import SystemSetting from 'react-native-system-setting';
+import { VolumeIndicator, BrightnessIndicator } from './SystemSettingIndicator';
 import Buffering from './Buffering';
+import ProgressBar, { SeekingProgress } from './ProgressBar';
 import { observer } from 'mobx-react';
 import playerStore from '../Store';
 
+const dww = Dimensions.get('window').width;
+const dwh = Dimensions.get('window').height;
+const PROGRESS_GESTURE_RATIO = [0.7, 0.7, 1, 2, 3];
+const SETTING_GESTURE_RATIO = dww * 0.58;
 const VISIBLE_DURATION = 4000;
-const FADE_VALUE = Dimensions.get('window').width * 0.25;
+const FADE_VALUE = dww * 0.25;
 let controllerBarIsShown = false;
 
 export default observer(({ playerRef, safeInset }) => {
+    // A：控制器显示逻辑
     const timerToControllerBar = useRef();
     const clearTimerToControllerBar = useCallback(() => {
         if (timerToControllerBar.current) {
@@ -61,6 +69,7 @@ export default observer(({ playerRef, safeInset }) => {
             },
         ],
     };
+    // 控制器动画
     const runControllerBarAnimation = useCallback((toValue: 0 | 1) => {
         clearTimerToControllerBar();
         Animated.timing(controllerBarAnimation.current, {
@@ -70,6 +79,7 @@ export default observer(({ playerRef, safeInset }) => {
             useNativeDriver: true,
         }).start(() => null);
     }, []);
+    // 控制器计时器
     const setTimerToControllerBar = useCallback(() => {
         clearTimerToControllerBar();
         timerToControllerBar.current = setTimeout(() => {
@@ -77,6 +87,7 @@ export default observer(({ playerRef, safeInset }) => {
             runControllerBarAnimation(0);
         }, VISIBLE_DURATION);
     }, []);
+    // 控制器显示/隐藏
     const toggleControllerBarVisible = useCallback(() => {
         // Log('controllerBarIsShown', controllerBarIsShown);
         controllerBarIsShown = !controllerBarIsShown;
@@ -87,6 +98,7 @@ export default observer(({ playerRef, safeInset }) => {
             runControllerBarAnimation(0);
         }
     }, []);
+    // 每次视频加载完成，显示控制器
     useEffect(() => {
         if (playerStore.loaded) {
             controllerBarIsShown = true;
@@ -94,21 +106,48 @@ export default observer(({ playerRef, safeInset }) => {
             setTimerToControllerBar();
         }
     }, [playerStore.loaded]);
+    // 清除定时器
+    useEffect(() => {
+        return () => {
+            clearTimerToControllerBar();
+        };
+    }, []);
 
+    // B：单击、双击、手势调整视频进度
     const doublePressHandlerRef = useRef();
+    const panGestureStartProgressRef = useRef(0);
 
-    const onPanGestureHandler = useCallback(({ nativeEvent }) => {
+    const onProgressPanGestureHandler = useCallback(({ nativeEvent }) => {
         if (nativeEvent.state === State.ACTIVE) {
-            // Log('onPanGestureHandler ACTIVE', nativeEvent.state);
+            panGestureStartProgressRef.current = playerStore.progress;
+            // Log('onProgressPanGestureHandler ACTIVE', nativeEvent.state);
         }
         if (nativeEvent.state == State.END) {
-            // Log('onPanGestureHandler', nativeEvent.state);
+            if (playerStore.sliding) {
+                playerStore.toggleSliding(false);
+                playerStore.setSeekProgress(playerStore.seekProgress);
+                playerStore.setProgress(playerStore.seekProgress);
+                playerRef.current?.seek(playerStore.seekProgress);
+            }
+            // Log('onProgressPanGestureHandler', nativeEvent.state);
         }
     }, []);
-    const onPanGestureEvent = useCallback(({ nativeEvent }) => {
-        if (nativeEvent.state === State.ACTIVE) {
-            // Log('onPanGestureEvent ACTIVE', nativeEvent.state);
+    const onProgressPanGestureEvent = useCallback(({ nativeEvent }) => {
+        const tx = nativeEvent.translationX;
+        const trackX = playerStore.fullscreen ? dwh : dww;
+        //计算滑动距离和播放时间的最近比例
+        const ratio = PROGRESS_GESTURE_RATIO[Math.min(Math.floor(playerStore.duration / trackX), 4)];
+        const progress = panGestureStartProgressRef.current + tx * ratio;
+        playerStore.toggleSliding(true);
+        playerStore.toggleSeeking(true);
+        if (progress <= 0) {
+            playerStore.setSeekProgress(0);
+        } else if (progress >= playerStore.duration) {
+            playerStore.setSeekProgress(playerStore.duration);
+        } else {
+            playerStore.setSeekProgress(progress);
         }
+        // Log('change progress', tx, progress);
     }, []);
     const onSinglePress = useCallback(({ nativeEvent }) => {
         // Log('onSinglePress', nativeEvent.state);
@@ -126,17 +165,77 @@ export default observer(({ playerRef, safeInset }) => {
         }
     }, []);
 
+    // C：系统音量、亮度控制
+    const [brightnessIndicatorVisible, setBrightnessIndicatorVisible] = useState(false);
+    const [volumeIndicatorVisible, setVolumeIndicatorVisible] = useState(false);
+    const brightnessSystemValueRef = useRef(0);
+    const volumeSystemValueRef = useRef(0);
+    const brightnessAnimationValue = useRef(new Animated.Value(0));
+    const volumeAnimationValue = useRef(new Animated.Value(0));
+    useEffect(() => {
+        let initBrightness = 0;
+        let initVolume = 0;
+        SystemSetting.getBrightness().then((v) => {
+            initBrightness = brightnessSystemValueRef.current = v;
+            brightnessAnimationValue.current.setValue(v * 100);
+        });
+        SystemSetting.getVolume().then((v) => {
+            initVolume = volumeSystemValueRef.current = v;
+            volumeAnimationValue.current.setValue(v * 100);
+        });
+        return () => {
+            SystemSetting.setAppBrightness(initBrightness);
+            SystemSetting.setVolume(initVolume);
+        };
+    }, []);
+    // 控制指示器显示，保存最终值
+    const onBrightnessPanGestureHandler = useCallback(({ nativeEvent }) => {
+        if (nativeEvent.state === State.ACTIVE) {
+            setBrightnessIndicatorVisible(true);
+        }
+        if (nativeEvent.state == State.END) {
+            setBrightnessIndicatorVisible(false);
+            brightnessSystemValueRef.current = brightnessAnimationValue.current._value / 100;
+        }
+    }, []);
+    const onVolumePanGestureHandler = useCallback(({ nativeEvent }) => {
+        if (nativeEvent.state === State.ACTIVE) {
+            setVolumeIndicatorVisible(true);
+        }
+        if (nativeEvent.state == State.END) {
+            setVolumeIndicatorVisible(false);
+            volumeSystemValueRef.current = volumeAnimationValue.current._value / 100;
+        }
+    }, []);
+    // 设置亮度和音量
+    const onPanGestureBrightnessEvent = useCallback(({ nativeEvent }) => {
+        const ty = nativeEvent.translationY;
+        let brightness = brightnessSystemValueRef.current + ty / SETTING_GESTURE_RATIO;
+        if (brightness >= 1) brightness = 1;
+        if (brightness <= 0) brightness = 0;
+        // Log(`setting Brightness`, brightness);
+        SystemSetting.setAppBrightness(brightness);
+        brightnessAnimationValue.current.setValue(brightness * 100);
+    }, []);
+    const onPanGestureVolumeEvent = useCallback(({ nativeEvent }) => {
+        const ty = nativeEvent.translationY;
+        // Log(`setting Volume`, ty);
+        let volume = volumeSystemValueRef.current + ty / SETTING_GESTURE_RATIO;
+        if (volume >= 1) volume = 1;
+        if (volume <= 0) volume = 0;
+        // Log(`setting Volume`, volume);
+        SystemSetting.setVolume(volume);
+        volumeAnimationValue.current.setValue(volume * 100);
+    }, []);
+
+    // 锁定竖屏
     const lockPortrait = useCallback(() => {
         playerStore.toggleFullscreen(false);
         Orientation.unlockAllOrientations();
         StatusBar.setHidden(false, 'slide');
+        HomeIndicator.setAutoHidden(false);
+        setFullscreenMode(false);
         Orientation.lockToPortrait();
-    }, []);
-
-    useEffect(() => {
-        return () => {
-            clearTimerToControllerBar();
-        };
     }, []);
 
     return (
@@ -164,15 +263,36 @@ export default observer(({ playerRef, safeInset }) => {
                 </View>
                 <View style={styles.row}></View>
             </Animated.View>
-            <PanGestureHandler onHandlerStateChange={onPanGestureHandler} onGestureEvent={onPanGestureEvent}>
-                <TapGestureHandler onHandlerStateChange={onSinglePress} waitFor={doublePressHandlerRef}>
+            <PanGestureHandler
+                activeOffsetX={[-4, 4]}
+                onHandlerStateChange={onProgressPanGestureHandler}
+                onGestureEvent={onProgressPanGestureEvent}>
+                <TapGestureHandler waitFor={doublePressHandlerRef} onHandlerStateChange={onSinglePress}>
                     <TapGestureHandler
                         ref={doublePressHandlerRef}
                         enabled={!playerStore.buffering}
                         onHandlerStateChange={onDoublePress}
                         numberOfTaps={2}>
-                        <View style={styles.container}>
-                            <Buffering store={playerStore} />
+                        <View style={styles.gestureContainer}>
+                            <SeekingProgress />
+                            <Buffering />
+                            <BrightnessIndicator
+                                visible={brightnessIndicatorVisible}
+                                value={brightnessAnimationValue.current}
+                            />
+                            <VolumeIndicator visible={volumeIndicatorVisible} value={volumeAnimationValue.current} />
+                            <PanGestureHandler
+                                activeOffsetY={[-4, 4]}
+                                onHandlerStateChange={onBrightnessPanGestureHandler}
+                                onGestureEvent={onPanGestureBrightnessEvent}>
+                                <Animated.View style={styles.brightnessSettingArea} />
+                            </PanGestureHandler>
+                            <PanGestureHandler
+                                activeOffsetY={[-4, 4]}
+                                onHandlerStateChange={onVolumePanGestureHandler}
+                                onGestureEvent={onPanGestureVolumeEvent}>
+                                <Animated.View style={styles.volumeSettingArea} />
+                            </PanGestureHandler>
                         </View>
                     </TapGestureHandler>
                 </TapGestureHandler>
@@ -221,7 +341,7 @@ export default observer(({ playerRef, safeInset }) => {
                                 style={styles.operateBtn}>
                                 <Text style={styles.operateText}>倍速</Text>
                             </Pressable>
-                            {playerStore.series.length > 0 && (
+                            {playerStore.series.length > 1 && (
                                 <Pressable
                                     onPress={() => {
                                         toggleControllerBarVisible();
@@ -245,6 +365,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     container: {
+        flex: 1,
+    },
+    gestureContainer: {
+        flex: 1,
+        flexDirection: 'row',
+    },
+    brightnessSettingArea: {
+        flex: 1,
+    },
+    volumeSettingArea: {
         flex: 1,
     },
     secTop: {

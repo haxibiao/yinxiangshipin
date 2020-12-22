@@ -8,7 +8,7 @@ import VideoControl from './VideoControl';
 import { observer, Provider, inject } from 'mobx-react';
 import { appStore } from '@src/store';
 import VideoStore from './VideoStore';
-import Orientation from 'react-native-orientation';
+import Orientation from 'react-native-device-orientation';
 
 @observer
 class Player extends Component {

@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { StyleSheet, View, Text, Animated, Easing, TouchableOpacity, BackHandler } from 'react-native';
 import Video from 'react-native-video';
-import Orientation from 'react-native-orientation';
+import Orientation from 'react-native-device-orientation';
 import { observer } from 'mobx-react';
 import { useStatusBarHeight } from '@src/common';
 import playerStore from './Store';
@@ -20,26 +20,43 @@ export const Player = observer((props: Props) => {
     }
 
     const playerRef = useRef();
+    const progressInBufferingRef = useRef(0);
+    // const bufferingTimerRef = useRef(0);
 
     const _onError = (e) => {
         if (e.error) {
-            Log('_onError');
+            Log('_onError', e.error);
             playerStore.toggleBuffering(false);
             playerStore.toggleError(true);
         }
     };
 
     const _onBuffer = (e) => {
-        Log('e.isBuffering', e.isBuffering);
-        playerStore.toggleBuffering(e.isBuffering);
+        Log('e.isBuffering', e.isBuffering, playerStore.seeking);
+        if (!(playerStore.seeking && !e.isBuffering)) {
+            playerStore.toggleBuffering(e.isBuffering);
+        }
+        // if(e.isBuffering){
+        //     clearTimeout(bufferingTimerRef.current)
+        //     bufferingTimerRef.current = setTimeout(() => {
+        //         playerStore.toggleBuffering(true);
+        //     }, 1000);
+        // }
     };
 
     const _onSeek = () => {
         Log('_onSeek');
+        playerStore.toggleSeeking(false);
     };
 
     const _onProgress = (e) => {
         playerStore.setProgress(e.currentTime);
+        // 处理已经在播放中了,但是buffering状态没有改变
+        if (playerStore.seeking && playerStore.buffering && ++progressInBufferingRef.current > 4) {
+            Log('progressInBufferingRef');
+            progressInBufferingRef.current = 0;
+            playerStore.toggleBuffering(false);
+        }
     };
 
     const _onLoad = (e) => {

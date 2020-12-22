@@ -72,7 +72,7 @@ export default observer(() => {
                         style={styles.chooserWrap}
                         start={{ x: 1, y: 0.5 }}
                         end={{ x: 0, y: 0.5 }}
-                        colors={['#00000066', '#00000000']}>
+                        colors={['#00000099', '#00000066', '#00000044', '#00000000']}>
                         {RATE_VALUE.map((value, index) => {
                             const currentRate = value === playerStore.rate;
                             return (
@@ -85,7 +85,6 @@ export default observer(() => {
                                     <Text style={[styles.rateText, currentRate && { color: Theme.primaryColor }]}>
                                         {value}
                                         <Text style={styles.chaText}>X</Text>
-                                        {currentRate && <Text style={styles.current}> · 当前</Text>}
                                     </Text>
                                 </TouchableOpacity>
                             );
@@ -123,13 +122,10 @@ const styles = StyleSheet.create({
     },
     rateText: {
         fontWeight: 'bold',
-        fontSize: font(20),
+        fontSize: font(18),
         color: '#ffffff',
     },
     chaText: {
         fontSize: font(14),
-    },
-    current: {
-        fontSize: font(13),
     },
 });

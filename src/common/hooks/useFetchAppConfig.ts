@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useCallback } from 'react';
 import { Platform } from 'react-native';
-import Orientation from 'react-native-orientation';
+import Orientation from 'react-native-device-orientation';
 import SplashScreen from 'react-native-splash-screen';
 import { ad } from 'react-native-ad';
 import { DisplayName } from '@app/app.json';
@@ -13,7 +13,15 @@ export function useFetchAppConfig() {
     const responseTime = useRef(0);
     const timer = useRef<ReturnType<typeof setInterval>>();
     const fetchConfig = useCallback(() => {
-        fetch(Config.ServerRoot + '/api/app-config?os=' + Platform.OS + '&store=' + Config.AppStore)
+        fetch(
+            Config.ServerRoot +
+                '/api/app-config?os=' +
+                Platform.OS +
+                '&store=' +
+                Config.AppStore +
+                '&version=' +
+                Config.Version,
+        )
             .then((response) => response.json())
             .then((result) => {
                 timer.current && clearInterval(timer.current);

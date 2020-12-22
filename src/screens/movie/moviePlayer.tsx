@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, StatusBar, StatusBarProperties } from 'react-na
 import { PageContainer, StatusView, NavBarHeader } from '@src/components';
 import { WebView } from 'react-native-webview';
 import { useRoute, useNavigation } from '@react-navigation/native';
-import Orientation from 'react-native-orientation';
+import Orientation from 'react-native-device-orientation';
 import { userStore } from '@src/store';
 
 const moviePlayer = (props) => {

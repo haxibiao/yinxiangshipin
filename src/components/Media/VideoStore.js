@@ -1,6 +1,6 @@
 import { View, Image, Keyboard } from 'react-native';
 import { observable, action, runInAction, autorun, reaction, computed } from 'mobx';
-import Orientation from 'react-native-orientation';
+import Orientation from 'react-native-device-orientation';
 import Video from 'react-native-video';
 // import { Api, Tools } from '../../utils';
 import { appStore } from '@src/store';

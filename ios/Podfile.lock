@@ -327,10 +327,10 @@ PODS:
     - React
   - react-native-splash-screen (3.2.0):
     - React
-  - react-native-video (5.0.2):
+  - react-native-video (5.1.0-alpha8):
     - React
-    - react-native-video/Video (= 5.0.2)
-  - react-native-video/Video (5.0.2):
+    - react-native-video/Video (= 5.1.0-alpha8)
+  - react-native-video/Video (5.1.0-alpha8):
     - React
   - react-native-view-shot (3.1.2):
     - React
@@ -783,7 +783,7 @@ SPEC CHECKSUMS:
   react-native-safe-area-context: eb91fe1fb3f7b87d9c30a7f0808407d8569d539d
   react-native-slider: e99fc201cefe81270fc9d81714a7a0f5e566b168
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
-  react-native-video: d01ed7ff1e38fa7dcc6c15c94cf505e661b7bfd0
+  react-native-video: dbb8df4f0bbdf80de6797c90fcad8bc12b19401d
   react-native-view-shot: 4475fde003fe8a210053d1f98fb9e06c1d834e1c
   react-native-viewpager: 88f4269c19d626d2ccd5f7c7f5f7f76422ddb9e3
   react-native-vod: 5426ab429cd090b1cdbf84ef64b9917774ec2b22
@@ -824,4 +824,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: c55ec151fbee7105821a807c54610b79fa753e2f
 
-COCOAPODS: 1.9.2
+COCOAPODS: 1.10.0

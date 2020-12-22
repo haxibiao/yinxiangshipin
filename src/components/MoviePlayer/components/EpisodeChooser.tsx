@@ -1,5 +1,5 @@
 import React, { useRef, useCallback, useEffect } from 'react';
-import { StyleSheet, View, Text, Animated, Easing, Dimensions, InteractionManager } from 'react-native';
+import { StyleSheet, View, Text, Animated, Easing, Dimensions, InteractionManager, LogBox } from 'react-native';
 import { TapGestureHandler, State, TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 import { observer } from 'mobx-react';
@@ -74,25 +74,29 @@ export default observer(() => {
                         style={styles.chooserWrap}
                         start={{ x: 1, y: 0.5 }}
                         end={{ x: 0, y: 0.5 }}
-                        colors={['#00000099', '#00000000']}>
+                        colors={['#00000099', '#00000077', '#00000055', '#00000000']}>
                         <View style={styles.head}>
-                            <Text style={styles.title}>选集{playerStore.series.length}</Text>
+                            <Text style={styles.title}>选集({playerStore.series.length})</Text>
                         </View>
                         <ScrollView contentContainerStyle={styles.episodeList}>
                             <View style={styles.episodeWrap}>
                                 {playerStore.series.map((value, index) => {
                                     const current = value?.url === playerStore.currentEpisode?.url;
                                     return (
-                                        <TouchableOpacity
-                                            key={value}
-                                            style={styles.episodeItem}
-                                            onPress={() => {
-                                                chooseValue(value);
+                                        <TapGestureHandler
+                                            key={index}
+                                            onHandlerStateChange={({ nativeEvent }) => {
+                                                if (nativeEvent.state === State.ACTIVE) {
+                                                    chooseValue(value);
+                                                }
                                             }}>
-                                            <Text style={[styles.itemText, current && { color: Theme.primaryColor }]}>
-                                                {index + 1}
-                                            </Text>
-                                        </TouchableOpacity>
+                                            <View style={styles.episodeItem}>
+                                                <Text
+                                                    style={[styles.itemText, current && { color: Theme.primaryColor }]}>
+                                                    {index + 1}
+                                                </Text>
+                                            </View>
+                                        </TapGestureHandler>
                                     );
                                 })}
                             </View>
@@ -128,7 +132,7 @@ const styles = StyleSheet.create({
         marginBottom: ITEM_SPACE,
     },
     title: {
-        fontSize: font(16),
+        fontSize: font(15),
         color: '#ffffff',
     },
     episodeList: {
