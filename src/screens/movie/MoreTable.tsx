@@ -3,12 +3,13 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { PageContainer, TouchFeedback, Iconfont, ScrollTabBar } from '@src/components';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import HistoryDetailTable from './HistoryDetail';
-import MyFavoriteDetail from './MyFavoriteDetail';
+import HistoryTab from './HistoryDetail';
+import MyFavoriteTab from './MyFavoriteDetail';
 // 更多table栏
 export default function MoreTable() {
     const navigation = useNavigation();
     const route = useRoute();
+    const style = { marginTop: pixel(5) };
     const follower = route.params?.follower || false;
 
     return (
@@ -30,8 +31,8 @@ export default function MoreTable() {
                         tintTextStyle={styles.tintTextStyle}
                     />
                 )}>
-                <HistoryDetailTable tabLabel="观影历史" navigation={navigation} />
-                <MyFavoriteDetail tabLabel="我的收藏" navigation={navigation} />
+                <HistoryTab tabLabel="观影历史" navigation={navigation} style={style} />
+                <MyFavoriteTab tabLabel="我的收藏" navigation={navigation} style={style} />
             </ScrollableTabView>
         </View>
     );
@@ -55,9 +56,9 @@ const styles = StyleSheet.create({
         marginTop: Theme.statusBarHeight,
     },
     underlineStyle: {
-        width: pixel(60),
+        width: pixel(40),
         height: pixel(3),
-        left: (Device.WIDTH - pixel(68) * 4) / 2,
+        left: pixel(25) + pixel(80) / 2,
         bottom: pixel(5),
     },
     activeTextStyle: {

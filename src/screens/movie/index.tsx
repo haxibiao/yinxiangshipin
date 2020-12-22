@@ -27,6 +27,7 @@ const index = () => {
         fetchMore: favoriteFetch,
         refetch: favoriteRefetch,
         loading: favoriteLoading,
+        error: favoriteError,
     } = useQuery(GQL.favoritedMoviesQuery, {
         fetchPolicy: 'network-only',
         variables: { user_id: userStore.me.id, type: 'movies' },
@@ -135,7 +136,8 @@ const index = () => {
     const ApplicationData = useMemo(() => Helper.syncGetter('getFilters', ApplicationResult), [ApplicationResult]);
     // 观看历史
     const { data: historyReult, loading, error, fetchMore, refetch } = useQuery(GQL.showMovieHistoryQuery);
-    const historyData = useMemo(() => Helper.syncGetter('showMovieHistory.data', historyReult), [historyReult]);
+    const historyData = useMemo(() => Helper.syncGetter('showMovieHistory.data', historyReult) || [], [historyReult]);
+
     return (
         !swiperLoading &&
         !favoriteLoading && (
@@ -149,14 +151,23 @@ const index = () => {
                     <ApplicationMenu navigation={navigation} data={ApplicationData} />
                     {userStore.login && (
                         <View>
-                            <MyHistory historyData={historyData} navigation={navigation} />
-                            <MyFavorite
-                                favoriteList={favoriteList}
-                                favoriteToMovie={favoriteToMovie}
-                                refetch={favoriteRefetch}
-                                hasMorePage={hasMoreFavorite}
-                                navigation={navigation}
-                            />
+                            {historyData.length > 0 && (
+                                <MyHistory
+                                    historyData={historyData}
+                                    navigation={navigation}
+                                    style={{ paddingTop: pixel(10) }}
+                                />
+                            )}
+                            {favoriteList ? (
+                                <MyFavorite
+                                    favoriteList={favoriteList}
+                                    favoriteToMovie={favoriteToMovie}
+                                    refetch={favoriteRefetch}
+                                    hasMorePage={hasMoreFavorite}
+                                    navigation={navigation}
+                                    style={{ paddingTop: pixel(10) }}
+                                />
+                            ) : null}
                         </View>
                     )}
                     <CategoryListColum

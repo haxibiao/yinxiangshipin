@@ -5,7 +5,7 @@ import { GQL } from '@src/apollo';
 import { QueryList } from '@src/content';
 // 观看历史详情
 export default function HistoryDetail(props: any) {
-    const { navigation } = props;
+    const { navigation, style } = props;
     const _renderItem = ({ item, index }) => {
         const movie = item.movie ?? [];
         return (
@@ -32,7 +32,7 @@ export default function HistoryDetail(props: any) {
         );
     };
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, style]}>
             <QueryList
                 gqlDocument={GQL.showMovieHistoryQuery}
                 dataOptionChain="showMovieHistory.data"

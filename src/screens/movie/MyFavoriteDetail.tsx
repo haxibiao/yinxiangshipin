@@ -7,7 +7,7 @@ import { userStore } from '@src/store';
 
 // 我的收藏
 export default function MyFavoriteDetail(props: any) {
-    const { navigation } = props;
+    const { navigation, style } = props;
     const _renderItem = ({ item, index }) => {
         return (
             <TouchFeedback onPress={() => navigation.navigate('MovieDetail', { movie_id: item.movie.id })}>
@@ -29,7 +29,7 @@ export default function MyFavoriteDetail(props: any) {
         );
     };
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, style]}>
             <QueryList
                 gqlDocument={GQL.favoritedMoviesQuery}
                 dataOptionChain="myFavorite.data"
