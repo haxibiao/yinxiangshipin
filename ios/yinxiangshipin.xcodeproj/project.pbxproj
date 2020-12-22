@@ -19,6 +19,8 @@
 		6EA052C6F286BF7CB48E0BD7 /* libPods-yinxiangshipin-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ABE5934F35E8FDB20875EEA0 /* libPods-yinxiangshipin-tvOS.a */; };
 		6F42A43FDD70761D546D9EA6 /* libPods-yinxiangshipin-yinxiangshipinTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B09FDEAD5F1389DC298854C /* libPods-yinxiangshipin-yinxiangshipinTests.a */; };
 		A7909FB724D98C6800AFF6B4 /* iconfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A7909FB524D9854500AFF6B4 /* iconfont.ttf */; };
+		A7B5D78B25907BEB004A981E /* RNHomeIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B5D78A25907BEB004A981E /* RNHomeIndicator.m */; };
+		A7B5D78E25907C5A004A981E /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B5D78D25907C5A004A981E /* RootViewController.m */; };
 		B8412254E36DF95A131B3435 /* libPods-yinxiangshipin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B3A7EB732C95F811D978C605 /* libPods-yinxiangshipin.a */; };
 /* End PBXBuildFile section */
 
@@ -63,6 +65,9 @@
 		9CB38DC422BD6C3CCBD99722 /* Pods-yinxiangshipin-yinxiangshipinTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-yinxiangshipin-yinxiangshipinTests.debug.xcconfig"; path = "Target Support Files/Pods-yinxiangshipin-yinxiangshipinTests/Pods-yinxiangshipin-yinxiangshipinTests.debug.xcconfig"; sourceTree = "<group>"; };
 		A5A8E703A0E6B1F5FBACEF83 /* Pods-yinxiangshipin-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-yinxiangshipin-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-yinxiangshipin-tvOS/Pods-yinxiangshipin-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		A7909FB524D9854500AFF6B4 /* iconfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = iconfont.ttf; path = ../assets/fonts/iconfont.ttf; sourceTree = "<group>"; };
+		A7B5D78A25907BEB004A981E /* RNHomeIndicator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNHomeIndicator.m; sourceTree = "<group>"; };
+		A7B5D78C25907C28004A981E /* RootViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
+		A7B5D78D25907C5A004A981E /* RootViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
 		ABE5934F35E8FDB20875EEA0 /* libPods-yinxiangshipin-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-yinxiangshipin-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B3A7EB732C95F811D978C605 /* libPods-yinxiangshipin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-yinxiangshipin.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -131,6 +136,8 @@
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				A7B5D78C25907C28004A981E /* RootViewController.h */,
+				A7B5D78D25907C5A004A981E /* RootViewController.m */,
 			);
 			name = yinxiangshipin;
 			sourceTree = "<group>";
@@ -190,6 +197,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				A7B5D78925907B7F004A981E /* rnModules */,
 				13B07FAE1A68108700A75B9A /* yinxiangshipin */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* yinxiangshipinTests */,
@@ -213,6 +221,14 @@
 				2D02E4901E0B4A5D006451C7 /* yinxiangshipin-tvOSTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		A7B5D78925907B7F004A981E /* rnModules */ = {
+			isa = PBXGroup;
+			children = (
+				A7B5D78A25907BEB004A981E /* RNHomeIndicator.m */,
+			);
+			path = rnModules;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -680,6 +696,8 @@
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				A7B5D78E25907C5A004A981E /* RootViewController.m in Sources */,
+				A7B5D78B25907BEB004A981E /* RNHomeIndicator.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
