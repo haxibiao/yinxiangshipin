@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from 'react';
+import React, { useRef, useCallback, useEffect } from 'react';
 import { StyleSheet, View, Text, Pressable, StatusBar, Platform } from 'react-native';
 import Slider from '@react-native-community/slider';
 import Orientation from 'react-native-device-orientation';
@@ -70,12 +70,11 @@ export default observer(({ playerRef, clearTimer, setTimer }) => {
         playerRef.current?.seek(sliderValue);
     }, []);
 
-    const setFullscreen = useCallback(() => {
+    const lockToLandscapeHandler = useCallback(() => {
         playerStore.toggleFullscreen(true);
-        Orientation.unlockAllOrientations();
-        StatusBar.setHidden(true, 'slide');
-        HomeIndicator.setAutoHidden(true);
         setFullscreenMode(true);
+        HomeIndicator.setAutoHidden(true);
+        StatusBar.setHidden(true, 'slide');
         Orientation.lockToLandscapeLeft();
     }, []);
 
@@ -100,7 +99,7 @@ export default observer(({ playerRef, clearTimer, setTimer }) => {
                 disabled={playerStore.buffering}
                 style={styles.slider}
                 maximumTrackTintColor="#ffffffcc"
-                minimumTrackTintColor={'#fff'}
+                minimumTrackTintColor={Theme.primaryColor}
                 thumbTintColor="#fff"
                 value={playerStore.seeking ? playerStore.seekProgress : playerStore.progress}
                 minimumValue={0}
@@ -110,7 +109,7 @@ export default observer(({ playerRef, clearTimer, setTimer }) => {
             />
             <DurationTime />
             {!playerStore.fullscreen && (
-                <Pressable onPress={setFullscreen} style={styles.operateBtn}>
+                <Pressable onPress={lockToLandscapeHandler} style={styles.operateBtn}>
                     <Iconfont name={'quanping'} size={font(16)} color="#ffffffee" />
                 </Pressable>
             )}

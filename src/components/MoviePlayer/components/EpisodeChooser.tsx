@@ -38,7 +38,6 @@ export default observer(() => {
 
     const chooseValue = useCallback((value: number) => {
         playerStore.setCurrentEpisode(value);
-        playerStore.sendNotice({ content: `正在播放${value.name}`, orientation: 'top' });
         InteractionManager.runAfterInteractions(() => {
             slideAnimation(0, () => {
                 playerStore.toggleSeriesChooserVisible(false);

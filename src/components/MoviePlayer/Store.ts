@@ -12,6 +12,7 @@ export interface NotificationData {
 
 class PlayerStore {
     @observable currentEpisode: EpisodeData = {};
+    @observable currentEpisodeIndex: number = 0;
     @observable series: EpisodeData[] = [];
     @observable seriesChooserVisible: boolean = false;
     @observable controllerBarVisible: boolean = false;
@@ -48,8 +49,13 @@ class PlayerStore {
 
     @action.bound
     setCurrentEpisode(episode: EpisodeData) {
+        if (this.series.length > 0) {
+            const index = this.series.findIndex((e) => e?.url === episode?.url) || 0;
+            this.currentEpisodeIndex = index;
+        }
         this.currentEpisode = episode;
         this.resetVideoState();
+        this.sendNotice({ content: `正在播放${episode.name}`, orientation: 'top' });
     }
 
     @action.bound

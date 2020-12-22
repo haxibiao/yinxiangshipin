@@ -1,23 +1,21 @@
 import React, { useRef, useEffect } from 'react';
-import { StyleSheet, View, Text, Animated, Easing, TouchableOpacity, BackHandler } from 'react-native';
+import { StyleSheet, View, Text, Animated, Easing, TouchableOpacity, StatusBar } from 'react-native';
 import Video from 'react-native-video';
 import Orientation from 'react-native-device-orientation';
 import { observer } from 'mobx-react';
-import { useStatusBarHeight } from '@src/common';
 import playerStore from './Store';
+import useSafeArea from './helper/useSafeArea';
 import Controller from './components/Controller';
 import VideoRateChooser from './components/VideoRateChooser';
 import EpisodeChooser from './components/EpisodeChooser';
+import LockOverlay from './components/LockOverlay';
 
 interface Props {
     destroy?: (progress: number) => void;
 }
 
 export const Player = observer((props: Props) => {
-    let safeInset = useStatusBarHeight();
-    if (!Device.Android || !Device.isFullScreenDevice || !playerStore.fullscreen) {
-        safeInset = 0;
-    }
+    const safeInset = useSafeArea({ fullscreen: playerStore.fullscreen });
 
     const playerRef = useRef();
     const progressInBufferingRef = useRef(0);
@@ -53,9 +51,11 @@ export const Player = observer((props: Props) => {
         playerStore.setProgress(e.currentTime);
         // 处理已经在播放中了,但是buffering状态没有改变
         if (playerStore.seeking && playerStore.buffering && ++progressInBufferingRef.current > 4) {
-            Log('progressInBufferingRef');
             progressInBufferingRef.current = 0;
             playerStore.toggleBuffering(false);
+        }
+        if (playerStore.error) {
+            playerStore.toggleError(false);
         }
     };
 
@@ -65,7 +65,11 @@ export const Player = observer((props: Props) => {
         playerStore.toggleLoaded(true);
     };
 
-    const _onEnd = () => {};
+    const _onEnd = () => {
+        if (playerStore.currentEpisodeIndex < playerStore.series.length - 1) {
+            playerStore.setCurrentEpisode(playerStore.series[playerStore.currentEpisodeIndex + 1]);
+        }
+    };
 
     useEffect(() => {
         return () => {
@@ -74,6 +78,39 @@ export const Player = observer((props: Props) => {
             }
         };
     }, [props.onBeDestroy]);
+
+    useEffect(() => {
+        // TODO:监听用户主动更改手机屏幕方向，设置全屏播放（但是addOrientationListener无效）
+        // let delayUnlockAllOrientations;
+        // const _orientationDidChange = (orientation) => {
+        //     console.log('====================================');
+        //     console.log('orientation', orientation);
+        //     console.log('====================================');
+        //     if (orientation === 'LANDSCAPE' && !playerStore.fullscreen) {
+        //         playerStore.toggleFullscreen(true);
+        //         setFullscreenMode(true);
+        //         HomeIndicator.setAutoHidden(true);
+        //         StatusBar.setHidden(true, 'slide');
+        //         Orientation.lockToLandscapeLeft();
+        //         delayUnlockAllOrientations = setTimeout(() => {
+        //             Orientation.unlockAllOrientations();
+        //         }, 0);
+        //     } else if (orientation === 'PORTRAIT' && playerStore.fullscreen) {
+        //         playerStore.toggleFullscreen(false);
+        //         setFullscreenMode(false);
+        //         HomeIndicator.setAutoHidden(false);
+        //         StatusBar.setHidden(false, 'slide');
+        //         Orientation.lockToPortrait();
+        //         delayUnlockAllOrientations = setTimeout(() => {
+        //             Orientation.unlockAllOrientations();
+        //         }, 0);
+        //     }
+        // };
+        // Orientation.addOrientationListener(_orientationDidChange);
+        return () => {
+            Orientation.lockToPortrait();
+        };
+    }, []);
 
     return (
         <View style={styles.videoWrap}>
@@ -92,9 +129,10 @@ export const Player = observer((props: Props) => {
                 onEnd={_onEnd}
             />
             <View style={styles.controllerWrap}>
-                <Controller playerRef={playerRef} safeInset={safeInset} />
+                <Controller playerRef={playerRef} />
                 <VideoRateChooser />
                 <EpisodeChooser />
+                <LockOverlay />
             </View>
         </View>
     );

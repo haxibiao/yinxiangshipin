@@ -2,7 +2,7 @@ import React, { useMemo, useState, useEffect } from 'react';
 import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity, ScrollView } from 'react-native';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
 import { ScrollTabBar, Iconfont, StatusView, SpinnerLoading, NavBarHeader } from '@src/components';
-import { MoviePlayer } from '@src/components/MoviePlayer';
+import { MoviePlayer, playerStore } from '@src/components/MoviePlayer';
 import { useStatusBarHeight } from '@src/common';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { GQL, useQuery } from '@src/apollo';
@@ -20,6 +20,21 @@ export default function MovieDetail() {
         },
     });
     const movie = useMemo(() => Helper.syncGetter('movie', data), [data]);
+
+    // 视频播放处理
+    useEffect(() => {
+        const navWillFocusListener = navigation.addListener('focus', () => {
+            playerStore.paused = false;
+        });
+        const navWillBlurListener = navigation.addListener('blur', () => {
+            playerStore.paused = true;
+        });
+        return () => {
+            navWillFocusListener();
+            navWillBlurListener();
+        };
+    }, []);
+
     if (error) return <StatusView.ErrorView onPress={refetch} error={error} />;
     if (loading) return <SpinnerLoading />;
 

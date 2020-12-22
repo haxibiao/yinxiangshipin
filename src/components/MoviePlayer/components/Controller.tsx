@@ -11,12 +11,12 @@ import {
     InteractionManager,
     LogBox,
 } from 'react-native';
-import { PanGestureHandler, TapGestureHandler, State } from 'react-native-gesture-handler';
+import { PanGestureHandler, TapGestureHandler, LongPressGestureHandler, State } from 'react-native-gesture-handler';
 import Orientation from 'react-native-device-orientation';
 import LinearGradient from 'react-native-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import LottieView from 'lottie-react-native';
-import { Iconfont } from '@src/components';
+import { Iconfont, SvgIcon, SvgPath } from '@src/components';
 import { HomeIndicator } from '@src/native';
 import { setFullscreenMode } from 'react-native-realfullscreen';
 import SystemSetting from 'react-native-system-setting';
@@ -25,6 +25,7 @@ import Buffering from './Buffering';
 import ProgressBar, { SeekingProgress } from './ProgressBar';
 import { observer } from 'mobx-react';
 import playerStore from '../Store';
+import useSafeArea from '../helper/useSafeArea';
 
 const dww = Dimensions.get('window').width;
 const dwh = Dimensions.get('window').height;
@@ -33,8 +34,9 @@ const SETTING_GESTURE_RATIO = dww * 0.58;
 const VISIBLE_DURATION = 4000;
 const FADE_VALUE = dww * 0.25;
 
-export default observer(({ playerRef, safeInset }) => {
-    // A：控制器显示逻辑
+export default observer(({ playerRef }) => {
+    const safeInset = useSafeArea({ fullscreen: playerStore.fullscreen });
+    // ### 控制器显示逻辑
     const timerToControllerBar = useRef();
     const clearTimerToControllerBar = useCallback(() => {
         if (timerToControllerBar.current) {
@@ -42,12 +44,12 @@ export default observer(({ playerRef, safeInset }) => {
         }
     }, []);
     const controllerBarAnimation = useRef(new Animated.Value(0));
-    const controllerBarOpacity = controllerBarAnimation.current.interpolate({
+    const animatedOpacity = controllerBarAnimation.current.interpolate({
         inputRange: [0, 1],
         outputRange: [0, 1],
     });
     const topControllerBarAnimationStyle = {
-        opacity: controllerBarOpacity,
+        opacity: animatedOpacity,
         transform: [
             {
                 translateY: controllerBarAnimation.current.interpolate({
@@ -58,7 +60,7 @@ export default observer(({ playerRef, safeInset }) => {
         ],
     };
     const bottomControllerBarAnimationStyle = {
-        opacity: controllerBarOpacity,
+        opacity: animatedOpacity,
         transform: [
             {
                 translateY: controllerBarAnimation.current.interpolate({
@@ -96,22 +98,28 @@ export default observer(({ playerRef, safeInset }) => {
             runControllerBarAnimation(0);
         }
     }, []);
-    // 每次视频加载完成，显示控制器
+    // 视频加载完成并且没有锁定播放器，显示控制器
     useEffect(() => {
-        if (playerStore.loaded) {
+        if (playerStore.loaded && !playerStore.locked) {
             playerStore.toggleControllerBarVisible(true);
             runControllerBarAnimation(1);
             setTimerToControllerBar();
         }
-    }, [playerStore.loaded]);
-    // 清除定时器
-    useEffect(() => {
-        return () => {
-            clearTimerToControllerBar();
-        };
+    }, [playerStore.loaded, playerStore.locked]);
+
+    // ### 右边操作栏
+    // 锁定播放器
+    const onLockPress = useCallback(({ nativeEvent }) => {
+        if (nativeEvent.state === State.ACTIVE) {
+            InteractionManager.runAfterInteractions(() => {
+                toggleControllerBarVisible();
+                playerStore.toggleLocked(true);
+                Orientation.lockToLandscape();
+            });
+        }
     }, []);
 
-    // B：单击、双击、手势调整视频进度
+    // ### 单击、双击、手势调整视频进度
     const doublePressHandlerRef = useRef();
     const panGestureStartProgressRef = useRef(0);
 
@@ -163,7 +171,7 @@ export default observer(({ playerRef, safeInset }) => {
         }
     }, []);
 
-    // C：系统音量、亮度控制
+    // ### 系统音量、亮度控制
     const [brightnessIndicatorVisible, setBrightnessIndicatorVisible] = useState(false);
     const [volumeIndicatorVisible, setVolumeIndicatorVisible] = useState(false);
     const brightnessSystemValueRef = useRef(0);
@@ -226,42 +234,57 @@ export default observer(({ playerRef, safeInset }) => {
         volumeAnimationValue.current.setValue(volume * 100);
     }, []);
 
-    // 锁定竖屏
-    const lockPortrait = useCallback(() => {
+    // ### 锁定竖屏
+    const lockPortraitHandler = useCallback(() => {
         playerStore.toggleFullscreen(false);
-        Orientation.unlockAllOrientations();
-        StatusBar.setHidden(false, 'slide');
-        HomeIndicator.setAutoHidden(false);
         setFullscreenMode(false);
+        HomeIndicator.setAutoHidden(false);
+        StatusBar.setHidden(false, 'slide');
         Orientation.lockToPortrait();
+    }, []);
+
+    // ...
+    useEffect(() => {
+        return () => {
+            clearTimerToControllerBar();
+        };
     }, []);
 
     return (
         <View style={styles.container}>
-            <Animated.View
-                style={[
-                    styles.secTop,
-                    playerStore.fullscreen
-                        ? { padding: pixel(10), paddingRight: safeInset + pixel(10) }
-                        : { padding: pixel(10) },
-                    topControllerBarAnimationStyle,
-                ]}>
-                <LinearGradient
-                    style={{ ...StyleSheet.absoluteFill, zIndex: -1 }}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 0, y: 1 }}
-                    colors={['#00000044', '#00000033', '#00000028', '#00000011', '#00000000']}
-                />
-                <View style={styles.row}>
-                    {playerStore.fullscreen && (
-                        <Pressable style={styles.operateBtn} onPress={lockPortrait}>
-                            <Iconfont name="fanhui" size={font(20)} color={'#ffffffee'} />
-                        </Pressable>
-                    )}
+            {playerStore.fullscreen && (
+                <Animated.View style={[styles.secRight, { right: safeInset + pixel(30), opacity: animatedOpacity }]}>
+                    <TapGestureHandler onHandlerStateChange={onLockPress}>
+                        <View style={styles.sideOperateBtn}>
+                            <SvgIcon name={SvgPath.unlock} size={22} color={'#FFFFFFDD'} />
+                        </View>
+                    </TapGestureHandler>
+                </Animated.View>
+            )}
+            <Animated.View style={[styles.secTop, { paddingRight: safeInset }, topControllerBarAnimationStyle]}>
+                <View style={styles.sectionWrap}>
+                    <LinearGradient
+                        style={{ ...StyleSheet.absoluteFill, zIndex: -1 }}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 0, y: 1 }}
+                        colors={['#00000044', '#00000033', '#00000028', '#00000011', '#00000000']}
+                    />
+                    <View style={styles.row}>
+                        {playerStore.fullscreen && (
+                            <>
+                                <Pressable style={styles.operateBtn} onPress={lockPortraitHandler}>
+                                    <Iconfont name="fanhui" size={font(20)} color={'#ffffffee'} />
+                                </Pressable>
+                                <Text style={styles.movieName}>{playerStore.currentEpisode.name}</Text>
+                            </>
+                        )}
+                    </View>
+                    <View style={styles.row}></View>
                 </View>
-                <View style={styles.row}></View>
             </Animated.View>
+            {/* <LongPressGestureHandler> */}
             <PanGestureHandler
+                enabled={!playerStore.buffering}
                 activeOffsetX={[-4, 4]}
                 onHandlerStateChange={onProgressPanGestureHandler}
                 onGestureEvent={onProgressPanGestureEvent}>
@@ -295,63 +318,72 @@ export default observer(({ playerRef, safeInset }) => {
                     </TapGestureHandler>
                 </TapGestureHandler>
             </PanGestureHandler>
-            <Animated.View
-                style={[
-                    styles.secBottom,
-                    playerStore.fullscreen
-                        ? { padding: pixel(10), paddingRight: safeInset + pixel(10) }
-                        : { padding: pixel(10) },
-                    bottomControllerBarAnimationStyle,
-                ]}>
-                <LinearGradient
-                    style={{ ...StyleSheet.absoluteFill, zIndex: -1 }}
-                    start={{ x: 0, y: 1 }}
-                    end={{ x: 0, y: 0 }}
-                    colors={['#00000044', '#00000033', '#00000028', '#00000011', '#00000000']}
-                />
-                <ProgressBar
-                    playerRef={playerRef}
-                    clearTimer={clearTimerToControllerBar}
-                    setTimer={setTimerToControllerBar}
-                />
-                {playerStore.fullscreen && (
-                    <View style={styles.playerOperate}>
-                        <View style={styles.row}>
-                            <Pressable
-                                onPress={() => {
-                                    playerStore.togglePaused(!playerStore.paused);
-                                    setTimerToControllerBar();
-                                }}
-                                style={styles.operateBtn}>
-                                <Iconfont
-                                    name={playerStore.paused ? 'bofang1' : 'zanting'}
-                                    size={font(18)}
-                                    color="#ffffffee"
-                                />
-                            </Pressable>
-                        </View>
-                        <View style={styles.row}>
-                            <Pressable
-                                onPress={() => {
-                                    toggleControllerBarVisible();
-                                    playerStore.toggleRateChooserVisible(true);
-                                }}
-                                style={styles.operateBtn}>
-                                <Text style={styles.operateText}>倍速</Text>
-                            </Pressable>
-                            {playerStore.series.length > 1 && (
+            {/* </LongPressGestureHandler> */}
+
+            <Animated.View style={[styles.secBottom, { paddingRight: safeInset }, bottomControllerBarAnimationStyle]}>
+                <View style={styles.sectionWrap}>
+                    <LinearGradient
+                        style={{ ...StyleSheet.absoluteFill, zIndex: -1 }}
+                        start={{ x: 0, y: 1 }}
+                        end={{ x: 0, y: 0 }}
+                        colors={['#00000044', '#00000033', '#00000028', '#00000011', '#00000000']}
+                    />
+                    <ProgressBar
+                        playerRef={playerRef}
+                        clearTimer={clearTimerToControllerBar}
+                        setTimer={setTimerToControllerBar}
+                    />
+                    {playerStore.fullscreen && (
+                        <View style={styles.playerOperate}>
+                            <View style={styles.row}>
+                                <Pressable
+                                    onPress={() => {
+                                        playerStore.togglePaused(!playerStore.paused);
+                                        setTimerToControllerBar();
+                                    }}
+                                    style={styles.operateBtn}>
+                                    <Iconfont
+                                        name={playerStore.paused ? 'bofang1' : 'zanting'}
+                                        size={font(18)}
+                                        color="#ffffffee"
+                                    />
+                                </Pressable>
+                                {playerStore.currentEpisodeIndex < playerStore.series.length - 1 && (
+                                    <Pressable
+                                        onPress={() => {
+                                            playerStore.setCurrentEpisode(
+                                                playerStore.series[playerStore.currentEpisodeIndex + 1],
+                                            );
+                                            setTimerToControllerBar();
+                                        }}
+                                        style={[styles.operateBtn, { marginLeft: -3, marginBottom: 1 }]}>
+                                        <SvgIcon name={SvgPath.nextEpisode} size={25} color={'#FFFFFFDD'} />
+                                    </Pressable>
+                                )}
+                            </View>
+                            <View style={styles.row}>
                                 <Pressable
                                     onPress={() => {
                                         toggleControllerBarVisible();
-                                        playerStore.toggleSeriesChooserVisible(true);
+                                        playerStore.toggleRateChooserVisible(true);
                                     }}
                                     style={styles.operateBtn}>
-                                    <Text style={styles.operateText}>选集</Text>
+                                    <Text style={styles.operateText}>倍速</Text>
                                 </Pressable>
-                            )}
+                                {playerStore.series.length > 1 && (
+                                    <Pressable
+                                        onPress={() => {
+                                            toggleControllerBarVisible();
+                                            playerStore.toggleSeriesChooserVisible(true);
+                                        }}
+                                        style={styles.operateBtn}>
+                                        <Text style={styles.operateText}>选集</Text>
+                                    </Pressable>
+                                )}
+                            </View>
                         </View>
-                    </View>
-                )}
+                    )}
+                </View>
             </Animated.View>
         </View>
     );
@@ -388,6 +420,31 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         zIndex: 2,
+    },
+    movieName: {
+        marginLeft: pixel(4),
+        fontSize: font(18),
+        color: '#ffffffEE',
+    },
+    sectionWrap: {
+        paddingVertical: pixel(12),
+        paddingHorizontal: pixel(20),
+    },
+    secRight: {
+        position: 'absolute',
+        right: 0,
+        top: 0,
+        bottom: 0,
+        zIndex: 2,
+        justifyContent: 'center',
+    },
+    sideOperateBtn: {
+        width: pixel(40),
+        minHeight: pixel(40),
+        borderRadius: pixel(20),
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#00000044',
     },
     progressOperate: {
         flexDirection: 'row',
