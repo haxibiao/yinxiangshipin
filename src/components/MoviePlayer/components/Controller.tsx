@@ -12,14 +12,14 @@ import {
     LogBox,
 } from 'react-native';
 import { PanGestureHandler, TapGestureHandler, LongPressGestureHandler, State } from 'react-native-gesture-handler';
-import Orientation from 'react-native-device-orientation';
 import LinearGradient from 'react-native-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import LottieView from 'lottie-react-native';
-import { Iconfont, SvgIcon, SvgPath } from '@src/components';
-import { HomeIndicator } from '@src/native';
+import Orientation from 'react-native-device-orientation';
 import { setFullscreenMode } from 'react-native-realfullscreen';
 import SystemSetting from 'react-native-system-setting';
+import { HomeIndicator } from '@src/native';
+import { Iconfont, SvgIcon, SvgPath } from '@src/components';
 import { VolumeIndicator, BrightnessIndicator } from './SystemSettingIndicator';
 import Buffering from './Buffering';
 import SpeedUpIndicator from './SpeedUpIndicator';
@@ -267,6 +267,7 @@ export default observer(({ playerRef }: Props) => {
     useEffect(() => {
         return () => {
             clearTimerToControllerBar();
+            lockPortraitHandler();
         };
     }, []);
 
@@ -302,7 +303,10 @@ export default observer(({ playerRef }: Props) => {
                     <View style={styles.row}></View>
                 </View>
             </Animated.View>
-            <LongPressGestureHandler onHandlerStateChange={onSpeedUpPanGestureHandler}>
+            <LongPressGestureHandler
+                waitFor={doublePressHandlerRef}
+                enabled={!playerStore.buffering}
+                onHandlerStateChange={onSpeedUpPanGestureHandler}>
                 <PanGestureHandler
                     enabled={!playerStore.buffering}
                     activeOffsetX={[-4, 4]}
@@ -311,7 +315,6 @@ export default observer(({ playerRef }: Props) => {
                     <TapGestureHandler waitFor={doublePressHandlerRef} onHandlerStateChange={onSinglePress}>
                         <TapGestureHandler
                             ref={doublePressHandlerRef}
-                            enabled={!playerStore.buffering}
                             onHandlerStateChange={onDoublePress}
                             numberOfTaps={2}>
                             <View style={styles.gestureContainer}>

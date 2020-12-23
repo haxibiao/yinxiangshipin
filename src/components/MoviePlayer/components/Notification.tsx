@@ -3,12 +3,12 @@ import { StyleSheet, View, Text, Animated, Easing, Dimensions, InteractionManage
 import LinearGradient from 'react-native-linear-gradient';
 import { observer } from 'mobx-react';
 import { autorun } from 'mobx';
-import playerStore from '../PlayerStore';
+import playerStore, { NotificationData } from '../PlayerStore';
 
 const FADE_VALUE = Dimensions.get('window').width * 0.25;
 
 export default observer(() => {
-    const [noticeData, setNoticeData] = useState();
+    const [noticeData, setNoticeData] = useState<NotificationData>();
     const shown = useRef(false);
     const animation = useRef(new Animated.Value(0));
     const animationStyle = {
@@ -30,7 +30,7 @@ export default observer(() => {
                 easing: Easing.linear,
                 useNativeDriver: true,
             }),
-            Animated.delay(1500),
+            Animated.delay(noticeData?.duration || 1500),
             Animated.timing(animation.current, {
                 toValue: 0,
                 duration: 400,

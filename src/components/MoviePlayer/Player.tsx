@@ -1,7 +1,6 @@
 import React, { useRef, useCallback, useEffect } from 'react';
 import { StyleSheet, View, Text, Animated, Easing, TouchableOpacity, StatusBar } from 'react-native';
 import Video from 'react-native-video';
-import Orientation from 'react-native-device-orientation';
 import { observer } from 'mobx-react';
 import playerStore, { EpisodeScheme } from './PlayerStore';
 import useSafeArea from './helper/useSafeArea';
@@ -77,7 +76,7 @@ export const Player = observer(() => {
 
     const _onLoad = (e) => {
         Log('_onLoad');
-        if (playerStore.currentEpisode?.progress) {
+        if (playerStore.currentEpisode?.progress && playerStore.currentEpisode?.progress >= 10) {
             playerRef.current.seek(playerStore.currentEpisode.progress);
             playerStore.sendNotice({ content: '为您定位到上次观看位置', orientation: 'left' });
         }
@@ -90,12 +89,6 @@ export const Player = observer(() => {
             playerStore.nextEpisode();
         }
     };
-
-    useEffect(() => {
-        return () => {
-            Orientation.lockToPortrait();
-        };
-    }, []);
 
     return (
         <View style={styles.videoWrap}>

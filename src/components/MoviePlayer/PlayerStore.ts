@@ -21,6 +21,7 @@ export interface MovieHistoryScheme {
 
 export interface NotificationData {
     content: string;
+    duration?: Number;
     orientation?: 'top' | 'left';
 }
 
@@ -161,6 +162,9 @@ class PlayerStore {
     @action.bound
     togglePaused(isPaused: boolean) {
         this.paused = isPaused;
+        if (isPaused) {
+            this.sendNotice({ content: '视频已暂停' });
+        }
     }
 
     @action.bound
