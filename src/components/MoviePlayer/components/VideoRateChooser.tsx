@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, Animated, Easing, Dimensions, InteractionManage
 import { TapGestureHandler, State, TouchableOpacity } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 import { observer } from 'mobx-react';
-import playerStore from '../Store';
+import playerStore from '../PlayerStore';
 
 const RATE_VALUE = [3.0, 2.0, 1.5, 1.25, 1.0, 0.5];
 const RATE_CHOOSER_WIDTH = Device.HEIGHT * 0.4;

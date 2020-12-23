@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import LottieView from 'lottie-react-native';
 import { observer } from 'mobx-react';
-import playerStore from '../Store';
+import playerStore from '../PlayerStore';
 
 export default observer(() => {
     const fontSize = playerStore.fullscreen ? font(15) : font(13);

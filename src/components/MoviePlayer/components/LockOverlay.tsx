@@ -4,7 +4,7 @@ import { TapGestureHandler, State } from 'react-native-gesture-handler';
 import Orientation from 'react-native-device-orientation';
 import { SvgIcon, SvgPath } from '@src/components';
 import { observer } from 'mobx-react';
-import playerStore from '../Store';
+import playerStore from '../PlayerStore';
 import useSafeArea from '../helper/useSafeArea';
 import DisplayContainer from './DisplayContainer';
 import { TrackIndicator } from './SystemSettingIndicator';

@@ -8,7 +8,7 @@ import { HomeIndicator } from '@src/native';
 import { moment } from '@src/common';
 import { observer } from 'mobx-react';
 import { TrackIndicator } from './SystemSettingIndicator';
-import playerStore from '../Store';
+import playerStore from '../PlayerStore';
 
 const CurrentTime = observer(() => {
     const fontSize = playerStore.fullscreen ? font(13) : font(12);
@@ -51,18 +51,18 @@ export const SeekingProgress = observer(() => {
     );
 });
 
-export default observer(({ playerRef, clearTimer, setTimer }) => {
+export default observer(({ playerRef, onTouchMove, onTouchEnd }) => {
     const onSliderValueChanged = useCallback((sliderValue) => {
-        if (clearTimer instanceof Function) {
-            clearTimer();
+        if (onTouchMove instanceof Function) {
+            onTouchMove();
         }
         playerStore.toggleSliding(true);
         playerStore.toggleSeeking(true);
         playerStore.setSeekProgress(sliderValue);
     }, []);
     const onSlidingComplete = useCallback((sliderValue) => {
-        if (setTimer instanceof Function) {
-            setTimer();
+        if (onTouchEnd instanceof Function) {
+            onTouchEnd();
         }
         playerStore.toggleSliding(false);
         playerStore.setSeekProgress(sliderValue);
@@ -85,8 +85,8 @@ export default observer(({ playerRef, clearTimer, setTimer }) => {
                     <Pressable
                         onPress={() => {
                             playerStore.togglePaused(!playerStore.paused);
-                            if (setTimer instanceof Function) {
-                                setTimer();
+                            if (onTouchEnd instanceof Function) {
+                                onTouchEnd();
                             }
                         }}
                         style={styles.operateBtn}>

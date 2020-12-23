@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useMemo } from 'react';
 import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity, ScrollView } from 'react-native';
 import { Iconfont, Placeholder } from '@src/components';
-import { playerStore } from '@src/components/MoviePlayer';
+import { PlayerStore } from '@src/components/MoviePlayer';
 import { useNavigation } from '@react-navigation/native';
 import { GQL, useQuery, useMutation, errorMessage } from '@src/apollo';
 import { userStore } from '@src/store';
@@ -74,7 +74,7 @@ export default function VideoContent({ movie }) {
                     activeOpacity={0.8}
                     style={[styles.episodeBox, currentEpisode.url === item.url && { borderColor: '#37B7FB' }]}
                     onPress={() => {
-                        playerStore.setCurrentEpisode(item);
+                        PlayerStore.setCurrentEpisode(item);
                         setEpisode(item);
                     }}>
                     <Text style={[styles.episodeText, currentEpisode.url === item.url && { color: '#37B7FB' }]}>

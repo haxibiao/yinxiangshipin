@@ -1,8 +1,22 @@
 import { observable, action, runInAction } from 'mobx';
+import validateSource from './helper/validateSource';
 
-export interface EpisodeData {
+export interface EpisodeScheme {
     name: string;
     url: string;
+    progress?: string;
+}
+
+export interface MovieScheme {
+    id: string;
+    name: string;
+    data: EpisodeScheme[];
+}
+
+export interface MovieHistoryScheme {
+    progress: string;
+    last_watch_time: string;
+    series_index: string;
 }
 
 export interface NotificationData {
@@ -11,12 +25,13 @@ export interface NotificationData {
 }
 
 class PlayerStore {
-    @observable currentEpisode: EpisodeData = {};
     @observable currentEpisodeIndex: number = 0;
-    @observable series: EpisodeData[] = [];
-    @observable seriesChooserVisible: boolean = false;
-    @observable controllerBarVisible: boolean = false;
-    @observable error: boolean = false;
+    @observable currentEpisode: EpisodeScheme = {};
+    @observable series: EpisodeScheme[] = [];
+    @observable seriesChooserVisible: boolean = false; //选择集数
+    @observable controllerBarVisible: boolean = false; //控制条
+    @observable sourceException: boolean = false; //视频源异常
+    @observable error: boolean = false; //播放出错
     @observable locked: boolean = false;
     @observable fullscreen: boolean = false;
     @observable resizeMode: 'contain' | 'cover' = 'contain';
@@ -26,16 +41,23 @@ class PlayerStore {
     @observable sliding: boolean = false; //拖动视频进度sliding=true，手指松开sliding=false
     @observable paused: boolean = false;
     @observable rate: number = 1.0;
-    @observable rateChooserVisible: boolean = false;
+    @observable rateChooserVisible: boolean = false; //设置音量
     @observable progress: number | string = 0; //视频播放进度
     @observable seekProgress: number | string = 0; //视频拖拽进度
     @observable duration: number | string = 0;
-    @observable notice: NotificationData[] = [];
+    @observable notice: NotificationData[] = []; //播放通知
 
     constructor() {}
 
     @action.bound
+    resetMovieData() {
+        this.currentEpisode = {};
+        this.series = [];
+    }
+
+    @action.bound
     resetVideoState() {
+        this.sourceException = false;
         this.error = false;
         this.loaded = false;
         this.buffering = true;
@@ -48,18 +70,36 @@ class PlayerStore {
     }
 
     @action.bound
-    setCurrentEpisode(episode: EpisodeData) {
-        if (this.series.length > 0) {
-            const index = this.series.findIndex((e) => e?.url === episode?.url) || 0;
+    setCurrentEpisode(episode: EpisodeScheme, index: number) {
+        if (index >= 0) {
             this.currentEpisodeIndex = index;
+        } else {
+            this.currentEpisodeIndex = this.series.findIndex((e) => e?.url === episode?.url) || 0;
         }
-        this.currentEpisode = episode;
         this.resetVideoState();
-        this.sendNotice({ content: `正在播放${episode.name}`, orientation: 'top' });
+        if (!validateSource(episode?.url)) {
+            this.toggleSourceException(true);
+            this.currentEpisode = {};
+        } else {
+            this.currentEpisode = episode;
+        }
     }
 
     @action.bound
-    setSeries(seriesData: EpisodeData[]) {
+    nextEpisode() {
+        this.currentEpisodeIndex++;
+        const episode = this.series[this.currentEpisodeIndex];
+        this.resetVideoState();
+        if (!validateSource(episode?.url)) {
+            this.toggleSourceException(true);
+            this.currentEpisode = {};
+        } else {
+            this.currentEpisode = episode;
+        }
+    }
+
+    @action.bound
+    setSeries(seriesData: EpisodeScheme[]) {
         this.series = seriesData;
     }
 
@@ -71,6 +111,11 @@ class PlayerStore {
     @action.bound
     toggleControllerBarVisible(visible: boolean) {
         this.controllerBarVisible = visible;
+    }
+
+    @action.bound
+    toggleSourceException(isException: boolean) {
+        this.sourceException = isException;
     }
 
     @action.bound
@@ -131,6 +176,7 @@ class PlayerStore {
     @action.bound
     setProgress(currentProgress: number) {
         this.progress = currentProgress;
+        this.currentEpisode.progress = currentProgress;
     }
 
     @action.bound
@@ -145,7 +191,7 @@ class PlayerStore {
 
     @action.bound
     sendNotice(notification: NotificationData) {
-        this.notice = [...this.notice, notification];
+        this.notice = [notification];
     }
 
     @action.bound

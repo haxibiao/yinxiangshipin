@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, Animated, Easing, Dimensions, InteractionManage
 import LinearGradient from 'react-native-linear-gradient';
 import { observer } from 'mobx-react';
 import { autorun } from 'mobx';
-import playerStore from '../Store';
+import playerStore from '../PlayerStore';
 
 const FADE_VALUE = Dimensions.get('window').width * 0.25;
 

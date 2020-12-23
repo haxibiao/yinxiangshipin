@@ -3,18 +3,17 @@ import { StyleSheet, View, Text, Animated, Easing, TouchableOpacity, StatusBar }
 import Video from 'react-native-video';
 import Orientation from 'react-native-device-orientation';
 import { observer } from 'mobx-react';
-import playerStore from './Store';
+import playerStore, { EpisodeScheme } from './PlayerStore';
 import useSafeArea from './helper/useSafeArea';
+import VideoStatus from './components/VideoStatus';
+import Exception from './components/Exception';
 import Controller from './components/Controller';
 import VideoRateChooser from './components/VideoRateChooser';
 import EpisodeChooser from './components/EpisodeChooser';
 import LockOverlay from './components/LockOverlay';
+import DisplayContainer from './components/DisplayContainer';
 
-interface Props {
-    destroy?: (progress: number) => void;
-}
-
-export const Player = observer((props: Props) => {
+export const Player = observer(() => {
     const safeInset = useSafeArea({ fullscreen: playerStore.fullscreen });
 
     const playerRef = useRef();
@@ -78,52 +77,21 @@ export const Player = observer((props: Props) => {
 
     const _onLoad = (e) => {
         Log('_onLoad');
+        if (playerStore.currentEpisode?.progress) {
+            playerRef.current.seek(playerStore.currentEpisode.progress);
+            playerStore.sendNotice({ content: '为您定位到上次观看位置', orientation: 'left' });
+        }
         playerStore.setDuration(e.duration);
         playerStore.toggleLoaded(true);
     };
 
     const _onEnd = () => {
         if (playerStore.currentEpisodeIndex < playerStore.series.length - 1) {
-            playerStore.setCurrentEpisode(playerStore.series[playerStore.currentEpisodeIndex + 1]);
+            playerStore.nextEpisode();
         }
     };
 
     useEffect(() => {
-        return () => {
-            if (props.onBeDestroy instanceof Function) {
-                props.onBeDestroy();
-            }
-        };
-    }, [props.onBeDestroy]);
-
-    useEffect(() => {
-        // TODO:监听用户主动更改手机屏幕方向，设置全屏播放（但是addOrientationListener无效）
-        // let delayUnlockAllOrientations;
-        // const _orientationDidChange = (orientation) => {
-        //     console.log('====================================');
-        //     console.log('orientation', orientation);
-        //     console.log('====================================');
-        //     if (orientation === 'LANDSCAPE' && !playerStore.fullscreen) {
-        //         playerStore.toggleFullscreen(true);
-        //         setFullscreenMode(true);
-        //         HomeIndicator.setAutoHidden(true);
-        //         StatusBar.setHidden(true, 'slide');
-        //         Orientation.lockToLandscapeLeft();
-        //         delayUnlockAllOrientations = setTimeout(() => {
-        //             Orientation.unlockAllOrientations();
-        //         }, 0);
-        //     } else if (orientation === 'PORTRAIT' && playerStore.fullscreen) {
-        //         playerStore.toggleFullscreen(false);
-        //         setFullscreenMode(false);
-        //         HomeIndicator.setAutoHidden(false);
-        //         StatusBar.setHidden(false, 'slide');
-        //         Orientation.lockToPortrait();
-        //         delayUnlockAllOrientations = setTimeout(() => {
-        //             Orientation.unlockAllOrientations();
-        //         }, 0);
-        //     }
-        // };
-        // Orientation.addOrientationListener(_orientationDidChange);
         return () => {
             Orientation.lockToPortrait();
         };
@@ -131,20 +99,23 @@ export const Player = observer((props: Props) => {
 
     return (
         <View style={styles.videoWrap}>
-            <Video
-                ref={playerRef}
-                style={[styles.absoluteVideo, { marginRight: safeInset }]}
-                source={{ uri: playerStore.currentEpisode.url }}
-                rate={playerStore.rate}
-                paused={playerStore.paused}
-                resizeMode={playerStore.resizeMode}
-                onError={_onError}
-                onBuffer={_onBuffer}
-                onSeek={_onSeek}
-                onProgress={_onProgress}
-                onLoad={_onLoad}
-                onEnd={_onEnd}
-            />
+            <DisplayContainer visible={playerStore.currentEpisode.url && !playerStore.sourceException}>
+                <Video
+                    ref={playerRef}
+                    style={[styles.absoluteVideo, { marginRight: safeInset }]}
+                    source={{ uri: playerStore.currentEpisode.url }}
+                    rate={playerStore.rate}
+                    paused={playerStore.paused}
+                    resizeMode={playerStore.resizeMode}
+                    onError={_onError}
+                    onBuffer={_onBuffer}
+                    onSeek={_onSeek}
+                    onProgress={_onProgress}
+                    onLoad={_onLoad}
+                    onEnd={_onEnd}
+                />
+            </DisplayContainer>
+            <VideoStatus style={{ marginRight: safeInset }} />
             <View style={styles.controllerWrap}>
                 <Controller playerRef={playerRef} />
                 <VideoRateChooser />

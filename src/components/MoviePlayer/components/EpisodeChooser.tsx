@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, Animated, Easing, Dimensions, InteractionManage
 import { TapGestureHandler, State, TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 import { observer } from 'mobx-react';
-import playerStore from '../Store';
+import playerStore from '../PlayerStore';
 
 const CHOOSER_WIDTH = Dimensions.get('window').height * 0.46;
 const PADDING = pixel(20);
@@ -36,8 +36,8 @@ export default observer(() => {
         });
     }, []);
 
-    const chooseValue = useCallback((value: number) => {
-        playerStore.setCurrentEpisode(value);
+    const chooseValue = useCallback((value: number, index: number) => {
+        playerStore.setCurrentEpisode(value, index);
         InteractionManager.runAfterInteractions(() => {
             slideAnimation(0, () => {
                 playerStore.toggleSeriesChooserVisible(false);
@@ -80,18 +80,22 @@ export default observer(() => {
                         <ScrollView contentContainerStyle={styles.episodeList}>
                             <View style={styles.episodeWrap}>
                                 {playerStore.series.map((value, index) => {
-                                    const current = value?.url === playerStore.currentEpisode?.url;
                                     return (
                                         <TapGestureHandler
                                             key={index}
                                             onHandlerStateChange={({ nativeEvent }) => {
                                                 if (nativeEvent.state === State.ACTIVE) {
-                                                    chooseValue(value);
+                                                    chooseValue(value, index);
                                                 }
                                             }}>
                                             <View style={styles.episodeItem}>
                                                 <Text
-                                                    style={[styles.itemText, current && { color: Theme.primaryColor }]}>
+                                                    style={[
+                                                        styles.itemText,
+                                                        playerStore.currentEpisodeIndex === index && {
+                                                            color: Theme.primaryColor,
+                                                        },
+                                                    ]}>
                                                     {index + 1}
                                                 </Text>
                                             </View>

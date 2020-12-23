@@ -2,7 +2,7 @@ import React, { useMemo, useState, useEffect } from 'react';
 import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity, ScrollView } from 'react-native';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
 import { ScrollTabBar, Iconfont, StatusView, SpinnerLoading, NavBarHeader } from '@src/components';
-import { MoviePlayer, playerStore } from '@src/components/MoviePlayer';
+import { MoviePlayer, PlayerStore } from '@src/components/MoviePlayer';
 import { useStatusBarHeight } from '@src/common';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { GQL, useQuery } from '@src/apollo';
@@ -24,10 +24,10 @@ export default function MovieDetail() {
     // 视频播放处理
     useEffect(() => {
         const navWillFocusListener = navigation.addListener('focus', () => {
-            playerStore.paused = false;
+            PlayerStore.paused = false;
         });
         const navWillBlurListener = navigation.addListener('blur', () => {
-            playerStore.paused = true;
+            PlayerStore.paused = true;
         });
         return () => {
             navWillFocusListener();
@@ -46,7 +46,7 @@ export default function MovieDetail() {
                 onPress={() => navigation.goBack()}>
                 <Iconfont style={styles.backIcon} name="fanhui" size={font(18)} color={'#fff'} />
             </TouchableOpacity>
-            <MoviePlayer source={movie?.data?.[0]} series={movie?.data} />
+            <MoviePlayer movie={movie} />
             <ScrollableTabView
                 style={{ flex: 1, backgroundColor: '#fff' }}
                 renderTabBar={(props) => (

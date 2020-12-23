@@ -1,4 +1,4 @@
-import React, { useRef, useState, useCallback, useEffect } from 'react';
+import React, { useRef, useMemo, useState, useCallback, useEffect } from 'react';
 import {
     StyleSheet,
     View,
@@ -25,17 +25,20 @@ import Buffering from './Buffering';
 import SpeedUpIndicator from './SpeedUpIndicator';
 import ProgressBar, { SeekingProgress } from './ProgressBar';
 import { observer } from 'mobx-react';
-import playerStore from '../Store';
+import playerStore, { EpisodeScheme } from '../PlayerStore';
 import useSafeArea from '../helper/useSafeArea';
 
 const dww = Dimensions.get('window').width;
 const dwh = Dimensions.get('window').height;
 const PROGRESS_GESTURE_RATIO = [0.7, 0.7, 1, 2, 3];
 const SETTING_GESTURE_RATIO = dww * 0.58;
-const VISIBLE_DURATION = 4000;
 const FADE_VALUE = dww * 0.25;
 
-export default observer(({ playerRef }) => {
+interface Props {
+    playerRef: { current: { seek: (p: number) => void } };
+}
+
+export default observer(({ playerRef }: Props) => {
     const safeInset = useSafeArea({ fullscreen: playerStore.fullscreen });
     // ### 控制器显示逻辑
     const timerToControllerBar = useRef();
@@ -72,7 +75,8 @@ export default observer(({ playerRef }) => {
         ],
     };
     // 控制器动画
-    const runControllerBarAnimation = useCallback((toValue: 0 | 1) => {
+    const controllerBarSlideAnimation = useCallback((type: 'slideIn' | 'slideOut') => {
+        const toValue = type === 'slideIn' ? 1 : 0;
         clearTimerToControllerBar();
         Animated.timing(controllerBarAnimation.current, {
             toValue,
@@ -82,29 +86,29 @@ export default observer(({ playerRef }) => {
         }).start(() => null);
     }, []);
     // 控制器计时器
-    const setTimerToControllerBar = useCallback(() => {
+    const delaySlideOutControllerBar = useCallback(() => {
         clearTimerToControllerBar();
         timerToControllerBar.current = setTimeout(() => {
             playerStore.toggleControllerBarVisible(false);
-            runControllerBarAnimation(0);
-        }, VISIBLE_DURATION);
+            controllerBarSlideAnimation('slideOut');
+        }, 4000);
     }, []);
     // 控制器显示/隐藏
     const toggleControllerBarVisible = useCallback(() => {
         playerStore.toggleControllerBarVisible(!playerStore.controllerBarVisible);
         if (playerStore.controllerBarVisible) {
-            runControllerBarAnimation(1);
-            setTimerToControllerBar();
+            controllerBarSlideAnimation('slideIn');
+            delaySlideOutControllerBar();
         } else {
-            runControllerBarAnimation(0);
+            controllerBarSlideAnimation('slideOut');
         }
     }, []);
     // 视频加载完成并且没有锁定播放器，显示控制器
     useEffect(() => {
         if (playerStore.loaded && !playerStore.locked) {
             playerStore.toggleControllerBarVisible(true);
-            runControllerBarAnimation(1);
-            setTimerToControllerBar();
+            controllerBarSlideAnimation('slideIn');
+            delaySlideOutControllerBar();
         }
     }, [playerStore.loaded, playerStore.locked]);
 
@@ -339,7 +343,6 @@ export default observer(({ playerRef }) => {
                     </TapGestureHandler>
                 </PanGestureHandler>
             </LongPressGestureHandler>
-
             <Animated.View style={[styles.secBottom, { paddingRight: safeInset }, bottomControllerBarAnimationStyle]}>
                 <View style={styles.sectionWrap}>
                     <LinearGradient
@@ -350,8 +353,8 @@ export default observer(({ playerRef }) => {
                     />
                     <ProgressBar
                         playerRef={playerRef}
-                        clearTimer={clearTimerToControllerBar}
-                        setTimer={setTimerToControllerBar}
+                        onTouchMove={clearTimerToControllerBar}
+                        onTouchEnd={delaySlideOutControllerBar}
                     />
                     {playerStore.fullscreen && (
                         <View style={styles.playerOperate}>
@@ -359,7 +362,7 @@ export default observer(({ playerRef }) => {
                                 <Pressable
                                     onPress={() => {
                                         playerStore.togglePaused(!playerStore.paused);
-                                        setTimerToControllerBar();
+                                        delaySlideOutControllerBar();
                                     }}
                                     style={styles.operateBtn}>
                                     <Iconfont
@@ -371,10 +374,9 @@ export default observer(({ playerRef }) => {
                                 {playerStore.currentEpisodeIndex < playerStore.series.length - 1 && (
                                     <Pressable
                                         onPress={() => {
-                                            playerStore.setCurrentEpisode(
-                                                playerStore.series[playerStore.currentEpisodeIndex + 1],
-                                            );
-                                            setTimerToControllerBar();
+                                            playerStore.nextEpisode();
+                                            clearTimerToControllerBar();
+                                            controllerBarSlideAnimation('slideOut');
                                         }}
                                         style={[styles.operateBtn, { marginLeft: -3, marginBottom: 1 }]}>
                                         <SvgIcon name={SvgPath.nextEpisode} size={25} color={'#FFFFFFDD'} />
