@@ -74,9 +74,8 @@ const ApplicationMenu = (props: any) => {
 const styles = StyleSheet.create({
     listPage: {
         width: Device.WIDTH,
-        marginVertical: pixel(16),
+        marginVertical: pixel(10),
         flexDirection: 'row',
-        // height: pixel(80),
     },
     menuList: {
         flex: 1,
@@ -84,21 +83,20 @@ const styles = StyleSheet.create({
     menuImage: {
         width: pixel(35),
         height: pixel(30),
-        borderRadius: pixel(5),
     },
     menuBox: {
         justifyContent: 'space-around',
         alignItems: 'center',
-        padding: pixel(5),
     },
     menuText: {
-        color: '#a8a8a8',
-        fontFamily: 'HelveticaNeue-CondensedBold',
+        color: '#333333',
+        marginTop: pixel(5),
     },
     menuPress: {
         marginHorizontal: pixel(8),
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         alignItems: 'center',
+        paddingHorizontal: pixel(12),
     },
 });
 

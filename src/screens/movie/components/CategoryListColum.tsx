@@ -105,11 +105,6 @@ const CategoryListColum = (props: Props) => {
                         data={categoryData}
                         numColumns={2}
                         bounces={true}
-                        contentContainerStyle={{
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            marginRight: -pixel(10),
-                        }}
                         renderItem={(item) => {
                             return (
                                 <TouchableOpacity onPress={() => navigateHandle(item.item.id)}>
@@ -142,7 +137,8 @@ const CategoryListColum = (props: Props) => {
                                         <View style={styles.pageRefresh}>
                                             <Animated.Image
                                                 style={[styles.refreshImage, { transform: [{ rotate: spin }] }]}
-                                                source={require('@app/assets/images/movie/refresh_icon.png')}></Animated.Image>
+                                                source={require('@app/assets/images/movie/refresh_icon.png')}
+                                            />
                                             <Text style={styles.refreshText}>换一换</Text>
                                         </View>
                                     </View>
