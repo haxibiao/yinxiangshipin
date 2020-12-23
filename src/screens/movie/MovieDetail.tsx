@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect, useCallback } from 'react';
 import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity, ScrollView } from 'react-native';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
 import { ScrollTabBar, Iconfont, StatusView, SpinnerLoading, NavBarHeader } from '@src/components';
@@ -6,6 +6,7 @@ import { MoviePlayer, PlayerStore } from '@src/components/MoviePlayer';
 import { useStatusBarHeight } from '@src/common';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { GQL, useQuery } from '@src/apollo';
+import { appStore, userStore } from '@src/store';
 import VideoContent from './components/VideoContent';
 import CommentContent from './components/CommentContent';
 
@@ -35,6 +36,27 @@ export default function MovieDetail() {
         };
     }, []);
 
+    const saveWatchProgress = useCallback(
+        ({ index, progress }) => {
+            if (userStore.login) {
+                appStore.client.mutate({
+                    mutation: GQL.saveWatchProgressMutation,
+                    variables: {
+                        movie_id: movie.id,
+                        series_index: index,
+                        progress,
+                    },
+                    refetchQueries: () => [
+                        {
+                            query: GQL.showMovieHistoryQuery,
+                        },
+                    ],
+                });
+            }
+        },
+        [movie],
+    );
+
     if (error) return <StatusView.ErrorView onPress={refetch} error={error} />;
     if (loading) return <SpinnerLoading />;
 
@@ -46,7 +68,7 @@ export default function MovieDetail() {
                 onPress={() => navigation.goBack()}>
                 <Iconfont style={styles.backIcon} name="fanhui" size={font(18)} color={'#fff'} />
             </TouchableOpacity>
-            <MoviePlayer movie={movie} />
+            <MoviePlayer movie={movie} onBeforeDestroy={saveWatchProgress} />
             <ScrollableTabView
                 contentProps={{ keyboardShouldPersistTaps: 'always' }}
                 style={{ flex: 1, backgroundColor: '#fff' }}
@@ -85,10 +107,6 @@ const styles = StyleSheet.create({
         textShadowColor: 'rgba(0, 0, 0, 0.75)',
         textShadowOffset: { width: 0, height: 0 },
         textShadowRadius: 2,
-    },
-    moviePlayer: {
-        height: Device.WIDTH * 0.6,
-        backgroundColor: '#000',
     },
     tabBarStyle: {
         height: pixel(42),

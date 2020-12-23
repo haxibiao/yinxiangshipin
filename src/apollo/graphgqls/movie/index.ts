@@ -5,6 +5,7 @@ import movieSwiper from './movieSwiper.graphql';
 import recommendMovieQuery from './recommendMovieQuery.graphql';
 import movieQuery from './movieQuery.graphql';
 import showMovieHistoryQuery from './showMovieHistoryQuery.graphql';
+import saveWatchProgressMutation from './saveWatchProgressMutation.graphql';
 export const movie = {
     categoryMovieQuery,
     getFiltersQuery,
@@ -12,4 +13,5 @@ export const movie = {
     recommendMovieQuery,
     movieQuery,
     showMovieHistoryQuery,
+    saveWatchProgressMutation,
 };

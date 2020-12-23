@@ -1,3 +1,5 @@
+#import "./movieFragment.graphql"
+
 # 观看历史记录
 query showMovieHistoryQuery($count: Int, $page: Int) {
     showMovieHistory(count: $count, page: $page) {
@@ -10,7 +12,9 @@ query showMovieHistoryQuery($count: Int, $page: Int) {
             progress
             last_watch_time
             series_index
-            movie
+            movie {
+                ...movieFragment
+            }
         }
     }
 }
