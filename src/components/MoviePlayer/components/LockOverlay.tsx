@@ -22,21 +22,13 @@ export default observer(() => {
 
 export const LockOverlay = observer(() => {
     const safeInset = useSafeArea({ fullscreen: playerStore.fullscreen });
-    const [operateVisible, setOperateVisible] = useState(true);
-    const timerToOperate = useRef();
-    const clearTimerToOperate = useCallback(() => {
-        if (timerToOperate.current) {
-            clearTimeout(timerToOperate.current);
-        }
-    }, []);
-    const operateAnimation = useRef(new Animated.Value(1));
+    const [operateVisible, setOperateVisible] = useState(false);
+    const operateAnimation = useRef(new Animated.Value(0));
     const operateOpacity = operateAnimation.current.interpolate({
         inputRange: [0, 1],
         outputRange: [0, 1],
     });
-    // 控制器动画
     const runOperateAnimation = useCallback((toValue: 0 | 1) => {
-        clearTimerToOperate();
         Animated.timing(operateAnimation.current, {
             toValue,
             duration: 400,
@@ -44,16 +36,22 @@ export const LockOverlay = observer(() => {
             useNativeDriver: true,
         }).start(() => null);
     }, []);
-    // 控制器计时器
+
+    const timerToOperate = useRef();
     const setTimerToOperate = useCallback(() => {
-        clearTimerToOperate();
         timerToOperate.current = setTimeout(() => {
             setOperateVisible(false);
             runOperateAnimation(0);
         }, VISIBLE_DURATION);
     }, []);
+    const clearTimerToOperate = useCallback(() => {
+        if (timerToOperate.current) {
+            clearTimeout(timerToOperate.current);
+        }
+    }, []);
     // 控制器显示/隐藏
     const toggleOperateVisible = useCallback(() => {
+        clearTimerToOperate();
         setOperateVisible((v) => {
             if (!v) {
                 runOperateAnimation(1);
@@ -64,22 +62,14 @@ export const LockOverlay = observer(() => {
             return !v;
         });
     }, []);
-    // 清除定时器
-    useEffect(() => {
-        return () => {
-            clearTimerToOperate();
-        };
-    }, []);
 
-    const unlockPressHandlerRef = useRef();
     const onTogglePress = useCallback(({ nativeEvent }) => {
         if (nativeEvent.state === State.ACTIVE) {
             InteractionManager.runAfterInteractions(() => {
-                toggleOperateVisible(1);
+                toggleOperateVisible();
             });
         }
     }, []);
-
     const onUnlockPress = useCallback(({ nativeEvent }) => {
         if (nativeEvent.state === State.ACTIVE) {
             InteractionManager.runAfterInteractions(() => {
@@ -89,15 +79,19 @@ export const LockOverlay = observer(() => {
         }
     }, []);
 
+    useEffect(() => {
+        toggleOperateVisible();
+        return () => {
+            clearTimerToOperate();
+        };
+    }, []);
+
     return (
-        <TapGestureHandler waitFor={unlockPressHandlerRef} onHandlerStateChange={onTogglePress}>
+        <TapGestureHandler onHandlerStateChange={onTogglePress}>
             <View style={styles.container}>
                 <Animated.View
-                    style={[styles.sideBar, { paddingRight: safeInset + pixel(30), opacity: operateOpacity }]}>
-                    <TapGestureHandler
-                        enabled={operateVisible}
-                        ref={unlockPressHandlerRef}
-                        onHandlerStateChange={onUnlockPress}>
+                    style={[styles.sideBar, { paddingRight: safeInset + pixel(10), opacity: operateOpacity }]}>
+                    <TapGestureHandler enabled={operateVisible} onHandlerStateChange={onUnlockPress}>
                         <View style={styles.operateBtn}>
                             <SvgIcon name={SvgPath.lock} size={22} color={'#FFFFFFDD'} />
                         </View>
