@@ -150,7 +150,7 @@ export default function VideoContent({ movie }) {
                 />
             </View>
             {/* 推荐 */}
-            <View style={styles.areaStyle}>
+            <View style={[styles.areaStyle, { marginBottom: pixel(10) + pixel(Theme.HOME_INDICATOR_HEIGHT) }]}>
                 <Text style={styles.title}>为你推荐</Text>
                 <FlatList
                     numColumns={3}

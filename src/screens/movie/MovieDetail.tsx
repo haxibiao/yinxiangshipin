@@ -48,6 +48,7 @@ export default function MovieDetail() {
             </TouchableOpacity>
             <MoviePlayer movie={movie} />
             <ScrollableTabView
+                contentProps={{ keyboardShouldPersistTaps: 'always' }}
                 style={{ flex: 1, backgroundColor: '#fff' }}
                 renderTabBar={(props) => (
                     <ScrollTabBar
@@ -71,7 +72,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#010101',
-        paddingBottom: pixel(Theme.HOME_INDICATOR_HEIGHT),
     },
     backButton: {
         position: 'absolute',
