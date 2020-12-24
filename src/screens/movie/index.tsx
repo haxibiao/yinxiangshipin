@@ -1,83 +1,20 @@
 import React, { useCallback, useRef, useEffect } from 'react';
 import { StyleSheet, View, Text, ScrollView, Image, TouchableWithoutFeedback, Animated } from 'react-native';
-import { NavBarHeader, SvgIcon, SvgPath } from '@src/components';
-import { observer, adStore, userStore } from '@src/store';
-import { useNavigation } from '@react-navigation/native';
+import { FocusAwareStatusBar } from '@src/components';
+import { observer, adStore } from '@src/store';
+import CategoryMenu from './parts/CategoryMenu';
 import MoviesPoster from './components/MoviesPoster';
 import MovieFollows from './components/MovieFollows';
 import MovieRecommend from './components/MovieRecommend';
 import MovieCategory from './components/MovieCategory';
 
 export default observer(() => {
-    const navigation = useNavigation();
-    const historyNavigate = useCallback((i) => {
-        if (userStore.login) {
-            navigation.navigate('MoreTable');
-        } else {
-            navigation.navigate('Login');
-        }
-    }, []);
-    const menuNavigate = useCallback((i) => {
-        navigation.navigate('ApplicationMenuTable', { i });
-    }, []);
     return (
         <ScrollView contentContainerStyle={styles.container}>
+            <FocusAwareStatusBar barStyle="dark-content" />
             <View style={styles.topSection}>
                 <MoviesPoster />
-                <ScrollView
-                    style={{ paddingLeft: pixel(14) }}
-                    contentContainerStyle={styles.menuList}
-                    horizontal={true}
-                    showsHorizontalScrollIndicator={false}>
-                    <TouchableWithoutFeedback onPress={historyNavigate}>
-                        <View style={styles.menuItem}>
-                            <View style={styles.menuIcon}>
-                                <SvgIcon name={SvgPath.history} size={26} color={'#FF8C7D'} />
-                            </View>
-                            <Text style={styles.menuName}>记录</Text>
-                        </View>
-                    </TouchableWithoutFeedback>
-                    <TouchableWithoutFeedback onPress={() => navigation.navigate('MovieCategoryListScreen')}>
-                        <View style={styles.menuItem}>
-                            <View style={styles.menuIcon}>
-                                <SvgIcon name={SvgPath.category} size={26} color={'#FF8C7D'} />
-                            </View>
-                            <Text style={styles.menuName}>全部</Text>
-                        </View>
-                    </TouchableWithoutFeedback>
-                    <TouchableWithoutFeedback onPress={() => menuNavigate(3)}>
-                        <View style={styles.menuItem}>
-                            <View style={styles.menuIcon}>
-                                <SvgIcon name={SvgPath.tv} size={28} color={'#FF8C7D'} />
-                            </View>
-                            <Text style={styles.menuName}>港剧</Text>
-                        </View>
-                    </TouchableWithoutFeedback>
-                    <TouchableWithoutFeedback onPress={() => menuNavigate(2)}>
-                        <View style={styles.menuItem}>
-                            <View style={styles.menuIcon}>
-                                <SvgIcon name={SvgPath.flower} size={28} color={'#FF8C7D'} />
-                            </View>
-                            <Text style={styles.menuName}>日剧</Text>
-                        </View>
-                    </TouchableWithoutFeedback>
-                    <TouchableWithoutFeedback onPress={() => menuNavigate(0)}>
-                        <View style={styles.menuItem}>
-                            <View style={styles.menuIcon}>
-                                <SvgIcon name={SvgPath.movie} size={28} color={'#FF8C7D'} />
-                            </View>
-                            <Text style={styles.menuName}>美剧</Text>
-                        </View>
-                    </TouchableWithoutFeedback>
-                    <TouchableWithoutFeedback onPress={() => menuNavigate(1)}>
-                        <View style={styles.menuItem}>
-                            <View style={styles.menuIcon}>
-                                <SvgIcon name={SvgPath.star} size={28} color={'#FF8C7D'} />
-                            </View>
-                            <Text style={styles.menuName}>韩剧</Text>
-                        </View>
-                    </TouchableWithoutFeedback>
-                </ScrollView>
+                <CategoryMenu />
             </View>
             <MovieFollows />
             <MovieRecommend categoryName="今日推荐" />
@@ -104,6 +41,7 @@ const styles = StyleSheet.create({
     },
     menuList: {
         marginTop: pixel(14),
+        paddingRight: pixel(14),
     },
     menuItem: {
         alignItems: 'center',

@@ -342,7 +342,7 @@ function midAutumnFestivalTask({ collection }) {
 
 // 浏览合集的方法,目的主要在于增加提示
 function browseCollection(params) {
-    navigation.navigate('Find', { initPage: 2 });
+    navigation.navigate('Find', { initPage: 1 });
     Toast.show({ content: '请挑选自己喜欢的合集开始浏览吧~' });
 }
 

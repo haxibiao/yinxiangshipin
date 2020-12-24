@@ -7,7 +7,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import FollowedPosts from './FollowedPosts';
 import Collections from './Collections';
 import RecommendPosts from './RecommendPosts';
-import Movie from '../../screens/movie';
+import MovieCenter from '../../screens/movie';
 
 export default observer(() => {
     const scrollTabRef = useRef();
@@ -27,24 +27,25 @@ export default observer(() => {
     return (
         <View style={styles.container}>
             <FocusAwareStatusBar barStyle="dark-content" />
+            <Image style={styles.headerBg} source={require('@app/assets/images/movie/bg_find_header.png')} />
             <ScrollableTabView
                 contentProps={{ keyboardShouldPersistTaps: 'always' }}
-                initialPage={3}
+                initialPage={0}
                 ref={scrollTabRef}
                 renderTabBar={(tabBarProps: any) => (
                     <ScrollTabBar
                         {...tabBarProps}
-                        tabWidth={pixel(66)}
+                        tabWidth={TAB_WIDTH}
                         tabBarStyle={styles.tabBarStyle}
                         underlineStyle={styles.underlineStyle}
                         activeTextStyle={styles.activeTextStyle}
                         tintTextStyle={styles.tintTextStyle}
                     />
                 )}>
-                <FollowedPosts tabLabel="关注" />
-                <RecommendPosts tabLabel="最新" />
+                <MovieCenter tabLabel="影视" />
                 <Collections tabLabel="合集" />
-                <Movie tabLabel="影视" />
+                <RecommendPosts tabLabel="精选" />
+                <FollowedPosts tabLabel="动态" />
             </ScrollableTabView>
             <TouchableWithoutFeedback onPress={goSearchCenter}>
                 <View style={styles.searchButton}>
@@ -55,11 +56,23 @@ export default observer(() => {
     );
 });
 
+const TAB_WIDTH = pixel(54);
+const UNDER_LINE_WIDTH = pixel(12);
+// const UNDER_LINE_LEFT = (Device.WIDTH - TAB_WIDTH * 4) / 2 + (TAB_WIDTH - UNDER_LINE_WIDTH) / 2;
+const UNDER_LINE_LEFT = (TAB_WIDTH - UNDER_LINE_WIDTH) / 2;
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingTop: Theme.statusBarHeight,
         backgroundColor: '#fff',
+    },
+    headerBg: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: Device.WIDTH,
+        height: (Device.WIDTH * 18) / 56,
     },
     taskButton: {
         position: 'absolute',
@@ -86,20 +99,19 @@ const styles = StyleSheet.create({
     },
     tabBarStyle: {
         height: Theme.NAVBAR_HEIGHT,
-        backgroundColor: 'rgba(255,255,255,1)',
         borderBottomWidth: pixel(0.5),
         borderColor: '#f0f0f0',
-        justifyContent: 'center',
     },
     underlineStyle: {
-        width: pixel(26),
+        width: UNDER_LINE_WIDTH,
         height: pixel(3),
-        left: (Device.WIDTH - pixel(66) * 4) / 2 + pixel(20),
+        left: UNDER_LINE_LEFT,
         bottom: pixel(5),
+        backgroundColor: Theme.primaryColor,
     },
     activeTextStyle: {
-        color: '#323232',
-        fontSize: font(16),
+        color: '#202020',
+        fontSize: font(19),
         fontWeight: 'bold',
     },
     tintTextStyle: {

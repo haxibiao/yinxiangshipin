@@ -12,9 +12,7 @@ query showMovieHistoryQuery($count: Int, $page: Int) {
             progress
             last_watch_time
             series_index
-            movie {
-                ...movieFragment
-            }
+            movie
         }
     }
 }
