@@ -64,8 +64,40 @@ const Search = () => {
         toggleSearchVisible(false);
     }, []);
 
+    const searchKeywordsOnPress = __.debounce((value) => {
+        setTextValue(value);
+        setKeyword(value);
+        toggleSearchVisible(true);
+    }, 100);
+
     const Record = useMemo(() => {
-        return <SearchRecord searchKeyword={keyword} search={search} />;
+        return (
+            <View>
+                <View style={styles.recommendHeader}>
+                    <Text style={{ fontWeight: '700' }}>热搜</Text>
+                </View>
+                <FlatList
+                    contentContainerStyle={styles.contentStyle}
+                    data={recommendWords}
+                    numColumns={2}
+                    renderItem={({ item, index }) => {
+                        return (
+                            <TouchableOpacity
+                                activeOpacity={0.8}
+                                key={item.id}
+                                style={styles.keywordsItem}
+                                onPress={() => searchKeywordsOnPress(item?.word)}>
+                                <Text style={[styles.keywordIndex, index <= 3 && { color: '#333' }]}>{index + 1}</Text>
+                                <Text style={{ fontSize: font(14), color: '#333' }} numberOfLines={1}>
+                                    {item?.word}
+                                </Text>
+                            </TouchableOpacity>
+                        );
+                    }}
+                />
+                <SearchRecord searchKeyword={keyword} search={search} />
+            </View>
+        );
     }, [keyword]);
 
     const KeywordsList = useMemo(() => {
@@ -88,7 +120,6 @@ const Search = () => {
                         {...props}
                         tabWidth={pixel(70)}
                         style={styles.tabBarStyle}
-                        // tabStyle={styles.tabStyle}
                         underlineStyle={styles.underlineStyle}
                         activeTextStyle={styles.activeTextStyle}
                         tintTextStyle={styles.tintTextStyle}
@@ -196,7 +227,6 @@ const styles = StyleSheet.create({
         paddingRight: pixel(7),
         backgroundColor: Theme.groundColour,
         borderRadius: pixel(30),
-        // overflow: 'hidden',
     },
     inputWrap: {
         flex: 1,
@@ -227,6 +257,28 @@ const styles = StyleSheet.create({
         width: pixel(10),
         height: pixel(10),
     },
+    recommendHeader: {
+        paddingHorizontal: pixel(15),
+        paddingVertical: pixel(5),
+        height: pixel(30),
+    },
+    contentStyle: {
+        paddingHorizontal: pixel(15),
+    },
+    keywordsItem: {
+        width: '50%',
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginVertical: pixel(8),
+        paddingRight: pixel(25),
+    },
+    keywordIndex: {
+        width: pixel(24),
+        paddingLeft: pixel(1),
+        fontSize: font(14),
+        fontWeight: '700',
+        color: '#9B9B9B',
+    },
     listHeader: {
         padding: pixel(Theme.itemSpace),
         paddingBottom: Theme.HOME_INDICATOR_HEIGHT + pixel(20),
@@ -254,9 +306,6 @@ const styles = StyleSheet.create({
         borderColor: '#f0f0f0',
         justifyContent: 'center',
     },
-    // tabStyle: {
-    //     justifyContent: 'center',
-    // },
     underlineStyle: {
         width: pixel(30),
         left: (Device.WIDTH - pixel(70) * 5) / 2 + pixel(20),
@@ -272,3 +321,47 @@ const styles = StyleSheet.create({
 });
 
 export default Search;
+
+// 推荐搜索数据为空时用下面的数据填充
+const recommendWords = [
+    {
+        id: 27705,
+        word: '检察官',
+    },
+    {
+        id: 27593,
+        word: '傲骨贤妻',
+    },
+    {
+        id: 28421,
+        word: '豪斯医生',
+    },
+    {
+        id: 28992,
+        word: '非自然死亡',
+    },
+    {
+        id: 31613,
+        word: '行尸走肉',
+    },
+    {
+        id: 31631,
+        word: '喜剧之心',
+    },
+    {
+        id: 28421,
+        word: '校阅女孩河野悦子',
+    },
+    {
+        id: 28992,
+        word: '新妓生传',
+    },
+    {
+        id: 31613,
+        word: '破产姐妹',
+    },
+    {
+        id: 31631,
+        word: '接线女孩',
+    },
+];
