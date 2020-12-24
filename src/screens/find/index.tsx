@@ -27,7 +27,6 @@ export default observer(() => {
     return (
         <View style={styles.container}>
             <FocusAwareStatusBar barStyle="dark-content" />
-            <Image style={styles.headerBg} source={require('@app/assets/images/movie/bg_find_header.png')} />
             <ScrollableTabView
                 contentProps={{ keyboardShouldPersistTaps: 'always' }}
                 initialPage={0}
@@ -47,6 +46,7 @@ export default observer(() => {
                 <RecommendPosts tabLabel="精选" />
                 <FollowedPosts tabLabel="动态" />
             </ScrollableTabView>
+            <Image style={styles.headerBg} source={require('@app/assets/images/bg/bg_find_header.png')} />
             <TouchableWithoutFeedback onPress={goSearchCenter}>
                 <View style={styles.searchButton}>
                     <Image source={require('@app/assets/images/icons/ic_search_b.png')} style={styles.buttonIcon} />
@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
         left: 0,
         width: Device.WIDTH,
         height: (Device.WIDTH * 18) / 56,
+        zIndex: -1,
     },
     taskButton: {
         position: 'absolute',
@@ -99,8 +100,7 @@ const styles = StyleSheet.create({
     },
     tabBarStyle: {
         height: Theme.NAVBAR_HEIGHT,
-        borderBottomWidth: pixel(0.5),
-        borderColor: '#f0f0f0',
+        borderBottomWidth: 0,
     },
     underlineStyle: {
         width: UNDER_LINE_WIDTH,
