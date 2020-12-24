@@ -134,11 +134,11 @@ export default observer(({ playerRef }: Props) => {
             speedValueRef.current = playerStore.rate;
             playerStore.setRateValue(3.0);
             setSpeedUpIndicatorVisible(true);
-        }
-        if (nativeEvent.state == State.END) {
+        } else if (speedValueRef.current > 0) {
             // console.log('END');
             playerStore.setRateValue(speedValueRef.current);
             setSpeedUpIndicatorVisible(false);
+            speedValueRef.current = 0;
         }
     }, []);
     const doublePressHandlerRef = useRef();
@@ -303,10 +303,7 @@ export default observer(({ playerRef }: Props) => {
                     <View style={styles.row}></View>
                 </View>
             </Animated.View>
-            <LongPressGestureHandler
-                waitFor={doublePressHandlerRef}
-                enabled={!playerStore.buffering}
-                onHandlerStateChange={onSpeedUpPanGestureHandler}>
+            <LongPressGestureHandler waitFor={doublePressHandlerRef} onHandlerStateChange={onSpeedUpPanGestureHandler}>
                 <PanGestureHandler
                     enabled={!playerStore.buffering}
                     activeOffsetX={[-4, 4]}
