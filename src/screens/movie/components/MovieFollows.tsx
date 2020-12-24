@@ -34,8 +34,13 @@ interface MovieProps {
 }
 
 function MovieItem({ movie, navigation }: MovieProps) {
-    const last_time = movie?.favoriteSeriesTime;
     const count_series = movie?.count_series;
+    let historyText = '尚未观看';
+    if (count_series > 1 && movie?.last_watch_series) {
+        historyText = `看至第${movie?.last_watch_series}集`;
+    } else if (movie?.last_watch_progress) {
+        historyText = '看至' + Helper.moment(movie?.last_watch_progress);
+    }
 
     if (!movie?.id) {
         return <MovieItemPlaceholder />;
@@ -80,8 +85,10 @@ function MovieItem({ movie, navigation }: MovieProps) {
                     <Text style={styles.movieName} numberOfLines={1}>
                         {movie?.name || ''}
                     </Text>
-                    <Text style={[styles.movieDesc, last_time && { color: Theme.primaryColor }]} numberOfLines={1}>
-                        {last_time || '尚未观看'}
+                    <Text
+                        style={[styles.movieDesc, historyText !== '尚未观看' && { color: Theme.primaryColor }]}
+                        numberOfLines={1}>
+                        {historyText}
                     </Text>
                 </View>
             </View>
@@ -117,6 +124,7 @@ export default observer(() => {
                 )}
             </View>
             <ScrollView
+                style={{ marginLeft: pixel(14) }}
                 contentContainerStyle={styles.movieList}
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}>
@@ -193,7 +201,6 @@ const styles = StyleSheet.create({
         marginRight: font(-1),
     },
     movieList: {
-        marginLeft: pixel(14),
         paddingTop: pixel(15),
         paddingRight: pixel(14),
     },

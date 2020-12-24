@@ -70,6 +70,7 @@ const styles = StyleSheet.create({
         marginHorizontal: pixel(14),
         height: POSTER_HEIGHT,
         borderRadius: pixel(5),
+        overflow: 'hidden',
         backgroundColor: '#f4f4f4',
         ...Platform.select({
             ios: {

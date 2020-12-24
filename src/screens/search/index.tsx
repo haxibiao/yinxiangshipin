@@ -6,6 +6,7 @@ import { useApolloClient, GQL } from '@src/apollo';
 import { useNavigation } from '@react-navigation/native';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
 import __ from 'lodash';
+import HotKeywords from './components/HotKeywords';
 import SearchRecord from './components/SearchRecord';
 import SearchedPost from './components/SearchedPost';
 import SearchedUser from './components/SearchedUser';
@@ -28,7 +29,7 @@ const Search = () => {
     const inputValueZIndex = trimmedValue.length ? 2 : -1;
     const resultTabViewZIndex = searchVisible ? 3 : -1;
 
-    const search = __.debounce((kw) => {
+    const onSearch = __.debounce((kw) => {
         setTextValue(kw);
         setKeyword(kw);
         toggleSearchVisible(true);
@@ -64,43 +65,16 @@ const Search = () => {
         toggleSearchVisible(false);
     }, []);
 
-    const searchKeywordsOnPress = __.debounce((value) => {
-        setTextValue(value);
-        setKeyword(value);
-        toggleSearchVisible(true);
-    }, 100);
-
-    const Record = useMemo(() => {
+    const RecommendKeywords = useMemo(() => {
         return (
-            <View>
-                <View style={styles.recommendHeader}>
-                    <Text style={{ fontWeight: '700' }}>热搜</Text>
-                </View>
-                <FlatList
-                    contentContainerStyle={styles.contentStyle}
-                    data={recommendWords}
-                    numColumns={2}
-                    renderItem={({ item, index }) => {
-                        return (
-                            <TouchableOpacity
-                                activeOpacity={0.8}
-                                key={item.id}
-                                style={styles.keywordsItem}
-                                onPress={() => searchKeywordsOnPress(item?.word)}>
-                                <Text style={[styles.keywordIndex, index <= 3 && { color: '#333' }]}>{index + 1}</Text>
-                                <Text style={{ fontSize: font(14), color: '#333' }} numberOfLines={1}>
-                                    {item?.word}
-                                </Text>
-                            </TouchableOpacity>
-                        );
-                    }}
-                />
-                <SearchRecord searchKeyword={keyword} search={search} />
-            </View>
+            <>
+                <HotKeywords onSearch={onSearch} />
+                <SearchRecord searchKeyword={keyword} onSearch={onSearch} />
+            </>
         );
     }, [keyword]);
 
-    const KeywordsList = useMemo(() => {
+    const RelatedKeywords = useMemo(() => {
         return (
             <View style={styles.listHeader}>
                 <SafeText style={styles.searchText}>
@@ -118,7 +92,7 @@ const Search = () => {
                 renderTabBar={(props) => (
                     <ScrollTabBar
                         {...props}
-                        tabWidth={pixel(70)}
+                        // tabWidth={TAB_WIDTH}
                         style={styles.tabBarStyle}
                         underlineStyle={styles.underlineStyle}
                         activeTextStyle={styles.activeTextStyle}
@@ -126,10 +100,10 @@ const Search = () => {
                     />
                 )}>
                 <SearchedMovie tabLabel="影视" keyword={keyword} navigation={navigation} />
-                <SearchedPost tabLabel="动态" keyword={keyword} navigation={navigation} />
-                <SearchedTag tabLabel="专题" keyword={keyword} navigation={navigation} />
-                <SearchedUser tabLabel="用户" keyword={keyword} navigation={navigation} />
                 <SearchedCollection tabLabel="合集" keyword={keyword} navigation={navigation} />
+                <SearchedPost tabLabel="动态" keyword={keyword} navigation={navigation} />
+                <SearchedUser tabLabel="用户" keyword={keyword} navigation={navigation} />
+                <SearchedTag tabLabel="专题" keyword={keyword} navigation={navigation} />
             </ScrollableTabView>
         );
     }, [keyword]);
@@ -173,13 +147,17 @@ const Search = () => {
                 </TouchableOpacity>
             </View>
             <View style={styles.container}>
-                <View style={[styles.posContent, { zIndex: recordZIndex }]}>{Record}</View>
-                <View style={[styles.posContent, { zIndex: inputValueZIndex }]}>{KeywordsList}</View>
+                <View style={[styles.posContent, { zIndex: recordZIndex }]}>{RecommendKeywords}</View>
+                <View style={[styles.posContent, { zIndex: inputValueZIndex }]}>{RelatedKeywords}</View>
                 <View style={[styles.posContent, { zIndex: resultTabViewZIndex }]}>{ResultTabView}</View>
             </View>
         </ScrollView>
     );
 };
+
+const TAB_WIDTH = pixel(60);
+const UNDER_LINE_WIDTH = pixel(30);
+const UNDER_LINE_LEFT = (Device.WIDTH - TAB_WIDTH * 5) / 2 + (TAB_WIDTH - UNDER_LINE_WIDTH) / 2;
 
 const styles = StyleSheet.create({
     container: {
@@ -194,8 +172,6 @@ const styles = StyleSheet.create({
         height: pixel(Theme.statusBarHeight + 48),
         paddingTop: pixel(Theme.statusBarHeight + 5),
         paddingBottom: pixel(5),
-        borderBottomWidth: pixel(0.5),
-        borderBottomColor: Theme.navBarSeparatorColor,
         backgroundColor: '#fff',
         flexDirection: 'row',
         alignItems: 'center',
@@ -257,28 +233,6 @@ const styles = StyleSheet.create({
         width: pixel(10),
         height: pixel(10),
     },
-    recommendHeader: {
-        paddingHorizontal: pixel(15),
-        paddingVertical: pixel(5),
-        height: pixel(30),
-    },
-    contentStyle: {
-        paddingHorizontal: pixel(15),
-    },
-    keywordsItem: {
-        width: '50%',
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginVertical: pixel(8),
-        paddingRight: pixel(25),
-    },
-    keywordIndex: {
-        width: pixel(24),
-        paddingLeft: pixel(1),
-        fontSize: font(14),
-        fontWeight: '700',
-        color: '#9B9B9B',
-    },
     listHeader: {
         padding: pixel(Theme.itemSpace),
         paddingBottom: Theme.HOME_INDICATOR_HEIGHT + pixel(20),
@@ -300,15 +254,16 @@ const styles = StyleSheet.create({
     },
     tabBarStyle: {
         height: pixel(42),
-        paddingHorizontal: pixel(42),
+        // paddingHorizontal: pixel(42),
         backgroundColor: 'rgba(255,255,255,1)',
         borderBottomWidth: pixel(0.5),
         borderColor: '#f0f0f0',
-        justifyContent: 'center',
+        // justifyContent: 'center',
     },
     underlineStyle: {
-        width: pixel(30),
-        left: (Device.WIDTH - pixel(70) * 5) / 2 + pixel(20),
+        // width: UNDER_LINE_WIDTH,
+        // left: UNDER_LINE_LEFT,
+        backgroundColor: Theme.primaryColor,
     },
     activeTextStyle: {
         color: '#212121',
@@ -321,47 +276,3 @@ const styles = StyleSheet.create({
 });
 
 export default Search;
-
-// 推荐搜索数据为空时用下面的数据填充
-const recommendWords = [
-    {
-        id: 27705,
-        word: '检察官',
-    },
-    {
-        id: 27593,
-        word: '傲骨贤妻',
-    },
-    {
-        id: 28421,
-        word: '豪斯医生',
-    },
-    {
-        id: 28992,
-        word: '非自然死亡',
-    },
-    {
-        id: 31613,
-        word: '行尸走肉',
-    },
-    {
-        id: 31631,
-        word: '喜剧之心',
-    },
-    {
-        id: 28421,
-        word: '校阅女孩河野悦子',
-    },
-    {
-        id: 28992,
-        word: '新妓生传',
-    },
-    {
-        id: 31613,
-        word: '破产姐妹',
-    },
-    {
-        id: 31631,
-        word: '接线女孩',
-    },
-];

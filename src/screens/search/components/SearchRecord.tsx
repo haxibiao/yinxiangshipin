@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, TouchableWithoutFeedback, TouchableOpacity } fr
 import { Iconfont, Row } from '@src/components';
 import { Storage, RecordKeys } from '@src/store';
 
-const SearchRecord = ({ searchKeyword, search, color = '#2b2b2b' }) => {
+const SearchRecord = ({ searchKeyword, onSearch, color = '#2b2b2b' }) => {
     const [recordData, setRecordData] = useState([]);
 
     const getRecord = useCallback(async () => {
@@ -52,7 +52,7 @@ const SearchRecord = ({ searchKeyword, search, color = '#2b2b2b' }) => {
         if (Array.isArray(recordData)) {
             return recordData.map((keyword) => {
                 return (
-                    <TouchableWithoutFeedback key={keyword} onPress={() => search(keyword)}>
+                    <TouchableWithoutFeedback key={keyword} onPress={() => onSearch(keyword)}>
                         <View style={styles.keywordItem}>
                             <Row>
                                 <Iconfont name="shizhong" size={font(16)} color={color} />
@@ -75,9 +75,9 @@ const SearchRecord = ({ searchKeyword, search, color = '#2b2b2b' }) => {
         <View style={styles.container}>
             {Array.isArray(recordData) && recordData.length > 0 && (
                 <View style={styles.historyHeader}>
-                    <Text style={{ fontWeight: '700' }}>搜索历史</Text>
+                    <Text style={styles.title}>搜索历史</Text>
                     <TouchableOpacity activeOpacity={0.9} onPress={reduceRecodes}>
-                        <Text style={{ fontSize: font(14), color: '#333' }}>清空</Text>
+                        <Text style={{ fontSize: font(14), color: '#909090' }}>清空</Text>
                     </TouchableOpacity>
                 </View>
             )}
@@ -98,6 +98,11 @@ const styles = StyleSheet.create({
         paddingHorizontal: pixel(15),
         paddingVertical: pixel(5),
         height: pixel(30),
+    },
+    title: {
+        fontSize: font(15),
+        color: '#202020',
+        fontWeight: 'bold',
     },
     keywordItem: {
         flexDirection: 'row',

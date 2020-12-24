@@ -1,0 +1,21 @@
+#import "../movie/movieFragment.graphql"
+
+#SEARCH
+#SERIES
+query searchHotKeywordsQuery($type: ActivityType) {
+    activities(type: $type) {
+        paginatorInfo {
+            total
+            hasMorePages
+            currentPage
+        }
+        data {
+            id
+            movie {
+                ...movieFragment
+            }
+            image_url
+            title
+        }
+    }
+}

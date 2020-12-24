@@ -5,6 +5,7 @@ import searchPostQuery from './searchPostQuery.graphql';
 import searchTagsQuery from './searchTagsQuery.graphql';
 import searchUsersQuery from './searchUsersQuery.graphql';
 import searchMoviesQuery from './searchMoviesQuery.graphql';
+import searchHotKeywordsQuery from './searchHotKeywordsQuery.graphql';
 
 export const search = {
     searchCollectionPostQuery,
@@ -13,4 +14,5 @@ export const search = {
     searchTagsQuery,
     searchUsersQuery,
     searchMoviesQuery,
+    searchHotKeywordsQuery,
 };
