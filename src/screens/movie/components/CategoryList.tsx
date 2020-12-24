@@ -108,6 +108,7 @@ const CategoryList = (props: Props) => {
                         }}
                         horizontal={true}
                         data={categoryData}
+                        bounces={false}
                         renderItem={(item) => {
                             return (
                                 <TouchableOpacity onPress={() => navigateHandle(item.item.id)}>

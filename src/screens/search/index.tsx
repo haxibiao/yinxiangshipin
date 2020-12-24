@@ -11,6 +11,7 @@ import SearchedPost from './components/SearchedPost';
 import SearchedUser from './components/SearchedUser';
 import SearchedTag from './components/SearchedTag';
 import SearchedCollection from './components/SearchedCollection';
+import SearchedMovie from './components/SearchedMovie';
 
 const Search = () => {
     const navigation = useNavigation();
@@ -71,7 +72,7 @@ const Search = () => {
         return (
             <View style={styles.listHeader}>
                 <SafeText style={styles.searchText}>
-                    搜索包含"<SafeText style={styles.highlightText}>{textValue}</SafeText>"的动态和问答
+                    搜索包含"<SafeText style={styles.highlightText}>{textValue}</SafeText>"的动态、影视和问答
                 </SafeText>
             </View>
         );
@@ -93,6 +94,7 @@ const Search = () => {
                         tintTextStyle={styles.tintTextStyle}
                     />
                 )}>
+                <SearchedMovie tabLabel="影视" keyword={keyword} navigation={navigation} />
                 <SearchedPost tabLabel="动态" keyword={keyword} navigation={navigation} />
                 <SearchedTag tabLabel="专题" keyword={keyword} navigation={navigation} />
                 <SearchedUser tabLabel="用户" keyword={keyword} navigation={navigation} />
@@ -257,7 +259,7 @@ const styles = StyleSheet.create({
     // },
     underlineStyle: {
         width: pixel(30),
-        left: (Device.WIDTH - pixel(70) * 4) / 2 + pixel(20),
+        left: (Device.WIDTH - pixel(70) * 5) / 2 + pixel(20),
     },
     activeTextStyle: {
         color: '#212121',

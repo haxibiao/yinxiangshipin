@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity, ScrollView }
 import { Iconfont, Placeholder } from '@src/components';
 import { PlayerStore } from '@src/components/MoviePlayer';
 import { useNavigation } from '@react-navigation/native';
-import { GQL, useQuery, useMutation, errorMessage } from '@src/apollo';
+import { GQL, useQuery, errorMessage, useFavoriteMutation } from '@src/apollo';
 import { userStore } from '@src/store';
 import { observable } from 'mobx';
 import MovieItem from './MovieItem';
@@ -36,9 +36,10 @@ export default function VideoContent({ movie }) {
     const recommendMovies = useMemo(() => Helper.syncGetter('recommendMovie', recommendData), [recommendData]);
 
     const [currentEpisode, setEpisode] = useState(data?.[0]);
-    const [toggleFavorite] = useMutation(GQL.toggleFavoriteMutation, {
+
+    const toggleFavorite = useFavoriteMutation({
         variables: {
-            id: id,
+            id: movie.id,
             type: 'movies',
         },
         refetchQueries: () => [
@@ -52,20 +53,16 @@ export default function VideoContent({ movie }) {
             },
         ],
     });
-    const toggleFavoriteOnPress = __.debounce(async function () {
+
+    const toggleFavoriteOnPress = useCallback(() => {
         if (TOKEN) {
             movie.favorited ? movie.count_favorites-- : movie.count_favorites++;
             movie.favorited = !movie?.favorited;
-            const [error, result] = await Helper.exceptionCapture(toggleFavorite);
-            if (error) {
-                Toast.show({ content: errorMessage(error) || '操作失败' });
-            } else if (result) {
-                Toast.show({ content: result?.data?.toggleFavorite?.favorited ? '已收藏' : '已取消收藏' });
-            }
+            toggleFavorite();
         } else {
             navigation.navigate('Login');
         }
-    }, 200);
+    }, [movie]);
 
     const episodeItem = useCallback(
         (item, index) => {
