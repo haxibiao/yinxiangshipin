@@ -13,8 +13,8 @@ export default function CategoryMenu() {
             navigation.navigate('Login');
         }
     }, []);
-    const menuNavigate = useCallback((i) => {
-        navigation.navigate('ApplicationMenuTable', { i });
+    const menuNavigate = useCallback((type) => {
+        navigation.navigate('ApplicationMenuTable', { category: type });
     }, []);
     return (
         <ScrollView
@@ -38,7 +38,7 @@ export default function CategoryMenu() {
                     <Text style={styles.menuName}>全部</Text>
                 </View>
             </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback onPress={() => menuNavigate(3)}>
+            <TouchableWithoutFeedback onPress={() => menuNavigate('GANG')}>
                 <View style={styles.menuItem}>
                     <View style={styles.menuIcon}>
                         <SvgIcon name={SvgPath.tv} size={28} color={'#FF8C7D'} />
@@ -46,7 +46,7 @@ export default function CategoryMenu() {
                     <Text style={styles.menuName}>港剧</Text>
                 </View>
             </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback onPress={() => menuNavigate(2)}>
+            <TouchableWithoutFeedback onPress={() => menuNavigate('RI')}>
                 <View style={styles.menuItem}>
                     <View style={styles.menuIcon}>
                         <SvgIcon name={SvgPath.flower} size={28} color={'#FF8C7D'} />
@@ -54,7 +54,7 @@ export default function CategoryMenu() {
                     <Text style={styles.menuName}>日剧</Text>
                 </View>
             </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback onPress={() => menuNavigate(0)}>
+            <TouchableWithoutFeedback onPress={() => menuNavigate('MEI')}>
                 <View style={styles.menuItem}>
                     <View style={styles.menuIcon}>
                         <SvgIcon name={SvgPath.movie} size={28} color={'#FF8C7D'} />
@@ -62,7 +62,7 @@ export default function CategoryMenu() {
                     <Text style={styles.menuName}>美剧</Text>
                 </View>
             </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback onPress={() => menuNavigate(1)}>
+            <TouchableWithoutFeedback onPress={() => menuNavigate('HAN')}>
                 <View style={styles.menuItem}>
                     <View style={styles.menuIcon}>
                         <SvgIcon name={SvgPath.star} size={28} color={'#FF8C7D'} />

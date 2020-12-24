@@ -7,18 +7,19 @@ import Ritable from './RiCategorytable';
 import Meitable from './MeiCategorytable';
 import HKitable from './HKCategorytable';
 import Hjitable from './HjCategorytable';
+
+const CategoryIndex = {
+    MEI: 0,
+    HAN: 1,
+    RI: 2,
+    GANG: 3,
+};
+
 // table栏
 export default function ApplicationMenuTable() {
-    const currentTabRef = useRef();
     const navigation = useNavigation();
     const route = useRoute();
-    const index = route.params?.i || [];
-    useEffect(() => {
-        if (index.i && currentTabRef.current?.goToPage) {
-            currentTabRef.current.goToPage(index.i);
-            navigation.setParams({ i: { i: 0 } });
-        }
-    }, []);
+    const category = route.params?.category || 'MEI';
 
     return (
         <View style={styles.container}>
@@ -27,8 +28,7 @@ export default function ApplicationMenuTable() {
             </TouchableOpacity>
             <ScrollableTabView
                 style={{ flex: 1 }}
-                initialPage={0}
-                ref={currentTabRef}
+                initialPage={CategoryIndex[category]}
                 contentProps={{ keyboardShouldPersistTaps: 'always' }}
                 renderTabBar={(props) => (
                     <ScrollTabBar
@@ -40,9 +40,9 @@ export default function ApplicationMenuTable() {
                         tintTextStyle={styles.tintTextStyle}
                     />
                 )}>
+                <Meitable tabLabel="美剧" />
                 <Hjitable tabLabel="韩剧" />
                 <Ritable tabLabel="日剧" />
-                <Meitable tabLabel="美剧" />
                 <HKitable tabLabel="港剧" />
             </ScrollableTabView>
         </View>

@@ -91,13 +91,6 @@ interface Props {
     count?: number;
 }
 
-const CategoryIndex = {
-    MEI: 0,
-    HAN: 1,
-    RI: 2,
-    GANG: 3,
-};
-
 export default ({ type = 'MEI', count = 6, categoryName }: Props) => {
     const { data, refetch, loading } = useQuery(GQL.categoryMovieQuery, {
         variables: { region: type, count },
@@ -112,7 +105,7 @@ export default ({ type = 'MEI', count = 6, categoryName }: Props) => {
                 <Text style={styles.secTitle}>{categoryName || '热门影视'}</Text>
                 <TouchableOpacity
                     style={styles.headRight}
-                    onPress={() => navigation.navigate('ApplicationMenuTable', { i: CategoryIndex[type] || 0 })}>
+                    onPress={() => navigation.navigate('ApplicationMenuTable', { category: type })}>
                     <Text style={styles.secAll}>查看全部</Text>
                     <Iconfont name="right" size={font(13)} color={'#909090'} />
                 </TouchableOpacity>
