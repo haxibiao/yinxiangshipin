@@ -316,8 +316,8 @@ export default observer(({ playerRef }: Props) => {
                             onHandlerStateChange={onDoublePress}
                             numberOfTaps={2}>
                             <View style={styles.gestureContainer}>
-                                <SeekingProgress />
                                 <Buffering />
+                                <SeekingProgress />
                                 <SpeedUpIndicator visible={speedUpIndicatorVisible} />
                                 <BrightnessIndicator
                                     visible={brightnessIndicatorVisible}

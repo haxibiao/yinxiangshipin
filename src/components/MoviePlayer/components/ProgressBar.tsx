@@ -109,6 +109,7 @@ export default observer(({ playerRef, onTouchMove, onTouchEnd }) => {
                 maximumValue={Number(playerStore.duration)}
                 onValueChange={onSliderValueChanged}
                 onSlidingComplete={onSlidingComplete}
+                thumbImage={require('@app/assets/images/movie/ic_player_thumb.png')}
             />
             <DurationTime />
             {!playerStore.fullscreen && (

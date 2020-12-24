@@ -41,7 +41,10 @@ export const Player = observer(() => {
 
     const _onBuffer = (e) => {
         Log('e.isBuffering', e.isBuffering, playerStore.seeking);
-        playerStore.toggleBuffering(e.isBuffering);
+        // 排除正在seeking buffering中
+        if (!(playerStore.seeking && playerStore.buffering)) {
+            playerStore.toggleBuffering(e.isBuffering);
+        }
         if (playerStore.error) {
             playerStore.toggleError(false);
         }
@@ -61,7 +64,7 @@ export const Player = observer(() => {
     const _onProgress = (e) => {
         playerStore.setProgress(e.currentTime);
         // 处理已经在播放中了,但是buffering状态没有改变
-        if (playerStore.seeking && playerStore.buffering && ++progressInBufferingRef.current > 4) {
+        if (playerStore.buffering && ++progressInBufferingRef.current > 4) {
             progressInBufferingRef.current = 0;
             playerStore.toggleBuffering(false);
         }
