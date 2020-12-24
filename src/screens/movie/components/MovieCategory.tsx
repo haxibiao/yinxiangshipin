@@ -30,37 +30,6 @@ interface MovieProps {
         navigate: (p1: String, p2?: any) => void;
     };
 }
-function MovieItemPlaceholder() {
-    const animation = new Animated.Value(0.5);
-    const animationStyle = { opacity: animation };
-
-    (function startAnimation() {
-        Animated.loop(
-            Animated.sequence([
-                Animated.timing(animation, {
-                    toValue: 1,
-                    duration: 600,
-                    useNativeDriver: true,
-                }),
-                Animated.timing(animation, {
-                    toValue: 0.5,
-                    duration: 600,
-                    useNativeDriver: true,
-                }),
-            ]),
-        ).start();
-    })();
-
-    return (
-        <View style={styles.movieContent}>
-            <Animated.View style={[styles.movieCover, animationStyle]} />
-            <View style={styles.movieInfo}>
-                <Animated.View style={[styles.placeholderName, animationStyle]} />
-                <Animated.View style={[styles.placeholderDesc, animationStyle]} />
-            </View>
-        </View>
-    );
-}
 
 export function MovieItem({ movie, navigation }: MovieProps) {
     const count_series = movie?.count_series;
@@ -157,6 +126,38 @@ export default ({ type = 'MEI', count = 6, categoryName }: Props) => {
         </View>
     );
 };
+
+function MovieItemPlaceholder() {
+    const animation = new Animated.Value(0.5);
+    const animationStyle = { opacity: animation };
+
+    (function startAnimation() {
+        Animated.loop(
+            Animated.sequence([
+                Animated.timing(animation, {
+                    toValue: 1,
+                    duration: 600,
+                    useNativeDriver: true,
+                }),
+                Animated.timing(animation, {
+                    toValue: 0.5,
+                    duration: 600,
+                    useNativeDriver: true,
+                }),
+            ]),
+        ).start();
+    })();
+
+    return (
+        <View style={styles.movieContent}>
+            <Animated.View style={[styles.movieCover, animationStyle]} />
+            <View style={styles.movieInfo}>
+                <Animated.View style={[styles.placeholderName, animationStyle]} />
+                <Animated.View style={[styles.placeholderDesc, animationStyle]} />
+            </View>
+        </View>
+    );
+}
 
 const styles = StyleSheet.create({
     secContainer: {

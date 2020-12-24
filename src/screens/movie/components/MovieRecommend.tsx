@@ -3,6 +3,7 @@ import {
     StyleSheet,
     View,
     Text,
+    Image,
     ImageBackground,
     TouchableWithoutFeedback,
     TouchableOpacity,
@@ -33,6 +34,10 @@ interface MovieProps {
 
 function MovieItem({ movie, navigation }: MovieProps) {
     const hits = movie?.hits;
+
+    if (!movie?.id) {
+        return <MovieItemPlaceholder />;
+    }
 
     return (
         <TouchableWithoutFeedback onPress={() => navigation.navigate('MovieDetail', { movie_id: movie?.id })}>
@@ -140,6 +145,13 @@ export default ({ count = 4, categoryName = '正在热播' }: Props) => {
         <View style={styles.secContainer}>
             <View style={styles.secHead}>
                 <Text style={styles.secTitle}>{categoryName}</Text>
+                <View style={styles.headRight}>
+                    <Image
+                        source={require('@app/assets/images/movie/ic_hot_orange.png')}
+                        style={styles.recommendIcon}
+                    />
+                    <Text style={styles.rightText}>甄选奉上</Text>
+                </View>
             </View>
             <View style={styles.movieList}>
                 {moviesData.map((item, index) => {
@@ -159,6 +171,38 @@ export default ({ count = 4, categoryName = '正在热播' }: Props) => {
         </View>
     );
 };
+
+function MovieItemPlaceholder() {
+    const animation = new Animated.Value(0.5);
+    const animationStyle = { opacity: animation };
+
+    (function startAnimation() {
+        Animated.loop(
+            Animated.sequence([
+                Animated.timing(animation, {
+                    toValue: 1,
+                    duration: 600,
+                    useNativeDriver: true,
+                }),
+                Animated.timing(animation, {
+                    toValue: 0.5,
+                    duration: 600,
+                    useNativeDriver: true,
+                }),
+            ]),
+        ).start();
+    })();
+
+    return (
+        <View style={styles.movieContent}>
+            <Animated.View style={[styles.movieCover, animationStyle]} />
+            <View style={styles.movieInfo}>
+                <Animated.View style={[styles.placeholderName, animationStyle]} />
+                <Animated.View style={[styles.placeholderDesc, animationStyle]} />
+            </View>
+        </View>
+    );
+}
 
 const styles = StyleSheet.create({
     secContainer: {
@@ -181,10 +225,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
     },
-    secAll: {
-        fontSize: font(13),
-        color: '#909090',
-        marginRight: font(-1),
+    recommendIcon: {
+        width: font(15),
+        height: font(15),
+        marginRight: pixel(2),
+    },
+    rightText: {
+        fontSize: font(12),
+        color: '#ff7f02',
     },
     movieList: {
         flexDirection: 'row',
@@ -262,6 +310,20 @@ const styles = StyleSheet.create({
     movieInfo: {
         marginTop: pixel(5),
         minHeight: font(42),
+    },
+    placeholderName: {
+        width: '60%',
+        height: font(15),
+        borderRadius: font(5),
+        marginTop: font(6),
+        backgroundColor: '#f0f0f0',
+    },
+    placeholderDesc: {
+        width: '90%',
+        height: font(15),
+        borderRadius: font(5),
+        marginTop: font(6),
+        backgroundColor: '#f0f0f0',
     },
     movieName: {
         color: '#202020',
