@@ -1,16 +1,16 @@
 import React, { useCallback, useState, useMemo } from 'react';
 import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity, ScrollView } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { observer } from 'mobx-react';
 import { Iconfont, Placeholder } from '@src/components';
 import { PlayerStore } from '@src/components/MoviePlayer';
-import { useNavigation } from '@react-navigation/native';
 import { GQL, useQuery, errorMessage, useFavoriteMutation } from '@src/apollo';
 import { userStore } from '@src/store';
-import { observable } from 'mobx';
-import MovieItem from './MovieItem';
+import { MovieItem } from './MovieCategory';
 import MovieInfoModal from './MovieInfoModal';
 import movieStore from '../store';
 
-export default function VideoContent({ movie }) {
+export default observer(({ movie }) => {
     const navigation = useNavigation();
     const {
         id,
@@ -26,16 +26,11 @@ export default function VideoContent({ movie }) {
         producer,
         actors,
     } = movie;
-    const { loading, error: recommendError, data: recommendData, fetchMore, refetch } = useQuery(
-        GQL.recommendMovieQuery,
-        {
-            variables: { count: 6 },
-            fetchPolicy: 'network-only',
-        },
-    );
-    const recommendMovies = useMemo(() => Helper.syncGetter('recommendMovie', recommendData), [recommendData]);
-
-    const [currentEpisode, setEpisode] = useState(data?.[0]);
+    const { data: recommendData } = useQuery(GQL.recommendMovieQuery, {
+        variables: { count: 6 },
+        fetchPolicy: 'network-only',
+    });
+    const recommendMovies = useMemo(() => recommendData?.recommendMovie || new Array(6).fill({}), [recommendData]);
 
     const toggleFavorite = useFavoriteMutation({
         variables: {
@@ -68,50 +63,39 @@ export default function VideoContent({ movie }) {
         (item, index) => {
             return (
                 <TouchableOpacity
-                    activeOpacity={0.8}
-                    style={[styles.episodeBox, currentEpisode.url === item.url && { borderColor: '#37B7FB' }]}
+                    activeOpacity={0.9}
+                    style={[styles.episodeBox, PlayerStore.currentEpisodeIndex === index && { borderColor: '#37B7FB' }]}
                     onPress={() => {
                         PlayerStore.setCurrentEpisode(item);
-                        setEpisode(item);
                     }}>
-                    <Text style={[styles.episodeText, currentEpisode.url === item.url && { color: '#37B7FB' }]}>
-                        {item.name}
+                    <Text
+                        style={[styles.episodeText, PlayerStore.currentEpisodeIndex === index && { color: '#37B7FB' }]}>
+                        {index + 1}
                     </Text>
                 </TouchableOpacity>
             );
         },
-        [currentEpisode],
+        [PlayerStore.currentEpisodeIndex],
     );
 
     return (
-        <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-            <TouchableOpacity
-                activeOpacity={0.9}
-                style={[styles.areaStyle, { marginRight: pixel(Theme.itemSpace) }]}
-                onPress={() => movieStore.setMovieData(movie)}>
-                <Text style={styles.title}>
-                    {name}
-                    {(region || year || style) && (
-                        <Text style={[styles.description, { color: '#F3583F' }]}>
-                            &emsp;[{region && `${region}`}
-                            {year && `·${year}`}
-                            {style && `·${style}`}]
-                        </Text>
-                    )}
-                </Text>
-                {producer && <Text style={styles.description}>导演：{producer}</Text>}
-                {actors && <Text style={styles.description}>演员：{actors}</Text>}
-                <Text numberOfLines={1} style={styles.description}>
-                    更新至第{count_series}集·简介
-                    <Iconfont name="right" color={'#333'} size={pixel(12)} />
-                </Text>
-                <View style={[styles.header, { marginTop: pixel(8) }]}>
+        <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
+            <TouchableOpacity activeOpacity={1} style={styles.movieInfo} onPress={() => movieStore.setMovieData(movie)}>
+                <Text style={styles.movieName}>{name}</Text>
+                <View style={styles.movieDesc}>
+                    {year && <Text style={styles.description}>{year} · </Text>}
+                    {region && <Text style={styles.description}>{region} · </Text>}
+                    {count_series > 1 && <Text style={styles.description}>{count_series}集全 · </Text>}
+                    <Text style={styles.description}>简介 </Text>
+                    <Iconfont style={{ marginTop: font(1) }} name="right" size={font(12)} color={'#AEBCC4'} />
+                </View>
+                <View style={styles.operates}>
                     <View style={styles.row}>
                         <Image
                             source={require('@app/assets/images/movie/ic_comment.png')}
                             style={styles.operationIcon}
                         />
-                        <Text style={styles.info}>{count_comments}人参与讨论</Text>
+                        <Text style={styles.count_comments}>{count_comments}人参与讨论</Text>
                     </View>
                     <TouchableOpacity onPress={toggleFavoriteOnPress} style={styles.row}>
                         <Image
@@ -122,132 +106,141 @@ export default function VideoContent({ movie }) {
                             }
                             style={styles.operationIcon}
                         />
-                        <Text style={styles.info}>{count_favorites}人收藏</Text>
                     </TouchableOpacity>
                 </View>
             </TouchableOpacity>
             {/* 选集 */}
-            <View style={{ marginBottom: pixel(20) }}>
-                <TouchableOpacity
-                    activeOpacity={0.9}
-                    style={[styles.header, { marginBottom: pixel(10), marginRight: pixel(Theme.itemSpace) }]}
-                    onPress={() => movieStore.setMovieData(Object.assign({}, { ...movie }, { selectEpisode: true }))}>
-                    <Text style={styles.episodeTitle}>选集</Text>
-                    <View style={styles.right}>
-                        <Iconfont name="right" color={'#000'} size={pixel(14)} />
-                    </View>
-                </TouchableOpacity>
-                <FlatList
-                    contentContainerStyle={styles.episodesContentStyle}
-                    data={data}
-                    horizontal={true}
-                    showsHorizontalScrollIndicator={false}
-                    renderItem={({ item, index }) => episodeItem(item, index)}
-                    keyExtractor={(item, index) => index.toString()}
-                />
-            </View>
+            {count_series > 1 && (
+                <View style={styles.sectionWrap}>
+                    <TouchableOpacity
+                        activeOpacity={1}
+                        style={styles.sectionHeader}
+                        onPress={() =>
+                            movieStore.setMovieData(Object.assign({}, { ...movie }, { selectEpisode: true }))
+                        }>
+                        <Text style={styles.sectionTitle}>选集</Text>
+                        <View style={styles.row}>
+                            <Text style={styles.metaText}>{count_series}集全</Text>
+                            <Iconfont name="right" color={'#AEBCC4'} size={pixel(14)} />
+                        </View>
+                    </TouchableOpacity>
+                    <FlatList
+                        contentContainerStyle={styles.episodesContentStyle}
+                        data={data}
+                        horizontal={true}
+                        showsHorizontalScrollIndicator={false}
+                        renderItem={({ item, index }) => episodeItem(item, index)}
+                        keyExtractor={(item, index) => index.toString()}
+                    />
+                </View>
+            )}
             {/* 推荐 */}
-            <View style={[styles.areaStyle, { marginBottom: pixel(10) + pixel(Theme.HOME_INDICATOR_HEIGHT) }]}>
-                <Text style={styles.title}>为你推荐</Text>
+            <View style={styles.sectionWrap}>
+                <View style={styles.sectionHeader}>
+                    <Text style={styles.sectionTitle}>为你推荐</Text>
+                </View>
                 <FlatList
                     numColumns={3}
                     data={recommendMovies}
+                    contentContainerStyle={styles.movieList}
                     showsHorizontalScrollIndicator={false}
-                    renderItem={({ item, index }) => <MovieItem movie={item} boxStyle={styles.boxStyle} />}
-                    keyExtractor={(item, index) => item.id.toString()}
-                    ListFooterComponent={() =>
-                        loading ? (
-                            <View style={{ flexDirection: 'row' }}>
-                                <Placeholder type={'movie'} quantity={6} />
-                            </View>
-                        ) : null
-                    }
+                    ItemSeparatorComponent={() => <View style={{ height: pixel(15) }} />}
+                    renderItem={({ item, index }) => <MovieItem movie={item} navigation={navigation} />}
+                    keyExtractor={(item, index) => (item?.id || index).toString()}
                 />
             </View>
-            <MovieInfoModal setEpisode={setEpisode} currentEpisode={currentEpisode} />
+            <MovieInfoModal />
         </ScrollView>
     );
-}
+});
 
-const itemWidth = (Device.WIDTH - pixel(Theme.itemSpace) * 2 - pixel(20)) / 3;
+const itemWidth = (Device.WIDTH - pixel(14) * 2 - pixel(20)) / 3;
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        paddingTop: pixel(15),
+        paddingTop: pixel(14),
+        paddingBottom: pixel(Theme.HOME_INDICATOR_HEIGHT),
     },
-    title: {
-        fontSize: font(16),
-        fontWeight: 'bold',
-        marginBottom: pixel(10),
+    row: {
+        flexDirection: 'row',
+        alignItems: 'center',
     },
-    areaStyle: {
+    metaText: {
+        fontSize: font(12),
+        lineHeight: font(15),
+        color: '#AEBCC4',
+    },
+    movieInfo: {
         marginBottom: pixel(20),
-        paddingLeft: pixel(Theme.itemSpace),
+        paddingHorizontal: pixel(14),
+    },
+    movieName: {
+        fontSize: font(16),
+        lineHeight: font(20),
+        fontWeight: 'bold',
+    },
+    movieDesc: {
+        marginTop: pixel(6),
+        flexDirection: 'row',
+        alignItems: 'center',
     },
     description: {
         fontSize: font(12),
-        lineHeight: pixel(18),
-        color: '#333',
-        fontWeight: 'normal',
-        marginTop: pixel(8),
+        lineHeight: font(16),
+        color: '#AEBCC4',
+    },
+    operates: {
+        marginTop: pixel(12),
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
     },
     operationIcon: {
         width: pixel(25),
         height: pixel(25),
         resizeMode: 'cover',
     },
-    header: {
+    count_comments: {
+        fontSize: font(12),
+        lineHeight: font(16),
+        color: '#AEBCC4',
+        marginLeft: pixel(2),
+    },
+    sectionWrap: {
+        marginBottom: pixel(20),
+    },
+    sectionHeader: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+        marginBottom: pixel(10),
+        marginHorizontal: pixel(14),
     },
-    episodeTitle: {
+    sectionTitle: {
         fontSize: font(16),
         fontWeight: 'bold',
-        paddingLeft: pixel(Theme.itemSpace),
     },
-    row: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    info: {
-        fontSize: font(12),
-        lineHeight: pixel(18),
-        color: '#333',
-        fontWeight: 'normal',
-        marginLeft: pixel(3),
-        alignSelf: 'flex-end',
-    },
-    right: {
-        flex: 1,
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginLeft: pixel(10),
-        justifyContent: 'flex-end',
+    episodesContentStyle: {
+        paddingRight: pixel(14),
+        marginLeft: pixel(14),
     },
     episodeBox: {
         minWidth: pixel(50),
-        height: pixel(45),
+        height: pixel(50),
         paddingHorizontal: pixel(10),
-        borderWidth: 1,
-        borderColor: '#DDDDDD',
         justifyContent: 'center',
         alignItems: 'center',
+        borderWidth: pixel(1),
+        borderColor: '#f0f0f0',
         borderRadius: pixel(5),
         marginRight: pixel(5),
     },
     episodeText: {
-        fontSize: font(13),
-        lineHeight: pixel(18),
-        color: '#333',
+        fontSize: font(15),
+        lineHeight: font(18),
+        fontWeight: '500',
+        color: '#202020',
     },
-    episodesContentStyle: {
-        paddingRight: pixel(9),
-        paddingLeft: pixel(Theme.itemSpace),
-    },
-    boxStyle: {
-        width: itemWidth,
-        marginRight: pixel(10),
-        marginBottom: pixel(10),
+    movieList: {
+        paddingHorizontal: pixel(14),
     },
 });

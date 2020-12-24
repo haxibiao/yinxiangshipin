@@ -78,7 +78,7 @@ const MENU_WIDTH = (Device.WIDTH - pixel(80)) / 5;
 
 const styles = StyleSheet.create({
     menuList: {
-        marginTop: pixel(14),
+        marginTop: pixel(20),
         paddingRight: pixel(14),
     },
     menuItem: {

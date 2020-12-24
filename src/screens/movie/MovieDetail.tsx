@@ -20,7 +20,7 @@ export default function MovieDetail() {
             movie_id: movie_id,
         },
     });
-    const movie = useMemo(() => Helper.syncGetter('movie', data), [data]);
+    const movie = useMemo(() => data?.movie, [data]);
 
     // 视频播放处理
     useEffect(() => {
@@ -64,7 +64,7 @@ export default function MovieDetail() {
         <View style={[styles.container, { paddingTop: topInset }]}>
             <TouchableOpacity
                 activeOpacity={1}
-                style={[styles.backButton, { top: topInset }]}
+                style={[styles.backButton, { top: topInset + pixel(10) }]}
                 onPress={() => navigation.goBack()}>
                 <Iconfont style={styles.backIcon} name="fanhui" size={font(18)} color={'#fff'} />
             </TouchableOpacity>
@@ -75,7 +75,7 @@ export default function MovieDetail() {
                 renderTabBar={(props) => (
                     <ScrollTabBar
                         {...props}
-                        tabWidth={pixel(60)}
+                        tabWidth={TAB_WIDTH}
                         style={styles.tabBarStyle}
                         tabStyle={styles.tabStyle}
                         underlineStyle={styles.underlineStyle}
@@ -89,6 +89,10 @@ export default function MovieDetail() {
         </View>
     );
 }
+
+const TAB_WIDTH = pixel(58);
+const UNDER_LINE_WIDTH = pixel(12);
+const UNDER_LINE_LEFT = (TAB_WIDTH - UNDER_LINE_WIDTH) / 2;
 
 const styles = StyleSheet.create({
     container: {
@@ -119,8 +123,11 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
     },
     underlineStyle: {
-        width: pixel(20),
-        left: pixel(Theme.itemSpace) + pixel(5),
+        width: UNDER_LINE_WIDTH,
+        height: pixel(3),
+        left: UNDER_LINE_LEFT,
+        bottom: pixel(5),
+        backgroundColor: Theme.primaryColor,
     },
     activeTextStyle: {
         color: '#212121',

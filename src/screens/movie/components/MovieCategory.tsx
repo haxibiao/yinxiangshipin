@@ -1,4 +1,4 @@
-import React, { useRef, useState, useMemo, useCallback } from 'react';
+import React, { useRef, useState, useMemo, useCallback, useEffect } from 'react';
 import {
     StyleSheet,
     View,
@@ -30,17 +30,52 @@ interface MovieProps {
         navigate: (p1: String, p2?: any) => void;
     };
 }
+function MovieItemPlaceholder() {
+    const animation = new Animated.Value(0.5);
+    const animationStyle = { opacity: animation };
 
-function MovieItem({ movie, navigation }: MovieProps) {
+    (function startAnimation() {
+        Animated.loop(
+            Animated.sequence([
+                Animated.timing(animation, {
+                    toValue: 1,
+                    duration: 600,
+                    useNativeDriver: true,
+                }),
+                Animated.timing(animation, {
+                    toValue: 0.5,
+                    duration: 600,
+                    useNativeDriver: true,
+                }),
+            ]),
+        ).start();
+    })();
+
+    return (
+        <View style={styles.movieContent}>
+            <Animated.View style={[styles.movieCover, animationStyle]} />
+            <View style={styles.movieInfo}>
+                <Animated.View style={[styles.placeholderName, animationStyle]} />
+                <Animated.View style={[styles.placeholderDesc, animationStyle]} />
+            </View>
+        </View>
+    );
+}
+
+export function MovieItem({ movie, navigation }: MovieProps) {
     const count_series = movie?.count_series;
     const hits = movie?.hits;
+
+    if (!movie?.id) {
+        return <MovieItemPlaceholder />;
+    }
 
     return (
         <TouchableWithoutFeedback
             disabled={!movie?.id}
             onPress={() => navigation.navigate('MovieDetail', { movie_id: movie?.id })}>
             <View style={styles.movieContent}>
-                <ImageBackground style={styles.movieCover} i resizeMode="cover" source={{ uri: movie?.cover }}>
+                <ImageBackground style={styles.movieCover} resizeMode="cover" source={{ uri: movie?.cover }}>
                     {count_series < 2 ? (
                         <ImageBackground
                             style={styles.picLabel}
@@ -113,7 +148,7 @@ export default ({ type = 'MEI', count = 6, categoryName }: Props) => {
             <View style={styles.movieList}>
                 {moviesData.map((item, index) => {
                     return (
-                        <View style={styles.itemWrap} key={item?.id || index}>
+                        <View key={item?.id || index} style={{ marginTop: pixel(15) }}>
                             <MovieItem movie={item} navigation={navigation} />
                         </View>
                     );
@@ -153,12 +188,10 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         marginRight: pixel(-14),
     },
-    itemWrap: {
-        marginTop: pixel(15),
+    movieContent: {
         marginRight: pixel(14),
         width: POSTER_WIDTH,
     },
-    movieContent: {},
     movieCover: {
         position: 'relative',
         width: POSTER_WIDTH,
@@ -213,6 +246,20 @@ const styles = StyleSheet.create({
     movieInfo: {
         marginTop: pixel(5),
         minHeight: font(42),
+    },
+    placeholderName: {
+        width: '60%',
+        height: font(15),
+        borderRadius: font(5),
+        marginTop: font(6),
+        backgroundColor: '#f0f0f0',
+    },
+    placeholderDesc: {
+        width: '90%',
+        height: font(15),
+        borderRadius: font(5),
+        marginTop: font(6),
+        backgroundColor: '#f0f0f0',
     },
     movieName: {
         color: '#202020',

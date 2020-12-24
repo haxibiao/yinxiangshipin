@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { StyleSheet, Text, View, Modal, Image, TouchableOpacity, ScrollView } from 'react-native';
 import { observer, autorun, adStore, userStore } from '@src/store';
-import { playerStore } from '@src/components/MoviePlayer';
+import { PlayerStore } from '@src/components/MoviePlayer';
 import { DebouncedPressable, Iconfont } from '@src/components';
 import movieStore from '../store';
 
-export default function MovieInfoModal({ setEpisode, currentEpisode }) {
+export default observer(() => {
     const [visible, setVisible] = useState(false);
     const [movie, setMovie] = useState({});
     const [showEpisodes, setShow] = useState(false);
@@ -58,19 +58,19 @@ export default function MovieInfoModal({ setEpisode, currentEpisode }) {
                                             activeOpacity={0.8}
                                             style={[
                                                 styles.episodeBox,
-                                                currentEpisode.url === item.url && { borderColor: '#37B7FB' },
+                                                PlayerStore.currentEpisodeIndex === index && { borderColor: '#37B7FB' },
                                             ]}
                                             onPress={() => {
-                                                playerStore.setCurrentEpisode(item);
-                                                setEpisode(item);
+                                                PlayerStore.setCurrentEpisode(item);
+                                                setVisible(false);
                                             }}
                                             key={(item, index) => String(item.name + index)}>
                                             <Text
                                                 style={[
                                                     styles.episodeText,
-                                                    currentEpisode.url === item.url && { color: '#37B7FB' },
+                                                    PlayerStore.currentEpisodeIndex === index && { color: '#37B7FB' },
                                                 ]}>
-                                                {item.name}
+                                                {index + 1}
                                             </Text>
                                         </TouchableOpacity>
                                     );
@@ -110,13 +110,14 @@ export default function MovieInfoModal({ setEpisode, currentEpisode }) {
             </View>
         </Modal>
     );
-}
+});
+
+const EPISODE_WIDTH = (Device.WIDTH - pixel(66)) / 6;
 
 const styles = StyleSheet.create({
     modalView: {
         flex: 1,
         justifyContent: 'flex-end',
-        backgroundColor: 'rgba(0,0,0,0.3)',
     },
     modalContainer: {
         width: Device.WIDTH,
@@ -164,28 +165,28 @@ const styles = StyleSheet.create({
         color: '#333',
         marginBottom: pixel(5),
     },
-    episodeBox: {
-        minWidth: pixel(50),
-        height: pixel(45),
-        paddingHorizontal: pixel(10),
-        borderWidth: 1,
-        borderColor: '#DDDDDD',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: pixel(5),
-        marginRight: pixel(10),
-        marginBottom: pixel(10),
-    },
-    episodeText: {
-        fontSize: font(13),
-        lineHeight: pixel(18),
-        color: '#333',
-    },
     episodesContentStyle: {
         flexDirection: 'row',
         flexWrap: 'wrap',
-        paddingVertical: pixel(15),
-        paddingRight: pixel(9),
-        paddingHorizontal: pixel(Theme.itemSpace),
+        padding: pixel(18),
+        paddingRight: pixel(2),
+    },
+    episodeBox: {
+        width: EPISODE_WIDTH,
+        height: EPISODE_WIDTH,
+        paddingHorizontal: pixel(10),
+        marginRight: pixel(6),
+        marginBottom: pixel(12),
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: pixel(1),
+        borderColor: '#f0f0f0',
+        borderRadius: pixel(5),
+    },
+    episodeText: {
+        fontSize: font(15),
+        lineHeight: font(18),
+        fontWeight: '500',
+        color: '#202020',
     },
 });
