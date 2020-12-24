@@ -18,7 +18,7 @@ import { Iconfont, DebouncedPressable } from '@src/components';
 import { observer, adStore, userStore } from '@src/store';
 
 const POSTER_WIDTH = Device.WIDTH / 3;
-const POSTER_HEIGHT = POSTER_WIDTH * 0.6;
+const POSTER_HEIGHT = POSTER_WIDTH * 0.65;
 
 interface MovieProps {
     movie: {
@@ -47,7 +47,7 @@ function MovieItem({ movie, navigation }: MovieProps) {
     }
 
     return (
-        <TouchableWithoutFeedback onPress={() => navigation.navigate('MovieDetail', { movie_id: movie?.id })}>
+        <TouchableWithoutFeedback onPress={() => navigation.navigate('MovieDetail', { movie })}>
             <View style={styles.movieContent}>
                 <ImageBackground style={styles.movieCover} i resizeMode="cover" source={{ uri: movie?.cover }}>
                     {count_series > 1 ? (
@@ -102,11 +102,11 @@ export default observer(() => {
         fetchPolicy: 'network-only',
         skip: !userStore.login,
     });
-    const moviesData = useMemo(() => data?.myFavorite?.data || new Array(3).fill({}), [data]);
+    const moviesData = useMemo(() => data?.myFavorite?.data, [data]);
     const hasMore = useMemo(() => data?.myFavorite?.paginatorInfo.hasMorePages, [data]);
     const navigation = useNavigation();
 
-    if (!userStore.login) {
+    if (!userStore.login || !moviesData?.length) {
         return null;
     }
 

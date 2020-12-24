@@ -25,7 +25,7 @@ export default function MyHistory(props: Props) {
     const _renderItem = ({ item, index }) => {
         const movie = item.movie ?? [];
         return (
-            <TouchableOpacity onPress={() => navigation.navigate('MovieDetail', { movie_id: movie.id })}>
+            <TouchableOpacity onPress={() => navigation.navigate('MovieDetail', { movie })}>
                 <View style={{ marginHorizontal: pixel(5) }}>
                     <ImageBackground
                         source={{

@@ -20,7 +20,7 @@ export default ({ style }: Props) => {
 
     const navigation = useNavigation();
     const goToMovieDetail = useCallback((movie) => {
-        navigation.navigate('MovieDetail', { movie_id: movie?.id });
+        navigation.navigate('MovieDetail', { movie });
     }, []);
 
     if (!moviesData?.length) {

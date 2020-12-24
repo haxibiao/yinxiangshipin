@@ -40,7 +40,7 @@ function MovieItem({ movie, navigation }: MovieProps) {
     }
 
     return (
-        <TouchableWithoutFeedback onPress={() => navigation.navigate('MovieDetail', { movie_id: movie?.id })}>
+        <TouchableWithoutFeedback onPress={() => navigation.navigate('MovieDetail', { movie })}>
             <View style={styles.movieContent}>
                 <ImageBackground style={styles.movieCover} i resizeMode="cover" source={{ uri: movie?.cover }}>
                     {hits > 0 && (
@@ -85,7 +85,7 @@ interface Props {
 }
 
 export default ({ count = 4, categoryName = '正在热播' }: Props) => {
-    const { data, refetch, loading } = useQuery(GQL.recommendMovieQuery, {
+    const { data, refetch, loading, error } = useQuery(GQL.recommendMovieQuery, {
         variables: { count },
         fetchPolicy: 'network-only',
     });

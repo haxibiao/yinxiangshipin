@@ -10,7 +10,7 @@ export default function MyFavoriteDetail(props: any) {
     const { navigation, style } = props;
     const _renderItem = ({ item, index }) => {
         return (
-            <TouchFeedback onPress={() => navigation.navigate('MovieDetail', { movie_id: item.movie.id })}>
+            <TouchFeedback onPress={() => navigation.navigate('MovieDetail', { movie: item.movie })}>
                 <View style={styles.content}>
                     <Image source={{ uri: item.movie.cover }} resizeMode="cover" style={styles.coverIcon} />
                     <View style={styles.name}>

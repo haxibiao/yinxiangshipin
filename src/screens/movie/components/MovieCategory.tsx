@@ -40,9 +40,7 @@ export function MovieItem({ movie, navigation }: MovieProps) {
     }
 
     return (
-        <TouchableWithoutFeedback
-            disabled={!movie?.id}
-            onPress={() => navigation.navigate('MovieDetail', { movie_id: movie?.id })}>
+        <TouchableWithoutFeedback disabled={!movie?.id} onPress={() => navigation.navigate('MovieDetail', { movie })}>
             <View style={styles.movieContent}>
                 <ImageBackground style={styles.movieCover} resizeMode="cover" source={{ uri: movie?.cover }}>
                     {count_series < 2 ? (

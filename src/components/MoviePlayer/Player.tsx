@@ -80,12 +80,14 @@ export const Player = observer(() => {
 
     const _onLoad = (e) => {
         Log('_onLoad');
-        if (playerStore.currentEpisode?.progress && playerStore.currentEpisode?.progress >= 10) {
-            playerRef.current.seek(playerStore.currentEpisode.progress);
-            playerStore.sendNotice({ content: '为您定位到上次观看位置', orientation: 'left' });
-        }
         playerStore.setDuration(e.duration);
         playerStore.toggleLoaded(true);
+        if (playerStore.currentEpisode?.progress && playerStore.currentEpisode?.progress >= 10) {
+            playerStore.sendNotice({ content: '为您定位到上次观看位置', orientation: 'left' });
+            const progress = Math.floor(Number(playerStore.currentEpisode?.progress));
+            playerStore.setProgress(progress);
+            playerRef.current?.seek(progress);
+        }
     };
 
     const _onEnd = () => {

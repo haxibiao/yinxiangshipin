@@ -7,9 +7,20 @@ import { QueryList } from '@src/content';
 export default function HistoryDetail(props: any) {
     const { navigation, style } = props;
     const _renderItem = ({ item, index }) => {
-        const movie = item.movie ?? [];
+        const movie = item.movie ?? {};
+        const history = {
+            series_index: item?.series_index,
+            progress: item?.progress,
+        };
+        const count_series = movie?.count_series;
+        let historyText = '尚未观看';
+        if (history?.series_index > 0) {
+            historyText = `看至第${history?.series_index + 1}集${Helper.moment(history?.progress)}`;
+        } else if (history?.progress) {
+            historyText = '看至' + Helper.moment(history?.progress);
+        }
         return (
-            <TouchFeedback onPress={() => navigation.navigate('MovieDetail', { movie_id: movie.id })}>
+            <TouchFeedback onPress={() => navigation.navigate('MovieDetail', { movie, history })}>
                 <View style={styles.content}>
                     <Image source={{ uri: movie.cover }} resizeMode="cover" style={styles.coverIcon} />
                     <View style={styles.name}>
@@ -17,7 +28,7 @@ export default function HistoryDetail(props: any) {
                             {movie.name}
                         </Text>
                         <View>
-                            <Text style={[styles.series_historyTitle]}>已观看:{movie.series_history[0].name}</Text>
+                            <Text style={[styles.series_historyTitle]}>{historyText}</Text>
                             <Row>
                                 <Image
                                     style={[styles.columnIcon, { tintColor: '#BBBBBB' }]}

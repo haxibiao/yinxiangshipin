@@ -93,7 +93,6 @@ import VersionInformation from '../screens/settings/VersionInformation'; // 版�
 import CommonQuestionScreen from '../screens/settings/CommonQuestionScreen'; // 版本信息
 
 // movie of neihandianying.com
-import MoviePlayerScreen from '../screens/movie/moviePlayer';
 import MovieCategoryListScreen from '../screens/movie/MovieCategoryList';
 import MovieDetail from '../screens/movie/MovieDetail';
 import ApplicationMenuTable from '../screens/movie/MovieCategoryList/ApplicationMenuTable';
@@ -293,9 +292,6 @@ export default {
     },
     UserBlockList: {
         component: UserBlockScreen,
-    },
-    MoviePlayer: {
-        component: MoviePlayerScreen,
     },
     MovieCategoryListScreen: {
         component: MovieCategoryListScreen,

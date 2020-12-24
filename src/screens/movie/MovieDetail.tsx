@@ -14,10 +14,14 @@ export default function MovieDetail() {
     const topInset = useStatusBarHeight();
     const navigation = useNavigation();
     const route = useRoute();
-    const movie_id = route.params?.movie_id || Math.round(Math.random() * 10);
+    const movieInfo = route.params?.movie || Math.round(Math.random() * 10);
+    const history = route.params?.history || {
+        series_index: movie?.last_watch_series,
+        progress: movie?.last_watch_progress,
+    };
     const { loading, error, data, fetchMore, refetch } = useQuery(GQL.movieQuery, {
         variables: {
-            movie_id: movie_id,
+            movie_id: movieInfo?.id,
         },
     });
     const movie = useMemo(() => data?.movie, [data]);
@@ -42,7 +46,7 @@ export default function MovieDetail() {
                 appStore.client.mutate({
                     mutation: GQL.saveWatchProgressMutation,
                     variables: {
-                        movie_id: movie.id,
+                        movie,
                         series_index: index,
                         progress,
                     },
@@ -68,7 +72,7 @@ export default function MovieDetail() {
                 onPress={() => navigation.goBack()}>
                 <Iconfont style={styles.backIcon} name="fanhui" size={font(18)} color={'#fff'} />
             </TouchableOpacity>
-            <MoviePlayer movie={movie} onBeforeDestroy={saveWatchProgress} />
+            <MoviePlayer movie={movie} history={history} onBeforeDestroy={saveWatchProgress} />
             <ScrollableTabView
                 contentProps={{ keyboardShouldPersistTaps: 'always' }}
                 style={{ flex: 1, backgroundColor: '#fff' }}

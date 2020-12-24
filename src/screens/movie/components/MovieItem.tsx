@@ -8,7 +8,7 @@ export default function movieItem({ movie, boxStyle }) {
     const navigation = useNavigation();
     const { name, cover, introduction, count_series } = movie;
     return (
-        <TouchableOpacity style={boxStyle} onPress={() => navigation.navigate('MovieDetail', { movie_id: movie.id })}>
+        <TouchableOpacity style={boxStyle} onPress={() => navigation.navigate('MovieDetail', { movie })}>
             <View style={{ borderRadius: pixel(5), overflow: 'hidden' }}>
                 <Image style={styles.cover} resizeMode="cover" source={{ uri: cover }} />
                 <LinearGradient
