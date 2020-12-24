@@ -128,7 +128,6 @@ export default observer(({ playerRef }: Props) => {
     const speedValueRef = useRef(0);
     const [speedUpIndicatorVisible, setSpeedUpIndicatorVisible] = useState(false);
     const onSpeedUpPanGestureHandler = useCallback(({ nativeEvent }) => {
-        // console.log('xxx', nativeEvent.state);
         if (nativeEvent.state === State.ACTIVE) {
             // console.log('ACTIVE');
             speedValueRef.current = playerStore.rate;
@@ -257,8 +256,11 @@ export default observer(({ playerRef }: Props) => {
     // ### 锁定竖屏
     const lockPortraitHandler = useCallback(() => {
         playerStore.toggleFullscreen(false);
-        setFullscreenMode(false);
-        HomeIndicator.setAutoHidden(false);
+        if (Platform.OS === 'ios') {
+            HomeIndicator.setAutoHidden(false);
+        } else {
+            setFullscreenMode(false);
+        }
         StatusBar.setHidden(false, 'slide');
         Orientation.lockToPortrait();
     }, []);
@@ -283,7 +285,7 @@ export default observer(({ playerRef }: Props) => {
                 </Animated.View>
             )}
             <Animated.View style={[styles.secTop, { paddingRight: safeInset }, topControllerBarAnimationStyle]}>
-                <View style={styles.sectionWrap}>
+                <View style={[styles.sectionWrap, playerStore.fullscreen && { paddingHorizontal: pixel(20) }]}>
                     <LinearGradient
                         style={{ ...StyleSheet.absoluteFill, zIndex: -1 }}
                         start={{ x: 0, y: 0 }}
@@ -303,9 +305,8 @@ export default observer(({ playerRef }: Props) => {
                     <View style={styles.row}></View>
                 </View>
             </Animated.View>
-            <LongPressGestureHandler waitFor={doublePressHandlerRef} onHandlerStateChange={onSpeedUpPanGestureHandler}>
+            <LongPressGestureHandler onHandlerStateChange={onSpeedUpPanGestureHandler}>
                 <PanGestureHandler
-                    enabled={!playerStore.buffering}
                     activeOffsetX={[-4, 4]}
                     onHandlerStateChange={onProgressPanGestureHandler}
                     onGestureEvent={onProgressPanGestureEvent}>
@@ -344,7 +345,7 @@ export default observer(({ playerRef }: Props) => {
                 </PanGestureHandler>
             </LongPressGestureHandler>
             <Animated.View style={[styles.secBottom, { paddingRight: safeInset }, bottomControllerBarAnimationStyle]}>
-                <View style={styles.sectionWrap}>
+                <View style={[styles.sectionWrap, playerStore.fullscreen && { paddingHorizontal: pixel(20) }]}>
                     <LinearGradient
                         style={{ ...StyleSheet.absoluteFill, zIndex: -1 }}
                         start={{ x: 0, y: 1 }}
@@ -450,15 +451,14 @@ const styles = StyleSheet.create({
     },
     sectionWrap: {
         paddingVertical: pixel(12),
-        paddingHorizontal: pixel(20),
     },
     secRight: {
         position: 'absolute',
         right: 0,
         top: 0,
-        bottom: 0,
+        bottom: pixel(120),
         zIndex: 2,
-        justifyContent: 'center',
+        justifyContent: 'flex-end',
     },
     sideOperateBtn: {
         width: pixel(40),

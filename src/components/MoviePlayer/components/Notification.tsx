@@ -3,11 +3,13 @@ import { StyleSheet, View, Text, Animated, Easing, Dimensions, InteractionManage
 import LinearGradient from 'react-native-linear-gradient';
 import { observer } from 'mobx-react';
 import { autorun } from 'mobx';
+import useSafeArea from '../helper/useSafeArea';
 import playerStore, { NotificationData } from '../PlayerStore';
 
 const FADE_VALUE = Dimensions.get('window').width * 0.25;
 
 export default observer(() => {
+    const safeInset = useSafeArea({ fullscreen: playerStore.fullscreen });
     const [noticeData, setNoticeData] = useState<NotificationData>();
     const shown = useRef(false);
     const animation = useRef(new Animated.Value(0));
@@ -71,16 +73,18 @@ export default observer(() => {
     }
 
     return (
-        <Animated.View style={[styles.container, animationStyle]}>
+        <Animated.View style={[styles.container, { marginRight: safeInset }, animationStyle]}>
             <LinearGradient
-                style={styles.notificationWrap}
+                style={styles.shade}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 0, y: 1 }}
-                colors={['#00000044', '#00000000']}>
+                colors={['#00000044', '#00000000']}
+            />
+            <View style={styles.notificationWrap}>
                 <View style={styles.notificationItem}>
                     <Text style={styles.notificationText}>{noticeData?.content}</Text>
                 </View>
-            </LinearGradient>
+            </View>
         </Animated.View>
     );
 });
@@ -93,8 +97,10 @@ const styles = StyleSheet.create({
         right: 0,
         zIndex: 1000,
     },
-    notificationWrap: {
+    shade: {
         ...StyleSheet.absoluteFill,
+    },
+    notificationWrap: {
         paddingVertical: pixel(15),
         justifyContent: 'center',
         alignItems: 'center',

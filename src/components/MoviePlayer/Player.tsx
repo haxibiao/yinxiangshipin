@@ -41,8 +41,9 @@ export const Player = observer(() => {
 
     const _onBuffer = (e) => {
         Log('e.isBuffering', e.isBuffering, playerStore.seeking);
-        if (!(playerStore.seeking && !e.isBuffering)) {
-            playerStore.toggleBuffering(e.isBuffering);
+        playerStore.toggleBuffering(e.isBuffering);
+        if (playerStore.error) {
+            playerStore.toggleError(false);
         }
         // if(e.isBuffering){
         //     clearTimeout(bufferingTimerRef.current)

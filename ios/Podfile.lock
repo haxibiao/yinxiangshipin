@@ -131,6 +131,8 @@ PODS:
   - Picker/Core (4.3.7):
     - React
   - RCTRequired (0.63.2)
+  - RCTSystemSetting (1.7.6):
+    - React
   - RCTTypeSafety (0.63.2):
     - FBLazyVector (= 0.63.2)
     - Folly (= 2020.01.13.00)
@@ -317,9 +319,11 @@ PODS:
     - react-native-config/App (= 1.3.3)
   - react-native-config/App (1.3.3):
     - React
+  - react-native-device-orientation (1.0.0):
+    - React
   - react-native-netinfo (5.9.6):
     - React
-  - react-native-orientation (3.1.3):
+  - react-native-realfullscreen (1.0.0):
     - React
   - react-native-safe-area-context (3.1.4):
     - React
@@ -495,6 +499,7 @@ DEPENDENCIES:
   - Permission-PhotoLibrary (from `../node_modules/react-native-permissions/ios/PhotoLibrary.podspec`)
   - Picker (from `../node_modules/react-native-picker`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
+  - RCTSystemSetting (from `../node_modules/react-native-system-setting`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
   - RCTWeChat (from `../node_modules/react-native-wechat-lib`)
   - React (from `../node_modules/react-native/`)
@@ -512,8 +517,9 @@ DEPENDENCIES:
   - react-native-camera (from `../node_modules/react-native-camera`)
   - "react-native-cameraroll (from `../node_modules/@react-native-community/cameraroll`)"
   - react-native-config (from `../node_modules/react-native-config`)
+  - react-native-device-orientation (from `../node_modules/react-native-device-orientation`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
-  - react-native-orientation (from `../node_modules/react-native-orientation`)
+  - react-native-realfullscreen (from `../node_modules/react-native-realfullscreen`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
@@ -619,6 +625,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-picker"
   RCTRequired:
     :path: "../node_modules/react-native/Libraries/RCTRequired"
+  RCTSystemSetting:
+    :path: "../node_modules/react-native-system-setting"
   RCTTypeSafety:
     :path: "../node_modules/react-native/Libraries/TypeSafety"
   RCTWeChat:
@@ -649,10 +657,12 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/cameraroll"
   react-native-config:
     :path: "../node_modules/react-native-config"
+  react-native-device-orientation:
+    :path: "../node_modules/react-native-device-orientation"
   react-native-netinfo:
     :path: "../node_modules/@react-native-community/netinfo"
-  react-native-orientation:
-    :path: "../node_modules/react-native-orientation"
+  react-native-realfullscreen:
+    :path: "../node_modules/react-native-realfullscreen"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-slider:
@@ -763,6 +773,7 @@ SPEC CHECKSUMS:
   Permission-PhotoLibrary: 4d2eff62c8f4b8a27bcf045c0e36f5047efbbf20
   Picker: 37554355aef82a532ea95b71b6eeba66bc86182b
   RCTRequired: f13f25e7b12f925f1f6a6a8c69d929a03c0129fe
+  RCTSystemSetting: 5107b7350d63b3f7b42a1277d07e4e5d9df879be
   RCTTypeSafety: 44982c5c8e43ff4141eb519a8ddc88059acd1f3a
   RCTWeChat: 21edc74a8d759566d226e6fa12e7ea5ac6bf2129
   React: e1c65dd41cb9db13b99f24608e47dd595f28ca9a
@@ -778,8 +789,9 @@ SPEC CHECKSUMS:
   react-native-camera: 3940f67a49eaf736525a3e730653fcb98e1525dd
   react-native-cameraroll: ae0a7c0cc8462508855707ff623b1e789b692865
   react-native-config: 9a061347e0136fdb32d43a34d60999297d672361
+  react-native-device-orientation: 2f6b837475f7626dee770b4534ba0e90abc3e228
   react-native-netinfo: 38a1e0b3e89b48e4b5833ed475d8df5f049f6f90
-  react-native-orientation: f1caf84d65f1a4fd4511a18f2b924e634ad7a628
+  react-native-realfullscreen: c033209eb2417b162600a33cecaa682d19111ed2
   react-native-safe-area-context: eb91fe1fb3f7b87d9c30a7f0808407d8569d539d
   react-native-slider: e99fc201cefe81270fc9d81714a7a0f5e566b168
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865

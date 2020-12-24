@@ -72,10 +72,14 @@ export default observer(({ playerRef, onTouchMove, onTouchEnd }) => {
 
     const lockToLandscapeHandler = useCallback(() => {
         playerStore.toggleFullscreen(true);
-        setFullscreenMode(true);
-        HomeIndicator.setAutoHidden(true);
         StatusBar.setHidden(true, 'slide');
-        Orientation.lockToLandscapeLeft();
+        if (Platform.OS === 'ios') {
+            HomeIndicator.setAutoHidden(true);
+            Orientation.lockToLandscapeRight();
+        } else {
+            setFullscreenMode(true);
+            Orientation.lockToLandscapeLeft();
+        }
     }, []);
 
     return (
@@ -96,7 +100,6 @@ export default observer(({ playerRef, onTouchMove, onTouchEnd }) => {
             )}
             <CurrentTime />
             <Slider
-                disabled={playerStore.buffering}
                 style={styles.slider}
                 maximumTrackTintColor="#ffffffcc"
                 minimumTrackTintColor={Theme.primaryColor}
