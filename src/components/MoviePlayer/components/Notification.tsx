@@ -3,13 +3,11 @@ import { StyleSheet, View, Text, Animated, Easing, Dimensions, InteractionManage
 import LinearGradient from 'react-native-linear-gradient';
 import { observer } from 'mobx-react';
 import { autorun } from 'mobx';
-import useSafeArea from '../helper/useSafeArea';
 import playerStore, { NotificationData } from '../PlayerStore';
 
 const FADE_VALUE = Dimensions.get('window').width * 0.25;
 
 export default observer(() => {
-    const safeInset = useSafeArea({ fullscreen: playerStore.fullscreen });
     const [noticeData, setNoticeData] = useState<NotificationData>();
     const shown = useRef(false);
     const animation = useRef(new Animated.Value(0));
@@ -73,7 +71,7 @@ export default observer(() => {
     }
 
     return (
-        <Animated.View style={[styles.container, { marginRight: safeInset }, animationStyle]}>
+        <Animated.View style={[styles.container, animationStyle]}>
             <LinearGradient
                 style={styles.shade}
                 start={{ x: 0, y: 0 }}

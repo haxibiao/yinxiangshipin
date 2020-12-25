@@ -90,7 +90,7 @@ export const LockOverlay = observer(() => {
         <TapGestureHandler onHandlerStateChange={onTogglePress}>
             <View style={styles.container}>
                 <Animated.View
-                    style={[styles.sideBar, { paddingRight: safeInset + pixel(10), opacity: operateOpacity }]}>
+                    style={[styles.sideBar, { paddingHorizontal: safeInset + pixel(10), opacity: operateOpacity }]}>
                     <TapGestureHandler enabled={operateVisible} onHandlerStateChange={onUnlockPress}>
                         <View style={styles.operateBtn}>
                             <SvgIcon name={SvgPath.lock} size={22} color={'#FFFFFFDD'} />

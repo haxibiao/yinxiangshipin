@@ -5,9 +5,7 @@ const { StatusBarManager } = NativeModules;
 export default function useSafeArea({ fullscreen }) {
     const [statusBarHeight, setStatusBarHeight] = useState(0);
     useEffect(() => {
-        if (!Device.Android || !Device.isFullScreenDevice || !fullscreen) {
-            setStatusBarHeight(0);
-        } else if (Platform.OS == 'android') {
+        if (Platform.OS == 'android') {
             setStatusBarHeight(StatusBar.currentHeight || 0);
         } else {
             StatusBarManager.getHeight(({ height }) => {
@@ -15,5 +13,5 @@ export default function useSafeArea({ fullscreen }) {
             });
         }
     }, [fullscreen]);
-    return statusBarHeight;
+    return fullscreen ? statusBarHeight : 0;
 }

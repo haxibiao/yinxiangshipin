@@ -284,7 +284,7 @@ export default observer(({ playerRef }: Props) => {
                     </TapGestureHandler>
                 </Animated.View>
             )}
-            <Animated.View style={[styles.secTop, { paddingRight: safeInset }, topControllerBarAnimationStyle]}>
+            <Animated.View style={[styles.secTop, { paddingHorizontal: safeInset }, topControllerBarAnimationStyle]}>
                 <View style={[styles.sectionWrap, playerStore.fullscreen && { paddingHorizontal: pixel(20) }]}>
                     <LinearGradient
                         style={{ ...StyleSheet.absoluteFill, zIndex: -1 }}
@@ -344,7 +344,8 @@ export default observer(({ playerRef }: Props) => {
                     </TapGestureHandler>
                 </PanGestureHandler>
             </LongPressGestureHandler>
-            <Animated.View style={[styles.secBottom, { paddingRight: safeInset }, bottomControllerBarAnimationStyle]}>
+            <Animated.View
+                style={[styles.secBottom, { paddingHorizontal: safeInset }, bottomControllerBarAnimationStyle]}>
                 <View style={[styles.sectionWrap, playerStore.fullscreen && { paddingHorizontal: pixel(20) }]}>
                     <LinearGradient
                         style={{ ...StyleSheet.absoluteFill, zIndex: -1 }}

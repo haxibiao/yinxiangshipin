@@ -65,8 +65,13 @@ export default function MovieDetail() {
     if (loading) return <SpinnerLoading />;
 
     return (
-        <View style={[styles.container, { paddingTop: topInset }]}>
-            <MoviePlayer movie={movie} history={history} onBeforeDestroy={saveWatchProgress} />
+        <View style={styles.container}>
+            <MoviePlayer
+                style={{ paddingTop: topInset }}
+                movie={movie}
+                history={history}
+                onBeforeDestroy={saveWatchProgress}
+            />
             <ScrollableTabView
                 contentProps={{ keyboardShouldPersistTaps: 'always' }}
                 style={{ flex: 1, backgroundColor: '#fff' }}
@@ -101,7 +106,6 @@ const UNDER_LINE_LEFT = (TAB_WIDTH - UNDER_LINE_WIDTH) / 2;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#010101',
     },
     backButton: {
         position: 'absolute',

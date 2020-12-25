@@ -1,5 +1,5 @@
 import React, { useState, useEffect, ReactChild } from 'react';
-import { StyleSheet, View, Text, Dimensions, Animated } from 'react-native';
+import { StyleSheet, View, Text, Dimensions, Animated, ViewStyle } from 'react-native';
 import LottieView from 'lottie-react-native';
 import { observer } from 'mobx-react';
 import Notification from './components/Notification';
@@ -9,13 +9,14 @@ import playerStore, { MovieScheme, MovieHistoryScheme } from './PlayerStore';
 
 const portraitHeight = Dimensions.get('window').width * 0.58;
 interface Props {
+    style?: ViewStyle;
     children?: ReactChild; // placeholder
     movie: MovieScheme;
     history?: MovieHistoryScheme;
     onBeforeDestroy?: ({ index, progress }: { index: number; progress: number }) => void;
 }
 
-export const MoviePlayer = observer(({ children, movie, history, onBeforeDestroy }: Props) => {
+export const MoviePlayer = observer(({ style, children, movie, history, onBeforeDestroy }: Props) => {
     useEffect(() => {
         const data = movie?.data || [];
         const series_index = history?.series_index || 0;
@@ -36,27 +37,33 @@ export const MoviePlayer = observer(({ children, movie, history, onBeforeDestroy
     }, []);
 
     if (!movie) {
-        return <View style={styles.portrait}>{children}</View>;
+        return <View style={[styles.portrait, style]}>{children}</View>;
     }
 
     return (
-        <Animated.View style={playerStore.fullscreen ? styles.landscape : styles.portrait}>
-            <Notification />
-            <Player />
+        <Animated.View style={[styles.container, playerStore.fullscreen ? styles.fullscreenMode : style]}>
+            <View style={playerStore.fullscreen ? styles.landscape : styles.portrait}>
+                <Notification />
+                <Player />
+            </View>
         </Animated.View>
     );
 });
 
 const styles = StyleSheet.create({
-    portrait: {
+    container: {
         backgroundColor: '#010101',
-        height: portraitHeight,
     },
-    landscape: {
-        ...StyleSheet.absoluteFillObject,
-        backgroundColor: '#010101',
+    fullscreenMode: {
+        ...StyleSheet.absoluteFill,
         zIndex: 999,
         padding: 0,
         margin: 0,
+    },
+    portrait: {
+        height: portraitHeight,
+    },
+    landscape: {
+        ...StyleSheet.absoluteFill,
     },
 });
