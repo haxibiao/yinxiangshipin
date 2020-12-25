@@ -130,8 +130,16 @@ class PlayerStore {
     }
 
     @action.bound
-    toggleResizeMode(mode: 'contain' | 'cover') {
-        this.resizeMode = mode;
+    toggleResizeMode(mode?: 'contain' | 'cover') {
+        if (mode) {
+            this.resizeMode = mode;
+        } else {
+            if (this.resizeMode === 'contain') {
+                this.resizeMode = 'cover';
+            } else {
+                this.resizeMode = 'contain';
+            }
+        }
     }
 
     @action.bound

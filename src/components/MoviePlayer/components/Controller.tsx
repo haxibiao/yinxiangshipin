@@ -113,6 +113,15 @@ export default observer(({ playerRef }: Props) => {
     }, [playerStore.loaded, playerStore.locked]);
 
     // ### 右边操作栏
+    // 满屏播放
+    const onToggleResizeMode = useCallback(({ nativeEvent }) => {
+        if (nativeEvent.state === State.ACTIVE) {
+            InteractionManager.runAfterInteractions(() => {
+                toggleControllerBarVisible();
+                playerStore.toggleResizeMode();
+            });
+        }
+    }, []);
     // 锁定播放器
     const onLockPress = useCallback(({ nativeEvent }) => {
         if (nativeEvent.state === State.ACTIVE) {
@@ -277,21 +286,32 @@ export default observer(({ playerRef }: Props) => {
         <View style={styles.container}>
             {playerStore.fullscreen && (
                 <Animated.View style={[styles.secRight, { right: safeInset + pixel(30), opacity: animatedOpacity }]}>
-                    <TapGestureHandler onHandlerStateChange={onLockPress}>
-                        <View style={styles.sideOperateBtn}>
-                            <SvgIcon name={SvgPath.unlock} size={22} color={'#FFFFFFDD'} />
-                        </View>
-                    </TapGestureHandler>
+                    <View style={styles.operation}>
+                        <TapGestureHandler onHandlerStateChange={onToggleResizeMode}>
+                            <View style={[styles.sideOperateBtn, { marginBottom: pixel(10) }]}>
+                                <SvgIcon
+                                    name={playerStore.resizeMode === 'contain' ? SvgPath.zoomIn : SvgPath.zoomOut}
+                                    size={22}
+                                    color={'#FFFFFFDD'}
+                                />
+                            </View>
+                        </TapGestureHandler>
+                        <TapGestureHandler onHandlerStateChange={onLockPress}>
+                            <View style={styles.sideOperateBtn}>
+                                <SvgIcon name={SvgPath.unlock} size={22} color={'#FFFFFFDD'} />
+                            </View>
+                        </TapGestureHandler>
+                    </View>
                 </Animated.View>
             )}
             <Animated.View style={[styles.secTop, { paddingHorizontal: safeInset }, topControllerBarAnimationStyle]}>
+                <LinearGradient
+                    style={{ ...StyleSheet.absoluteFill, zIndex: -1 }}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 0, y: 1 }}
+                    colors={['#00000044', '#00000033', '#00000028', '#00000011', '#00000000']}
+                />
                 <View style={[styles.sectionWrap, playerStore.fullscreen && { paddingHorizontal: pixel(20) }]}>
-                    <LinearGradient
-                        style={{ ...StyleSheet.absoluteFill, zIndex: -1 }}
-                        start={{ x: 0, y: 0 }}
-                        end={{ x: 0, y: 1 }}
-                        colors={['#00000044', '#00000033', '#00000028', '#00000011', '#00000000']}
-                    />
                     <View style={styles.row}>
                         {playerStore.fullscreen && (
                             <>
@@ -346,13 +366,13 @@ export default observer(({ playerRef }: Props) => {
             </LongPressGestureHandler>
             <Animated.View
                 style={[styles.secBottom, { paddingHorizontal: safeInset }, bottomControllerBarAnimationStyle]}>
+                <LinearGradient
+                    style={{ ...StyleSheet.absoluteFill, zIndex: -1 }}
+                    start={{ x: 0, y: 1 }}
+                    end={{ x: 0, y: 0 }}
+                    colors={['#00000044', '#00000033', '#00000028', '#00000011', '#00000000']}
+                />
                 <View style={[styles.sectionWrap, playerStore.fullscreen && { paddingHorizontal: pixel(20) }]}>
-                    <LinearGradient
-                        style={{ ...StyleSheet.absoluteFill, zIndex: -1 }}
-                        start={{ x: 0, y: 1 }}
-                        end={{ x: 0, y: 0 }}
-                        colors={['#00000044', '#00000033', '#00000028', '#00000011', '#00000000']}
-                    />
                     <ProgressBar
                         playerRef={playerRef}
                         onTouchMove={clearTimerToControllerBar}
@@ -461,13 +481,17 @@ const styles = StyleSheet.create({
         zIndex: 2,
         justifyContent: 'flex-end',
     },
+    operation: {
+        width: pixel(40),
+        paddingVertical: pixel(5),
+        borderRadius: pixel(20),
+        backgroundColor: '#00000044',
+    },
     sideOperateBtn: {
         width: pixel(40),
-        minHeight: pixel(40),
-        borderRadius: pixel(20),
+        height: pixel(40),
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#00000044',
     },
     progressOperate: {
         flexDirection: 'row',

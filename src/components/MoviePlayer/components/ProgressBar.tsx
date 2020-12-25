@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, Pressable, StatusBar, Platform } from 'react-na
 import Slider from '@react-native-community/slider';
 import Orientation from 'react-native-device-orientation';
 import { setFullscreenMode } from 'react-native-realfullscreen';
-import { Iconfont } from '@src/components';
+import { Iconfont, SvgIcon, SvgPath } from '@src/components';
 import { HomeIndicator } from '@src/native';
 import { moment } from '@src/common';
 import { observer } from 'mobx-react';
@@ -94,7 +94,11 @@ export default observer(({ playerRef, onTouchMove, onTouchEnd }) => {
                             }
                         }}
                         style={styles.operateBtn}>
-                        <Iconfont name={playerStore.paused ? 'bofang1' : 'zanting'} size={font(16)} color="#ffffffee" />
+                        <SvgIcon
+                            name={playerStore.paused ? SvgPath.play : SvgPath.paused}
+                            size={20}
+                            color={'#FFFFFFDD'}
+                        />
                     </Pressable>
                 </View>
             )}
@@ -113,7 +117,7 @@ export default observer(({ playerRef, onTouchMove, onTouchEnd }) => {
             <DurationTime />
             {!playerStore.fullscreen && (
                 <Pressable onPress={lockToLandscapeHandler} style={styles.operateBtn}>
-                    <Iconfont name={'quanping'} size={font(16)} color="#ffffffee" />
+                    <SvgIcon name={SvgPath.fullscreen} size={20} color={'#FFFFFFDD'} />
                 </Pressable>
             )}
         </View>
