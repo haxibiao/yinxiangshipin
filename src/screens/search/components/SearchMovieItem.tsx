@@ -35,7 +35,7 @@ const SearchMovieItem = observer(({ movie }) => {
     }, [movie]);
 
     const toMovieDetail = () => {
-        navigation.navigate('MovieDetail', { movie_id: movie.id });
+        navigation.navigate('MovieDetail', { movie });
     };
 
     return (
