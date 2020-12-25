@@ -10,6 +10,7 @@ import { GQL, useQuery, useMutation } from '@src/apollo';
 import { userStore } from '@src/store';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
+// 子龙写的初版影视首页
 const index = () => {
     const navigation = useNavigation();
     const route = useRoute();
