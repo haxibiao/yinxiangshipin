@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
         ...StyleSheet.absoluteFillObject,
     },
     controllerWrap: {
-        ...StyleSheet.absoluteFill,
+        ...StyleSheet.absoluteFillObject,
         zIndex: 2,
     },
 });

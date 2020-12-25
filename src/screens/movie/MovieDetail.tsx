@@ -66,12 +66,6 @@ export default function MovieDetail() {
 
     return (
         <View style={[styles.container, { paddingTop: topInset }]}>
-            <TouchableOpacity
-                activeOpacity={1}
-                style={[styles.backButton, { top: topInset + pixel(10) }]}
-                onPress={() => navigation.goBack()}>
-                <Iconfont style={styles.backIcon} name="fanhui" size={font(18)} color={'#fff'} />
-            </TouchableOpacity>
             <MoviePlayer movie={movie} history={history} onBeforeDestroy={saveWatchProgress} />
             <ScrollableTabView
                 contentProps={{ keyboardShouldPersistTaps: 'always' }}
@@ -90,6 +84,12 @@ export default function MovieDetail() {
                 <VideoContent tabLabel="视频" movie={movie} />
                 <CommentContent tabLabel="讨论" movie={movie} />
             </ScrollableTabView>
+            <TouchableOpacity
+                activeOpacity={1}
+                style={[styles.backButton, { top: topInset + pixel(10) }]}
+                onPress={() => navigation.goBack()}>
+                <Iconfont style={styles.backIcon} name="fanhui" size={font(18)} color={'#fff'} />
+            </TouchableOpacity>
         </View>
     );
 }
@@ -109,7 +109,6 @@ const styles = StyleSheet.create({
         width: pixel(40),
         height: Theme.NAVBAR_HEIGHT,
         paddingLeft: pixel(15),
-        zIndex: 2,
     },
     backIcon: {
         textShadowColor: 'rgba(0, 0, 0, 0.75)',

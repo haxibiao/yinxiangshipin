@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
         height: portraitHeight,
     },
     landscape: {
-        ...StyleSheet.absoluteFill,
+        ...StyleSheet.absoluteFillObject,
         backgroundColor: '#010101',
         zIndex: 999,
         padding: 0,
