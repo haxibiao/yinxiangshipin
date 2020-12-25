@@ -51,17 +51,17 @@ const SearchMovieItem = observer(({ movie }) => {
                     }}>
                     <Text style={styles.title}>{movie?.name}</Text>
                     <Text style={styles.info} numberOfLines={1}>
-                        {movie.region && `${movie.region}`}
-                        {movie.year && `·${movie.year}`}
-                        {movie.style && `·${movie.style}`}
-                        {movie.count_series && `·更新至第${movie.count_series}集`}
+                        {movie.region && `${movie.region} · `}
+                        {movie.year && `${movie.year} · `}
+                        {movie.style && `${movie.style} · `}
+                        {movie.count_series && `更新至第${movie.count_series}集`}
                     </Text>
-                    {movie.producer && (
+                    {!!movie.producer && (
                         <Text style={styles.info} numberOfLines={1}>
                             导演：{movie.producer}
                         </Text>
                     )}
-                    {movie.actors && (
+                    {!!movie.actors && (
                         <Text style={styles.info} numberOfLines={1}>
                             演员：{movie.actors}
                         </Text>

@@ -85,16 +85,16 @@ export default observer(() => {
                                     <View style={styles.right}>
                                         <Text style={styles.title}>{movie.name}</Text>
                                         <Text style={styles.info}>
-                                            {movie.region && `${movie.region}`}
-                                            {movie.year && `·${movie.year}`}
-                                            {movie.style && `·${movie.style}`}
-                                            {movie.count_series && `·更新至第${movie.count_series}集`}
+                                            {movie.region && `${movie.region} · `}
+                                            {movie.year && `${movie.year} · `}
+                                            {movie.style && `${movie.style} · `}
+                                            {movie.count_series && `更新至第${movie.count_series}集`}
                                         </Text>
-                                        {movie.producer && <Text style={styles.info}>导演：{movie.producer}</Text>}
-                                        {movie.actors && <Text style={styles.info}>演员：{movie.actors}</Text>}
+                                        {!!movie.producer && <Text style={styles.info}>导演：{movie.producer}</Text>}
+                                        {!!movie.actors && <Text style={styles.info}>演员：{movie.actors}</Text>}
                                     </View>
                                 </View>
-                                {movie.introduction && (
+                                {!!movie.introduction && (
                                     <View>
                                         <Text style={[styles.title, { marginTop: pixel(20) }]}>概要</Text>
                                         <Text style={[styles.info, { color: '#666666' }]}>{movie.introduction}</Text>
