@@ -12,6 +12,6 @@ export default function useSafeArea({ fullscreen }) {
                 setStatusBarHeight(height);
             });
         }
-    }, [fullscreen]);
+    }, []);
     return fullscreen ? statusBarHeight : 0;
 }

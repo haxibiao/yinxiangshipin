@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, Animated, Easing, TouchableOpacity, StatusBar }
 import Video from 'react-native-video';
 import { observer } from 'mobx-react';
 import playerStore, { EpisodeScheme } from './PlayerStore';
+import useSafeArea from './helper/useSafeArea';
 import VideoStatus from './components/VideoStatus';
 import Exception from './components/Exception';
 import Controller from './components/Controller';
@@ -12,6 +13,7 @@ import LockOverlay from './components/LockOverlay';
 import DisplayContainer from './components/DisplayContainer';
 
 export const Player = observer(() => {
+    const safeInset = useSafeArea({ fullscreen: playerStore.fullscreen });
     const playerRef = useRef();
     const progressInBufferingRef = useRef(0);
     const errorTimerRef = useRef(0);
@@ -98,7 +100,10 @@ export const Player = observer(() => {
             <DisplayContainer visible={playerStore.currentEpisode.url && !playerStore.sourceException}>
                 <Video
                     ref={playerRef}
-                    style={styles.absoluteVideo}
+                    style={[
+                        styles.absoluteVideo,
+                        playerStore.resizeMode === 'contain' && { marginHorizontal: safeInset },
+                    ]}
                     source={{ uri: playerStore.currentEpisode.url }}
                     rate={playerStore.rate}
                     paused={playerStore.paused}
