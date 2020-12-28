@@ -75,7 +75,7 @@ export default (props) => {
 
     return (
         <View style={styles.container}>
-            <NavBarHeader title="应用商店好评" statusbarProperties={{ barStyle: 'dark-content' }} />
+            <NavBarHeader title="应用商店好评" StatusBarProps={{ barStyle: 'dark-content' }} />
             <ScrollView contentContainerStyle={styles.contentContainer} keyboardShouldPersistTaps={'always'}>
                 <TouchableOpacity
                     style={styles.operationItem}

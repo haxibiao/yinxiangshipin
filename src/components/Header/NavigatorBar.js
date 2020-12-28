@@ -113,7 +113,7 @@ const NavigatorBar = (props: any) => {
                         width: Theme.navBarContentHeight,
                         justifyContent: 'center',
                     }}>
-                    <Iconfont name="zuojiantou" color={'#333'} size={pixel(22)} />
+                    <Iconfont name="zuojiantou" color={'#333'} size={font(22)} />
                 </TouchableOpacity>
             );
         }

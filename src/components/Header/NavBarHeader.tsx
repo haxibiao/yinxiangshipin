@@ -8,7 +8,7 @@ import {
     ViewStyle,
     TextStyle,
     StatusBar,
-    StatusBarProperties,
+    StatusBarProps,
 } from 'react-native';
 import { useNavigation, useRoute, useIsFocused } from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
@@ -25,7 +25,7 @@ import Iconfont from '../Iconfont';
 }
 
 interface Props {
-    statusbarProperties: StatusBarProperties;
+    StatusBarProps?: StatusBarProps;
     navBarStyle?: ViewStyle;
     centerStyle?: ViewStyle;
     titleStyle?: TextStyle;
@@ -44,7 +44,7 @@ interface Props {
 export default (props: Props) => {
     const navigation = useNavigation();
     const {
-        statusbarProperties = {},
+        StatusBarProps = {},
         navBarStyle,
         centerStyle,
         titleStyle,
@@ -78,7 +78,7 @@ export default (props: Props) => {
                     <Iconfont
                         style={isTransparent && styles.textShadow}
                         name="fanhui"
-                        size={23}
+                        size={font(22)}
                         color={isTransparent ? '#fff' : '#2b2b2b'}
                     />
                 </TouchableOpacity>
@@ -104,7 +104,7 @@ export default (props: Props) => {
                     <Iconfont
                         style={isTransparent && styles.textShadow}
                         name="fangdajing"
-                        size={23}
+                        size={font(22)}
                         color={isTransparent ? '#fff' : '#2b2b2b'}
                     />
                 </TouchableOpacity>
@@ -115,7 +115,7 @@ export default (props: Props) => {
                     <Iconfont
                         style={isTransparent && styles.textShadow}
                         name="androidgengduo"
-                        size={23}
+                        size={font(22)}
                         color={isTransparent ? '#fff' : '#2b2b2b'}
                     />
                 </TouchableOpacity>
@@ -141,7 +141,7 @@ export default (props: Props) => {
 
     return (
         <View style={[styles.navBar, isTransparent && styles.transparent, navBarStyle]}>
-            {isFocused ? <StatusBar {...statusbarProperties} /> : null}
+            {isFocused ? <StatusBar {...StatusBarProps} /> : null}
             <View style={styles.header}>
                 <View style={[styles.headerSide, styles.sideLeft]}>{headerLeft}</View>
                 {center}

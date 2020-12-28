@@ -17,7 +17,7 @@ export default () => {
     return (
         <View style={styles.container}>
             <NavBarHeader
-                statusbarProperties={{ barStyle: 'dark-content' }}
+                StatusBarProps={{ barStyle: 'dark-content' }}
                 title="个人动态"
                 hasSearchButton={true}
                 onPressSearch={() => navigation.push('SearchVideo', { user_id })}

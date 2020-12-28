@@ -11,7 +11,7 @@ export default (props: any) => {
     }, []);
     return (
         <View style={styles.container}>
-            <NavBarHeader title="喜欢和赞" statusbarProperties={{ barStyle: 'dark-content' }} />
+            <NavBarHeader title="喜欢和赞" StatusBarProps={{ barStyle: 'dark-content' }} />
             <QueryList
                 contentContainerStyle={styles.contentContainer}
                 gqlDocument={GQL.likeNotificationsQuery}
