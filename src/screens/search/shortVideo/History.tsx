@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, TouchableWithoutFeedback, TouchableOpacity } fr
 import { Iconfont, Row } from '@src/components';
 import { Storage, RecordKeys } from '@src/store';
 
-const SearchRecord = ({ searchKeyword, onSearch, color = '#2b2b2b' }) => {
+export default ({ searchKeyword, onSearch }) => {
     const [recordData, setRecordData] = useState([]);
 
     const getRecord = useCallback(async () => {
@@ -55,14 +55,14 @@ const SearchRecord = ({ searchKeyword, onSearch, color = '#2b2b2b' }) => {
                     <TouchableWithoutFeedback key={keyword} onPress={() => onSearch(keyword)}>
                         <View style={styles.keywordItem}>
                             <Row>
-                                <Iconfont name="shizhong" size={font(16)} color={color} />
-                                <Text style={[styles.keywordText, { color }]}>{keyword}</Text>
+                                <Iconfont name="shizhong" size={font(16)} color="#fff" />
+                                <Text style={styles.keywordText}>{keyword}</Text>
                             </Row>
                             <TouchableOpacity
                                 style={styles.closeBtn}
                                 activeOpacity={0.9}
                                 onPress={() => removeRecordItem(keyword)}>
-                                <Iconfont name="guanbi1" size={font(16)} color={color} />
+                                <Iconfont name="guanbi1" size={font(16)} color="#fff" />
                             </TouchableOpacity>
                         </View>
                     </TouchableWithoutFeedback>
@@ -77,7 +77,7 @@ const SearchRecord = ({ searchKeyword, onSearch, color = '#2b2b2b' }) => {
                 <View style={styles.historyHeader}>
                     <Text style={styles.title}>搜索历史</Text>
                     <TouchableOpacity activeOpacity={0.9} onPress={reduceRecodes}>
-                        <Text style={{ fontSize: font(14), color: '#909090' }}>清空</Text>
+                        <Text style={{ fontSize: font(14), color: '#b2b2b2' }}>清空</Text>
                     </TouchableOpacity>
                 </View>
             )}
@@ -100,8 +100,8 @@ const styles = StyleSheet.create({
         height: pixel(30),
     },
     title: {
+        color: '#fff',
         fontSize: font(15),
-        color: '#202020',
         fontWeight: 'bold',
     },
     keywordItem: {
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
         paddingLeft: pixel(15),
     },
     keywordText: {
-        color: '#b2b2b2',
+        color: '#ffffff',
         fontSize: font(14),
         marginLeft: pixel(6),
     },
@@ -122,5 +122,3 @@ const styles = StyleSheet.create({
         paddingHorizontal: pixel(15),
     },
 });
-
-export default SearchRecord;

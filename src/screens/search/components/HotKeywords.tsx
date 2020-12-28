@@ -58,7 +58,7 @@ export default function HotKeywords({ onSearch }) {
     return (
         <View>
             <View style={styles.recommendHeader}>
-                <Text style={styles.title}>热搜</Text>
+                <Text style={styles.title}>热门热搜</Text>
             </View>
             <FlatList
                 contentContainerStyle={styles.contentStyle}

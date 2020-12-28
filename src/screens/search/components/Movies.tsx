@@ -1,13 +1,34 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity } from 'react-native';
-import { GQL, errorMessage, useFavoriteMutation } from '@src/apollo';
 import { useNavigation } from '@react-navigation/native';
-import { userStore } from '@src/store';
 import { observer } from 'mobx-react';
+import { userStore } from '@src/store';
+import { GQL, errorMessage, useFavoriteMutation } from '@src/apollo';
+import { QueryList } from '@src/content';
 
-const SearchMovieItem = observer(({ movie }) => {
+export default function SearchedMovie({ keyword }) {
     const navigation = useNavigation();
 
+    return (
+        <QueryList
+            gqlDocument={GQL.searchMoviesQuery}
+            dataOptionChain="searchMovie.data"
+            paginateOptionChain="searchMovie.paginatorInfo"
+            options={{
+                variables: {
+                    keyword: keyword,
+                },
+                fetchPolicy: 'network-only',
+            }}
+            renderItem={({ item }) => <SearchMovieItem movie={item} navigation={navigation} />}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.container}
+            ItemSeparatorComponent={() => <View style={styles.separator} />}
+        />
+    );
+}
+
+const SearchMovieItem = observer(({ movie, navigation }) => {
     const toggleFavorite = useFavoriteMutation({
         variables: {
             id: movie.id,
@@ -39,7 +60,7 @@ const SearchMovieItem = observer(({ movie }) => {
     };
 
     return (
-        <TouchableOpacity activeOpacity={1} style={styles.container} onPress={toMovieDetail}>
+        <TouchableOpacity activeOpacity={1} style={styles.movieWrap} onPress={toMovieDetail}>
             <Image source={{ uri: movie?.cover }} style={styles.cover} />
             <View style={{ flex: 1 }}>
                 <View
@@ -93,6 +114,15 @@ const SearchMovieItem = observer(({ movie }) => {
 
 const styles = StyleSheet.create({
     container: {
+        flexGrow: 1,
+        paddingBottom: Theme.HOME_INDICATOR_HEIGHT,
+    },
+    separator: {
+        marginHorizontal: pixel(Theme.itemSpace),
+        height: pixel(1),
+        backgroundColor: '#F4F4F4',
+    },
+    movieWrap: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         paddingVertical: (pixel(Theme.itemSpace) / 3) * 2,
@@ -138,5 +168,3 @@ const styles = StyleSheet.create({
         marginRight: pixel(2),
     },
 });
-
-export default SearchMovieItem;

@@ -4,21 +4,13 @@ import { PageContainer, Iconfont, HxfTextInput, ScrollTabBar, SafeText, FocusAwa
 import { Storage, RecordKeys } from '@src/store';
 import { useApolloClient, GQL } from '@src/apollo';
 import { useNavigation } from '@react-navigation/native';
-import ScrollableTabView from 'react-native-scrollable-tab-view';
 import __ from 'lodash';
 import HotKeywords from './components/HotKeywords';
-import SearchRecord from './components/SearchRecord';
-import SearchedPost from './components/SearchedPost';
-import SearchedUser from './components/SearchedUser';
-import SearchedTag from './components/SearchedTag';
-import SearchedCollection from './components/SearchedCollection';
-import SearchedMovie from './components/SearchedMovie';
+import SearchHistory from './components/SearchHistory';
+import SearchedResult from './components/SearchedResult';
 
 const Search = () => {
     const navigation = useNavigation();
-    const backButtonPress = useCallback(() => {
-        navigation.goBack();
-    }, []);
 
     const [keyword, setKeyword] = useState('');
     const [textValue, setTextValue] = useState('');
@@ -65,54 +57,11 @@ const Search = () => {
         toggleSearchVisible(false);
     }, []);
 
-    const RecommendKeywords = useMemo(() => {
-        return (
-            <>
-                <HotKeywords onSearch={onSearch} />
-                <SearchRecord searchKeyword={keyword} onSearch={onSearch} />
-            </>
-        );
-    }, [keyword]);
-
-    const RelatedKeywords = useMemo(() => {
-        return (
-            <View style={styles.listHeader}>
-                <SafeText style={styles.searchText}>
-                    搜索包含"<SafeText style={styles.highlightText}>{textValue}</SafeText>"的动态、影视和问答
-                </SafeText>
-            </View>
-        );
-    }, [textValue]);
-
-    const ResultTabView = useMemo(() => {
-        return (
-            <ScrollableTabView
-                key={keyword}
-                style={{ flex: 1 }}
-                renderTabBar={(props) => (
-                    <ScrollTabBar
-                        {...props}
-                        // tabWidth={TAB_WIDTH}
-                        style={styles.tabBarStyle}
-                        underlineStyle={styles.underlineStyle}
-                        activeTextStyle={styles.activeTextStyle}
-                        tintTextStyle={styles.tintTextStyle}
-                    />
-                )}>
-                <SearchedMovie tabLabel="影视" keyword={keyword} navigation={navigation} />
-                <SearchedCollection tabLabel="合集" keyword={keyword} navigation={navigation} />
-                <SearchedPost tabLabel="动态" keyword={keyword} navigation={navigation} />
-                <SearchedUser tabLabel="用户" keyword={keyword} navigation={navigation} />
-                <SearchedTag tabLabel="专题" keyword={keyword} navigation={navigation} />
-            </ScrollableTabView>
-        );
-    }, [keyword]);
-
     return (
         <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="always">
             <FocusAwareStatusBar barStyle="dark-content" />
             <View style={styles.header}>
-                <TouchableOpacity activeOpacity={1} onPress={backButtonPress} style={styles.backButton}>
+                <TouchableOpacity activeOpacity={1} onPress={() => navigation.goBack()} style={styles.backButton}>
                     <Iconfont name="zuojiantou" color={Theme.primaryTextColor} size={pixel(21)} />
                 </TouchableOpacity>
                 <View style={styles.inputContainer}>
@@ -147,17 +96,24 @@ const Search = () => {
                 </TouchableOpacity>
             </View>
             <View style={styles.container}>
-                <View style={[styles.posContent, { zIndex: recordZIndex }]}>{RecommendKeywords}</View>
-                <View style={[styles.posContent, { zIndex: inputValueZIndex }]}>{RelatedKeywords}</View>
-                <View style={[styles.posContent, { zIndex: resultTabViewZIndex }]}>{ResultTabView}</View>
+                <View style={[styles.posContent, { zIndex: recordZIndex }]}>
+                    <HotKeywords onSearch={onSearch} />
+                    <SearchHistory searchKeyword={keyword} onSearch={onSearch} />
+                </View>
+                <View style={[styles.posContent, { zIndex: inputValueZIndex }]}>
+                    <View style={styles.listHeader}>
+                        <SafeText style={styles.searchText}>
+                            搜索包含"<SafeText style={styles.highlightText}>{textValue}</SafeText>"的动态、影视和问答
+                        </SafeText>
+                    </View>
+                </View>
+                <View style={[styles.posContent, { zIndex: resultTabViewZIndex }]}>
+                    <SearchedResult keyword={keyword} />
+                </View>
             </View>
         </ScrollView>
     );
 };
-
-const TAB_WIDTH = pixel(60);
-const UNDER_LINE_WIDTH = pixel(30);
-const UNDER_LINE_LEFT = (Device.WIDTH - TAB_WIDTH * 5) / 2 + (TAB_WIDTH - UNDER_LINE_WIDTH) / 2;
 
 const styles = StyleSheet.create({
     container: {
@@ -251,27 +207,6 @@ const styles = StyleSheet.create({
     searchImage: {
         height: pixel(16),
         width: pixel(16),
-    },
-    tabBarStyle: {
-        height: pixel(42),
-        // paddingHorizontal: pixel(42),
-        backgroundColor: 'rgba(255,255,255,1)',
-        borderBottomWidth: pixel(0.5),
-        borderColor: '#f0f0f0',
-        // justifyContent: 'center',
-    },
-    underlineStyle: {
-        // width: UNDER_LINE_WIDTH,
-        // left: UNDER_LINE_LEFT,
-        backgroundColor: Theme.primaryColor,
-    },
-    activeTextStyle: {
-        color: '#212121',
-        fontSize: font(16),
-    },
-    tintTextStyle: {
-        color: '#D0D0D0',
-        fontSize: font(16),
     },
 });
 

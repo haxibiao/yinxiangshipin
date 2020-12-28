@@ -30,8 +30,8 @@ import PraiseScreen from '../screens/task/Praise';
 
 // find search
 import SearchScreen from '../screens/search';
-import SearchVideoScreen from '../screens/search/Video';
-import SearchedVideoListScreen from '../screens/search/VideoList';
+import SearchedShortVideoScreen from '../screens/search/shortVideo';
+import SearchedShortVideoListScreen from '../screens/search/shortVideo/List';
 
 // user
 import UserHomeScreen from '../screens/user';
@@ -188,7 +188,7 @@ export default {
         component: SearchScreen,
     },
     SearchVideo: {
-        component: SearchVideoScreen,
+        component: SearchedShortVideoScreen,
     },
     Category: {
         component: CategoryScreen,
@@ -209,7 +209,7 @@ export default {
         component: TagVideoListScreen,
     },
     SearchedVideoList: {
-        component: SearchedVideoListScreen,
+        component: SearchedShortVideoListScreen,
     },
     CollectionVideoList: {
         component: CollectionVideoListScreen,

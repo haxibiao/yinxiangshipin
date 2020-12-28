@@ -5,9 +5,10 @@ import { Storage, RecordKeys } from '@src/store';
 import { useApolloClient, GQL } from '@src/apollo';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import __ from 'lodash';
-import SearchRecord from './components/SearchRecord';
-import SearchedVideo from './components/SearchedVideo';
+import History from './History';
+import Result from './Result';
 
+// 合集、标签短视频搜索
 const Search = () => {
     const route = useRoute();
     const tag_id = useMemo(() => route?.params?.tag_id, []);
@@ -24,11 +25,11 @@ const Search = () => {
     const [searchVisible, toggleSearchVisible] = useState(false);
 
     const trimmedValue = textValue && textValue.trim();
-    const recordZIndex = !trimmedValue ? 1 : -1;
+    const historyZIndex = !trimmedValue ? 1 : -1;
     const inputValueZIndex = trimmedValue.length ? 2 : -1;
     const resultTabViewZIndex = searchVisible ? 3 : -1;
 
-    const search = __.debounce((kw) => {
+    const onSearch = __.debounce((kw) => {
         setTextValue(kw);
         setKeyword(kw);
         toggleSearchVisible(true);
@@ -63,10 +64,6 @@ const Search = () => {
         setTextValue('');
         toggleSearchVisible(false);
     }, []);
-
-    const Record = useMemo(() => {
-        return <SearchRecord searchKeyword={keyword} search={search} color="#fff" />;
-    }, [keyword]);
 
     const KeywordsList = useMemo(() => {
         return (
@@ -118,10 +115,12 @@ const Search = () => {
                 </TouchableOpacity>
             </View>
             <View style={styles.container}>
-                <View style={[styles.posContent, { zIndex: recordZIndex }]}>{Record}</View>
+                <View style={[styles.posContent, { zIndex: historyZIndex }]}>
+                    <History searchKeyword={keyword} onSearch={onSearch} />
+                </View>
                 <View style={[styles.posContent, { zIndex: inputValueZIndex }]}>{KeywordsList}</View>
                 <View style={[styles.posContent, { zIndex: resultTabViewZIndex }]}>
-                    <SearchedVideo
+                    <Result
                         keyword={keyword}
                         navigation={navigation}
                         tag_id={tag_id}

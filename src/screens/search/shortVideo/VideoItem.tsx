@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, ImageBackground } from 'react-native';
 import { Avatar, Iconfont, SafeText } from '@src/components';
 import LinearGradient from 'react-native-linear-gradient';
 
-export default function SearchVideoItem({ media }) {
+export default function VideoItem({ media }) {
     return (
         <ImageBackground style={styles.videoCover} source={{ uri: media?.video?.dynamic_cover || media?.video?.cover }}>
             <LinearGradient

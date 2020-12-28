@@ -4,11 +4,11 @@ import { SafeText, Iconfont } from '@src/components';
 import { observer } from '@src/store';
 import { GQL } from '@src/apollo';
 import { QueryList } from '@src/content';
-import SearchVideoItem from './SearchVideoItem';
+import VideoItem from './VideoItem';
 import EpisodeItem from '@src/screens/collection/components/EpisodeItem';
 
 // selectable:区分个人合集和公共合集入口
-const index = observer(({ navigation, keyword, tag_id, user_id, collection_id }) => {
+export default observer(({ navigation, keyword, tag_id, user_id, collection_id }) => {
     const [hot, setHot] = useState(false);
 
     const renderItem = useCallback(
@@ -26,7 +26,7 @@ const index = observer(({ navigation, keyword, tag_id, user_id, collection_id })
                         });
                     }}>
                     <View style={styles.itemWrap}>
-                        <SearchVideoItem media={item} />
+                        <VideoItem media={item} />
                     </View>
                 </TouchableWithoutFeedback>
             );
@@ -169,5 +169,3 @@ const styles = StyleSheet.create({
         color: '#666',
     },
 });
-
-export default index;
