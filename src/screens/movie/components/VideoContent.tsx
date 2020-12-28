@@ -6,26 +6,12 @@ import { Iconfont, Placeholder } from '@src/components';
 import { PlayerStore } from '@src/components/MoviePlayer';
 import { GQL, useQuery, errorMessage, useFavoriteMutation } from '@src/apollo';
 import { userStore } from '@src/store';
-import { MovieItem } from './MovieCategory';
+import MovieItem, { SPACE } from './MovieItem';
 import MovieInfoModal from './MovieInfoModal';
 import movieStore from '../store';
 
 export default observer(({ movie }) => {
     const navigation = useNavigation();
-    const {
-        id,
-        name,
-        count_series,
-        count_comments,
-        count_favorites,
-        data,
-        favorited,
-        region,
-        year,
-        style,
-        producer,
-        actors,
-    } = movie;
     const { data: recommendData } = useQuery(GQL.recommendMovieQuery, {
         variables: { count: 6 },
         fetchPolicy: 'network-only',
@@ -34,13 +20,13 @@ export default observer(({ movie }) => {
 
     const toggleFavorite = useFavoriteMutation({
         variables: {
-            id: movie.id,
+            id: movie?.id,
             type: 'movies',
         },
         refetchQueries: () => [
             {
                 query: GQL.movieQuery,
-                variables: { movie_id: id },
+                variables: { movie_id: movie?.id },
             },
             {
                 query: GQL.favoritedMoviesQuery,
@@ -52,7 +38,7 @@ export default observer(({ movie }) => {
     const toggleFavoriteOnPress = useCallback(() => {
         if (TOKEN) {
             movie.favorited ? movie.count_favorites-- : movie.count_favorites++;
-            movie.favorited = !movie?.favorited;
+            movie.favorited = !movie.favorited;
             toggleFavorite();
         } else {
             navigation.navigate('Login');
@@ -81,11 +67,11 @@ export default observer(({ movie }) => {
     return (
         <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
             <TouchableOpacity activeOpacity={1} style={styles.movieInfo} onPress={() => movieStore.setMovieData(movie)}>
-                <Text style={styles.movieName}>{name}</Text>
+                <Text style={styles.movieName}>{movie?.name}</Text>
                 <View style={styles.movieDesc}>
-                    {year && <Text style={styles.description}>{year} · </Text>}
-                    {region && <Text style={styles.description}>{region} · </Text>}
-                    {count_series > 1 && <Text style={styles.description}>{count_series}集全 · </Text>}
+                    {movie?.year && <Text style={styles.description}>{movie?.year} · </Text>}
+                    {movie?.region && <Text style={styles.description}>{movie?.region} · </Text>}
+                    {movie?.count_series > 1 && <Text style={styles.description}>{movie?.count_series}集全 · </Text>}
                     <Text style={styles.description}>简介 </Text>
                     <Iconfont style={{ marginTop: font(1) }} name="right" size={font(12)} color={'#AEBCC4'} />
                 </View>
@@ -95,12 +81,12 @@ export default observer(({ movie }) => {
                             source={require('@app/assets/images/movie/ic_comment.png')}
                             style={styles.operationIcon}
                         />
-                        <Text style={styles.count_comments}>{count_comments}人参与讨论</Text>
+                        <Text style={styles.count_comments}>{movie?.count_comments}人参与讨论</Text>
                     </View>
                     <TouchableOpacity onPress={toggleFavoriteOnPress} style={styles.row}>
                         <Image
                             source={
-                                favorited
+                                movie?.favorited
                                     ? require('@app/assets/images/movie/ic_collected.png')
                                     : require('@app/assets/images/movie/ic_collect.png')
                             }
@@ -110,7 +96,7 @@ export default observer(({ movie }) => {
                 </View>
             </TouchableOpacity>
             {/* 选集 */}
-            {count_series > 1 && (
+            {movie?.count_series > 1 && (
                 <View style={styles.sectionWrap}>
                     <TouchableOpacity
                         activeOpacity={1}
@@ -120,13 +106,13 @@ export default observer(({ movie }) => {
                         }>
                         <Text style={styles.sectionTitle}>选集</Text>
                         <View style={styles.row}>
-                            <Text style={styles.metaText}>{count_series}集全</Text>
+                            <Text style={styles.metaText}>{movie?.count_series}集全</Text>
                             <Iconfont name="right" color={'#AEBCC4'} size={pixel(14)} />
                         </View>
                     </TouchableOpacity>
                     <FlatList
                         contentContainerStyle={styles.episodesContentStyle}
-                        data={data}
+                        data={movie?.data}
                         horizontal={true}
                         showsHorizontalScrollIndicator={false}
                         renderItem={({ item, index }) => episodeItem(item, index)}
@@ -145,7 +131,7 @@ export default observer(({ movie }) => {
                     contentContainerStyle={styles.movieList}
                     showsHorizontalScrollIndicator={false}
                     ItemSeparatorComponent={() => <View style={{ height: pixel(15) }} />}
-                    renderItem={({ item, index }) => <MovieItem movie={item} navigation={navigation} />}
+                    renderItem={({ item, index }) => <MovieItem movie={item} />}
                     keyExtractor={(item, index) => (item?.id || index).toString()}
                 />
             </View>
@@ -154,7 +140,6 @@ export default observer(({ movie }) => {
     );
 });
 
-const itemWidth = (Device.WIDTH - pixel(14) * 2 - pixel(20)) / 3;
 const styles = StyleSheet.create({
     container: {
         paddingTop: pixel(14),
@@ -241,6 +226,6 @@ const styles = StyleSheet.create({
         color: '#202020',
     },
     movieList: {
-        paddingHorizontal: pixel(14),
+        paddingLeft: SPACE,
     },
 });

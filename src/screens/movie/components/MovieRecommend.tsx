@@ -16,8 +16,8 @@ import LinearGradient from 'react-native-linear-gradient';
 import { GQL, useQuery } from '@src/apollo';
 import { Iconfont, DebouncedPressable } from '@src/components';
 
-const POSTER_WIDTH = (Device.WIDTH - pixel(42)) / 2;
-const POSTER_HEIGHT = POSTER_WIDTH * 0.6;
+const POSTER_WIDTH = (Device.WIDTH - pixel(43)) / 2;
+const POSTER_HEIGHT = POSTER_WIDTH * 0.62;
 
 interface MovieProps {
     movie: {

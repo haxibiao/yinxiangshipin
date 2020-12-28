@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Image, TextStyle, ViewStyle, Animated, Easing }
 import LottieView from 'lottie-react-native';
 
 // 列表各状态：加载中、加载更多、没有数据、出错所对应的UI
-type Status = 'loading' | 'loadMore' | 'empty' | 'error';
+type Status = 'loading' | 'loadMore' | 'empty' | 'error' | 'loadAll';
 
 const statusContent: { [key in Status]: any } = {
     loading: {
@@ -34,6 +34,10 @@ interface Props {
 export default function ContentStatus({ status = 'loading', style, titleStyle, refetch }: Props) {
     const data = statusContent[status];
 
+    if (!status) {
+        return null;
+    }
+
     if (status === 'loading') {
         return (
             <View style={[styles.container, style]}>
@@ -44,6 +48,14 @@ export default function ContentStatus({ status = 'loading', style, titleStyle, r
 
     if (status === 'loadMore') {
         return <LoadingContent data={data} style={style} />;
+    }
+
+    if (status === 'loadAll') {
+        return (
+            <View style={styles.listFooter}>
+                <Text style={styles.listFooterText}>--end--</Text>
+            </View>
+        );
     }
 
     return (
@@ -80,7 +92,7 @@ function LoadingContent({ data, style }) {
     });
 
     return (
-        <View style={[styles.loading, style]}>
+        <View style={[styles.listFooter, style]}>
             <Animated.Image style={[styles.loadingImage, { transform: [{ rotateZ }] }]} source={data.image} />
             <Text style={styles.loadingText}>{data.title}</Text>
         </View>
@@ -106,12 +118,16 @@ const styles = StyleSheet.create({
         color: '#b2b2b2',
         marginTop: pixel(10),
     },
-    loading: {
+    listFooter: {
         width: '100%',
+        height: pixel(50),
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        paddingVertical: pixel(14),
+    },
+    listFooterText: {
+        fontSize: font(13),
+        color: '#b4b4b4',
     },
     loadingImage: {
         width: pixel(20),

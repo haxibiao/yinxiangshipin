@@ -13,7 +13,7 @@ interface Props {
 }
 
 export default ({ style }: Props) => {
-    const { data } = useQuery(GQL.movieSwiper, {
+    const { data } = useQuery(GQL.moviePosters, {
         fetchPolicy: 'network-only',
     });
     const moviesData = useMemo(() => data?.activities?.data, [data]);

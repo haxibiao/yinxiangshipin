@@ -1,5 +1,6 @@
-# Write your query or mutation here
-query movieSwiper($type: ActivityType) {
+#import "./movieFragment.graphql"
+
+query moviePosters($type: ActivityType) {
     activities(type: $type) {
         paginatorInfo {
             total
@@ -9,10 +10,7 @@ query movieSwiper($type: ActivityType) {
         data {
             id
             movie {
-                id
-                producer
-                introduction
-                name
+                ...movieFragment
             }
             image_url
             title

@@ -11,12 +11,8 @@ export interface MovieScheme {
     id: string;
     name: string;
     data: EpisodeScheme[];
-}
-
-export interface MovieHistoryScheme {
-    progress: string;
-    last_watch_time: string;
-    series_index: string;
+    series_index?: number; //播放集数
+    progress?: number; //播放进度
 }
 
 export interface NotificationData {

@@ -48,7 +48,6 @@ export default function SelectHeader(props: any) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        width: Device.WIDTH,
     },
     text: {
         fontSize: font(14),
@@ -59,9 +58,8 @@ const styles = StyleSheet.create({
     button: {
         paddingHorizontal: pixel(5),
         paddingVertical: pixel(3),
-        marginLeft: pixel(15),
-        marginRight: pixel(5),
-        marginVertical: pixel(8),
+        marginRight: pixel(14),
+        marginBottom: pixel(14),
         borderRadius: pixel(5),
     },
 });

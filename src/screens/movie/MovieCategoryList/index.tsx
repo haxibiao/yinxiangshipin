@@ -2,9 +2,9 @@ import React, { useCallback, useMemo, useState, useEffect, useRef } from 'react'
 import { StyleSheet, Text, View, FlatList } from 'react-native';
 import { SafeText, PageContainer, TouchFeedback } from '@src/components';
 import { GQL, useQuery } from '@src/apollo';
-import { ContentStatus, QueryList } from '@src/content';
+import { ContentStatus } from '@src/content';
 import SelectHeader from './SelectHeader';
-import MovieItem from '../components/MovieItem';
+import MovieItem, { SPACE } from '../components/MovieItem';
 // 电影分类
 const NumOfLines = 3;
 export default function index() {
@@ -20,9 +20,9 @@ export default function index() {
         fetchPolicy: 'network-only',
     });
     const selectData = useMemo(() => Helper.syncGetter('getFilters', data), [data]);
-    // console.log('selectDataselectData', selectData);
     const { loading, error, data: result, fetchMore, refetch } = useQuery(GQL.categoryMovieQuery, {
         variables: {
+            count: 12,
             region: category.region.value,
             type: category.type.value,
             country: category.country.value,
@@ -53,14 +53,30 @@ export default function index() {
             });
         }
     }, [hasMorePages, currentPage]);
+
     const ListHeader = () => {
-        return <SelectHeader data={selectData} fetchData={movieData} setCategory={setCategory} category={category} />;
+        return (
+            <View style={styles.menuWrap}>
+                <SelectHeader data={selectData} fetchData={movieData} setCategory={setCategory} category={category} />
+            </View>
+        );
     };
+
+    const ListFooter = useCallback(() => {
+        let status = null;
+        if (!loading && hasMorePages) {
+            status = 'loadMore';
+        }
+        if (movieData?.length > 0 && !hasMorePages) {
+            status = 'loadAll';
+        }
+        return <ContentStatus status={status} />;
+    }, [loading, movieData, hasMorePages]);
 
     const _renderItem = ({ item, index }) => {
         return (
             <View style={styles.areaStyle}>
-                <MovieItem movie={item} boxStyle={styles.boxStyle} key={index} />
+                <MovieItem movie={item} />
             </View>
         );
     };
@@ -69,7 +85,7 @@ export default function index() {
         <PageContainer title="电影分类" titleStyle={{ fontSize: font(14) }} loading={filterLoading}>
             <View style={styles.container}>
                 <FlatList
-                    contentContainerStyle={{}}
+                    contentContainerStyle={{ paddingLeft: SPACE }}
                     data={movieData}
                     keyExtractor={(item, index) => String(item.id)}
                     renderItem={_renderItem}
@@ -79,23 +95,31 @@ export default function index() {
                     showsVerticalScrollIndicator={false}
                     removeClippedSubviews={true}
                     ListHeaderComponent={ListHeader}
+                    ListFooterComponent={ListFooter}
                 />
             </View>
         </PageContainer>
     );
 }
-const itemWidth = (Device.WIDTH - pixel(Theme.itemSpace) * 2 - pixel(25)) / 3;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        width: Device.WIDTH,
     },
-    boxStyle: {
-        width: itemWidth,
-        marginBottom: pixel(10),
+    menuWrap: {
+        paddingRight: SPACE,
+        marginTop: SPACE,
     },
     areaStyle: {
-        marginBottom: pixel(8),
-        paddingLeft: pixel(Theme.itemSpace),
+        marginBottom: SPACE,
+    },
+    listFooter: {
+        paddingVertical: pixel(15),
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    listFooterText: {
+        fontSize: font(13),
+        color: '#b4b4b4',
     },
 });
