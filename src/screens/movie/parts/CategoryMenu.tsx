@@ -8,13 +8,13 @@ export default function CategoryMenu() {
     const navigation = useNavigation();
     const historyNavigate = useCallback((i) => {
         if (userStore.login) {
-            navigation.navigate('MoreTable');
+            navigation.navigate('MovieHistories');
         } else {
             navigation.navigate('Login');
         }
     }, []);
     const menuNavigate = useCallback((type) => {
-        navigation.navigate('ApplicationMenuTable', { category: type });
+        navigation.navigate('CategoriesTab', { category: type });
     }, []);
     return (
         <ScrollView
@@ -30,7 +30,7 @@ export default function CategoryMenu() {
                     <Text style={styles.menuName}>记录</Text>
                 </View>
             </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback onPress={() => navigation.navigate('MovieCategoryListScreen')}>
+            <TouchableWithoutFeedback onPress={() => navigation.navigate('MovieCategories')}>
                 <View style={styles.menuItem}>
                     <View style={styles.menuIcon}>
                         <SvgIcon name={SvgPath.category} size={26} color={'#FF8C7D'} />

@@ -20,7 +20,7 @@ export default observer(() => {
             movie_id: movieInfo?.id,
         },
     });
-    const movie = useMemo(() => Object.assign({}, data?.movie, movieInfo), [data]);
+    const movie = useMemo(() => Object.assign({}, movieInfo, data?.movie), [data]);
 
     const saveWatchProgress = useCallback(
         ({ index, progress }) => {
