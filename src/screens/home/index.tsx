@@ -65,7 +65,7 @@ export default observer(({}) => {
                 hasGoBackButton={false}
                 isTransparent={true}
                 hasSearchButton={true}
-                statusbarProperties={{ barStyle: 'light-content' }}
+                StatusBarProps={{ barStyle: 'light-content' }}
             />
         </View>
     );

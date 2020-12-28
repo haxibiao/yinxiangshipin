@@ -50,13 +50,13 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     text: {
-        fontSize: font(14),
+        fontSize: font(13),
         lineHeight: font(18),
         textAlign: 'center',
         color: '#fff',
     },
     button: {
-        paddingHorizontal: pixel(5),
+        paddingHorizontal: pixel(6),
         paddingVertical: pixel(3),
         marginRight: pixel(14),
         marginBottom: pixel(14),

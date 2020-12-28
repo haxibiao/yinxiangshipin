@@ -75,14 +75,14 @@ export default function index() {
 
     const _renderItem = ({ item, index }) => {
         return (
-            <View style={styles.areaStyle}>
+            <View style={styles.itemWrap}>
                 <MovieItem movie={item} />
             </View>
         );
     };
 
     return (
-        <PageContainer title="电影分类" titleStyle={{ fontSize: font(14) }} loading={filterLoading}>
+        <PageContainer title="电影分类" loading={filterLoading}>
             <View style={styles.container}>
                 <FlatList
                     contentContainerStyle={{ paddingLeft: SPACE }}
@@ -109,17 +109,7 @@ const styles = StyleSheet.create({
         paddingRight: SPACE,
         marginTop: SPACE,
     },
-    areaStyle: {
+    itemWrap: {
         marginBottom: SPACE,
-    },
-    listFooter: {
-        paddingVertical: pixel(15),
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    listFooterText: {
-        fontSize: font(13),
-        color: '#b4b4b4',
     },
 });

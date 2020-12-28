@@ -1,12 +1,9 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import { Iconfont, StatusView, SpinnerLoading, ScrollTabBar, FocusAwareStatusBar } from '@src/components';
+import { NavBarHeader, ScrollTabBar } from '@src/components';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
-import Ritable from './RiCategorytable';
-import Meitable from './MeiCategorytable';
-import HKitable from './HKCategorytable';
-import Hjitable from './HjCategorytable';
+import CategoryMovies from './CategoryMovies';
 
 const CategoryIndex = {
     MEI: 0,
@@ -16,16 +13,13 @@ const CategoryIndex = {
 };
 
 // table栏
-export default function ApplicationMenuTable() {
+export default function CategoriesTab() {
     const navigation = useNavigation();
     const route = useRoute();
     const category = route.params?.category || 'MEI';
 
     return (
         <View style={styles.container}>
-            <TouchableOpacity activeOpacity={1} style={styles.goBack} onPress={() => navigation.goBack()}>
-                <Iconfont name="fanhui" size={20} color="#000" />
-            </TouchableOpacity>
             <ScrollableTabView
                 style={{ flex: 1 }}
                 initialPage={CategoryIndex[category]}
@@ -33,52 +27,63 @@ export default function ApplicationMenuTable() {
                 renderTabBar={(props) => (
                     <ScrollTabBar
                         {...props}
-                        tabWidth={pixel(66)}
+                        tabWidth={TAB_WIDTH}
                         style={styles.tabBarStyle}
                         underlineStyle={styles.underlineStyle}
                         activeTextStyle={styles.activeTextStyle}
                         tintTextStyle={styles.tintTextStyle}
                     />
                 )}>
-                <Meitable tabLabel="美剧" />
-                <Hjitable tabLabel="韩剧" />
-                <Ritable tabLabel="日剧" />
-                <HKitable tabLabel="港剧" />
+                <CategoryMovies tabLabel="美剧" type="MEI" />
+                <CategoryMovies tabLabel="韩剧" type="HAN" />
+                <CategoryMovies tabLabel="日剧" type="RI" />
+                <CategoryMovies tabLabel="港剧" type="GANG" />
             </ScrollableTabView>
+            <NavBarHeader
+                navBarStyle={styles.navBarStyle}
+                hasGoBackButton={true}
+                StatusBarProps={{ barStyle: 'dark-content' }}
+            />
         </View>
     );
 }
+
+const TAB_WIDTH = pixel(58);
+const PADDING = pixel(42);
+const UNDER_LINE_WIDTH = pixel(28);
+const UNDER_LINE_LEFT = (TAB_WIDTH - UNDER_LINE_WIDTH) / 2 + PADDING;
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
     },
-    goBack: {
+    navBarStyle: {
         position: 'absolute',
-        top: Theme.statusBarHeight + pixel(Theme.itemSpace),
-        left: pixel(Theme.itemSpace),
-        zIndex: 99,
+        top: 0,
+        left: 0,
+        width: PADDING,
     },
     tabBarStyle: {
-        height: Theme.NAVBAR_HEIGHT,
-        paddingHorizontal: pixel(42),
-        backgroundColor: 'rgba(255,255,255,1)',
         marginTop: Theme.statusBarHeight,
+        height: Theme.NAVBAR_HEIGHT,
+        paddingHorizontal: PADDING,
+        backgroundColor: 'rgba(255,255,255,1)',
     },
     underlineStyle: {
-        width: pixel(26),
+        width: UNDER_LINE_WIDTH,
         height: pixel(3),
-        left: (Device.WIDTH - pixel(63) * 4) / 2,
+        left: UNDER_LINE_LEFT,
         bottom: pixel(5),
+        backgroundColor: Theme.primaryColor,
     },
     activeTextStyle: {
-        color: '#323232',
+        color: '#212121',
         fontSize: font(16),
         fontWeight: 'bold',
     },
     tintTextStyle: {
-        color: '#525252',
+        color: '#666',
         fontSize: font(16),
     },
 });

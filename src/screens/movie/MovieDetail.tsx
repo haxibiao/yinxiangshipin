@@ -1,44 +1,26 @@
 import React, { useMemo, useState, useEffect, useCallback } from 'react';
 import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity, ScrollView } from 'react-native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
 import { ScrollTabBar, Iconfont, StatusView, SpinnerLoading, NavBarHeader } from '@src/components';
 import { MoviePlayer, PlayerStore } from '@src/components/MoviePlayer';
-import { useStatusBarHeight } from '@src/common';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { observer, appStore, userStore } from '@src/store';
 import { GQL, useQuery } from '@src/apollo';
-import { appStore, userStore } from '@src/store';
+import { useStatusBarHeight } from '@src/common';
 import VideoContent from './components/VideoContent';
 import CommentContent from './components/CommentContent';
 
-export default function MovieDetail() {
+export default observer(() => {
     const topInset = useStatusBarHeight();
     const navigation = useNavigation();
     const route = useRoute();
-    const movieInfo = route.params?.movie || Math.round(Math.random() * 10);
-    const history = route.params?.history || {
-        series_index: movie?.last_watch_series,
-        progress: movie?.last_watch_progress,
-    };
-    const { loading, error, data, fetchMore, refetch } = useQuery(GQL.movieQuery, {
+    const movieInfo = route.params?.movie;
+    const { loading, error, data, refetch } = useQuery(GQL.movieQuery, {
         variables: {
             movie_id: movieInfo?.id,
         },
     });
-    const movie = useMemo(() => data?.movie, [data]);
-
-    // 视频播放处理
-    useEffect(() => {
-        const navWillFocusListener = navigation.addListener('focus', () => {
-            PlayerStore.paused = false;
-        });
-        const navWillBlurListener = navigation.addListener('blur', () => {
-            PlayerStore.paused = true;
-        });
-        return () => {
-            navWillFocusListener();
-            navWillBlurListener();
-        };
-    }, []);
+    const movie = useMemo(() => Object.assign({}, data?.movie, movieInfo), [data]);
 
     const saveWatchProgress = useCallback(
         ({ index, progress }) => {
@@ -61,8 +43,19 @@ export default function MovieDetail() {
         [movie],
     );
 
-    if (error) return <StatusView.ErrorView onPress={refetch} error={error} />;
-    if (loading) return <SpinnerLoading />;
+    // 视频播放处理
+    useEffect(() => {
+        const navWillFocusListener = navigation.addListener('focus', () => {
+            PlayerStore.paused = false;
+        });
+        const navWillBlurListener = navigation.addListener('blur', () => {
+            PlayerStore.paused = true;
+        });
+        return () => {
+            navWillFocusListener();
+            navWillBlurListener();
+        };
+    }, []);
 
     return (
         <View style={styles.container}>
@@ -72,32 +65,29 @@ export default function MovieDetail() {
                 onPress={() => navigation.goBack()}>
                 <Iconfont style={styles.backIcon} name="fanhui" size={font(18)} color={'#fff'} />
             </TouchableOpacity>
-            <MoviePlayer
-                style={{ paddingTop: topInset }}
-                movie={movie}
-                history={history}
-                onBeforeDestroy={saveWatchProgress}
-            />
-            <ScrollableTabView
-                contentProps={{ keyboardShouldPersistTaps: 'always' }}
-                style={{ flex: 1, backgroundColor: '#fff' }}
-                renderTabBar={(props) => (
-                    <ScrollTabBar
-                        {...props}
-                        tabWidth={TAB_WIDTH}
-                        style={styles.tabBarStyle}
-                        tabStyle={styles.tabStyle}
-                        underlineStyle={styles.underlineStyle}
-                        activeTextStyle={styles.activeTextStyle}
-                        tintTextStyle={styles.tintTextStyle}
-                    />
-                )}>
-                <VideoContent tabLabel="视频" movie={movie} />
-                <CommentContent tabLabel="讨论" movie={movie} />
-            </ScrollableTabView>
+            <MoviePlayer style={{ paddingTop: topInset }} movie={movie} onBeforeDestroy={saveWatchProgress} />
+            {!loading && (
+                <ScrollableTabView
+                    contentProps={{ keyboardShouldPersistTaps: 'always' }}
+                    style={{ flex: 1, backgroundColor: '#fff' }}
+                    renderTabBar={(props) => (
+                        <ScrollTabBar
+                            {...props}
+                            tabWidth={TAB_WIDTH}
+                            style={styles.tabBarStyle}
+                            tabStyle={styles.tabStyle}
+                            underlineStyle={styles.underlineStyle}
+                            activeTextStyle={styles.activeTextStyle}
+                            tintTextStyle={styles.tintTextStyle}
+                        />
+                    )}>
+                    <VideoContent tabLabel="视频" movie={movie} />
+                    <CommentContent tabLabel="讨论" movie={movie} />
+                </ScrollableTabView>
+            )}
         </View>
     );
-}
+});
 
 const TAB_WIDTH = pixel(58);
 const UNDER_LINE_WIDTH = pixel(12);

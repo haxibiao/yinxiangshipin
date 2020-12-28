@@ -3,10 +3,10 @@ import { StyleSheet, View, Text, ScrollView, Image, TouchableWithoutFeedback, An
 import { FocusAwareStatusBar } from '@src/components';
 import { observer, adStore } from '@src/store';
 import CategoryMenu from './parts/CategoryMenu';
-import MoviesPoster from './components/MoviesPoster';
-import MovieFollows from './components/MovieFollows';
-import MovieRecommend from './components/MovieRecommend';
-import MovieCategory from './components/MovieCategory';
+import MoviesPoster from './parts/MoviesPoster';
+import MovieFollows from './parts/MovieFollows';
+import MovieRecommend from './parts/MovieRecommend';
+import MovieCategory from './parts/MovieCategory';
 
 export default observer(() => {
     return (

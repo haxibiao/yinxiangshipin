@@ -92,12 +92,13 @@ import PhoneVerification from '../screens/settings/PhoneVerification';
 import VersionInformation from '../screens/settings/VersionInformation'; // 版本信息
 import CommonQuestionScreen from '../screens/settings/CommonQuestionScreen'; // 版本信息
 
-// movie of neihandianying.com
-import MovieCategoryListScreen from '../screens/movie/MovieCategoryList';
+// movie
 import MovieDetail from '../screens/movie/MovieDetail';
-import ApplicationMenuTable from '../screens/movie/MovieCategoryList/ApplicationMenuTable';
-import HistoryDetail from '../screens/movie/HistoryDetail';
-import MoreTable from '../screens/movie/MoreTable';
+import MovieCategories from '../screens/movie/categories';
+import CategoriesTab from '../screens/movie/categories/CategoriesTab';
+import MovieHistories from '../screens/movie/Histories';
+import MovieFavorites from '../screens/movie/Favorites';
+
 export default {
     Login: {
         component: LoginScreen,
@@ -293,19 +294,19 @@ export default {
     UserBlockList: {
         component: UserBlockScreen,
     },
-    MovieCategoryListScreen: {
-        component: MovieCategoryListScreen,
+    MovieCategories: {
+        component: MovieCategories,
     },
     MovieDetail: {
         component: MovieDetail,
     },
-    ApplicationMenuTable: {
-        component: ApplicationMenuTable,
+    CategoriesTab: {
+        component: CategoriesTab,
     },
-    HistoryDetail: {
-        component: HistoryDetail,
+    MovieHistories: {
+        component: MovieHistories,
     },
-    MoreTable: {
-        component: MoreTable,
+    MovieFavorites: {
+        component: MovieFavorites,
     },
 };
