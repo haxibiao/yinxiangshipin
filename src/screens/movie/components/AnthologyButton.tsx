@@ -4,16 +4,18 @@ import __ from 'lodash';
 import Theme from '@app/src/common/theme';
 
 export default function AnthologyButton({
+    style,
     active,
     content,
     onPress,
 }: {
+    style?: ViewStyle;
     active: boolean;
     content: string;
     onPress: (i: any) => void;
 }) {
     return (
-        <Pressable onPress={onPress} style={styles.button}>
+        <Pressable onPress={onPress} style={[styles.button, style]}>
             {active ? <LiveAnimation style={{ height: pixel(18) }} /> : <Text style={styles.content}>{content}</Text>}
         </Pressable>
     );
@@ -82,12 +84,13 @@ function LiveAnimation({ number = 3, duration = 800, style }) {
         </View>
     );
 }
+const EPISODE_WIDTH = (Device.WIDTH - pixel(66)) / 6;
 
 const styles = StyleSheet.create({
     button: {
-        marginRight: pixel(5),
-        minWidth: pixel(50),
-        height: pixel(50),
+        marginRight: pixel(6),
+        minWidth: EPISODE_WIDTH,
+        height: EPISODE_WIDTH,
         paddingHorizontal: pixel(10),
         borderRadius: pixel(5),
         justifyContent: 'center',

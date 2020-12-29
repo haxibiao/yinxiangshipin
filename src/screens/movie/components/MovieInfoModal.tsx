@@ -57,6 +57,7 @@ export default observer(() => {
                                     return (
                                         <AnthologyButton
                                             key={(item, index) => String(item.name + index)}
+                                            style={{ marginBottom: pixel(12) }}
                                             active={PlayerStore.currentEpisodeIndex === index}
                                             content={index + 1}
                                             onPress={() => {
@@ -102,8 +103,6 @@ export default observer(() => {
         </Modal>
     );
 });
-
-const EPISODE_WIDTH = (Device.WIDTH - pixel(66)) / 6;
 
 const styles = StyleSheet.create({
     modalView: {
@@ -161,23 +160,5 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         padding: pixel(18),
         paddingRight: pixel(2),
-    },
-    episodeBox: {
-        width: EPISODE_WIDTH,
-        height: EPISODE_WIDTH,
-        paddingHorizontal: pixel(10),
-        marginRight: pixel(6),
-        marginBottom: pixel(12),
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderWidth: pixel(1),
-        borderColor: '#f0f0f0',
-        borderRadius: pixel(5),
-    },
-    episodeText: {
-        fontSize: font(15),
-        lineHeight: font(18),
-        fontWeight: '500',
-        color: '#202020',
     },
 });
