@@ -28,7 +28,7 @@ export default observer(() => {
                 appStore.client.mutate({
                     mutation: GQL.saveWatchProgressMutation,
                     variables: {
-                        movie,
+                        movie_id: movie?.id,
                         series_index: index,
                         progress,
                     },
