@@ -1,5 +1,5 @@
 import React, { useRef, useCallback, useEffect } from 'react';
-import { StyleSheet, View, Text, Animated, Easing, Dimensions, InteractionManager, LogBox } from 'react-native';
+import { StyleSheet, View, Text, Animated, Easing, Dimensions, InteractionManager } from 'react-native';
 import { TapGestureHandler, State, TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 import { observer } from 'mobx-react';

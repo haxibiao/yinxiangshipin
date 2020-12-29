@@ -140,12 +140,12 @@ export default observer(({ playerRef }: Props) => {
     const [speedUpIndicatorVisible, setSpeedUpIndicatorVisible] = useState(false);
     const onSpeedUpPanGestureHandler = useCallback(({ nativeEvent }) => {
         if (nativeEvent.state === State.ACTIVE) {
-            // console.log('ACTIVE');
+            // Log('ACTIVE');
             speedValueRef.current = playerStore.rate;
             playerStore.setRateValue(3.0);
             setSpeedUpIndicatorVisible(true);
         } else if (speedValueRef.current > 0) {
-            // console.log('END');
+            // Log('END');
             playerStore.setRateValue(speedValueRef.current);
             setSpeedUpIndicatorVisible(false);
             speedValueRef.current = 0;

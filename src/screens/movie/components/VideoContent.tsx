@@ -53,7 +53,7 @@ export default observer(({ movie }) => {
                     active={PlayerStore.currentEpisodeIndex === index}
                     content={index + 1}
                     onPress={() => {
-                        PlayerStore.setCurrentEpisode(item);
+                        PlayerStore.setCurrentEpisode(item, index);
                     }}
                 />
             );

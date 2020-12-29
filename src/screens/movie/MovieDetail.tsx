@@ -14,14 +14,13 @@ export default observer(() => {
     const topInset = useStatusBarHeight();
     const navigation = useNavigation();
     const route = useRoute();
-    const movieInfo = useMemo(() => route.params?.movie, [route.params?.movie]);
+    const movieInfo = route.params?.movie;
     const { loading, error, data, refetch } = useQuery(GQL.movieQuery, {
         variables: {
             movie_id: movieInfo?.id,
         },
     });
-    const movie = useMemo(() => Object(movieInfo, data?.movie), [movieInfo, data]);
-
+    const movie = useMemo(() => data?.movie, [data?.movie]);
     const saveWatchProgress = useCallback(
         ({ index, progress }) => {
             if (userStore.login) {
@@ -73,12 +72,7 @@ export default observer(() => {
                     <Iconfont style={styles.backIcon} name="fanhui" size={font(18)} color={'#fff'} />
                 </TouchableOpacity>
             )}
-            <MoviePlayer
-                key={movie?.id}
-                movie={movie}
-                onBeforeDestroy={saveWatchProgress}
-                style={{ paddingTop: topInset }}
-            />
+            <MoviePlayer movie={movie} onBeforeDestroy={saveWatchProgress} style={{ paddingTop: topInset }} />
             {!loading && (
                 <ScrollableTabView
                     contentProps={{ keyboardShouldPersistTaps: 'always' }}

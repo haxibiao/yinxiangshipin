@@ -185,7 +185,6 @@ class PlayerStore {
     @action.bound
     setProgress(currentProgress: number) {
         this.progress = currentProgress;
-        this.currentEpisode.progress = currentProgress;
     }
 
     @action.bound

@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
         marginRight: pixel(6),
         minWidth: EPISODE_WIDTH,
         height: EPISODE_WIDTH,
-        paddingHorizontal: pixel(10),
+        paddingHorizontal: pixel(8),
         borderRadius: pixel(5),
         justifyContent: 'center',
         alignItems: 'center',

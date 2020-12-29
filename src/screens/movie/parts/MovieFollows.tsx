@@ -36,8 +36,8 @@ interface MovieProps {
 function MovieItem({ movie, navigation }: MovieProps) {
     const count_series = movie?.count_series;
     let historyText = '尚未观看';
-    if (count_series > 1 && movie?.last_watch_series) {
-        historyText = `观看至第${movie?.last_watch_series}集`;
+    if (count_series > 1 && movie?.last_watch_series >= 0) {
+        historyText = `观看至第${movie?.last_watch_series + 1}集 ${Helper.moment(movie?.last_watch_progress)}`;
     } else if (movie?.last_watch_progress) {
         historyText = '观看至' + Helper.moment(movie?.last_watch_progress);
     }
