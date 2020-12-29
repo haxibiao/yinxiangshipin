@@ -24,6 +24,9 @@ export default function Histories(props: any) {
                     gqlDocument={GQL.showMovieHistoryQuery}
                     dataOptionChain="showMovieHistory.data"
                     paginateOptionChain="showMovieHistory.paginatorInfo"
+                    options={{
+                        fetchPolicy: 'network-only',
+                    }}
                     renderItem={_renderItem}
                 />
             </View>

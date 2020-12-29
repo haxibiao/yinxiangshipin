@@ -14,13 +14,13 @@ export default observer(() => {
     const topInset = useStatusBarHeight();
     const navigation = useNavigation();
     const route = useRoute();
-    const movieInfo = route.params?.movie;
+    const movieInfo = useMemo(() => route.params?.movie, [route.params?.movie]);
     const { loading, error, data, refetch } = useQuery(GQL.movieQuery, {
         variables: {
             movie_id: movieInfo?.id,
         },
     });
-    const movie = useMemo(() => Object.assign({}, movieInfo, data?.movie), [data]);
+    const movie = useMemo(() => Object(movieInfo, data?.movie), [movieInfo, data]);
 
     const saveWatchProgress = useCallback(
         ({ index, progress }) => {
@@ -35,6 +35,12 @@ export default observer(() => {
                     refetchQueries: () => [
                         {
                             query: GQL.showMovieHistoryQuery,
+                            fetchPolicy: 'network-only',
+                        },
+                        {
+                            query: GQL.favoritedMoviesQuery,
+                            variables: { user_id: userStore.me.id, type: 'movies' },
+                            fetchPolicy: 'network-only',
                         },
                     ],
                 });
@@ -67,7 +73,12 @@ export default observer(() => {
                     <Iconfont style={styles.backIcon} name="fanhui" size={font(18)} color={'#fff'} />
                 </TouchableOpacity>
             )}
-            <MoviePlayer style={{ paddingTop: topInset }} movie={movie} onBeforeDestroy={saveWatchProgress} />
+            <MoviePlayer
+                key={movie?.id}
+                movie={movie}
+                onBeforeDestroy={saveWatchProgress}
+                style={{ paddingTop: topInset }}
+            />
             {!loading && (
                 <ScrollableTabView
                     contentProps={{ keyboardShouldPersistTaps: 'always' }}

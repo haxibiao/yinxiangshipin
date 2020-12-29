@@ -17,12 +17,14 @@ interface Props {
 
 export const MoviePlayer = observer(({ style, children, movie, onBeforeDestroy }: Props) => {
     useEffect(() => {
-        const data = movie?.data || [];
-        const last_watch_series = movie?.last_watch_series || 0;
-        const episode = data?.[last_watch_series] || {};
-        episode.progress = movie?.last_watch_progress;
-        playerStore.setSeries(data);
-        playerStore.setCurrentEpisode(episode, Number(last_watch_series));
+        if (movie) {
+            const data = movie?.data || [];
+            const last_watch_series = movie?.last_watch_series || 0;
+            const episode = data?.[last_watch_series] || {};
+            episode.progress = movie?.last_watch_progress;
+            playerStore.setSeries(data);
+            playerStore.setCurrentEpisode(episode, Number(last_watch_series));
+        }
     }, [movie]);
 
     useEffect(() => {
@@ -30,10 +32,15 @@ export const MoviePlayer = observer(({ style, children, movie, onBeforeDestroy }
             if (onBeforeDestroy instanceof Function) {
                 onBeforeDestroy({ index: playerStore.currentEpisodeIndex, progress: playerStore.progress });
             }
+        };
+    }, [onBeforeDestroy]);
+
+    useEffect(() => {
+        return () => {
             playerStore.resetVideoState();
             playerStore.resetMovieData();
         };
-    }, [onBeforeDestroy]);
+    }, []);
 
     if (!movie) {
         return <View style={[styles.portrait, { backgroundColor: '#f0f0f0' }, style]}>{children}</View>;
