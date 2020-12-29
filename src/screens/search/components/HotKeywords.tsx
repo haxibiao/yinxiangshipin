@@ -101,15 +101,13 @@ const styles = StyleSheet.create({
         color: '#202020',
         fontWeight: 'bold',
     },
-    contentStyle: {
-        paddingHorizontal: pixel(15),
-    },
+    contentStyle: {},
     keywordsItem: {
         width: '50%',
+        paddingHorizontal: pixel(15),
         flexDirection: 'row',
         alignItems: 'center',
         marginVertical: pixel(8),
-        paddingRight: pixel(25),
     },
     keywordIndex: {
         width: pixel(24),
