@@ -47,11 +47,13 @@ function LiveAnimation({ number = 3, duration = 800, style }) {
                             toValue: 1,
                             duration: duration * (1 - value._value),
                             easing: Easing.linear,
+                            useNativeDriver: true,
                         }),
                         Animated.timing(value, {
                             toValue: 0.3,
                             duration: duration * 0.5,
                             easing: Easing.linear,
+                            useNativeDriver: true,
                         }),
                     ]),
                 ),
@@ -72,10 +74,14 @@ function LiveAnimation({ number = 3, duration = 800, style }) {
                         style={[
                             styles.lineItem,
                             {
-                                height: value.interpolate({
-                                    inputRange: [0, 1],
-                                    outputRange: ['0%', '100%'],
-                                }),
+                                transform: [
+                                    {
+                                        scaleY: value.interpolate({
+                                            inputRange: [0, 1],
+                                            outputRange: [0, 1],
+                                        }),
+                                    },
+                                ],
                             },
                         ]}
                     />
@@ -105,16 +111,19 @@ const styles = StyleSheet.create({
     },
     liveContainer: {
         flexDirection: 'row',
+        marginRight: -pixel(3),
     },
     lineItemWrap: {
         width: pixel(3),
         alignSelf: 'stretch',
         marginRight: pixel(3),
+        overflow: 'hidden',
     },
     lineItem: {
         position: 'absolute',
-        bottom: 0,
+        bottom: '-100%',
         width: '100%',
+        height: '200%',
         borderRadius: pixel(2),
         backgroundColor: Theme.primaryColor,
         // backgroundColor: '#37B7FB',
