@@ -4,6 +4,7 @@ import { observer, autorun, adStore, userStore } from '@src/store';
 import { PlayerStore } from '@src/components/MoviePlayer';
 import { DebouncedPressable, Iconfont } from '@src/components';
 import movieStore from '../store';
+import AnthologyButton from './AnthologyButton';
 
 export default observer(() => {
     const [visible, setVisible] = useState(false);
@@ -54,25 +55,15 @@ export default observer(() => {
                             <View style={styles.episodesContentStyle}>
                                 {(movie?.data || []).map((item, index) => {
                                     return (
-                                        <TouchableOpacity
-                                            activeOpacity={0.8}
-                                            style={[
-                                                styles.episodeBox,
-                                                PlayerStore.currentEpisodeIndex === index && { borderColor: '#37B7FB' },
-                                            ]}
+                                        <AnthologyButton
+                                            key={(item, index) => String(item.name + index)}
+                                            active={PlayerStore.currentEpisodeIndex === index}
+                                            content={index + 1}
                                             onPress={() => {
                                                 PlayerStore.setCurrentEpisode(item);
                                                 setVisible(false);
                                             }}
-                                            key={(item, index) => String(item.name + index)}>
-                                            <Text
-                                                style={[
-                                                    styles.episodeText,
-                                                    PlayerStore.currentEpisodeIndex === index && { color: '#37B7FB' },
-                                                ]}>
-                                                {index + 1}
-                                            </Text>
-                                        </TouchableOpacity>
+                                        />
                                     );
                                 })}
                             </View>

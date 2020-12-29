@@ -7,6 +7,7 @@ import { PlayerStore } from '@src/components/MoviePlayer';
 import { GQL, useQuery, errorMessage, useFavoriteMutation } from '@src/apollo';
 import { userStore } from '@src/store';
 import MovieItem, { SPACE } from './MovieItem';
+import AnthologyButton from './AnthologyButton';
 import MovieInfoModal from './MovieInfoModal';
 import movieStore from '../store';
 
@@ -46,19 +47,15 @@ export default observer(({ movie }) => {
     }, [movie]);
 
     const episodeItem = useCallback(
-        (item, index) => {
+        ({ item, index }) => {
             return (
-                <TouchableOpacity
-                    activeOpacity={0.9}
-                    style={[styles.episodeBox, PlayerStore.currentEpisodeIndex === index && { borderColor: '#37B7FB' }]}
+                <AnthologyButton
+                    active={PlayerStore.currentEpisodeIndex === index}
+                    content={index + 1}
                     onPress={() => {
                         PlayerStore.setCurrentEpisode(item);
-                    }}>
-                    <Text
-                        style={[styles.episodeText, PlayerStore.currentEpisodeIndex === index && { color: '#37B7FB' }]}>
-                        {index + 1}
-                    </Text>
-                </TouchableOpacity>
+                    }}
+                />
             );
         },
         [PlayerStore.currentEpisodeIndex],
@@ -115,7 +112,7 @@ export default observer(({ movie }) => {
                         data={movie?.data}
                         horizontal={true}
                         showsHorizontalScrollIndicator={false}
-                        renderItem={({ item, index }) => episodeItem(item, index)}
+                        renderItem={episodeItem}
                         keyExtractor={(item, index) => index.toString()}
                     />
                 </View>
