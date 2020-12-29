@@ -13,13 +13,13 @@ export default observer(() => {
     const scrollTabRef = useRef();
     const navigation = useNavigation();
     const route = useRoute();
-    const initPage = route?.params?.initPage;
+    const collection = route?.params?.collection;
     useEffect(() => {
-        if (initPage && scrollTabRef.current?.goToPage) {
-            scrollTabRef.current.goToPage(initPage);
-            navigation.setParams({ initPage: 0 });
+        if (collection && scrollTabRef.current?.goToPage) {
+            scrollTabRef.current.goToPage(adStore.enableAd ? 1 : 0);
+            navigation.setParams({ collection: false });
         }
-    }, [initPage]);
+    }, [collection]);
     const goSearchCenter = useCallback(() => {
         navigation.navigate('Search');
     }, []);
@@ -41,7 +41,7 @@ export default observer(() => {
                         tintTextStyle={styles.tintTextStyle}
                     />
                 )}>
-                <MovieCenter tabLabel="影视" />
+                {adStore.enableAd && <MovieCenter tabLabel="影视" />}
                 <Collections tabLabel="合集" />
                 <RecommendPosts tabLabel="精选" />
                 <FollowedPosts tabLabel="动态" />

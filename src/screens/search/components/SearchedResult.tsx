@@ -3,13 +3,14 @@ import { StyleSheet, View, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
 import { ScrollTabBar } from '@src/components';
+import { observer, adStore, userStore } from '@src/store';
 import Movies from './Movies';
 import Collections from './Collections';
 import Posts from './Posts';
 import Users from './Users';
 import Tags from './Tags';
 
-export default function SearchedResult({ keyword }) {
+export default observer(({ keyword }) => {
     const navigation = useNavigation();
 
     return (
@@ -26,14 +27,14 @@ export default function SearchedResult({ keyword }) {
                     tintTextStyle={styles.tintTextStyle}
                 />
             )}>
-            <Movies tabLabel="影视" keyword={keyword} navigation={navigation} />
+            {adStore.enableAd && <Movies tabLabel="影视" keyword={keyword} navigation={navigation} />}
             <Collections tabLabel="合集" keyword={keyword} navigation={navigation} />
             <Posts tabLabel="动态" keyword={keyword} navigation={navigation} />
             <Users tabLabel="用户" keyword={keyword} navigation={navigation} />
             <Tags tabLabel="专题" keyword={keyword} navigation={navigation} />
         </ScrollableTabView>
     );
-}
+});
 
 const TAB_WIDTH = pixel(60);
 const UNDER_LINE_WIDTH = pixel(30);

@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { StyleSheet, View, Text, FlatList, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useQuery, GQL } from '@src/apollo';
+import { observer, adStore } from '@src/store';
 
 // 推荐搜索数据为空时用下面的数据填充
 const KEYWORDS = [
@@ -48,12 +49,16 @@ const KEYWORDS = [
 ];
 const COLORS = ['#F21D58', '#FE4E15', '#FD9818'];
 
-export default function HotKeywords({ onSearch }) {
+export default observer(({ onSearch }) => {
     const { data } = useQuery(GQL.searchHotKeywordsQuery, {
         variables: { type: 'SEARCH' },
     });
     const moviesData = useMemo(() => data?.activities?.data || KEYWORDS, [data]);
     const navigation = useNavigation();
+
+    if (!adStore.enableAd) {
+        return null;
+    }
 
     return (
         <View>
@@ -83,7 +88,7 @@ export default function HotKeywords({ onSearch }) {
             />
         </View>
     );
-}
+});
 
 const styles = StyleSheet.create({
     recommendHeader: {
