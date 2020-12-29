@@ -48,6 +48,7 @@ class PlayerStore {
 
     @action.bound
     resetMovieData() {
+        this.rate = 1.0;
         this.currentEpisode = {};
         this.series = [];
     }

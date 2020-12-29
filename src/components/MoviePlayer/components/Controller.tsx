@@ -33,6 +33,8 @@ const dwh = Dimensions.get('window').height;
 const PROGRESS_GESTURE_RATIO = [0.7, 0.7, 1, 2, 3];
 const SETTING_GESTURE_RATIO = dww * 0.58;
 const FADE_VALUE = dww * 0.25;
+let INIT_BRIGHTNESS = 0;
+let INIT_VOLUME = 0;
 
 interface Props {
     playerRef: { current: { seek: (p: number) => void } };
@@ -207,19 +209,17 @@ export default observer(({ playerRef }: Props) => {
     const brightnessAnimationValue = useRef(new Animated.Value(0));
     const volumeAnimationValue = useRef(new Animated.Value(0));
     useEffect(() => {
-        let initBrightness = 0;
-        let initVolume = 0;
         SystemSetting.getBrightness().then((v) => {
-            initBrightness = brightnessSystemValueRef.current = v;
+            INIT_BRIGHTNESS = brightnessSystemValueRef.current = v;
             brightnessAnimationValue.current.setValue(v * 100);
         });
         SystemSetting.getVolume().then((v) => {
-            initVolume = volumeSystemValueRef.current = v;
+            INIT_VOLUME = volumeSystemValueRef.current = v;
             volumeAnimationValue.current.setValue(v * 100);
         });
         return () => {
-            SystemSetting.setAppBrightness(initBrightness);
-            SystemSetting.setVolume(initVolume);
+            SystemSetting.setAppBrightness(INIT_BRIGHTNESS);
+            SystemSetting.setVolume(INIT_VOLUME);
         };
     }, []);
     // 控制指示器显示，保存最终值

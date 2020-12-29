@@ -23,7 +23,7 @@ export const MoviePlayer = observer(({ style, children, movie, onBeforeDestroy }
         episode.progress = movie?.last_watch_progress;
         playerStore.setSeries(data);
         playerStore.setCurrentEpisode(episode, Number(last_watch_series));
-    }, [movie, movie]);
+    }, [movie]);
 
     useEffect(() => {
         return () => {
@@ -33,7 +33,7 @@ export const MoviePlayer = observer(({ style, children, movie, onBeforeDestroy }
             playerStore.resetVideoState();
             playerStore.resetMovieData();
         };
-    }, []);
+    }, [onBeforeDestroy]);
 
     if (!movie) {
         return <View style={[styles.portrait, { backgroundColor: '#f0f0f0' }, style]}>{children}</View>;
