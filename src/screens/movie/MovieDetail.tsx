@@ -59,12 +59,14 @@ export default observer(() => {
 
     return (
         <View style={styles.container}>
-            <TouchableOpacity
-                activeOpacity={1}
-                style={[styles.backButton, { top: topInset + pixel(10) }]}
-                onPress={() => navigation.goBack()}>
-                <Iconfont style={styles.backIcon} name="fanhui" size={font(18)} color={'#fff'} />
-            </TouchableOpacity>
+            {!PlayerStore.fullscreen && (
+                <TouchableOpacity
+                    activeOpacity={1}
+                    style={[styles.backButton, { top: topInset + pixel(10) }]}
+                    onPress={() => navigation.goBack()}>
+                    <Iconfont style={styles.backIcon} name="fanhui" size={font(18)} color={'#fff'} />
+                </TouchableOpacity>
+            )}
             <MoviePlayer style={{ paddingTop: topInset }} movie={movie} onBeforeDestroy={saveWatchProgress} />
             {!loading && (
                 <ScrollableTabView
