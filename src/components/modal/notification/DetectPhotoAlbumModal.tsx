@@ -66,7 +66,6 @@ export const DetectPhotoAlbumModal = observer(() => {
             shown.current = false;
             setVisible(false);
             record();
-            userStore.startParseSharedLink = true;
         }
     }, [record]);
 
@@ -75,8 +74,6 @@ export const DetectPhotoAlbumModal = observer(() => {
         if (photoInfo?.type == 'post' && (photoInfo?.post_id || photoInfo?.uuid)) {
             setContent(photoInfo);
             showModal();
-        } else {
-            userStore.startParseSharedLink = true;
         }
     }, []);
 
@@ -84,16 +81,14 @@ export const DetectPhotoAlbumModal = observer(() => {
     useEffect(() => {
         const appIsReady = notificationStore.guides.UserAgreementGuide && adStore.loadedConfig;
         if (appIsReady) {
-            if ((userStore.startDetectPhotoAlbum || !adStore.enableWallet) && !notificationStore.hasModalShown) {
+            if (!adStore.enableWallet && !notificationStore.hasModalShown) {
                 if (!detectPhotoAlbum.called) {
                     detectPhotoAlbum.called = true;
                     detectPhotoAlbum();
-                } else {
-                    userStore.startParseSharedLink = true;
                 }
             }
         }
-    }, [notificationStore.guides.UserAgreementGuide, adStore.loadedConfig, userStore.startDetectPhotoAlbum]);
+    }, [notificationStore.guides.UserAgreementGuide, adStore.loadedConfig]);
 
     return (
         <Modal

@@ -11,7 +11,7 @@ export function useAccountRemind({ gold, articles }: UserProfile) {
     const updateCount = useRef(0);
     useEffect(() => {
         // 满足这些条件并且更新了2次以上
-        if (userStore?.login && !userStore?.me?.phone && userStore.startParseSharedLink) {
+        if (userStore?.login && !userStore?.me?.phone) {
             updateCount.current++;
         }
         // 用户账户信息满足条件

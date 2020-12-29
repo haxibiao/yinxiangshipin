@@ -24,8 +24,6 @@ class UserStore {
     @observable recalledUser: boolean = false;
     @observable firstInstall: boolean = false;
     @observable isNewUser?: boolean;
-    @observable startDetectPhotoAlbum?: boolean; // 是否签到
-    @observable startParseSharedLink: boolean = false; // 是否开始解析分享链接
 
     constructor() {
         (async () => {
@@ -52,7 +50,6 @@ class UserStore {
         this.recalledUser = true;
         this.firstInstall = false;
         this.isNewUser = undefined;
-        this.startDetectPhotoAlbum = undefined;
         Storage.setItem(RecordKeys.me, user);
         Storage.setItem(RecordKeys.notFirstInstall, true);
     }
@@ -63,8 +60,6 @@ class UserStore {
         this.me = {} as UserScheme;
         this.login = false;
         this.isNewUser = undefined;
-        this.startDetectPhotoAlbum = undefined;
-        this.startParseSharedLink = false;
         Storage.removeItem(RecordKeys.me);
     }
 

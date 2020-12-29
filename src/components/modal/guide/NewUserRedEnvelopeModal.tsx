@@ -38,7 +38,6 @@ export const NewUserRedEnvelopeModal = observer(() => {
         },
         onError: (err) => {
             notificationStore.hasModalShown = false;
-            userStore.startDetectPhotoAlbum = true;
         },
     });
 
@@ -54,7 +53,6 @@ export const NewUserRedEnvelopeModal = observer(() => {
             shown.current = false;
             setVisible(false);
             notificationStore.hasModalShown = false;
-            userStore.startDetectPhotoAlbum = true;
         }
     }, []);
 

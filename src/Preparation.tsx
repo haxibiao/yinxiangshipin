@@ -53,7 +53,7 @@ export default observer(function Preparation() {
             <AppUserAgreementModal />
             <NewUserRedEnvelopeModal />
             <AutoCheckInModal />
-            <DetectPhotoAlbumModal />
+            {/* <DetectPhotoAlbumModal /> */}
             <ParseShareLinkModal />
         </>
     );

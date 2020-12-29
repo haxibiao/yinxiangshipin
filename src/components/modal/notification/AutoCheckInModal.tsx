@@ -28,7 +28,6 @@ export const AutoCheckInModal = observer(() => {
             shown.current = false;
             setVisible(false);
             notificationStore.hasModalShown = false;
-            userStore.startDetectPhotoAlbum = true;
         }
     }, []);
 
@@ -65,7 +64,6 @@ export const AutoCheckInModal = observer(() => {
             showModal();
         } catch (error) {
             notificationStore.hasModalShown = false;
-            userStore.startDetectPhotoAlbum = true;
         }
     }, [createCheckIn]);
 
@@ -74,8 +72,6 @@ export const AutoCheckInModal = observer(() => {
             if (!todayChecked && adStore.enableWallet) {
                 notificationStore.hasModalShown = true;
                 toDaySignIn();
-            } else {
-                userStore.startDetectPhotoAlbum = true;
             }
         }
     }, [userStore.isNewUser, adStore.enableWallet, todayChecked]);

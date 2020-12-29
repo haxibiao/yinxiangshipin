@@ -40,12 +40,11 @@ export const ParseShareLinkModal = observer(() => {
     }, []);
 
     useEffect(() => {
-        // 用户已经登录、有分享链接、完成了内容解析业务、没有进行用户引导
+        // 用户已经登录、有分享链接、没有进行用户引导
         if (
             shareLink &&
             shareBody &&
             userStore.login &&
-            userStore.startParseSharedLink &&
             !notificationStore.hasModalShown &&
             shareLinkCache[shareLink] == undefined
         ) {
@@ -54,40 +53,6 @@ export const ParseShareLinkModal = observer(() => {
             showModal();
         }
     }, [shareLink, shareBody]);
-
-    // 采集成功
-    const resolveContentSuccess = useCallback(
-        async (video) => {
-            notificationStore.toggleLoadingVisible('视频收藏中');
-            const [error, res] = await exceptionCapture(() =>
-                client.mutate({
-                    mutation: GQL.createPostContent,
-                    variables: {
-                        body: videoTitle,
-                        qcvod_fileid: video?.id,
-                        share_link: shareLink,
-                    },
-                    refetchQueries: () => [
-                        {
-                            query: GQL.tasksQuery,
-                            fetchPolicy: 'network-only',
-                        },
-                        {
-                            query: GQL.meMetaQuery,
-                            fetchPolicy: 'network-only',
-                        },
-                    ],
-                }),
-            );
-            notificationStore.toggleLoadingVisible();
-            if (error) {
-                hideModal(error?.message || '收藏失败');
-            } else if (res) {
-                hideModal('收藏成功');
-            }
-        },
-        [videoTitle, shareLink],
-    );
 
     // 服务端采集
     const resolveVideo = useResolveVideo({
