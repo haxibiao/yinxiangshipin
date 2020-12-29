@@ -18,11 +18,11 @@ interface Props {
 export const MoviePlayer = observer(({ style, children, movie, onBeforeDestroy }: Props) => {
     useEffect(() => {
         const data = movie?.data || [];
-        const series_index = movie?.series_index || 0;
-        const episode = data?.[series_index] || {};
-        episode.progress = movie?.progress;
+        const last_watch_series = movie?.last_watch_series || 0;
+        const episode = data?.[last_watch_series] || {};
+        episode.progress = movie?.last_watch_progress;
         playerStore.setSeries(data);
-        playerStore.setCurrentEpisode(episode, Number(series_index));
+        playerStore.setCurrentEpisode(episode, Number(last_watch_series));
     }, [movie, movie]);
 
     useEffect(() => {

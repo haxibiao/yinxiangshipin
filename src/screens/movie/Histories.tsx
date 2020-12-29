@@ -10,8 +10,8 @@ export default function Histories(props: any) {
     const navigation = useNavigation();
     const _renderItem = ({ item, index }) => {
         const movie = item.movie ?? {};
-        movie.series_index = item?.series_index || 0;
-        movie.progress = item?.progress || 0;
+        movie.last_watch_series = item?.series_index || 0;
+        movie.last_watch_progress = item?.progress || 0;
         return <MediaItem movie={movie} infoStyle={{ justifyContent: 'center' }} />;
     };
 

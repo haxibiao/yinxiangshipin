@@ -11,8 +11,6 @@ export default function Favorites(props: any) {
     const navigation = useNavigation();
     const _renderItem = ({ item, index }) => {
         const movie = item.movie ?? {};
-        movie.series_index = item?.series_index || 0;
-        movie.progress = item?.progress || 0;
         return <MediaItem movie={movie} />;
     };
 

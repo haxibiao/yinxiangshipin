@@ -36,9 +36,9 @@ export default function MediaItem({ movie, infoStyle }: MovieProps) {
     const hits = movie?.hits;
     let metaText = '尚未观看';
     if (movie?.count_series > 1) {
-        metaText = `观看至第${movie.series_index + 1}集 ${Helper.moment(movie.progress)}`;
-    } else if (movie?.progress) {
-        metaText = '观看至' + Helper.moment(movie.progress);
+        metaText = `观看至第${movie.last_watch_series + 1}集 ${Helper.moment(movie.last_watch_progress)}`;
+    } else if (movie?.last_watch_progress) {
+        metaText = '观看至' + Helper.moment(movie.last_watch_progress);
     }
 
     if (!movie?.id) {
