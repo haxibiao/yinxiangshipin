@@ -16,7 +16,7 @@ export default observer(() => {
     const collection = route?.params?.collection;
     useEffect(() => {
         if (collection && scrollTabRef.current?.goToPage) {
-            scrollTabRef.current.goToPage(adStore.enableAd ? 1 : 0);
+            scrollTabRef.current.goToPage(adStore.enableMovie ? 1 : 0);
             navigation.setParams({ collection: false });
         }
     }, [collection]);
@@ -41,7 +41,7 @@ export default observer(() => {
                         tintTextStyle={styles.tintTextStyle}
                     />
                 )}>
-                {adStore.enableAd && <MovieCenter tabLabel="影视" />}
+                {adStore.enableMovie && <MovieCenter tabLabel="影视" />}
                 <Collections tabLabel="合集" />
                 <RecommendPosts tabLabel="精选" />
                 <FollowedPosts tabLabel="动态" />

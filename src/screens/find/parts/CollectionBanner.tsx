@@ -1,15 +1,18 @@
 import React from 'react';
-import { StyleSheet, View, Text, Image, Animated } from 'react-native';
+import { StyleSheet, View, Text, Image, Animated, Pressable } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 export const PADDING = pixel(14);
 const CONTENT_WIDTH = Device.WIDTH - PADDING * 2;
 
 export default function CollectionBanner({ collection, banner }) {
+    const navigation = useNavigation();
+
     if (!collection) {
         return <Placeholder />;
     }
     return (
-        <View style={styles.topBanner}>
+        <Pressable style={styles.topBanner} onPress={() => navigation.navigate('CollectionDetail', { collection })}>
             <Image style={styles.banner} source={banner} />
             <View style={styles.bannerContent}>
                 <Text style={styles.collectionText}>《精选合集》</Text>
@@ -17,7 +20,7 @@ export default function CollectionBanner({ collection, banner }) {
                     {collection?.description || collection?.name}
                 </Text>
             </View>
-        </View>
+        </Pressable>
     );
 }
 

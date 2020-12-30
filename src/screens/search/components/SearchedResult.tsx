@@ -27,7 +27,7 @@ export default observer(({ keyword }) => {
                     tintTextStyle={styles.tintTextStyle}
                 />
             )}>
-            {adStore.enableAd && <Movies tabLabel="影视" keyword={keyword} navigation={navigation} />}
+            {adStore.enableMovie && <Movies tabLabel="影视" keyword={keyword} navigation={navigation} />}
             <Collections tabLabel="合集" keyword={keyword} navigation={navigation} />
             <Posts tabLabel="动态" keyword={keyword} navigation={navigation} />
             <Users tabLabel="用户" keyword={keyword} navigation={navigation} />

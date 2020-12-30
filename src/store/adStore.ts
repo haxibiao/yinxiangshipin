@@ -5,7 +5,7 @@ import AppJson from '@app/app.json';
 // 广告相关的 store
 class AdStore {
     @observable loadedConfig: boolean = false; //config请求是否完成
-    
+
     @observable tt_appid: string = Platform.OS === 'ios' ? AppJson.tt_appid_ios : AppJson.tt_appid; // 头条APPID
     // @observable tx_appid: string = Platform.OS === 'ios' ? AppJson.tx_appid_ios : AppJson.tx_appid; // 腾讯APPID
     // @observable bd_appid: string = Platform.OS === 'ios' ? AppJson.bd_appid_ios : AppJson.bd_appid; // 百度APPID
@@ -18,8 +18,10 @@ class AdStore {
     @observable codeid_splash: string = Platform.OS === 'ios' ? AppJson.codeid_splash_ios : AppJson.codeid_splash;
     // feed
     @observable codeid_feed: string = Platform.OS === 'ios' ? AppJson.codeid_feed_ios : AppJson.codeid_feed;
-    @observable codeid_fedd_vertical: string = Platform.OS === 'ios' ? AppJson.codeid_feed_vertical_ios: AppJson.codeid_feed_vertical;
-    @observable codeid_feed_imgLeft: string = Platform.OS === 'ios' ? AppJson.codeid_feed_imgLeft_ios: AppJson.codeid_feed_imgLeft;
+    @observable codeid_fedd_vertical: string =
+        Platform.OS === 'ios' ? AppJson.codeid_feed_vertical_ios : AppJson.codeid_feed_vertical;
+    @observable codeid_feed_imgLeft: string =
+        Platform.OS === 'ios' ? AppJson.codeid_feed_imgLeft_ios : AppJson.codeid_feed_imgLeft;
     // draw video
     @observable codeid_draw_video: string =
         Platform.OS === 'ios' ? AppJson.codeid_draw_video_ios : AppJson.codeid_draw_video;
@@ -34,6 +36,7 @@ class AdStore {
 
     @observable enableAd: boolean = false; // 广告开关
     @observable enableWallet: boolean = false; // 钱包相关业务开关
+    @observable enableMovie: boolean = false; // 影视相关业务开关
 
     @observable timeForLastAdShow: number = 0; // 最后一次广告播放事件
     @observable interval: number = 90000; // 广告间隔时间(毫秒)
@@ -45,6 +48,7 @@ class AdStore {
         this.loadedConfig = true;
         this.enableAd = config?.ad === 'on';
         this.enableWallet = config?.wallet === 'on';
+        this.enableMovie = config?.movie === 'on';
         // for (var p in config) {
         //     if (config.hasOwnProperty(p)) {
         //         this[p] = config[p];

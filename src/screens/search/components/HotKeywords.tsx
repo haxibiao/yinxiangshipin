@@ -56,7 +56,7 @@ export default observer(({ onSearch }) => {
     const moviesData = useMemo(() => data?.activities?.data || KEYWORDS, [data]);
     const navigation = useNavigation();
 
-    if (!adStore.enableAd) {
+    if (!adStore.enableMovie) {
         return null;
     }
 
