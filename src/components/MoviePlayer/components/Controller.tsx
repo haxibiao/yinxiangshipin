@@ -9,7 +9,6 @@ import {
     Easing,
     Dimensions,
     InteractionManager,
-    LogBox,
 } from 'react-native';
 import { PanGestureHandler, TapGestureHandler, LongPressGestureHandler, State } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
@@ -30,6 +29,7 @@ import useSafeArea from '../helper/useSafeArea';
 
 const dww = Dimensions.get('window').width;
 const dwh = Dimensions.get('window').height;
+// 0.7：视频长度小于等于屏幕宽度、1：视频长度/屏幕宽度=2、2：视频长度/屏幕宽度=3、3：视频长度/屏幕宽度=4
 const PROGRESS_GESTURE_RATIO = [0.7, 0.7, 1, 2, 3];
 const SETTING_GESTURE_RATIO = dww * 0.58;
 const FADE_VALUE = dww * 0.25;
@@ -171,8 +171,9 @@ export default observer(({ playerRef }: Props) => {
     const onProgressPanGestureEvent = useCallback(({ nativeEvent }) => {
         const tx = nativeEvent.translationX;
         const trackX = playerStore.fullscreen ? dwh : dww;
-        //计算滑动距离和播放时间的最近比例
+        // 根据视频长度和可滑动距离得出最佳的设置比例
         const ratio = PROGRESS_GESTURE_RATIO[Math.min(Math.floor(playerStore.duration / trackX), 4)];
+        // 计算手势移动距离后应当改变的视频进度
         const progress = panGestureStartProgressRef.current + tx * ratio;
         playerStore.toggleSliding(true);
         playerStore.toggleSeeking(true);

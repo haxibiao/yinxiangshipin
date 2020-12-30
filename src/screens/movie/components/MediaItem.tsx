@@ -20,7 +20,6 @@ const POSTER_WIDTH = (Device.WIDTH - SPACE) / 3;
 const POSTER_HEIGHT = POSTER_WIDTH * 0.64;
 
 interface MovieProps {
-    infoStyle?: ViewStyle;
     movie: {
         id: string;
         cover: string;
@@ -30,7 +29,7 @@ interface MovieProps {
     };
 }
 
-export default function MediaItem({ movie, infoStyle }: MovieProps) {
+export default function MediaItem({ movie }: MovieProps) {
     const navigation = useNavigation();
     const count_series = movie?.count_series;
     const hits = movie?.hits;
@@ -80,10 +79,12 @@ export default function MediaItem({ movie, infoStyle }: MovieProps) {
                         </View>
                     </LinearGradient>
                 </ImageBackground>
-                <View style={[styles.movieInfo, infoStyle]}>
-                    <Text style={styles.movieName} numberOfLines={2}>
-                        {movie?.name || ''}
-                    </Text>
+                <View style={styles.movieInfo}>
+                    <View>
+                        <Text style={styles.movieName} numberOfLines={2}>
+                            {movie?.name || ''}
+                        </Text>
+                    </View>
                     <Text style={styles.movieDesc} numberOfLines={1}>
                         {metaText}
                     </Text>

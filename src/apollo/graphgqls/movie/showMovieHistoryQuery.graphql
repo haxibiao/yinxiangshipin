@@ -9,10 +9,10 @@ query showMovieHistoryQuery($count: Int, $page: Int) {
         }
         data {
             id
-            progress
             last_watch_time
-            series_index
-            movie
+            movie {
+                ...movieFragment
+            }
         }
     }
 }

@@ -35,7 +35,7 @@ const FilterMap = ({ filter, category, setCategory }) => {
 
 // 头部选择
 export default function SelectHeader(props: any) {
-    const { fetchData, category, setCategory, data } = props;
+    const { category, setCategory, data } = props;
     return (
         <View style={[styles.container]}>
             {data.map((item, index) => {

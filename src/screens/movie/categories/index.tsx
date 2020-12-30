@@ -1,12 +1,33 @@
 import React, { useCallback, useMemo, useState, useEffect, useRef } from 'react';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
-import { SafeText, PageContainer, TouchFeedback } from '@src/components';
+import { StyleSheet, Text, View } from 'react-native';
+import { NavBarHeader } from '@src/components';
 import { GQL, useQuery } from '@src/apollo';
-import { ContentStatus } from '@src/content';
+import { QueryList } from '@src/content';
 import SelectHeader from './SelectHeader';
 import MovieItem, { SPACE } from '../components/MovieItem';
+
+const MovieCategories = [
+    {
+        id: 'scopes',
+        filterName: '排序选项',
+        filterOptions: ['全部', '最新', '最热', '评分'],
+        filterValue: ['ALL', 'NEW', 'HOT', 'SCORE'],
+    },
+    {
+        id: 'region',
+        filterName: '剧种',
+        filterOptions: ['全部', '韩剧', '日剧', '美剧', '港剧'],
+        filterValue: ['ALL', 'HAN', 'RI', 'MEI', 'GANG'],
+    },
+    {
+        id: 'year',
+        filterName: '年份',
+        filterOptions: ['全部', '2020', '2019', '2018', '2017', '2016'],
+        filterValue: ['ALL', '2020', '2019', '2018', '2017', '2016'],
+    },
+];
+
 // 电影分类
-const NumOfLines = 3;
 export default function index() {
     const [category, setCategory] = useState({
         region: { value: '', index: 0 },
@@ -15,63 +36,14 @@ export default function index() {
         year: { value: '', index: 0 },
         scopes: { value: '', index: 0 },
     });
-    // 筛选电影条件=>排序选项,排序选项,分类,年份
-    const { data, loading: filterLoading } = useQuery(GQL.getFiltersQuery, {
-        fetchPolicy: 'network-only',
-    });
-    const selectData = useMemo(() => Helper.syncGetter('getFilters', data), [data]);
-    const { loading, error, data: result, fetchMore, refetch } = useQuery(GQL.categoryMovieQuery, {
-        variables: {
-            count: 12,
-            region: category.region.value,
-            type: category.type.value,
-            country: category.country.value,
-            year: category.year.value,
-            scopes: category.scopes.value,
-        },
-        fetchPolicy: 'network-only',
-    });
-    const movieData = useMemo(() => Helper.syncGetter('categoryMovie.data', result), [result]);
-    const currentPage = useMemo(() => Helper.syncGetter('categoryMovie.paginatorInfo.currentPage', result), [result]);
-    const hasMorePages = useMemo(() => Helper.syncGetter('categoryMovie.paginatorInfo.hasMorePages', result), [result]);
-    const onEndReached = useCallback(() => {
-        if (hasMorePages) {
-            fetchMore({
-                variables: {
-                    page: currentPage + 1,
-                },
-                updateQuery: (prev, { fetchMoreResult }) => {
-                    if (!fetchMoreResult) {
-                        return prev;
-                    }
-                    return Object.assign({}, prev, {
-                        categoryMovie: Object.assign({}, fetchMoreResult.categoryMovie, {
-                            data: [...prev.categoryMovie.data, ...fetchMoreResult.categoryMovie.data],
-                        }),
-                    });
-                },
-            });
-        }
-    }, [hasMorePages, currentPage]);
 
     const ListHeader = () => {
         return (
             <View style={styles.menuWrap}>
-                <SelectHeader data={selectData} fetchData={movieData} setCategory={setCategory} category={category} />
+                <SelectHeader data={MovieCategories} setCategory={setCategory} category={category} />
             </View>
         );
     };
-
-    const ListFooter = useCallback(() => {
-        let status = null;
-        if (!loading && hasMorePages) {
-            status = 'loadMore';
-        }
-        if (movieData?.length > 0 && !hasMorePages) {
-            status = 'loadAll';
-        }
-        return <ContentStatus status={status} />;
-    }, [loading, movieData, hasMorePages]);
 
     const _renderItem = ({ item, index }) => {
         return (
@@ -82,28 +54,45 @@ export default function index() {
     };
 
     return (
-        <PageContainer title="电影分类" loading={filterLoading}>
-            <View style={styles.container}>
-                <FlatList
-                    contentContainerStyle={{ paddingLeft: SPACE }}
-                    data={movieData}
-                    keyExtractor={(item, index) => String(item.id)}
-                    renderItem={_renderItem}
-                    onEndReached={onEndReached}
-                    onEndReachedThreshold={0.1}
-                    numColumns={NumOfLines}
-                    showsVerticalScrollIndicator={false}
-                    removeClippedSubviews={true}
-                    ListHeaderComponent={ListHeader}
-                    ListFooterComponent={ListFooter}
-                />
-            </View>
-        </PageContainer>
+        <View style={styles.container}>
+            <NavBarHeader
+                title="视频分类"
+                hasGoBackButton={true}
+                hasSearchButton={true}
+                StatusBarProps={{ barStyle: 'dark-content' }}
+            />
+            <QueryList
+                contentContainerStyle={styles.contentContainer}
+                showsVerticalScrollIndicator={false}
+                ListHeaderComponent={ListHeader}
+                gqlDocument={GQL.categoryMovieQuery}
+                dataOptionChain="categoryMovie.data"
+                paginateOptionChain="categoryMovie.paginatorInfo"
+                options={{
+                    variables: {
+                        count: 12,
+                        region: category.region.value,
+                        type: category.type.value,
+                        country: category.country.value,
+                        year: category.year.value,
+                        scopes: category.scopes.value,
+                    },
+                    fetchPolicy: 'network-only',
+                }}
+                renderItem={_renderItem}
+                numColumns={3}
+            />
+        </View>
     );
 }
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: '#fff',
+    },
+    contentContainer: {
+        flexGrow: 1,
+        paddingLeft: SPACE,
     },
     menuWrap: {
         paddingRight: SPACE,

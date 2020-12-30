@@ -14,7 +14,6 @@ fragment movieFragment on Movie {
     lang
     hits
     score
-    data
     favorited
     created_at
     last_watch_series

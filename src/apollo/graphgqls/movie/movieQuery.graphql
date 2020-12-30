@@ -3,5 +3,6 @@
 query movieQuery($movie_id: ID!) {
     movie(movie_id: $movie_id) {
         ...movieFragment
+        data
     }
 }
