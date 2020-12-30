@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
     picText: {
         color: '#fff',
         lineHeight: font(14),
-        fontSize: font(12),
+        fontSize: font(11),
     },
     movieInfo: {
         marginTop: pixel(5),
@@ -213,6 +213,6 @@ const styles = StyleSheet.create({
     movieDesc: {
         color: '#909090',
         lineHeight: font(20),
-        fontSize: font(13),
+        fontSize: font(12),
     },
 });

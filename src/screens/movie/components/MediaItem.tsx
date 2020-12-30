@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
     picText: {
         color: '#fff',
         lineHeight: font(14),
-        fontSize: font(12),
+        fontSize: font(11),
     },
     movieInfo: {
         flex: 1,

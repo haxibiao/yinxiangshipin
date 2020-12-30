@@ -69,7 +69,7 @@ export default observer(() => {
                     activeOpacity={1}
                     style={[styles.backButton, { top: topInset + pixel(10) }]}
                     onPress={() => navigation.goBack()}>
-                    <Iconfont style={styles.backIcon} name="fanhui" size={font(18)} color={'#fff'} />
+                    <Iconfont style={styles.backIcon} name="fanhui" size={font(18)} color={'#ffffffee'} />
                 </TouchableOpacity>
             )}
             <MoviePlayer movie={movie} onBeforeDestroy={saveWatchProgress} style={{ paddingTop: topInset }} />

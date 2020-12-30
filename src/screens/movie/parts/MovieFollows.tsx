@@ -294,6 +294,6 @@ const styles = StyleSheet.create({
     movieDesc: {
         color: '#909090',
         lineHeight: font(20),
-        fontSize: font(13),
+        fontSize: font(12),
     },
 });

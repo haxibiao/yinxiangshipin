@@ -22,6 +22,9 @@ export default observer(() => {
             <MovieCategory type="HAN" categoryName="精选韩剧" />
             <MovieCategory type="RI" categoryName="精选日剧" />
             <MovieCategory type="GANG" categoryName="怀旧港剧" />
+            <View style={styles.footer}>
+                <Text style={styles.footerContent}>╰(๑•́₃ •̀๑)╯再往下就没有啦</Text>
+            </View>
         </ScrollView>
     );
 });
@@ -39,24 +42,13 @@ const styles = StyleSheet.create({
         borderBottomWidth: pixel(1),
         borderBottomColor: '#f4f4f4',
     },
-    menuList: {
-        marginTop: pixel(14),
-        paddingRight: pixel(14),
-    },
-    menuItem: {
+    footer: {
+        marginTop: pixel(-2),
+        paddingVertical: pixel(14),
         alignItems: 'center',
-        marginRight: pixel(10),
+        backgroundColor: '#ffffff',
     },
-    menuIcon: {
-        width: MENU_WIDTH,
-        height: MENU_WIDTH * 0.7,
-        borderRadius: MENU_WIDTH * 0.35,
-        backgroundColor: '#FFE7E3',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    menuName: {
-        marginTop: pixel(4),
+    footerContent: {
         fontSize: font(12),
         color: '#909090',
     },
