@@ -9,6 +9,7 @@ import {
     Easing,
     Dimensions,
     InteractionManager,
+    BackHandler,
 } from 'react-native';
 import { PanGestureHandler, TapGestureHandler, LongPressGestureHandler, State } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
@@ -282,6 +283,19 @@ export default observer(({ playerRef }: Props) => {
             lockPortraitHandler();
         };
     }, []);
+
+    useEffect(() => {
+        function handleBack() {
+            if (playerStore.fullscreen) {
+                lockPortraitHandler();
+                return true;
+            }
+        }
+        const hardwareBackPress = BackHandler.addEventListener('hardwareBackPress', handleBack);
+        return () => {
+            hardwareBackPress.remove();
+        };
+    }, [playerStore.fullscreen]);
 
     return (
         <View style={styles.container}>
