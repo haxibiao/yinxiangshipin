@@ -64,7 +64,8 @@ function CollectionItem({ collection, navigation }: CollectionProps) {
                         {collection?.name || ''}
                     </Text>
                     <Text style={styles.collectionDesc} numberOfLines={1}>
-                        {collection?.description}
+                        {collection?.description ||
+                            `${Helper.count((Number(collection?.count_views) + Number(collection?.id)) * 100)}次播放`}
                     </Text>
                 </View>
             </View>
