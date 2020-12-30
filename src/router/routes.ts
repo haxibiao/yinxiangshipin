@@ -58,6 +58,7 @@ import TagVideoListScreen from '../screens/tag/VideoList';
 
 // collection
 import CollectionScreen from '../screens/collection';
+import RandomCollectionScreen from '../screens/collection/RandomList';
 import CreateCollectionScreen from '../screens/collection/CreateCollection';
 import CollectionDetailScreen from '../screens/collection/CollectionDetail';
 import EpisodeVideoListScreen from '../screens/collection/EpisodeVideoList';
@@ -241,6 +242,9 @@ export default {
     },
     Enshrined: {
         component: EnshrinedScreen,
+    },
+    RandomCollection: {
+        component: RandomCollectionScreen,
     },
     创建合集: {
         component: CreateCollectionScreen,
