@@ -9,6 +9,7 @@ import {
     Animated,
     Easing,
     Platform,
+    InteractionManager,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
@@ -39,8 +40,14 @@ export default function MovieItem({ movie }: MovieProps) {
         return <MovieItemPlaceholder />;
     }
 
+    function showDetail() {
+        InteractionManager.runAfterInteractions(() => {
+            navigation.navigate('MovieDetail', { movie });
+        });
+    }
+
     return (
-        <TouchableWithoutFeedback disabled={!movie?.id} onPress={() => navigation.navigate('MovieDetail', { movie })}>
+        <TouchableWithoutFeedback disabled={!movie?.id} onPress={showDetail}>
             <View style={styles.movieContent}>
                 <ImageBackground style={styles.movieCover} resizeMode="cover" source={{ uri: movie?.cover }}>
                     {count_series < 2 ? (

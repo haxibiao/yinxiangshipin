@@ -118,6 +118,7 @@ const styles = StyleSheet.create({
         alignSelf: 'stretch',
         marginRight: pixel(3),
         overflow: 'hidden',
+        borderRadius: pixel(2),
     },
     lineItem: {
         position: 'absolute',

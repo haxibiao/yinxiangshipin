@@ -69,12 +69,12 @@ class PlayerStore {
 
     @action.bound
     setCurrentEpisode(episode: EpisodeScheme, index: number) {
-        if (index >= 0) {
+        this.resetVideoState();
+        if (!isNaN(index) && index >= 0) {
             this.currentEpisodeIndex = index;
         } else {
             this.currentEpisodeIndex = this.series.findIndex((e) => e?.url === episode?.url) || 0;
         }
-        this.resetVideoState();
         if (!validateSource(episode?.url)) {
             this.toggleSourceException(true);
             this.currentEpisode = {};

@@ -25,7 +25,7 @@ export const MoviePlayer = observer(({ style, children, movie, onBeforeDestroy }
     }, [onBeforeDestroy]);
 
     useEffect(() => {
-        if (movie) {
+        if (movie && typeof movie === 'object') {
             const data = movie?.data || [];
             const last_watch_series = movie?.last_watch_series || 0;
             const episode = data?.[last_watch_series] || {};
@@ -37,7 +37,7 @@ export const MoviePlayer = observer(({ style, children, movie, onBeforeDestroy }
             playerStore.resetVideoState();
             playerStore.resetMovieData();
         };
-    }, [movie]);
+    }, [movie?.id]);
 
     if (!movie) {
         return <View style={[styles.portrait, { backgroundColor: '#f0f0f0' }, style]}>{children}</View>;

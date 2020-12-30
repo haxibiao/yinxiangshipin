@@ -27,7 +27,7 @@ export default observer(() => {
                 appStore.client.mutate({
                     mutation: GQL.saveWatchProgressMutation,
                     variables: {
-                        movie_id: movie?.id,
+                        movie_id: movieInfo?.id,
                         series_index: index,
                         progress,
                     },
@@ -45,7 +45,7 @@ export default observer(() => {
                 });
             }
         },
-        [movie],
+        [movieInfo?.id],
     );
 
     // 视频播放处理

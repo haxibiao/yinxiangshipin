@@ -1,8 +1,17 @@
 import React, { useCallback, useState, useMemo } from 'react';
-import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity, ScrollView } from 'react-native';
+import {
+    StyleSheet,
+    Text,
+    View,
+    FlatList,
+    Image,
+    TouchableOpacity,
+    ScrollView,
+    InteractionManager,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { observer } from 'mobx-react';
-import { Iconfont, Placeholder } from '@src/components';
+import { Iconfont, Placeholder, DebouncedPressable } from '@src/components';
 import { PlayerStore } from '@src/components/MoviePlayer';
 import { GQL, useQuery, errorMessage, useFavoriteMutation } from '@src/apollo';
 import { userStore } from '@src/store';
@@ -53,7 +62,9 @@ export default observer(({ movie }) => {
                     active={PlayerStore.currentEpisodeIndex === index}
                     content={index + 1}
                     onPress={() => {
-                        PlayerStore.setCurrentEpisode(item, index);
+                        InteractionManager.runAfterInteractions(() => {
+                            PlayerStore.setCurrentEpisode(item, index);
+                        });
                     }}
                 />
             );
@@ -80,7 +91,7 @@ export default observer(({ movie }) => {
                         />
                         <Text style={styles.count_comments}>{movie?.count_comments}人参与讨论</Text>
                     </View>
-                    <TouchableOpacity onPress={toggleFavoriteOnPress} style={styles.row}>
+                    <DebouncedPressable onPress={toggleFavoriteOnPress}>
                         <Image
                             source={
                                 movie?.favorited
@@ -89,7 +100,7 @@ export default observer(({ movie }) => {
                             }
                             style={styles.operationIcon}
                         />
-                    </TouchableOpacity>
+                    </DebouncedPressable>
                 </View>
             </TouchableOpacity>
             {/* 选集 */}
