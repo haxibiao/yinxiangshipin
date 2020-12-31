@@ -27,12 +27,12 @@ export default function Collections() {
             <CollectionList style={styles.secWrap} />
             <RecommendCollections
                 style={styles.secWrap}
-                sectionName="小剧场"
+                sectionName="专属剧场"
                 collections={topRecommend?.recommendCollectionsA || fakeData}
             />
             <RecommendCollections
                 style={styles.secWrap}
-                sectionName="有好片"
+                sectionName="精选好片"
                 collections={topRecommend?.recommendCollectionsB || fakeData}
             />
             <View style={styles.footer}>

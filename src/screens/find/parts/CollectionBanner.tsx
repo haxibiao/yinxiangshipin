@@ -15,10 +15,13 @@ export default function CollectionBanner({ collection, banner }) {
         <Pressable style={styles.topBanner} onPress={() => navigation.navigate('CollectionDetail', { collection })}>
             <Image style={styles.banner} source={banner} />
             <View style={styles.bannerContent}>
-                <Text style={styles.collectionText}>《精选合集》</Text>
-                <Text style={[styles.collectionText, { fontSize: pixel(14), lineHeight: pixel(18) }]} numberOfLines={2}>
-                    {collection?.description || collection?.name}
-                </Text>
+                <Text style={styles.bannerTitle}>精选合集</Text>
+                <View>
+                    <Text style={styles.collectionText} numberOfLines={2}>
+                        {collection?.description}
+                    </Text>
+                    <Text style={styles.collectionText}>{`——《${collection?.name}》`}</Text>
+                </View>
             </View>
         </Pressable>
     );
@@ -64,14 +67,22 @@ const styles = StyleSheet.create({
     },
     bannerContent: {
         position: 'absolute',
-        bottom: pixel(10),
+        top: pixel(10),
         left: pixel(10),
         right: CONTENT_WIDTH * 0.3,
+        bottom: pixel(10),
+        justifyContent: 'space-between',
+    },
+    bannerTitle: {
+        fontSize: font(18),
+        color: '#ffffffee',
+        textShadowColor: 'rgba(0, 0, 0, 0.75)',
+        textShadowOffset: { width: 0, height: 0 },
+        textShadowRadius: 2,
     },
     collectionText: {
-        fontSize: font(19),
-        lineHeight: font(25),
-        marginBottom: pixel(8),
+        fontSize: font(14),
+        lineHeight: font(20),
         color: '#ffffffee',
         textShadowColor: 'rgba(0, 0, 0, 0.75)',
         textShadowOffset: { width: 0, height: 0 },

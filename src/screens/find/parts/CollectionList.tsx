@@ -53,7 +53,7 @@ function CollectionItem({ collection, navigation }: collectionProps) {
                         <View style={{ flex: 1 }}>
                             {collection?.count_posts > 1 && (
                                 <Text style={styles.picText} numberOfLines={1}>
-                                    共{collection?.count_posts}收录
+                                    {collection?.count_posts}个视频
                                 </Text>
                             )}
                         </View>
@@ -65,7 +65,7 @@ function CollectionItem({ collection, navigation }: collectionProps) {
                     </Text>
                     <Text style={styles.collectionDesc} numberOfLines={1}>
                         {collection?.description ||
-                            `${Helper.count((Number(collection?.count_views) + Number(collection?.id)) * 100)}次播放`}
+                            `${Helper.count((Number(collection?.count_views) + Number(collection?.id)) * 10)}次播放`}
                     </Text>
                 </View>
             </View>
@@ -146,13 +146,13 @@ export default ({ style, count = 4 }: Props) => {
     return (
         <View style={[styles.secContainer, style]}>
             <View style={styles.secHead}>
-                <Text style={styles.secTitle}>热门推荐</Text>
+                <Text style={styles.secTitle}>视频推荐</Text>
                 <View style={styles.headRight}>
                     <Image
                         source={require('@app/assets/images/movie/ic_hot_orange.png')}
                         style={styles.recommendIcon}
                     />
-                    <Text style={styles.rightText}>强烈安利</Text>
+                    <Text style={styles.rightText}>热门合集</Text>
                 </View>
             </View>
             <View style={styles.collectionList}>
