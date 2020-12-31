@@ -2,13 +2,13 @@ import React, { useMemo, useState, useEffect, useCallback } from 'react';
 import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
-import { ScrollTabBar, Iconfont, StatusView, SpinnerLoading, NavBarHeader } from '@src/components';
+import { ScrollTabBar, Iconfont, FocusAwareStatusBar } from '@src/components';
 import { MoviePlayer, PlayerStore } from '@src/components/MoviePlayer';
 import { observer, appStore, userStore } from '@src/store';
 import { GQL, useQuery } from '@src/apollo';
 import { useStatusBarHeight } from '@src/common';
-import VideoContent from './components/VideoContent';
-import CommentContent from './components/CommentContent';
+import VideoSection from './components/VideoSection';
+import CommentSection from './components/CommentSection';
 
 export default observer(() => {
     const topInset = useStatusBarHeight();
@@ -19,6 +19,7 @@ export default observer(() => {
         variables: {
             movie_id: movieInfo?.id,
         },
+        fetchPolicy: 'network-only',
     });
     const movie = useMemo(() => data?.movie, [data?.movie]);
     const saveWatchProgress = useCallback(
@@ -64,6 +65,7 @@ export default observer(() => {
 
     return (
         <View style={styles.container}>
+            <FocusAwareStatusBar barStyle="light-content" />
             {!PlayerStore.fullscreen && (
                 <TouchableOpacity
                     activeOpacity={1}
@@ -88,8 +90,8 @@ export default observer(() => {
                             tintTextStyle={styles.tintTextStyle}
                         />
                     )}>
-                    <VideoContent tabLabel="视频" movie={movie} />
-                    <CommentContent tabLabel="讨论" movie={movie} />
+                    <VideoSection tabLabel="视频" movie={movie} />
+                    <CommentSection tabLabel="讨论" movie={movie} />
                 </ScrollableTabView>
             )}
         </View>

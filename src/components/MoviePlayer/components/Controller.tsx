@@ -267,10 +267,12 @@ export default observer(({ playerRef }: Props) => {
     // ### 锁定竖屏
     const lockPortraitHandler = useCallback(() => {
         playerStore.toggleFullscreen(false);
-        if (Platform.OS === 'ios') {
-            HomeIndicator.setAutoHidden(false);
-        } else {
-            setFullscreenMode(false);
+        if (playerStore.fullscreen) {
+            if (Platform.OS === 'ios') {
+                HomeIndicator.setAutoHidden(false);
+            } else {
+                setFullscreenMode(false);
+            }
         }
         StatusBar.setHidden(false, 'slide');
         Orientation.lockToPortrait();

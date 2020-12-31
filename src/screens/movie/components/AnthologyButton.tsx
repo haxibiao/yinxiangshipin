@@ -3,6 +3,8 @@ import { StyleSheet, View, Text, Pressable, Animated, Easing, ViewStyle, ColorVa
 import __ from 'lodash';
 import Theme from '@app/src/common/theme';
 
+const EPISODE_WIDTH = (Device.WIDTH - pixel(66)) / 6;
+
 export default function AnthologyButton({
     style,
     active,
@@ -90,7 +92,6 @@ function LiveAnimation({ number = 3, duration = 800, style }) {
         </View>
     );
 }
-const EPISODE_WIDTH = (Device.WIDTH - pixel(66)) / 6;
 
 const styles = StyleSheet.create({
     button: {

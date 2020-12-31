@@ -17,7 +17,7 @@ import { observer, userStore, notificationStore } from '@src/store';
 import { BoxShadow } from 'react-native-shadow';
 import CommentItem from './CommentItem';
 
-const CommentContent = observer(({ movie }) => {
+export default observer(({ movie }) => {
     const isSelf = userStore.me.id === movie?.user?.id;
     const fancyInputRef = useRef();
     const [placeholder, setPlaceholder] = useState();
@@ -289,5 +289,3 @@ const styles = StyleSheet.create({
         letterSpacing: pixel(4),
     },
 });
-
-export default CommentContent;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { PageContainer } from '@src/components';
+import { NavBarHeader } from '@src/components';
 import { QueryList } from '@src/content';
 import { GQL } from '@src/apollo';
 import MediaItem, { SPACE } from './components/MediaItem';
@@ -15,27 +15,24 @@ export default function Histories(props: any) {
     };
 
     return (
-        <PageContainer title="观看记录">
-            <View style={styles.container}>
-                <QueryList
-                    contentContainerStyle={styles.contentContainer}
-                    showsVerticalScrollIndicator={false}
-                    gqlDocument={GQL.showMovieHistoryQuery}
-                    dataOptionChain="showMovieHistory.data"
-                    paginateOptionChain="showMovieHistory.paginatorInfo"
-                    options={{
-                        fetchPolicy: 'network-only',
-                    }}
-                    renderItem={_renderItem}
-                />
-            </View>
-        </PageContainer>
+        <View style={styles.container}>
+            <NavBarHeader title="播放记录" hasGoBackButton={true} StatusBarProps={{ barStyle: 'dark-content' }} />
+            <QueryList
+                contentContainerStyle={styles.contentContainer}
+                showsVerticalScrollIndicator={false}
+                gqlDocument={GQL.showMovieHistoryQuery}
+                dataOptionChain="showMovieHistory.data"
+                paginateOptionChain="showMovieHistory.paginatorInfo"
+                renderItem={_renderItem}
+            />
+        </View>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: '#fff',
     },
     contentContainer: {
         flexGrow: 1,

@@ -71,7 +71,7 @@ function MovieItem({ movie, navigation }: MovieProps) {
                         {movie?.name || ''}
                     </Text>
                     <Text style={styles.movieDesc} numberOfLines={1}>
-                        {movie?.introduction || ''}
+                        {movie?.introduction || `${Helper.count(Number(movie?.id) * 100)}次播放`}
                     </Text>
                 </View>
             </View>

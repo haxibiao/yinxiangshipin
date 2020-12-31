@@ -53,7 +53,7 @@ function CollectionItem({ collection, navigation }: CollectionProps) {
                         <View style={{ flex: 1 }}>
                             {collection?.count_posts && (
                                 <Text style={styles.picText} numberOfLines={1}>
-                                    共{collection?.count_posts}收录
+                                    {collection?.count_posts}个视频
                                 </Text>
                             )}
                         </View>
@@ -65,7 +65,7 @@ function CollectionItem({ collection, navigation }: CollectionProps) {
                     </Text>
                     <Text style={styles.collectionDesc} numberOfLines={1}>
                         {collection?.description ||
-                            `${Helper.count((Number(collection?.count_views) + Number(collection?.id)) * 100)}次播放`}
+                            `${Helper.count((Number(collection?.count_views) + Number(collection?.id)) * 10)}次播放`}
                     </Text>
                 </View>
             </View>

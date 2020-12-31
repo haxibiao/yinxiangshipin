@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { PageContainer } from '@src/components';
+import { NavBarHeader } from '@src/components';
 import { QueryList } from '@src/content';
 import { userStore } from '@src/store';
 import { GQL } from '@src/apollo';
@@ -15,31 +15,31 @@ export default function Favorites(props: any) {
     };
 
     return (
-        <PageContainer title="我的追剧">
-            <View style={styles.container}>
-                <QueryList
-                    contentContainerStyle={styles.contentContainer}
-                    showsVerticalScrollIndicator={false}
-                    gqlDocument={GQL.favoritedMoviesQuery}
-                    dataOptionChain="myFavorite.data"
-                    paginateOptionChain="myFavorite.paginatorInfo"
-                    options={{
-                        variables: {
-                            user_id: userStore.me.id,
-                            type: 'movies',
-                        },
-                        fetchPolicy: 'network-only',
-                    }}
-                    renderItem={_renderItem}
-                />
-            </View>
-        </PageContainer>
+        <View style={styles.container}>
+            <NavBarHeader title="我的追剧" hasGoBackButton={true} StatusBarProps={{ barStyle: 'dark-content' }} />
+            <QueryList
+                contentContainerStyle={styles.contentContainer}
+                showsVerticalScrollIndicator={false}
+                gqlDocument={GQL.favoritedMoviesQuery}
+                dataOptionChain="myFavorite.data"
+                paginateOptionChain="myFavorite.paginatorInfo"
+                options={{
+                    variables: {
+                        user_id: userStore.me.id,
+                        type: 'movies',
+                    },
+                    fetchPolicy: 'network-only',
+                }}
+                renderItem={_renderItem}
+            />
+        </View>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: '#fff',
     },
     contentContainer: {
         flexGrow: 1,

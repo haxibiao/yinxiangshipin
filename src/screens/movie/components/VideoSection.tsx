@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useMemo } from 'react';
+import React, { useRef, useCallback, useState, useMemo } from 'react';
 import {
     StyleSheet,
     Text,
@@ -8,19 +8,28 @@ import {
     TouchableOpacity,
     ScrollView,
     InteractionManager,
+    Dimensions,
 } from 'react-native';
+import Modal from 'react-native-modal';
 import { useNavigation } from '@react-navigation/native';
 import { observer } from 'mobx-react';
-import { Iconfont, Placeholder, DebouncedPressable } from '@src/components';
-import { PlayerStore } from '@src/components/MoviePlayer';
-import { GQL, useQuery, errorMessage, useFavoriteMutation } from '@src/apollo';
 import { userStore } from '@src/store';
+import { GQL, useQuery, errorMessage, useFavoriteMutation } from '@src/apollo';
+import { Iconfont, DebouncedPressable } from '@src/components';
+import { AutonomousModal } from '@src/components/modal';
+import { PlayerStore } from '@src/components/MoviePlayer';
+import { useStatusBarHeight } from '@src/common';
 import MovieItem, { SPACE } from './MovieItem';
 import AnthologyButton from './AnthologyButton';
-import MovieInfoModal from './MovieInfoModal';
-import movieStore from '../store';
+import { MovieIntroduction, MovieSeriesChooser } from './MovieContent';
+
+const portraitHeight = Dimensions.get('window').width * 0.58;
 
 export default observer(({ movie }) => {
+    const avatarId = useRef(String(movie.id)[movie.id?.length - 1]).current;
+    const topInset = useStatusBarHeight();
+    const [introModalVisible, setIntroModalVisible] = useState(false);
+    const [episodeModalVisible, setEpisodeModalVisible] = useState(false);
     const navigation = useNavigation();
     const { data: recommendData } = useQuery(GQL.recommendMovieQuery, {
         variables: { count: 6 },
@@ -55,7 +64,7 @@ export default observer(({ movie }) => {
         }
     }, [movie]);
 
-    const episodeItem = useCallback(
+    const renderEpisode = useCallback(
         ({ item, index }) => {
             return (
                 <AnthologyButton
@@ -74,14 +83,30 @@ export default observer(({ movie }) => {
 
     return (
         <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
-            <TouchableOpacity activeOpacity={1} style={styles.movieInfo} onPress={() => movieStore.setMovieData(movie)}>
+            <TouchableOpacity activeOpacity={1} style={styles.movieInfo} onPress={() => setIntroModalVisible(true)}>
                 <Text style={styles.movieName}>{movie?.name}</Text>
                 <View style={styles.movieDesc}>
-                    {movie?.year && <Text style={styles.description}>{movie?.year} · </Text>}
-                    {movie?.region && <Text style={styles.description}>{movie?.region} · </Text>}
-                    {movie?.count_series > 1 && <Text style={styles.description}>{movie?.count_series}集全 · </Text>}
-                    <Text style={styles.description}>简介 </Text>
-                    <Iconfont style={{ marginTop: font(1) }} name="right" size={font(12)} color={'#AEBCC4'} />
+                    {movie?.year && <Text style={styles.description}>{movie.year} · </Text>}
+                    {movie?.region && <Text style={styles.description}>{movie.region} · </Text>}
+                    {movie?.count_series > 1 && <Text style={styles.description}>{movie.count_series}集全 · </Text>}
+                    <Text style={styles.description}>简介</Text>
+                    <Iconfont
+                        name="right"
+                        size={font(12)}
+                        style={{ marginTop: font(1), marginLeft: font(2) }}
+                        color={'#AEBCC4'}
+                    />
+                </View>
+                <View style={styles.uploaderWrap}>
+                    <View style={styles.uploader}>
+                        <Image
+                            style={styles.avatar}
+                            source={{
+                                uri: `https://yinxiangshipin-1254284941.cos.ap-guangzhou.myqcloud.com/storage/avatar/avatar-${avatarId}.jpg`,
+                            }}
+                        />
+                        <Text style={styles.uploaderText}>匿名用户</Text>
+                    </View>
                 </View>
                 <View style={styles.operates}>
                     <View style={styles.row}>
@@ -89,7 +114,7 @@ export default observer(({ movie }) => {
                             source={require('@app/assets/images/movie/ic_comment.png')}
                             style={styles.operationIcon}
                         />
-                        <Text style={styles.count_comments}>{movie?.count_comments}人参与讨论</Text>
+                        <Text style={styles.countComments}>{movie?.count_comments}人参与讨论</Text>
                     </View>
                     <DebouncedPressable onPress={toggleFavoriteOnPress}>
                         <Image
@@ -109,9 +134,7 @@ export default observer(({ movie }) => {
                     <TouchableOpacity
                         activeOpacity={1}
                         style={styles.sectionHeader}
-                        onPress={() =>
-                            movieStore.setMovieData(Object.assign({}, { ...movie }, { selectEpisode: true }))
-                        }>
+                        onPress={() => setEpisodeModalVisible(true)}>
                         <Text style={styles.sectionTitle}>选集</Text>
                         <View style={styles.row}>
                             <Text style={styles.metaText}>{movie?.count_series}集全</Text>
@@ -119,11 +142,11 @@ export default observer(({ movie }) => {
                         </View>
                     </TouchableOpacity>
                     <FlatList
-                        contentContainerStyle={styles.episodesContentStyle}
+                        contentContainerStyle={styles.episodes}
                         data={movie?.data}
                         horizontal={true}
                         showsHorizontalScrollIndicator={false}
-                        renderItem={episodeItem}
+                        renderItem={renderEpisode}
                         keyExtractor={(item, index) => index.toString()}
                     />
                 </View>
@@ -143,7 +166,48 @@ export default observer(({ movie }) => {
                     keyExtractor={(item, index) => (item?.id || index).toString()}
                 />
             </View>
-            <MovieInfoModal />
+            <AutonomousModal
+                style={[styles.modalWrap, { marginTop: topInset + portraitHeight }]}
+                visible={introModalVisible}
+                onToggleVisible={setIntroModalVisible}>
+                {(visible, changeVisible) => {
+                    return (
+                        <View style={[styles.modalContainer, { flex: 1 }]}>
+                            <View style={styles.modalHeader}>
+                                <Text style={styles.modalTitle}>简介</Text>
+                                <DebouncedPressable
+                                    style={styles.hideModalBtn}
+                                    onPress={() => changeVisible(false)}
+                                    activeOpacity={1}>
+                                    <Iconfont name="guanbi1" size={font(20)} color={'#333'} />
+                                </DebouncedPressable>
+                            </View>
+                            <MovieIntroduction movie={movie} />
+                        </View>
+                    );
+                }}
+            </AutonomousModal>
+            <AutonomousModal
+                style={[styles.modalWrap, { marginTop: topInset + portraitHeight }]}
+                visible={episodeModalVisible}
+                onToggleVisible={setEpisodeModalVisible}>
+                {(visible, changeVisible) => {
+                    return (
+                        <View style={[styles.modalContainer, { flex: 1 }]}>
+                            <View style={styles.modalHeader}>
+                                <Text style={styles.modalTitle}>选集</Text>
+                                <DebouncedPressable
+                                    style={styles.hideModalBtn}
+                                    onPress={() => changeVisible(false)}
+                                    activeOpacity={1}>
+                                    <Iconfont name="guanbi1" size={font(20)} color={'#333'} />
+                                </DebouncedPressable>
+                            </View>
+                            <MovieSeriesChooser seriesData={movie?.data} />
+                        </View>
+                    );
+                }}
+            </AutonomousModal>
         </ScrollView>
     );
 });
@@ -181,6 +245,26 @@ const styles = StyleSheet.create({
         lineHeight: font(16),
         color: '#AEBCC4',
     },
+    uploaderWrap: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginVertical: pixel(10),
+    },
+    uploader: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    uploaderText: {
+        fontSize: font(13),
+        lineHeight: font(16),
+        color: '#AEBCC4',
+    },
+    avatar: {
+        width: pixel(20),
+        height: pixel(20),
+        borderRadius: pixel(10),
+        marginRight: pixel(6),
+    },
     operates: {
         marginTop: pixel(12),
         flexDirection: 'row',
@@ -192,7 +276,7 @@ const styles = StyleSheet.create({
         height: pixel(25),
         resizeMode: 'cover',
     },
-    count_comments: {
+    countComments: {
         fontSize: font(12),
         lineHeight: font(16),
         color: '#AEBCC4',
@@ -212,28 +296,39 @@ const styles = StyleSheet.create({
         fontSize: font(16),
         fontWeight: 'bold',
     },
-    episodesContentStyle: {
+    episodes: {
         paddingRight: pixel(14),
         marginLeft: pixel(14),
     },
-    episodeBox: {
-        minWidth: pixel(50),
-        height: pixel(50),
-        paddingHorizontal: pixel(10),
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderWidth: pixel(1),
-        borderColor: '#f0f0f0',
-        borderRadius: pixel(5),
-        marginRight: pixel(5),
-    },
-    episodeText: {
-        fontSize: font(15),
-        lineHeight: font(18),
-        fontWeight: '500',
-        color: '#202020',
-    },
     movieList: {
         paddingLeft: SPACE,
+    },
+    modalWrap: {
+        flex: 1,
+    },
+    modalContainer: {
+        width: Device.WIDTH,
+        backgroundColor: '#fff',
+    },
+    modalHeader: {
+        padding: pixel(20),
+        paddingHorizontal: pixel(20),
+        paddingVertical: pixel(10),
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        borderColor: '#f0f0f0',
+    },
+    modalTitle: {
+        color: '#202020',
+        fontSize: font(16),
+        fontWeight: 'bold',
+    },
+    hideModalBtn: {
+        paddingHorizontal: pixel(10),
+        marginRight: -pixel(20),
+        alignSelf: 'stretch',
+        justifyContent: 'center',
     },
 });
