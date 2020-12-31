@@ -6,10 +6,11 @@ import ScrollableTabView from 'react-native-scrollable-tab-view';
 import CategoryMovies from './CategoryMovies';
 
 const CategoryIndex = {
-    MEI: 0,
-    HAN: 1,
-    RI: 2,
-    GANG: 3,
+    JIESHUO: 0,
+    MEI: 1,
+    GANG: 2,
+    RI: 3,
+    HAN: 4,
 };
 
 // table栏
@@ -34,10 +35,11 @@ export default function CategoriesTab() {
                         tintTextStyle={styles.tintTextStyle}
                     />
                 )}>
+                <CategoryMovies tabLabel="解说" type="JIESHUO" />
                 <CategoryMovies tabLabel="美剧" type="MEI" />
-                <CategoryMovies tabLabel="韩剧" type="HAN" />
-                <CategoryMovies tabLabel="日剧" type="RI" />
                 <CategoryMovies tabLabel="港剧" type="GANG" />
+                <CategoryMovies tabLabel="日剧" type="RI" />
+                <CategoryMovies tabLabel="韩剧" type="HAN" />
             </ScrollableTabView>
             <NavBarHeader
                 navBarStyle={styles.navBarStyle}

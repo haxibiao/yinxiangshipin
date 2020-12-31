@@ -38,10 +38,28 @@ export default function CategoryMenu() {
                     <Text style={styles.menuName}>全部</Text>
                 </View>
             </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback onPress={() => menuNavigate('GANG')}>
+            <TouchableWithoutFeedback onPress={() => menuNavigate('JIESHUO')}>
+                <View style={styles.menuItem}>
+                    <View style={styles.menuIcon}>
+                        <SvgIcon name={SvgPath.movie} size={28} color={'#FF8C7D'} />
+                    </View>
+                    <Text style={styles.menuName}>解说</Text>
+                </View>
+            </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback onPress={() => menuNavigate('MEI')}>
                 <View style={styles.menuItem}>
                     <View style={styles.menuIcon}>
                         <SvgIcon name={SvgPath.tv} size={28} color={'#FF8C7D'} />
+                    </View>
+                    <Text style={styles.menuName}>美剧</Text>
+                </View>
+            </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback onPress={() => menuNavigate('GANG')}>
+                <View style={styles.menuItem}>
+                    <View style={styles.menuIcon}>
+                        <View style={{ marginLeft: 2 }}>
+                            <SvgIcon name={SvgPath.HongKong} size={25} color={'#FF8C7D'} />
+                        </View>
                     </View>
                     <Text style={styles.menuName}>港剧</Text>
                 </View>
@@ -52,14 +70,6 @@ export default function CategoryMenu() {
                         <SvgIcon name={SvgPath.flower} size={28} color={'#FF8C7D'} />
                     </View>
                     <Text style={styles.menuName}>日剧</Text>
-                </View>
-            </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback onPress={() => menuNavigate('MEI')}>
-                <View style={styles.menuItem}>
-                    <View style={styles.menuIcon}>
-                        <SvgIcon name={SvgPath.movie} size={28} color={'#FF8C7D'} />
-                    </View>
-                    <Text style={styles.menuName}>美剧</Text>
                 </View>
             </TouchableWithoutFeedback>
             <TouchableWithoutFeedback onPress={() => menuNavigate('HAN')}>

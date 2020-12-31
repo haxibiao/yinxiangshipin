@@ -10,6 +10,7 @@ import {
     Easing,
     Platform,
     InteractionManager,
+    ViewStyle,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
@@ -29,9 +30,10 @@ interface MovieProps {
         introduction: string;
         count_series: string;
     };
+    style?: ViewStyle;
 }
 
-export default function MovieItem({ movie }: MovieProps) {
+export default function MovieItem({ movie, style }: MovieProps) {
     const navigation = useNavigation();
     const count_series = movie?.count_series;
     const hits = movie?.hits;
@@ -48,7 +50,7 @@ export default function MovieItem({ movie }: MovieProps) {
 
     return (
         <TouchableWithoutFeedback disabled={!movie?.id} onPress={showDetail}>
-            <View style={styles.movieContent}>
+            <View style={[styles.movieContent, style]}>
                 <ImageBackground style={styles.movieCover} resizeMode="cover" source={{ uri: movie?.cover }}>
                     {count_series < 2 ? (
                         <ImageBackground

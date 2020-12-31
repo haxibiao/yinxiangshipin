@@ -7,6 +7,7 @@ import MoviesPoster from './parts/MoviesPoster';
 import MovieFollows from './parts/MovieFollows';
 import MovieRecommend from './parts/MovieRecommend';
 import MovieCategory from './parts/MovieCategory';
+import MovieNarration from './parts/MovieNarration';
 
 export default observer(() => {
     return (
@@ -20,6 +21,7 @@ export default observer(() => {
             <MovieRecommend categoryName="今日推荐" />
             <MovieCategory type="MEI" categoryName="热门美剧" />
             <MovieCategory type="HAN" categoryName="精选韩剧" />
+            <MovieNarration />
             <MovieCategory type="RI" categoryName="精选日剧" />
             <MovieCategory type="GANG" categoryName="怀旧港剧" />
             <View style={styles.footer}>
