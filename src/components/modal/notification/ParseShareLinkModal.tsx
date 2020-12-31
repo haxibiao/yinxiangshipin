@@ -46,6 +46,7 @@ export const ParseShareLinkModal = observer(() => {
             shareBody &&
             userStore.login &&
             !notificationStore.hasModalShown &&
+            appStore.currentRouteName !== 'CreatePost' &&
             shareLinkCache[shareLink] == undefined
         ) {
             shareLinkCache[shareLink] = shareBody;
