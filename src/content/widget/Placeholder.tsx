@@ -4,10 +4,10 @@ import LottieView from 'lottie-react-native';
 
 const Source = {
     Loading: require('@app/assets/json/loading.json'),
-    NotLogged: require('@app/assets/images/default_blank.png'),
-    NoContent: require('@app/assets/images/default_empty.png'),
-    SomeError: require('@app/assets/images/default_error.png'),
-    NoCollection: require('@app/assets/images/default_empty.png'),
+    NotLogged: require('@app/assets/images/default/common_blank_default.png'),
+    NoContent: require('@app/assets/images/default/common_empty_default.png'),
+    SomeError: require('@app/assets/images/default/common_error_default.png'),
+    NoCollection: require('@app/assets/images/default/common_empty_default.png'),
 };
 
 interface Props {

@@ -47,7 +47,7 @@ export default observer((props: any) => {
                 return (
                     <StatusView.EmptyView
                         title="若不寻人聊，只能待佳音"
-                        imageSource={require('@app/assets/images/default_chat.png')}
+                        imageSource={require('@app/assets/images/default/default_chat.png')}
                     />
                 );
             }
@@ -61,7 +61,7 @@ export default observer((props: any) => {
             return (
                 <StatusView.EmptyView
                     title="加入我们，认识更多小伙伴吧"
-                    imageSource={require('@app/assets/images/default_chat.png')}
+                    imageSource={require('@app/assets/images/default/default_chat.png')}
                 />
             );
         }
@@ -142,16 +142,6 @@ export default observer((props: any) => {
         </View>
     );
 });
-
-/* <StatusView.EmptyView
-    title="若不寻人聊，只能待佳音"
-    imageSource={require('@app/assets/images/default_chat.png')}
-/> */
-
-/* <StatusView.EmptyView
-    title="加入我们，认识更多小伙伴吧"
-    imageSource={require('@app/assets/images/default_chat.png')}
-/>; */
 
 const styles = StyleSheet.create({
     container: {

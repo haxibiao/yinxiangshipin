@@ -16,11 +16,11 @@ const statusContent: { [key in Status]: any } = {
     },
     empty: {
         title: '没有相关内容哦',
-        image: require('@app/assets/images/default/default_empty.png'),
+        image: require('@app/assets/images/default/common_empty_default.png'),
     },
     error: {
         title: '加载失败，点击重试',
-        image: require('@app/assets/images/default/default_error.png'),
+        image: require('@app/assets/images/default/common_error_default.png'),
     },
 };
 

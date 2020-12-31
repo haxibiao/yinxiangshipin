@@ -74,7 +74,7 @@ export default (props: any) => {
                 posts && (
                     <StatusView.EmptyView
                         title="TA还没有作品"
-                        imageSource={require('@app/assets/images/default_empty.png')}
+                        imageSource={require('@app/assets/images/default/common_empty_default.png')}
                     />
                 )
             }

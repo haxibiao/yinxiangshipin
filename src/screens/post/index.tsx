@@ -228,7 +228,7 @@ export default observer((props) => {
         return (
             <StatusView.EmptyView
                 style={{ minHeight: percent(50), paddingVertical: pixel(20), backgroundColor: '#fff' }}
-                imageSource={require('@app/assets/images/default_comment.png')}
+                imageSource={require('@app/assets/images/default/common_comment_default.png')}
             />
         );
     }, [loading, commentsData, hasMorePages]);

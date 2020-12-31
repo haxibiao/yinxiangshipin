@@ -60,7 +60,9 @@ export default (props: any) => {
                     }}
                     ItemSeparatorComponent={() => <View style={styles.separator} />}
                     ListEmptyComponent={
-                        <StatusView.EmptyView imageSource={require('@app/assets/images/default_empty.png')} />
+                        <StatusView.EmptyView
+                            imageSource={require('@app/assets/images/default/common_empty_default.png')}
+                        />
                     }
                     onEndReached={() => {
                         if (hasMorePages) {

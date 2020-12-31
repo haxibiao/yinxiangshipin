@@ -10,7 +10,7 @@ class BlankContent extends Component {
         let { size = 70, fontSize = 16, customStyle = {}, remind = '这里还木有内容哦 ~', children } = this.props;
         return (
             <View style={styles.container}>
-                <Image style={styles.image} source={require('@app/assets/images/default_blank.png')} />
+                <Image style={styles.image} source={require('@app/assets/images/default/common_empty_default.png')} />
                 {children ? (
                     children
                 ) : (

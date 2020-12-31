@@ -17,7 +17,7 @@ type Props = {
 class ErrorView extends React.Component<Props> {
     static defaultProps = {
         title: '页面出错啦',
-        imageSource: require('@app/assets/images/default_error.png'),
+        imageSource: require('@app/assets/images/default/common_error_default.png'),
     };
 
     render() {

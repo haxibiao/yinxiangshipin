@@ -8,7 +8,7 @@ class LoadingError extends Component {
         let { size = 70, fontSize = 16, reload = () => null, children } = this.props;
         return (
             <View style={styles.container}>
-                <Image style={styles.image} source={require('@app/assets/images/default_error.png')} />
+                <Image style={styles.image} source={require('@app/assets/images/default/common_error_default.png')} />
                 {children ? (
                     children
                 ) : (

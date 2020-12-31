@@ -56,7 +56,7 @@ export default observer((props: any) => {
 
     const scrollAnimateValue = useRef(new Animated.Value(0));
 
-    const scrollListener = useCallback(e => {
+    const scrollListener = useCallback((e) => {
         const { contentOffset, contentSize } = e.nativeEvent;
         const { y } = contentOffset;
     }, []);
@@ -121,7 +121,7 @@ export default observer((props: any) => {
                 ListEmptyComponent={
                     <StatusView.EmptyView
                         title="TA还没有作品"
-                        imageSource={require('@app/assets/images/default_empty.png')}
+                        imageSource={require('@app/assets/images/default/common_empty_default.png')}
                     />
                 }
                 onEndReached={() => {

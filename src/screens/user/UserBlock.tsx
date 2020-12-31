@@ -48,7 +48,9 @@ const UserBlock = () => {
                 renderItem={({ item, index }) => <UserBlockItem user={item} />}
                 onEndReachedThreshold={0.3}
                 ListEmptyComponent={
-                    <StatusView.EmptyView imageSource={require('@app/assets/images/default_empty.png')} />
+                    <StatusView.EmptyView
+                        imageSource={require('@app/assets/images/default/common_empty_default.png')}
+                    />
                 }
                 onEndReached={() => {
                     if (hasMorePages) {
