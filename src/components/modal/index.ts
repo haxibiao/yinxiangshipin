@@ -14,3 +14,4 @@ export { ParseShareLinkModal } from './notification/ParseShareLinkModal';
 export { AppRemindModal } from './notification/AppRemindModal';
 export { ShareModal } from './notification/ShareModal';
 export { ReportModal } from './notification/ReportModal';
+export { ToastModal } from './notification/ToastModal';

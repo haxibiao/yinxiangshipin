@@ -26,12 +26,16 @@ export const ReportModal = observer(() => {
         onCompleted: (data) => {
             Toast.show({
                 content: '举报成功，感谢您的反馈',
+                layout: 'top',
             });
+            // notificationStore.sendToastNotice({ content: '举报成功，感谢您的反馈' });
         },
         onError: (error) => {
             Toast.show({
                 content: errorMessage(error, '举报失败'),
+                layout: 'top',
             });
+            // notificationStore.sendToastNotice({ content: errorMessage(error, '举报失败') });
         },
     });
 

@@ -161,7 +161,7 @@ export const ShareModal = observer(() => {
             statusBarTranslucent={true}
             hardwareAccelerated={true}>
             <View style={styles.modalView}>
-                <DebouncedPressable style={{ flex: 1 }} onPress={hideModal} />
+                <DebouncedPressable style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.3)' }} onPress={hideModal} />
                 {sharedTargetType === 'post' && (
                     <View
                         style={{
@@ -262,7 +262,6 @@ const styles = StyleSheet.create({
     modalView: {
         flex: 1,
         justifyContent: 'flex-end',
-        backgroundColor: 'rgba(0,0,0,0.3)',
     },
     modalContainer: {
         overflow: 'hidden',

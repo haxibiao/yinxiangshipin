@@ -33,6 +33,12 @@ interface ReportData {
     type: 'comments' | 'user' | 'post';
 }
 
+// 轻提示
+interface ToastData {
+    content: string;
+    position: 'top' | 'middle' | 'bottom';
+}
+
 class NotificationStore {
     // notice
     @observable withdrawalNotice: NotificationData[] = [];
@@ -40,6 +46,7 @@ class NotificationStore {
     @observable remindNotice: NotificationData[] = [];
     @observable shareNotice: ShareData[] = [];
     @observable reportNotice: ReportData[] = [];
+    @observable toastNotice: ToastData[] = [];
     @observable unreadNotify: unreadNotifyTypes = {} as unreadNotifyTypes;
     @observable unreadMessages: number = 0;
     @observable loadingVisible: boolean = false;
@@ -125,6 +132,18 @@ class NotificationStore {
     reduceReportNotice() {
         if (this.reportNotice.length > 0) {
             this.reportNotice = [...this.reportNotice.slice(1)];
+        }
+    }
+
+    @action.bound
+    sendToastNotice(Notice: ToastData) {
+        this.toastNotice = [...this.toastNotice, Notice];
+    }
+
+    @action.bound
+    reduceToastNotice() {
+        if (this.toastNotice.length > 0) {
+            this.toastNotice = [...this.toastNotice.slice(1)];
         }
     }
 }

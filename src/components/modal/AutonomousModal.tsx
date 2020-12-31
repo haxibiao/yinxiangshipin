@@ -1,4 +1,5 @@
 import React, {
+    useRef,
     useEffect,
     useState,
     useCallback,
@@ -7,7 +8,7 @@ import React, {
     ReactNode,
     RefObject,
 } from 'react';
-import { StyleSheet, Modal, View, ViewStyle, ModalProps, Platform } from 'react-native';
+import { StyleSheet, Modal, View, ViewStyle, ModalProps, Platform, Pressable, Animated, Easing } from 'react-native';
 import KeyboardSpacer from '../Other/KeyboardSpacer';
 
 const useControllableProp = ({ value, updater, defaultValue }) => {
@@ -47,6 +48,26 @@ export const AutonomousModal = React.forwardRef(
             }),
             [setModalVisible],
         );
+
+        // 控制器动画
+        const opacityValue = useRef(new Animated.Value(0));
+        const controllerBarSlideAnimation = useCallback((type: 'slideIn' | 'slideOut') => {
+            const toValue = type === 'slideIn' ? 1 : 0;
+            Animated.timing(opacityValue.current, {
+                toValue,
+                duration: 300,
+                easing: Easing.linear,
+                useNativeDriver: true,
+            }).start(() => null);
+        }, []);
+        useEffect(() => {
+            if (modalVisible) {
+                controllerBarSlideAnimation('slideIn');
+            } else {
+                controllerBarSlideAnimation('slideOut');
+            }
+        }, [modalVisible]);
+
         return (
             <Modal
                 animationType="slide"
@@ -56,6 +77,9 @@ export const AutonomousModal = React.forwardRef(
                 statusBarTranslucent={true}
                 hardwareAccelerated={true}
                 {...modalProps}>
+                <Pressable style={styles.shadowWrap} onPress={() => setModalVisible(false)}>
+                    <Animated.View style={[styles.shadow, { opacity: opacityValue.current }]}></Animated.View>
+                </Pressable>
                 <View style={[styles.centeredView, style]}>{children(visible, setModalVisible)}</View>
                 {/* <KeyboardSpacer /> */}
             </Modal>
@@ -66,6 +90,13 @@ export const AutonomousModal = React.forwardRef(
 const styles = StyleSheet.create({
     centeredView: {
         flex: 1,
-        backgroundColor: 'rgba(0,0,0,0.3)',
+    },
+    shadowWrap: {
+        position: 'absolute',
+        ...StyleSheet.absoluteFillObject,
+    },
+    shadow: {
+        flex: 1,
+        backgroundColor: '#00000033',
     },
 });
