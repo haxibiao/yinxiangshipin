@@ -32,6 +32,7 @@ export default ({ count = 6, categoryName }: Props) => {
                         <Text style={styles.moreText}>查看全部解说</Text>
                         <Iconfont name="right" style={{ marginTop: font(2) }} size={font(11)} color={'#ffffffDD'} />
                     </TouchableOpacity>
+                    <View style={styles.arrow} />
                 </View>
             </ImageBackground>
             <ScrollView
@@ -71,6 +72,25 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    arrow: {
+        position: 'absolute',
+        bottom: 0,
+        left: '50%',
+        width: pixel(16),
+        height: pixel(16),
+        backgroundColor: '#fff',
+        transform: [
+            {
+                translateX: -pixel(8),
+            },
+            {
+                translateY: pixel(8),
+            },
+            {
+                rotateZ: '45deg',
+            },
+        ],
+    },
     secTitle: {
         fontSize: font(18),
         color: '#fff',
@@ -91,7 +111,7 @@ const styles = StyleSheet.create({
         color: '#ffffffDD',
     },
     movieList: {
-        paddingTop: pixel(15),
+        paddingTop: pixel(10),
         paddingRight: pixel(14),
     },
 });
