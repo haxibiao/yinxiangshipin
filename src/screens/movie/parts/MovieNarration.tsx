@@ -58,7 +58,7 @@ export default ({ count = 6, categoryName }: Props) => {
 const styles = StyleSheet.create({
     secContainer: {
         paddingTop: pixel(20),
-        marginBottom: pixel(20),
+        marginBottom: pixel(10),
         marginTop: pixel(-10),
         backgroundColor: '#fff',
     },
@@ -100,8 +100,8 @@ const styles = StyleSheet.create({
     moreBtn: {
         flexDirection: 'row',
         alignItems: 'center',
-        height: pixel(26),
-        borderRadius: pixel(13),
+        height: pixel(28),
+        borderRadius: pixel(14),
         paddingHorizontal: pixel(8),
         backgroundColor: '#000000AA',
     },
@@ -112,6 +112,6 @@ const styles = StyleSheet.create({
     },
     movieList: {
         paddingTop: pixel(10),
-        paddingRight: pixel(14),
+        paddingRight: pixel(8),
     },
 });
