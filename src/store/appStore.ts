@@ -2,6 +2,7 @@ import { Platform } from 'react-native';
 import { observable, action, computed } from 'mobx';
 import NetInfo from '@react-native-community/netinfo';
 import { Storage, RecordKeys, ItemKeys } from './storage';
+import Echo from 'laravel-echo';
 
 class App {
     @observable viewportHeight: number = Device.HEIGHT;
@@ -11,6 +12,7 @@ class App {
     @observable client: Record<string, any> = {};
     @observable modalIsShow: boolean = false;
     @observable currentRouteName: string = '';
+    @observable echo: object = {}; //socoket
     // storage
     @observable agreeCreatePostAgreement: boolean = false; // 用户协议（发布内容）
     @observable spiderVideoTaskGuided: boolean = false; // 采集功能使用指导
@@ -50,6 +52,12 @@ class App {
     changeAppVersion(version: string) {
         Storage.setItem(RecordKeys.appVersion, version);
     }
+    //监听对象（即时能力）
+    @action.bound
+    setEcho(echo: Echo) {
+        this.echo = echo;
+    }
+
 }
 
 export default new App();

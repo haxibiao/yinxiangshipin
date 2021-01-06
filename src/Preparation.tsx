@@ -14,6 +14,7 @@ import {
     DetectPhotoAlbumModal,
     ParseShareLinkModal,
 } from './components/modal';
+import Socket from './Socket';
 
 const fetchConfigTimeout = 4000;
 
@@ -55,6 +56,7 @@ export default observer(function Preparation() {
             <AutoCheckInModal />
             {/* <DetectPhotoAlbumModal /> */}
             <ParseShareLinkModal />
+            <Socket />
         </>
     );
 });
