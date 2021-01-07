@@ -14,6 +14,7 @@ import { useNavigation, useRoute, useIsFocused } from '@react-navigation/native'
 import LinearGradient from 'react-native-linear-gradient';
 import SafeText from '../Basic/SafeText';
 import Iconfont from '../Iconfont';
+import FocusAwareStatusBar from './FocusAwareStatusBar';
 
 {
     /* <LinearGradient
@@ -79,7 +80,7 @@ export default (props: Props) => {
                         style={isTransparent && styles.textShadow}
                         name="fanhui"
                         size={font(22)}
-                        color={isTransparent ? '#fff' : '#2b2b2b'}
+                        color={isTransparent ? '#fff' : '#202020'}
                     />
                 </TouchableOpacity>
             );
@@ -105,7 +106,7 @@ export default (props: Props) => {
                         style={isTransparent && styles.textShadow}
                         name="fangdajing"
                         size={font(22)}
-                        color={isTransparent ? '#fff' : '#2b2b2b'}
+                        color={isTransparent ? '#fff' : '#202020'}
                     />
                 </TouchableOpacity>
             );
@@ -116,7 +117,7 @@ export default (props: Props) => {
                         style={isTransparent && styles.textShadow}
                         name="androidgengduo"
                         size={font(22)}
-                        color={isTransparent ? '#fff' : '#2b2b2b'}
+                        color={isTransparent ? '#fff' : '#202020'}
                     />
                 </TouchableOpacity>
             );
@@ -129,7 +130,7 @@ export default (props: Props) => {
         } else if (title) {
             return (
                 <Animated.View style={[styles.center, centerStyle]}>
-                    <SafeText style={[styles.title, { color: isTransparent ? '#fff' : '#2b2b2b' }, titleStyle]}>
+                    <SafeText style={[styles.title, { color: isTransparent ? '#fff' : '#202020' }, titleStyle]}>
                         {title}
                     </SafeText>
                 </Animated.View>
@@ -141,7 +142,7 @@ export default (props: Props) => {
 
     return (
         <View style={[styles.navBar, isTransparent && styles.transparent, navBarStyle]}>
-            {isFocused ? <StatusBar {...StatusBarProps} /> : null}
+            <FocusAwareStatusBar barStyle="dark-content" {...StatusBarProps} />
             <View style={styles.header}>
                 <View style={[styles.headerSide, styles.sideLeft]}>{headerLeft}</View>
                 {center}

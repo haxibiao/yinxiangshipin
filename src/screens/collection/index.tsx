@@ -68,8 +68,8 @@ export default function CollectionScreen() {
             title={isSelf ? '我的合集' : 'TA的合集'}
             rightView={
                 isSelf && (
-                    <TouchableOpacity onPress={() => navigation.navigate('创建合集')}>
-                        <Text style={{ fontSize: font(15), color: Theme.primaryColor }}>创建</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate('CreateCollection')}>
+                        <Text style={{ fontSize: font(15), color: Theme.primaryColor }}>新建</Text>
                     </TouchableOpacity>
                 )
             }>

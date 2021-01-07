@@ -55,14 +55,14 @@ export default ({ searchKeyword, onSearch }) => {
                     <TouchableWithoutFeedback key={keyword} onPress={() => onSearch(keyword)}>
                         <View style={styles.keywordItem}>
                             <Row>
-                                <Iconfont name="shizhong" size={font(16)} color="#fff" />
+                                <Iconfont name="shizhong" size={font(16)} color="#202020" />
                                 <Text style={styles.keywordText}>{keyword}</Text>
                             </Row>
                             <TouchableOpacity
                                 style={styles.closeBtn}
                                 activeOpacity={0.9}
                                 onPress={() => removeRecordItem(keyword)}>
-                                <Iconfont name="guanbi1" size={font(16)} color="#fff" />
+                                <Iconfont name="guanbi1" size={font(16)} color="#202020" />
                             </TouchableOpacity>
                         </View>
                     </TouchableWithoutFeedback>
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
         height: pixel(30),
     },
     title: {
-        color: '#fff',
+        color: '#202020',
         fontSize: font(15),
         fontWeight: 'bold',
     },
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
         paddingLeft: pixel(15),
     },
     keywordText: {
-        color: '#ffffff',
+        color: '#202020',
         fontSize: font(14),
         marginLeft: pixel(6),
     },

@@ -22,7 +22,7 @@ export default ({ onClose, onClick, navigation }) => {
                     imageStyle={{ width: percent(40), height: percent(40) }}
                     onPress={() => {
                         onClose();
-                        navigation.navigate('创建合集');
+                        navigation.navigate('CreateCollection');
                     }}
                 />
             );

@@ -80,7 +80,7 @@ const Search = () => {
             <FocusAwareStatusBar barStyle="dark-content" />
             <View style={styles.header}>
                 <TouchableOpacity activeOpacity={1} onPress={backButtonPress} style={styles.backButton}>
-                    <Iconfont name="zuojiantou" color={'#fff'} size={pixel(21)} />
+                    <Iconfont name="zuojiantou" color="#202020" size={pixel(21)} />
                 </TouchableOpacity>
                 <View style={styles.inputContainer}>
                     <Image style={styles.searchImage} source={require('@app/assets/images/icons/ic_search_g.png')} />
@@ -136,17 +136,17 @@ const Search = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#161924',
+        backgroundColor: '#fff',
     },
     posContent: {
         ...StyleSheet.absoluteFillObject,
-        backgroundColor: '#161924',
+        backgroundColor: '#fff',
     },
     header: {
         height: pixel(Theme.statusBarHeight + 48),
         paddingTop: pixel(Theme.statusBarHeight + 5),
         paddingBottom: pixel(5),
-        backgroundColor: '#161924',
+        backgroundColor: '#fff',
         flexDirection: 'row',
         alignItems: 'center',
     },
@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
         paddingVertical: pixel(5),
         paddingLeft: pixel(10),
         paddingRight: pixel(7),
-        backgroundColor: '#3A3B44',
+        backgroundColor: Theme.groundColour,
         borderRadius: pixel(5),
         // overflow: 'hidden',
     },
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
         flex: 1,
         marginLeft: pixel(6),
         fontSize: font(13),
-        color: '#fff',
+        color: '#202020',
     },
     closeButton: {
         paddingLeft: pixel(10),
@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
         width: pixel(16),
         height: pixel(16),
         borderRadius: pixel(8),
-        backgroundColor: '#98999E',
+        backgroundColor: '#e9e9e9',
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -220,12 +220,12 @@ const styles = StyleSheet.create({
     },
     searchText: {
         fontSize: font(13),
-        color: '#98999E',
+        color: Theme.subTextColor,
         marginLeft: pixel(2),
     },
     highlightText: {
         fontSize: font(13),
-        color: '#F8CE1C',
+        color: Theme.secondaryColor,
     },
 });
 

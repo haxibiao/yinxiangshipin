@@ -5,7 +5,7 @@ import { observer } from '@src/store';
 import { GQL } from '@src/apollo';
 import { QueryList } from '@src/content';
 import VideoItem from './VideoItem';
-import EpisodeItem from '@src/screens/collection/components/EpisodeItem';
+import EpisodeItem from './EpisodeItem';
 
 // selectable:区分个人合集和公共合集入口
 export default observer(({ navigation, keyword, tag_id, user_id, collection_id }) => {
@@ -115,12 +115,12 @@ const styles = StyleSheet.create({
         width: '50%',
         height: percent(50) * 1.4,
         borderRightWidth: StyleSheet.hairlineWidth,
-        borderColor: '#2b2b2b',
-        backgroundColor: '#2b2b2b',
+        borderColor: '#ffffff',
+        backgroundColor: '#f0f0f0',
     },
     columnWrapperStyle: {
         borderWidth: StyleSheet.hairlineWidth,
-        borderColor: '#161924',
+        borderColor: '#eeeeee',
     },
     header: {
         flexDirection: 'row',

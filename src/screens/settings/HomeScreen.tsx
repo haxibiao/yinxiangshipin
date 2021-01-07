@@ -15,7 +15,7 @@ export default observer((props: any) => {
                 content: '确定退出登录吗?',
                 onConfirm: async () => {
                     userStore.signOut();
-                    navigation.navigate('Main', null, navigation.navigate('Profile'));
+                    navigation.navigate('Main', null, navigation.navigate('Find'));
                 },
             });
         } else {
@@ -25,7 +25,7 @@ export default observer((props: any) => {
                 rightContent: '前去绑定',
                 leftConfirm: async () => {
                     userStore.signOut();
-                    navigation.navigate('Main', null, navigation.navigate('Profile'));
+                    navigation.navigate('Main', null, navigation.navigate('Find'));
                 },
                 onConfirm: async () => {
                     navigation.navigate('BindingAccount');
@@ -43,7 +43,7 @@ export default observer((props: any) => {
                 });
                 userStore.signOut();
                 Toast.show({ content: '注销成功' });
-                navigation.navigate('Main', null, navigation.navigate('Profile'));
+                navigation.navigate('Main', null, navigation.navigate('Find'));
             } catch (error) {
                 Toast.show({ content: errorMessage(error) || '注销失败' });
             }

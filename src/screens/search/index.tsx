@@ -62,7 +62,7 @@ const Search = () => {
             <FocusAwareStatusBar barStyle="dark-content" />
             <View style={styles.header}>
                 <TouchableOpacity activeOpacity={1} onPress={() => navigation.goBack()} style={styles.backButton}>
-                    <Iconfont name="zuojiantou" color={Theme.primaryTextColor} size={pixel(21)} />
+                    <Iconfont name="zuojiantou" color="#202020" size={pixel(21)} />
                 </TouchableOpacity>
                 <View style={styles.inputContainer}>
                     <Image style={styles.searchImage} source={require('@app/assets/images/icons/ic_search_g.png')} />
@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
         flex: 1,
         marginLeft: pixel(6),
         fontSize: font(12),
-        color: '#2b2b2b',
+        color: '#202020',
     },
     closeButton: {
         paddingLeft: pixel(10),

@@ -23,7 +23,7 @@ export default function UuidLoginView(props: { navigation: any; client: any; onC
                     const meInfo = Helper.syncGetter('data.autoSignIn', result);
                     userStore.signIn(meInfo);
                     onClose && onClose();
-                    navigation.goBack();
+                    navigation.navigate('Main', null, navigation.navigate('Personage'));
                 })
                 .catch((err: any) => {
                     Toast.show({ content: errorMessage(err), layout: 'top' });
