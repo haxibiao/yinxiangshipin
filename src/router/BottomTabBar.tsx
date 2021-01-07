@@ -66,7 +66,7 @@ const iconSource = {
         videoActive: require('@app/assets/images/icons/ic_message_inactive_gray.png'),
         inactive: require('@app/assets/images/icons/ic_message_inactive.png'),
     },
-    Profile: {
+    Personage: {
         active: require('@app/assets/images/icons/ic_mine_active.png'),
         videoActive: require('@app/assets/images/icons/ic_mine_inactive_gray.png'),
         inactive: require('@app/assets/images/icons/ic_mine_inactive.png'),
@@ -210,17 +210,21 @@ export default observer(
             const tabBarLabel = descriptors[route.key].options.tabBarLabel || route.name;
 
             const onPress = () => {
-                const event = navigation.emit({
-                    type: 'tabPress',
-                    target: route.key,
-                    canPreventDefault: true,
-                });
-
-                if (!focused && !event.defaultPrevented) {
-                    navigation.dispatch({
-                        ...CommonActions.navigate(route.name),
-                        target: state.key,
+                if (!userStore.login && route.name === 'Personage') {
+                    navigation.navigate('Login');
+                } else {
+                    const event = navigation.emit({
+                        type: 'tabPress',
+                        target: route.key,
+                        canPreventDefault: true,
                     });
+
+                    if (!focused && !event.defaultPrevented) {
+                        navigation.dispatch({
+                            ...CommonActions.navigate(route.name),
+                            target: state.key,
+                        });
+                    }
                 }
             };
 

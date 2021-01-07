@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback, useRef } from 'react';
+import React, { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import { StyleSheet, View, Text, Pressable, Animated } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { BoxShadow } from 'react-native-shadow';
@@ -27,39 +27,8 @@ const shadowSetting = {
 };
 
 export default observer(() => {
-    const route = useRoute();
+    const user = userStore.me;
     const navigation = useNavigation();
-    const user = route.params?.user || userStore.me;
-    const isSelf = useMemo(() => userStore.me.id === user.id, [userStore.me.id, user]);
-
-    const [modalVisible, setModalVisible] = useState(false);
-    const [addUserBlock] = useMutation(GQL.addUserBlockMutation, {
-        variables: {
-            id: user.id,
-        },
-        refetchQueries: () => [
-            {
-                query: GQL.publicPostsQuery,
-                fetchPolicy: 'network-only',
-            },
-        ],
-        onCompleted: () => {
-            Toast.show({ content: '拉黑成功，系统将屏蔽此用户的内容！' });
-        },
-        onError: () => {
-            Toast.show({ content: errorMessage(error) });
-        },
-    });
-
-    const addUserBlockHandler = useCallback(() => {
-        setModalVisible(true);
-        if (userStore.login) {
-            addUserBlock();
-        } else {
-            navigation.navigate('Login');
-        }
-    }, [addUserBlock]);
-
     const goToSearch = useCallback(() => {
         navigation.push('SearchVideo', {
             user_id: user.id,
@@ -90,28 +59,16 @@ export default observer(() => {
             <Animated.View style={[styles.navBarWrap, { opacity: navBarOpacity, transform: [{ scale: navBarScale }] }]}>
                 <BoxShadow setting={shadowSetting}>
                     <View style={styles.navBarContainer}>
-                        <Pressable
-                            style={styles.navBarButton}
-                            onPress={() => {
-                                navigation.goBack();
-                            }}>
-                            <Iconfont name="fanhui" color={'#202020'} size={font(21)} />
-                        </Pressable>
+                        <View style={styles.navBarButton}></View>
                         <Animated.View style={styles.navBarTitle}>
                             <Text style={styles.userName} numberOfLines={1}>
-                                {user?.name}
+                                个人主页
                             </Text>
                         </Animated.View>
                         <View style={styles.rightButtons}>
-                            {isSelf ? (
-                                <Pressable style={styles.navBarButton} onPress={goToSearch}>
-                                    <SvgIcon name={SvgPath.search} size={font(22)} color={'#202020'} />
-                                </Pressable>
-                            ) : (
-                                <Pressable style={styles.navBarButton} onPress={() => setModalVisible(true)}>
-                                    <Iconfont name="daohanggengduoanzhuo" size={font(22)} color={'#202020'} />
-                                </Pressable>
-                            )}
+                            <Pressable style={styles.navBarButton} onPress={goToSearch}>
+                                <SvgIcon name={SvgPath.search} size={font(22)} color={'#202020'} />
+                            </Pressable>
                         </View>
                     </View>
                 </BoxShadow>
@@ -122,10 +79,10 @@ export default observer(() => {
     const _renderScrollHeader = useCallback(() => {
         return (
             <View onLayout={headerOnLayout}>
-                <UserInfo user={user} operateHandler={() => setModalVisible(true)} />
+                <UserInfo isTopStack />
             </View>
         );
-    }, [user]);
+    }, []);
 
     return (
         <View style={styles.container}>
@@ -166,53 +123,21 @@ export default observer(() => {
                         return <PostItem data={item?.article} />;
                     }}
                 />
-                {isSelf && (
-                    <PostQueryList
-                        tabLabel="收藏"
-                        gqlDocument={GQL.userPostsQuery}
-                        dataOptionChain="userPosts.data"
-                        paginateOptionChain="userPosts.paginatorInfo"
-                        options={{
-                            variables: {
-                                user_id: user.id,
-                                filter: 'spider',
-                            },
-                            fetchPolicy: 'network-only',
-                        }}
-                    />
-                )}
+                <PostQueryList
+                    tabLabel="收藏"
+                    gqlDocument={GQL.userPostsQuery}
+                    dataOptionChain="userPosts.data"
+                    paginateOptionChain="userPosts.paginatorInfo"
+                    options={{
+                        variables: {
+                            user_id: user.id,
+                            filter: 'spider',
+                        },
+                        fetchPolicy: 'network-only',
+                    }}
+                />
                 <More user={user} tabLabel="更多" />
             </ScrollTabView>
-            <AutonomousModal visible={modalVisible} onToggleVisible={setModalVisible} style={styles.modalContainer}>
-                {(visible, changeVisible) => {
-                    return (
-                        <View style={styles.modalBody}>
-                            <View style={styles.modalHeader}>
-                                <Text style={styles.modalTitle}>{user.name}</Text>
-                                <Text style={styles.modalSubText} numberOfLines={2}>
-                                    {user.description || '这个人很懒，一点介绍都没留下'}
-                                </Text>
-                            </View>
-                            <Pressable style={styles.actionItem} onPress={addUserBlockHandler}>
-                                <Text style={styles.actionName}>拉黑</Text>
-                            </Pressable>
-                            <Pressable
-                                style={styles.actionItem}
-                                onPress={() => {
-                                    changeVisible(false);
-                                    notificationStore.sendReportNotice({ target: user, type: 'user' });
-                                }}>
-                                <Text style={styles.actionName}>举报</Text>
-                            </Pressable>
-                            <Pressable
-                                style={[styles.actionItem, styles.actionCloseItem]}
-                                onPress={() => changeVisible(false)}>
-                                <Text style={styles.actionName}>取消</Text>
-                            </Pressable>
-                        </View>
-                    );
-                }}
-            </AutonomousModal>
         </View>
     );
 });
@@ -221,7 +146,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        paddingBottom: Theme.HOME_INDICATOR_HEIGHT,
+        paddingBottom: Theme.BOTTOM_HEIGHT + Theme.HOME_INDICATOR_HEIGHT,
     },
     navBarWrap: {
         position: 'absolute',
@@ -265,44 +190,5 @@ const styles = StyleSheet.create({
         borderTopWidth: StyleSheet.hairlineWidth,
         borderBottomWidth: 0,
         backgroundColor: '#fff',
-    },
-    modalContainer: {
-        justifyContent: 'flex-end',
-    },
-    modalBody: {
-        overflow: 'hidden',
-        backgroundColor: '#fff',
-        borderTopLeftRadius: pixel(10),
-        borderTopRightRadius: pixel(10),
-    },
-    modalHeader: {
-        padding: pixel(25),
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    modalTitle: {
-        color: '#212121',
-        fontSize: font(20),
-        fontWeight: 'bold',
-    },
-    modalSubText: {
-        color: '#b2b2b2',
-        fontSize: font(12),
-        marginTop: pixel(4),
-    },
-    actionItem: {
-        paddingVertical: pixel(20),
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderTopWidth: StyleSheet.hairlineWidth,
-        borderColor: '#f0f0f0',
-    },
-    actionCloseItem: {
-        borderTopWidth: pixel(8),
-        borderColor: '#eee',
-    },
-    actionName: {
-        color: '#212121',
-        fontSize: font(16),
     },
 });

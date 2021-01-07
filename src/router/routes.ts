@@ -34,16 +34,13 @@ import SearchedShortVideoScreen from '../screens/search/shortVideo';
 import SearchedShortVideoListScreen from '../screens/search/shortVideo/List';
 
 // user
-import UserHomeScreen from '../screens/user';
+import UserScreen from '../screens/user';
+import FavoriteCollection from '../screens/user/FavoriteCollection';
 import SocietyScreen from '../screens/user/Society';
-import WorksScreen from '../screens/user/WorksScreen';
-import LikedArticlesScreen from '../screens/user/LikedArticlesScreen';
 import UserBlockScreen from '../screens/user/UserBlock';
-
-// my
-import BrowsingHistoryScreen from '../screens/my/HistoryScreen';
-import EnshrinedScreen from '../screens/my/Enshrined';
-import EditProfileScreen from '../screens/profile/EditProfile';
+// user personage
+import EditProfileScreen from '../screens/user/personage/EditProfile';
+import BrowsingHistoryScreen from '../screens/user/personage/HistoryScreen';
 
 // comment
 import CommentScreen from '../screens/comment/CommentScreen';
@@ -161,9 +158,6 @@ export default {
     OtherRemindNotification: {
         component: OtherRemindScreen,
     },
-    Works: {
-        component: WorksScreen,
-    },
     Society: {
         component: SocietyScreen,
     },
@@ -229,10 +223,7 @@ export default {
         component: ChatSettingScreen,
     },
     User: {
-        component: UserHomeScreen,
-    },
-    喜欢: {
-        component: LikedArticlesScreen,
+        component: UserScreen,
     },
     RetrievePassword: {
         component: RetrievePasswordScreen,
@@ -240,13 +231,13 @@ export default {
     获取验证码: {
         component: VerificationScreen,
     },
-    Enshrined: {
-        component: EnshrinedScreen,
+    FavoriteCollection: {
+        component: FavoriteCollection,
     },
     RandomCollection: {
         component: RandomCollectionScreen,
     },
-    创建合集: {
+    CreateCollection: {
         component: CreateCollectionScreen,
     },
     SelectPost: {
@@ -258,7 +249,7 @@ export default {
     CollectionDetail: {
         component: CollectionDetailScreen,
     },
-    我的合集: {
+    UserCollection: {
         component: CollectionScreen,
     },
     浏览记录: {

@@ -27,7 +27,10 @@ export default observer(
         const route = useRoute();
 
         const goToScreen = useCallback(() => {
-            if (route.params?.user?.id === post?.user?.id) {
+            if (route.name === 'Personage' && userStore.me.id === post?.user?.id) {
+                // 个人主页不重复跳转到用户主页
+                return;
+            } else if (route.params?.user?.id === post?.user?.id) {
                 navigation.navigate('User', { user: post?.user });
             } else {
                 navigation.push('User', { user: post?.user });

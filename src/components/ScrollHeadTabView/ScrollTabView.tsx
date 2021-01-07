@@ -18,6 +18,9 @@ interface Props {
     insetValue?: number;
     headerHeight?: number;
     tabBarStyle?: ViewStyle;
+    tabBarPaddingInset?: number;
+    tabBarTabWidth?: number;
+    tabBarTabUnderlineWidth?: number;
     tabBarUnderlineStyle?: ViewStyle;
     tabBarBackgroundColor?: string;
     tabBarActiveTextColor?: string;
@@ -430,12 +433,8 @@ export default class ScrollableTabView extends Component<Props> {
             activeTab: this.state.currentPage,
             scrollValue: this.state.scrollValue,
             containerWidth: this.state.containerWidth,
-            style: this.props.tabBarStyle,
+            tabBarStyle: this.props.tabBarStyle,
         };
-
-        if (this.props.tabBarBackgroundColor) {
-            tabBarProps.backgroundColor = this.props.tabBarBackgroundColor;
-        }
         if (this.props.tabBarActiveTextColor) {
             tabBarProps.activeTextColor = this.props.tabBarActiveTextColor;
         }
@@ -447,6 +446,15 @@ export default class ScrollableTabView extends Component<Props> {
         }
         if (this.props.tabBarUnderlineStyle) {
             tabBarProps.underlineStyle = this.props.tabBarUnderlineStyle;
+        }
+        if (this.props.tabBarPaddingInset) {
+            tabBarProps.paddingInset = this.props.tabBarPaddingInset;
+        }
+        if (this.props.tabBarTabWidth) {
+            tabBarProps.tabWidth = this.props.tabBarTabWidth;
+        }
+        if (this.props.tabBarTabUnderlineWidth) {
+            tabBarProps.tabUnderlineWidth = this.props.tabBarTabUnderlineWidth;
         }
         if (overlayTabs) {
             tabBarProps.style = {

@@ -1,44 +1,20 @@
 import React, { useCallback } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { PageContainer, ScrollTabBar } from '@src/components';
+import { PageContainer } from '@src/components';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { GQL } from '@src/apollo';
-import { QueryList, PostItem, CaptureContent } from '@src/content';
-import ScrollableTabView from 'react-native-scrollable-tab-view';
+import { QueryList } from '@src/content';
+import { userStore } from '@app/src/store';
 import CollectionItem from '@src/screens/collection/components/CollectionItem';
 
 export default () => {
     const route = useRoute();
     const navigation = useNavigation();
     const user_id = route?.params?.user?.id;
-    const renderItem = useCallback(({ item }) => {
-        return (
-            <PostItem data={item}>
-                <CaptureContent />
-            </PostItem>
-        );
-    }, []);
-    const UserPostsQuery = ({ user_id }) => {
-        return (
-            <QueryList
-                gqlDocument={GQL.userPostsQuery}
-                dataOptionChain="userPosts.data"
-                paginateOptionChain="userPosts.paginatorInfo"
-                options={{
-                    variables: {
-                        user_id: user_id,
-                        filter: 'spider',
-                    },
-                    fetchPolicy: 'network-only',
-                }}
-                renderItem={renderItem}
-                ItemSeparatorComponent={() => <View style={styles.separator} />}
-                contentContainerStyle={styles.container}
-            />
-        );
-    };
-    const FollowedCollectionsQuery = ({ user_id }) => {
-        return (
+    const isSelf = user_id === userStore.me.id;
+
+    return (
+        <PageContainer title={isSelf ? '我收藏的合集' : 'TA收藏的合集'}>
             <QueryList
                 gqlDocument={GQL.followedCollectionsQuery}
                 dataOptionChain="follows.data"
@@ -56,26 +32,6 @@ export default () => {
                 ItemSeparatorComponent={() => <View style={styles.separator} />}
                 contentContainerStyle={styles.container}
             />
-        );
-    };
-    return (
-        <PageContainer title="我的收藏">
-            <ScrollableTabView
-                style={{ flex: 1 }}
-                renderTabBar={(props) => (
-                    <ScrollTabBar
-                        {...props}
-                        tabWidth={pixel(70)}
-                        style={styles.tabBarStyle}
-                        tabStyle={styles.tabStyle}
-                        underlineStyle={styles.underlineStyle}
-                        activeTextStyle={styles.activeTextStyle}
-                        tintTextStyle={styles.tintTextStyle}
-                    />
-                )}>
-                <UserPostsQuery tabLabel="动态" user_id={user_id} />
-                <FollowedCollectionsQuery tabLabel="合集" user_id={user_id} />
-            </ScrollableTabView>
         </PageContainer>
     );
 };

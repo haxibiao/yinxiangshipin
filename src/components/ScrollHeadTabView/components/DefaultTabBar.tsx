@@ -10,108 +10,99 @@ import {
     ViewStyle,
     TextStyle,
 } from 'react-native';
+import { BoxShadow } from 'react-native-shadow';
 
 interface Props extends ViewProps {
+    scrollValue: number; //切换tab的动画对应系数
     containerWidth: number; //tabBar外部容器宽度
-    scrollValue: number; //切换tab的对应系数
     tabs: Array;
-    tabUnderlineWidth?: number;
-    tabUnderlineHeight?: number;
-    tabUnderlineScaleX?: number;
-    hiddenUnderLine?: boolean;
-    underLineColor?: string;
-    underlineStyle?: ViewStyle;
-    activeTextStyle?: TextStyle;
-    tintTextStyle?: TextStyle;
-    tabWidth?: number;
+    paddingInset?: number; //tabBar外两边padding
+    tabBarStyle?: ViewStyle;
     tabStyle?: ViewStyle;
+    tabWidth?: number;
+    underlineStyle?: ViewStyle;
+    tabUnderlineWidth?: number;
+    hiddenUnderLine?: boolean;
     textStyle?: TextStyle;
-    style?: ViewStyle;
+    activeTextStyle?: TextStyle;
+    inactiveTextColor?: TextStyle;
 }
+
+const SCALE_NUMBER = 2;
 
 export default class DefaultTabBar extends Component<Props> {
     static defaultProps = {
+        paddingInset: 0,
         activeTextStyle: { color: Theme.defaultTextColor },
-        tintTextStyle: { color: Theme.subTextColor },
-        underLineColor: Theme.secondaryColor,
-        tabUnderlineHeight: 2,
+        inactiveTextColor: { color: Theme.subTextColor },
         hiddenUnderLine: false,
     };
 
     _renderTab(name: string, page: number, isTabActive: boolean, onPressHandler: Function) {
-        let { tabWidth, tabStyle, textStyle, activeTextStyle, tintTextStyle } = this.props;
-        let style = isTabActive ? activeTextStyle : tintTextStyle;
-        let tabWidthStyle = tabWidth ? { width: tabWidth } : { flex: 1 };
-        tabStyle = {
+        const { tabWidth, tabStyle, textStyle, activeTextStyle, inactiveTextColor } = this.props;
+        const tabTextStyle = isTabActive ? activeTextStyle : inactiveTextColor;
+        const tabWidthStyle = tabWidth ? { width: tabWidth } : { flex: 1 };
+        const tabItem = {
             alignItems: 'center',
             justifyContent: 'center',
             ...tabWidthStyle,
             ...tabStyle,
         };
-        textStyle = {
+        const tabText = {
             fontSize: font(16),
-            ...style,
             ...textStyle,
+            ...tabTextStyle,
         };
         return (
-            <TouchableOpacity style={tabStyle} key={name} onPress={() => onPressHandler(page)}>
-                <Text style={textStyle}>{name}</Text>
+            <TouchableOpacity style={tabItem} key={name} onPress={() => onPressHandler(page)}>
+                <Text style={tabText}>{name}</Text>
             </TouchableOpacity>
         );
     }
 
     _renderUnderline() {
-        let {
-            tabs,
-            underlineStyle,
+        const {
+            scrollValue,
             containerWidth,
+            paddingInset,
+            tabs,
             tabWidth,
             tabUnderlineWidth,
-            tabUnderlineHeight,
-            tabUnderlineScaleX,
-            underLineColor,
-            scrollValue,
+            underlineStyle,
         } = this.props;
-        let numberOfTabs = tabs.length;
-        let underlineWidth = tabUnderlineWidth
-            ? tabUnderlineWidth
-            : tabWidth
-            ? tabWidth * 0.6
-            : containerWidth / (numberOfTabs * 2);
-        let scale = tabUnderlineScaleX ? tabUnderlineScaleX : 2;
-        let deLen = tabWidth ? tabWidth * 0.2 : (containerWidth / numberOfTabs - underlineWidth) / 2;
-        let tabUnderlineStyle = {
+        const numberOfTabs = tabs.length;
+        const calcTabWidth = tabWidth || (containerWidth - paddingInset) / numberOfTabs;
+        const calcUnderlineWidth = Math.min(tabUnderlineWidth || calcTabWidth * 0.6, calcTabWidth);
+        const underlineLeft = (calcTabWidth - calcUnderlineWidth) / 2 + paddingInset / 2;
+        const tabUnderlineStyle = {
             position: 'absolute',
-            width: underlineWidth,
-            height: tabUnderlineHeight,
-            borderRadius: tabUnderlineHeight,
-            backgroundColor: underLineColor,
-            bottom: 0,
-            left: deLen,
+            width: calcUnderlineWidth,
+            height: 3,
+            borderRadius: 3,
+            backgroundColor: Theme.primaryColor,
+            bottom: 1,
+            left: underlineLeft,
             ...underlineStyle,
         };
 
-        // 滑动tab，对应系数0~1
-        let translateX = scrollValue.interpolate({
-            inputRange: [0, 1],
-            outputRange: [0, tabWidth ? tabWidth : containerWidth / numberOfTabs],
-        });
-
-        // 计算scaleX动画系数
-        let scaleValue = (defaultScale) => {
-            let number = 4;
-            let arr = new Array(number * 2);
+        // 计算underline动画系数
+        const scaleValue = () => {
+            const number = 4;
+            const arr = new Array(number * 2);
             return arr.fill(0).reduce(
                 function (pre, cur, idx) {
                     idx == 0 ? pre.inputRange.push(cur) : pre.inputRange.push(pre.inputRange[idx - 1] + 0.5);
-                    idx % 2 ? pre.outputRange.push(defaultScale) : pre.outputRange.push(1);
+                    idx % 2 ? pre.outputRange.push(SCALE_NUMBER) : pre.outputRange.push(1);
                     return pre;
                 },
                 { inputRange: [], outputRange: [] },
             );
         };
-
-        let scaleX = scrollValue.interpolate(scaleValue(scale));
+        const scaleX = scrollValue.interpolate(scaleValue());
+        const translateX = scrollValue.interpolate({
+            inputRange: [0, 1],
+            outputRange: [0, calcTabWidth],
+        });
 
         return (
             <Animated.View
@@ -130,9 +121,9 @@ export default class DefaultTabBar extends Component<Props> {
     }
 
     render() {
-        let { style, tabs, hiddenUnderLine } = this.props;
+        const { tabBarStyle, paddingInset, hiddenUnderLine, tabs } = this.props;
         return (
-            <Animated.View style={[styles.tabBar, style]}>
+            <Animated.View style={[styles.tabBar, { paddingHorizontal: paddingInset }, tabBarStyle]}>
                 {!hiddenUnderLine && this._renderUnderline()}
                 {tabs.map((name, page) => {
                     const isTabActive = this.props.activeTab === page;
@@ -143,15 +134,22 @@ export default class DefaultTabBar extends Component<Props> {
     }
 }
 
+const shadowSetting = {
+    width: Device.WIDTH,
+    height: pixel(Theme.NAVBAR_HEIGHT),
+    color: '#E8E8E8',
+    border: pixel(5),
+    radius: pixel(15),
+    opacity: 0.5,
+    x: 0,
+    y: 0,
+};
 const styles = StyleSheet.create({
     tabBar: {
         height: pixel(Theme.NAVBAR_HEIGHT),
         flexDirection: 'row',
         alignItems: 'stretch',
-        borderWidth: pixel(0.5),
-        borderTopWidth: 0,
-        borderLeftWidth: 0,
-        borderRightWidth: 0,
+        borderBottomWidth: StyleSheet.hairlineWidth,
         borderColor: Theme.borderColor,
     },
 });

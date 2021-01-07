@@ -5,7 +5,7 @@ import Home from '@src/screens/home';
 import Find from '@src/screens/find';
 import Task from '@src/screens/task';
 import Notification from '@src/screens/notification';
-import Profile from '@src/screens/my';
+import Personage from '@src/screens/user/Personage';
 import BottomTabBar from './BottomTabBar';
 
 const Tab = createBottomTabNavigator();
@@ -50,8 +50,8 @@ export default function MainTabNavigator() {
                 }}
             />
             <Tab.Screen
-                name="Profile"
-                component={Profile}
+                name="Personage"
+                component={Personage}
                 options={{
                     tabBarLabel: '我的',
                 }}

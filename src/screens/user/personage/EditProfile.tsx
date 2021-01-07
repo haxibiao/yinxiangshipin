@@ -53,9 +53,7 @@ export default observer((props: any) => {
             .then((res) => {
                 userStore.changeAvatar(res);
             })
-            .catch((err) => {
-                console.log('err', err);
-            });
+            .catch((err) => {});
     };
 
     const _changeAvatar = () => {
@@ -77,9 +75,7 @@ export default observer((props: any) => {
                     }, 60000);
                 }
             })
-            .catch((error) => {
-                console.warn('error', error);
-            });
+            .catch((error) => {});
     };
 
     const parseBirthday = () => {
@@ -100,7 +96,6 @@ export default observer((props: any) => {
             .replace(/(年)|(月)/gi, '-')
             .replace(/(日)/gi, '');
         setUserBirthday(date);
-
         client
             .mutate({
                 mutation: GQL.updateUserBirthday,
@@ -178,7 +173,6 @@ export default observer((props: any) => {
         },
         [setUserGender, setGender],
     );
-    console.log(userGender, user.gender);
     // 修改昵称
     const [updateUserName] = useMutation(GQL.updateUserName, {
         variables: {
@@ -198,7 +192,6 @@ export default observer((props: any) => {
             id: user.id,
         },
         // onCompleted: () => {
-        //     console.log(123);
         // },
     });
 
