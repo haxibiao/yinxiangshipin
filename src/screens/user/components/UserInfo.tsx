@@ -236,8 +236,8 @@ const styles = StyleSheet.create({
         flex: 1,
         marginTop: -pixel(15),
         paddingHorizontal: SPACE,
-        borderTopLeftRadius: pixel(16),
-        borderTopRightRadius: pixel(16),
+        borderTopLeftRadius: pixel(14),
+        borderTopRightRadius: pixel(14),
         backgroundColor: '#fff',
     },
     topInfo: {

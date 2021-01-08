@@ -76,7 +76,7 @@ import FollowNotificationsScreen from '../screens/notification/FollowScreen';
 import OtherRemindScreen from '../screens/notification/OtherRemindScreen';
 
 // settings
-import SettingsScreen from '../screens/settings/HomeScreen';
+import SettingsScreen from '../screens/settings';
 import AboutUsScreen from '../screens/settings/AboutUsScreen';
 import UserAgreementScreen from '../screens/settings/UserAgreementScreen';
 import PrivacyPolicyScreen from '../screens/settings/PrivacyPolicyScreen';

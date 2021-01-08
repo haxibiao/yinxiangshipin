@@ -80,7 +80,7 @@ export default observer(({ user, ...props }) => {
                 <View style={styles.secHead}>
                     <View style={styles.headLeft}>
                         <Iconfont name="wenji" color="#909090" size={font(15)} />
-                        <Text style={styles.secTitle}>收藏的合集</Text>
+                        <Text style={styles.secTitle}>关注的合集</Text>
                     </View>
                     {followedCollectionData?.length > 3 && (
                         <Pressable

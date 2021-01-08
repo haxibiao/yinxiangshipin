@@ -71,81 +71,50 @@ export default observer((props: any) => {
                 contentContainerStyle={{
                     paddingBottom: pixel(20),
                 }}>
-                {userStore.login && (
-                    <>
-                        <ItemSeparator />
-                        <ListItem
-                            onPress={() => navigation.navigate('EditProfile')}
-                            style={styles.listItem}
-                            leftComponent={
-                                <View style={styles.UserComment}>
-                                    <Image source={{ uri: userStore.me.avatar }} style={styles.avatarImage} />
-                                    <SafeText style={styles.avatarName}>{userStore.me.name}</SafeText>
-                                </View>
-                            }
-                            rightComponent={
-                                <View style={styles.UserComment}>
-                                    <Text style={styles.informationUser}>个人信息</Text>
-                                    <Iconfont name="right" size={pixel(14)} color={Theme.subTextColor} />
-                                </View>
-                            }
-                        />
-                        <ItemSeparator />
-                        <ListItem
-                            onPress={() => navigation.navigate('AccountSecurity')}
-                            style={styles.listItem}
-                            leftComponent={<Text style={styles.itemText}>账号绑定</Text>}
-                            rightComponent={<Iconfont name="right" size={pixel(14)} color={Theme.subTextColor} />}
-                        />
-                        <ItemSeparator />
-                        <ListItem
-                            onPress={destroyAccount}
-                            style={styles.listItem}
-                            leftComponent={<Text style={styles.itemText}>账号注销</Text>}
-                            rightComponent={<Iconfont name="right" size={pixel(14)} color={Theme.subTextColor} />}
-                        />
-                        <ItemSeparator />
-                        <ListItem
-                            onPress={() => navigation.navigate('UserBlockList')}
-                            style={styles.listItem}
-                            leftComponent={<Text style={styles.itemText}>黑名单</Text>}
-                            rightComponent={<Iconfont name="right" size={pixel(14)} color={Theme.subTextColor} />}
-                        />
-                    </>
-                )}
-                {userStore.login && adStore.enableAd && (
-                    <>
-                        <ItemSeparator />
-                        <ListItem
-                            onPress={changResolveLinkType}
-                            style={styles.listItem}
-                            leftComponent={
-                                <View>
-                                    <Text style={styles.itemText}>收藏方式</Text>
-                                    <Text style={styles.tipsText}>{`收藏第三方视频链接${
-                                        appStore.isLocalSpiderVideo ? '先' : '不'
-                                    }下载到本地`}</Text>
-                                </View>
-                            }
-                            rightComponent={
-                                <Image
-                                    style={styles.btnImage}
-                                    source={
-                                        appStore.isLocalSpiderVideo
-                                            ? require('@app/assets/images/bg.png')
-                                            : require('@app/assets/images/bf.png')
-                                    }
-                                />
-                            }
-                        />
-                    </>
-                )}
                 <ItemSeparator />
                 <ListItem
-                    onPress={checkUpdate}
+                    onPress={() => navigation.navigate('EditProfile')}
                     style={styles.listItem}
-                    leftComponent={<Text style={styles.itemText}>检查更新</Text>}
-                    rightComponent={<Text style={styles.rightText}> {Config.Version} </Text>}
+                    leftComponent={
+                        <View style={styles.UserComment}>
+                            <Image source={{ uri: userStore.me.avatar }} style={styles.avatarImage} />
+                            <SafeText style={styles.avatarName}>{userStore.me.name}</SafeText>
+                        </View>
+                    }
+                    rightComponent={
+                        <View style={styles.UserComment}>
+                            <Text style={styles.informationUser}>个人信息</Text>
+                            <Iconfont name="right" size={pixel(14)} color={Theme.subTextColor} />
+                        </View>
+                    }
+                />
+                <ItemSeparator />
+                <ListItem
+                    onPress={() => navigation.navigate('AccountSecurity')}
+                    style={styles.listItem}
+                    leftComponent={<Text style={styles.itemText}>账号绑定</Text>}
+                    rightComponent={<Iconfont name="right" size={pixel(14)} color={Theme.subTextColor} />}
+                />
+                <ItemSeparator />
+                <ListItem
+                    onPress={destroyAccount}
+                    style={styles.listItem}
+                    leftComponent={<Text style={styles.itemText}>账号注销</Text>}
+                    rightComponent={<Iconfont name="right" size={pixel(14)} color={Theme.subTextColor} />}
+                />
+                <ItemSeparator />
+                <ListItem
+                    onPress={() => navigation.navigate('Feedback')}
+                    style={styles.listItem}
+                    leftComponent={<Text style={styles.itemText}>反馈中心</Text>}
+                    rightComponent={<Iconfont name="right" size={pixel(14)} color={Theme.subTextColor} />}
+                />
+                <ItemSeparator />
+                <ListItem
+                    onPress={() => navigation.navigate('UserBlockList')}
+                    style={styles.listItem}
+                    leftComponent={<Text style={styles.itemText}>黑名单</Text>}
+                    rightComponent={<Iconfont name="right" size={pixel(14)} color={Theme.subTextColor} />}
                 />
                 <ItemSeparator />
                 <ListItem
@@ -155,18 +124,23 @@ export default observer((props: any) => {
                     rightComponent={<Iconfont name="right" size={pixel(14)} color={Theme.subTextColor} />}
                 />
                 <ItemSeparator />
-                {userStore.login && (
-                    <TouchableOpacity
-                        style={[
-                            styles.listItem,
-                            {
-                                justifyContent: 'center',
-                            },
-                        ]}
-                        onPress={signOut}>
-                        <Text style={styles.logout}>退出登录</Text>
-                    </TouchableOpacity>
-                )}
+                <ListItem
+                    onPress={checkUpdate}
+                    style={styles.listItem}
+                    leftComponent={<Text style={styles.itemText}>检查更新</Text>}
+                    rightComponent={<Text style={styles.rightText}> {Config.Version} </Text>}
+                />
+                <ItemSeparator />
+                <TouchableOpacity
+                    style={[
+                        styles.listItem,
+                        {
+                            justifyContent: 'center',
+                        },
+                    ]}
+                    onPress={signOut}>
+                    <Text style={styles.logout}>退出登录</Text>
+                </TouchableOpacity>
             </ScrollView>
         </PageContainer>
     );

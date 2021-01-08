@@ -7362,7 +7362,7 @@ react-native-device-info@^5.6.1:
 
 "react-native-device-orientation@git+http://code.haxibiao.cn/packages/react-native-device-orientation.git":
   version "1.0.0"
-  resolved "git+http://code.haxibiao.cn/packages/react-native-device-orientation.git#d3386833ad155e6492d185acfb03de0dfd089186"
+  resolved "git+http://code.haxibiao.cn/packages/react-native-device-orientation.git#744d61ab23bca9bc20be16f5ee1d26df00ba03e2"
 
 react-native-gesture-handler@^1.6.1:
   version "1.7.0"

@@ -19,10 +19,6 @@ const VersionInformation = (props: Props) => {
                     <Text style={styles.textWord}>隐私政策</Text>
                     <Image source={require('@app/assets/images/more_right.png')} style={styles.jTouImage} />
                 </TouchableOpacity>
-                {/* <TouchableOpacity style={styles.touchStyle} onPress={() => navigation.navigate('UseInstructions')}>
-                    <Text style={styles.textWord}>健康分使用说明</Text>
-                    <Image source={require('@app/assets/images/more_right.png')} style={styles.jTouImage} />
-                </TouchableOpacity> */}
                 <TouchableOpacity style={styles.touchStyle} onPress={() => navigation.navigate('CommonQuestion')}>
                     <Text style={styles.textWord}>常见问题</Text>
                     <Image source={require('@app/assets/images/more_right.png')} style={styles.jTouImage} />
