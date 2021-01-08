@@ -1,45 +1,74 @@
 import React, { useCallback } from 'react';
-import { StyleSheet, View, Text, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, Pressable, ViewStyle } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { GQL, useFollowMutation, errorMessage } from '@src/apollo';
 import { userStore } from '@src/store';
 import { exceptionCapture } from '@src/common';
 import Iconfont from '../Iconfont';
 
-type Props = {
-    style?: any,
-    titleStyle?: any,
-    activeColor?: any,
-    tintColor?: any,
+interface Props {
+    user: any;
+    style?: ViewStyle;
+    textStyle?: ViewStyle;
+    activeStyle?: ViewStyle;
+    inactiveStyle?: ViewStyle;
+    textActiveStyle?: ViewStyle;
+    textInactiveStyle?: ViewStyle;
+}
+
+const defaultProps = {
+    style: {},
+    textStyle: {},
+    activeStyle: {
+        backgroundColor: '#b2b2b2',
+    },
+    inactiveStyle: {
+        backgroundColor: Theme.secondaryColor,
+    },
+    textActiveStyle: {},
+    textInactiveStyle: {},
+    activeOpacity: 0.7,
 };
 
 const FollowButton = (props: Props) => {
-    const { user, activeColor, tintColor, ...others } = props;
+    const { user, style, textStyle, activeStyle, inactiveStyle, textActiveStyle, textInactiveStyle, ...others } = props;
     const navigation = useNavigation();
-    let title, backgroundColor, textColor;
+    let btnName,
+        btnStyle = {
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+        btnTextStyle = {
+            color: '#fff',
+            fontSize: font(13),
+            overflow: 'hidden',
+        };
     if (user?.followed_status > 0) {
-        title = '已关注';
-        textColor = activeColor;
-        backgroundColor = '#b2b2b2';
+        btnName = '已关注';
+        btnStyle = {
+            ...btnStyle,
+            ...style,
+            ...activeStyle,
+        };
+        btnTextStyle = {
+            ...btnTextStyle,
+            ...textStyle,
+            ...textActiveStyle,
+        };
     } else {
-        title = '关注';
-        textColor = tintColor;
-        backgroundColor = Theme.secondaryColor;
+        btnName = '关注';
+        btnStyle = {
+            ...btnStyle,
+            ...style,
+            ...inactiveStyle,
+        };
+        btnTextStyle = {
+            ...btnTextStyle,
+            ...textStyle,
+            ...textInactiveStyle,
+        };
     }
-    const style = {
-        backgroundColor,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        ...props.style,
-    };
-
-    const titleStyle = {
-        fontSize: font(13),
-        color: textColor,
-        overflow: 'hidden',
-        ...props.titleStyle,
-    };
 
     const followUser = useFollowMutation({
         variables: {
@@ -80,29 +109,24 @@ const FollowButton = (props: Props) => {
     if (userStore.me.id === user?.id) {
         return null;
     }
-
     return (
-        <TouchableOpacity {...others} style={style} onPress={onFollowHandler}>
+        <Pressable {...others} style={btnStyle} onPress={onFollowHandler}>
             {!user?.followed_status > 0 && (
                 <Iconfont
                     name="iconfontadd"
-                    size={titleStyle.fontSize}
-                    color={titleStyle.color}
-                    style={{ marginRight: titleStyle.fontSize / 2 }}
+                    size={btnTextStyle.fontSize}
+                    color={btnTextStyle.color}
+                    style={{ marginRight: btnTextStyle.fontSize / 2 }}
                 />
             )}
-            <Text style={titleStyle} numberOfLines={1}>
-                {title}
+            <Text style={btnTextStyle} numberOfLines={1}>
+                {btnName}
             </Text>
-        </TouchableOpacity>
+        </Pressable>
     );
 };
 
-FollowButton.defaultProps = {
-    activeOpacity: 0.6,
-    activeColor: '#fff',
-    tintColor: '#fff',
-};
+FollowButton.defaultProps = defaultProps;
 
 export default FollowButton;
 

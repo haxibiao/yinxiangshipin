@@ -11,7 +11,7 @@ const BG_HEIGHT = Device.WIDTH * 0.52;
 
 // '1990-12-02'
 function getFullYear(time) {
-    return new Date(time).getFullYear();
+    return new Date(time).getFullYear() || 2000;
 }
 function getMonth(time) {
     return new Date(time).getMonth();
@@ -121,8 +121,9 @@ export default observer(({ user: userData = userStore.me, isTopStack, operateHan
                             <>
                                 <FollowButton
                                     user={user}
-                                    style={{ ...styles.userBtn, backgroundColor: isNight ? '#23C895' : '#F24F0F' }}
-                                    titleStyle={styles.userBtnText}
+                                    style={{ ...styles.userBtn }}
+                                    inactiveStyle={{ backgroundColor: isNight ? '#23C895' : '#F24F0F' }}
+                                    textStyle={styles.userBtnText}
                                 />
                                 <Pressable
                                     style={[styles.userBtn, { backgroundColor: isNight ? '#B5E4B6' : '#F3B5AA' }]}
