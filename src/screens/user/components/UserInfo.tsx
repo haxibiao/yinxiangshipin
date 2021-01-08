@@ -112,7 +112,7 @@ export default observer(({ user: userData = userStore.me, isTopStack, operateHan
                     <Pressable>
                         <Avatar
                             style={styles.userAvatar}
-                            source={user?.avatar || require('@app/assets/images/user/default_avatar02.png')}
+                            source={user?.avatar || require('@app/assets/images/user/default_avatar.png')}
                         />
                     </Pressable>
 

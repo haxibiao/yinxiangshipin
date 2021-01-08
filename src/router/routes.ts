@@ -63,9 +63,6 @@ import CollectionVideoListScreen from '../screens/collection/VideoList';
 import PostsSelectScreen from '../screens/collection/PostsSelect';
 import EditCollectionScreen from '../screens/creation/EditCollection';
 
-// category
-import CategoryScreen from '../screens/category';
-
 // notification
 import NotificationScreen from '../screens/notification';
 import ChatScreen from '../screens/chat';
@@ -185,9 +182,6 @@ export default {
     },
     SearchVideo: {
         component: SearchedShortVideoScreen,
-    },
-    Category: {
-        component: CategoryScreen,
     },
     Comment: {
         component: CommentScreen,
