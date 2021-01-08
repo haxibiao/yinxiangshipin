@@ -161,7 +161,7 @@ export default observer((props: any) => {
             <View style={styles.container}>
                 <View style={styles.formContainer}>
                     <Center>
-                        <Image source={require('@app/assets/images/dmg_logo_white.png')} style={styles.logo} />
+                        <Image source={require('@app/assets/images/app_logo.png')} style={styles.logo} />
                     </Center>
 
                     <TouchableOpacity

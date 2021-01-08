@@ -59,7 +59,7 @@ export default function UuidLoginView(props: { navigation: any; client: any; onC
                     }}>
                     <Image
                         style={{ width: pixel(25), height: pixel(25) }}
-                        source={require('@app/assets/images/dmg_logo_white.png')}
+                        source={require('@app/assets/images/app_logo.png')}
                     />
                     <Text style={{ color: '#000', fontSize: pixel(20), marginLeft: pixel(10) }}>{Config.AppName}</Text>
                 </View>
