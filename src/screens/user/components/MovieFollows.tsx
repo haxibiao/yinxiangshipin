@@ -45,6 +45,7 @@ export default ({ user, categoryName = 'TA最近在看' }: Props) => {
                     const movie = item?.movie || {};
                     return (
                         <MovieItemWithTime
+                            showLastWatch={false}
                             style={styles.itemWrap}
                             key={movie?.id || index}
                             movie={movie}

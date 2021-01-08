@@ -23,9 +23,9 @@ export default () => {
                 onPressSearch={() => navigation.push('SearchVideo', { user_id })}
             />
             <QueryList
-                gqlDocument={GQL.postsQuery}
-                dataOptionChain="posts.data"
-                paginateOptionChain="posts.paginatorInfo"
+                gqlDocument={GQL.userPostsQuery}
+                dataOptionChain="userPosts.data"
+                paginateOptionChain="userPosts.paginatorInfo"
                 options={{
                     variables: {
                         user_id,

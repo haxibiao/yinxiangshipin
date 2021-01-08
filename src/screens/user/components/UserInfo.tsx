@@ -171,7 +171,7 @@ export default observer(({ user: userData = userStore.me, isTopStack, operateHan
                     </View>
                 </Pressable>
                 <View style={styles.metaList}>
-                    <Pressable style={styles.metaItem} onPress={() => navigation.navigate('Works', { user })}>
+                    <Pressable style={styles.metaItem} onPress={() => navigation.navigate('UserPosts', { user })}>
                         <Text style={styles.metaCount} numberOfLines={1}>
                             {Helper.count(user.count_articles)}
                         </Text>

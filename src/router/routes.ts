@@ -35,6 +35,7 @@ import SearchedShortVideoListScreen from '../screens/search/shortVideo/List';
 
 // user
 import UserScreen from '../screens/user';
+import UserPosts from '../screens/user/Posts';
 import FavoriteCollection from '../screens/user/FavoriteCollection';
 import SocietyScreen from '../screens/user/Society';
 import UserBlockScreen from '../screens/user/UserBlock';
@@ -223,6 +224,9 @@ export default {
     },
     User: {
         component: UserScreen,
+    },
+    UserPosts: {
+        component: UserPosts,
     },
     RetrievePassword: {
         component: RetrievePasswordScreen,

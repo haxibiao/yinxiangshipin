@@ -23,6 +23,7 @@ const POSTER_HEIGHT = POSTER_WIDTH * 0.64;
 
 interface MovieProps {
     style?: ViewStyle;
+    showLastWatch?: boolean;
     movie: {
         id: string;
         cover: string;
@@ -35,7 +36,7 @@ interface MovieProps {
     };
 }
 
-export default function MovieItemWithTime({ style, movie, navigation }: MovieProps) {
+export default function MovieItemWithTime({ showLastWatch = true, style, movie, navigation }: MovieProps) {
     const count_series = movie?.count_series;
     let historyText = '尚未观看';
     if (count_series > 1 && movie?.last_watch_series >= 0) {
@@ -45,7 +46,7 @@ export default function MovieItemWithTime({ style, movie, navigation }: MoviePro
     }
 
     if (!movie?.id) {
-        return <MovieItemPlaceholder style={style} />;
+        return <MovieItemPlaceholder style={style} showLastWatch={showLastWatch} />;
     }
 
     return (
@@ -87,18 +88,20 @@ export default function MovieItemWithTime({ style, movie, navigation }: MoviePro
                     <Text style={styles.movieName} numberOfLines={1}>
                         {movie?.name || ''}
                     </Text>
-                    <Text
-                        style={[styles.movieDesc, historyText !== '尚未观看' && { color: Theme.primaryColor }]}
-                        numberOfLines={1}>
-                        {historyText}
-                    </Text>
+                    {showLastWatch && (
+                        <Text
+                            style={[styles.movieDesc, historyText !== '尚未观看' && { color: Theme.primaryColor }]}
+                            numberOfLines={1}>
+                            {historyText}
+                        </Text>
+                    )}
                 </View>
             </View>
         </TouchableWithoutFeedback>
     );
 }
 
-function MovieItemPlaceholder({ style }) {
+function MovieItemPlaceholder({ style, showLastWatch }) {
     const animation = new Animated.Value(0.5);
     const animationStyle = { opacity: animation };
 
@@ -124,7 +127,7 @@ function MovieItemPlaceholder({ style }) {
             <Animated.View style={[styles.movieCover, animationStyle]} />
             <View style={styles.movieInfo}>
                 <Animated.View style={[styles.placeholderName, animationStyle]} />
-                <Animated.View style={[styles.placeholderDesc, animationStyle]} />
+                {showLastWatch && <Animated.View style={[styles.placeholderDesc, animationStyle]} />}
             </View>
         </View>
     );
@@ -185,7 +188,6 @@ const styles = StyleSheet.create({
     },
     movieInfo: {
         marginTop: pixel(5),
-        minHeight: font(42),
     },
     placeholderName: {
         width: '60%',
