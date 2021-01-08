@@ -1,7 +1,7 @@
 #import "./postFragment.graphql"
 #import "../collection/collectionFragment.graphql"
 
-# 动态详情
+# 动态列表
 query postsQuery($user_id: Int!, $count: Int, $page: Int) {
     posts(user_id: $user_id, count: $count, page: $page) {
         paginatorInfo {

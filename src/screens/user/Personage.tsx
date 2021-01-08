@@ -97,9 +97,9 @@ export default observer(() => {
                 tabBarStyle={styles.tabBarStyle}>
                 <PostQueryList
                     tabLabel="发布"
-                    gqlDocument={GQL.postsQuery}
-                    dataOptionChain="posts.data"
-                    paginateOptionChain="posts.paginatorInfo"
+                    gqlDocument={GQL.userPostsQuery}
+                    dataOptionChain="userPosts.data"
+                    paginateOptionChain="userPosts.paginatorInfo"
                     options={{
                         variables: {
                             user_id: user.id,
