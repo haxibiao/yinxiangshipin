@@ -3,7 +3,8 @@ import { View, Text, ViewStyle, Animated, TouchableOpacity } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import { observer } from 'mobx-react';
 import { ContentData } from '@src/common';
-import { useLikeMutation } from '@src/apollo';
+import { GQL, useLikeMutation } from '@src/apollo';
+import { userStore } from '@src/store';
 
 interface Props {
     content: ContentData;
@@ -28,6 +29,17 @@ export default observer(({ content, style, children }: Props) => {
         variables: {
             id: content.id,
             type: 'POST',
+        },
+        options: {
+            refetchQueries: () => [
+                {
+                    query: GQL.userLikedArticlesQuery,
+                    variables: {
+                        user_id: userStore.me.id,
+                    },
+                    fetchPolicy: 'network-only',
+                },
+            ],
         },
         failure,
     });
