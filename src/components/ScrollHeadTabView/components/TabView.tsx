@@ -9,15 +9,15 @@ interface Props {
     headerHeight: number;
 }
 
-const tabViewHoc = (WrappedComponent) => {
+const scrollViewHoc = (WrappedComponent) => {
     const AnimatePageView = Animated.createAnimatedComponent(WrappedComponent);
 
-    class HTabView extends React.Component {
+    class TabView extends React.Component {
         constructor(props: Props) {
             super(props);
             this.scrollOffsetY = 0;
             this.state = {
-                placeHeight: 0,
+                bottomPlace: 0,
             };
             this.didMount = false;
         }
@@ -54,9 +54,9 @@ const tabViewHoc = (WrappedComponent) => {
             }
         }
 
-        // 其它scrollTab同步同步OffsetY
+        // 其它TabView同步同步OffsetY
         updateView = (e) => {
-            const { headerHeight, isActive } = this.props;
+            const { index, headerHeight, isActive } = this.props;
             if (isActive) return;
             if (e.value > headerHeight) {
                 if (this.scrollOffsetY < headerHeight) {
@@ -77,22 +77,22 @@ const tabViewHoc = (WrappedComponent) => {
             }
         };
 
-        // 根据contentSize决定占位视图高度
+        // 根据contentSize决定底部占位高度
         onContentSizeChange = (contentWidth, contentHeight) => {
-            const { placeHeight } = this.state;
-            const { sceneHeight } = this.props;
-            if (contentHeight < sceneHeight) {
-                // 添加占位高度 placeHeight
-                const newPlaceHeight = placeHeight + sceneHeight - contentHeight;
-                this.setState({ placeHeight: newPlaceHeight });
+            const { bottomPlace } = this.state;
+            const { index, sceneHeight } = this.props;
+            if (Math.ceil(contentHeight) < sceneHeight) {
+                // 添加占位高度 bottomPlace
+                const newBottomPlace = bottomPlace + sceneHeight - contentHeight;
+                this.setState({ bottomPlace: newBottomPlace });
             } else {
                 this.adjustScrollOffset();
-                if (placeHeight > 0) {
+                if (bottomPlace > 0) {
                     // 有占位高，考虑减少占位高
-                    const moreHeight = contentHeight - sceneHeight;
-                    const newPlaceHeight = moreHeight > placeHeight ? 0 : placeHeight - moreHeight;
-                    if (newPlaceHeight != placeHeight) {
-                        this.setState({ placeHeight: newPlaceHeight });
+                    const remainingHeight = contentHeight - sceneHeight;
+                    const newBottomPlace = remainingHeight > bottomPlace ? 0 : bottomPlace - remainingHeight;
+                    if (newBottomPlace != bottomPlace) {
+                        this.setState({ bottomPlace: newBottomPlace });
                     }
                 }
             }
@@ -116,7 +116,7 @@ const tabViewHoc = (WrappedComponent) => {
 
         render() {
             const { children, headerHeight, forwardedRef, ...restProps } = this.props;
-            const { placeHeight } = this.state;
+            const { bottomPlace } = this.state;
             return (
                 <AnimatePageView
                     ref={(ref) => {
@@ -133,7 +133,7 @@ const tabViewHoc = (WrappedComponent) => {
                     onContentSizeChange={this.onContentSizeChange}
                     contentContainerStyle={{
                         paddingTop: headerHeight,
-                        paddingBottom: placeHeight,
+                        paddingBottom: bottomPlace,
                     }}
                     overScrollMode="never"
                     scrollEventThrottle={16}
@@ -148,9 +148,9 @@ const tabViewHoc = (WrappedComponent) => {
     }
 
     return React.forwardRef((props, ref) => {
-        return <HTabView {...props} forwardedRef={ref} />;
+        return <TabView {...props} forwardedRef={ref} />;
     });
 };
 
-export const FlatList = tabViewHoc(ReactNative.FlatList);
-export const ScrollView = tabViewHoc(ReactNative.ScrollView);
+export const FlatList = scrollViewHoc(ReactNative.FlatList);
+export const ScrollView = scrollViewHoc(ReactNative.ScrollView);
