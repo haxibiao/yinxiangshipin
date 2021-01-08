@@ -402,23 +402,24 @@ export default class ScrollableTabView extends Component<Props> {
     _handleLayout = (e) => {
         const { width, height } = e.nativeEvent.layout;
 
-        if (!width || width <= 0 || Math.round(width) === Math.round(this.state.containerWidth)) {
-            return;
+        if (width && width > 0 && Math.round(width) !== Math.round(this.state.containerWidth)) {
+            if (IS_IOS) {
+                const containerWidthAnimatedValue = new Animated.Value(width);
+                // Need to call __makeNative manually to avoid a native animated bug. See
+                // https://github.com/facebook/react-native/pull/14435
+                containerWidthAnimatedValue.__makeNative();
+                scrollValue = Animated.divide(this.state.scrollXIOS, containerWidthAnimatedValue);
+                this.setState({ containerWidth: width, scrollValue });
+            } else {
+                this.setState({ containerWidth: width });
+            }
+            this.requestAnimationFrame(() => {
+                this.goToPage(this.state.currentPage);
+            });
         }
-
-        if (IS_IOS) {
-            const containerWidthAnimatedValue = new Animated.Value(width);
-            // Need to call __makeNative manually to avoid a native animated bug. See
-            // https://github.com/facebook/react-native/pull/14435
-            containerWidthAnimatedValue.__makeNative();
-            scrollValue = Animated.divide(this.state.scrollXIOS, containerWidthAnimatedValue);
-            this.setState({ containerWidth: width, containerHeight: height, scrollValue });
-        } else {
-            this.setState({ containerWidth: width, containerHeight: height });
+        if (height && height > 0 && Math.round(height) !== Math.round(this.state.containerHeight)) {
+            this.setState({ containerHeight: height });
         }
-        this.requestAnimationFrame(() => {
-            this.goToPage(this.state.currentPage);
-        });
     };
 
     _children = (children = this.props.children) => {
