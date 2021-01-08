@@ -15,7 +15,7 @@ interface Props {
     onContentScroll?: (o: Animated.value) => void;
     renderTabBar?: (p: any) => React.ReactElement;
     renderScrollHeader?: (p: any) => React.ReactElement;
-    insetValue?: number;
+    insetValue?: number; // tabBar距离顶部高度
     headerHeight?: number;
     tabBarStyle?: ViewStyle;
     tabBarPaddingInset?: number;
@@ -327,13 +327,13 @@ export default class ScrollableTabView extends Component<Props> {
     };
 
     _creatSceneParams = (index) => {
-        const { renderScrollHeader, headerHeight } = this.props;
+        const { renderScrollHeader, headerHeight, insetValue } = this.props;
         const { currentPage, containerOffsetY, containerHeight, tabBarHeight } = this.state;
         if (!renderScrollHeader) {
             return { isActive: currentPage == index };
         }
         const params = { index, isActive: currentPage == index, containerOffsetY, headerHeight };
-        params.sceneHeight = headerHeight + containerHeight - tabBarHeight;
+        params.sceneHeight = headerHeight + containerHeight - tabBarHeight - insetValue;
         return params;
     };
 
