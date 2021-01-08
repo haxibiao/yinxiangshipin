@@ -1,44 +1,45 @@
 import React, { useRef, useState, useMemo, useCallback } from 'react';
-import {
-    StyleSheet,
-    ScrollView,
-    View,
-    Text,
-    ImageBackground,
-    TouchableWithoutFeedback,
-    TouchableOpacity,
-    Animated,
-    Easing,
-    Platform,
-} from 'react-native';
+import { StyleSheet, ScrollView, View, Text, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import LinearGradient from 'react-native-linear-gradient';
 import { GQL, useQuery } from '@src/apollo';
-import { Iconfont, DebouncedPressable } from '@src/components';
+import { Iconfont } from '@src/components';
 import { observer, adStore, userStore } from '@src/store';
-import MovieItemWithTime from '../components/MovieItemWithTime';
+import MovieItemWithTime from '@src/screens/movie/components/MovieItemWithTime';
+
+interface MovieProps {
+    movie: {
+        id: string;
+        cover: string;
+        name: string;
+        introduction: string;
+        count_series: string;
+    };
+    navigation: {
+        navigate: (p1: String, p2?: any) => void;
+    };
+}
 
 export default observer(() => {
-    const { data, refetch, loading } = useQuery(GQL.favoritedMoviesQuery, {
+    const { data, refetch, loading } = useQuery(GQL.showMovieHistoryQuery, {
         variables: { user_id: userStore.me.id, type: 'movies' },
         fetchPolicy: 'network-only',
-        skip: !userStore.login,
     });
-    const moviesData = useMemo(() => data?.myFavorite?.data, [data]);
+    const moviesData = useMemo(() => data?.showMovieHistory?.data, [data]);
     const navigation = useNavigation();
 
-    if (!userStore.login || !moviesData?.length) {
+    if (!adStore.enableMovie || !moviesData?.length) {
         return null;
     }
 
     return (
         <View style={styles.secContainer}>
             <View style={styles.secHead}>
-                <Text style={styles.secTitle}>我的追剧</Text>
+                <View style={styles.secHeadLeft}>
+                    <Iconfont name="shizhongfill" style={{ marginTop: font(1) }} size={font(16)} color={'#909090'} />
+                    <Text style={styles.secTitle}>播放记录</Text>
+                </View>
                 {moviesData?.length > 3 && (
-                    <TouchableOpacity
-                        style={styles.headRight}
-                        onPress={() => navigation.navigate('MovieFavorites', { user: userStore.me })}>
+                    <TouchableOpacity style={styles.headRight} onPress={() => navigation.navigate('MovieHistories')}>
                         <Text style={styles.secAll}>查看全部</Text>
                         <Iconfont name="right" style={{ marginTop: font(1) }} size={font(12)} color={'#909090'} />
                     </TouchableOpacity>
@@ -53,8 +54,8 @@ export default observer(() => {
                     const movie = item?.movie || {};
                     return (
                         <MovieItemWithTime
-                            key={movie?.id || index}
                             style={styles.itemWrap}
+                            key={movie?.id || index}
                             movie={movie}
                             navigation={navigation}
                         />
@@ -78,10 +79,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingHorizontal: pixel(14),
     },
+    secHeadLeft: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
     secTitle: {
-        fontSize: font(16),
-        color: '#202020',
-        fontWeight: 'bold',
+        fontSize: font(15),
+        color: '#404040',
+        marginLeft: pixel(4),
     },
     headRight: {
         flexDirection: 'row',
@@ -93,7 +98,7 @@ const styles = StyleSheet.create({
         marginRight: font(-1),
     },
     movieList: {
-        paddingTop: pixel(15),
+        paddingTop: pixel(10),
         paddingRight: pixel(14),
     },
     itemWrap: {

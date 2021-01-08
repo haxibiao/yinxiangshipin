@@ -1,14 +1,17 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useRoute, useNavigation } from '@react-navigation/native';
 import { NavBarHeader } from '@src/components';
 import { QueryList } from '@src/content';
 import { userStore } from '@src/store';
 import { GQL } from '@src/apollo';
 import MediaItem, { SPACE } from './components/MediaItem';
 
-export default function Favorites(props: any) {
+export default function Favorites() {
+    const route = useRoute();
     const navigation = useNavigation();
+    const user = route.params?.user;
+    const isSelf = user?.id === userStore.me.id;
     const _renderItem = ({ item, index }) => {
         const movie = item.movie ?? {};
         return <MediaItem movie={movie} />;
@@ -16,7 +19,11 @@ export default function Favorites(props: any) {
 
     return (
         <View style={styles.container}>
-            <NavBarHeader title="我的追剧" hasGoBackButton={true} StatusBarProps={{ barStyle: 'dark-content' }} />
+            <NavBarHeader
+                title={isSelf ? '我的追剧' : 'TA的追剧'}
+                hasGoBackButton={true}
+                StatusBarProps={{ barStyle: 'dark-content' }}
+            />
             <QueryList
                 contentContainerStyle={styles.contentContainer}
                 showsVerticalScrollIndicator={false}
@@ -25,7 +32,7 @@ export default function Favorites(props: any) {
                 paginateOptionChain="myFavorite.paginatorInfo"
                 options={{
                     variables: {
-                        user_id: userStore.me.id,
+                        user_id: user.id,
                         type: 'movies',
                     },
                     fetchPolicy: 'network-only',

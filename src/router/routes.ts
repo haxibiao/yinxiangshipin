@@ -40,7 +40,6 @@ import SocietyScreen from '../screens/user/Society';
 import UserBlockScreen from '../screens/user/UserBlock';
 // user personage
 import EditProfileScreen from '../screens/user/personage/EditProfile';
-import BrowsingHistoryScreen from '../screens/user/personage/HistoryScreen';
 
 // comment
 import CommentScreen from '../screens/comment/CommentScreen';
@@ -251,9 +250,6 @@ export default {
     },
     UserCollection: {
         component: CollectionScreen,
-    },
-    浏览记录: {
-        component: BrowsingHistoryScreen,
     },
     BindingAccount: {
         component: BindingAccount,

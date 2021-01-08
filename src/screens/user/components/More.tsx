@@ -6,6 +6,8 @@ import { Iconfont, StatusView } from '@app/src/components';
 import { observer, userStore } from '@src/store';
 import { GQL, useQuery } from '@src/apollo';
 import CollectionItem, { POSTER_WIDTH } from './CollectionItem';
+import MovieHistory from './MovieHistory';
+import MovieFollows from './MovieFollows';
 
 const SPACE = pixel(14);
 
@@ -112,6 +114,7 @@ export default observer(({ user, ...props }) => {
                     )}
                 </ScrollView>
             </View>
+            {isSelf ? <MovieHistory /> : <MovieFollows user={user} />}
         </HScrollView>
     );
 });
