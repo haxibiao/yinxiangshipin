@@ -126,7 +126,7 @@ export default observer(({ user: userData = userStore.me, isTopStack, operateHan
                                     textStyle={styles.userBtnText}
                                 />
                                 <Pressable
-                                    style={[styles.userBtn, { backgroundColor: isNight ? '#B5E4B6' : '#F3B5AA' }]}
+                                    style={[styles.userBtn, { backgroundColor: isNight ? '#B5E4B6' : '#FF8C7D' }]}
                                     onPress={withChat}>
                                     <Text style={styles.userBtnText}>私信</Text>
                                 </Pressable>
@@ -272,7 +272,7 @@ const styles = StyleSheet.create({
     userBtnText: {
         color: '#fff',
         fontSize: font(15),
-        lineHeight: font(18),
+        lineHeight: font(20),
     },
     userName: {
         color: '#303030',
