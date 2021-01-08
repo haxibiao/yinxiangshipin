@@ -146,6 +146,7 @@ export default observer(() => {
                     options={{
                         variables: {
                             user_id: user.id,
+                            filter: 'all',
                         },
                         fetchPolicy: 'network-only',
                     }}

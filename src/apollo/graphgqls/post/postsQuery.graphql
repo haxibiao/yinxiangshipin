@@ -2,8 +2,9 @@
 #import "../collection/collectionFragment.graphql"
 
 # 动态列表
-query postsQuery($user_id: Int!, $count: Int, $page: Int) {
-    posts(user_id: $user_id, count: $count, page: $page) {
+# type: PostType = VIDEO
+query postsQuery($user_id: Int!, $type: PostType, $count: Int, $page: Int) {
+    posts(user_id: $user_id, type: $type, count: $count, page: $page) {
         paginatorInfo {
             hasMorePages
             currentPage
