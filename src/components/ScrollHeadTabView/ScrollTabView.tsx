@@ -12,10 +12,10 @@ interface Props {
     page?: number;
     onChangeTab?: ({ i: number, ref: RefObject, from: number }) => void;
     onScroll?: (o: number) => void;
-    onContentScroll?: (o: Animated.value) => void;
+    onContentScroll?: (o: Animated.value) => void; //tab容器滑动改变offsetY值，触发该事件
     renderTabBar?: (p: any) => React.ReactElement;
     renderScrollHeader?: (p: any) => React.ReactElement;
-    insetValue?: number; // tabBar距离顶部高度
+    insetValue?: number; // 状态栏的高度，也就是TabBar距离顶部状态栏的距离
     headerHeight?: number;
     tabBarStyle?: ViewStyle;
     tabBarPaddingInset?: number;
