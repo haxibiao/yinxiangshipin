@@ -9,8 +9,8 @@ import {
     ViewProps,
     ViewStyle,
     TextStyle,
+    Dimensions,
 } from 'react-native';
-import { BoxShadow } from 'react-native-shadow';
 
 interface Props extends ViewProps {
     scrollValue: number; //切换tab的动画对应系数
@@ -33,8 +33,8 @@ const SCALE_NUMBER = 2;
 export default class DefaultTabBar extends Component<Props> {
     static defaultProps = {
         paddingInset: 0,
-        activeTextStyle: { color: Theme.defaultTextColor },
-        inactiveTextColor: { color: Theme.subTextColor },
+        activeTextStyle: { color: '#202020' },
+        inactiveTextColor: { color: '#909090' },
         hiddenUnderLine: false,
     };
 
@@ -135,7 +135,7 @@ export default class DefaultTabBar extends Component<Props> {
 }
 
 const shadowSetting = {
-    width: Device.WIDTH,
+    width: Dimensions.get('window').width,
     height: pixel(Theme.NAVBAR_HEIGHT),
     color: '#E8E8E8',
     border: pixel(5),
@@ -150,6 +150,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'stretch',
         borderBottomWidth: StyleSheet.hairlineWidth,
-        borderColor: Theme.borderColor,
+        borderColor: '#f0f0f0',
     },
 });

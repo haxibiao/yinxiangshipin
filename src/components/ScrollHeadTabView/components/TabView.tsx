@@ -86,9 +86,9 @@ const compose = (WrappedComponent) => {
                 const newBottomPadding = bottomPadding + sceneHeight - contentHeight;
                 this.setState({ bottomPadding: newBottomPadding });
             } else {
+                // 内容高度超过容器高度，调整Tab的Offset，并且减少多余占位高bottomPadding
                 this.adjustScrollOffset();
                 if (bottomPadding > 0) {
-                    // 有占位高，考虑减少占位高
                     const remainingHeight = contentHeight - sceneHeight;
                     const newBottomPadding = remainingHeight > bottomPadding ? 0 : bottomPadding - remainingHeight;
                     if (newBottomPadding != bottomPadding) {
