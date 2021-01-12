@@ -34,7 +34,7 @@ export const Socket = observer((user: { token: string | undefined; id: string })
     }, [userStore.me]);
 
     const sendLocalNotification = useCallback((data: { id: any; content: any; title: any }) => {
-        const handler = () => navigate('OtherRemindNotification', { user: userStore.me });
+        const handler = () => navigate('systemRemindNotification', { user: userStore.me });
         if (data && typeof data === 'object') {
             Notice.add({ ...data, handler });
         }
