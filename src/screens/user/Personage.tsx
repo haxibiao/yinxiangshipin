@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        paddingBottom: Theme.BOTTOM_HEIGHT + Theme.HOME_INDICATOR_HEIGHT,
+        paddingBottom: Theme.BOTTOM_HEIGHT,
     },
     navBarWrap: {
         position: 'absolute',

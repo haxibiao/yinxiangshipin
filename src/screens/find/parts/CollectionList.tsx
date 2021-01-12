@@ -146,13 +146,13 @@ export default ({ style, count = 4 }: Props) => {
     return (
         <View style={[styles.secContainer, style]}>
             <View style={styles.secHead}>
-                <Text style={styles.secTitle}>视频推荐</Text>
+                <Text style={styles.secTitle}>精彩片段</Text>
                 <View style={styles.headRight}>
                     <Image
                         source={require('@app/assets/images/movie/ic_hot_orange.png')}
                         style={styles.recommendIcon}
                     />
-                    <Text style={styles.rightText}>热门合集</Text>
+                    <Text style={styles.rightText}>推荐合集</Text>
                 </View>
             </View>
             <View style={styles.collectionList}>

@@ -31,7 +31,7 @@ export default observer(({ user, ...props }) => {
     ]);
 
     return (
-        <HScrollView {...props}>
+        <HScrollView {...props} bounces={false}>
             <View style={styles.secContainer}>
                 <View style={styles.secHead}>
                     <View style={styles.headLeft}>

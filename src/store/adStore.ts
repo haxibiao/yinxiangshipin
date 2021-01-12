@@ -43,12 +43,16 @@ class AdStore {
 
     @action.bound
     setAdConfig(config: any) {
-        // this.enableAd = true;
-        // this.enableWallet = true;
         this.loadedConfig = true;
-        // this.enableAd = config?.ad === 'on';
-        // this.enableWallet = config?.wallet === 'on';
-        this.enableMovie = config?.movie === 'on';
+        if (__DEV__) {
+            this.enableAd = true;
+            this.enableWallet = true;
+            this.enableMovie = true;
+        } else {
+            this.enableAd = config?.ad === 'on';
+            this.enableWallet = config?.wallet === 'on';
+            this.enableMovie = config?.movie === 'on';
+        }
         // for (var p in config) {
         //     if (config.hasOwnProperty(p)) {
         //         this[p] = config[p];

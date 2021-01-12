@@ -206,15 +206,6 @@ export default observer((props: any) => {
         notificationStore.sendShareNotice({ target: { ...collection, description }, type: 'collection' });
     }, 100);
 
-    // 浏览合集任务弹窗提示以及计时器的实现
-    // let [durationStatus, setDurationStatus] = useState(0);
-    // const timeValue = 600000;
-    // useEffect(() => {
-    //     setTimeout(() => {}, timeValue);
-    // }, [setDurationStatus]);
-
-    // console.log('durationStatus', durationStatus);
-
     return (
         <View style={styles.container}>
             <NavBarHeader
@@ -367,9 +358,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#666',
-        borderRadius: pixel(2),
+        borderRadius: pixel(5),
         marginHorizontal: pixel(Theme.itemSpace),
-        paddingVertical: pixel(10),
+        paddingVertical: pixel(12),
         marginBottom: pixel(20),
     },
     contentText: {

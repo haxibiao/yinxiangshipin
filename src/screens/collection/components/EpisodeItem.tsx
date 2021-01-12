@@ -48,7 +48,7 @@ const EpisodeItem = observer((props: Props) => {
                 <Image style={styles.videoCover} source={{ uri: cover }} />
                 <View style={{ flex: 1, overflow: 'hidden', justifyContent: 'space-around' }}>
                     <SafeText style={styles.contentText} numberOfLines={2}>
-                        {item?.current_episode && `第${item?.current_episode}集￨`}
+                        {item?.current_episode && `第${item?.current_episode}集 ￨ `}
                         {`${item?.content || item?.description}`}
                     </SafeText>
                     <Row>
@@ -56,9 +56,9 @@ const EpisodeItem = observer((props: Props) => {
                             {Helper.moment(item?.video?.duration)}
                         </SafeText>
                         <Iconfont
-                            name={item.liked ? 'xihuanfill' : 'xihuan'}
-                            size={pixel(15)}
-                            color={item.liked ? Theme.primaryColor : '#fff'}
+                            name={'xihuanfill'}
+                            size={font(14)}
+                            color={item.liked ? Theme.primaryColor : '#909090'}
                         />
                         <SafeText style={[styles.metaText, { marginLeft: pixel(3) }]} numberOfLines={1}>
                             {item.count_likes}
@@ -83,10 +83,10 @@ const styles = StyleSheet.create({
         width: Device.WIDTH,
         flexDirection: 'row',
         paddingHorizontal: pixel(Theme.itemSpace),
-        marginVertical: pixel(Theme.itemSpace) / 2,
+        marginVertical: pixel(10),
     },
     videoCover: {
-        width: percent(18),
+        width: percent(19),
         height: percent(18) * 1.4,
         marginRight: pixel(10),
         borderRadius: pixel(2),
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     },
     metaText: {
         fontSize: font(13),
-        color: '#fff',
+        color: '#909090',
     },
     selectedBox: {
         padding: pixel(2),

@@ -30,6 +30,7 @@ export default ({ gqlDocument, options, dataOptionChain, paginateOptionChain, ..
 
     return (
         <FlatList
+            bounces={false}
             data={listData}
             keyExtractor={(item, index) => String(item.id || index)}
             refreshControl={
