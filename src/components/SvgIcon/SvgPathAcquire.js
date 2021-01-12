@@ -1,6 +1,6 @@
-﻿let str = `<svg t="1609905216053" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4991" width="64" height="64"><path d="M329.525 173.41366667l56.285-58.261 393.996 392.021-393.996 392.021-56.285-58.261 331.786-333.761z" p-id="4992"></path></svg>`;
+﻿const svgXML = `<svg t="1609905216053" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4991" width="64" height="64"><path d="M329.525 173.41366667l56.285-58.261 393.996 392.021-393.996 392.021-56.285-58.261 331.786-333.761z" p-id="4992"></path></svg>`;
 
-function getPath() {
+function getPath(str) {
     let prefix = '<path d="',
         plen = 9,
         suffix = '" p-id="',
@@ -25,4 +25,4 @@ function getPath() {
     console.log(out);
 }
 
-getPath();
+// getPath(svgXML);

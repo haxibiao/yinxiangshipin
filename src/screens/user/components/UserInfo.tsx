@@ -2,8 +2,8 @@ import React, { useMemo, useEffect, useCallback } from 'react';
 import { StyleSheet, View, Text, ImageBackground, Image, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { GQL, useQuery } from '@src/apollo';
-import { observer, adStore, userStore } from '@src/store';
-import { Iconfont, Avatar, FollowButton, SvgIcon, SvgPath } from '@src/components';
+import { observer, adStore, userStore, notificationStore } from '@src/store';
+import { Iconfont, Avatar, FollowButton, SvgIcon, SvgPath, Badge } from '@src/components';
 
 const SPACE = pixel(20);
 const BG_WIDTH = Device.WIDTH;
@@ -117,7 +117,19 @@ export default observer(({ user: userData = userStore.me, isTopStack, operateHan
                     </Pressable>
 
                     <View style={styles.operations}>
-                        {!isSelf && (
+                        {isSelf ? (
+                            <Pressable
+                                style={[
+                                    styles.messageBox,
+                                    notificationStore.unreadMessages > 0 && { paddingRight: pixel(15) },
+                                ]}
+                                onPress={() => navigation.navigate('NotificationCenter')}>
+                                <SvgIcon name={SvgPath.message} size={font(28)} color={'#303030'} />
+                                <View style={styles.unreadMessage}>
+                                    <Badge count={notificationStore.unreadMessages} />
+                                </View>
+                            </Pressable>
+                        ) : (
                             <>
                                 <FollowButton
                                     user={user}
@@ -258,6 +270,17 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: pixel(10),
+    },
+    messageBox: {
+        marginLeft: pixel(15),
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: font(34),
+    },
+    unreadMessage: {
+        position: 'absolute',
+        top: 0,
+        right: 0,
     },
     userBtn: {
         marginLeft: pixel(15),
