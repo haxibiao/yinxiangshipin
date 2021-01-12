@@ -27,12 +27,8 @@ export const Socket = observer((user: { token: string | undefined; id: string })
 
             appStore.setEcho(echo);
 
-            console.log('====================================');
-            console.log('echo', echo);
-            console.log('====================================');
-
             // 监听公共频道
-            echo.channel('notice').listen('system.notice', sendLocalNotification); //系统通知
+            echo.channel('notice').listen('.system.notice', sendLocalNotification); //系统通知
 
             // 监听用户私人频道
             echo.private('App.User.' + me.id);
