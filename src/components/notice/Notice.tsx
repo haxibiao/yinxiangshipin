@@ -105,6 +105,8 @@ export default function Notice({ notice, onClose }: { notice: NoticeProps; onClo
                         onPress={() => {
                             if (notice.handler instanceof Function) {
                                 notice.handler();
+                                clearTimeout(timer.current);
+                                slideOut();
                             }
                         }}>
                         <Text style={styles.buttonText}>查 看</Text>

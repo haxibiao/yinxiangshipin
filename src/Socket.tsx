@@ -3,7 +3,7 @@ import Echo from 'laravel-echo';
 import Socketio from 'socket.io-client';
 import { observer, appStore, adStore, userStore } from '@src/store';
 import Notice from '@src/components/notice';
-import { navigate } from '@src/router';
+import { navigate } from '@src/common';
 
 // 通知信息有哪些字段
 // ⁣type：通知类型
