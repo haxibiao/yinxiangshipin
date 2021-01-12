@@ -15,7 +15,8 @@ export const Socket = observer((user: { token: string | undefined; id: string })
             // 构造laravel echo及Socket Client
             const echo = new Echo({
                 broadcaster: 'socket.io',
-                host: 'ws://socket.datizhuanqian.com:6001',
+                // host: 'ws://socket.datizhuanqian.com:6001',
+                host: 'ws://yxsp.haxifang.cn:6002',
                 client: Socketio,
                 auth: {
                     headers: {
@@ -26,8 +27,12 @@ export const Socket = observer((user: { token: string | undefined; id: string })
 
             appStore.setEcho(echo);
 
+            console.log('====================================');
+            console.log('echo', echo);
+            console.log('====================================');
+
             // 监听公共频道
-            echo.channel('notice').listen('NewNotice', sendLocalNotification);
+            echo.channel('notice').listen('system.notice', sendLocalNotification); //系统通知
 
             // 监听用户私人频道
             echo.private('App.User.' + me.id);
@@ -55,6 +60,9 @@ export const Socket = observer((user: { token: string | undefined; id: string })
         //     fireTime: currentDate.getTime() + 3000,
         //     title: data.title,
         // });
+        console.log('====================================');
+        console.log('data', data);
+        console.log('====================================');
     };
     return null;
 });
