@@ -1,0 +1,22 @@
+query SystemNotificationItem($id: Int!) {
+    notice(id: $id) {
+        paginatorInfo {
+            currentPage
+            hasMorePages
+        }
+        # data {
+
+        # }
+        id
+        content
+        user {
+            id
+            name
+            balance
+        }
+        title
+        expires_at
+        created_at
+        updated_at
+    }
+}

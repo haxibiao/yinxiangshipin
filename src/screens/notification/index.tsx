@@ -123,7 +123,7 @@ export default observer((props: any) => {
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.notifyItem}
-                        onPress={() => authNavigator('OtherRemindNotification', { user })}>
+                        onPress={() => authNavigator('SystemRemindNotification', { user })}>
                         <Image
                             style={styles.notifyIcon}
                             source={require('@app/assets/images/icons/ic_message_notify.png')}

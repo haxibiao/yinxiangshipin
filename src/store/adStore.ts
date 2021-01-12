@@ -46,8 +46,8 @@ class AdStore {
         // this.enableAd = true;
         // this.enableWallet = true;
         this.loadedConfig = true;
-        this.enableAd = config?.ad === 'on';
-        this.enableWallet = config?.wallet === 'on';
+        // this.enableAd = config?.ad === 'on';
+        // this.enableWallet = config?.wallet === 'on';
         this.enableMovie = config?.movie === 'on';
         // for (var p in config) {
         //     if (config.hasOwnProperty(p)) {
