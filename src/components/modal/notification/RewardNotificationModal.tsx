@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { StyleSheet, View, Text, Image, Modal } from 'react-native';
 import { ad } from 'react-native-ad';
-import { authNavigate } from '@src/router';
+import { authNavigate } from '@src/common';
 import { observer, autorun, adStore, userStore, notificationStore } from '@src/store';
 import Iconfont from '../../../components/Iconfont';
 import { DebouncedPressable } from '../../../components/Basic/DebouncedPressable';

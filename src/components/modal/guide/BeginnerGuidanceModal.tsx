@@ -3,7 +3,6 @@ import { StyleSheet, View, Text, Image, Modal, ScrollView, BackHandler, Touchabl
 import { observer, Storage, GuideKeys, appStore, userStore, notificationStore } from '@src/store';
 import { useNavigation } from '@react-navigation/native';
 import { GQL, useApolloClient } from '@src/apollo';
-import { authNavigate } from '@src/router';
 import { DebouncedPressable } from '../../Basic/DebouncedPressable';
 import Iconfont from '../../Iconfont';
 

@@ -3,7 +3,6 @@ import { StyleSheet, View, Text, Image, Modal, ScrollView, TextInput, ActivityIn
 import { observer, appStore, userStore, notificationStore } from '@src/store';
 import { GQL, useApolloClient } from '@src/apollo';
 import { useClipboardLink, useResolveVideo } from '@src/content';
-import { authNavigate } from '@src/router';
 import { useNavigationListener } from '@src/common';
 import { DebouncedPressable } from '../../../components/Basic/DebouncedPressable';
 import Iconfont from '../../../components/Iconfont';

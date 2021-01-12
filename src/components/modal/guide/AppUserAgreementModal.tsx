@@ -2,7 +2,6 @@ import React, { useRef, useState, useMemo, useEffect, useCallback } from 'react'
 import { StyleSheet, View, Text, Image, Modal, ScrollView, BackHandler } from 'react-native';
 import { observer, Storage, GuideKeys, appStore, userStore, notificationStore } from '@src/store';
 import { GQL, useApolloClient } from '@src/apollo';
-import { authNavigate } from '@src/router';
 import { DebouncedPressable } from '../../Basic/DebouncedPressable';
 import Iconfont from '../../Iconfont';
 

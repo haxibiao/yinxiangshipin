@@ -2,8 +2,7 @@ import React, { useRef, useState, useMemo, useEffect, useCallback } from 'react'
 import { StyleSheet, View, Text, Image, Modal, ScrollView, TextInput } from 'react-native';
 import { observer, appStore, adStore, userStore, notificationStore } from '@src/store';
 import { GQL, useApolloClient } from '@src/apollo';
-import { detectPhotos } from '@src/common';
-import { authNavigate } from '@src/router';
+import { detectPhotos, authNavigate } from '@src/common';
 import { DebouncedPressable } from '../../../components/Basic/DebouncedPressable';
 import Iconfont from '../../../components/Iconfont';
 import Video from 'react-native-video';

@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { Storage, GuideKeys, userStore, notificationStore } from '@src/store';
-import { authNavigate } from '@src/router';
+import { authNavigate } from '../RootNavigation';
 
 interface UserProfile {
     gold: number;

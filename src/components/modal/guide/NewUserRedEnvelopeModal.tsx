@@ -1,6 +1,6 @@
 import React, { useRef, useState, useMemo, useEffect, useCallback } from 'react';
 import { StyleSheet, View, Text, Image, Modal, ImageBackground, TouchableOpacity } from 'react-native';
-import { authNavigate } from '@src/router';
+import { authNavigate } from '@src/common';
 import { observer, Storage, GuideKeys, appStore, adStore, userStore, notificationStore } from '@src/store';
 import { GQL, useQuery, useMutation } from '@src/apollo';
 import { DebouncedPressable } from '../../Basic/DebouncedPressable';
