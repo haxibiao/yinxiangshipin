@@ -1,5 +1,6 @@
 import React, { useRef, useMemo, useCallback } from 'react';
-import { StyleSheet, View, Image, Animated, TouchableOpacity, DeviceEventEmitter } from 'react-native';
+import { StyleSheet, View, Image, ImageBackground, TouchableOpacity, DeviceEventEmitter, Animated } from 'react-native';
+import { useCirculationAnimation } from '@src/common';
 import { Avatar, SafeText } from '@src/components';
 import { useNavigation } from '@react-navigation/native';
 import { observer, userStore, notificationStore } from '@src/store';
@@ -10,9 +11,21 @@ const imageSource = {
     unlike: require('@app/assets/images/ic_like.png'),
 };
 
+// {
+//     id: 16151,
+//     name: '僵尸高校2',
+//     cover: 'http://images.cnblogsc.com/pic/upload/vod/2020-03/1583088602.jpg',
+// }
+
 export default observer(({ media, store }) => {
     const navigation = useNavigation();
     const isMe = useMemo(() => userStore?.me?.id === media?.user?.id, []);
+    const movie = media?.movie;
+    const animation = useCirculationAnimation({ duration: 8000, start: !!movie });
+    const rotate = animation.interpolate({
+        inputRange: [0, 1],
+        outputRange: ['0deg', '360deg'],
+    });
     const showComment = useCallback(() => {
         DeviceEventEmitter.emit('showCommentModal');
     }, []);
@@ -50,11 +63,31 @@ export default observer(({ media, store }) => {
                     <Image source={require('@app/assets/images/more_item.png')} style={styles.imageSize} />
                 </TouchableOpacity>
             </View>
+            {movie && (
+                <View style={styles.itemWrap}>
+                    <Animated.View style={{ transform: [{ rotate }] }}>
+                        <TouchableOpacity onPress={() => navigation.navigate('MovieDetail', { movie })}>
+                            <ImageBackground
+                                source={require('@app/assets/images/movie/playing_film.png')}
+                                style={styles.imageSize}>
+                                <Image source={{ uri: movie?.cover }} style={styles.movieCover} />
+                            </ImageBackground>
+                        </TouchableOpacity>
+                    </Animated.View>
+                </View>
+            )}
         </View>
     );
 });
 
 const styles = StyleSheet.create({
+    sideBar: {
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    itemWrap: {
+        marginTop: pixel(18),
+    },
     countText: {
         color: 'rgba(255,255,255,0.8)',
         fontSize: font(12),
@@ -64,12 +97,12 @@ const styles = StyleSheet.create({
     imageSize: {
         height: pixel(40),
         width: pixel(40),
-    },
-    itemWrap: {
-        marginTop: pixel(18),
-    },
-    sideBar: {
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    movieCover: {
+        height: pixel(24),
+        width: pixel(24),
+        borderRadius: pixel(12),
     },
 });
