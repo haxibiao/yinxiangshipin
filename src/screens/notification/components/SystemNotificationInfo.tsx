@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { Iconfont, SvgIcon, SvgPath } from '@src/components';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -10,36 +10,63 @@ const SystemNotificationInfo = (props: Props) => {
     const navigation = useNavigation();
     // 账户信息
     const userProfile = userStore.me;
-    return (
-        <TouchableOpacity
-            onPress={() => {
+    // 路由跳转
+    const navigateType = data.type;
+    const navigateHandle = useCallback(() => {
+        // |default:deduction[金币扣除通知]|public_notice: 公共消息通知|activity: 活动通知|
+        switch (navigateType) {
+            case 'public_notice':
+                break;
+            case 'activity':
+                console.log('====================================');
+                console.log('activity');
+                console.log('====================================');
+                break;
+            default:
                 navigation.navigate('WithdrawHistory', {
                     wallet_id: userProfile?.wallet.id,
                     tabPage: 1,
                 });
-            }}>
+                break;
+        }
+    }, [navigateType]);
+
+    return (
+        <TouchableOpacity disabled={navigateType === 'public_notice'} onPress={navigateHandle}>
             <View style={styles.containers}>
                 <Text style={styles.containerTop}>{data.created_at}</Text>
                 <View style={styles.containerBottom}>
-                    {/* <Image
-                    style={styles.containerBtmImg}
-                    resizeMode="cover"
-                    source={{
-                        uri:
-                            'http://img1.gamersky.com/image2014/11/20141105zx_6/gamersky_01small_02_2014115111123A.jpg',
-                    }}
-                /> */}
-                    <Text style={styles.containerBtmTitle}>{data.title}</Text>
-                    <Text style={styles.containerBtmContent}>{data.content}</Text>
-                    <View style={styles.containerBtmHandle}>
-                        <Text style={styles.handleText}>立即查看</Text>
-                        <SvgIcon
-                            style={{ marginRight: -pixel(7) }}
-                            name={SvgPath.rightArrow}
-                            size={25}
-                            color={'#aaaaaa'}
+                    {data?.cover && (
+                        <Image
+                            style={styles.containerBtmImg}
+                            resizeMode="cover"
+                            source={{
+                                uri:
+                                    'http://img1.gamersky.com/image2014/11/20141105zx_6/gamersky_01small_02_2014115111123A.jpg',
+                            }}
                         />
-                    </View>
+                    )}
+                    <Text style={styles.containerBtmTitle}>{data.title}</Text>
+                    <Text
+                        style={[
+                            styles.containerBtmContent,
+                            navigateType == 'public_notice' && { borderBottomWidth: pixel(0) },
+                        ]}>
+                        {data.content}
+                    </Text>
+                    {navigateType == 'public_notice' ? (
+                        <View></View>
+                    ) : (
+                        <View style={styles.containerBtmHandle}>
+                            <Text style={styles.handleText}>立即查看</Text>
+                            <SvgIcon
+                                style={{ marginRight: -pixel(7) }}
+                                name={SvgPath.rightArrow}
+                                size={25}
+                                color={'#aaaaaa'}
+                            />
+                        </View>
+                    )}
                 </View>
             </View>
         </TouchableOpacity>

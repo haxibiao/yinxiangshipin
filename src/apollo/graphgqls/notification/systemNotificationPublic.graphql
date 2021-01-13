@@ -1,4 +1,4 @@
-query systemNotificationPrivate($page: Int) {
+query systemNotificationPublic($page: Int) {
     notices(page: $page) {
         paginatorInfo {
             currentPage
@@ -16,6 +16,7 @@ query systemNotificationPrivate($page: Int) {
             expires_at #过期时间
             created_at
             updated_at
+            type
         }
     }
 }
