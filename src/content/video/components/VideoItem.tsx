@@ -7,6 +7,7 @@ import { observable, observer, userStore, appStore, notificationStore } from '@s
 import Player from './Player';
 import SideBar from './SideBar';
 import AnswerQuestion from './AnswerQuestion';
+import MarqueeText from './MarqueeText';
 
 interface Props {
     media: any;
@@ -127,7 +128,6 @@ export default observer((props: Props) => {
         }
         return null;
     }, [media, appStore.currentRouteName]);
-
     return (
         <View
             style={{
@@ -171,8 +171,29 @@ export default observer((props: Props) => {
                                         {mediaTags}
                                     </SafeText>
                                 </View>
+                                {media?.movie && (
+                                    <Pressable
+                                        style={styles.movieInfo}
+                                        onPress={() => navigation.navigate('MovieDetail', { movie: media?.movie })}>
+                                        <Image
+                                            style={styles.movieLabel}
+                                            source={require('@app/assets/images/movie/ic_film_play.png')}
+                                        />
+                                        <MarqueeText
+                                            width={Device.WIDTH - pixel(142)}
+                                            textList={[
+                                                {
+                                                    value: media?.movie?.name || media?.movie?.description,
+                                                },
+                                                {
+                                                    value: media?.movie?.name || media?.movie?.description,
+                                                },
+                                            ]}
+                                        />
+                                    </Pressable>
+                                )}
                             </View>
-                            <SideBar media={media} store={store} />
+                            <SideBar media={media} store={store} viewable={viewable} />
                         </View>
                         {Collection}
                     </View>
@@ -219,7 +240,7 @@ const styles = StyleSheet.create({
     },
     videoInfo: {
         flex: 1,
-        marginRight: pixel(15),
+        marginRight: pixel(40),
     },
     goodsItem: {
         marginRight: pixel(20),
@@ -238,15 +259,14 @@ const styles = StyleSheet.create({
     tagName: {
         fontWeight: 'bold',
     },
-    footer: {
-        width: '100%',
-        height: pixel(54),
-        justifyContent: 'center',
-        paddingHorizontal: pixel(10),
+    movieInfo: {
+        flexDirection: 'row',
+        marginTop: pixel(10),
     },
-    footerText: {
-        fontSize: font(15),
-        color: '#969696',
+    movieLabel: {
+        width: pixel(15),
+        height: pixel(16),
+        marginRight: pixel(5),
     },
     collectionItem: {
         flexDirection: 'row',

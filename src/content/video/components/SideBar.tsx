@@ -1,10 +1,10 @@
 import React, { useRef, useMemo, useCallback } from 'react';
 import { StyleSheet, View, Image, ImageBackground, TouchableOpacity, DeviceEventEmitter, Animated } from 'react-native';
-import { useCirculationAnimation } from '@src/common';
 import { Avatar, SafeText } from '@src/components';
 import { useNavigation } from '@react-navigation/native';
 import { observer, userStore, notificationStore } from '@src/store';
 import { AnimationLike } from '../../widget';
+import MoviePlaying from './MoviePlaying';
 
 const imageSource = {
     liked: require('@app/assets/images/ic_liked.png'),
@@ -17,15 +17,9 @@ const imageSource = {
 //     cover: 'http://images.cnblogsc.com/pic/upload/vod/2020-03/1583088602.jpg',
 // }
 
-export default observer(({ media, store }) => {
+export default observer(({ media, store, viewable }) => {
     const navigation = useNavigation();
     const isMe = useMemo(() => userStore?.me?.id === media?.user?.id, []);
-    const movie = media?.movie;
-    const animation = useCirculationAnimation({ duration: 8000, start: !!movie });
-    const rotate = animation.interpolate({
-        inputRange: [0, 1],
-        outputRange: ['0deg', '360deg'],
-    });
     const showComment = useCallback(() => {
         DeviceEventEmitter.emit('showCommentModal');
     }, []);
@@ -63,18 +57,12 @@ export default observer(({ media, store }) => {
                     <Image source={require('@app/assets/images/more_item.png')} style={styles.imageSize} />
                 </TouchableOpacity>
             </View>
-            {movie && (
-                <View style={styles.itemWrap}>
-                    <Animated.View style={{ transform: [{ rotate }] }}>
-                        <TouchableOpacity onPress={() => navigation.navigate('MovieDetail', { movie })}>
-                            <ImageBackground
-                                source={require('@app/assets/images/movie/playing_film.png')}
-                                style={styles.imageSize}>
-                                <Image source={{ uri: movie?.cover }} style={styles.movieCover} />
-                            </ImageBackground>
-                        </TouchableOpacity>
-                    </Animated.View>
-                </View>
+            {media?.movie && (
+                <TouchableOpacity
+                    style={{ marginTop: pixel(30) }}
+                    onPress={() => navigation.navigate('MovieDetail', { movie: media?.movie })}>
+                    <MoviePlaying movie={media?.movie} viewable={viewable} />
+                </TouchableOpacity>
             )}
         </View>
     );
@@ -99,10 +87,5 @@ const styles = StyleSheet.create({
         width: pixel(40),
         alignItems: 'center',
         justifyContent: 'center',
-    },
-    movieCover: {
-        height: pixel(24),
-        width: pixel(24),
-        borderRadius: pixel(12),
     },
 });
