@@ -1,15 +1,27 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { Iconfont, SvgIcon, SvgPath } from '@src/components';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { observer, userStore, notificationStore } from '@src/store';
 
 const SystemNotificationInfo = (props: Props) => {
     const { data } = props;
     // console.log('data', data);
+    const navigation = useNavigation();
+    // 账户信息
+    const userProfile = userStore.me;
     return (
-        <View style={styles.containers}>
-            <Text style={styles.containerTop}>{data.created_at}</Text>
-            <View style={styles.containerBottom}>
-                {/* <Image
+        <TouchableOpacity
+            onPress={() => {
+                navigation.navigate('WithdrawHistory', {
+                    wallet_id: userProfile?.wallet.id,
+                    tabPage: 1,
+                });
+            }}>
+            <View style={styles.containers}>
+                <Text style={styles.containerTop}>{data.created_at}</Text>
+                <View style={styles.containerBottom}>
+                    {/* <Image
                     style={styles.containerBtmImg}
                     resizeMode="cover"
                     source={{
@@ -17,14 +29,20 @@ const SystemNotificationInfo = (props: Props) => {
                             'http://img1.gamersky.com/image2014/11/20141105zx_6/gamersky_01small_02_2014115111123A.jpg',
                     }}
                 /> */}
-                <Text style={styles.containerBtmTitle}>{data.title}</Text>
-                <Text style={styles.containerBtmContent}>{data.content}</Text>
-                <View style={styles.containerBtmHandle}>
-                    <Text style={styles.handleText}>立即查看</Text>
-                    <SvgIcon style={{ marginRight: -pixel(7) }} name={SvgPath.rightArrow} size={25} color={'#aaaaaa'} />
+                    <Text style={styles.containerBtmTitle}>{data.title}</Text>
+                    <Text style={styles.containerBtmContent}>{data.content}</Text>
+                    <View style={styles.containerBtmHandle}>
+                        <Text style={styles.handleText}>立即查看</Text>
+                        <SvgIcon
+                            style={{ marginRight: -pixel(7) }}
+                            name={SvgPath.rightArrow}
+                            size={25}
+                            color={'#aaaaaa'}
+                        />
+                    </View>
                 </View>
             </View>
-        </View>
+        </TouchableOpacity>
     );
 };
 

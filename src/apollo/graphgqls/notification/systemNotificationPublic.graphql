@@ -1,5 +1,5 @@
-query systemNotificationPublic {
-    notices {
+query systemNotificationPrivate($page: Int) {
+    notices(page: $page) {
         paginatorInfo {
             currentPage
             hasMorePages
@@ -13,7 +13,7 @@ query systemNotificationPublic {
                 balance
             }
             title
-            expires_at
+            expires_at #过期时间
             created_at
             updated_at
         }
