@@ -73,7 +73,7 @@ export default observer((props: any) => {
                 }}>
                 <ItemSeparator />
                 <ListItem
-                    onPress={() => navigation.navigate('EditProfile')}
+                    onPress={() => navigation.navigate('EditUserData')}
                     style={styles.listItem}
                     leftComponent={
                         <View style={styles.UserComment}>

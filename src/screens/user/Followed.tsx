@@ -2,11 +2,11 @@ import React from 'react';
 import { StyleSheet, View, StatusBar } from 'react-native';
 import { PageContainer, NavBarHeader, Iconfont, ScrollTabBar } from '@src/components';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
-import Following from './society/Following';
-import Follower from './society/Follower';
+import Following from './parts/Following';
+import Follower from './parts/Follower';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-const Society = () => {
+const FollowedUser = () => {
     const navigation = useNavigation();
     const route = useRoute();
     const user = route.params?.user || {};
@@ -29,7 +29,7 @@ const Society = () => {
     );
 };
 
-export default Society;
+export default FollowedUser;
 
 const styles = StyleSheet.create({
     container: {

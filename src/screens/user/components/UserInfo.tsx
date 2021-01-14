@@ -152,7 +152,7 @@ export default observer(({ user: userData = userStore.me, isTopStack, operateHan
                 <Pressable
                     style={styles.information}
                     disabled={!isSelf}
-                    onPress={() => navigation.navigate('EditProfile')}>
+                    onPress={() => navigation.navigate('EditUserData')}>
                     <Text style={styles.introduction} numberOfLines={2}>
                         {user.introduction ||
                             (isSelf ? '点击添加简介，让大家更快认识你' : '这个人很懒，一点介绍都没留下')}
@@ -192,7 +192,7 @@ export default observer(({ user: userData = userStore.me, isTopStack, operateHan
                             动态
                         </Text>
                     </Pressable>
-                    <Pressable style={styles.metaItem} onPress={() => navigation.navigate('Society', { user })}>
+                    <Pressable style={styles.metaItem} onPress={() => navigation.navigate('FollowedUser', { user })}>
                         <Text style={styles.metaCount} numberOfLines={1}>
                             {Helper.count(user.count_followings)}
                         </Text>
@@ -202,7 +202,7 @@ export default observer(({ user: userData = userStore.me, isTopStack, operateHan
                     </Pressable>
                     <Pressable
                         style={styles.metaItem}
-                        onPress={() => navigation.navigate('Society', { user, follower: true })}>
+                        onPress={() => navigation.navigate('FollowedUser', { user, follower: true })}>
                         <Text style={styles.metaCount} numberOfLines={1}>
                             {Helper.count(user.count_followers)}
                         </Text>

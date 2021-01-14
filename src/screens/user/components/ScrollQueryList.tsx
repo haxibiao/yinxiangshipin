@@ -6,7 +6,7 @@ import { ContentStatus, PostItem } from '@src/content';
 import { syncGetter, mergeProperty } from '@src/common';
 import { useQuery } from '@src/apollo';
 
-export default ({ gqlDocument, options, dataOptionChain, paginateOptionChain, ...props }: any) => {
+export default ({ gqlDocument, options, dataOptionChain, paginateOptionChain, renderItem, ...props }: any) => {
     const { loading, error, data, fetchMore, refetch } = useQuery(gqlDocument, options);
     const listData = useMemo(() => syncGetter(dataOptionChain, data), [data]);
     const nextPage = useMemo(() => syncGetter(paginateOptionChain + '.currentPage', data) + 1 || 2, [data]);
@@ -49,8 +49,8 @@ export default ({ gqlDocument, options, dataOptionChain, paginateOptionChain, ..
                 )
             }
             ListFooterComponent={() => (hasMore || loading ? <Placeholder quantity={1} /> : null)}
-            renderItem={({ item }) => {
-                return <PostItem data={item} />;
+            renderItem={({ item, index }) => {
+                return renderItem({ item, index, data: listData, page: nextPage });
             }}
             ItemSeparatorComponent={() => <View style={styles.separator} />}
             {...props}

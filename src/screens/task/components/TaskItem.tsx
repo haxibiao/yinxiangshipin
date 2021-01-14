@@ -362,7 +362,7 @@ const taskRouteInfo = {
     去点赞: 'Home',
     去发布: 'CreatePost',
     去绑定: 'BindingAccount',
-    去修改: 'EditProfile',
+    去修改: 'EditUserData',
     去好评: 'Praise',
     去评论: 'Home',
     去浏览: browseCollection,

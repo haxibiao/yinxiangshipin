@@ -34,13 +34,13 @@ import SearchedShortVideoScreen from '../screens/search/shortVideo';
 import SearchedShortVideoListScreen from '../screens/search/shortVideo/List';
 
 // user
-import UserScreen from '../screens/user';
+import UserHome from '../screens/user/Home';
+import EditUserData from '../screens/user/EditData';
 import UserPosts from '../screens/user/Posts';
-import FavoriteCollection from '../screens/user/FavoriteCollection';
-import SocietyScreen from '../screens/user/Society';
+import FollowedUser from '../screens/user/Followed';
 import UserBlockScreen from '../screens/user/UserBlock';
-// user personage
-import EditProfileScreen from '../screens/user/personage/EditProfile';
+import FavoriteCollection from '../screens/user/FavoriteCollection';
+import FavoritePostList from '../screens/user/FavoritePostList';
 
 // comment
 import CommentScreen from '../screens/comment/CommentScreen';
@@ -70,7 +70,7 @@ import ChatSettingScreen from '../screens/chat/ChatSetting';
 import CommentsScreen from '../screens/notification/CommentsScreen';
 import BeLikedScreen from '../screens/notification/BeLiked';
 import FollowNotificationsScreen from '../screens/notification/FollowScreen';
-import SystemRemindScreen from '../screens/notification/SystemRemindScreen';//系统消息
+import SystemRemindScreen from '../screens/notification/SystemRemindScreen'; //系统消息
 import SystemNotificationItem from '../screens/notification/components/SystemNotificationItem';
 
 // settings
@@ -156,15 +156,15 @@ export default {
     SystemRemindNotification: {
         component: SystemRemindScreen,
     },
-    Society: {
-        component: SocietyScreen,
+    FollowedUser: {
+        component: FollowedUser,
     },
     Setting: {
         component: SettingsScreen,
         path: 'setting/:route',
     },
-    EditProfile: {
-        component: EditProfileScreen,
+    EditUserData: {
+        component: EditUserData,
     },
     AboutUs: {
         component: AboutUsScreen,
@@ -218,7 +218,7 @@ export default {
         component: ChatSettingScreen,
     },
     User: {
-        component: UserScreen,
+        component: UserHome,
     },
     UserPosts: {
         component: UserPosts,
@@ -231,6 +231,9 @@ export default {
     },
     FavoriteCollection: {
         component: FavoriteCollection,
+    },
+    FavoritePostList: {
+        component: FavoritePostList,
     },
     RandomCollection: {
         component: RandomCollectionScreen,
@@ -299,7 +302,7 @@ export default {
     MovieFavorites: {
         component: MovieFavorites,
     },
-    SystemNotificationItem:{
+    SystemNotificationItem: {
         component: SystemNotificationItem,
     },
 };
