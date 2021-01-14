@@ -5,9 +5,14 @@ import { observer, appStore, adStore, userStore } from '@src/store';
 import Notice from '@src/components/notice';
 import { navigate } from '@src/common';
 
-// 通知信息有哪些字段
-// ⁣type：通知类型
-// ⁣content：通知内容
+interface NoticeData {
+    id: number;
+    type: string;
+    title: string;
+    content: string;
+    cover?: string; //图片封面
+    url?: string; //跳转的h5链接
+}
 
 export const Socket = observer((user: { token: string | undefined; id: string }) => {
     useEffect(() => {
@@ -27,13 +32,13 @@ export const Socket = observer((user: { token: string | undefined; id: string })
             //保存echo实例
             appStore.setEcho(echo);
             // 监听公共频道
-            echo.channel('notice').listen('.system.notice', sendLocalNotification);
+            echo.channel('notice').listen('.system.notice', sendSystemNotification);
             // 监听用户私人频道
             echo.private('App.User.' + me.id);
         }
     }, [userStore.me]);
 
-    const sendLocalNotification = useCallback((data: { id: any; content: any; title: any }) => {
+    const sendSystemNotification = useCallback((data: NoticeData) => {
         const handler = () => navigate('systemRemindNotification', { user: userStore.me });
         if (data && typeof data === 'object') {
             Notice.add({ ...data, handler });

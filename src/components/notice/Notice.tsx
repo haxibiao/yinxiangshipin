@@ -96,8 +96,12 @@ export default function Notice({ notice, onClose }: { notice: NoticeProps; onClo
                             source={notice.url || require('@app/assets/images/app_logo.png')}
                         />
                         <View style={styles.info}>
-                            <Text style={styles.title}>{notice?.title}</Text>
-                            <Text style={styles.content}>{notice?.content}</Text>
+                            <Text style={styles.title} numberOfLines={1}>
+                                {notice?.title}
+                            </Text>
+                            <Text style={styles.content} numberOfLines={2}>
+                                {notice?.content}
+                            </Text>
                         </View>
                     </View>
                     <Pressable
