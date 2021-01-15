@@ -34,7 +34,7 @@ export const Socket = observer((user: { token: string | undefined; id: string })
             // 监听公共频道
             echo.channel('notice').listen('.system.notice', sendSystemNotification);
             // 监听用户私人频道
-            echo.private('App.User.' + me.id);
+            echo.private('App.User.' + me.id).listen('.personal.notice', sendSystemNotification);
         }
     }, [userStore.me]);
 
