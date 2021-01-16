@@ -3,10 +3,11 @@ import { StyleSheet, View, DeviceEventEmitter } from 'react-native';
 import { observer, appStore, userStore } from '@src/store';
 import { NavBarHeader, ScrollTabBar } from '@src/components';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
+import { DefaultTabBar } from '@app/src/components/ScrollHeadTabView';
 import { useNavigation } from '@react-navigation/native';
-import RecommendVideos from './RecommendVideos';
-import EnshrinedVideos from './EnshrinedVideos';
 import FriendShipVideos from './FriendShipVideos';
+import RecommendVideos from './RecommendVideos';
+import MovieVideos from './MovieVideos';
 
 export default observer(({}) => {
     const navigation = useNavigation();
@@ -43,28 +44,29 @@ export default observer(({}) => {
         <View style={styles.container} onLayout={onLayout}>
             <ScrollableTabView
                 contentProps={{ keyboardShouldPersistTaps: 'always' }}
-                tabBarPosition="overlayTop"
-                initialPage={1}
+                initialPage={currentPage.current}
                 onChangeTab={onChangeTab}
                 renderTabBar={(tabBarProps: any) => (
-                    <ScrollTabBar
+                    <DefaultTabBar
                         {...tabBarProps}
-                        tabWidth={pixel(74)}
+                        paddingInset={(Device.WIDTH - pixel(72) * 3) / 2}
+                        tabUnderlineWidth={pixel(24)}
+                        tabWidth={pixel(72)}
                         tabBarStyle={styles.tabBarStyle}
                         underlineStyle={styles.underlineStyle}
                         activeTextStyle={styles.activeTextStyle}
-                        tintTextStyle={styles.tintTextStyle}
+                        inactiveTextStyle={styles.inactiveTextStyle}
                     />
                 )}>
-                <EnshrinedVideos tabLabel="收藏" page={0} />
+                <FriendShipVideos tabLabel="关注" page={0} />
                 <RecommendVideos tabLabel="推荐" page={1} />
-                <FriendShipVideos tabLabel="关注" page={2} />
+                <MovieVideos tabLabel="影视" page={2} />
             </ScrollableTabView>
             <NavBarHeader
                 navBarStyle={styles.navBarStyle}
                 hasGoBackButton={false}
                 isTransparent={true}
-                hasSearchButton={true}
+                hasSearchButton={false}
                 StatusBarProps={{ barStyle: 'light-content' }}
             />
         </View>
@@ -83,30 +85,30 @@ const styles = StyleSheet.create({
         width: pixel(60),
     },
     tabBarStyle: {
+        position: 'absolute',
+        zIndex: 100,
         width: '100%',
         height: pixel(42),
-        paddingHorizontal: pixel(42),
         marginTop: Theme.statusBarHeight,
-        borderWidth: 0,
-        justifyContent: 'center',
+        borderTopWidth: 0,
+        borderBottomWidth: 0,
     },
     underlineStyle: {
-        width: pixel(24),
-        left: (Device.WIDTH - pixel(74) * 3) / 2 + pixel(25),
-        marginBottom: pixel(4),
+        marginBottom: pixel(2),
+        height: pixel(2),
         backgroundColor: '#fff',
     },
     activeTextStyle: {
         color: '#ffffff',
-        fontSize: font(19),
+        fontSize: font(18),
         fontWeight: 'bold',
         textShadowColor: 'rgba(0, 0, 0, 0.75)',
         textShadowOffset: { width: 0, height: 0 },
         textShadowRadius: 2,
     },
-    tintTextStyle: {
+    inactiveTextStyle: {
         color: '#ddd',
-        fontSize: font(19),
+        fontSize: font(18),
         fontWeight: 'bold',
         textShadowColor: 'rgba(0, 0, 0, 0.75)',
         textShadowOffset: { width: 0, height: 0 },

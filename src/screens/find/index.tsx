@@ -4,10 +4,9 @@ import { NavBarHeader, ScrollTabBar, FocusAwareStatusBar } from '@src/components
 import { observer, adStore, userStore } from '@src/store';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import FollowedPosts from './FollowedPosts';
-import Collections from './Collections';
-import RecommendPosts from './RecommendPosts';
 import MovieCenter from '../../screens/movie';
+import Collections from './Collections';
+import Community from './Community';
 
 export default observer(() => {
     const scrollTabRef = useRef();
@@ -41,10 +40,9 @@ export default observer(() => {
                         tintTextStyle={styles.tintTextStyle}
                     />
                 )}>
-                {adStore.enableMovie && <MovieCenter tabLabel="影视" />}
+                {adStore.enableMovie && <MovieCenter tabLabel="影厅" />}
                 <Collections tabLabel="合集" />
-                <RecommendPosts tabLabel="精选" />
-                <FollowedPosts tabLabel="动态" />
+                <Community tabLabel="社区" />
             </ScrollableTabView>
             <Image style={styles.headerBg} source={require('@app/assets/images/bg/bg_find_header.png')} />
             <TouchableWithoutFeedback onPress={goSearchCenter}>

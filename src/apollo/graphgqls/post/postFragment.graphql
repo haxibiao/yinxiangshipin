@@ -45,4 +45,10 @@ fragment postFragment on Post {
         width
         height
     }
+    movies {
+        id
+        name
+        introduction
+        cover
+    }
 }

@@ -12,6 +12,7 @@ import updatePostMutation from './updatePostMutation.graphql';
 import userPostsQuery from './userPostsQuery.graphql';
 import userVisitsQuery from './userVisitsQuery.graphql';
 import visitShareablebyUuid from './visitShareablebyUuid.graphql';
+import postWithMoviesQuery from './postWithMoviesQuery.graphql';
 
 export const post = {
     createPostContent,
@@ -27,4 +28,5 @@ export const post = {
     userPostsQuery,
     userVisitsQuery,
     visitShareablebyUuid,
+    postWithMoviesQuery,
 };

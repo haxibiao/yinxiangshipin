@@ -107,9 +107,6 @@ export default observer(
                 </SafeText>
                 {renderCover}
                 {renderTags}
-                {post?.product && (
-                    <Commodity style={styles.productWrap} product={post?.product} navigation={navigation} />
-                )}
                 <View style={styles.footer}>
                     <View style={styles.metaList}>
                         <AnimationLike content={post} style={styles.metaItem}>

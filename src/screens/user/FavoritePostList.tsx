@@ -81,7 +81,11 @@ export default () => {
                 fetchData={fetchData}
                 showBottomInput={true}
             />
-            <NavBarHeader navBarStyle={styles.navBarStyle} isTransparent={true} />
+            <NavBarHeader
+                StatusBarProps={{ barStyle: 'light-content' }}
+                navBarStyle={styles.navBarStyle}
+                isTransparent={true}
+            />
         </View>
     );
 };

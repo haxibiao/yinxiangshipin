@@ -1,9 +1,8 @@
 import React, { useRef, useCallback, useEffect } from 'react';
 import { StyleSheet, View, Text, ImageBackground, Image, Animated, Easing } from 'react-native';
 
-const TEXT = '播放电影';
-const width = pixel(30);
-const height = pixel(70);
+const TEXT = '立即观看';
+const IMAGE_HEIGHT = pixel(48);
 export default function DanceText({ movie, viewable }) {
     const values = useRef(
         Array(TEXT.length)
@@ -16,7 +15,7 @@ export default function DanceText({ movie, viewable }) {
         Animated.loop(
             Animated.timing(rotateAnimation, {
                 toValue: 1,
-                duration: 8000,
+                duration: 6000,
                 easing: Easing.linear,
                 useNativeDriver: true,
             }),
@@ -25,13 +24,12 @@ export default function DanceText({ movie, viewable }) {
 
     const startTextAnimation = useCallback(() => {
         Animated.stagger(
-            1800,
+            800,
             values.map((value) => {
                 value.setValue(0);
                 return Animated.timing(value, {
                     toValue: 1,
-                    duration: 3600,
-                    easing: Easing.linear,
+                    duration: 3000,
                     useNativeDriver: true,
                 });
             }),
@@ -61,26 +59,26 @@ export default function DanceText({ movie, viewable }) {
     const animationStyle = useCallback((value, index) => {
         return {
             opacity: value.interpolate({
-                inputRange: [0, 0.7, 1],
-                outputRange: [0.4, 0.8, 0],
+                inputRange: [0, 0.6, 1],
+                outputRange: [0, 1, 0],
             }),
             transform: [
                 {
                     translateY: value.interpolate({
                         inputRange: [0, 1],
-                        outputRange: [0, -height],
+                        outputRange: [0, -IMAGE_HEIGHT - font(14)],
                     }),
                 },
                 {
                     translateX: value.interpolate({
-                        inputRange: [0, 0.4, 0.6, 1],
-                        outputRange: [0, -width * 0.9, -width, -width * 0.8],
+                        inputRange: [0, 0.6, 1],
+                        outputRange: [0, -IMAGE_HEIGHT / 2, 0],
                     }),
                 },
                 {
-                    rotate: value.interpolate({
-                        inputRange: [0, 1],
-                        outputRange: [`${index * 5}deg`, `${80 - index * 5}deg`],
+                    scale: value.interpolate({
+                        inputRange: [0, 0.4, 0.6, 1],
+                        outputRange: [0, 1, 1, 0],
                     }),
                 },
             ],
@@ -89,15 +87,12 @@ export default function DanceText({ movie, viewable }) {
 
     return (
         <View>
-            {viewable && (
-                <View style={styles.textWrap}>
-                    {values.map((value, index) => (
-                        <Animated.View key={index} style={[styles.textItem, animationStyle(value, index)]}>
-                            <Text style={styles.text}>{TEXT[index]}</Text>
-                        </Animated.View>
-                    ))}
-                </View>
-            )}
+            {viewable &&
+                values.map((value, index) => (
+                    <Animated.View key={index} style={[styles.textItem, animationStyle(value, index)]}>
+                        <Text style={styles.text}>{TEXT[index]}</Text>
+                    </Animated.View>
+                ))}
             <Animated.View style={{ transform: [{ rotate }] }}>
                 <ImageBackground
                     source={require('@app/assets/images/movie/playing_film.png')}
@@ -111,8 +106,8 @@ export default function DanceText({ movie, viewable }) {
 
 const styles = StyleSheet.create({
     playingImage: {
-        height: pixel(48),
-        width: pixel(48),
+        height: IMAGE_HEIGHT,
+        width: IMAGE_HEIGHT,
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -121,15 +116,10 @@ const styles = StyleSheet.create({
         width: pixel(28),
         borderRadius: pixel(15),
     },
-    textWrap: {
-        ...StyleSheet.absoluteFillObject,
-        left: pixel(5),
-        justifyContent: 'center',
-        alignItems: 'flex-start',
-    },
     textItem: {
         position: 'absolute',
-        left: 0,
+        left: -font(14) / 2,
+        bottom: -font(14),
     },
     text: {
         fontSize: font(14),

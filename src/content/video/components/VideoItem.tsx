@@ -31,6 +31,7 @@ const qd = {
 
 export default observer((props: Props) => {
     const { media, index, store } = props;
+    const movie = media?.movies?.[0];
     const viewable = index === store.viewableItemIndex && store.visibility;
     const isMe = useMemo(() => userStore?.me?.id === media?.user?.id, []);
 
@@ -171,10 +172,10 @@ export default observer((props: Props) => {
                                         {mediaTags}
                                     </SafeText>
                                 </View>
-                                {media?.movie && (
+                                {movie && (
                                     <Pressable
                                         style={styles.movieInfo}
-                                        onPress={() => navigation.navigate('MovieDetail', { movie: media?.movie })}>
+                                        onPress={() => navigation.navigate('MovieDetail', { movie })}>
                                         <Image
                                             style={styles.movieLabel}
                                             source={require('@app/assets/images/movie/ic_film_play.png')}
@@ -183,10 +184,7 @@ export default observer((props: Props) => {
                                             width={Device.WIDTH - pixel(142)}
                                             textList={[
                                                 {
-                                                    value: media?.movie?.name || media?.movie?.description,
-                                                },
-                                                {
-                                                    value: media?.movie?.name || media?.movie?.description,
+                                                    value: `视频出处 ——《${movie?.name}》`,
                                                 },
                                             ]}
                                         />

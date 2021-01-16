@@ -19,6 +19,7 @@ const imageSource = {
 
 export default observer(({ media, store, viewable }) => {
     const navigation = useNavigation();
+    const movie = media?.movies?.[0];
     const isMe = useMemo(() => userStore?.me?.id === media?.user?.id, []);
     const showComment = useCallback(() => {
         DeviceEventEmitter.emit('showCommentModal');
@@ -57,11 +58,11 @@ export default observer(({ media, store, viewable }) => {
                     <Image source={require('@app/assets/images/more_item.png')} style={styles.imageSize} />
                 </TouchableOpacity>
             </View>
-            {media?.movie && (
+            {movie && (
                 <TouchableOpacity
                     style={{ marginTop: pixel(30) }}
-                    onPress={() => navigation.navigate('MovieDetail', { movie: media?.movie })}>
-                    <MoviePlaying movie={media?.movie} viewable={viewable} />
+                    onPress={() => navigation.navigate('MovieDetail', { movie })}>
+                    <MoviePlaying movie={movie} viewable={viewable} />
                 </TouchableOpacity>
             )}
         </View>

@@ -218,7 +218,7 @@ export default observer(
                     </View>
                     {/* 金币奖励悬浮球 */}
                     {rewardEnable && adStore.enableWallet && (
-                        <View style={[styles.rewardProgress, rewardStyle]}>
+                        <View style={[styles.rewardBox, rewardStyle]}>
                             <RewardProgress store={store} />
                         </View>
                     )}
@@ -273,12 +273,11 @@ const styles = StyleSheet.create({
     inputStyle: {
         color: '#fff',
     },
-    rewardProgress: {
-        opacity: 0.7,
+    rewardBox: {
         position: 'absolute',
+        opacity: 0.6,
+        top: Theme.statusBarHeight + pixel(1),
         right: pixel(12),
-        // top: Theme.statusBarHeight + Theme.NAVBAR_HEIGHT + pixel(70),
-        bottom: pixel(350 + Theme.HOME_INDICATOR_HEIGHT),
     },
     contentCover: {
         ...StyleSheet.absoluteFillObject,

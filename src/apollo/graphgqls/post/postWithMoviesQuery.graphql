@@ -1,0 +1,11 @@
+#import "./postFragment.graphql"
+#import "../collection/collectionFragment.graphql"
+
+query postWithMoviesQuery {
+    postWithMovies {
+        ...postFragment
+        collections {
+            ...collectionFragment
+        }
+    }
+}

@@ -84,6 +84,7 @@ export default observer((props: any) => {
             store={videoStore}
             getVisibleItem={getVisibleItem}
             fetchData={fetchData}
+            rewardEnable={true}
             EmptyComponent={<Placeholder.NoContent />}
         />
     );

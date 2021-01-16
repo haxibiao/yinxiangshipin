@@ -14,4 +14,10 @@ fragment collectionFragment on Collection {
         name
         avatar
     }
+    movies {
+        id
+        name
+        introduction
+        cover
+    }
 }

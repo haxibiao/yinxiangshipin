@@ -66,7 +66,7 @@ const RewardProgress = observer(({ store }) => {
 
     const textTranslateY = textAnimation.interpolate({
         inputRange: [0, 1],
-        outputRange: [1, -80],
+        outputRange: [1, 80],
     });
 
     const textScale = textAnimation.interpolate({
@@ -99,7 +99,7 @@ const RewardProgress = observer(({ store }) => {
                 {progress > 0 && (
                     <Progress.Circle
                         progress={progress / 100}
-                        size={pixel(45)}
+                        size={pixel(36)}
                         borderWidth={0}
                         color="#ff5644"
                         thickness={pixel(3)}
@@ -113,16 +113,16 @@ const RewardProgress = observer(({ store }) => {
 });
 const styles = StyleSheet.create({
     circleProgress: {
-        height: pixel(50),
+        height: pixel(40),
         position: 'relative',
-        width: pixel(50),
+        width: pixel(40),
         justifyContent: 'center',
         alignItems: 'center',
     },
     rewardImage: {
         ...StyleSheet.absoluteFill,
-        height: pixel(50),
-        width: pixel(50),
+        height: pixel(40),
+        width: pixel(40),
     },
     rewardText: {
         color: '#FFB100',
