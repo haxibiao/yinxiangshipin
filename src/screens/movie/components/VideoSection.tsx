@@ -13,7 +13,7 @@ import {
 import Modal from 'react-native-modal';
 import { useNavigation } from '@react-navigation/native';
 import { observer } from 'mobx-react';
-import { userStore } from '@src/store';
+import { adStore, userStore } from '@src/store';
 import { GQL, useQuery, errorMessage, useFavoriteMutation } from '@src/apollo';
 import { Iconfont, DebouncedPressable } from '@src/components';
 import { AutonomousModal } from '@src/components/modal';
@@ -22,6 +22,7 @@ import { useStatusBarHeight } from '@src/common';
 import MovieItem, { SPACE } from './MovieItem';
 import AnthologyButton from './AnthologyButton';
 import { MovieIntroduction, MovieSeriesChooser } from './MovieContent';
+import { ad } from 'react-native-ad';
 
 const portraitHeight = Dimensions.get('window').width * 0.58;
 
@@ -151,8 +152,9 @@ export default observer(({ movie }) => {
                     />
                 </View>
             )}
+            <ad.Feed visible={adStore.enableAd} codeid={adStore.codeid_feed_image_three} adWidth={Device.WIDTH} />
             {/* 推荐 */}
-            <View style={styles.sectionWrap}>
+            <View style={{ marginTop: pixel(10) }}>
                 <View style={styles.sectionHeader}>
                     <Text style={styles.sectionTitle}>为你推荐</Text>
                 </View>
@@ -215,7 +217,7 @@ export default observer(({ movie }) => {
 const styles = StyleSheet.create({
     container: {
         paddingTop: pixel(14),
-        paddingBottom: pixel(Theme.HOME_INDICATOR_HEIGHT),
+        paddingBottom: pixel(Theme.HOME_INDICATOR_HEIGHT) + pixel(20),
     },
     row: {
         flexDirection: 'row',
@@ -283,7 +285,7 @@ const styles = StyleSheet.create({
         marginLeft: pixel(2),
     },
     sectionWrap: {
-        marginBottom: pixel(20),
+        marginBottom: pixel(10),
     },
     sectionHeader: {
         flexDirection: 'row',

@@ -6,6 +6,7 @@ import { observer, adStore } from '@src/store';
 import CollectionBanner, { PADDING } from './parts/CollectionBanner';
 import CollectionList from './parts/CollectionList';
 import RecommendCollections from './parts/RecommendCollections';
+import { ad } from 'react-native-ad';
 
 const fakeData = new Array(3).fill({});
 
@@ -24,17 +25,21 @@ export default function Collections() {
     return (
         <ScrollView contentContainerStyle={styles.container}>
             <CollectionBanner collection={topRecommend?.topCollection} banner={topCover} />
-            <CollectionList style={styles.secWrap} />
+            <CollectionList />
             <RecommendCollections
                 style={styles.secWrap}
                 sectionName="专属剧场"
                 collections={topRecommend?.recommendCollectionsA || fakeData}
             />
+            <ad.Feed visible={adStore.enableAd} codeid={adStore.codeid_feed_image_three} adWidth={Device.WIDTH} />
             <RecommendCollections
                 style={styles.secWrap}
                 sectionName="精选好片"
                 collections={topRecommend?.recommendCollectionsB || fakeData}
             />
+            <View>
+                <ad.Feed visible={adStore.enableAd} codeid={adStore.codeid_feed_video} adWidth={Device.WIDTH} />
+            </View>
             <View style={styles.footer}>
                 <Text style={styles.footerContent}>╰(๑•́₃ •̀๑)╯再往下就没有啦</Text>
             </View>
@@ -50,7 +55,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffffff',
     },
     secWrap: {
-        marginBottom: PADDING,
+        marginTop: PADDING,
     },
     footer: {
         marginTop: pixel(-2),

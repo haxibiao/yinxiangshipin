@@ -134,7 +134,7 @@ export default observer((props: any) => {
                         {/* Platform.OS === 'ios' ? itemWidth * 2 + 110 : */}
                         {/* style={Platform.OS === 'ios' && { marginLeft: pixel(-98) }} */}
                         <ad.Feed
-                            codeid={adStore.codeid_fedd_vertical}
+                            codeid={adStore.codeid_feed_video_vertical}
                             adWidth={Platform.OS === 'ios' ? itemWidth * 2 + 110 : itemWidth}
                             onLoad={(smg) => {
                                 // 广告加载成功回调

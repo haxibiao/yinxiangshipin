@@ -71,7 +71,7 @@ const RewardProgress = observer(({ store }) => {
 
     const textScale = textAnimation.interpolate({
         inputRange: [0, 1],
-        outputRange: [0, 1.5],
+        outputRange: [0, 1.4],
     });
 
     const onPress = useCallback(() => {

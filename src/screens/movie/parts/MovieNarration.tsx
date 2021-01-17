@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, ScrollView, ImageBackground } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, ScrollView, ImageBackground, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { GQL, useQuery } from '@src/apollo';
 import { Iconfont, DebouncedPressable } from '@src/components';
@@ -20,21 +20,23 @@ export default ({ count = 6, categoryName }: Props) => {
 
     return (
         <View style={styles.secContainer}>
-            <ImageBackground
-                style={styles.secHeadBg}
-                resizeMode="cover"
-                source={require('@app/assets/images/movie/bg_film.jpeg')}>
-                <View style={styles.headerContent}>
-                    <Text style={styles.secTitle}>精彩解说 ￨ 唯有电影永不散场</Text>
-                    <TouchableOpacity
-                        style={styles.moreBtn}
-                        onPress={() => navigation.navigate('CategoriesTab', { category: 'JIESHUO' })}>
-                        <Text style={styles.moreText}>查看全部解说</Text>
-                        <Iconfont name="right" style={{ marginTop: font(2) }} size={font(11)} color={'#ffffffDD'} />
-                    </TouchableOpacity>
-                    <View style={styles.arrow} />
-                </View>
-            </ImageBackground>
+            <Pressable onPress={() => navigation.navigate('CategoriesTab', { category: 'JIESHUO' })}>
+                <ImageBackground
+                    style={styles.secHeadBg}
+                    resizeMode="cover"
+                    source={require('@app/assets/images/movie/bg_film.jpeg')}>
+                    <View style={styles.headerContent}>
+                        <Text style={styles.secTitle}>精彩解说 ￨ 唯有电影永不散场</Text>
+                        <TouchableOpacity
+                            style={styles.moreBtn}
+                            onPress={() => navigation.navigate('CategoriesTab', { category: 'JIESHUO' })}>
+                            <Text style={styles.moreText}>查看全部解说</Text>
+                        </TouchableOpacity>
+                        <View style={styles.arrow} />
+                    </View>
+                </ImageBackground>
+            </Pressable>
+
             <ScrollView
                 style={{ marginLeft: pixel(14) }}
                 contentContainerStyle={styles.movieList}
@@ -100,14 +102,13 @@ const styles = StyleSheet.create({
     moreBtn: {
         flexDirection: 'row',
         alignItems: 'center',
-        height: pixel(28),
         borderRadius: pixel(14),
-        paddingHorizontal: pixel(8),
+        paddingHorizontal: pixel(10),
         backgroundColor: '#000000AA',
     },
     moreText: {
         fontSize: font(11),
-        lineHeight: font(18),
+        lineHeight: font(28),
         color: '#ffffffDD',
     },
     movieList: {

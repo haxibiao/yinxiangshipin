@@ -8,6 +8,7 @@ import MovieFollows from './parts/MovieFollows';
 import MovieRecommend from './parts/MovieRecommend';
 import MovieCategory from './parts/MovieCategory';
 import MovieNarration from './parts/MovieNarration';
+import { ad } from 'react-native-ad';
 
 export default observer(() => {
     return (
@@ -20,10 +21,13 @@ export default observer(() => {
             <MovieFollows />
             <MovieRecommend categoryName="今日推荐" />
             <MovieCategory type="MEI" categoryName="热门美剧" />
+            <ad.Feed visible={adStore.enableAd} codeid={adStore.codeid_feed_image_three} adWidth={Device.WIDTH} />
             <MovieCategory type="HAN" categoryName="精选韩剧" />
             <MovieNarration />
             <MovieCategory type="RI" categoryName="精选日剧" />
+            <ad.Feed visible={adStore.enableAd} codeid={adStore.codeid_feed_image_three} adWidth={Device.WIDTH} />
             <MovieCategory type="GANG" categoryName="怀旧港剧" />
+            <ad.Feed visible={adStore.enableAd} codeid={adStore.codeid_feed_video} adWidth={Device.WIDTH} />
             <View style={styles.footer}>
                 <Text style={styles.footerContent}>╰(๑•́₃ •̀๑)╯再往下就没有啦</Text>
             </View>
