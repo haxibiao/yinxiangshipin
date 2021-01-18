@@ -1,8 +1,9 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import { NavBarHeader, ScrollTabBar } from '@src/components';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
+import { DefaultTabBar } from '@app/src/components/ScrollHeadTabView';
+import { NavBarHeader } from '@src/components';
 import CategoryMovies from './CategoryMovies';
 
 const CategoryIndex = {
@@ -12,6 +13,10 @@ const CategoryIndex = {
     RI: 3,
     HAN: 4,
 };
+
+const TAB_WIDTH = pixel(58);
+const PADDING = pixel(42);
+const UNDER_LINE_WIDTH = pixel(28);
 
 // table栏
 export default function CategoriesTab() {
@@ -25,14 +30,16 @@ export default function CategoriesTab() {
                 style={{ flex: 1 }}
                 initialPage={CategoryIndex[category]}
                 contentProps={{ keyboardShouldPersistTaps: 'always' }}
-                renderTabBar={(props) => (
-                    <ScrollTabBar
-                        {...props}
+                renderTabBar={(tabBarProps: any) => (
+                    <DefaultTabBar
+                        {...tabBarProps}
                         tabWidth={TAB_WIDTH}
-                        style={styles.tabBarStyle}
+                        paddingInset={PADDING}
+                        tabUnderlineWidth={UNDER_LINE_WIDTH}
+                        tabBarStyle={styles.tabBarStyle}
                         underlineStyle={styles.underlineStyle}
                         activeTextStyle={styles.activeTextStyle}
-                        tintTextStyle={styles.tintTextStyle}
+                        inactiveTextStyle={styles.inactiveTextStyle}
                     />
                 )}>
                 <CategoryMovies tabLabel="解说" type="JIESHUO" />
@@ -50,11 +57,6 @@ export default function CategoriesTab() {
     );
 }
 
-const TAB_WIDTH = pixel(58);
-const PADDING = pixel(42);
-const UNDER_LINE_WIDTH = pixel(28);
-const UNDER_LINE_LEFT = (TAB_WIDTH - UNDER_LINE_WIDTH) / 2 + PADDING;
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -69,14 +71,11 @@ const styles = StyleSheet.create({
     tabBarStyle: {
         marginTop: Theme.statusBarHeight,
         height: Theme.NAVBAR_HEIGHT,
-        paddingHorizontal: PADDING,
         backgroundColor: 'rgba(255,255,255,1)',
     },
     underlineStyle: {
-        width: UNDER_LINE_WIDTH,
+        marginBottom: pixel(2),
         height: pixel(3),
-        left: UNDER_LINE_LEFT,
-        bottom: pixel(5),
         backgroundColor: Theme.primaryColor,
     },
     activeTextStyle: {
@@ -84,7 +83,7 @@ const styles = StyleSheet.create({
         fontSize: font(16),
         fontWeight: 'bold',
     },
-    tintTextStyle: {
+    inactiveTextStyle: {
         color: '#666',
         fontSize: font(16),
     },

@@ -2,7 +2,7 @@ import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
-import { ScrollTabBar } from '@src/components';
+import { DefaultTabBar } from '@app/src/components/ScrollHeadTabView';
 import { observer, adStore, userStore } from '@src/store';
 import Movies from './Movies';
 import Collections from './Collections';
@@ -17,14 +17,13 @@ export default observer(({ keyword }) => {
         <ScrollableTabView
             key={keyword}
             style={{ flex: 1 }}
-            renderTabBar={(props) => (
-                <ScrollTabBar
-                    {...props}
-                    // tabWidth={TAB_WIDTH}
-                    style={styles.tabBarStyle}
+            renderTabBar={(tabBarProps: any) => (
+                <DefaultTabBar
+                    {...tabBarProps}
+                    tabBarStyle={styles.tabBarStyle}
                     underlineStyle={styles.underlineStyle}
                     activeTextStyle={styles.activeTextStyle}
-                    tintTextStyle={styles.tintTextStyle}
+                    inactiveTextStyle={styles.inactiveTextStyle}
                 />
             )}>
             {adStore.enableMovie && <Movies tabLabel="影视" keyword={keyword} navigation={navigation} />}
@@ -36,29 +35,21 @@ export default observer(({ keyword }) => {
     );
 });
 
-const TAB_WIDTH = pixel(60);
-const UNDER_LINE_WIDTH = pixel(30);
-const UNDER_LINE_LEFT = (Device.WIDTH - TAB_WIDTH * 5) / 2 + (TAB_WIDTH - UNDER_LINE_WIDTH) / 2;
-
 const styles = StyleSheet.create({
     tabBarStyle: {
         height: pixel(42),
-        // paddingHorizontal: pixel(42),
         backgroundColor: 'rgba(255,255,255,1)',
         borderBottomWidth: pixel(0.5),
         borderColor: '#f0f0f0',
-        // justifyContent: 'center',
     },
     underlineStyle: {
-        // width: UNDER_LINE_WIDTH,
-        // left: UNDER_LINE_LEFT,
         backgroundColor: Theme.primaryColor,
     },
     activeTextStyle: {
         color: '#212121',
         fontSize: font(16),
     },
-    tintTextStyle: {
+    inactiveTextStyle: {
         color: '#D0D0D0',
         fontSize: font(16),
     },
