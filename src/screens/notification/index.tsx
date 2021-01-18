@@ -5,8 +5,16 @@ import { GQL, useQuery } from '@src/apollo';
 import { observer, userStore, appStore, adStore, notificationStore } from '@src/store';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import Chats from './components/Chats';
+import Theme from '@app/src/common/theme';
 
-const notifyTypes = ['unread_comments', 'unread_likes', 'unread_follows', 'unread_others', 'unread_chat'];
+const notifyTypes = [
+    'unread_comments',
+    'unread_likes',
+    'unread_follows',
+    'unread_others',
+    'unread_tips',
+    'unread_chat',
+];
 
 export default observer((props: any) => {
     const navigation = useNavigation();
@@ -121,9 +129,7 @@ export default observer((props: any) => {
                             <Badge count={notificationStore.unreadNotify.unread_follows} />
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.notifyItem}
-                        onPress={() => authNavigator('SystemRemindNotification', { user })}>
+                    <TouchableOpacity style={styles.notifyItem} onPress={() => authNavigator('PublicNotification')}>
                         <Image
                             style={styles.notifyIcon}
                             source={require('@app/assets/images/icons/ic_message_notify.png')}
@@ -136,6 +142,26 @@ export default observer((props: any) => {
                         </View>
                     </TouchableOpacity>
                 </View>
+                <TouchableOpacity
+                    style={styles.messageItem}
+                    activeOpacity={1}
+                    onPress={() => authNavigator('PersonalNotification')}>
+                    <Avatar source={require('@app/assets/images/app_logo.png')} size={pixel(46)} />
+                    <View style={styles.messageContent}>
+                        <View style={styles.messageContentTop}>
+                            <SafeText style={styles.messageName}>{Config.AppName}</SafeText>
+                            <View style={styles.officialLabel}>
+                                <SafeText style={styles.officialLabelName}>官方</SafeText>
+                            </View>
+                        </View>
+                        <View style={styles.messageContentBottom}>
+                            <SafeText style={styles.lastMessage} numberOfLines={1}>
+                                您的专属小贴士
+                            </SafeText>
+                            <Badge count={notificationStore.unreadNotify.unread_tips} />
+                        </View>
+                    </View>
+                </TouchableOpacity>
                 <Chats chats={chats} />
                 {PageFooter}
             </ScrollView>
@@ -182,6 +208,62 @@ const styles = StyleSheet.create({
     itemName: {
         color: Theme.defaultTextColor,
         fontSize: font(14),
+    },
+    messageItem: {
+        height: pixel(70),
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#fff',
+        paddingHorizontal: pixel(Theme.itemSpace),
+    },
+    messageContent: {
+        flex: 1,
+        alignSelf: 'stretch',
+        justifyContent: 'space-between',
+        marginLeft: pixel(10),
+        paddingVertical: pixel(8),
+        borderBottomWidth: Theme.minimumPixel,
+        borderBottomColor: '#f0f0f0',
+    },
+    messageContentTop: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    messageContentBottom: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
+    messageName: {
+        color: Theme.defaultTextColor,
+        fontSize: font(15),
+        fontWeight: 'bold',
+    },
+    officialLabel: {
+        backgroundColor: '#FFEBEE',
+        width: pixel(30),
+        height: font(18),
+        marginLeft: pixel(4),
+        borderRadius: pixel(4),
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    officialLabelName: {
+        color: Theme.primaryColor,
+        fontSize: font(10),
+        lineHeight: font(14),
+    },
+    lastMessage: {
+        color: Theme.subTextColor,
+        fontSize: font(12),
+        lineHeight: font(14),
+        paddingRight: pixel(20),
+    },
+    timeAgo: {
+        color: Theme.subTextColor,
+        fontSize: font(12),
     },
     footerView: {
         alignItems: 'center',

@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
         paddingVertical: pixel(10),
         color: '#a8a8a8',
         borderBottomWidth: pixel(0.5),
-        borderBottomColor: '#a8a8a8',
+        borderBottomColor: '#f0f0f0',
         fontSize: font(13),
         lineHeight: pixel(20),
     },

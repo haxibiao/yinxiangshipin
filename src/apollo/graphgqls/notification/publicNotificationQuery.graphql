@@ -1,0 +1,22 @@
+query publicNotificationQuery($page: Int) {
+    notices(page: $page) {
+        paginatorInfo {
+            currentPage
+            hasMorePages
+        }
+        data {
+            id
+            content
+            user {
+                id
+                name
+                balance
+            }
+            title
+            expires_at #过期时间
+            created_at
+            updated_at
+            type
+        }
+    }
+}

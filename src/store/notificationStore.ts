@@ -13,7 +13,13 @@ interface NotificationData {
 }
 
 // 系统通知
-type unreadNotifyTypes = 'unread_comments' | 'unread_likes' | 'unread_follows' | 'unread_others' | 'unread_chat';
+type unreadNotifyTypes =
+    | 'unread_comments'
+    | 'unread_likes'
+    | 'unread_follows'
+    | 'unread_others'
+    | 'unread_tips'
+    | 'unread_chat';
 
 // 更多操作
 interface ShareData {

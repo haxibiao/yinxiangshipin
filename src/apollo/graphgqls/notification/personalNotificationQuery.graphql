@@ -1,5 +1,5 @@
-query systemNotificationPublic($page: Int) {
-    notices(page: $page) {
+query personalNotificationQuery($user_id: Int!, $page: Int) {
+    personalNotices(user_id: $user_id, page: $page) {
         paginatorInfo {
             currentPage
             hasMorePages

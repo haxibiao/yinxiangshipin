@@ -17,9 +17,6 @@ export default (props: any) => {
         };
     }, []);
     const renderItem = useCallback((item, index) => {
-        console.log('====================================');
-        console.log('itemitem', item);
-        console.log('====================================');
         return <UserItem user={item.item.user} navigation={navigation} />;
     }, []);
     return (

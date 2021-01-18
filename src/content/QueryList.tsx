@@ -27,6 +27,7 @@ export default React.forwardRef(function ContentList(
         ListHeaderComponent,
         ListFooterComponent,
         ListEmptyComponent,
+        inverted,
         ...contentProps
     }: Props,
     listRef,
@@ -124,6 +125,7 @@ export default React.forwardRef(function ContentList(
 
     return (
         <FlatList
+            inverted={listData?.length > 0 ? inverted : false}
             contentContainerStyle={styles.container}
             ref={listRef}
             data={listData}

@@ -70,7 +70,8 @@ import ChatSettingScreen from '../screens/chat/ChatSetting';
 import CommentsScreen from '../screens/notification/CommentsScreen';
 import BeLikedScreen from '../screens/notification/BeLiked';
 import FollowNotificationsScreen from '../screens/notification/FollowScreen';
-import SystemRemindScreen from '../screens/notification/SystemRemindScreen'; //系统消息
+import PublicNotification from '../screens/notification/PublicNotification'; // 系统通知
+import PersonalNotification from '../screens/notification/PersonalNotification'; //系统消息
 import SystemNotificationItem from '../screens/notification/components/SystemNotificationItem';
 
 // settings
@@ -153,8 +154,11 @@ export default {
     BeLikedNotification: {
         component: BeLikedScreen,
     },
-    SystemRemindNotification: {
-        component: SystemRemindScreen,
+    PublicNotification: {
+        component: PublicNotification,
+    },
+    PersonalNotification: {
+        component: PersonalNotification,
     },
     FollowedUser: {
         component: FollowedUser,

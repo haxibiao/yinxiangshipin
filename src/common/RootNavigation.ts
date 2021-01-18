@@ -4,7 +4,6 @@ const privateRoutes = {
     CommentNotification: true,
     FollowNotification: true,
     BeLikedNotification: true,
-    systemRemindNotification: true,
     EditUserData: true,
     Chat: true,
     喜欢: true,

@@ -9,6 +9,7 @@ const unreadNotifyTypes = {
     unread_likes: 0,
     unread_follows: 0,
     unread_others: 0,
+    unread_tips: 0,
     unread_chat: 0,
 };
 

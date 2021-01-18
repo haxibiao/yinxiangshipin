@@ -89,7 +89,15 @@ export default function Notice({ notice, onClose }: { notice: NoticeProps; onClo
     return (
         <Animated.View style={[{ position: 'absolute', marginTop: statusBarHeight }, animationStyle]}>
             <BoxShadow setting={messageWrap}>
-                <View style={styles.messageBox}>
+                <Pressable
+                    style={styles.messageBox}
+                    onPress={() => {
+                        if (notice.handler instanceof Function) {
+                            notice.handler();
+                            clearTimeout(timer.current);
+                            slideOut();
+                        }
+                    }}>
                     <View style={styles.messageBody}>
                         <Image
                             style={styles.avatar}
@@ -97,25 +105,17 @@ export default function Notice({ notice, onClose }: { notice: NoticeProps; onClo
                         />
                         <View style={styles.info}>
                             <Text style={styles.title} numberOfLines={1}>
-                                {notice?.title}
+                                {notice?.title || Config.AppName}
                             </Text>
                             <Text style={styles.content} numberOfLines={2}>
                                 {notice?.content}
                             </Text>
                         </View>
                     </View>
-                    <Pressable
-                        style={styles.button}
-                        onPress={() => {
-                            if (notice.handler instanceof Function) {
-                                notice.handler();
-                                clearTimeout(timer.current);
-                                slideOut();
-                            }
-                        }}>
+                    <View style={styles.button}>
                         <Text style={styles.buttonText}>查 看</Text>
-                    </Pressable>
-                </View>
+                    </View>
+                </Pressable>
             </BoxShadow>
         </Animated.View>
     );

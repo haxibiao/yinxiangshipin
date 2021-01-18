@@ -32,14 +32,21 @@ export const Socket = observer((user: { token: string | undefined; id: string })
             //保存echo实例
             appStore.setEcho(echo);
             // 监听公共频道
-            echo.channel('notice').listen('.system.notice', sendSystemNotification);
+            echo.channel('notice').listen('.system.notice', sendPublicNotification);
             // 监听用户私人频道
-            echo.private('App.User.' + me.id).listen('.personal.notice', sendSystemNotification);
+            echo.private('App.User.' + me.id).listen('.personal.notice', sendPersonalNotification);
         }
     }, [userStore.me]);
 
-    const sendSystemNotification = useCallback((data: NoticeData) => {
-        const handler = () => navigate('systemRemindNotification', { user: userStore.me });
+    const sendPublicNotification = useCallback((data: NoticeData) => {
+        const handler = () => navigate('PublicNotification');
+        if (data && typeof data === 'object') {
+            Notice.add({ ...data, handler });
+        }
+    }, []);
+
+    const sendPersonalNotification = useCallback((data: NoticeData) => {
+        const handler = () => navigate('PersonalNotification');
         if (data && typeof data === 'object') {
             Notice.add({ ...data, handler });
         }
