@@ -1,5 +1,15 @@
 import React, { Component, RefObject } from 'react';
-import { View, Animated, ScrollView, Dimensions, Platform, StyleSheet, ViewStyle, TextStyle } from 'react-native';
+import {
+    View,
+    Animated,
+    ScrollView,
+    Dimensions,
+    Platform,
+    StyleSheet,
+    ViewStyle,
+    TextStyle,
+    InteractionManager,
+} from 'react-native';
 import ViewPager from '@react-native-community/viewpager';
 import SceneComponent from './components/SceneComponent';
 import DefaultTabBar from './components/DefaultTabBar';
@@ -413,7 +423,7 @@ export default class ScrollableTabView extends Component<Props> {
             } else {
                 this.setState({ containerWidth: width });
             }
-            this.requestAnimationFrame(() => {
+            InteractionManager.runAfterInteractions(() => {
                 this.goToPage(this.state.currentPage);
             });
         }
