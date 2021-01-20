@@ -17,6 +17,20 @@ export default observer(() => {
     const navigation = useNavigation();
 
     const renderItem = useCallback(({ item, index }) => {
+        if (adStore.enableAd && index > 0 && index % 5 === 0) {
+            return (
+                <>
+                    <ad.Feed codeid={adStore.codeid_feed_image_three} adWidth={Device.WIDTH} />
+                    <View style={styles.separator} />
+                    <CollectionItem
+                        collection={item}
+                        navigation={navigation}
+                        style={styles.collectionWrap}
+                        logoWidth={LOGO_WIDTH}
+                    />
+                </>
+            );
+        }
         return (
             <CollectionItem
                 collection={item}
@@ -47,15 +61,7 @@ export default observer(() => {
                     fetchPolicy: 'network-only',
                 }}
                 renderItem={renderItem}
-                ItemSeparatorComponent={() => {
-                    return adStore.enableAd ? (
-                        <View>
-                            <ad.Feed codeid={adStore.codeid_feed_image_three} adWidth={Device.WIDTH} />
-                        </View>
-                    ) : (
-                        <View style={styles.separator} />
-                    );
-                }}
+                ItemSeparatorComponent={() => <View style={styles.separator} />}
                 contentContainerStyle={styles.contentContainer}
             />
         </View>
