@@ -275,7 +275,7 @@ const styles = StyleSheet.create({
     },
     rewardBox: {
         position: 'absolute',
-        opacity: 0.6,
+        opacity: 0.8,
         top: Theme.statusBarHeight + pixel(1),
         right: pixel(12),
     },

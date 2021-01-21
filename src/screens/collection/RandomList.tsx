@@ -20,7 +20,9 @@ export default observer(() => {
         if (adStore.enableAd && index > 0 && index % 5 === 0) {
             return (
                 <>
-                    <ad.Feed codeid={adStore.codeid_feed_image_three} adWidth={CONTENT_WIDTH} />
+                    <View style={{ marginHorizontal: -PADDING, minHeight: LOGO_WIDTH }}>
+                        <ad.Feed codeid={adStore.codeid_feed_image_three} adWidth={Device.WIDTH} />
+                    </View>
                     <View style={styles.separator} />
                     <CollectionItem
                         collection={item}
