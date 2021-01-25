@@ -2,14 +2,13 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet, StatusBar, TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { PageContainer, SafeText } from '@src/components';
-
+import { PageContainer, SafeText, NavBarHeader } from '@src/components';
 import UserAgreement from './components/UserAgreement';
-
 import { appStore, Storage, userStore } from '@src/store';
 import { GQL, useMutation, errorMessage } from '@src/apollo';
+import ThirdPartyLoginBottom from './components/ThirdPartyLoginBottom';
 
-const MobileLogin = () => {
+const MobileLogin = (props: Props) => {
     const navigation = useNavigation();
 
     const [Account, setAccount] = React.useState('');
@@ -88,10 +87,14 @@ const MobileLogin = () => {
     });
 
     return (
-        <PageContainer title="手机号码登陆" white>
-            {/* 页面内容 */}
+        <View style={{ flex: 1 }}>
+            <NavBarHeader navBarStyle={{ backgroundColor: 'rgba(240,240,240,1)' }} />
             <View style={[styles.pageContent, { flex: 1 }]}>
-                <View style={{ marginTop: 30 }}>
+                <View style={{ marginTop: 20 }}>
+                    <Text style={{ fontSize: font(23) }}>手机号码登录</Text>
+                    <Text style={{ marginTop: pixel(5), color: '#0008', fontSize: font(12) }}>
+                        未注册的手机号登录成功后将自动注册
+                    </Text>
                     <TextInput
                         style={styles.textInput}
                         onChangeText={(account) => setAccount(account)}
@@ -99,10 +102,9 @@ const MobileLogin = () => {
                         placeholder="请输入你的手机号"
                         numberOfLines={1}
                     />
-
                     <View style={[styles.textInput, { flexDirection: 'row' }]}>
                         <TextInput
-                            style={{ flex: 1, padding: 0 }}
+                            style={{ flex: 1, padding: 0, fontSize: font(16) }}
                             onChangeText={(text) => setCaptcha(text)}
                             value={Captcha}
                             placeholder="请输入验证码"
@@ -120,24 +122,32 @@ const MobileLogin = () => {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View style={{ marginTop: 35 }}>
+                <View style={{ marginTop: pixel(12) }}>
+                    <TouchableOpacity
+                        onPress={() => {
+                            navigation.navigate('LoginSwitch', { switchStatus: true });
+                        }}>
+                        <Text style={{ color: '#16FA', fontSize: font(13) }}>密码登录</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={{ marginTop: 12 }}>
                     <TouchableOpacity style={[styles.textCenter, styles.borderButtom]} onPress={() => smsSign()}>
-                        <SafeText style={styles.buttonText}>登陆账号</SafeText>
+                        <SafeText style={styles.buttonText}>登录账号</SafeText>
+                    </TouchableOpacity>
+                </View>
+                <View style={[styles.headRow, styles.textCenter, { paddingBottom: 15, marginTop: 15 }]}>
+                    <Text style={[{ color: '#0006' }, styles.protocolSize]}>登录代表你已阅读并同意</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate('UserProtocol')}>
+                        <Text style={[{ color: '#F4606C' }, styles.protocolSize]}>《用户协议》</Text>
+                    </TouchableOpacity>
+                    <Text style={[{ color: '#0006' }, styles.protocolSize]}>和</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate('PrivacyPolicy')}>
+                        <Text style={[{ color: '#F4606C' }, styles.protocolSize]}>《隐私策略》</Text>
                     </TouchableOpacity>
                 </View>
             </View>
-
-            <View style={[styles.headRow, styles.textCenter, { paddingBottom: 15 }]}>
-                <Text style={{ color: '#0006' }}>登陆代表你已阅读并同意</Text>
-                <TouchableOpacity onPress={() => navigation.navigate('UserProtocol')}>
-                    <Text style={{}}>《用户协议》</Text>
-                </TouchableOpacity>
-                <Text style={{ color: '#0006' }}>和</Text>
-                <TouchableOpacity onPress={() => navigation.navigate('PrivacyPolicy')}>
-                    <Text style={{}}>《隐私策略》</Text>
-                </TouchableOpacity>
-            </View>
-        </PageContainer>
+            <ThirdPartyLoginBottom SMSDisable={true} />
+        </View>
     );
 };
 
@@ -150,7 +160,7 @@ const styles = StyleSheet.create({
     borderButtom: {
         backgroundColor: Theme.secondaryColor,
         borderRadius: 50,
-        paddingVertical: 13,
+        paddingVertical: 10,
     },
     buttonText: {
         fontSize: pixel(16),
@@ -187,10 +197,15 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     textInput: {
-        marginTop: 30,
+        marginTop: 5,
         padding: 0,
         paddingVertical: 6,
         borderBottomWidth: 1,
         borderBottomColor: '#9996',
+        fontSize: font(16),
+        height: 55,
+    },
+    protocolSize: {
+        fontSize: font(12),
     },
 });

@@ -4,6 +4,7 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 #import "RootViewController.h"
+#import <React/RCTLinkingManager.h>
 
 //注意，必须import到FB_SONARKIT_ENABLED之前
 #import "RNSplashScreen.h"
@@ -55,6 +56,19 @@ static void InitializeFlipper(UIApplication *application) {
   [RNSplashScreen show];
 
   return YES;
+}
+
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
+    return  [WXApi handleOpenURL:url delegate:self];
+}
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
+            options:(NSDictionary<NSString*, id> *)options
+{
+  // Triggers a callback event.
+  // 触发回调事件
+  [RCTLinkingManager application:application openURL:url options:options];
+  return [WXApi handleOpenURL:url delegate:self];
 }
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge

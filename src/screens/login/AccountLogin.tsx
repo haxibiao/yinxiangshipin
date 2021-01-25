@@ -2,11 +2,12 @@
 import React, { useCallback, version } from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet, StatusBar, TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { PageContainer, SafeText } from '@src/components';
+import { PageContainer, SafeText, NavBarHeader } from '@src/components';
 
 import { exceptionCapture } from '@src/common';
 import { appStore, Storage, userStore } from '@src/store';
 import { GQL, useMutation, errorMessage } from '@src/apollo';
+import ThirdPartyLoginBottom from './components/ThirdPartyLoginBottom';
 
 const AccountLogin = () => {
     const navigation = useNavigation();
@@ -46,10 +47,15 @@ const AccountLogin = () => {
     }, []);
 
     return (
-        <PageContainer title="账号密码登陆" white autoKeyboardInsets={false}>
+        <View style={{ flex: 1 }}>
+            <NavBarHeader navBarStyle={{ backgroundColor: 'rgba(240,240,240,1)' }} />
             {/* 页面内容 */}
             <View style={[styles.pageContent, { flex: 1 }]}>
-                <View style={{ marginTop: 30 }}>
+                <View style={{ marginTop: 20 }}>
+                    <Text style={{ fontSize: font(23) }}>账号密码登录</Text>
+                    <Text style={{ marginTop: pixel(5), color: '#0008', fontSize: font(12) }}>
+                        使用以注册的账号和密码登录
+                    </Text>
                     <TextInput
                         style={styles.textInput}
                         onChangeText={(account) => setAccount(account)}
@@ -60,7 +66,7 @@ const AccountLogin = () => {
 
                     <View style={[styles.textInput, { flexDirection: 'row' }]}>
                         <TextInput
-                            style={{ flex: 1, padding: 0 }}
+                            style={{ flex: 1, padding: 0, fontSize: font(16) }}
                             onChangeText={(passwd) => setPasswd(passwd)}
                             value={Passwd}
                             placeholder="请输入密码"
@@ -76,36 +82,36 @@ const AccountLogin = () => {
                             <Text style={styles.aColor}>忘记密码？</Text>
                         </TouchableOpacity>
                     </View>
-                </View>
-                <View style={{ marginTop: 35 }}>
-                    <TouchableOpacity
-                        onPress={() => {
-                            if (Account.length <= 0 || Passwd.length <= 0) {
-                                toast('账号密码不得为空！');
-                                return;
-                            }
-                            onLogin();
-                        }}>
-                        <View style={[styles.textCenter, styles.borderButtom]}>
-                            <SafeText style={styles.buttonText} numberOfLines={1}>
-                                立即登陆
-                            </SafeText>
-                        </View>
-                    </TouchableOpacity>
+                    <View style={{ marginTop: 35 }}>
+                        <TouchableOpacity
+                            onPress={() => {
+                                if (Account.length <= 0 || Passwd.length <= 0) {
+                                    toast('账号密码不得为空！');
+                                    return;
+                                }
+                                onLogin();
+                            }}>
+                            <View style={[styles.textCenter, styles.borderButtom]}>
+                                <SafeText style={styles.buttonText} numberOfLines={1}>
+                                    立即登录
+                                </SafeText>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={[styles.headRow, styles.textCenter, { paddingBottom: 15, marginTop: 12 }]}>
+                        <Text style={[{ color: '#0006' }, styles.protocolSize]}>登录代表你已阅读并同意</Text>
+                        <TouchableOpacity onPress={() => navigation.navigate('UserProtocol')}>
+                            <Text style={[{ color: '#F4606C' }, styles.protocolSize]}>《用户协议》</Text>
+                        </TouchableOpacity>
+                        <Text style={[{ color: '#0006' }, styles.protocolSize]}>和</Text>
+                        <TouchableOpacity onPress={() => navigation.navigate('PrivacyPolicy')}>
+                            <Text style={[{ color: '#F4606C' }, styles.protocolSize]}>《隐私策略》</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </View>
-
-            <View style={[styles.headRow, styles.textCenter, { paddingBottom: 15 }]}>
-                <Text style={{ color: '#0006' }}>登陆代表你已阅读并同意</Text>
-                <TouchableOpacity onPress={() => navigation.navigate('UserProtocol')}>
-                    <Text style={{}}>《用户协议》</Text>
-                </TouchableOpacity>
-                <Text style={{ color: '#0006' }}>和</Text>
-                <TouchableOpacity onPress={() => navigation.navigate('PrivacyPolicy')}>
-                    <Text style={{}}>《隐私策略》</Text>
-                </TouchableOpacity>
-            </View>
-        </PageContainer>
+            <ThirdPartyLoginBottom />
+        </View>
     );
 };
 
@@ -118,7 +124,7 @@ const styles = StyleSheet.create({
     borderButtom: {
         backgroundColor: Theme.secondaryColor,
         borderRadius: 50,
-        paddingVertical: 13,
+        paddingVertical: 10,
     },
     buttonText: {
         fontSize: pixel(16),
@@ -155,10 +161,15 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     textInput: {
-        marginTop: 30,
+        marginTop: 5,
         padding: 0,
         paddingVertical: 6,
         borderBottomWidth: 1,
         borderBottomColor: '#9996',
+        fontSize: font(16),
+        height: 55,
+    },
+    protocolSize: {
+        fontSize: font(12),
     },
 });

@@ -8,9 +8,8 @@ import TagListScreen from '../screens/creation/TagList';
 import LoginScreen from '../screens/login';
 import RetrievePasswordScreen from '../screens/login/RetrievePasswordScreen';
 import VerificationScreen from '../screens/login/VerificationScreen';
-import AccountLoginScreen from '../screens/login/AccountLogin';
 import LoginHelpScreen from '../screens/login/loginHelp';
-import MobileLoginScreen from '../screens/login/MobileLogin';
+import LoginSwitch from '../screens/login/LoginSwitch';
 
 // wallet
 import Wallet from '../screens/wallet';
@@ -100,11 +99,8 @@ export default {
     Login: {
         component: LoginScreen,
     },
-    AccountLogin: {
-        component: AccountLoginScreen,
-    },
-    MobileLogin: {
-        component: MobileLoginScreen,
+    LoginSwitch:{
+        component: LoginSwitch, 
     },
     LoginHelp: {
         component: LoginHelpScreen,
@@ -309,4 +305,5 @@ export default {
     SystemNotificationItem: {
         component: SystemNotificationItem,
     },
+    
 };

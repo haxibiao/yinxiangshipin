@@ -1,6 +1,17 @@
 import React, { Component, useState, useContext, useEffect, useCallback } from 'react';
-import { StyleSheet, View, Image, Text, TouchableOpacity, StatusBar } from 'react-native';
-import { PageContainer, HxfTextInput, HxfButton, Row, Center, Iconfont, GradientView, SafeText } from '@src/components';
+import { StyleSheet, View, Image, Text, TouchableOpacity, StatusBar, Platform, Alert } from 'react-native';
+import {
+    PageContainer,
+    HxfTextInput,
+    HxfButton,
+    Row,
+    Center,
+    Iconfont,
+    GradientView,
+    SafeText,
+    SvgIcon,
+    SvgPath,
+} from '@src/components';
 import { exceptionCapture, useBounceAnimation } from '@src/common';
 import { GQL, useMutation, useApolloClient, errorMessage } from '@src/apollo';
 import { observer, userStore } from '@src/store';
@@ -19,6 +30,8 @@ export default observer((props: any) => {
     // const [signIn, toggleEntrance] = useState(true);
     //  const [isCmicssoSignIn, setIsCmicssoSignIn] = useState(false);
     const [formData, setFormData] = useState({ name: '', account: '', password: '' });
+    const scope = 'snsapi_userinfo';
+    const state = 'is_wx_login';
 
     // 第三方登陆请求
     const otherSignIn = useCallback(async (code: string, type: 'WECHAT' | 'PHONE') => {
@@ -48,6 +61,26 @@ export default observer((props: any) => {
                 closeLoading(); // 关闭登陆加载中动画
                 Toast.show({ content: errorMessage(err), layout: 'top' });
             });
+    }, []);
+
+    const WX_Login = useCallback(() => {
+        WeChat.isWXAppInstalled().then((login: boolean) => {
+            console.log('login', login);
+            if (login) {
+                showLoading();
+                WeChat.sendAuthRequest(scope, state).then((description: any) => {
+                    console.log('description', description);
+                    otherSignIn(description.code, 'WECHAT');
+                });
+            } else {
+                closeLoading();
+                console.log('123', 123);
+                Alert.alert('没有安装微信', '是否安装微信？', [
+                    { text: '取消' },
+                    { text: '确定', onPress: () => this.installWechat() },
+                ]);
+            }
+        });
     }, []);
 
     // 手机号码一键登陆
@@ -163,44 +196,15 @@ export default observer((props: any) => {
                     <Center>
                         <Image source={require('@app/assets/images/app_logo.png')} style={styles.logo} />
                     </Center>
+                    <Center>
+                        <Text style={{ marginBottom: 80, fontSize: font(18), fontWeight: 'bold' }}>{Device.UUID}</Text>
+                    </Center>
 
-                    <TouchableOpacity
-                        style={[
-                            styles.buttonStyle,
-                            {
-                                flexDirection: 'row',
-                                backgroundColor: Theme.secondaryColor,
-                            },
-                        ]}
-                        onPress={() => navigation.navigate('MobileLogin')}>
-                        {/* <Image
-                            style={{ width: pixel(20), height: pixel(20), marginRight: pixel(5) }}
-                            source={require('@app/assets/images/ic_login_weichat.png')}
-                        /> */}
-                        <SafeText style={styles.buttonText}>{`短信一键登陆${Config.AppName || ''}`}</SafeText>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                        style={[styles.buttonStyle, { flexDirection: 'row', borderColor: '#0003', borderWidth: 0.5 }]}
-                        onPress={() => {
-                            navigation.navigate('AccountLogin');
-                        }}>
-                        <SafeText style={[styles.buttonText, { color: '#0008' }]}>{`${
-                            Config.AppName || ''
-                        }账号密码登陆`}</SafeText>
-                    </TouchableOpacity>
-
-                    <View style={styles.groupFooter}>
-                        <TouchableOpacity onPress={showUuidLoginWidows}>
-                            <Row>
-                                <Iconfont name="iphone" size={pixel(15)} />
-                                <Text style={styles.grayText}>一键登录</Text>
-                            </Row>
-                        </TouchableOpacity>
+                    {/* <View style={styles.groupFooter}>
                         <TouchableOpacity onPress={() => navigation.navigate('获取验证码')}>
                             <Text style={styles.grayText}>找回密码？</Text>
                         </TouchableOpacity>
-                    </View>
+                    </View> */}
                 </View>
 
                 <View style={styles.header}>
@@ -214,18 +218,94 @@ export default observer((props: any) => {
 
                 <View style={{ flex: 1, backgroundColor: '#FFF' }} />
 
-                <Row style={styles.protocol}>
-                    <Text style={styles.bottomInfoText}>登录代表您已同意</Text>
-                    <Row>
-                        <TouchableOpacity onPress={() => navigation.navigate('UserProtocol')}>
-                            <Text style={[styles.bottomInfoText, { color: Theme.secondaryColor }]}>《用户协议》</Text>
+                <View style={{ marginHorizontal: pixel(Theme.itemSpace * 2), marginBottom: pixel(35) }}>
+                    <TouchableOpacity onPress={showUuidLoginWidows}>
+                        <Row
+                            style={[
+                                styles.buttonStyle,
+                                {
+                                    // Theme.secondaryColor
+                                    backgroundColor: 'rgba(255,70,0,1)',
+                                    justifyContent: 'space-between',
+                                    paddingHorizontal: pixel(80),
+                                },
+                            ]}>
+                            {/* <Iconfont name="iphone" size={pixel(23)} /> */}
+                            <SvgIcon name={SvgPath.phoneLogin} color={'#fff'} size={pixel(28)} />
+                            <Text style={[styles.grayText, { color: '#fff' }]}>本机一键登录</Text>
+                        </Row>
+                    </TouchableOpacity>
+
+                    <Row style={{ justifyContent: 'space-between' }}>
+                        <TouchableOpacity
+                            style={[
+                                styles.buttonStyle,
+                                {
+                                    flexDirection: 'row',
+                                    backgroundColor: 'rgba(41,191,35,1)',
+                                    // marginRight: pixel(25),
+                                },
+                            ]}
+                            // navigation.navigate('MobileLogin')
+                            onPress={() => WX_Login()}>
+                            {/* <Image
+                            style={{ width: pixel(20), height: pixel(20), marginRight: pixel(5) }}
+                            source={require('@app/assets/images/ic_login_weichat.png')}
+                        /> */}
+                            <Row style={{ marginHorizontal: pixel(30) }}>
+                                <SvgIcon size={23} color={'#fff'} name={SvgPath.weChatLogin} />
+                                <SafeText style={[styles.buttonText, { marginLeft: pixel(5) }]}>微信登陆</SafeText>
+                            </Row>
+
+                            {/* ${Config.AppName || ''} */}
                         </TouchableOpacity>
-                        <Text style={styles.bottomInfoText}>和</Text>
-                        <TouchableOpacity onPress={() => navigation.navigate('PrivacyPolicy')}>
-                            <Text style={[styles.bottomInfoText, { color: Theme.secondaryColor }]}>《隐私政策》</Text>
+                        <TouchableOpacity
+                            style={[
+                                styles.buttonStyle,
+                                {
+                                    flexDirection: 'row',
+                                    // backgroundColor: Theme.secondaryColor,
+                                    backgroundColor: 'rgba(56,158,255,1)',
+                                    // marginLeft: pixel(25),
+                                },
+                            ]}
+                            onPress={() => navigation.navigate('LoginSwitch')}>
+                            {/* <Image
+                            style={{ width: pixel(20), height: pixel(20), marginRight: pixel(5) }}
+                            source={require('@app/assets/images/ic_login_weichat.png')}
+                        /> */}
+                            <Row style={{ marginHorizontal: pixel(30) }}>
+                                <SvgIcon name={SvgPath.SMS} color={'#fff'} size={18} />
+                                <SafeText style={[styles.buttonText, { marginLeft: pixel(5) }]}>{`短信登陆`}</SafeText>
+                            </Row>
                         </TouchableOpacity>
                     </Row>
-                </Row>
+
+                    <TouchableOpacity
+                        // borderColor: '#0003', borderWidth: 0.5
+                        style={[styles.buttonStyle, { flexDirection: 'row' }]}
+                        onPress={() => {
+                            navigation.navigate('LoginSwitch', { switchStatus: true });
+                        }}>
+                        <SafeText style={[styles.buttonText, { color: '#000' }]}>{`账号密码登陆`}</SafeText>
+                    </TouchableOpacity>
+                    <Row style={styles.protocol}>
+                        <Text style={styles.bottomInfoText}>登录代表您已同意</Text>
+                        <Row>
+                            <TouchableOpacity onPress={() => navigation.navigate('UserProtocol')}>
+                                <Text style={[styles.bottomInfoText, { color: Theme.secondaryColor }]}>
+                                    《用户协议》
+                                </Text>
+                            </TouchableOpacity>
+                            <Text style={styles.bottomInfoText}>和</Text>
+                            <TouchableOpacity onPress={() => navigation.navigate('PrivacyPolicy')}>
+                                <Text style={[styles.bottomInfoText, { color: Theme.secondaryColor }]}>
+                                    《隐私政策》
+                                </Text>
+                            </TouchableOpacity>
+                        </Row>
+                    </Row>
+                </View>
             </View>
         </PageContainer>
     );
@@ -268,7 +348,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: pixel(Theme.itemSpace * 2),
     },
     logo: {
-        marginBottom: pixel(80),
+        marginBottom: pixel(35),
         width: pixel(71),
         height: pixel(71),
         resizeMode: 'contain',
@@ -317,7 +397,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     grayText: {
-        fontSize: pixel(14),
+        fontSize: pixel(18),
     },
     linkText: {
         fontSize: pixel(18),
@@ -336,5 +416,6 @@ const styles = StyleSheet.create({
         paddingBottom: Theme.HOME_INDICATOR_HEIGHT + pixel(Theme.itemSpace),
         alignItems: 'center',
         justifyContent: 'center',
+        marginTop: pixel(Theme.itemSpace),
     },
 });
