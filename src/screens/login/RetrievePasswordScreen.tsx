@@ -33,7 +33,7 @@ const RetrievePasswordScreen = (props: any) => {
 
     const [retrievePasswordMutation] = useMutation(GQL.retrievePasswordMutation, {
         variables: {
-            phone,
+            phone: phone,
             newPassword: password,
             code,
         },
@@ -49,9 +49,9 @@ const RetrievePasswordScreen = (props: any) => {
         errorPolicy: 'all',
     });
 
-    const [SendVerifyCodeMutation] = useMutation(GQL.SendVerifyCodeMutation, {
+    const [SendVerifyCodeMutation] = useMutation(GQL.sendVerifyCodeMutation, {
         variables: {
-            phone,
+            phone: phone,
             action: 'RESET_PASSWORD',
         },
         onCompleted: (result: any) => {

@@ -9,15 +9,16 @@ const VerificationScreen = (props: any) => {
     const navigation = useNavigation();
     const [phone, setPhoneNumber] = React.useState('');
 
-    const [SendVerifyCodeMutation] = useMutation(GQL.SendVerifyCodeMutation, {
+    const [SendVerifyCodeMutation] = useMutation(GQL.sendVerifyCodeMutation, {
         variables: {
-            phone,
+            phone: phone,
             action: 'RESET_PASSWORD',
         },
         onCompleted: (result: any) => {
+            console.log('result', result);
             Loading.hide();
             navigation.navigate('RetrievePassword', {
-                phone,
+                phone: phone,
                 verifyCode: result?.sendVerifyCode?.code,
                 time: new Date().getTime(),
             });
