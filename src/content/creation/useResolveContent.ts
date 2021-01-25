@@ -139,7 +139,7 @@ function getQCVodFileId(videoPath: string): Promise<string> {
 
 function downloadVideo(url: string, title: string): Promise<string> {
     title = String(title || new Date().getTime()).trim();
-    const path: string = FILE_PATH + '/' + url + '.mp4';
+    const path: string = FILE_PATH + '/' + title + '.mp4';
     Log('====================================');
     Log('downloadVideo', url, title);
     Log('====================================');
