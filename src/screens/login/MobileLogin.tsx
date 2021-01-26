@@ -87,8 +87,8 @@ const MobileLogin = (props: Props) => {
     });
 
     return (
-        <View style={{ flex: 1 }}>
-            <NavBarHeader navBarStyle={{ backgroundColor: 'rgba(240,240,240,1)' }} />
+        <View style={{ flex: 1, backgroundColor: '#fff' }}>
+            <NavBarHeader navBarStyle={{ backgroundColor: '#fff' }} />
             <View style={[styles.pageContent, { flex: 1 }]}>
                 <View style={{ marginTop: 20 }}>
                     <Text style={{ fontSize: font(23) }}>手机号码登录</Text>

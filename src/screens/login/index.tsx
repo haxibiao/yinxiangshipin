@@ -348,7 +348,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: pixel(Theme.itemSpace * 2),
     },
     logo: {
-        marginBottom: pixel(35),
+        marginBottom: pixel(21),
         width: pixel(71),
         height: pixel(71),
         resizeMode: 'contain',
@@ -413,7 +413,8 @@ const styles = StyleSheet.create({
     },
     protocol: {
         backgroundColor: '#FFF',
-        paddingBottom: Theme.HOME_INDICATOR_HEIGHT + pixel(Theme.itemSpace),
+        // + pixel(Theme.itemSpace)
+        paddingBottom: Theme.HOME_INDICATOR_HEIGHT,
         alignItems: 'center',
         justifyContent: 'center',
         marginTop: pixel(Theme.itemSpace),

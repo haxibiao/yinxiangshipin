@@ -47,8 +47,8 @@ const AccountLogin = () => {
     }, []);
 
     return (
-        <View style={{ flex: 1 }}>
-            <NavBarHeader navBarStyle={{ backgroundColor: 'rgba(240,240,240,1)' }} />
+        <View style={{ flex: 1, backgroundColor: '#fff' }}>
+            <NavBarHeader navBarStyle={{ backgroundColor: '#fff' }} />
             {/* 页面内容 */}
             <View style={[styles.pageContent, { flex: 1 }]}>
                 <View style={{ marginTop: 20 }}>
