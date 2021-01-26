@@ -31,7 +31,6 @@ export default function Collections() {
                 sectionName="专属剧场"
                 collections={topRecommend?.recommendCollectionsA || fakeData}
             />
-            <ad.Feed visible={adStore.enableAd} codeid={adStore.codeid_feed_image_three} adWidth={Device.WIDTH} />
             <RecommendCollections
                 style={styles.secWrap}
                 sectionName="精选好片"

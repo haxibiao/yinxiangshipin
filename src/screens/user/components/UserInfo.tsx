@@ -117,19 +117,7 @@ export default observer(({ user: userData = userStore.me, isTopStack, operateHan
                     </Pressable>
 
                     <View style={styles.operations}>
-                        {isSelf ? (
-                            <Pressable
-                                style={[
-                                    styles.messageBox,
-                                    notificationStore.unreadMessages > 0 && { paddingRight: pixel(15) },
-                                ]}
-                                onPress={() => navigation.navigate('NotificationCenter')}>
-                                <SvgIcon name={SvgPath.message} size={font(28)} color={'#303030'} />
-                                <View style={styles.unreadMessage}>
-                                    <Badge count={notificationStore.unreadMessages} />
-                                </View>
-                            </Pressable>
-                        ) : (
+                        {!isSelf ? (
                             <>
                                 <FollowButton
                                     user={user}
@@ -143,6 +131,31 @@ export default observer(({ user: userData = userStore.me, isTopStack, operateHan
                                     <Text style={styles.userBtnText}>私信</Text>
                                 </Pressable>
                             </>
+                        ) : (
+                            adStore.enableAd && (
+                                <>
+                                    <Pressable style={styles.messageBox} onPress={() => navigation.navigate('Wallet')}>
+                                        <Image
+                                            style={{ width: pixel(30), height: pixel(30) }}
+                                            source={require('@app/assets/images/icons/ic_mine_wallet.png')}
+                                        />
+                                    </Pressable>
+                                    <Pressable
+                                        style={[
+                                            styles.messageBox,
+                                            notificationStore.unreadMessages > 0 && { paddingRight: pixel(15) },
+                                        ]}
+                                        onPress={() => navigation.navigate('NotificationCenter')}>
+                                        <Image
+                                            style={{ width: pixel(30), height: pixel(30) }}
+                                            source={require('@app/assets/images/icons/ic_mine_message.png')}
+                                        />
+                                        <View style={styles.unreadMessage}>
+                                            <Badge count={notificationStore.unreadMessages} />
+                                        </View>
+                                    </Pressable>
+                                </>
+                            )
                         )}
                     </View>
                 </View>
@@ -272,10 +285,9 @@ const styles = StyleSheet.create({
         marginBottom: pixel(10),
     },
     messageBox: {
-        marginLeft: pixel(15),
+        marginLeft: pixel(20),
         alignItems: 'center',
         justifyContent: 'center',
-        height: font(34),
     },
     unreadMessage: {
         position: 'absolute',

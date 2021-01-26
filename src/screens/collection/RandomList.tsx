@@ -17,7 +17,7 @@ export default observer(() => {
     const navigation = useNavigation();
 
     const renderItem = useCallback(({ item, index }) => {
-        if (adStore.enableAd && index > 0 && index % 5 === 0) {
+        if (adStore.enableAd && index > 0 && index % 10 === 0) {
             return (
                 <>
                     <View style={{ marginHorizontal: -PADDING, minHeight: LOGO_WIDTH }}>

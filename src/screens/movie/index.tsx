@@ -25,7 +25,6 @@ export default observer(() => {
             <MovieCategory type="HAN" categoryName="精选韩剧" />
             <MovieNarration />
             <MovieCategory type="RI" categoryName="精选日剧" />
-            <ad.Feed visible={adStore.enableAd} codeid={adStore.codeid_feed_image_three} adWidth={Device.WIDTH} />
             <MovieCategory type="GANG" categoryName="怀旧港剧" />
             <ad.Feed visible={adStore.enableAd} codeid={adStore.codeid_feed_video} adWidth={Device.WIDTH} />
             <View style={styles.footer}>

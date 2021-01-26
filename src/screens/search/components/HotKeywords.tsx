@@ -79,9 +79,11 @@ export default observer(({ onSearch }) => {
                             <Text style={[styles.keywordIndex, { color: COLORS[index] || '#9B9B9B' }]}>
                                 {index + 1}
                             </Text>
-                            <Text style={{ fontSize: font(14), color: '#202020' }} numberOfLines={1}>
-                                {item?.title}
-                            </Text>
+                            <View style={{ flex: 1 }}>
+                                <Text style={{ fontSize: font(14), color: '#202020' }} numberOfLines={1}>
+                                    {item?.title}
+                                </Text>
+                            </View>
                         </TouchableOpacity>
                     );
                 }}

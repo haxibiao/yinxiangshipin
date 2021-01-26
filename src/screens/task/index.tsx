@@ -57,53 +57,38 @@ export default observer((props: any) => {
             <TouchableWithoutFeedback onPress={() => authNavigator('Wallet', { user: userProfile })}>
                 <ImageBackground
                     style={styles.taskTopContainer}
-                    source={require('@app/assets/images/bg/task_top_bg.png')}>
-                    <View style={{ flex: 1, backgroundColor: '#FFE500' }}>
-                        <View style={styles.assetContainer}>
-                            <TouchableOpacity
-                                style={styles.assetItem}
-                                onPress={() => {
-                                    authNavigator('WithdrawHistory', {
-                                        wallet_id: Helper.syncGetter('wallet.id', userProfile),
-                                        tabPage: 2,
-                                    });
-                                }}>
-                                <Image
-                                    source={require('@app/assets/images/wallet/icon_wallet_diamond.png')}
-                                    style={styles.walletItemIcon}
-                                />
-                                <Text style={styles.assetName}>{Config.goldAlias}</Text>
-                                <Text style={styles.assetCount}>{userProfile?.gold || 0}</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                style={styles.assetItem}
-                                onPress={() =>
-                                    notificationStore.sendRemindNotice({
-                                        title: `${Config.ticketAlias}说明`,
-                                        content: `部分任务的进行需要消耗相应${Config.ticketAlias}，次日恢复满额${Config.ticketAlias}，不可累积`,
-                                    })
-                                }>
-                                <Image
-                                    source={require('@app/assets/images/wallet/icon_wallet_giftAward.png')}
-                                    style={styles.walletItemIcon}
-                                />
-                                <Text style={styles.assetName}>{Config.ticketAlias}</Text>
-                                <Text style={styles.assetCount}>{userProfile?.ticket || 0}</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View style={styles.assetTip}>
-                            <Text style={styles.assetRate}>{withdrawTips}</Text>
-                            <Animated.View style={{ transform: [{ scale }] }}>
-                                <HxfButton
-                                    gradient={true}
-                                    colors={['#FEDB86', '#FDB528']}
-                                    style={styles.withdrawButton}
-                                    title={'去提现'}
-                                    titleStyle={styles.withdrawText}
-                                    onPress={() => authNavigator('Wallet', { user: userProfile })}
-                                />
-                            </Animated.View>
-                        </View>
+                    source={require('@app/assets/images/bg/bg_task_cover.png')}>
+                    <View style={styles.assetContainer}>
+                        <TouchableOpacity
+                            style={styles.assetItem}
+                            onPress={() => {
+                                authNavigator('WithdrawHistory', {
+                                    wallet_id: Helper.syncGetter('wallet.id', userProfile),
+                                    tabPage: 2,
+                                });
+                            }}>
+                            <Image
+                                source={require('@app/assets/images/wallet/icon_wallet_diamond.png')}
+                                style={styles.walletItemIcon}
+                            />
+                            <Text style={styles.assetName}>{Config.goldAlias}</Text>
+                            <Text style={styles.assetCount}>{userProfile?.gold || 0}</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            style={styles.assetItem}
+                            onPress={() => authNavigator('Wallet', { user: userProfile })}>
+                            <Image
+                                source={require('@app/assets/images/wallet/icon_wallet_giftAward.png')}
+                                style={styles.walletItemIcon}
+                            />
+                            <Text style={styles.assetName}>余额</Text>
+                            <Text style={styles.assetCount}>{userProfile?.balance || 0}</Text>
+                            <Animated.Image
+                                style={[styles.redPacketIcon, { transform: [{ scale }] }]}
+                                source={require('@app/assets/images/wallet/ic_home_red_packet.png')}
+                            />
+                        </TouchableOpacity>
                     </View>
                 </ImageBackground>
             </TouchableWithoutFeedback>
@@ -125,33 +110,42 @@ const styles = StyleSheet.create({
     },
     taskTopContainer: {
         width: Device.WIDTH,
-        height: Device.WIDTH * 0.65,
+        height: Device.WIDTH * 0.47,
         paddingTop: Theme.statusBarHeight + Theme.NAVBAR_HEIGHT - pixel(35),
-        paddingBottom: Device.WIDTH * 0.2,
+        paddingBottom: pixel(50),
     },
     taskContent: {
-        marginTop: -Device.WIDTH * 0.15,
+        marginTop: -pixel(50),
     },
     assetContainer: {
+        flex: 1,
         flexDirection: 'row',
-        alignItems: 'center',
+        paddingHorizontal: pixel(10),
     },
     assetItem: {
         flex: 1,
-        paddingVertical: pixel(15),
+        position: 'relative',
+        padding: pixel(15),
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
     },
     walletItemIcon: {
-        height: pixel(28),
         width: pixel(28),
+        height: pixel(28),
         marginRight: pixel(10),
         borderRadius: pixel(14),
         backgroundColor: '#FFF',
     },
+    redPacketIcon: {
+        position: 'absolute',
+        right: pixel(15),
+        top: -pixel(6),
+        width: pixel(32),
+        height: pixel(32) * 1.19,
+    },
     assetName: {
-        fontSize: font(16),
+        fontSize: font(15),
         fontWeight: 'bold',
         color: '#703C0B',
         marginRight: pixel(5),
