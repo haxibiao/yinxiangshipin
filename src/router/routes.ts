@@ -3,6 +3,7 @@ import CreationScreen from '../screens/creation';
 import SelectCategory from '../screens/creation/SelectCategory';
 import EditPostScreen from '../screens/creation/EditPost';
 import TagListScreen from '../screens/creation/TagList';
+import getMovieEdit from '../screens/creation/getMovieEdit';
 
 // login
 import LoginScreen from '../screens/login';
@@ -116,6 +117,9 @@ export default {
     },
     TagList: {
         component: TagListScreen,
+    },
+    getMovie:{
+        component: getMovieEdit,
     },
     Wallet: {
         component: Wallet,

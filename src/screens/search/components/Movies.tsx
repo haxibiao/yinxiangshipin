@@ -14,6 +14,7 @@ export default function SearchedMovie({ keyword }) {
         <QueryList
             gqlDocument={GQL.searchMoviesQuery}
             dataOptionChain="searchMovie.data"
+            keyword={keyword}
             paginateOptionChain="searchMovie.paginatorInfo"
             options={{
                 variables: {

@@ -1,12 +1,22 @@
 import React, { useCallback, useMemo, useRef } from 'react';
-import { StyleSheet, View, Text, FlatList, FlatListProperties, ViewStyle, RefreshControl } from 'react-native';
+import {
+    StyleSheet,
+    View,
+    Text,
+    FlatList,
+    FlatListProperties,
+    ViewStyle,
+    RefreshControl,
+    TouchableOpacity,
+} from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { QueryHookOptions } from '@apollo/react-hooks';
 import { DocumentNode } from 'graphql';
 import { GQL, useQuery } from '@src/apollo';
 import { syncGetter, mergeProperty } from '@src/common';
 import { ContentStatus } from './widget';
-
+import { useNavigation } from '@react-navigation/native';
+import { userStore } from '@src/store';
 interface Props extends FlatListProperties {
     gqlDocument?: DocumentNode;
     dataOptionChain?: string;
@@ -14,6 +24,7 @@ interface Props extends FlatListProperties {
     style?: ViewStyle;
     options?: QueryHookOptions;
     focusRefresh?: boolean;
+    keyword: string;
 }
 
 export default React.forwardRef(function ContentList(
@@ -28,6 +39,7 @@ export default React.forwardRef(function ContentList(
         ListFooterComponent,
         ListEmptyComponent,
         inverted,
+        keyword,
         ...contentProps
     }: Props,
     listRef,
@@ -37,6 +49,7 @@ export default React.forwardRef(function ContentList(
     const nextPage = useMemo(() => syncGetter(paginateOptionChain + '.currentPage', data) + 1 || 2, [data]);
     const hasMore = useMemo(() => syncGetter(paginateOptionChain + '.hasMorePages', data), [data]);
     const isLoading = useRef(false);
+    const navigation = useNavigation();
     const onEndReached = useCallback(() => {
         if (!isLoading.current && hasMore) {
             isLoading.current = true;
@@ -99,6 +112,15 @@ export default React.forwardRef(function ContentList(
         return footer;
     }, [ListFooterComponent, loading, listData, hasMore]);
 
+    // 求片发布页面路由导航
+    const getMovieHandle = useCallback(() => {
+        if (!userStore.login) {
+            navigation.navigate('Login');
+        } else {
+            navigation.navigate('getMovie', { keyword });
+        }
+    }, [keyword, userStore]);
+
     const listEmpty = useCallback(() => {
         let status = '';
         switch (true) {
@@ -117,7 +139,24 @@ export default React.forwardRef(function ContentList(
         if (ListEmptyComponent instanceof Function) {
             return ListEmptyComponent({ status, refetch });
         } else if (status) {
-            return <ContentStatus status={status} refetch={status === 'error' ? refetch : undefined} />;
+            return dataOptionChain == 'searchMovie.data' ? (
+                <View>
+                    <ContentStatus status={status} refetch={status === 'error' ? refetch : undefined} />
+                    <View style={{ width: Device.WIDTH, alignItems: 'center', justifyContent: 'center' }}>
+                        {listData?.length === 0 && (
+                            <TouchableOpacity onPress={() => getMovieHandle()}>
+                                <View style={styles.getMovieBottom}>
+                                    <Text style={{ color: '#fff', fontSize: font(15), fontWeight: 'bold' }}>
+                                        在线求片
+                                    </Text>
+                                </View>
+                            </TouchableOpacity>
+                        )}
+                    </View>
+                </View>
+            ) : (
+                <ContentStatus status={status} refetch={status === 'error' ? refetch : undefined} />
+            );
         } else {
             return null;
         }
@@ -158,5 +197,13 @@ const styles = StyleSheet.create({
     listFooterText: {
         fontSize: font(13),
         color: '#b4b4b4',
+    },
+    getMovieBottom: {
+        backgroundColor: '#F4606C',
+        width: Device.WIDTH - pixel(200),
+        height: (Device.WIDTH - pixel(200)) / 4,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: pixel(25),
     },
 });
