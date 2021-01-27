@@ -8,7 +8,7 @@ import OverlayViewer from '../Popup/OverlayViewer';
 import Loading from '../Popup/Loading';
 import PullChooser from '../Popup/PullChooser';
 
-const maxMediaWidth = Device.WIDTH - Theme.edgeDistance * 4;
+const maxMediaWidth = Device.width - Theme.edgeDistance * 4;
 const mediaWidth = maxMediaWidth / 3;
 
 interface VideoProps {

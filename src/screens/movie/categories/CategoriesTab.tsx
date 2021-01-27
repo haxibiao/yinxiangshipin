@@ -69,8 +69,8 @@ const styles = StyleSheet.create({
         width: PADDING,
     },
     tabBarStyle: {
-        marginTop: Theme.statusBarHeight,
-        height: Theme.navBarHeight,
+        marginTop: Device.statusBarHeight,
+        height: Device.navBarHeight,
         backgroundColor: 'rgba(255,255,255,1)',
     },
     underlineStyle: {

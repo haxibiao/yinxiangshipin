@@ -3,9 +3,9 @@ import { StyleSheet, BackHandler, View, Text, TouchableOpacity } from 'react-nat
 import { Overlay } from 'teaset';
 import { userStore } from '@src/store';
 
-const OverlayWidth = Device.WIDTH * 0.6;
+const OverlayWidth = Device.width * 0.6;
 const ADWidth =
-    Device.WIDTH * 0.6 > pixel(400) ? pixel(360) : Device.WIDTH * 0.6 > pixel(300) ? Device.WIDTH * 0.6 : pixel(260);
+    Device.width * 0.6 > pixel(400) ? pixel(360) : Device.width * 0.6 > pixel(300) ? Device.width * 0.6 : pixel(260);
 
 export const useDetainment = (navigation: any, isEntry: boolean) => {
     const continuous = useRef(true);

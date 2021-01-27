@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     },
     contentContainer: {
         flexGrow: 1,
-        paddingBottom: Theme.bottomInset,
+        paddingBottom: Device.bottomInset,
     },
     listFooter: {
         borderTopWidth: pixel(1),

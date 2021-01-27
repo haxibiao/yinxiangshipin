@@ -5,7 +5,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import Swiper from 'react-native-swiper';
 import { GQL, useQuery } from '@src/apollo';
 
-const POSTER_WIDTH = Device.WIDTH - pixel(28);
+const POSTER_WIDTH = Device.width - pixel(28);
 const POSTER_HEIGHT = POSTER_WIDTH * 0.52;
 
 interface Props {

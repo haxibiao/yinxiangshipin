@@ -175,7 +175,7 @@ const CommentItem = observer((props: Props) => {
             {
                 translateX: animation.current.interpolate({
                     inputRange: [0, 1],
-                    outputRange: [-Device.WIDTH * 1.5, 0],
+                    outputRange: [-Device.width * 1.5, 0],
                     extrapolate: 'clamp',
                 }),
             },

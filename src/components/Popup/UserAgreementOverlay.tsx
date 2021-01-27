@@ -125,8 +125,8 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        width: Device.WIDTH,
-        height: Device.HEIGHT,
+        width: Device.width,
+        height: Device.height,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'rgba(0,0,0,0.6)',
@@ -135,8 +135,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFF',
         borderRadius: pixel(10),
         overflow: 'hidden',
-        height: Device.WIDTH,
-        width: Device.WIDTH * 0.8,
+        height: Device.width,
+        width: Device.width * 0.8,
     },
     footer: {
         height: pixel(46),

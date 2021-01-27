@@ -14,9 +14,9 @@ import { Avatar, Iconfont, SafeText, PlaceholderImage, GridImage } from '@src/co
 import { observer, userStore, notificationStore } from '@src/store';
 import { AnimationLike } from '../../widget';
 
-const videoWidth = Device.WIDTH * 0.6;
+const videoWidth = Device.width * 0.6;
 const videoHeight = videoWidth * 1.33;
-const COVER_WIDTH = Device.WIDTH - pixel(14) * 2;
+const COVER_WIDTH = Device.width - pixel(14) * 2;
 
 interface Props {
     post: any;

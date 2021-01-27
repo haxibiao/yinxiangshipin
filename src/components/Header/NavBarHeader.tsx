@@ -154,7 +154,7 @@ export default (props: Props) => {
 
 const styles = StyleSheet.create({
     navBar: {
-        paddingTop: Theme.statusBarHeight,
+        paddingTop: Device.statusBarHeight,
         backgroundColor: Theme.skinColor || '#FFF',
         borderBottomColor: '#f0f0f0',
         borderBottomWidth: StyleSheet.hairlineWidth,
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
     header: {
         flexDirection: 'row',
         alignItems: 'center',
-        height: Theme.navBarHeight,
+        height: Device.navBarHeight,
     },
     headerSide: {
         position: 'absolute',

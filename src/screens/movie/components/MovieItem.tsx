@@ -19,7 +19,7 @@ import { GQL, useQuery } from '@src/apollo';
 export const SPACE = pixel(14);
 // 三个一行
 const COUNT_SPACE = SPACE * 4 + pixel(1);
-const POSTER_WIDTH = (Device.WIDTH - COUNT_SPACE) / 3;
+const POSTER_WIDTH = (Device.width - COUNT_SPACE) / 3;
 const POSTER_HEIGHT = POSTER_WIDTH * 1.34;
 
 interface MovieProps {

@@ -1,7 +1,6 @@
 import React, { useRef } from 'react';
 import { StyleSheet, View, Text, Animated, ColorValue, ViewStyle } from 'react-native';
 import { SvgIcon, SvgPath } from '@src/components';
-import Theme from '@app/src/common/theme';
 
 interface Props {
     value: Animated.AnimatedValue;

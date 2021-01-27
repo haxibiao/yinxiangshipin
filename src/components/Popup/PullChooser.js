@@ -102,12 +102,12 @@ const hide = () => {
 
 const styles = StyleSheet.create({
     actionSheetView: {
-        marginBottom: Theme.bottomInset,
+        marginBottom: Device.bottomInset,
         overflow: 'hidden',
         padding: pixel(Theme.edgeDistance),
     },
     popSheetView: {
-        marginBottom: Theme.bottomInset,
+        marginBottom: Device.bottomInset,
         overflow: 'hidden',
         padding: pixel(Theme.edgeDistance * 2),
     },

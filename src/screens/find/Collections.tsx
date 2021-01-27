@@ -37,7 +37,7 @@ export default function Collections() {
                 collections={topRecommend?.recommendCollectionsB || fakeData}
             />
             <View>
-                <ad.Feed visible={adStore.enableAd} codeid={adStore.codeid_feed_video} adWidth={Device.WIDTH} />
+                <ad.Feed visible={adStore.enableAd} codeid={adStore.codeid_feed_video} adWidth={Device.width} />
             </View>
             <View style={styles.footer}>
                 <Text style={styles.footerContent}>╰(๑•́₃ •̀๑)╯再往下就没有啦</Text>
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
         paddingTop: PADDING,
-        paddingBottom: Theme.tabBarHeight + PADDING,
+        paddingBottom: Device.tabBarHeight + PADDING,
         backgroundColor: '#ffffff',
     },
     secWrap: {

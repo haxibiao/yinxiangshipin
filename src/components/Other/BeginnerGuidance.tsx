@@ -53,7 +53,7 @@ export default (props: Props) => {
         if (!result) {
             notificationStore.inGuidance = true;
             OverlayKey = Overlay.show(overlayView);
-            if (Device.Android) {
+            if (Device.isAndroid) {
                 backListener = BackHandler.addEventListener('hardwareBackPress', () => {
                     return true;
                 });
@@ -82,7 +82,7 @@ export default (props: Props) => {
     }
 
     function removeBackListener() {
-        if (Device.Android) {
+        if (Device.isAndroid) {
             backListener.remove();
         }
     }
@@ -91,8 +91,8 @@ export default (props: Props) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        width: Device.WIDTH,
-        height: Device.HEIGHT,
+        width: Device.width,
+        height: Device.height,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'rgba(0,0,0,0.3)',

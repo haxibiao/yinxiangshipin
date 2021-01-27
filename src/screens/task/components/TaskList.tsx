@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
         // height: pixel(12),
         height: StyleSheet.hairlineWidth,
         backgroundColor: '#F5F6FB',
-        // width: Device.WIDTH - pixel(68),
+        // width: Device.width - pixel(68),
         // marginLeft: pixel(68),
         // overflow: 'hidden',
     },

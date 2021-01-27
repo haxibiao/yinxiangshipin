@@ -1,61 +1,35 @@
-import { Dimensions, PixelRatio, Platform } from 'react-native';
-import DeviceInfo from 'react-native-device-info';
-import _ from 'lodash';
-import config from './config';
-import theme from './theme';
-import * as Helper from './helper';
+import lodash from 'lodash';
+import * as helper from './helper';
 import * as scale from './scale';
-
-const { height, width } = Dimensions.get('window');
+import device from './device';
+import config from './config';
+import theme from './styles';
 
 const Global = global || window || {};
 
-const device = {
-    WIDTH: width,
-    HEIGHT: height,
-    isFullScreenDevice: height / width >= 18 / 9,
-    contentHeight: height - theme.bottomInset - theme.navBarHeight - theme.statusBarHeight,
-    OS: Platform.OS,
-    IOS: Platform.OS === 'ios',
-    Android: Platform.OS === 'android',
-    SystemVersion: DeviceInfo.getSystemVersion(),
-    PixelRatio: PixelRatio.get(), // 获取屏幕分辨率
-    PhoneNumber: DeviceInfo.getPhoneNumber(),
-    UUID: DeviceInfo.getUniqueId(),
-    Brand: DeviceInfo.getBrand(),
-};
-// 设备信息
-Global.Device = device;
-// App主题
-Global.Theme = theme;
+// lodash
+Global.__ = lodash;
+// helper
+Global.Helper = helper;
 // 适配字体
 Global.font = scale.font;
 // 屏幕适配
 Global.pixel = scale.pixel;
 // 宽度适配
 Global.percent = scale.percent;
-// helper
-Global.Helper = Helper;
+// 设备信息
+Global.Device = device;
 // App配置
 Global.Config = config;
+// App主题
+Global.Theme = theme;
 // 用户token
 Global.TOKEN = null;
-// lodash
-Global.__ = _;
 // toast
 Global.Toast = () => null;
-//xx
+// Log
 Global.Log = (...args) => {
     if (__DEV__) {
         console.log('『Log』:', ...args);
     }
 };
-
-Object.defineProperties(Global, {
-    Scale: {
-        configurable: false,
-        enumerable: true,
-        writable: false,
-        value: scale,
-    },
-});

@@ -135,7 +135,7 @@ export default class DefaultTabBar extends Component<Props> {
 
 const shadowSetting = {
     width: Dimensions.get('window').width,
-    height: pixel(Theme.navBarHeight),
+    height: pixel(Device.navBarHeight),
     color: '#E8E8E8',
     border: pixel(5),
     radius: pixel(15),
@@ -145,7 +145,7 @@ const shadowSetting = {
 };
 const styles = StyleSheet.create({
     tabBar: {
-        height: pixel(Theme.navBarHeight),
+        height: pixel(Device.navBarHeight),
         flexDirection: 'row',
         alignItems: 'stretch',
         borderBottomWidth: StyleSheet.hairlineWidth,

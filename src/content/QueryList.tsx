@@ -9,13 +9,12 @@ import {
     RefreshControl,
     TouchableOpacity,
 } from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
 import { QueryHookOptions } from '@apollo/react-hooks';
 import { DocumentNode } from 'graphql';
 import { GQL, useQuery } from '@src/apollo';
 import { syncGetter, mergeProperty } from '@src/common';
 import { ContentStatus } from './widget';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { userStore } from '@src/store';
 interface Props extends FlatListProperties {
     gqlDocument?: DocumentNode;
@@ -172,8 +171,8 @@ const styles = StyleSheet.create({
     },
     getMovieBottom: {
         backgroundColor: '#F4606C',
-        width: Device.WIDTH - pixel(200),
-        height: (Device.WIDTH - pixel(200)) / 4,
+        width: Device.width - pixel(200),
+        height: (Device.width - pixel(200)) / 4,
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: pixel(25),

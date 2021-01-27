@@ -14,8 +14,8 @@ import Iconfont from '../Iconfont';
 import { Avatar } from '../Basic';
 
 const IMG_INTERVAL = 2;
-const IMG_WIDTH = (Device.WIDTH - 34) / 3;
-const COVER_WIDTH = Device.WIDTH - 30;
+const IMG_WIDTH = (Device.width - 34) / 3;
+const COVER_WIDTH = Device.width - 30;
 
 const NoteItem = (props: any) => {
     const {
@@ -72,7 +72,7 @@ const NoteItem = (props: any) => {
         } else if (images.length >= 1) {
             return (
                 <View style={[styles.gridView, styles.layoutFlexRow]}>
-                    {images.slice(0, 3).map(function (img: any, i: number) {
+                    {images.slice(0, 3).map(function(img: any, i: number) {
                         if (img) return <Image style={styles.gridImage} source={{ uri: img }} key={i} />;
                     })}
                 </View>

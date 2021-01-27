@@ -125,8 +125,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     header: {
-        height: pixel(Theme.statusBarHeight + 48),
-        paddingTop: pixel(Theme.statusBarHeight + 5),
+        height: pixel(Device.statusBarHeight + 48),
+        paddingTop: pixel(Device.statusBarHeight + 5),
         paddingBottom: pixel(5),
         backgroundColor: '#fff',
         flexDirection: 'row',
@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
     },
     listHeader: {
         padding: pixel(Theme.edgeDistance),
-        paddingBottom: Theme.bottomInset + pixel(20),
+        paddingBottom: Device.bottomInset + pixel(20),
         flexDirection: 'row',
         alignItems: 'center',
     },

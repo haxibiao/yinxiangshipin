@@ -136,7 +136,7 @@ const ThirdPartyLoginBottom = (props: Props) => {
     );
 };
 
-const itemHorizontal = (Device.WIDTH - 25 * 2) / 6;
+const itemHorizontal = (Device.width - 25 * 2) / 6;
 
 const styles = StyleSheet.create({
     rowContainer: {

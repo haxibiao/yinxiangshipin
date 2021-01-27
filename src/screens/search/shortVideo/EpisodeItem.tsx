@@ -80,7 +80,7 @@ const EpisodeItem = observer((props: Props) => {
 
 const styles = StyleSheet.create({
     itemWrap: {
-        width: Device.WIDTH,
+        width: Device.width,
         flexDirection: 'row',
         paddingHorizontal: pixel(Theme.edgeDistance),
         marginVertical: pixel(Theme.edgeDistance) / 2,

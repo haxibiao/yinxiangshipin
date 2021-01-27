@@ -76,7 +76,7 @@ class CommentOverlay extends Component {
         const { media } = this.props;
         const translateY = this.offset.interpolate({
             inputRange: [0, 1],
-            outputRange: [(Device.HEIGHT * 2) / 3, 0],
+            outputRange: [(Device.height * 2) / 3, 0],
             extrapolate: 'clamp',
         });
         if (!this.state.visible || !media) {
@@ -139,9 +139,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderTopLeftRadius: pixel(12),
         borderTopRightRadius: pixel(12),
-        height: (Device.HEIGHT * 2) / 3,
+        height: (Device.height * 2) / 3,
         overflow: 'hidden',
-        paddingBottom: pixel(Theme.bottomInset),
+        paddingBottom: pixel(Device.bottomInset),
     },
     countCommentsText: {
         fontSize: font(16),

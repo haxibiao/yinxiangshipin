@@ -18,7 +18,7 @@ export default ({ onClose, onClick, navigation }) => {
         if (status === 'empty') {
             return (
                 <Placeholder.NoCollection
-                    style={{ minHeight: Device.HEIGHT / 2 }}
+                    style={{ minHeight: Device.height / 2 }}
                     imageStyle={{ width: percent(40), height: percent(40) }}
                     onPress={() => {
                         onClose();
@@ -84,7 +84,7 @@ export function CollectionItem({ style, collection, navigation, onClick, btnName
 
 const styles = StyleSheet.create({
     container: {
-        height: (Device.HEIGHT * 2) / 3,
+        height: (Device.height * 2) / 3,
         borderTopLeftRadius: pixel(12),
         borderTopRightRadius: pixel(12),
         backgroundColor: '#fff',
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     },
     content: {
         flexGrow: 1,
-        paddingBottom: pixel(Theme.bottomInset),
+        paddingBottom: pixel(Device.bottomInset),
     },
     separator: {
         marginHorizontal: pixel(14),

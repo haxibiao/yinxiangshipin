@@ -20,7 +20,7 @@ import { Iconfont, DebouncedPressable } from '@src/components';
 import { adStore, userStore } from '@src/store';
 
 export const PADDING = pixel(14);
-const POSTER_WIDTH = (Device.WIDTH - pixel(1) - PADDING * 4) / 3;
+const POSTER_WIDTH = (Device.width - pixel(1) - PADDING * 4) / 3;
 const POSTER_HEIGHT = POSTER_WIDTH;
 
 interface Collection {

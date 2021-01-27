@@ -1,9 +1,8 @@
 import React, { useRef, useState, useCallback, useEffect } from 'react';
 import { StyleSheet, View, Text, Pressable, Animated, Easing, ViewStyle, ColorValue } from 'react-native';
 import __ from 'lodash';
-import Theme from '@app/src/common/theme';
 
-const EPISODE_WIDTH = (Device.WIDTH - pixel(66)) / 6;
+const EPISODE_WIDTH = (Device.width - pixel(66)) / 6;
 
 export default function AnthologyButton({
     style,

@@ -6,7 +6,7 @@ import { observer, autorun, adStore, userStore, notificationStore } from '@src/s
 import Iconfont from '../../../components/Iconfont';
 import { DebouncedPressable } from '../../../components/Basic/DebouncedPressable';
 
-const MODAL_WIDTH = Device.WIDTH * 0.84 > pixel(320) ? pixel(320) : Device.WIDTH * 0.84;
+const MODAL_WIDTH = Device.width * 0.84 > pixel(320) ? pixel(320) : Device.width * 0.84;
 const BUTTON_WIDTH = MODAL_WIDTH * 0.66;
 const BUTTON_HEIGHT = BUTTON_WIDTH * 0.2;
 

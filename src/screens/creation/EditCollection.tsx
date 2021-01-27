@@ -9,8 +9,8 @@ import { Overlay } from 'teaset';
 import Video from 'react-native-video';
 
 const contentGap = pixel(20);
-const MediaItemWidth = (Device.WIDTH - pixel(60)) / 3;
-const maxMediaWidth = Device.WIDTH - Theme.edgeDistance * 4;
+const MediaItemWidth = (Device.width - pixel(60)) / 3;
+const maxMediaWidth = Device.width - Theme.edgeDistance * 4;
 const mediaWidth = maxMediaWidth / 3;
 
 const EditCollection = (props: any) => {
@@ -172,7 +172,7 @@ const EditCollection = (props: any) => {
                                     type="image"
                                     maximum={1}
                                     onResponse={uploadResponse}
-                                    maxWidth={Device.WIDTH / 2}
+                                    maxWidth={Device.width / 2}
                                     style={styles.mediaItem}
                                 />
                             )}
@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingHorizontal: Theme.edgeDistance,
     },
-    contentContainerStyle: { flexGrow: 1, paddingBottom: Theme.bottomInset },
+    contentContainerStyle: { flexGrow: 1, paddingBottom: Device.bottomInset },
     publishButton: {
         backgroundColor: Theme.watermelon,
         borderRadius: pixel(5),

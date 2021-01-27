@@ -9,7 +9,7 @@ import Iconfont from '../../../components/Iconfont';
 import KeyboardSpacer from '../../../components/Other/KeyboardSpacer';
 
 const shareLinkCache = {};
-const MODAL_WIDTH = Device.WIDTH * 0.8 > pixel(300) ? pixel(300) : Device.WIDTH * 0.8;
+const MODAL_WIDTH = Device.width * 0.8 > pixel(300) ? pixel(300) : Device.width * 0.8;
 
 // 采集分享链接视频内容
 export const ParseShareLinkModal = observer(() => {

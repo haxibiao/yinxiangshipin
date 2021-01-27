@@ -62,14 +62,14 @@ class DownloadApkIntro {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        width: Device.WIDTH,
-        height: Device.HEIGHT,
+        width: Device.width,
+        height: Device.height,
         backgroundColor: 'rgba(255,255,255,0)',
         justifyContent: 'center',
         alignItems: 'center',
     },
     content: {
-        width: Device.WIDTH - pixel(48),
+        width: Device.width - pixel(48),
         borderRadius: pixel(6),
         backgroundColor: '#FFF',
         alignItems: 'center',

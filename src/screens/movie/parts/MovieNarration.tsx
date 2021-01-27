@@ -65,8 +65,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     secHeadBg: {
-        width: Device.WIDTH,
-        height: Device.WIDTH * 0.4,
+        width: Device.width,
+        height: Device.width * 0.4,
     },
     headerContent: {
         ...StyleSheet.absoluteFillObject,

@@ -7,7 +7,7 @@ import { DebouncedPressable } from '../../../components/Basic/DebouncedPressable
 import Iconfont from '../../../components/Iconfont';
 import Video from 'react-native-video';
 
-const MODAL_WIDTH = Device.WIDTH * 0.8 > pixel(290) ? pixel(290) : Device.WIDTH * 0.8;
+const MODAL_WIDTH = Device.width * 0.8 > pixel(290) ? pixel(290) : Device.width * 0.8;
 
 interface Props {
     url: string;

@@ -23,7 +23,7 @@ if (Platform.OS == 'android') {
     });
 }
 
-const MESSAGE_WIDTH = Device.WIDTH - pixel(40);
+const MESSAGE_WIDTH = Device.width - pixel(40);
 const MESSAGE_HEIGHT = MESSAGE_WIDTH * 0.22;
 const PADDING_H = pixel(16);
 const PADDING_V = pixel(12);

@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
         fontSize: font(15),
     },
     contentContainer: {
-        paddingBottom: Theme.bottomInset,
+        paddingBottom: Device.bottomInset,
         marginHorizontal: -itemBorder * 6,
         // marginLeft: -itemBorder * 2,
     },

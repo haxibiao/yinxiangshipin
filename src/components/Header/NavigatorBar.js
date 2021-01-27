@@ -49,11 +49,11 @@ const NavigatorBar = (props: any) => {
         position: 'absolute',
         left: 0,
         right: 0,
-        height: pixel(Theme.navBarHeight + Theme.statusBarHeight),
-        paddingTop: pixel(Theme.statusBarHeight),
+        height: pixel(Device.navBarHeight + Device.statusBarHeight),
+        paddingTop: pixel(Device.statusBarHeight),
         paddingLeft: pixel(Theme.edgeDistance),
         paddingRight: pixel(Theme.edgeDistance),
-        borderBottomWidth: Theme.minimumPixel,
+        borderBottomWidth: Device.minimumPixel,
         borderBottomColor: Theme.navBarSeparatorColor,
         flexDirection: 'row',
         alignItems: 'center',
@@ -64,7 +64,7 @@ const NavigatorBar = (props: any) => {
     // build titleViewStyle
     titleViewStyle = {
         position: 'absolute',
-        top: pixel(Theme.statusBarHeight),
+        top: pixel(Device.statusBarHeight),
         left: pixel(Theme.edgeDistance),
         right: pixel(Theme.edgeDistance),
         bottom: 0,

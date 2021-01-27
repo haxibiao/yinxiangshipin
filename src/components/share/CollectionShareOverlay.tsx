@@ -15,14 +15,14 @@ class CollectionShareOverlay {
                         borderTopLeftRadius: pixel(12),
                         borderTopRightRadius: pixel(12),
                         backgroundColor: '#FFF',
-                        paddingBottom: Theme.bottomInset - 10 || 0,
+                        paddingBottom: Device.bottomInset - 10 || 0,
                     }}>
                     <View style={styles.top}>
                         <TouchableOpacity
                             onPress={async () => {
                                 CollectionShareOverlay.hide();
                                 console.log('result ', pageUrl);
-                                if (Device.IOS) {
+                                if (Device.isIos) {
                                     ShareIOS.open({
                                         title: '分享给朋友',
                                         url: pageUrl,
@@ -55,7 +55,7 @@ class CollectionShareOverlay {
                         <TouchableOpacity
                             onPress={async () => {
                                 CollectionShareOverlay.hide();
-                                if (Device.IOS) {
+                                if (Device.isIos) {
                                     ShareIOS.open({
                                         title: '分享给朋友',
                                         url: pageUrl,

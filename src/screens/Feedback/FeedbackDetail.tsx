@@ -85,7 +85,7 @@ const index = (props: Props) => {
         (e) => {
             const { contentOffset, contentSize } = e.nativeEvent;
             // fetchMore触发条件
-            if (contentSize.height - contentOffset.y < Device.HEIGHT - pixel(50)) {
+            if (contentSize.height - contentOffset.y < Device.height - pixel(50)) {
                 __.throttle(fetchMoreComments, 500);
             }
         },
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     },
     contentContainerStyle: {
         flexGrow: 1,
-        paddingBottom: Theme.bottomInset,
+        paddingBottom: Device.bottomInset,
     },
     contentWrap: {
         margin: pixel(Theme.edgeDistance),

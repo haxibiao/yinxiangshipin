@@ -150,8 +150,8 @@ export default NavBar;
 
 const styles = StyleSheet.create({
     navBarContent: {
-        height: pixel(44 + Theme.statusBarHeight),
-        paddingTop: pixel(Theme.statusBarHeight + 4),
+        height: pixel(44 + Device.statusBarHeight),
+        paddingTop: pixel(Device.statusBarHeight + 4),
         paddingBottom: pixel(8),
         flexDirection: 'row',
         alignItems: 'center',

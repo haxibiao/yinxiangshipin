@@ -16,7 +16,7 @@ import { useNavigation } from '@react-navigation/native';
 import { GQL, useQuery } from '@src/apollo';
 
 export const SPACE = pixel(15);
-const POSTER_WIDTH = (Device.WIDTH - SPACE) / 3;
+const POSTER_WIDTH = (Device.width - SPACE) / 3;
 const POSTER_HEIGHT = POSTER_WIDTH * 0.64;
 
 interface MovieProps {

@@ -77,14 +77,14 @@ class UpdateOverlay {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        width: Device.WIDTH,
-        height: Device.HEIGHT,
+        width: Device.width,
+        height: Device.height,
         backgroundColor: 'rgba(255,255,255,0)',
         justifyContent: 'center',
         alignItems: 'center',
     },
     content: {
-        width: Device.WIDTH - pixel(60),
+        width: Device.width - pixel(60),
         borderRadius: pixel(15),
         backgroundColor: '#FFF',
         padding: 0,

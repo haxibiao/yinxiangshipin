@@ -13,12 +13,12 @@ export default observer(({}) => {
     const navigation = useNavigation();
     const currentPage = useRef(1);
     const visibility = useRef(false);
-    const onChangeTab = useCallback((e) => {
+    const onChangeTab = useCallback(e => {
         currentPage.current = e.i;
         DeviceEventEmitter.emit('onChangeVideoTab', visibility.current ? currentPage.current : -1);
     }, []);
 
-    const onLayout = useCallback((event) => {
+    const onLayout = useCallback(event => {
         const { height } = event.nativeEvent.layout;
         appStore.viewportHeight = height;
     }, []);
@@ -49,7 +49,7 @@ export default observer(({}) => {
                 renderTabBar={(tabBarProps: any) => (
                     <DefaultTabBar
                         {...tabBarProps}
-                        paddingInset={(Device.WIDTH - pixel(72) * 3) / 2}
+                        paddingInset={(Device.width - pixel(72) * 3) / 2}
                         tabUnderlineWidth={pixel(24)}
                         tabWidth={pixel(72)}
                         tabBarStyle={styles.tabBarStyle}
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
         zIndex: 100,
         width: '100%',
         height: pixel(42),
-        marginTop: Theme.statusBarHeight,
+        marginTop: Device.statusBarHeight,
         borderTopWidth: 0,
         borderBottomWidth: 0,
     },

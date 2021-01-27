@@ -236,7 +236,7 @@ const MoreOperation = (props: any) => {
 
             return (
                 <TouchableOpacity
-                    style={[styles.optionItem, options.length < 5 && { width: Device.WIDTH / 4 }]}
+                    style={[styles.optionItem, options.length < 5 && { width: Device.width / 4 }]}
                     key={index}
                     onPress={operation[option].callback}>
                     <Image style={styles.optionIcon} source={operation[option].image} />
@@ -250,7 +250,7 @@ const MoreOperation = (props: any) => {
         closeOverlay();
         const link = await fetchShareLink();
 
-        if (Device.IOS) {
+        if (Device.isIos) {
             ShareIOS.open({
                 title: '分享给朋友',
                 url: Config.ServerRoot + `/share/post/${target.id}?user_id=${userStore.me.id}`,
@@ -276,7 +276,7 @@ const MoreOperation = (props: any) => {
         closeOverlay();
         const link = await fetchShareLink();
 
-        if (Device.IOS) {
+        if (Device.isIos) {
             ShareIOS.open({
                 title: '分享给朋友',
                 url: Config.ServerRoot + `/share/post/${target.id}?user_id=${userStore.me.id}`,
@@ -308,7 +308,7 @@ const MoreOperation = (props: any) => {
         // Linking.openURL(openUrl);
         const link = await fetchShareLink();
 
-        // if (Device.IOS) {
+        // if (Device.isIos) {
         ShareIOS.open({
             title: '分享给朋友',
             url: Config.ServerRoot + `/share/post/${target.id}?user_id=${userStore.me.id}`,
@@ -366,7 +366,7 @@ const MoreOperation = (props: any) => {
         // Clipboard.setString(link);
 
         // 先简单拦截一下 IOS 的分享操作
-        // if (Device.IOS) {
+        // if (Device.isIos) {
         ShareIOS.open({
             title: '分享给朋友',
             url: Config.ServerRoot + `/share/post/${target.id}?user_id=${userStore.me.id}`,
@@ -422,7 +422,7 @@ const MoreOperation = (props: any) => {
         return shares.map((option: any, index: any) => {
             return (
                 <TouchableOpacity
-                    style={[styles.optionItem, shares.length < 5 && { width: Device.WIDTH / 4 }]}
+                    style={[styles.optionItem, shares.length < 5 && { width: Device.width / 4 }]}
                     key={index}
                     onPress={share[option].callback}>
                     <Image style={styles.optionIcon} source={share[option].image} />
@@ -489,7 +489,7 @@ const styles = StyleSheet.create({
     optionItem: {
         alignItems: 'center',
         justifyContent: 'center',
-        minWidth: Device.WIDTH * 0.22,
+        minWidth: Device.width * 0.22,
         padding: pixel(12),
     },
     optionName: {
@@ -502,7 +502,7 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: pixel(12),
         borderTopRightRadius: pixel(12),
         overflow: 'hidden',
-        paddingBottom: pixel(Theme.bottomInset),
+        paddingBottom: pixel(Device.bottomInset),
     },
 });
 

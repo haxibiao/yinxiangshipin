@@ -153,8 +153,8 @@ class ContentShareCardOverlay {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        width: Device.WIDTH,
-        height: Device.HEIGHT,
+        width: Device.width,
+        height: Device.height,
         justifyContent: 'flex-end',
         alignItems: 'center',
     },
@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
         alignSelf: 'stretch',
         backgroundColor: '#FFF',
         padding: pixel(10),
-        paddingBottom: Theme.bottomInset ? pixel(30) : pixel(10),
+        paddingBottom: Device.bottomInset ? pixel(30) : pixel(10),
     },
     sharePlatforms: {
         flexDirection: 'row',

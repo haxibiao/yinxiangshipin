@@ -49,22 +49,22 @@ export function TaskGuidance({ onDismiss, navigation }) {
     return guidesView[step];
 }
 
-const redPacketWidth = (Device.WIDTH * 3) / 5;
+const redPacketWidth = (Device.width * 3) / 5;
 const redPacketHeight = (redPacketWidth * 615) / 471;
 
-const taskGuideWidth = Device.WIDTH;
+const taskGuideWidth = Device.width;
 const taskGuideHeight = (taskGuideWidth * 750) / 790;
 
-const walletGuideWidth = Device.WIDTH - pixel(30);
+const walletGuideWidth = Device.width - pixel(30);
 const walletGuideHeight = (walletGuideWidth * 838) / 336;
 
-const WalletBgWidth = (Device.WIDTH - pixel(20)) * 0.66 - walletGuideHeight * 0.28;
+const WalletBgWidth = (Device.width - pixel(20)) * 0.66 - walletGuideHeight * 0.28;
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        width: Device.WIDTH,
-        height: Device.HEIGHT,
+        width: Device.width,
+        height: Device.height,
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: 'transparent',

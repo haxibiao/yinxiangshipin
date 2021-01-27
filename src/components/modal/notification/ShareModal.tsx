@@ -8,7 +8,7 @@ import { DebouncedPressable } from '../../Basic/DebouncedPressable';
 import ContentShareCard from '../../share/ContentShareCard';
 import viewShotUtil from '../../share/viewShotUtil';
 
-const MODAL_WIDTH = Device.WIDTH * 0.84 > pixel(320) ? pixel(320) : Device.WIDTH * 0.84;
+const MODAL_WIDTH = Device.width * 0.84 > pixel(320) ? pixel(320) : Device.width * 0.84;
 const BUTTON_WIDTH = MODAL_WIDTH * 0.66;
 const BUTTON_HEIGHT = BUTTON_WIDTH * 0.2;
 
@@ -168,7 +168,7 @@ export const ShareModal = observer(() => {
                             position: 'absolute',
                             left: 0,
                             right: 0,
-                            bottom: Device.WIDTH * 0.6,
+                            bottom: Device.width * 0.6,
                             alignItems: 'center',
                             zIndex: imageRef ? 1 : -10,
                             opacity: imageRef ? 1 : 0,
@@ -268,7 +268,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderTopLeftRadius: pixel(12),
         borderTopRightRadius: pixel(12),
-        paddingBottom: pixel(Theme.bottomInset),
+        paddingBottom: pixel(Device.bottomInset),
     },
     modalBody: {
         paddingVertical: pixel(12),
@@ -290,7 +290,7 @@ const styles = StyleSheet.create({
     optionItem: {
         alignItems: 'center',
         justifyContent: 'center',
-        minWidth: Device.WIDTH * 0.22,
+        minWidth: Device.width * 0.22,
         padding: pixel(12),
     },
     platformIcon: {

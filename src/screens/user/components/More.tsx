@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
         fontSize: font(14),
     },
     emptyView: {
-        width: Device.WIDTH,
+        width: Device.width,
         height: POSTER_WIDTH,
         justifyContent: 'center',
         alignItems: 'center',

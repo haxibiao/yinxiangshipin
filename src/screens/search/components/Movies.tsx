@@ -137,13 +137,13 @@ const SearchMovieItem = observer(({ movie, navigation }) => {
 });
 
 export const SPACE = pixel(15);
-const POSTER_WIDTH = (Device.WIDTH - SPACE) / 3;
+const POSTER_WIDTH = (Device.width - SPACE) / 3;
 const POSTER_HEIGHT = POSTER_WIDTH * 1.28;
 
 const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
-        paddingBottom: Theme.bottomInset,
+        paddingBottom: Device.bottomInset,
     },
     separator: {
         marginHorizontal: pixel(Theme.edgeDistance),

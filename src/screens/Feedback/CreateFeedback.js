@@ -6,9 +6,9 @@ import { GQL, useMutation } from '@src/apollo';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 const contentGap = pixel(20);
-const MediaItemWidth = (Device.WIDTH - pixel(60)) / 3;
+const MediaItemWidth = (Device.width - pixel(60)) / 3;
 let result = {};
-export default observer((props) => {
+export default observer(props => {
     const navigation = useNavigation();
     const [formData, setFormData] = useState({ content: '', images: [] });
     const [createFeedback, { data, loading }] = useMutation(GQL.createFeedbackMutation, {
@@ -23,12 +23,12 @@ export default observer((props) => {
                 fetchPolicy: 'network-only',
             },
         ],
-        onError: (error) => {
+        onError: error => {
             Toast.show({
                 content: errorMessage(error) || '发布失败',
             });
         },
-        onCompleted: (mutationResult) => {
+        onCompleted: mutationResult => {
             Toast.show({
                 content: '发布成功',
             });
@@ -39,14 +39,14 @@ export default observer((props) => {
         },
     });
 
-    const changeBody = useCallback((value) => {
-        setFormData((prevFormData) => {
+    const changeBody = useCallback(value => {
+        setFormData(prevFormData => {
             return { ...prevFormData, content: value };
         });
     }, []);
 
-    const uploadResponse = useCallback((response) => {
-        setFormData((prevFormData) => {
+    const uploadResponse = useCallback(response => {
+        setFormData(prevFormData => {
             return { ...prevFormData, images: response };
         });
     }, []);
@@ -86,7 +86,7 @@ export default observer((props) => {
                                 type="image"
                                 maximum={3}
                                 onResponse={uploadResponse}
-                                maxWidth={Device.WIDTH / 2}
+                                maxWidth={Device.width / 2}
                                 style={styles.mediaItem}
                             />
                         </View>

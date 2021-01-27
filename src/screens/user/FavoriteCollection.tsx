@@ -39,7 +39,7 @@ export default () => {
 const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
-        paddingBottom: Theme.bottomInset,
+        paddingBottom: Device.bottomInset,
     },
     separator: {
         marginHorizontal: pixel(14),

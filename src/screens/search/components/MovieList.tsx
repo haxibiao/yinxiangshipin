@@ -142,7 +142,7 @@ export default React.forwardRef(function ContentList(
             return dataOptionChain == 'searchMovie.data' ? (
                 <View>
                     <ContentStatus status={status} refetch={status === 'error' ? refetch : undefined} />
-                    <View style={{ width: Device.WIDTH, alignItems: 'center', justifyContent: 'center' }}>
+                    <View style={{ width: Device.width, alignItems: 'center', justifyContent: 'center' }}>
                         {listData?.length === 0 && (
                             <TouchableOpacity onPress={() => getMovieHandle()}>
                                 <View style={styles.getMovieBottom}>
@@ -200,8 +200,8 @@ const styles = StyleSheet.create({
     },
     getMovieBottom: {
         backgroundColor: '#F4606C',
-        width: Device.WIDTH - pixel(200),
-        height: (Device.WIDTH - pixel(200)) / 4,
+        width: Device.width - pixel(200),
+        height: (Device.width - pixel(200)) / 4,
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: pixel(25),

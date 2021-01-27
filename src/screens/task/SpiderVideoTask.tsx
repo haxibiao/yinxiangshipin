@@ -3,7 +3,7 @@ import { View, Text, ScrollView, Image } from 'react-native';
 import { PageContainer } from '@src/components';
 
 const SpiderVideoTask = () => {
-    const WIDTH = Device.WIDTH - 30;
+    const WIDTH = Device.width - 30;
 
     return (
         <PageContainer title="收藏视频教学" white>

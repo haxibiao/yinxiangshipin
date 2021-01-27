@@ -6,9 +6,9 @@ import { observer, userStore, notificationStore } from '@src/store';
 import { AnimationLike, Commodity } from '../../widget';
 import { Overlay } from 'teaset';
 
-const videoWidth = Device.WIDTH * 0.6;
+const videoWidth = Device.width * 0.6;
 const videoHeight = videoWidth * 1.33;
-const COVER_WIDTH = Device.WIDTH - pixel(14) * 2;
+const COVER_WIDTH = Device.width - pixel(14) * 2;
 
 const HeartIcon = {
     liked: require('@app/assets/images/icons/ic_heart_red.png'),

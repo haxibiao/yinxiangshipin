@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     contentContainerStyle: {
-        paddingBottom: Theme.bottomInset,
+        paddingBottom: Device.bottomInset,
         paddingHorizontal: pixel(Theme.edgeDistance),
     },
     hotMark: {

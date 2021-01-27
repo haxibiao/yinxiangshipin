@@ -33,7 +33,7 @@ import Video from 'react-native-video';
 import SelectCollection, { CollectionItem } from '@src/screens/collection/components/SelectCollection';
 import SharedVideoContent from './SharedVideoContent';
 
-const MediaItemWidth = (Device.WIDTH - pixel(60)) / 3;
+const MediaItemWidth = (Device.width - pixel(60)) / 3;
 
 export default (props: any) => {
     const route = useRoute();
@@ -135,7 +135,7 @@ export default (props: any) => {
         const [error, sharedContent] = await exceptionCapture(() => shareClipboardLink(clipboardString));
         Loading.hide();
         if (error) {
-            Linking.openURL(Device.IOS ? 'itms-apps://itunes.apple.com/app/id1142110895' : 'snssdk1128://');
+            Linking.openURL(Device.isIos ? 'itms-apps://itunes.apple.com/app/id1142110895' : 'snssdk1128://');
             return;
         }
         if (sharedContent && !isShow) {
@@ -325,7 +325,7 @@ export default (props: any) => {
                         ) : (
                             <MediaUploader
                                 onResponse={uploadResponse}
-                                maxWidth={Device.WIDTH / 2}
+                                maxWidth={Device.width / 2}
                                 style={styles.mediaItem}
                             />
                         )}
@@ -419,7 +419,7 @@ const styles = StyleSheet.create({
     },
     contentContainer: {
         flexGrow: 1,
-        paddingBottom: Theme.bottomInset,
+        paddingBottom: Device.bottomInset,
     },
     content: {
         padding: pixel(15),

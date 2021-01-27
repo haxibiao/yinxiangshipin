@@ -142,7 +142,7 @@ const AccountSecurity = observer(() => {
                     />
                 )}
 
-                {/* {!Device.IOS && (
+                {/* {!Device.isIos && (
                     <ListItem
                         onPress={handlerBindWechat}
                         style={styles.listItem}

@@ -6,7 +6,7 @@ import { observer } from 'mobx-react';
 import playerStore from '../PlayerStore';
 
 const RATE_VALUE = [3.0, 2.0, 1.5, 1.25, 1.0, 0.5];
-const RATE_CHOOSER_WIDTH = Device.HEIGHT * 0.4;
+const RATE_CHOOSER_WIDTH = Device.height * 0.4;
 
 export default observer(() => {
     const animation = useRef(new Animated.Value(0));

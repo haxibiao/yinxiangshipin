@@ -7,7 +7,7 @@ import { GQL, useMutation, errorMessage } from '@src/apollo';
 import { openImagePicker } from '@src/native';
 import Video from 'react-native-video';
 
-const mediaWidth = Device.WIDTH * 0.28;
+const mediaWidth = Device.width * 0.28;
 
 export default function CreateCollection(props) {
     const navigation = useNavigation();
@@ -238,8 +238,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     logoArea: {
-        width: Device.WIDTH * 0.2,
-        height: Device.WIDTH * 0.2,
+        width: Device.width * 0.2,
+        height: Device.width * 0.2,
         borderWidth: StyleSheet.hairlineWidth,
         borderColor: '#f0f0f0',
         borderRadius: pixel(5),

@@ -37,6 +37,6 @@ const styles = StyleSheet.create({
     contentContainer: {
         flexGrow: 1,
         paddingTop: SPACE,
-        paddingBottom: pixel(Theme.bottomInset),
+        paddingBottom: pixel(Device.bottomInset),
     },
 });

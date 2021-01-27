@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, PermissionsAndroid, Platform, StyleSheet, TouchableOpacity } from 'react-native';
 import RNFetchBlob from 'rn-fetch-blob';
 
-const DownLoadApk = (props) => {
+const DownLoadApk = props => {
     const [downloading, setDownloading] = useState(false);
     const [donwloadTask, setDonwloadTask] = useState();
     const [received, setReceived] = useState(1);
@@ -61,7 +61,7 @@ const DownLoadApk = (props) => {
                     setReceived(received);
                     setTotal(total);
                 })
-                .then((res) => {
+                .then(res => {
                     if (Platform.OS === 'android') {
                         RNFetchBlob.fs.scanFile([
                             { path: res.path(), mime: 'application/vnd.android.package-archive' },
@@ -75,7 +75,7 @@ const DownLoadApk = (props) => {
                     setReceived(total);
                     setDownloading(false);
                 })
-                .catch((error) => {
+                .catch(error => {
                     console.log('error :', error);
                     setReceived(0);
                     setDownloading(false);
@@ -109,7 +109,7 @@ const DownLoadApk = (props) => {
                     {
                         borderTopRightRadius: downloading ? 0 : pixel(5),
                         borderBottomRightRadius: downloading ? 0 : pixel(5),
-                        width: downloading ? ((Device.WIDTH - pixel(88)) * received) / total : Device.WIDTH - pixel(88),
+                        width: downloading ? ((Device.width - pixel(88)) * received) / total : Device.width - pixel(88),
                     },
                 ]}>
                 <Text style={styles.downloadText}>{buttonName}</Text>
@@ -122,13 +122,13 @@ const styles = StyleSheet.create({
     button: {
         backgroundColor: Theme.primaryColor,
         borderRadius: pixel(5),
-        width: Device.WIDTH - pixel(88),
+        width: Device.width - pixel(88),
         height: pixel(42),
     },
     download: {
         backgroundColor: '#F0F0F0',
         borderRadius: pixel(5),
-        width: Device.WIDTH - pixel(88),
+        width: Device.width - pixel(88),
         height: pixel(42),
     },
     downloadProgress: {
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
         textAlignVertical: 'center',
         left: 0,
         top: 0,
-        width: Device.WIDTH - pixel(88),
+        width: Device.width - pixel(88),
         height: pixel(42),
     },
 });

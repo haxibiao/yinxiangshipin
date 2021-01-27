@@ -18,7 +18,7 @@ import { GQL, useQuery } from '@src/apollo';
 import { Iconfont, DebouncedPressable } from '@src/components';
 
 export const PADDING = pixel(14);
-const POSTER_WIDTH = (Device.WIDTH - pixel(1) - PADDING * 3) / 2;
+const POSTER_WIDTH = (Device.width - pixel(1) - PADDING * 3) / 2;
 const POSTER_HEIGHT = POSTER_WIDTH * 0.62;
 
 interface collectionProps {

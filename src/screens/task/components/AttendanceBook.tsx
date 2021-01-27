@@ -253,13 +253,13 @@ const AttendanceBook = (): JSX.Element => {
     );
 };
 
-const signItemWidth = (Device.WIDTH - pixel(40)) / 7;
+const signItemWidth = (Device.width - pixel(40)) / 7;
 const coinImageWidth = signItemWidth * 0.9;
 const mysticGiftHeight = (coinImageWidth * 0.9 * 86) / 164;
 const doubleRewardHeight = mysticGiftHeight;
 
 const shadowOpt = {
-    width: Device.WIDTH - pixel(30),
+    width: Device.width - pixel(30),
     height: pixel(150),
     color: '#E8E8E8',
     border: pixel(10),

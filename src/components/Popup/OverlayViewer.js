@@ -35,13 +35,13 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: '#000000',
         flex: 1,
-        height: Device.HEIGHT,
-        width: Device.WIDTH,
+        height: Device.height,
+        width: Device.width,
     },
     closeBtn: {
         position: 'absolute',
         zIndex: 2,
-        top: pixel(Theme.statusBarHeight),
+        top: pixel(Device.statusBarHeight),
         right: 0,
         paddingHorizontal: pixel(Theme.edgeDistance),
         paddingVertical: pixel(8),

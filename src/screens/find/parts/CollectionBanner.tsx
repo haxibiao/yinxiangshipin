@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, Image, Animated, Pressable } from 'react-native
 import { useNavigation } from '@react-navigation/native';
 
 export const PADDING = pixel(14);
-const CONTENT_WIDTH = Device.WIDTH - PADDING * 2;
+const CONTENT_WIDTH = Device.width - PADDING * 2;
 
 export default function CollectionBanner({ collection, banner }) {
     const navigation = useNavigation();

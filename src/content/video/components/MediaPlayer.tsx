@@ -243,7 +243,7 @@ export default (props: Props) => {
     );
 };
 
-const headerHeight = Theme.navBarHeight + Theme.statusBarHeight;
+const headerHeight = Device.navBarHeight + Device.statusBarHeight;
 
 const styles = StyleSheet.create({
     playerContainer: {

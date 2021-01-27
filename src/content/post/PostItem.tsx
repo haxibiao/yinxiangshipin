@@ -58,7 +58,7 @@ export default observer(
                 {
                     translateY: animation.current.interpolate({
                         inputRange: [0, 1],
-                        outputRange: [Device.WIDTH * -0.75, 0],
+                        outputRange: [Device.width * -0.75, 0],
                         extrapolate: 'clamp',
                     }),
                 },

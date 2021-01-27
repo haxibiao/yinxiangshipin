@@ -6,10 +6,10 @@ import { DebouncedPressable, Iconfont } from '@src/components';
 import AnthologyButton from './AnthologyButton';
 
 export const SPACE = pixel(20);
-const POSTER_WIDTH = (Device.WIDTH - SPACE) / 3;
+const POSTER_WIDTH = (Device.width - SPACE) / 3;
 const POSTER_HEIGHT = POSTER_WIDTH * 1.28;
 const EPISODE_WIDTH_SPACE = pixel(6);
-const EPISODE_WIDTH = (Device.WIDTH - SPACE * 2 - EPISODE_WIDTH_SPACE * 5 - 1) / 6;
+const EPISODE_WIDTH = (Device.width - SPACE * 2 - EPISODE_WIDTH_SPACE * 5 - 1) / 6;
 
 export const MovieIntroduction = observer(({ movie, style }) => {
     const avatarId = useRef(String(movie.id)[movie.id?.length - 1]).current;
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     modalBody: {
         flexGrow: 1,
         padding: SPACE,
-        paddingBottom: SPACE + pixel(Theme.bottomInset),
+        paddingBottom: SPACE + pixel(Device.bottomInset),
     },
     movieCover: {
         position: 'relative',

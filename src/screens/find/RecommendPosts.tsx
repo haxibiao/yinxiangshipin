@@ -7,7 +7,7 @@ import { GQL, useQuery } from '@src/apollo';
 import PostItem from './components/PostItem';
 import { ad } from 'react-native-ad';
 
-const itemWidth = (Device.WIDTH - pixel(6) * 3) / 2;
+const itemWidth = (Device.width - pixel(6) * 3) / 2;
 const minVideoHeight = itemWidth * 0.6;
 const maxVideoHeight = itemWidth * 1.4;
 
@@ -15,7 +15,7 @@ function calculatorImageHeight({ item, index }) {
     const video = item.video;
     const images = item.images;
     if (index !== 0 && index % 10 === 0 && adStore.enableAd) {
-        return itemWidth * 1.4 + (Device.IOS ? pixel(36) : pixel(50));
+        return itemWidth * 1.4 + (Device.isIos ? pixel(36) : pixel(50));
     } else if (video?.width) {
         if (video?.width >= video?.height) {
             return Math.max(minVideoHeight, (itemWidth / video?.width) * video?.height);
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
         paddingHorizontal: pixel(6),
-        paddingBottom: pixel(Theme.tabBarHeight),
+        paddingBottom: pixel(Device.tabBarHeight),
         paddingTop: pixel(10),
     },
 });

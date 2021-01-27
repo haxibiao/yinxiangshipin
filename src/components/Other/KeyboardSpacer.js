@@ -28,11 +28,11 @@ class KeyboardSpacer extends Component<Props> {
 
     componentDidMount() {
         if (!this.showListener) {
-            const name = Device.IOS ? 'keyboardWillShow' : 'keyboardDidShow';
-            this.showListener = Keyboard.addListener(name, (e) => this.onKeyboardShow(e));
+            const name = Device.isIos ? 'keyboardWillShow' : 'keyboardDidShow';
+            this.showListener = Keyboard.addListener(name, e => this.onKeyboardShow(e));
         }
         if (!this.hideListener) {
-            const name = Device.IOS ? 'keyboardWillHide' : 'keyboardDidHide';
+            const name = Device.isIos ? 'keyboardWillHide' : 'keyboardDidHide';
             this.hideListener = Keyboard.addListener(name, () => this.onKeyboardHide());
         }
     }
@@ -72,7 +72,7 @@ class KeyboardSpacer extends Component<Props> {
         // 适配安卓全面屏
         if (difference > 0) {
             height += difference;
-        } else if ((Device.Android && Device.isFullScreenDevice) || DeviceInfo.getBrand() === 'Xiaomi') {
+        } else if ((Device.isAndroid && Device.isFullScreenDevice) || DeviceInfo.getBrand() === 'Xiaomi') {
             height += 40;
         }
         this.setState({ keyboardHeight: height });

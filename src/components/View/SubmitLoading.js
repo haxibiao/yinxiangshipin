@@ -37,8 +37,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     container: {
-        width: Device.WIDTH / 4,
-        height: Device.WIDTH / 4,
+        width: Device.width / 4,
+        height: Device.width / 4,
         backgroundColor: 'rgba(0,0,0,0.8)',
         alignItems: 'center',
         justifyContent: 'center',

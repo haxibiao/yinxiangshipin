@@ -121,8 +121,8 @@ const CARD_WIDTH = percent(80) > pixel(290) ? pixel(290) : percent(80);
 
 const styles = StyleSheet.create({
     container: {
-        width: Device.WIDTH,
-        height: Device.HEIGHT,
+        width: Device.width,
+        height: Device.height,
         justifyContent: 'center',
         alignItems: 'center',
     },

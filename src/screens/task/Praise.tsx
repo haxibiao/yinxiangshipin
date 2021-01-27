@@ -15,7 +15,7 @@ import { GQL, useQuery, useMutation, useApolloClient, errorMessage } from '@src/
 import { appStore, userStore } from '@src/store';
 
 const shadowOpt = {
-    width: Device.WIDTH,
+    width: Device.width,
     color: '#E8E8E8',
     border: 10,
     // radius: 10,
@@ -80,7 +80,7 @@ export default (props) => {
                 <TouchableOpacity
                     style={styles.operationItem}
                     onPress={() =>
-                        Linking.openURL(Device.IOS ? Config.iosAppStoreUrl : 'market://details?id=' + Config.AppID)
+                        Linking.openURL(Device.isIos ? Config.iosAppStoreUrl : 'market://details?id=' + Config.AppID)
                     }>
                     <Text style={styles.operationName}>应用商店好评</Text>
                     <View style={styles.operationRight}>
@@ -123,7 +123,7 @@ export default (props) => {
                             type="image"
                             maximum={3}
                             onResponse={uploadResponse}
-                            maxWidth={Device.WIDTH / 2}
+                            maxWidth={Device.width / 2}
                             style={styles.mediaItem}
                         />
                     </View>
@@ -154,7 +154,7 @@ export default (props) => {
     );
 };
 
-const MediaItemWidth = (Device.WIDTH - pixel(60)) / 3;
+const MediaItemWidth = (Device.width - pixel(60)) / 3;
 
 const styles = StyleSheet.create({
     container: {
@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
     contentContainer: {
         flexGrow: 1,
         paddingHorizontal: pixel(12),
-        paddingBottom: Theme.bottomInset + pixel(80),
+        paddingBottom: Device.bottomInset + pixel(80),
     },
     operationItem: {
         height: pixel(56),
@@ -225,7 +225,7 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         padding: pixel(15),
-        paddingBottom: Theme.bottomInset + pixel(30),
+        paddingBottom: Device.bottomInset + pixel(30),
         backgroundColor: '#fff',
     },
     buttonStyle: {

@@ -152,7 +152,7 @@ export default observer(({ movie }) => {
                     />
                 </View>
             )}
-            <ad.Feed visible={adStore.enableAd} codeid={adStore.codeid_feed_image_three} adWidth={Device.WIDTH} />
+            <ad.Feed visible={adStore.enableAd} codeid={adStore.codeid_feed_image_three} adWidth={Device.width} />
             {/* 推荐 */}
             <View style={{ marginTop: pixel(10) }}>
                 <View style={styles.sectionHeader}>
@@ -217,7 +217,7 @@ export default observer(({ movie }) => {
 const styles = StyleSheet.create({
     container: {
         paddingTop: pixel(14),
-        paddingBottom: pixel(Theme.bottomInset) + pixel(20),
+        paddingBottom: pixel(Device.bottomInset) + pixel(20),
     },
     row: {
         flexDirection: 'row',
@@ -309,7 +309,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     modalContainer: {
-        width: Device.WIDTH,
+        width: Device.width,
         backgroundColor: '#fff',
     },
     modalHeader: {

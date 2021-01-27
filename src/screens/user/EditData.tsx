@@ -49,11 +49,11 @@ export default observer((props: any) => {
         };
 
         fetch(Config.ServerRoot + '/api/user/save-avatar?api_token=' + token, config)
-            .then((response) => response.text())
-            .then((res) => {
+            .then(response => response.text())
+            .then(res => {
                 userStore.changeAvatar(res);
             })
-            .catch((err) => {});
+            .catch(err => {});
     };
 
     const _changeAvatar = () => {
@@ -64,7 +64,7 @@ export default observer((props: any) => {
             includeBase64: true,
             compressImageQuality: 0.1,
         })
-            .then((image) => {
+            .then(image => {
                 if (image.size > 12000) {
                     Toast.show({ content: '头像上传失败，图片质量过大' });
                 } else {
@@ -75,7 +75,7 @@ export default observer((props: any) => {
                     }, 60000);
                 }
             })
-            .catch((error) => {});
+            .catch(error => {});
     };
 
     const parseBirthday = () => {
@@ -112,12 +112,12 @@ export default observer((props: any) => {
                     ],
                 },
             })
-            .then((result) => {
+            .then(result => {
                 setUserBirthday(date);
                 // 更新 store 里的 me
                 userStore.changeProfile({ birthday_msg: date });
             })
-            .catch((error) => {
+            .catch(error => {
                 Toast.show({ content: '生日修改失败,服务器内部错误' });
             });
     };
@@ -144,14 +144,14 @@ export default observer((props: any) => {
                 mutation: GQL.updateUserGender,
                 variables: { id: user.id, gender: Gender },
             })
-            .then((result) => {
+            .then(result => {
                 const gender = Helper.syncGetter('data.updateUserInfo.gender', result);
                 setUserGender(gender);
                 // 更新store里的me
                 userStore.changeProfile({ gender });
                 // setSexModalVisible(!sexModalVisible);
             })
-            .catch((error) => {
+            .catch(error => {
                 Toast.show({ content: '性别修改失败,服务器内部错误' });
                 if (userGender === '女') {
                     // 用户性别是女 ，改成男
@@ -164,7 +164,7 @@ export default observer((props: any) => {
             });
     }
     const genderHandle = useCallback(
-        (man) => {
+        man => {
             setUserGender(man);
             setGender(man);
             setTimeout(() => {
@@ -244,7 +244,7 @@ export default observer((props: any) => {
                                         }}
                                         autoFocus={true}
                                         placeholder={user.name}
-                                        onChangeText={(value) => setName(value)}
+                                        onChangeText={value => setName(value)}
                                     />
                                 }
                             />
@@ -293,7 +293,7 @@ export default observer((props: any) => {
                                     <TextInput
                                         style={{
                                             backgroundColor: '#F0F0F0',
-                                            width: Device.WIDTH - pixel(30),
+                                            width: Device.width - pixel(30),
                                             paddingVertical: pixel(8),
                                             paddingHorizontal: pixel(8),
                                             height: pixel(signatureHeight),
@@ -301,10 +301,10 @@ export default observer((props: any) => {
                                         }}
                                         placeholder={qianM}
                                         multiline={true}
-                                        onContentSizeChange={(e) => {
+                                        onContentSizeChange={e => {
                                             setSignatureHeight(e.nativeEvent.contentSize.height);
                                         }}
-                                        onChangeText={(value) => setIntroduction(value)}
+                                        onChangeText={value => setIntroduction(value)}
                                     />
                                     {/* <Text style={{ position: 'absolute', right: 8, bottom: 16 }}>0/20</Text> */}
                                 </View>
@@ -440,7 +440,7 @@ const styles = StyleSheet.create({
         borderTopRightRadius: pixel(10),
         position: 'absolute',
         bottom: 0,
-        width: Device.WIDTH,
+        width: Device.width,
         height: pixel(180),
         justifyContent: 'center',
     },

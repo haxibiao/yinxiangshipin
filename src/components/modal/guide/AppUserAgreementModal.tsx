@@ -5,7 +5,7 @@ import { GQL, useApolloClient } from '@src/apollo';
 import { DebouncedPressable } from '../../Basic/DebouncedPressable';
 import Iconfont from '../../Iconfont';
 
-const MODAL_WIDTH = Device.WIDTH * 0.82 > pixel(300) ? pixel(300) : Device.WIDTH * 0.82;
+const MODAL_WIDTH = Device.width * 0.82 > pixel(300) ? pixel(300) : Device.width * 0.82;
 
 // 用户协议
 export const AppUserAgreementModal = observer(() => {
@@ -13,7 +13,7 @@ export const AppUserAgreementModal = observer(() => {
     const [visible, setVisible] = useState(false);
     const isAgreed = useRef(true);
 
-    const showModal = useCallback((data) => {
+    const showModal = useCallback(data => {
         if (!shown.current) {
             shown.current = true;
             setVisible(true);
@@ -29,7 +29,7 @@ export const AppUserAgreementModal = observer(() => {
 
     // const backListener = useRef();
     // const addBackListener = useCallback(() => {
-    //     if (Device.Android && !isAgreed.current) {
+    //     if (Device.isAndroid && !isAgreed.current) {
     //         backListener.current = BackHandler.addEventListener('hardwareBackPress', () => {
     //             return true;
     //         });
@@ -37,7 +37,7 @@ export const AppUserAgreementModal = observer(() => {
     // }, []);
 
     // const removeBackListener = useCallback(() => {
-    //     if (Device.Android && backListener.current) {
+    //     if (Device.isAndroid && backListener.current) {
     //         backListener.current.remove();
     //     }
     // }, []);
@@ -49,7 +49,7 @@ export const AppUserAgreementModal = observer(() => {
     }, []);
 
     useEffect(() => {
-        (async function () {
+        (async function() {
             isAgreed.current = await Storage.getItem(GuideKeys.UserAgreementGuide);
             notificationStore.guides.UserAgreementGuide = !!isAgreed.current;
             if (!isAgreed.current) {

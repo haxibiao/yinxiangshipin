@@ -324,7 +324,7 @@ export default observer((props: any) => {
                     </View>
                     <View style={styles.withdrawPlatforms}>
                         {WithdrawalPlatforms.map((data) => {
-                            if (Device.IOS && data.type === 'WECHAT') return null;
+                            if (Device.isIos && data.type === 'WECHAT') return null;
                             return (
                                 <TouchableWithoutFeedback
                                     key={data.type}
@@ -387,14 +387,14 @@ export default observer((props: any) => {
     );
 });
 
-const BG_WIDTH = Device.WIDTH - pixel(20);
-const amountItemWidth = (Device.WIDTH - pixel(65)) / 2;
+const BG_WIDTH = Device.width - pixel(20);
+const amountItemWidth = (Device.width - pixel(65)) / 2;
 
 const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
         backgroundColor: '#F8F8F8',
-        paddingBottom: pixel(Theme.edgeDistance) + Theme.bottomInset,
+        paddingBottom: pixel(Theme.edgeDistance) + Device.bottomInset,
     },
     logButton: {
         height: pixel(25),

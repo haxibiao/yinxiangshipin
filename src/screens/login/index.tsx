@@ -87,7 +87,7 @@ export default observer((props: any) => {
     // const onCmicssoLogin = () => {
     //     showLoading(); // 显示登陆加载中动画
 
-    //     if (Device.IOS) {
+    //     if (Device.isIos) {
     //         // By: 目前 IOS 移动认证服务还未对接，所以判断是 IOS 设备或者没有连接移动网络将会跳转到 UUID 登陆逻辑
     //         // onSilentLogin();
     //         closeLoading(); // 关闭登陆加载中动画
@@ -314,7 +314,7 @@ export default observer((props: any) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        height: appStore.viewportHeight + Theme.bottomInset,
+        height: appStore.viewportHeight + Device.bottomInset,
         justifyContent: 'space-between',
         backgroundColor: '#fff',
     },
@@ -335,7 +335,7 @@ const styles = StyleSheet.create({
     },
     header: {
         position: 'absolute',
-        top: pixel(Theme.statusBarHeight + Theme.edgeDistance),
+        top: pixel(Device.statusBarHeight + Theme.edgeDistance),
         left: pixel(Theme.edgeDistance),
         right: pixel(Theme.edgeDistance),
         flexDirection: 'row',
@@ -344,7 +344,7 @@ const styles = StyleSheet.create({
     },
     formContainer: {
         backgroundColor: '#FFF',
-        paddingTop: pixel(Theme.statusBarHeight + Theme.edgeDistance + 80),
+        paddingTop: pixel(Device.statusBarHeight + Theme.edgeDistance + 80),
         paddingHorizontal: pixel(Theme.edgeDistance * 2),
     },
     logo: {
@@ -414,7 +414,7 @@ const styles = StyleSheet.create({
     protocol: {
         backgroundColor: '#FFF',
         // + pixel(Theme.edgeDistance)
-        paddingBottom: Theme.bottomInset,
+        paddingBottom: Device.bottomInset,
         alignItems: 'center',
         justifyContent: 'center',
         marginTop: pixel(Theme.edgeDistance),

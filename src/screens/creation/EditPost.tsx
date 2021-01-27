@@ -8,7 +8,7 @@ import { Overlay } from 'teaset';
 import Video from 'react-native-video';
 
 const contentGap = pixel(20);
-const MediaItemWidth = (Device.WIDTH - pixel(60)) / 3;
+const MediaItemWidth = (Device.width - pixel(60)) / 3;
 
 export default (props: any) => {
     const route = useRoute();
@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingHorizontal: contentGap,
     },
-    contentContainerStyle: { flexGrow: 1, paddingBottom: Theme.bottomInset },
+    contentContainerStyle: { flexGrow: 1, paddingBottom: Device.bottomInset },
     publishButton: {
         backgroundColor: Theme.watermelon,
         borderRadius: pixel(5),

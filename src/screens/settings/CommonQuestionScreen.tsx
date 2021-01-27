@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: '#fff',
         flexGrow: 1,
-        paddingBottom: Theme.bottomInset,
+        paddingBottom: Device.bottomInset,
         paddingTop: pixel(Theme.edgeDistance * 2),
     },
     content: {

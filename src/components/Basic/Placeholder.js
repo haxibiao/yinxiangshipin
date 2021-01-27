@@ -85,7 +85,7 @@ const START_VALUE = 0.5;
 const END_VALUE = 1;
 const DURATION = 500;
 
-const movieWidth = (Device.WIDTH - pixel(Theme.edgeDistance) * 2 - pixel(20)) / 3;
+const movieWidth = (Device.width - pixel(Theme.edgeDistance) * 2 - pixel(20)) / 3;
 
 const AnimatedView = ({ children }) => {
     const animation = new Animated.Value(START_VALUE);

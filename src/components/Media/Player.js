@@ -24,10 +24,10 @@ class Player extends Component {
     componentDidMount() {
         let { navigation } = this.props;
         // let BackHandler = ReactNative.BackHandler ? ReactNative.BackHandler : ReactNative.BackAndroid;
-        if (Device.Android) {
+        if (Device.isAndroid) {
             BackHandler.addEventListener('hardwareBackPress', this._backButtonPress);
         }
-        this.willBlurSubscription = navigation.addListener('blur', (payload) => {
+        this.willBlurSubscription = navigation.addListener('blur', payload => {
             this.videoStore.paused = true;
         });
     }
@@ -69,8 +69,8 @@ class Player extends Component {
                     style,
                     appStore.isFullScreen
                         ? {
-                              width: Device.WIDTH,
-                              height: Device.HEIGHT,
+                              width: Device.width,
+                              height: Device.height,
                               marginTop: 0,
                               position: 'absolute',
                               zIndex: 10000,
@@ -120,8 +120,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#000000',
     },
     defaultSize: {
-        width: Device.WIDTH,
-        height: Device.WIDTH * 0.65,
+        width: Device.width,
+        height: Device.width * 0.65,
     },
     videoStyle: {
         position: 'absolute',

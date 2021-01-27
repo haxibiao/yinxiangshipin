@@ -158,7 +158,7 @@ export default observer(({ onClose, operation, collection, confirmBtn }) => {
 
 const styles = StyleSheet.create({
     container: {
-        height: (Device.HEIGHT * 2) / 3,
+        height: (Device.height * 2) / 3,
         borderTopLeftRadius: pixel(12),
         borderTopRightRadius: pixel(12),
         backgroundColor: '#fff',
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
     },
     content: {
         flexGrow: 1,
-        paddingBottom: pixel(Theme.bottomInset),
+        paddingBottom: pixel(Device.bottomInset),
     },
     separator: {
         marginHorizontal: pixel(14),

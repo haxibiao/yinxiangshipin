@@ -62,8 +62,8 @@ export default ImageCarousel;
 
 const styles = StyleSheet.create({
     container: {
-        height: Device.WIDTH,
-        width: Device.WIDTH,
+        height: Device.width,
+        width: Device.width,
     },
     bannerActiveDot: {
         backgroundColor: 'rgba(10, 173, 255, 1)',

@@ -6,14 +6,14 @@ import { userStore } from '@src/store';
 
 export default function CategoryMenu() {
     const navigation = useNavigation();
-    const historyNavigate = useCallback((i) => {
+    const historyNavigate = useCallback(i => {
         if (userStore.login) {
             navigation.navigate('MovieHistories');
         } else {
             navigation.navigate('Login');
         }
     }, []);
-    const menuNavigate = useCallback((type) => {
+    const menuNavigate = useCallback(type => {
         navigation.navigate('CategoriesTab', { category: type });
     }, []);
     return (
@@ -84,7 +84,7 @@ export default function CategoryMenu() {
     );
 }
 
-const MENU_WIDTH = (Device.WIDTH - pixel(80)) / 5;
+const MENU_WIDTH = (Device.width - pixel(80)) / 5;
 
 const styles = StyleSheet.create({
     menuList: {

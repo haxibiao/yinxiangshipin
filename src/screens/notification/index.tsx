@@ -5,7 +5,6 @@ import { GQL, useQuery } from '@src/apollo';
 import { observer, userStore, appStore, adStore, notificationStore } from '@src/store';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import Chats from './components/Chats';
-import Theme from '@app/src/common/theme';
 
 const notifyTypes = [
     'unread_comments',
@@ -177,7 +176,7 @@ const styles = StyleSheet.create({
     contentContainer: {
         backgroundColor: Theme.groundColour,
         flexGrow: 1,
-        paddingBottom: Theme.bottomInset || pixel(15),
+        paddingBottom: Device.bottomInset || pixel(15),
     },
     notifyList: {
         backgroundColor: '#fff',
@@ -222,7 +221,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         marginLeft: pixel(10),
         paddingVertical: pixel(8),
-        borderBottomWidth: Theme.minimumPixel,
+        borderBottomWidth: Device.minimumPixel,
         borderBottomColor: '#f0f0f0',
     },
     messageContentTop: {

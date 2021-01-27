@@ -104,7 +104,7 @@ export default observer(({ navigation, keyword, tag_id, user_id, collection_id }
 const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
-        paddingBottom: Theme.bottomInset,
+        paddingBottom: Device.bottomInset,
     },
     collectionInfo: {
         fontSize: font(11),
@@ -152,8 +152,8 @@ const styles = StyleSheet.create({
         paddingBottom: 0,
     },
     postCover: {
-        width: Device.WIDTH * 0.25,
-        height: Device.WIDTH * 0.3,
+        width: Device.width * 0.25,
+        height: Device.width * 0.3,
         resizeMode: 'cover',
         borderRadius: pixel(3),
         marginRight: pixel(10),

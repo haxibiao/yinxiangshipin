@@ -35,9 +35,9 @@ export default function PostWithAD({ item, index, adClick }) {
                         <View style={{ marginHorizontal: -pixel(14), minHeight: pixel(100) }}>
                             <ad.Feed
                                 codeid={adStore.codeid_feed_video}
-                                adWidth={Device.WIDTH}
+                                adWidth={Device.width}
                                 onAdClick={() => adClick(index)}
-                                onAdError={(err) => {
+                                onAdError={err => {
                                     // console.log('setVisible(false)', err);
                                     setVisible(false);
                                 }}

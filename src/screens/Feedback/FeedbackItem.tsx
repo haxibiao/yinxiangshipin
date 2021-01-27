@@ -8,7 +8,7 @@ export interface Props {
     feedback: any;
 }
 
-const COVER_WIDTH = Device.WIDTH - pixel(Theme.edgeDistance) * 2;
+const COVER_WIDTH = Device.width - pixel(Theme.edgeDistance) * 2;
 
 const FeedbackItem: React.FC<Props> = observer((props: Props) => {
     const { feedback } = props;

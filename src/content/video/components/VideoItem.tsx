@@ -156,7 +156,7 @@ export default observer((props: Props) => {
                     colors={['rgba(000,000,000,0.5)', 'rgba(000,000,000,0.3)', 'rgba(000,000,000,0.0)']}>
                     <View
                         style={{
-                            paddingBottom: Device.isFullScreenDevice ? 0 : Theme.tabBarHeight,
+                            paddingBottom: Device.isFullScreenDevice ? 0 : Device.tabBarHeight,
                         }}>
                         <View style={styles.postInfo}>
                             <View style={styles.videoInfo}>
@@ -181,7 +181,7 @@ export default observer((props: Props) => {
                                             source={require('@app/assets/images/movie/ic_film_play.png')}
                                         />
                                         <MarqueeText
-                                            width={Device.WIDTH - pixel(142)}
+                                            width={Device.width - pixel(142)}
                                             textList={[
                                                 {
                                                     value: `视频出处 ——《${movie?.name}》`,

@@ -6,7 +6,7 @@ import { GQL, useApolloClient } from '@src/apollo';
 import { DebouncedPressable } from '../../Basic/DebouncedPressable';
 import Iconfont from '../../Iconfont';
 
-const MODAL_WIDTH = Device.WIDTH * 0.82 > pixel(300) ? pixel(300) : Device.WIDTH * 0.82;
+const MODAL_WIDTH = Device.width * 0.82 > pixel(300) ? pixel(300) : Device.width * 0.82;
 
 interface Props {
     guidanceKey: keyof typeof GuideKeys; //指导标识
@@ -32,7 +32,7 @@ export const BeginnerGuidanceModal = observer((props: Props) => {
     const shown = useRef(false);
     const [visible, setVisible] = useState(false);
 
-    const showModal = useCallback((data) => {
+    const showModal = useCallback(data => {
         if (!shown.current) {
             shown.current = true;
             setVisible(true);
@@ -58,7 +58,7 @@ export const BeginnerGuidanceModal = observer((props: Props) => {
     const skipGuidance = useCallback(() => {
         notificationStore.inGuidance = false;
         if (recordable) {
-            skipGuidanceKeys.forEach((skipGuidanceKey) => {
+            skipGuidanceKeys.forEach(skipGuidanceKey => {
                 Storage.setItem(skipGuidanceKey, JSON.stringify({}));
             });
         }
@@ -66,7 +66,7 @@ export const BeginnerGuidanceModal = observer((props: Props) => {
     }, []);
 
     useEffect(() => {
-        (async function () {
+        (async function() {
             const result = await Storage.getItem(guidanceKey);
             notificationStore.guides[guidanceKey] = !!result;
             if (!result) {

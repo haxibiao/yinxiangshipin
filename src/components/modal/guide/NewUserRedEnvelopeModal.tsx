@@ -6,7 +6,7 @@ import { GQL, useQuery, useMutation } from '@src/apollo';
 import { DebouncedPressable } from '../../Basic/DebouncedPressable';
 import Iconfont from '../../Iconfont';
 
-const MODAL_WIDTH = Device.WIDTH * 0.8 > pixel(290) ? pixel(290) : Device.WIDTH * 0.8;
+const MODAL_WIDTH = Device.width * 0.8 > pixel(290) ? pixel(290) : Device.width * 0.8;
 const MODAL_HEIGHT = (MODAL_WIDTH * 756) / 578;
 
 // 新用户红包

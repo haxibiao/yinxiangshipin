@@ -6,8 +6,8 @@ import { observer, adStore, userStore, notificationStore } from '@src/store';
 import { Iconfont, Avatar, FollowButton, SvgIcon, SvgPath, Badge } from '@src/components';
 
 const SPACE = pixel(20);
-const BG_WIDTH = Device.WIDTH;
-const BG_HEIGHT = Device.WIDTH * 0.52;
+const BG_WIDTH = Device.width;
+const BG_HEIGHT = Device.width * 0.52;
 
 // '1990-12-02'
 function getFullYear(time) {
@@ -241,7 +241,7 @@ const styles = StyleSheet.create({
     userBackground: {
         width: BG_WIDTH,
         height: BG_HEIGHT,
-        paddingTop: pixel(Theme.statusBarHeight),
+        paddingTop: pixel(Device.statusBarHeight),
         position: 'relative',
     },
     operationHead: {

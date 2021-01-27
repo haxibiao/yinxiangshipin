@@ -13,11 +13,11 @@ import ScrollQueryList from './components/ScrollQueryList';
 import FavoritesPost from './components/FavoritesPost';
 import More from './components/More';
 
-const NAV_BAR_HEIGHT = pixel(Theme.navBarHeight + Theme.statusBarHeight);
-const tabWidth = Device.WIDTH / 2;
+const NAV_BAR_HEIGHT = pixel(Device.navBarHeight + Device.statusBarHeight);
+const tabWidth = Device.width / 2;
 const tabUnderlineWidth = pixel(20);
 const shadowSetting = {
-    width: Device.WIDTH,
+    width: Device.width,
     height: NAV_BAR_HEIGHT,
     color: '#E8E8E8',
     border: pixel(5),
@@ -86,7 +86,7 @@ export default observer(() => {
     }, []);
 
     return (
-        <View style={[styles.container, { paddingBottom: Theme.tabBarHeight }]}>
+        <View style={[styles.container, { paddingBottom: Device.tabBarHeight }]}>
             <FocusAwareStatusBar barStyle="dark-content" />
             {_renderNavBar()}
             <ScrollTabView
@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
     },
     navBarContainer: {
         flex: 1,
-        paddingTop: pixel(Theme.statusBarHeight),
+        paddingTop: pixel(Device.statusBarHeight),
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
     },
     navBarTitle: {
         position: 'absolute',
-        top: pixel(Theme.statusBarHeight),
+        top: pixel(Device.statusBarHeight),
         bottom: 0,
         left: pixel(100),
         right: pixel(100),

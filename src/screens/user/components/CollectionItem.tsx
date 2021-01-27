@@ -12,7 +12,7 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 
 export const SPACE = pixel(8);
-export const POSTER_WIDTH = (Device.WIDTH - SPACE * 3 - pixel(14)) / 3.5;
+export const POSTER_WIDTH = (Device.width - SPACE * 3 - pixel(14)) / 3.5;
 const POSTER_HEIGHT = POSTER_WIDTH;
 
 interface Collection {

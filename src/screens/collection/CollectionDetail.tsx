@@ -281,7 +281,7 @@ const styles = StyleSheet.create({
     },
     contentContainer: {
         flexGrow: 1,
-        paddingBottom: Theme.bottomInset,
+        paddingBottom: Device.bottomInset,
     },
     navTitle: {
         alignItems: 'center',
@@ -388,7 +388,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#161924',
         zIndex: 999,
-        bottom: Theme.bottomInset,
+        bottom: Device.bottomInset,
         paddingVertical: pixel(10),
         paddingHorizontal: pixel(Theme.edgeDistance),
         borderTopColor: '#666',

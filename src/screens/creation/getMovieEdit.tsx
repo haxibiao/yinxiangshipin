@@ -165,13 +165,13 @@ const getMovieEdit = observer(() => {
                         ) : (
                             <MediaUploader
                                 onResponse={uploadResponse}
-                                maxWidth={Device.WIDTH / 2}
+                                maxWidth={Device.width / 2}
                                 style={styles.mediaItem}
                             />
                         )} */}
                         <MediaUploader
                             onResponse={uploadResponse}
-                            maxWidth={Device.WIDTH / 2}
+                            maxWidth={Device.width / 2}
                             style={styles.mediaItem}
                         />
                     </View>
@@ -181,7 +181,7 @@ const getMovieEdit = observer(() => {
     );
 });
 
-const MediaItemWidth = (Device.WIDTH - pixel(60)) / 3;
+const MediaItemWidth = (Device.width - pixel(60)) / 3;
 
 const styles = StyleSheet.create({
     publishButton: {
@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
     },
     contentContainer: {
         flexGrow: 1,
-        paddingBottom: Theme.bottomInset,
+        paddingBottom: Device.bottomInset,
         backgroundColor: '#fff',
     },
     content: {

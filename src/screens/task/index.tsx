@@ -100,18 +100,18 @@ export default observer((props: any) => {
     );
 });
 
-const BUTTON_WIDTH = Math.max(Device.WIDTH * 0.48, pixel(168));
+const BUTTON_WIDTH = Math.max(Device.width * 0.48, pixel(168));
 
 const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
         backgroundColor: '#ffffff',
-        paddingBottom: Theme.tabBarHeight + Theme.bottomInset + pixel(15),
+        paddingBottom: Device.tabBarHeight + Device.bottomInset + pixel(15),
     },
     taskTopContainer: {
-        width: Device.WIDTH,
-        height: Device.WIDTH * 0.47,
-        paddingTop: Theme.statusBarHeight + Theme.navBarHeight - pixel(35),
+        width: Device.width,
+        height: Device.width * 0.47,
+        paddingTop: Device.statusBarHeight + Device.navBarHeight - pixel(35),
         paddingBottom: pixel(50),
     },
     taskContent: {

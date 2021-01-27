@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'rgba(255,255,255,0.9)',
         justifyContent: 'flex-end',
-        paddingBottom: Theme.bottomInset,
+        paddingBottom: Device.bottomInset,
     },
     menuBar: {
         flexDirection: 'row',

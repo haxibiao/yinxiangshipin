@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#f8f8f8',
         borderRadius: 3,
         padding: 20,
-        width: Device.WIDTH - 40,
+        width: Device.width - 40,
     },
     modalShade: {
         alignItems: 'center',

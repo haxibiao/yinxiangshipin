@@ -16,7 +16,7 @@ function Feedback(props: Props) {
     return (
         <PageContainer
             title={'反馈中心'}
-            // contentViewStyle={{ paddingTop: Theme.statusBarHeight }}
+            // contentViewStyle={{ paddingTop: Device.statusBarHeight }}
             white>
             <ScrollableTabView renderTabBar={props => <ScrollTabBar {...props} tabUnderlineWidth={pixel(30)} />}>
                 <CreateFeedback navigation={navigation} tabLabel="提交反馈" />
@@ -36,8 +36,8 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 0,
         left: 0,
-        width: Theme.navBarHeight,
-        height: Theme.navBarHeight,
+        width: Device.navBarHeight,
+        height: Device.navBarHeight,
         justifyContent: 'center',
         paddingLeft: pixel(Theme.edgeDistance),
     },

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
 
-const IMAGE_WIDTH = Device.WIDTH * 0.6;
+const IMAGE_WIDTH = Device.width * 0.6;
 
 class LoadingError extends Component {
     render() {

@@ -38,8 +38,8 @@ export default function SearchBar() {
 
 const styles = StyleSheet.create({
     header: {
-        height: pixel(Theme.statusBarHeight + 48),
-        paddingTop: pixel(Theme.statusBarHeight + 5),
+        height: pixel(Device.statusBarHeight + 48),
+        paddingTop: pixel(Device.statusBarHeight + 5),
         paddingBottom: pixel(5),
         backgroundColor: '#161924',
         flexDirection: 'row',

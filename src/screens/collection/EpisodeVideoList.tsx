@@ -13,7 +13,7 @@ import CollectionEpisodes from './components/CollectionEpisodes';
 
 const VIDEO_QUERY_COUNT = 5;
 const paddingBottom = Device.isFullScreenDevice
-    ? pixel(44) + pixel(12) + (Theme.bottomInset || pixel(12))
+    ? pixel(44) + pixel(12) + (Device.bottomInset || pixel(12))
     : pixel(12);
 
 export default observer(() => {
@@ -264,7 +264,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         left: pixel(12),
         right: pixel(12),
-        bottom: Theme.bottomInset || pixel(12),
+        bottom: Device.bottomInset || pixel(12),
         height: pixel(44),
         borderRadius: pixel(22),
         paddingHorizontal: pixel(15),

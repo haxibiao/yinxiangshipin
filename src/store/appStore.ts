@@ -5,7 +5,7 @@ import { Storage, RecordKeys, ItemKeys } from './storage';
 import Echo from 'laravel-echo';
 
 class App {
-    @observable viewportHeight: number = Device.HEIGHT;
+    @observable viewportHeight: number = Device.height;
     @observable deviceOffline: boolean = false;
     @observable connectionInfoType: Record<string, any> = {};
     @observable isFullScreen: boolean = false;
@@ -57,7 +57,6 @@ class App {
     setEcho(echo: Echo) {
         this.echo = echo;
     }
-
 }
 
 export default new App();

@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         marginLeft: pixel(10),
         paddingVertical: pixel(8),
-        borderBottomWidth: Theme.minimumPixel,
+        borderBottomWidth: Device.minimumPixel,
         borderBottomColor: '#f0f0f0',
     },
     itemContentTop: {

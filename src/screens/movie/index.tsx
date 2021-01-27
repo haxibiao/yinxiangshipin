@@ -21,12 +21,12 @@ export default observer(() => {
             <MovieFollows />
             <MovieRecommend categoryName="今日推荐" />
             <MovieCategory type="MEI" categoryName="热门美剧" />
-            <ad.Feed visible={adStore.enableAd} codeid={adStore.codeid_feed_image_three} adWidth={Device.WIDTH} />
+            <ad.Feed visible={adStore.enableAd} codeid={adStore.codeid_feed_image_three} adWidth={Device.width} />
             <MovieCategory type="HAN" categoryName="精选韩剧" />
             <MovieNarration />
             <MovieCategory type="RI" categoryName="精选日剧" />
             <MovieCategory type="GANG" categoryName="怀旧港剧" />
-            <ad.Feed visible={adStore.enableAd} codeid={adStore.codeid_feed_video} adWidth={Device.WIDTH} />
+            <ad.Feed visible={adStore.enableAd} codeid={adStore.codeid_feed_video} adWidth={Device.width} />
             <View style={styles.footer}>
                 <Text style={styles.footerContent}>╰(๑•́₃ •̀๑)╯再往下就没有啦</Text>
             </View>
@@ -34,12 +34,12 @@ export default observer(() => {
     );
 });
 
-const MENU_WIDTH = (Device.WIDTH - pixel(80)) / 5;
+const MENU_WIDTH = (Device.width - pixel(80)) / 5;
 
 const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
-        paddingBottom: Theme.tabBarHeight,
+        paddingBottom: Device.tabBarHeight,
         backgroundColor: '#ffffff',
     },
     topSection: {

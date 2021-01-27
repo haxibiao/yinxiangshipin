@@ -56,38 +56,38 @@ export default observer(() => {
 
 const TAB_WIDTH = pixel(54);
 const UNDER_LINE_WIDTH = pixel(12);
-// const UNDER_LINE_LEFT = (Device.WIDTH - TAB_WIDTH * 4) / 2 + (TAB_WIDTH - UNDER_LINE_WIDTH) / 2;
+// const UNDER_LINE_LEFT = (Device.width - TAB_WIDTH * 4) / 2 + (TAB_WIDTH - UNDER_LINE_WIDTH) / 2;
 const UNDER_LINE_LEFT = (TAB_WIDTH - UNDER_LINE_WIDTH) / 2;
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: Theme.statusBarHeight,
+        paddingTop: Device.statusBarHeight,
         backgroundColor: '#fff',
     },
     headerBg: {
         position: 'absolute',
         top: 0,
         left: 0,
-        width: Device.WIDTH,
-        height: (Device.WIDTH * 18) / 56,
+        width: Device.width,
+        height: (Device.width * 18) / 56,
         zIndex: -1,
     },
     taskButton: {
         position: 'absolute',
-        top: Theme.statusBarHeight,
+        top: Device.statusBarHeight,
         right: pixel(20),
         width: pixel(50),
-        height: Theme.navBarHeight,
+        height: Device.navBarHeight,
         justifyContent: 'center',
         alignItems: 'flex-end',
     },
     searchButton: {
         position: 'absolute',
-        top: Theme.statusBarHeight,
+        top: Device.statusBarHeight,
         right: pixel(20),
         width: pixel(50),
-        height: Theme.navBarHeight,
+        height: Device.navBarHeight,
         justifyContent: 'center',
         alignItems: 'flex-end',
     },
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
         resizeMode: 'cover',
     },
     tabBarStyle: {
-        height: Theme.navBarHeight,
+        height: Device.navBarHeight,
         borderBottomWidth: 0,
     },
     underlineStyle: {

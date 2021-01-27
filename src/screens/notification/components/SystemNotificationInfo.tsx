@@ -75,7 +75,7 @@ const SystemNotificationInfo = (props: Props) => {
 
 export default SystemNotificationInfo;
 
-const itemWidth = Device.WIDTH - pixel(20);
+const itemWidth = Device.width - pixel(20);
 
 const styles = StyleSheet.create({
     containers: {

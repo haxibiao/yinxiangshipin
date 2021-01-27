@@ -9,7 +9,7 @@ import { ad } from 'react-native-ad';
 import CollectionItem from '../find/components/CollectionItem';
 
 const PADDING = pixel(14);
-const CONTENT_WIDTH = Device.WIDTH - PADDING * 2;
+const CONTENT_WIDTH = Device.width - PADDING * 2;
 const LOGO_WIDTH = (CONTENT_WIDTH - pixel(60)) / 3;
 
 // 随机合集
@@ -21,7 +21,7 @@ export default observer(() => {
             return (
                 <>
                     <View style={{ marginHorizontal: -PADDING, minHeight: LOGO_WIDTH }}>
-                        <ad.Feed codeid={adStore.codeid_feed_image_three} adWidth={Device.WIDTH} />
+                        <ad.Feed codeid={adStore.codeid_feed_image_three} adWidth={Device.width} />
                     </View>
                     <View style={styles.separator} />
                     <CollectionItem
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     contentContainer: {
         flexGrow: 1,
         paddingHorizontal: PADDING,
-        paddingBottom: pixel(Theme.bottomInset) + PADDING,
+        paddingBottom: pixel(Device.bottomInset) + PADDING,
     },
     collectionWrap: {
         paddingVertical: PADDING,

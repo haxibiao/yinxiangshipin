@@ -26,10 +26,10 @@ export function Drawer({ style, title, onClose, children }: Props) {
 const styles = StyleSheet.create({
     drawerContainer: {
         flexGrow: 1,
-        height: (Device.HEIGHT * 2) / 3,
+        height: (Device.height * 2) / 3,
         borderTopLeftRadius: pixel(12),
         borderTopRightRadius: pixel(12),
-        paddingBottom: Theme.bottomInset,
+        paddingBottom: Device.bottomInset,
         backgroundColor: '#fff',
         overflow: 'hidden',
     },

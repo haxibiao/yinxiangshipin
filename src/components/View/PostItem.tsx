@@ -47,9 +47,9 @@ export interface Props {
     post: any;
 }
 
-const videoWidth = Device.WIDTH * 0.6;
+const videoWidth = Device.width * 0.6;
 const videoHeight = videoWidth * 1.33;
-const COVER_WIDTH = Device.WIDTH - pixel(Theme.edgeDistance) * 2;
+const COVER_WIDTH = Device.width - pixel(Theme.edgeDistance) * 2;
 
 const PostItem: React.FC<Props> = observer((props: Props) => {
     const { showSubmitStatus, showSeparator, post = {}, showComment } = props;

@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         left: 0,
         width: pixel(40),
-        height: Theme.navBarHeight,
+        height: Device.navBarHeight,
         paddingLeft: pixel(15),
         zIndex: 1,
     },

@@ -37,7 +37,7 @@ export default observer((props) => {
     const disableButton = commentValue.trim().length <= 0;
 
     // 获取头部内容高度
-    const headerHeight = useRef(Device.WIDTH);
+    const headerHeight = useRef(Device.width);
     const measurementHeader = useCallback((e) => {
         if (e.nativeEvent.layout.height) {
             headerHeight.current = e.nativeEvent.layout.height;
@@ -171,7 +171,7 @@ export default observer((props) => {
     // const inputTranslateY = Animated.diffClamp(fadeAnimation.current, 0, bottomInputHeight);
     const inputTranslateY = fadeAnimation.current.interpolate({
         inputRange: [0, headerHeight.current],
-        outputRange: [0, Device.HEIGHT - headerHeight.current - bottomInputHeight ? 0 : bottomInputHeight],
+        outputRange: [0, Device.height - headerHeight.current - bottomInputHeight ? 0 : bottomInputHeight],
     });
 
     // 头尾组件
@@ -182,18 +182,18 @@ export default observer((props) => {
         if (video) {
             const playerContainer = (() => {
                 const proportion = video?.width / video?.height || 0.5614;
-                const h = Math.ceil(Device.WIDTH / proportion);
+                const h = Math.ceil(Device.width / proportion);
                 if (proportion > 1) {
                     return {
                         height: h,
                     };
                 } else {
                     return {
-                        height: Math.min(Math.ceil(h), Device.HEIGHT),
+                        height: Math.min(Math.ceil(h), Device.height),
                     };
                 }
             })();
-            if (playerContainer.height <= Device.WIDTH * 0.7) {
+            if (playerContainer.height <= Device.width * 0.7) {
                 setFixedNavBar(true);
                 isFixedNavBar = true;
             }
@@ -314,7 +314,7 @@ export default observer((props) => {
 });
 
 const shadowOpt = {
-    width: Device.WIDTH,
+    width: Device.width,
     color: '#E8E8E8',
     border: pixel(3),
     radius: pixel(12),
@@ -327,7 +327,7 @@ const shadowOpt = {
 };
 
 const bottomInputHeight = pixel(52);
-const navBarHeight = pixel(44 + Theme.statusBarHeight);
+const navBarHeight = pixel(44 + Device.statusBarHeight);
 
 const styles = StyleSheet.create({
     container: {

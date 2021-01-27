@@ -6,7 +6,7 @@ import QRCode from 'react-native-qrcode-svg';
 import { userStore } from '@src/store';
 import viewShotUtil from './viewShotUtil';
 
-const contentWidth = Device.WIDTH * 0.76;
+const contentWidth = Device.width * 0.76;
 const contentHeight = (contentWidth * 1450) / 1040;
 const imageWidth = contentWidth * 0.5;
 
@@ -19,7 +19,7 @@ class ContentShareCard extends Component {
         const { post } = this.props;
         const imageUri = post?.video?.cover || post?.images?.[0]?.url;
         return (
-            <View style={styles.container} ref={(ref) => (this.shareCard = ref)}>
+            <View style={styles.container} ref={ref => (this.shareCard = ref)}>
                 <ImageBackground
                     style={styles.contentCover}
                     source={require('@app/assets/images/capture_video_cover.png')}>
@@ -66,7 +66,9 @@ class ContentShareCard extends Component {
                         </View>
                         <View style={{ width: pixel(80), height: pixel(80) }}>
                             <QRCode
-                                value={`https://yinxiangshipin.com/share/post/${post?.id}?post_id=${post?.id}&user_id=${userStore?.me?.id}`}
+                                value={`https://yinxiangshipin.com/share/post/${post?.id}?post_id=${post?.id}&user_id=${
+                                    userStore?.me?.id
+                                }`}
                                 size={pixel(80)}
                                 color={'#000'}
                                 backgroundColor={'#FFF'}

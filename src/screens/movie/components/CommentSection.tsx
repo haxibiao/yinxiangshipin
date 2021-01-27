@@ -111,12 +111,12 @@ export default observer(({ movie }) => {
     }, [onReplyComment]);
 
     // 获取头部内容高度
-    const headerHeight = useRef(Device.WIDTH);
+    const headerHeight = useRef(Device.width);
     // 底部动画
     const fadeAnimation = useRef(new Animated.Value(0));
     const inputTranslateY = fadeAnimation.current.interpolate({
         inputRange: [0, headerHeight.current],
-        outputRange: [0, Device.HEIGHT - headerHeight.current - bottomInputHeight ? 0 : bottomInputHeight],
+        outputRange: [0, Device.height - headerHeight.current - bottomInputHeight ? 0 : bottomInputHeight],
     });
 
     const FooterComponent = useMemo(() => {
@@ -190,7 +190,7 @@ export default observer(({ movie }) => {
 });
 
 const shadowOpt = {
-    width: Device.WIDTH,
+    width: Device.width,
     color: '#E8E8E8',
     border: pixel(3),
     radius: pixel(12),
@@ -203,7 +203,7 @@ const shadowOpt = {
 };
 
 const bottomInputHeight = pixel(52);
-const navBarHeight = pixel(44 + Theme.statusBarHeight);
+const navBarHeight = pixel(44 + Device.statusBarHeight);
 
 const styles = StyleSheet.create({
     container: {

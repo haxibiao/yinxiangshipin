@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     },
     validationBox: {
         backgroundColor: '#FFF',
-        width: Device.WIDTH,
+        width: Device.width,
         paddingHorizontal: 5,
     },
     columnItem: {

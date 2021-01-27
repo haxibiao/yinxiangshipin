@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     inputStyle: {
         fontSize: font(16),
         height: pixel(40),
-        borderBottomWidth: Theme.minimumPixel,
+        borderBottomWidth: Device.minimumPixel,
         borderBottomColor: Theme.borderColor,
     },
     card: {

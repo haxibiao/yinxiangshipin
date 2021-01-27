@@ -270,7 +270,7 @@ function resolveVideo() {
         navigation.navigate('SpiderVideoTask');
     } else {
         //TODO 唤起抖音，scheme可能存在一旦更改无法唤起的风险
-        const scheme = Device.IOS ? 'itms-apps://itunes.apple.com/app/id1142110895' : 'snssdk1128://';
+        const scheme = Device.isIos ? 'itms-apps://itunes.apple.com/app/id1142110895' : 'snssdk1128://';
         Linking.openURL(scheme)
             .then(() => null)
             .catch(() => {
@@ -461,13 +461,13 @@ const styles = StyleSheet.create({
     },
     // overlayInner: {
     //     flex: 1,
-    //     width: Device.WIDTH,
-    //     height: Device.HEIGHT,
+    //     width: Device.width,
+    //     height: Device.height,
     //     justifyContent: 'center',
     //     alignItems: 'center',
     // },
     // overlayContent: {
-    //     width: Device.WIDTH - pixel(70),
+    //     width: Device.width - pixel(70),
     //     paddingHorizontal: pixel(25),
     //     paddingVertical: pixel(20),
     //     borderRadius: pixel(10),

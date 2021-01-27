@@ -18,7 +18,7 @@ import { GQL, useQuery } from '@src/apollo';
 import { Iconfont, DebouncedPressable } from '@src/components';
 import { observer, adStore, userStore } from '@src/store';
 
-const POSTER_WIDTH = Device.WIDTH / 3;
+const POSTER_WIDTH = Device.width / 3;
 const POSTER_HEIGHT = POSTER_WIDTH * 0.64;
 
 interface MovieProps {

@@ -108,8 +108,8 @@ const Chat = observer((props: Props) => {
 
     return (
         <PageContainer
-            autoKeyboardInsets={Device.Android}
-            topInsets={Device.Android ? 0 : -Theme.statusBarHeight}
+            autoKeyboardInsets={Device.isAndroid}
+            topInsets={Device.isAndroid ? 0 : -Device.statusBarHeight}
             title={chat.withUser.name}
             titleStyle={{ fontSize: font(16) }}
             rightView={

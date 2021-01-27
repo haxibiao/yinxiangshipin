@@ -246,7 +246,7 @@ export default ({ collection, post, onClose, navigation }) => {
             </View>
             <BidirectionalList
                 ref={listRef}
-                contentHeight={(Device.HEIGHT * 2) / 3}
+                contentHeight={(Device.height * 2) / 3}
                 data={episodeData}
                 renderItem={renderItem}
                 onTopReached={onTopReached}
@@ -267,8 +267,8 @@ export default ({ collection, post, onClose, navigation }) => {
 
 const styles = StyleSheet.create({
     container: {
-        height: (Device.HEIGHT * 2) / 3,
-        paddingBottom: pixel(Theme.bottomInset),
+        height: (Device.height * 2) / 3,
+        paddingBottom: pixel(Device.bottomInset),
         borderTopLeftRadius: pixel(12),
         borderTopRightRadius: pixel(12),
         backgroundColor: 'rgba(0,0,0,0.6)',
