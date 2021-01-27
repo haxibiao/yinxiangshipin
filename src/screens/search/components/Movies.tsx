@@ -6,12 +6,13 @@ import { observer } from 'mobx-react';
 import { userStore } from '@src/store';
 import { GQL, errorMessage, useFavoriteMutation } from '@src/apollo';
 import { QueryList } from '@src/content';
+import MovieList from './MovieList';
 
 export default function SearchedMovie({ keyword }) {
     const navigation = useNavigation();
 
     return (
-        <QueryList
+        <MovieList
             gqlDocument={GQL.searchMoviesQuery}
             dataOptionChain="searchMovie.data"
             keyword={keyword}
