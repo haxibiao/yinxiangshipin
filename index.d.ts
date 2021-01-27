@@ -73,7 +73,7 @@ declare const Device: DeviceInfo;
 
 declare const Config: AppConfig;
 
-declare const Colors: Colour;
+declare const Theme: Colour & { edgeDistance: number };
 
 declare const Toast: {
     show: (p: ToastShowParams) => void;

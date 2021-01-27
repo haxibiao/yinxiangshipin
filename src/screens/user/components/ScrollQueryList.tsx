@@ -27,7 +27,6 @@ export default ({ gqlDocument, options, dataOptionChain, paginateOptionChain, re
             });
         }
     }, [nextPage, hasMore]);
-
     return (
         <FlatList
             bounces={false}
