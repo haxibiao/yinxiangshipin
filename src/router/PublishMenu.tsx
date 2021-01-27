@@ -30,7 +30,7 @@ const PublishMenu = observer(({ navigation, onMenuPress, enableAd }) => {
         });
     }
 
-    const onPublishPress = useCallback((route) => {
+    const onPublishPress = useCallback(route => {
         // 开直播点击事件处理
         if (route === 'StartLive') {
             if (userStore.login) {
@@ -59,7 +59,7 @@ const PublishMenu = observer(({ navigation, onMenuPress, enableAd }) => {
         Animated.parallel([
             Animated.stagger(
                 100,
-                menuAnimations.current.map((anim) =>
+                menuAnimations.current.map(anim =>
                     Animated.spring(anim, {
                         toValue: 1,
                         friction: 4,
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'rgba(255,255,255,0.9)',
         justifyContent: 'flex-end',
-        paddingBottom: Theme.HOME_INDICATOR_HEIGHT,
+        paddingBottom: Theme.bottomInset,
     },
     menuBar: {
         flexDirection: 'row',

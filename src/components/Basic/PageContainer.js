@@ -45,7 +45,7 @@ class PageContainer extends Component<Props> {
         hiddenNavBar: false,
         autoKeyboardInsets: true,
         submitTips: 'loading...',
-        topInsets: -Theme.HOME_INDICATOR_HEIGHT,
+        topInsets: -Theme.bottomInset,
     };
 
     renderContent() {
@@ -83,8 +83,8 @@ class PageContainer extends Component<Props> {
             safeView,
             ...props
         } = this.props;
-        const marginTop = !hiddenNavBar ? pixel(Theme.NAVBAR_HEIGHT + Theme.statusBarHeight) : 0;
-        const marginBottom = safeView ? Theme.HOME_INDICATOR_HEIGHT : 0;
+        const marginTop = !hiddenNavBar ? pixel(Theme.navBarHeight + Theme.statusBarHeight) : 0;
+        const marginBottom = safeView ? Theme.bottomInset : 0;
         return (
             <View style={[styles.container, style]} {...props}>
                 {!hiddenNavBar && this.renderNavBar()}

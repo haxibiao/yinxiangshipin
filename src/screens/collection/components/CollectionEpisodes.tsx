@@ -268,7 +268,7 @@ export default ({ collection, post, onClose, navigation }) => {
 const styles = StyleSheet.create({
     container: {
         height: (Device.HEIGHT * 2) / 3,
-        paddingBottom: pixel(Theme.HOME_INDICATOR_HEIGHT),
+        paddingBottom: pixel(Theme.bottomInset),
         borderTopLeftRadius: pixel(12),
         borderTopRightRadius: pixel(12),
         backgroundColor: 'rgba(0,0,0,0.6)',

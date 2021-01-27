@@ -8,7 +8,7 @@ import OverlayViewer from '../Popup/OverlayViewer';
 import Loading from '../Popup/Loading';
 import PullChooser from '../Popup/PullChooser';
 
-const maxMediaWidth = Device.WIDTH - Theme.itemSpace * 4;
+const maxMediaWidth = Device.WIDTH - Theme.edgeDistance * 4;
 const mediaWidth = maxMediaWidth / 3;
 
 interface VideoProps {
@@ -57,14 +57,14 @@ const VideoUploadView = (props: Props) => {
 
     const imagePickerHandler = useCallback(() => {
         openImagePicker({ mediaType: 'photo', multiple: maximum > 1, includeBase64: true })
-            .then((images) => {
+            .then(images => {
                 let imagesPath;
                 if (maximum > 1) {
-                    imagesPath = images.map((image) => `data:${image.mime};base64,${image.data}`);
+                    imagesPath = images.map(image => `data:${image.mime};base64,${image.data}`);
                 } else {
                     imagesPath = [`data:${images.mime};base64,${images.data}`];
                 }
-                setImages((prevImages) => {
+                setImages(prevImages => {
                     const newImages = prevImages.concat(imagesPath);
                     if (newImages.length > maximum) {
                         newImages.splice(maximum);
@@ -73,19 +73,19 @@ const VideoUploadView = (props: Props) => {
                     return newImages;
                 });
             })
-            .catch((err) => {});
+            .catch(err => {});
     }, [maximum]);
 
-    const removeImage = useCallback((ImageIndex) => {
-        setImages((prevImages) => {
+    const removeImage = useCallback(ImageIndex => {
+        setImages(prevImages => {
             prevImages.splice(ImageIndex, 1);
             return [...prevImages];
         });
     }, []);
 
     const showImage = useCallback(
-        (initIndex) => {
-            const imageUrls = images.map((image) => {
+        initIndex => {
+            const imageUrls = images.map(image => {
                 return { url: image };
             });
             const overlayView = (
@@ -101,7 +101,7 @@ const VideoUploadView = (props: Props) => {
         [images],
     );
 
-    const showVideo = useCallback((path) => {
+    const showVideo = useCallback(path => {
         const overlayView = (
             <Video
                 source={{
@@ -128,7 +128,7 @@ const VideoUploadView = (props: Props) => {
     }, [video]);
 
     const videoUploadHandler = useCallback(() => {
-        openImagePicker({ mediaType: 'video', multiple: false }).then((video) => {
+        openImagePicker({ mediaType: 'video', multiple: false }).then(video => {
             setVideo(video);
             vod.upload({
                 videoPath: video.uploadPath,
@@ -262,7 +262,7 @@ const styles = StyleSheet.create({
         borderRadius: pixel(5),
         height: mediaWidth,
         justifyContent: 'center',
-        marginRight: Theme.itemSpace,
+        marginRight: Theme.edgeDistance,
         overflow: 'hidden',
         width: mediaWidth,
     },

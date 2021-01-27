@@ -218,7 +218,7 @@ export default observer((props: any) => {
 
                 <View style={{ flex: 1, backgroundColor: '#FFF' }} />
 
-                <View style={{ marginHorizontal: pixel(Theme.itemSpace * 2), marginBottom: pixel(35) }}>
+                <View style={{ marginHorizontal: pixel(Theme.edgeDistance * 2), marginBottom: pixel(35) }}>
                     <TouchableOpacity onPress={showUuidLoginWidows}>
                         <Row
                             style={[
@@ -314,7 +314,7 @@ export default observer((props: any) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        height: appStore.viewportHeight + Theme.HOME_INDICATOR_HEIGHT,
+        height: appStore.viewportHeight + Theme.bottomInset,
         justifyContent: 'space-between',
         backgroundColor: '#fff',
     },
@@ -335,17 +335,17 @@ const styles = StyleSheet.create({
     },
     header: {
         position: 'absolute',
-        top: pixel(Theme.statusBarHeight + Theme.itemSpace),
-        left: pixel(Theme.itemSpace),
-        right: pixel(Theme.itemSpace),
+        top: pixel(Theme.statusBarHeight + Theme.edgeDistance),
+        left: pixel(Theme.edgeDistance),
+        right: pixel(Theme.edgeDistance),
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
     },
     formContainer: {
         backgroundColor: '#FFF',
-        paddingTop: pixel(Theme.statusBarHeight + Theme.itemSpace + 80),
-        paddingHorizontal: pixel(Theme.itemSpace * 2),
+        paddingTop: pixel(Theme.statusBarHeight + Theme.edgeDistance + 80),
+        paddingHorizontal: pixel(Theme.edgeDistance * 2),
     },
     logo: {
         marginBottom: pixel(21),
@@ -380,7 +380,7 @@ const styles = StyleSheet.create({
         color: Theme.subTextColor,
     },
     buttonStyle: {
-        marginTop: pixel(Theme.itemSpace),
+        marginTop: pixel(Theme.edgeDistance),
         height: pixel(44),
         borderRadius: pixel(4),
         backgroundColor: 'rgba(255,255,255,0.6)',
@@ -413,10 +413,10 @@ const styles = StyleSheet.create({
     },
     protocol: {
         backgroundColor: '#FFF',
-        // + pixel(Theme.itemSpace)
-        paddingBottom: Theme.HOME_INDICATOR_HEIGHT,
+        // + pixel(Theme.edgeDistance)
+        paddingBottom: Theme.bottomInset,
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: pixel(Theme.itemSpace),
+        marginTop: pixel(Theme.edgeDistance),
     },
 });

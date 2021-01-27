@@ -21,7 +21,7 @@ const Search = () => {
     const inputValueZIndex = trimmedValue.length ? 2 : -1;
     const resultTabViewZIndex = searchVisible ? 3 : -1;
 
-    const onSearch = __.debounce((kw) => {
+    const onSearch = __.debounce(kw => {
         setTextValue(kw);
         setKeyword(kw);
         toggleSearchVisible(true);
@@ -33,7 +33,7 @@ const Search = () => {
     }, 100);
 
     const onChangeText = useCallback(
-        (text) => {
+        text => {
             setTextValue(text);
             if (text.length < 1) {
                 toggleSearchVisible(false);
@@ -190,8 +190,8 @@ const styles = StyleSheet.create({
         height: pixel(10),
     },
     listHeader: {
-        padding: pixel(Theme.itemSpace),
-        paddingBottom: Theme.HOME_INDICATOR_HEIGHT + pixel(20),
+        padding: pixel(Theme.edgeDistance),
+        paddingBottom: Theme.bottomInset + pixel(20),
         flexDirection: 'row',
         alignItems: 'center',
     },

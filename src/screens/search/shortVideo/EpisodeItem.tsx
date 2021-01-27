@@ -82,8 +82,8 @@ const styles = StyleSheet.create({
     itemWrap: {
         width: Device.WIDTH,
         flexDirection: 'row',
-        paddingHorizontal: pixel(Theme.itemSpace),
-        marginVertical: pixel(Theme.itemSpace) / 2,
+        paddingHorizontal: pixel(Theme.edgeDistance),
+        marginVertical: pixel(Theme.edgeDistance) / 2,
     },
     videoCover: {
         width: percent(18),

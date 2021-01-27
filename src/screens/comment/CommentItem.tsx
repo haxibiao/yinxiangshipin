@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
     comment: {
         alignItems: 'flex-start',
         flexDirection: 'row',
-        padding: pixel(Theme.itemSpace),
+        padding: pixel(Theme.edgeDistance),
         backgroundColor: '#fff',
     },
     commentBody: {

@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
         paddingHorizontal: pixel(6),
-        paddingBottom: pixel(Theme.BOTTOM_HEIGHT),
+        paddingBottom: pixel(Theme.tabBarHeight),
         paddingTop: pixel(10),
     },
 });

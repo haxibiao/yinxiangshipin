@@ -244,7 +244,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#000',
-        paddingBottom: Device.isFullScreenDevice ? Theme.BOTTOM_HEIGHT : 0,
+        paddingBottom: Device.isFullScreenDevice ? Theme.tabBarHeight : 0,
     },
     listContainer: {
         flex: 1,
@@ -265,7 +265,7 @@ const styles = StyleSheet.create({
     },
     commentInput: {
         position: 'absolute',
-        bottom: Theme.HOME_INDICATOR_HEIGHT,
+        bottom: Theme.bottomInset,
         zIndex: 1,
         height: 50,
         width: '100%',

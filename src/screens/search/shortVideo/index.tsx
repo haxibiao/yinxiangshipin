@@ -213,8 +213,8 @@ const styles = StyleSheet.create({
         width: pixel(16),
     },
     listHeader: {
-        padding: pixel(Theme.itemSpace),
-        paddingBottom: Theme.HOME_INDICATOR_HEIGHT + pixel(20),
+        padding: pixel(Theme.edgeDistance),
+        paddingBottom: Theme.bottomInset + pixel(20),
         flexDirection: 'row',
         alignItems: 'center',
     },

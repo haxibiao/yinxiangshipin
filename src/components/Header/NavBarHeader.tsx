@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
     header: {
         flexDirection: 'row',
         alignItems: 'center',
-        height: Theme.NAVBAR_HEIGHT,
+        height: Theme.navBarHeight,
     },
     headerSide: {
         position: 'absolute',

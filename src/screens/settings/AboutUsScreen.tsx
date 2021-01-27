@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: Theme.white || '#FFF',
         flexGrow: 1,
-        paddingBottom: Theme.HOME_INDICATOR_HEIGHT || pixel(15),
+        paddingBottom: Theme.bottomInset || pixel(15),
     },
     copyright: {
         alignItems: 'center',

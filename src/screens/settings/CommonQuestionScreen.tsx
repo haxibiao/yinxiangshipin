@@ -8,13 +8,17 @@ export default function CommonQuestionScreen(props: any) {
         {
             question: '如何发布视频问答？有什么奖励？',
             answer:
-                `1.为了提高视频学习的趣味性，平台新增了视频问答的发布类型，您可以在提问页描述清楚您的问题，并插入相关视频内容即可发布视频问答,发布优质的视频问答将奖励一定${Config.goldAlias}。` +
+                `1.为了提高视频学习的趣味性，平台新增了视频问答的发布类型，您可以在提问页描述清楚您的问题，并插入相关视频内容即可发布视频问答,发布优质的视频问答将奖励一定${
+                    Config.goldAlias
+                }。` +
                 '\n' +
                 '2.优质问答需保持真实客观，用语规范；凡带有其他软件水印的视频将不会被推荐，建议上传无水印视频；内容不得涉黄、政治引导、煽动谣言、传播垃圾广告。',
         },
         {
             question: '如何去第三方平台收藏视频',
-            answer: `打开第三方App，点击分享按钮然后复制链接，再回到${Config.AppName}中，稍等几秒然后就可以点击收藏视频了`,
+            answer: `打开第三方App，点击分享按钮然后复制链接，再回到${
+                Config.AppName
+            }中，稍等几秒然后就可以点击收藏视频了`,
         },
         {
             question: '绑定支付宝账户是否会有风险？',
@@ -77,7 +81,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'flex-end',
-        marginTop: pixel(Theme.itemSpace),
+        marginTop: pixel(Theme.edgeDistance),
     },
     answerText: {
         color: Theme.defaultTextColor,
@@ -91,8 +95,8 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: '#fff',
         flexGrow: 1,
-        paddingBottom: Theme.HOME_INDICATOR_HEIGHT,
-        paddingTop: pixel(Theme.itemSpace * 2),
+        paddingBottom: Theme.bottomInset,
+        paddingTop: pixel(Theme.edgeDistance * 2),
     },
     content: {
         flex: 1,
@@ -100,15 +104,15 @@ const styles = StyleSheet.create({
     footer: {
         alignItems: 'center',
         backgroundColor: '#f9f9f9',
-        padding: pixel(Theme.itemSpace),
+        padding: pixel(Theme.edgeDistance),
     },
     inner: {
         borderRadius: pixel(5),
         padding: pixel(10),
     },
     issueItem: {
-        marginBottom: pixel(Theme.itemSpace * 2),
-        paddingHorizontal: pixel(Theme.itemSpace),
+        marginBottom: pixel(Theme.edgeDistance * 2),
+        paddingHorizontal: pixel(Theme.edgeDistance),
     },
     left: {
         backgroundColor: '#FFEBEE',

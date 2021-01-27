@@ -10,7 +10,7 @@ import Video from 'react-native-video';
 
 const contentGap = pixel(20);
 const MediaItemWidth = (Device.WIDTH - pixel(60)) / 3;
-const maxMediaWidth = Device.WIDTH - Theme.itemSpace * 4;
+const maxMediaWidth = Device.WIDTH - Theme.edgeDistance * 4;
 const mediaWidth = maxMediaWidth / 3;
 
 const EditCollection = (props: any) => {
@@ -188,9 +188,9 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: '#fff',
         flex: 1,
-        paddingHorizontal: Theme.itemSpace,
+        paddingHorizontal: Theme.edgeDistance,
     },
-    contentContainerStyle: { flexGrow: 1, paddingBottom: Theme.HOME_INDICATOR_HEIGHT },
+    contentContainerStyle: { flexGrow: 1, paddingBottom: Theme.bottomInset },
     publishButton: {
         backgroundColor: Theme.watermelon,
         borderRadius: pixel(5),
@@ -272,7 +272,7 @@ const styles = StyleSheet.create({
         borderRadius: pixel(5),
         height: mediaWidth,
         justifyContent: 'center',
-        marginRight: Theme.itemSpace,
+        marginRight: Theme.edgeDistance,
         overflow: 'hidden',
         width: mediaWidth,
     },

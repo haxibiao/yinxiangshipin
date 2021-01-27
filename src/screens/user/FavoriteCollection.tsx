@@ -39,7 +39,7 @@ export default () => {
 const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
-        paddingBottom: Theme.HOME_INDICATOR_HEIGHT,
+        paddingBottom: Theme.bottomInset,
     },
     separator: {
         marginHorizontal: pixel(14),
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     },
     tabBarStyle: {
         height: pixel(42),
-        paddingHorizontal: pixel(Theme.itemSpace),
+        paddingHorizontal: pixel(Theme.edgeDistance),
         backgroundColor: 'rgba(255,255,255,1)',
         borderBottomWidth: pixel(0.5),
         borderColor: '#f0f0f0',
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     },
     underlineStyle: {
         width: pixel(30),
-        left: pixel(Theme.itemSpace),
+        left: pixel(Theme.edgeDistance),
     },
     activeTextStyle: {
         color: '#212121',

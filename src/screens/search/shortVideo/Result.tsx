@@ -104,7 +104,7 @@ export default observer(({ navigation, keyword, tag_id, user_id, collection_id }
 const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
-        paddingBottom: Theme.HOME_INDICATOR_HEIGHT,
+        paddingBottom: Theme.bottomInset,
     },
     collectionInfo: {
         fontSize: font(11),
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
     },
     rowItem: {
         flexDirection: 'row',
-        padding: pixel(Theme.itemSpace),
+        padding: pixel(Theme.edgeDistance),
         paddingBottom: 0,
     },
     postCover: {

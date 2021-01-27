@@ -49,7 +49,7 @@ export interface Props {
 
 const videoWidth = Device.WIDTH * 0.6;
 const videoHeight = videoWidth * 1.33;
-const COVER_WIDTH = Device.WIDTH - pixel(Theme.itemSpace) * 2;
+const COVER_WIDTH = Device.WIDTH - pixel(Theme.edgeDistance) * 2;
 
 const PostItem: React.FC<Props> = observer((props: Props) => {
     const { showSubmitStatus, showSeparator, post = {}, showComment } = props;
@@ -267,11 +267,11 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
-        marginRight: pixel(Theme.itemSpace),
+        marginRight: pixel(Theme.edgeDistance),
     },
     info: {
         justifyContent: 'space-between',
-        marginLeft: pixel(Theme.itemSpace),
+        marginLeft: pixel(Theme.edgeDistance),
     },
     timeAgoText: { fontSize: font(12), color: Theme.slateGray1, fontWeight: '300', marginTop: pixel(5) },
     nameText: { fontSize: font(14), color: Theme.defaultTextColor },
@@ -305,15 +305,15 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
     },
     contentTop: {
-        marginTop: pixel(Theme.itemSpace),
+        marginTop: pixel(Theme.edgeDistance),
     },
     contentBottom: {
-        marginTop: pixel(Theme.itemSpace),
+        marginTop: pixel(Theme.edgeDistance),
     },
     bodyText: { color: Theme.defaultTextColor, fontSize: font(16), letterSpacing: 0.8 },
     postContainer: {
-        paddingHorizontal: pixel(Theme.itemSpace),
-        marginVertical: pixel(Theme.itemSpace),
+        paddingHorizontal: pixel(Theme.edgeDistance),
+        marginVertical: pixel(Theme.edgeDistance),
     },
     headerWrapper: {
         width: '100%',
@@ -344,7 +344,7 @@ const styles = StyleSheet.create({
     },
     remark: {
         flex: 1,
-        paddingBottom: pixel(Theme.itemSpace),
+        paddingBottom: pixel(Theme.edgeDistance),
     },
     remarkText: {
         fontSize: font(14),
@@ -353,6 +353,6 @@ const styles = StyleSheet.create({
     commentsHeader: {
         borderColor: Theme.borderColor,
         borderBottomWidth: pixel(0.5),
-        padding: pixel(Theme.itemSpace),
+        padding: pixel(Theme.edgeDistance),
     },
 });

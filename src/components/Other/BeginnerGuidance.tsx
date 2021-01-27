@@ -46,7 +46,7 @@ export default (props: Props) => {
         </Overlay.View>
     );
 
-    (async function () {
+    (async function() {
         // OverlayKey = Overlay.show(overlayView);
         const result = await Storage.getItem(guidanceKey);
         notificationStore.guides[guidanceKey] = !!result;
@@ -73,7 +73,7 @@ export default (props: Props) => {
 
     function skipGuidance() {
         if (recordable) {
-            skipGuidanceKeys.forEach((skipGuidanceKey) => {
+            skipGuidanceKeys.forEach(skipGuidanceKey => {
                 Storage.setItem(skipGuidanceKey, JSON.stringify({}));
             });
         }
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     header: {
         position: 'absolute',
         top: pixel(Device.statusBarHeight + 10),
-        paddingHorizontal: pixel(Theme.itemSpace),
+        paddingHorizontal: pixel(Theme.edgeDistance),
         width: '100%',
         justifyContent: 'center',
         alignItems: 'flex-end',

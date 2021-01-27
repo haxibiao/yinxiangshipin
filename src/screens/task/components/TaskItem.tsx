@@ -447,8 +447,8 @@ const styles = StyleSheet.create({
         marginLeft: pixel(3),
     },
     taskButton: {
-        width: pixel(76),
-        height: pixel(30),
+        width: pixel(74),
+        height: pixel(32),
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: pixel(16),

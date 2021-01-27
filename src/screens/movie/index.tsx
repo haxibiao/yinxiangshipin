@@ -39,7 +39,7 @@ const MENU_WIDTH = (Device.WIDTH - pixel(80)) / 5;
 const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
-        paddingBottom: Theme.BOTTOM_HEIGHT,
+        paddingBottom: Theme.tabBarHeight,
         backgroundColor: '#ffffff',
     },
     topSection: {

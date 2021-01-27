@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     modalBody: {
         flexGrow: 1,
         padding: SPACE,
-        paddingBottom: SPACE + pixel(Theme.HOME_INDICATOR_HEIGHT),
+        paddingBottom: SPACE + pixel(Theme.bottomInset),
     },
     movieCover: {
         position: 'relative',

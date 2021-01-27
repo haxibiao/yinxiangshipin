@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
     contentContainer: {
         backgroundColor: Theme.groundColour,
         flexGrow: 1,
-        paddingBottom: Theme.HOME_INDICATOR_HEIGHT || pixel(15),
+        paddingBottom: Theme.bottomInset || pixel(15),
     },
     notifyList: {
         backgroundColor: '#fff',
@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#fff',
         flexDirection: 'column',
-        padding: pixel(Theme.itemSpace),
+        padding: pixel(Theme.edgeDistance),
     },
     notifyIcon: {
         width: pixel(42),
@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: '#fff',
-        paddingHorizontal: pixel(Theme.itemSpace),
+        paddingHorizontal: pixel(Theme.edgeDistance),
     },
     messageContent: {
         flex: 1,

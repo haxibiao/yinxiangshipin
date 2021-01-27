@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
         top: Theme.statusBarHeight,
         right: pixel(20),
         width: pixel(50),
-        height: Theme.NAVBAR_HEIGHT,
+        height: Theme.navBarHeight,
         justifyContent: 'center',
         alignItems: 'flex-end',
     },
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
         top: Theme.statusBarHeight,
         right: pixel(20),
         width: pixel(50),
-        height: Theme.NAVBAR_HEIGHT,
+        height: Theme.navBarHeight,
         justifyContent: 'center',
         alignItems: 'flex-end',
     },
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
         resizeMode: 'cover',
     },
     tabBarStyle: {
-        height: Theme.NAVBAR_HEIGHT,
+        height: Theme.navBarHeight,
         borderBottomWidth: 0,
     },
     underlineStyle: {

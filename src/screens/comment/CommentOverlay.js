@@ -44,7 +44,7 @@ class CommentOverlay extends Component {
     }
 
     // 显示动画
-    slideUp = (params) => {
+    slideUp = params => {
         appStore.modalIsShow = true;
         this.setState(
             () => ({ visible: true, autoFocus: params?.autoFocus }),
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
         borderTopRightRadius: pixel(12),
         height: (Device.HEIGHT * 2) / 3,
         overflow: 'hidden',
-        paddingBottom: pixel(Theme.HOME_INDICATOR_HEIGHT),
+        paddingBottom: pixel(Theme.bottomInset),
     },
     countCommentsText: {
         fontSize: font(16),

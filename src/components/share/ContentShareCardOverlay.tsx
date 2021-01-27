@@ -13,7 +13,7 @@ class ContentShareCardOverlay {
         let overlayView = (
             <Overlay.View animated>
                 <View style={styles.container}>
-                    <ContentShareCard post={post} ref={(ref) => (this.shareCardRef = ref)} />
+                    <ContentShareCard post={post} ref={ref => (this.shareCardRef = ref)} />
                     <View style={styles.bottomOperation}>
                         <View style={styles.sharePlatforms}>
                             <TouchableOpacity
@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
         alignSelf: 'stretch',
         backgroundColor: '#FFF',
         padding: pixel(10),
-        paddingBottom: Theme.HOME_INDICATOR_HEIGHT ? pixel(30) : pixel(10),
+        paddingBottom: Theme.bottomInset ? pixel(30) : pixel(10),
     },
     sharePlatforms: {
         flexDirection: 'row',

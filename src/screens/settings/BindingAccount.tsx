@@ -109,11 +109,11 @@ const styles = StyleSheet.create({
         fontWeight: '400',
     },
     inputWrapper: {
-        marginHorizontal: pixel(Theme.itemSpace * 2),
-        marginBottom: pixel(Theme.itemSpace),
+        marginHorizontal: pixel(Theme.edgeDistance * 2),
+        marginBottom: pixel(Theme.edgeDistance),
     },
     btnWrap: {
-        marginTop: pixel(Theme.itemSpace),
-        marginHorizontal: pixel(Theme.itemSpace * 2),
+        marginTop: pixel(Theme.edgeDistance),
+        marginHorizontal: pixel(Theme.edgeDistance * 2),
     },
 });

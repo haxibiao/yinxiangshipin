@@ -13,7 +13,7 @@ import ScrollQueryList from './components/ScrollQueryList';
 import FavoritesPost from './components/FavoritesPost';
 import More from './components/More';
 
-const NAV_BAR_HEIGHT = pixel(Theme.NAVBAR_HEIGHT + Theme.statusBarHeight);
+const NAV_BAR_HEIGHT = pixel(Theme.navBarHeight + Theme.statusBarHeight);
 const tabWidth = Device.WIDTH / 2;
 const tabUnderlineWidth = pixel(20);
 const shadowSetting = {
@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        paddingBottom: Theme.HOME_INDICATOR_HEIGHT,
+        paddingBottom: Theme.bottomInset,
     },
     navBarWrap: {
         position: 'absolute',

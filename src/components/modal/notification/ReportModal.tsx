@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderTopLeftRadius: pixel(12),
         borderTopRightRadius: pixel(12),
-        paddingBottom: pixel(Theme.HOME_INDICATOR_HEIGHT),
+        paddingBottom: pixel(Theme.bottomInset),
     },
     header: {
         alignItems: 'center',

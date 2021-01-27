@@ -89,7 +89,7 @@ export default class DefaultTabBar extends Component<Props> {
         const scaleValue = () => {
             const arr = new Array(numberOfTabs * 2);
             return arr.fill(0).reduce(
-                function (pre, cur, idx) {
+                function(pre, cur, idx) {
                     idx == 0 ? pre.inputRange.push(cur) : pre.inputRange.push(pre.inputRange[idx - 1] + 0.5);
                     idx % 2 ? pre.outputRange.push(SCALE_NUMBER) : pre.outputRange.push(1);
                     return pre;
@@ -135,7 +135,7 @@ export default class DefaultTabBar extends Component<Props> {
 
 const shadowSetting = {
     width: Dimensions.get('window').width,
-    height: pixel(Theme.NAVBAR_HEIGHT),
+    height: pixel(Theme.navBarHeight),
     color: '#E8E8E8',
     border: pixel(5),
     radius: pixel(15),
@@ -145,7 +145,7 @@ const shadowSetting = {
 };
 const styles = StyleSheet.create({
     tabBar: {
-        height: pixel(Theme.NAVBAR_HEIGHT),
+        height: pixel(Theme.navBarHeight),
         flexDirection: 'row',
         alignItems: 'stretch',
         borderBottomWidth: StyleSheet.hairlineWidth,

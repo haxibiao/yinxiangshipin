@@ -36,10 +36,10 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 0,
         left: 0,
-        width: Theme.NAVBAR_HEIGHT,
-        height: Theme.NAVBAR_HEIGHT,
+        width: Theme.navBarHeight,
+        height: Theme.navBarHeight,
         justifyContent: 'center',
-        paddingLeft: pixel(Theme.itemSpace),
+        paddingLeft: pixel(Theme.edgeDistance),
     },
 });
 

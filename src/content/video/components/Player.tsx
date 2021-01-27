@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
         height: pixel(1),
         backgroundColor: 'rgba(255,255,255,0.4)',
         position: 'absolute',
-        bottom: Device.isFullScreenDevice ? StyleSheet.hairlineWidth : Theme.BOTTOM_HEIGHT,
+        bottom: Device.isFullScreenDevice ? StyleSheet.hairlineWidth : Theme.tabBarHeight,
         left: 0,
         right: 0,
     },

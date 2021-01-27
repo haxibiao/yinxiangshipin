@@ -51,6 +51,6 @@ const styles = StyleSheet.create({
     contentContainer: {
         flexGrow: 1,
         paddingTop: SPACE,
-        paddingBottom: pixel(Theme.HOME_INDICATOR_HEIGHT),
+        paddingBottom: pixel(Theme.bottomInset),
     },
 });

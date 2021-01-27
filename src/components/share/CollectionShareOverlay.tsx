@@ -15,7 +15,7 @@ class CollectionShareOverlay {
                         borderTopLeftRadius: pixel(12),
                         borderTopRightRadius: pixel(12),
                         backgroundColor: '#FFF',
-                        paddingBottom: Theme.HOME_INDICATOR_HEIGHT - 10 || 0,
+                        paddingBottom: Theme.bottomInset - 10 || 0,
                     }}>
                     <View style={styles.top}>
                         <TouchableOpacity
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         paddingVertical: 15,
-        paddingHorizontal: pixel(Theme.itemSpace),
+        paddingHorizontal: pixel(Theme.edgeDistance),
     },
     imageStyle: {
         width: 44,

@@ -217,7 +217,7 @@ export default observer(({ movie }) => {
 const styles = StyleSheet.create({
     container: {
         paddingTop: pixel(14),
-        paddingBottom: pixel(Theme.HOME_INDICATOR_HEIGHT) + pixel(20),
+        paddingBottom: pixel(Theme.bottomInset) + pixel(20),
     },
     row: {
         flexDirection: 'row',

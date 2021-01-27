@@ -127,10 +127,10 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: '#fff',
         flex: 1,
-        paddingBottom: pixel(Theme.HOME_INDICATOR_HEIGHT),
+        paddingBottom: pixel(Theme.bottomInset),
     },
     contentContainerStyle: {
         flexGrow: 1,
-        paddingBottom: Theme.HOME_INDICATOR_HEIGHT + pixel(Theme.itemSpace),
+        paddingBottom: Theme.bottomInset + pixel(Theme.edgeDistance),
     },
 });

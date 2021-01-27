@@ -37,7 +37,7 @@ class Footer extends Component<Props> {
 
 const styles = StyleSheet.create({
     footerView: {
-        paddingVertical: pixel(Theme.itemSpace),
+        paddingVertical: pixel(Theme.edgeDistance),
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',

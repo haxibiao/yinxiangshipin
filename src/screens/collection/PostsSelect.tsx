@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
         fontSize: font(15),
     },
     contentContainer: {
-        paddingBottom: Theme.HOME_INDICATOR_HEIGHT,
+        paddingBottom: Theme.bottomInset,
         marginHorizontal: -itemBorder * 6,
         // marginLeft: -itemBorder * 2,
     },

@@ -57,7 +57,7 @@ export default (props: Props) => {
         }, 4000);
     }, []);
 
-    const onSliderValueChanged = useCallback((value) => {
+    const onSliderValueChanged = useCallback(value => {
         sliderIsMoveOn.current = true;
         if (visibleTimer.current) {
             clearTimeout(visibleTimer.current);
@@ -66,21 +66,21 @@ export default (props: Props) => {
         setProgress(value);
     }, []);
 
-    const onSlidingComplete = useCallback((value) => {
+    const onSlidingComplete = useCallback(value => {
         sliderIsMoveOn.current = false;
         controlVisibleTimer();
         videoRef.current.seek(value);
     }, []);
 
     const twiceRate = useCallback(() => {
-        setRate((r) => {
+        setRate(r => {
             startRateAnimation(0, 1);
             return 2;
         });
     }, []);
 
     const defaultRate = useCallback(() => {
-        setRate((r) => {
+        setRate(r => {
             if (r === 2) {
                 startRateAnimation(1, 0);
             }
@@ -89,7 +89,7 @@ export default (props: Props) => {
     }, []);
 
     const togglePause = useCallback(() => {
-        setPause((v) => {
+        setPause(v => {
             if (visibleTimer.current) {
                 clearTimeout(visibleTimer.current);
             }
@@ -101,7 +101,7 @@ export default (props: Props) => {
     }, []);
 
     const toggleControlVisible = useCallback(() => {
-        setControlVisible((v) => {
+        setControlVisible(v => {
             controlVisibleTimer();
             return !v;
         });
@@ -110,7 +110,7 @@ export default (props: Props) => {
     const onPress = useDoubleHandler({ doubleClick: togglePause, singleClick: toggleControlVisible });
 
     const onBlur = useCallback(() => {
-        setPause((p) => {
+        setPause(p => {
             lastState.current = p;
             return true;
         });
@@ -204,7 +204,7 @@ export default (props: Props) => {
                         start={{ x: 0, y: 1 }}
                         end={{ x: 0, y: 0 }}
                         colors={['rgba(000,000,000,0.4)', 'rgba(000,000,000,0.2)', 'rgba(000,000,000,0.0)']}>
-                        <View style={styles.playerStatus} onStartShouldSetResponder={(evt) => true}>
+                        <View style={styles.playerStatus} onStartShouldSetResponder={evt => true}>
                             <View style={styles.momentWrap}>
                                 <SafeText style={styles.momentText}>
                                     {moment(sliderIsMoveOn.current ? sliderValue : progress)}
@@ -241,7 +241,7 @@ export default (props: Props) => {
     );
 };
 
-const headerHeight = Theme.NAVBAR_HEIGHT + Theme.statusBarHeight;
+const headerHeight = Theme.navBarHeight + Theme.statusBarHeight;
 
 const styles = StyleSheet.create({
     playerContainer: {

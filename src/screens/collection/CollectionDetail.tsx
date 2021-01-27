@@ -97,7 +97,7 @@ export default observer((props: any) => {
                         </View>
                     </View>
                     <TouchableOpacity
-                        style={{ marginBottom: pixel(20), marginHorizontal: pixel(Theme.itemSpace) }}
+                        style={{ marginBottom: pixel(20), marginHorizontal: pixel(Theme.edgeDistance) }}
                         onPress={() => setLines((l) => (l > 0 ? null : 2))}>
                         <SafeText style={styles.tagCount} numberOfLines={lines}>
                             {tagData?.description}
@@ -273,7 +273,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#161924',
     },
     search: {
-        paddingRight: pixel(Theme.itemSpace),
+        paddingRight: pixel(Theme.edgeDistance),
         flexDirection: 'row',
         alignSelf: 'stretch',
         justifyContent: 'center',
@@ -281,7 +281,7 @@ const styles = StyleSheet.create({
     },
     contentContainer: {
         flexGrow: 1,
-        paddingBottom: Theme.HOME_INDICATOR_HEIGHT,
+        paddingBottom: Theme.bottomInset,
     },
     navTitle: {
         alignItems: 'center',
@@ -296,7 +296,7 @@ const styles = StyleSheet.create({
     },
     header: {
         flexDirection: 'row',
-        padding: pixel(Theme.itemSpace),
+        padding: pixel(Theme.edgeDistance),
         paddingTop: pixel(5),
         paddingBottom: pixel(20),
     },
@@ -359,7 +359,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#666',
         borderRadius: pixel(5),
-        marginHorizontal: pixel(Theme.itemSpace),
+        marginHorizontal: pixel(Theme.edgeDistance),
         paddingVertical: pixel(12),
         marginBottom: pixel(20),
     },
@@ -370,7 +370,7 @@ const styles = StyleSheet.create({
     lineStyle: {
         height: pixel(0.5),
         backgroundColor: '#666',
-        marginBottom: pixel(Theme.itemSpace) / 2,
+        marginBottom: pixel(Theme.edgeDistance) / 2,
     },
     listFooter: {
         paddingVertical: pixel(15),
@@ -388,9 +388,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#161924',
         zIndex: 999,
-        bottom: Theme.HOME_INDICATOR_HEIGHT,
+        bottom: Theme.bottomInset,
         paddingVertical: pixel(10),
-        paddingHorizontal: pixel(Theme.itemSpace),
+        paddingHorizontal: pixel(Theme.edgeDistance),
         borderTopColor: '#666',
         borderTopWidth: pixel(1),
     },

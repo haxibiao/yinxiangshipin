@@ -63,7 +63,7 @@ class UserItem extends Component<Props> {
 const styles = StyleSheet.create({
     info: {
         flex: 1,
-        marginRight: pixel(Theme.itemSpace),
+        marginRight: pixel(Theme.edgeDistance),
     },
     introduction: {
         marginTop: pixel(8),
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     item: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginLeft: pixel(Theme.itemSpace),
+        marginLeft: pixel(Theme.edgeDistance),
     },
     labelText: { fontSize: font(12), color: '#fff', marginLeft: pixel(2), lineHeight: font(14) },
     nameText: {
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     },
     right: {
         flex: 1,
-        paddingHorizontal: pixel(Theme.itemSpace),
+        paddingHorizontal: pixel(Theme.edgeDistance),
         paddingVertical: pixel(20),
         flexDirection: 'row',
         alignItems: 'center',

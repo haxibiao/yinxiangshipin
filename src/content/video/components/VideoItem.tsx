@@ -156,7 +156,7 @@ export default observer((props: Props) => {
                     colors={['rgba(000,000,000,0.5)', 'rgba(000,000,000,0.3)', 'rgba(000,000,000,0.0)']}>
                     <View
                         style={{
-                            paddingBottom: Device.isFullScreenDevice ? 0 : Theme.BOTTOM_HEIGHT,
+                            paddingBottom: Device.isFullScreenDevice ? 0 : Theme.tabBarHeight,
                         }}>
                         <View style={styles.postInfo}>
                             <View style={styles.videoInfo}>

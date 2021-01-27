@@ -394,7 +394,7 @@ const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
         backgroundColor: '#F8F8F8',
-        paddingBottom: pixel(Theme.itemSpace) + Theme.HOME_INDICATOR_HEIGHT,
+        paddingBottom: pixel(Theme.edgeDistance) + Theme.bottomInset,
     },
     logButton: {
         height: pixel(25),

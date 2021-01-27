@@ -106,12 +106,12 @@ const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
         backgroundColor: '#ffffff',
-        paddingBottom: Theme.BOTTOM_HEIGHT + Theme.HOME_INDICATOR_HEIGHT + pixel(15),
+        paddingBottom: Theme.tabBarHeight + Theme.bottomInset + pixel(15),
     },
     taskTopContainer: {
         width: Device.WIDTH,
         height: Device.WIDTH * 0.47,
-        paddingTop: Theme.statusBarHeight + Theme.NAVBAR_HEIGHT - pixel(35),
+        paddingTop: Theme.statusBarHeight + Theme.navBarHeight - pixel(35),
         paddingBottom: pixel(50),
     },
     taskContent: {

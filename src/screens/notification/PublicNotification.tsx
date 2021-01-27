@@ -23,7 +23,7 @@ export default (props: any) => {
         <View style={styles.container}>
             <NavBarHeader title="系统通知" StatusBarProps={{ barStyle: 'dark-content' }} />
             <QueryList
-                contentContainerStyle={{ flexGrow: 1, paddingTop: Theme.HOME_INDICATOR_HEIGHT + pixel(20) }}
+                contentContainerStyle={{ flexGrow: 1, paddingTop: Theme.bottomInset + pixel(20) }}
                 gqlDocument={GQL.publicNotificationQuery}
                 options={{
                     fetchPolicy: 'network-only',

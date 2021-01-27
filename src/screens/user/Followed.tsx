@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        paddingTop: Theme.NAVBAR_HEIGHT,
+        paddingTop: Theme.navBarHeight,
     },
     navBarStyle: {
         position: 'absolute',

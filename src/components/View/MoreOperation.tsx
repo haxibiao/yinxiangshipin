@@ -476,7 +476,7 @@ const styles = StyleSheet.create({
         borderColor: Theme.borderColor,
         borderTopWidth: pixel(1),
         justifyContent: 'center',
-        paddingVertical: pixel(Theme.itemSpace),
+        paddingVertical: pixel(Theme.edgeDistance),
     },
     footerText: {
         color: Theme.defaultTextColor,
@@ -502,7 +502,7 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: pixel(12),
         borderTopRightRadius: pixel(12),
         overflow: 'hidden',
-        paddingBottom: pixel(Theme.HOME_INDICATOR_HEIGHT),
+        paddingBottom: pixel(Theme.bottomInset),
     },
 });
 

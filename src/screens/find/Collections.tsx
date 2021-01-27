@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
         paddingTop: PADDING,
-        paddingBottom: Theme.BOTTOM_HEIGHT + PADDING,
+        paddingBottom: Theme.tabBarHeight + PADDING,
         backgroundColor: '#ffffff',
     },
     secWrap: {

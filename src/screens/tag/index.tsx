@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
     },
     contentContainer: {
         flexGrow: 1,
-        paddingBottom: Theme.HOME_INDICATOR_HEIGHT,
+        paddingBottom: Theme.bottomInset,
     },
     columnWrapperStyle: {
         borderWidth: StyleSheet.hairlineWidth,

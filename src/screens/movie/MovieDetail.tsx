@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         left: 0,
         width: pixel(40),
-        height: Theme.NAVBAR_HEIGHT,
+        height: Theme.navBarHeight,
         paddingLeft: pixel(15),
         zIndex: 1,
     },
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     },
     tabBarStyle: {
         height: pixel(42),
-        paddingHorizontal: pixel(Theme.itemSpace),
+        paddingHorizontal: pixel(Theme.edgeDistance),
         backgroundColor: 'rgba(255,255,255,1)',
         borderBottomWidth: pixel(0.5),
         borderColor: '#f0f0f0',

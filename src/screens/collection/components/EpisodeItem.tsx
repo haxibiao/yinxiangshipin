@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     itemWrap: {
         width: Device.WIDTH,
         flexDirection: 'row',
-        paddingHorizontal: pixel(Theme.itemSpace),
+        paddingHorizontal: pixel(Theme.edgeDistance),
         marginVertical: pixel(10),
     },
     videoCover: {

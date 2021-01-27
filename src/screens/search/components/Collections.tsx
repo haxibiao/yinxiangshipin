@@ -27,7 +27,7 @@ const index = observer(({ keyword, navigation }) => {
 
 const styles = StyleSheet.create({
     contentContainer: {
-        paddingBottom: Theme.HOME_INDICATOR_HEIGHT,
+        paddingBottom: Theme.bottomInset,
     },
     listFooter: {
         borderTopWidth: pixel(1),

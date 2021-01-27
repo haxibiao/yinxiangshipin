@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     },
     info: {
         flex: 1,
-        marginRight: pixel(Theme.itemSpace),
+        marginRight: pixel(Theme.edgeDistance),
     },
     introduction: {
         color: '#696482',
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     item: {
         alignItems: 'center',
         flexDirection: 'row',
-        marginLeft: pixel(Theme.itemSpace),
+        marginLeft: pixel(Theme.edgeDistance),
     },
     labelText: { color: '#fff', fontSize: font(12), lineHeight: font(14), marginLeft: pixel(2) },
     nameText: {
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: pixel(1),
         flex: 1,
         flexDirection: 'row',
-        paddingHorizontal: pixel(Theme.itemSpace),
+        paddingHorizontal: pixel(Theme.edgeDistance),
         paddingVertical: pixel(20),
     },
     titleStyle: {

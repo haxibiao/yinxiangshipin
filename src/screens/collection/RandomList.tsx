@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     contentContainer: {
         flexGrow: 1,
         paddingHorizontal: PADDING,
-        paddingBottom: pixel(Theme.HOME_INDICATOR_HEIGHT) + PADDING,
+        paddingBottom: pixel(Theme.bottomInset) + PADDING,
     },
     collectionWrap: {
         paddingVertical: PADDING,

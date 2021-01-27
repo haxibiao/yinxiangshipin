@@ -143,10 +143,10 @@ const POSTER_HEIGHT = POSTER_WIDTH * 1.28;
 const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
-        paddingBottom: Theme.HOME_INDICATOR_HEIGHT,
+        paddingBottom: Theme.bottomInset,
     },
     separator: {
-        marginHorizontal: pixel(Theme.itemSpace),
+        marginHorizontal: pixel(Theme.edgeDistance),
         height: pixel(1),
         backgroundColor: '#F4F4F4',
     },

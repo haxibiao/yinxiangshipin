@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
         height: (Device.HEIGHT * 2) / 3,
         borderTopLeftRadius: pixel(12),
         borderTopRightRadius: pixel(12),
-        paddingBottom: Theme.HOME_INDICATOR_HEIGHT,
+        paddingBottom: Theme.bottomInset,
         backgroundColor: '#fff',
         overflow: 'hidden',
     },

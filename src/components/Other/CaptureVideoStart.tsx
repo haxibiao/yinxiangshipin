@@ -6,7 +6,7 @@ import { SafeText } from '@src/components';
 //     earnings: number;
 // }
 
-const CaptureVideoStart = (props) => {
+const CaptureVideoStart = props => {
     return (
         <ImageBackground style={styles.overlayImage} source={require('@app/assets/images/participation_profit.png')}>
             <View style={styles.overlayContent}>
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flex: 1,
         justifyContent: 'center',
-        paddingHorizontal: PxFit(Theme.itemSpace),
+        paddingHorizontal: PxFit(Theme.edgeDistance),
     },
     overlayImage: {
         height: OVERLAY_HEIGHT,

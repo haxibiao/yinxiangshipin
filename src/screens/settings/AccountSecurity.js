@@ -188,8 +188,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        paddingHorizontal: pixel(Theme.itemSpace),
-        // marginHorizontal: pixel(Theme.itemSpace),
+        paddingHorizontal: pixel(Theme.edgeDistance),
+        // marginHorizontal: pixel(Theme.edgeDistance),
     },
     field: {
         color: '#666',
@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
     },
     fieldGroup: {
         marginBottom: pixel(30),
-        paddingHorizontal: Theme.itemSpace,
+        paddingHorizontal: Theme.edgeDistance,
     },
     genderGroup: {
         alignItems: 'center',

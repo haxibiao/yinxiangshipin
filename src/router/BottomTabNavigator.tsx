@@ -11,12 +11,7 @@ import BottomTabBar from './BottomTabBar';
 const Tab = createBottomTabNavigator();
 export default function MainTabNavigator() {
     return (
-        <Tab.Navigator
-            initialRouteName="Home"
-            lazy={false}
-            tabBar={(props: any) => (
-                <BottomTabBar {...props} safeAreaInsets={{ bottom: Theme.HOME_INDICATOR_HEIGHT }} />
-            )}>
+        <Tab.Navigator initialRouteName="Home" lazy={false} tabBar={(props: any) => <BottomTabBar {...props} />}>
             <Tab.Screen
                 name="Home"
                 component={Home}

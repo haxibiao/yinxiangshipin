@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
     contentContainer: {
         flexGrow: 1,
         paddingHorizontal: pixel(12),
-        paddingBottom: Theme.HOME_INDICATOR_HEIGHT + pixel(80),
+        paddingBottom: Theme.bottomInset + pixel(80),
     },
     operationItem: {
         height: pixel(56),
@@ -225,7 +225,7 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         padding: pixel(15),
-        paddingBottom: Theme.HOME_INDICATOR_HEIGHT + pixel(30),
+        paddingBottom: Theme.bottomInset + pixel(30),
         backgroundColor: '#fff',
     },
     buttonStyle: {

@@ -140,7 +140,7 @@ export default class ScrollTabBar extends Component<Props> {
 
 const styles = StyleSheet.create({
     tabBar: {
-        height: pixel(Theme.NAVBAR_HEIGHT),
+        height: pixel(Theme.navBarHeight),
         flexDirection: 'row',
         alignItems: 'stretch',
         borderWidth: pixel(0.5),

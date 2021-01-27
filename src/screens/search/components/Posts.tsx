@@ -31,7 +31,7 @@ const index = observer(({ keyword }) => {
 const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
-        paddingBottom: Theme.HOME_INDICATOR_HEIGHT,
+        paddingBottom: Theme.bottomInset,
     },
     separator: {
         marginHorizontal: pixel(14),

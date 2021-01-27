@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
         fontSize: font(13),
     },
     categorySection: {
-        marginTop: pixel(Theme.itemSpace),
+        marginTop: pixel(Theme.edgeDistance),
     },
     categorySectionTitle: {
         color: Theme.slateGray1,
@@ -159,8 +159,8 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     contentContainerStyle: {
-        paddingBottom: Theme.HOME_INDICATOR_HEIGHT,
-        paddingHorizontal: pixel(Theme.itemSpace),
+        paddingBottom: Theme.bottomInset,
+        paddingHorizontal: pixel(Theme.edgeDistance),
     },
     hotMark: {
         alignItems: 'center',

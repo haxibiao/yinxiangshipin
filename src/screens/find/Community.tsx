@@ -43,7 +43,7 @@ export default observer((props: any) => {
 const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
-        paddingBottom: Theme.BOTTOM_HEIGHT,
+        paddingBottom: Theme.tabBarHeight,
     },
     separator: {
         marginHorizontal: pixel(14),

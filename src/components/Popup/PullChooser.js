@@ -102,14 +102,14 @@ const hide = () => {
 
 const styles = StyleSheet.create({
     actionSheetView: {
-        marginBottom: Theme.HOME_INDICATOR_HEIGHT,
+        marginBottom: Theme.bottomInset,
         overflow: 'hidden',
-        padding: pixel(Theme.itemSpace),
+        padding: pixel(Theme.edgeDistance),
     },
     popSheetView: {
-        marginBottom: Theme.HOME_INDICATOR_HEIGHT,
+        marginBottom: Theme.bottomInset,
         overflow: 'hidden',
-        padding: pixel(Theme.itemSpace * 2),
+        padding: pixel(Theme.edgeDistance * 2),
     },
     chooseContainer: {
         backgroundColor: '#fff',
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: '#fff',
         borderRadius: pixel(6),
-        marginTop: pixel(Theme.itemSpace),
+        marginTop: pixel(Theme.edgeDistance),
     },
     headerText: {
         fontSize: font(16),

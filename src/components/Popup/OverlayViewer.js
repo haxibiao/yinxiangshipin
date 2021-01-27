@@ -43,9 +43,9 @@ const styles = StyleSheet.create({
         zIndex: 2,
         top: pixel(Theme.statusBarHeight),
         right: 0,
-        paddingHorizontal: pixel(Theme.itemSpace),
+        paddingHorizontal: pixel(Theme.edgeDistance),
         paddingVertical: pixel(8),
-        paddingRight: pixel(Theme.itemSpace),
+        paddingRight: pixel(Theme.edgeDistance),
         alignItems: 'flex-end',
     },
 });

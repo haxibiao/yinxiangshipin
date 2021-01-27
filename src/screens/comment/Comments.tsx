@@ -111,7 +111,7 @@ const Comments = observer((props: Props) => {
                 setReplyByComment={setReplyByComment}
                 ref={fancyInputRef}
             />
-            <KeyboardSpacer topInsets={-Theme.HOME_INDICATOR_HEIGHT} />
+            <KeyboardSpacer topInsets={-Theme.bottomInset} />
         </View>
     );
 });

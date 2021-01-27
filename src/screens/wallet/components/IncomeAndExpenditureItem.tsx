@@ -38,7 +38,7 @@ export default function IncomeAndExpenditureItem(props: any) {
 
 const styles = StyleSheet.create({
     item: {
-        padding: pixel(Theme.itemSpace),
+        padding: pixel(Theme.edgeDistance),
         borderBottomColor: Theme.borderColor,
         borderBottomWidth: pixel(1),
     },

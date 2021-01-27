@@ -83,13 +83,13 @@ class Toast extends Component<Props, State> {
         let position;
         switch (this.positionValue) {
             case 'top':
-                position = { top: pixel(Theme.NAVBAR_HEIGHT + 100) };
+                position = { top: pixel(Theme.navBarHeight + 100) };
                 break;
             case 'center':
                 position = { top: pixel(Device.HEIGHT - 120) / 2 };
                 break;
             case 'bottom':
-                position = { bottom: pixel(Theme.HOME_INDICATOR_HEIGHT + 100) };
+                position = { bottom: pixel(Theme.bottomInset + 100) };
                 break;
         }
         const ToastView = isShow ? (

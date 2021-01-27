@@ -8,7 +8,7 @@ export interface Props {
     feedback: any;
 }
 
-const COVER_WIDTH = Device.WIDTH - pixel(Theme.itemSpace) * 2;
+const COVER_WIDTH = Device.WIDTH - pixel(Theme.edgeDistance) * 2;
 
 const FeedbackItem: React.FC<Props> = observer((props: Props) => {
     const { feedback } = props;
@@ -86,8 +86,8 @@ const styles = StyleSheet.create({
         marginTop: pixel(12),
     },
     feedbackContainer: {
-        paddingHorizontal: pixel(Theme.itemSpace),
-        marginVertical: pixel(Theme.itemSpace),
+        paddingHorizontal: pixel(Theme.edgeDistance),
+        marginVertical: pixel(Theme.edgeDistance),
     },
     headerWrapper: {
         width: '100%',
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     },
     info: {
         justifyContent: 'space-between',
-        marginLeft: pixel(Theme.itemSpace),
+        marginLeft: pixel(Theme.edgeDistance),
     },
     landscape: {
         width: COVER_WIDTH,
@@ -140,6 +140,6 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
-        marginRight: pixel(Theme.itemSpace),
+        marginRight: pixel(Theme.edgeDistance),
     },
 });

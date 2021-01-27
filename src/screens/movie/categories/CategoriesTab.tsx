@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     },
     tabBarStyle: {
         marginTop: Theme.statusBarHeight,
-        height: Theme.NAVBAR_HEIGHT,
+        height: Theme.navBarHeight,
         backgroundColor: 'rgba(255,255,255,1)',
     },
     underlineStyle: {

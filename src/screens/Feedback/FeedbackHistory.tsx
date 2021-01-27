@@ -7,7 +7,7 @@ import { observer, userStore } from '@src/store';
 
 import FeedbackItem from './FeedbackItem';
 
-export default observer((props) => {
+export default observer(props => {
     const { loading, error, data, fetchMore, refetch } = useQuery(GQL.myFeedbackQuery, {
         variables: { id: userStore.me.id },
         fetchPolicy: 'network-only',
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        paddingBottom: pixel(Theme.HOME_INDICATOR_HEIGHT),
+        paddingBottom: pixel(Theme.bottomInset),
     },
     ad: {
         minHeight: pixel(200),

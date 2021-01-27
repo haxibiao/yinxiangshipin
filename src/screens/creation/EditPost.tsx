@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingHorizontal: contentGap,
     },
-    contentContainerStyle: { flexGrow: 1, paddingBottom: Theme.HOME_INDICATOR_HEIGHT },
+    contentContainerStyle: { flexGrow: 1, paddingBottom: Theme.bottomInset },
     publishButton: {
         backgroundColor: Theme.watermelon,
         borderRadius: pixel(5),

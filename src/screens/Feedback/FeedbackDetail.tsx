@@ -154,10 +154,10 @@ const styles = StyleSheet.create({
     },
     contentContainerStyle: {
         flexGrow: 1,
-        paddingBottom: Theme.HOME_INDICATOR_HEIGHT,
+        paddingBottom: Theme.bottomInset,
     },
     contentWrap: {
-        margin: pixel(Theme.itemSpace),
+        margin: pixel(Theme.edgeDistance),
     },
     commentsHeader: {
         borderBottomColor: Theme.borderColor,

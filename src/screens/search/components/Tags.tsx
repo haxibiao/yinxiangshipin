@@ -40,7 +40,7 @@ const index = observer(({ keyword }) => {
 
 const styles = StyleSheet.create({
     container: {
-        paddingBottom: Theme.HOME_INDICATOR_HEIGHT,
+        paddingBottom: Theme.bottomInset,
     },
     tagItem: {
         flexDirection: 'row',

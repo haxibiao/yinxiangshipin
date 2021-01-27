@@ -27,7 +27,9 @@ const UserAgreementOverlayView = (props: any) => {
                 </View>
                 <View>
                     <Text style={styles.tintFont}>
-                        {`您制作、评论、发布、传播的信息(包括但不限于随拍或上传至“${Config.AppName}”平台的未公开的私密视频)应自觉遵守法律法规、社会主义制度、国家利益、公民合法权益、社会公共秩序、道德风尚和信息真实性等"七条底线”要求，否则公司有权立即采取相应处理措施。您同意并承诺不制作、复制、发布、传播下列信息:
+                        {`您制作、评论、发布、传播的信息(包括但不限于随拍或上传至“${
+                            Config.AppName
+                        }”平台的未公开的私密视频)应自觉遵守法律法规、社会主义制度、国家利益、公民合法权益、社会公共秩序、道德风尚和信息真实性等"七条底线”要求，否则公司有权立即采取相应处理措施。您同意并承诺不制作、复制、发布、传播下列信息:
 (1)反对宪法确定的基本原则的;
 (2)危害国家安全，泄露国家秘密的;
 (3)颠覆国家政权，推翻社会主义制度，煽动分裂国家，破坏国家统一的;
@@ -152,7 +154,7 @@ const styles = StyleSheet.create({
     agreementContent: {
         flexGrow: 1,
         backgroundColor: '#FFF',
-        padding: pixel(Theme.itemSpace),
+        padding: pixel(Theme.edgeDistance),
     },
     title: {
         color: '#212121',
