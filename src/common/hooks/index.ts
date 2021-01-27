@@ -13,3 +13,6 @@ export { useAutoSignIn } from './useAutoSignIn';
 export { useReport } from './useReport';
 export { useVisitDurationReport } from './useVisitDurationReport';
 export { useStatusBarHeight } from './useStatusBarHeight';
+export { useBounceAnimation } from './useBounceAnimation';
+export { useCirculationAnimation } from './useCirculationAnimation';
+export { useLinearAnimation } from './useLinearAnimation';
