@@ -76,8 +76,9 @@ const compose = (WrappedComponent) => {
         // 计算底部占位高度
         onContentSizeChange = (contentWidth, contentHeight) => {
             const { bottomPadding } = this.state;
-            const { index, sceneHeight } = this.props;
-            if (Math.ceil(contentHeight) < sceneHeight) {
+            const { sceneHeight } = this.props;
+
+            if (bottomPadding <= 0) {
                 // 添加占位高度 bottomPadding
                 const newBottomPadding = bottomPadding + sceneHeight - contentHeight;
                 this.setState({ bottomPadding: newBottomPadding });
@@ -110,7 +111,7 @@ const compose = (WrappedComponent) => {
         };
 
         render() {
-            const { isActive, children, headerHeight, forwardedRef, ...restProps } = this.props;
+            const { isActive, children, headerHeight, forwardedRef, contentContainerStyle, ...restProps } = this.props;
             const { bottomPadding } = this.state;
             const scrollListener = this.getScrollListener(isActive);
             return (
@@ -128,6 +129,7 @@ const compose = (WrappedComponent) => {
                     onScroll={scrollListener}
                     onContentSizeChange={this.onContentSizeChange}
                     contentContainerStyle={{
+                        ...contentContainerStyle,
                         paddingTop: headerHeight,
                         paddingBottom: bottomPadding,
                     }}
