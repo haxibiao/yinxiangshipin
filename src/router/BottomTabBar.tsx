@@ -14,7 +14,7 @@ import {
     TouchableWithoutFeedback,
 } from 'react-native';
 import { CommonActions, useTheme } from '@react-navigation/native';
-import { useSafeArea } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BoxShadow } from 'react-native-shadow';
 import { observer, userStore, appStore, adStore, notificationStore } from '@src/store';
 import { Overlay } from 'teaset';
@@ -94,7 +94,7 @@ export default observer(
         tabStyle,
     }: Props) => {
         const { colors } = useTheme();
-        const defaultInsets = useSafeArea();
+        const defaultInsets = useSafeAreaInsets();
 
         const focusedRoute = state.routes[state.index];
         const focusedDescriptor = descriptors[focusedRoute.key];
@@ -281,7 +281,7 @@ export default observer(
                     },
                     {
                         height: DEFAULT_TAB_HEIGHT + insets.bottom,
-                        paddingBottom: insets.bottom,
+                        paddingBottom: insets.bottom * 0.9,
                         paddingHorizontal: Math.max(insets.left, insets.right),
                     },
                     focusedOptions.tabBarStyle,

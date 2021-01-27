@@ -14,7 +14,7 @@ const device = {
     WIDTH: width,
     HEIGHT: height,
     isFullScreenDevice: height / width >= 18 / 9,
-    INNER_HEIGHT: height - theme.HOME_INDICATOR_HEIGHT - theme.NAVBAR_HEIGHT - theme.statusBarHeight,
+    contentHeight: height - theme.bottomInset - theme.navBarHeight - theme.statusBarHeight,
     OS: Platform.OS,
     IOS: Platform.OS === 'ios',
     Android: Platform.OS === 'android',

@@ -6,7 +6,7 @@ import { toggleImmerseStatusBar } from 'react-native-realfullscreen';
 import { WechatAppId, SentryDSN } from '../app.json';
 import { observer, userStore, appStore } from './store';
 import { usePreloadData } from './apollo';
-import { useFetchAppConfig, useAutoSignIn, useRecallUserProfile, useAccountRemind } from './common';
+import { useFetchAppConfig, useAutoSignIn, useRecallUserProfile } from './common';
 import {
     AppUserAgreementModal,
     NewUserRedEnvelopeModal,
@@ -25,8 +25,6 @@ export default observer(function Preparation() {
     useAutoSignIn({ isLogin: userStore.login, firstInstall: userStore.firstInstall });
     // 恢复登录状态、监听MeMetaQuery更新MeStorage
     useRecallUserProfile(userStore.login);
-    // 绑定手机号提醒
-    /* useAccountRemind({ gold: userStore.me.gold, articles: userStore.me.count_articles }); */
     // sdk registration
     useEffect(() => {
         // WeChat注册（微信分享）
