@@ -9,6 +9,7 @@ import updateUserBirthday from './updateUserBirthday.graphql';
 import updateUserGender from './updateUserGender.graphql';
 import updateUserIntroduction from './updateUserIntroduction.graphql';
 import updateUserName from './updateUserName.graphql';
+import mySeekMoviesQuery from './mySeekMoviesQuery.graphql';
 
 export const user = {
     meMetaQuery,
@@ -21,4 +22,5 @@ export const user = {
     updateUserGender,
     updateUserIntroduction,
     updateUserName,
+    mySeekMoviesQuery,
 };

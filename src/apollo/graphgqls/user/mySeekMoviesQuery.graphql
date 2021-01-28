@@ -1,0 +1,22 @@
+query mySeekMoviesQuery($user_id: Int!) {
+    mySeekMovies(user_id: $user_id) {
+        data {
+            id
+            images {
+                id
+                path
+            }
+            user {
+                id
+                name
+            }
+            status
+            movies {
+                id
+                name
+            }
+            name
+            description
+        }
+    }
+}
