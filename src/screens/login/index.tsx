@@ -1,422 +1,225 @@
 import React, { Component, useState, useContext, useEffect, useCallback } from 'react';
-import { StyleSheet, View, Image, Text, TouchableOpacity, StatusBar, Platform, Alert } from 'react-native';
-import {
-    PageContainer,
-    HxfTextInput,
-    HxfButton,
-    Row,
-    Center,
-    Iconfont,
-    GradientView,
-    SafeText,
-    SvgIcon,
-    SvgPath,
-} from '@src/components';
-import { exceptionCapture, useBounceAnimation } from '@src/common';
-import { GQL, useMutation, useApolloClient, errorMessage } from '@src/apollo';
-import { observer, userStore } from '@src/store';
-import * as WeChat from 'react-native-wechat-lib';
-// import Cmicsso from 'react-native-cmicsso';
-import { Overlay } from 'teaset';
+import { StyleSheet, View, Image, Text, ScrollView } from 'react-native';
+import { DebouncedPressable, Iconfont, NavBarHeader, Loading } from '@src/components';
+import { exceptionCapture, WeChatAuth } from '@src/common';
+import { GQL, errorMessage, useMutation, useApolloClient } from '@src/apollo';
+import { observer, userStore, appStore } from '@src/store';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { BoxShadow } from 'react-native-shadow';
 import UuidLoginView from './components/UuidLoginView';
-import { appStore } from '@src/store';
 
-const thumbType = ['name', 'account', 'password'];
+export default function index() {
+    const navigation = useNavigation();
 
-export default observer((props: any) => {
-    const { navigation } = props;
-    const client = useApolloClient();
-    const [submitting, toggleSubmitting] = useState(false);
-    // const [signIn, toggleEntrance] = useState(true);
-    //  const [isCmicssoSignIn, setIsCmicssoSignIn] = useState(false);
-    const [formData, setFormData] = useState({ name: '', account: '', password: '' });
-    const scope = 'snsapi_userinfo';
-    const state = 'is_wx_login';
+    const autoSignIn = useCallback(async () => {
+        function uuidLogin() {
+            return appStore.client.mutate({
+                mutation: GQL.autoSignInMutation,
+                variables: { UUID: uuid },
+            });
+        }
+        const uuid = Device.UUID;
+        if (uuid && appStore.client) {
+            Loading.show();
+            const [err, res] = await exceptionCapture(uuidLogin);
+            Loading.hide();
+            const userData = res?.data?.autoSignIn;
+            if (userData) {
+                userStore.signIn(userData);
+                navigation.navigate('Main', null, navigation.navigate('Personage'));
+            } else {
+                Toast.show({ content: '一键登录失败，请手动登录', layout: 'top' });
+            }
+        } else {
+            Toast.show({ content: '一键登录失败，请手动登录', layout: 'top' });
+        }
+    }, []);
 
-    // 第三方登陆请求
     const otherSignIn = useCallback(async (code: string, type: 'WECHAT' | 'PHONE') => {
-        client
-            .mutate({
+        function otherLogin() {
+            return appStore.client.mutate({
                 mutation: GQL.otherSignInMutation,
                 variables: {
                     code,
                     type,
                 },
                 errorPolicy: 'all',
-            })
-            .then((result: any) => {
-                // console.log('微信登陆请求回调：', result);
-                closeLoading(); // 关闭登陆加载中动画
-                const meInfo = result?.data?.authSignIn;
-
-                if (!result || !meInfo || !meInfo.token) {
-                    Toast.show({ content: '登陆失败，请稍后重试！', layout: 'top' });
-                    return;
-                }
-
-                userStore.signIn(meInfo);
-                navigation.goBack();
-            })
-            .catch((err: any) => {
-                closeLoading(); // 关闭登陆加载中动画
-                Toast.show({ content: errorMessage(err), layout: 'top' });
             });
+        }
+        if (appStore.client) {
+            Loading.show();
+            const [err, res] = await exceptionCapture(otherLogin);
+            Loading.hide();
+            const userData = res?.data?.authSignIn;
+            if (userData) {
+                userStore.signIn(userData);
+                navigation.navigate('Main', null, navigation.navigate('Personage'));
+            } else {
+                Toast.show({ content: '登录出错！', layout: 'top' });
+            }
+        } else {
+            Toast.show({ content: '登录出错！', layout: 'top' });
+        }
     }, []);
 
-    const WX_Login = useCallback(() => {
-        WeChat.isWXAppInstalled().then((login: boolean) => {
-            console.log('login', login);
-            if (login) {
-                showLoading();
-                WeChat.sendAuthRequest(scope, state).then((description: any) => {
-                    console.log('description', description);
-                    otherSignIn(description.code, 'WECHAT');
-                });
-            } else {
-                closeLoading();
-                console.log('123', 123);
-                Alert.alert('没有安装微信', '是否安装微信？', [
-                    { text: '取消' },
-                    { text: '确定', onPress: () => this.installWechat() },
-                ]);
-            }
+    const wxLogin = useCallback(() => {
+        WeChatAuth({
+            onSuccess: (code) => otherSignIn(code, 'WECHAT'),
+            onFailed: () => Toast.show({ content: '微信登录出错！', layout: 'top' }),
         });
     }, []);
 
-    // 手机号码一键登陆
-    // const onCmicssoLogin = () => {
-    //     showLoading(); // 显示登陆加载中动画
-
-    //     if (Device.isIos) {
-    //         // By: 目前 IOS 移动认证服务还未对接，所以判断是 IOS 设备或者没有连接移动网络将会跳转到 UUID 登陆逻辑
-    //         // onSilentLogin();
-    //         closeLoading(); // 关闭登陆加载中动画
-
-    //         showUuidLoginWidows();
-    //         return;
-    //     }
-
-    //     Cmicsso.loginAuth().then((data: any) => {
-    //         const info = JSON.parse(data);
-    //         const code = Helper.syncGetter('token', info);
-    //         // console.log('一键登陆回调', info.resultCode, code, info);
-    //         closeLoading(); // 关闭登陆加载中动画
-
-    //         if (info.resultCode === '200027') {
-    //             // 移动认证一键登陆失败，调用 UUID 登陆弹窗
-    //             showUuidLoginWidows();
-    //             return;
-    //         }
-
-    //         if (!code) {
-    //             if (info?.resultCode !== '200020')
-    //                 Toast.show({ content: info?.resultDesc || '登陆失败，请稍后重试！', layout: 'bottom' });
-
-    //             return;
-    //         }
-
-    //         otherSignIn(code, 'PHONE');
-    //     });
-    // };
-
-    // UUID 登陆弹窗
-    const showUuidLoginWidows = () => {
-        let popViewRef: any;
-        if (Device.UUID) {
-            // UUID 获取成功，进入 UUID 一键登陆逻辑
-            const overlayView = (
-                <Overlay.PopView
-                    style={{ justifyContent: 'center' }}
-                    containerStyle={{ backgroundColor: 'transparent' }}
-                    animated={true}
-                    ref={(ref: any) => (popViewRef = ref)}>
-                    <View style={{ paddingHorizontal: 20 }}>
-                        <UuidLoginView navigation={navigation} client={client} onClose={() => popViewRef?.close()} />
-                    </View>
-                </Overlay.PopView>
-            );
-            Overlay.show(overlayView);
-        } else {
-            // UUID 获取失败进入手机号获取验证码登陆逻辑
-            Toast.show({ content: '一键登录失败，请手动登录', layout: 'top' });
-        }
-    };
-
-    // 显示登陆中弹窗
-    let popLoadingViewRef: any;
-    const showLoading = () => {
-        const overlayView = (
-            <Overlay.PopView
-                style={{ justifyContent: 'center' }}
-                containerStyle={{ backgroundColor: 'transparent' }}
-                animated={true}
-                ref={(ref: any) => (popLoadingViewRef = ref)}>
-                <View style={{ justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
-                    <View
-                        style={{
-                            width: pixel(100),
-                            height: pixel(100),
-                            backgroundColor: '#FFF',
-                            borderRadius: 10,
-                            justifyContent: 'center',
-                            alignContent: 'center',
-                            alignItems: 'center',
-                        }}>
-                        <Image
-                            style={{ width: pixel(92), height: pixel(92) }}
-                            source={require('@app/assets/images/ic_loginpage_loading.gif')}
-                        />
-                    </View>
-                </View>
-            </Overlay.PopView>
-        );
-        Overlay.show(overlayView);
-    };
-
-    // 关闭登陆中弹窗
-    const closeLoading = () => {
-        if (popLoadingViewRef) {
-            popLoadingViewRef.close();
-        }
-    };
-
-    useEffect(() => {
-        StatusBar.setBarStyle('dark-content');
-    }, []);
-
     return (
-        <PageContainer
-            autoKeyboardInsets={false}
-            submitting={submitting}
-            style={{ flex: 1, backgroundColor: '#FFF' }}
-            submitTips={'loading'}
-            hiddenNavBar={true}>
-            <View style={styles.container}>
-                <View style={styles.formContainer}>
-                    <Center>
-                        <Image source={require('@app/assets/images/app_logo.png')} style={styles.logo} />
-                    </Center>
-                    <Center>
-                        <Text style={{ marginBottom: 80, fontSize: font(18), fontWeight: 'bold' }}>{Device.UUID}</Text>
-                    </Center>
-
-                    {/* <View style={styles.groupFooter}>
-                        <TouchableOpacity onPress={() => navigation.navigate('获取验证码')}>
-                            <Text style={styles.grayText}>找回密码？</Text>
-                        </TouchableOpacity>
-                    </View> */}
+        <View style={styles.container}>
+            <NavBarHeader
+                rightComponent={
+                    <DebouncedPressable style={styles.right} onPress={() => navigation.navigate('LoginHelp')}>
+                        <Text style={styles.rightText}>帮助</Text>
+                    </DebouncedPressable>
+                }
+            />
+            <View style={styles.content}>
+                <View style={styles.uuid}>
+                    <BoxShadow setting={shadowSetting}>
+                        <Image style={styles.appLogo} source={require('@app/assets/images/app_logo.png')} />
+                    </BoxShadow>
+                    <Text style={styles.uuidText}>{Device.UUID}</Text>
+                    <Text style={styles.uuidDescText}>一键登录由本设备识别码关联账户</Text>
                 </View>
-
-                <View style={styles.header}>
-                    <TouchableOpacity style={{ padding: pixel(5) }} onPress={() => navigation.pop()}>
-                        <Iconfont name="guanbi1" size={pixel(20)} />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={{ padding: pixel(5) }} onPress={() => navigation.navigate('LoginHelp')}>
-                        <Text style={styles.linkText}>{'遇到问题'}</Text>
-                    </TouchableOpacity>
-                </View>
-
-                <View style={{ flex: 1, backgroundColor: '#FFF' }} />
-
-                <View style={{ marginHorizontal: pixel(Theme.edgeDistance * 2), marginBottom: pixel(35) }}>
-                    <TouchableOpacity onPress={showUuidLoginWidows}>
-                        <Row
-                            style={[
-                                styles.buttonStyle,
-                                {
-                                    // Theme.secondaryColor
-                                    backgroundColor: 'rgba(255,70,0,1)',
-                                    justifyContent: 'space-between',
-                                    paddingHorizontal: pixel(80),
-                                },
-                            ]}>
-                            {/* <Iconfont name="iphone" size={pixel(23)} /> */}
-                            <SvgIcon name={SvgPath.phoneLogin} color={'#fff'} size={pixel(28)} />
-                            <Text style={[styles.grayText, { color: '#fff' }]}>本机一键登录</Text>
-                        </Row>
-                    </TouchableOpacity>
-
-                    <Row style={{ justifyContent: 'space-between' }}>
-                        <TouchableOpacity
-                            style={[
-                                styles.buttonStyle,
-                                {
-                                    flexDirection: 'row',
-                                    backgroundColor: 'rgba(41,191,35,1)',
-                                    // marginRight: pixel(25),
-                                },
-                            ]}
-                            // navigation.navigate('MobileLogin')
-                            onPress={() => WX_Login()}>
-                            {/* <Image
-                            style={{ width: pixel(20), height: pixel(20), marginRight: pixel(5) }}
-                            source={require('@app/assets/images/ic_login_weichat.png')}
-                        /> */}
-                            <Row style={{ marginHorizontal: pixel(30) }}>
-                                <SvgIcon size={23} color={'#fff'} name={SvgPath.weChatLogin} />
-                                <SafeText style={[styles.buttonText, { marginLeft: pixel(5) }]}>微信登陆</SafeText>
-                            </Row>
-
-                            {/* ${Config.AppName || ''} */}
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={[
-                                styles.buttonStyle,
-                                {
-                                    flexDirection: 'row',
-                                    // backgroundColor: Theme.secondaryColor,
-                                    backgroundColor: 'rgba(56,158,255,1)',
-                                    // marginLeft: pixel(25),
-                                },
-                            ]}
-                            onPress={() => navigation.navigate('LoginSwitch')}>
-                            {/* <Image
-                            style={{ width: pixel(20), height: pixel(20), marginRight: pixel(5) }}
-                            source={require('@app/assets/images/ic_login_weichat.png')}
-                        /> */}
-                            <Row style={{ marginHorizontal: pixel(30) }}>
-                                <SvgIcon name={SvgPath.SMS} color={'#fff'} size={18} />
-                                <SafeText style={[styles.buttonText, { marginLeft: pixel(5) }]}>{`短信登陆`}</SafeText>
-                            </Row>
-                        </TouchableOpacity>
-                    </Row>
-
-                    <TouchableOpacity
-                        // borderColor: '#0003', borderWidth: 0.5
-                        style={[styles.buttonStyle, { flexDirection: 'row' }]}
-                        onPress={() => {
-                            navigation.navigate('LoginSwitch', { switchStatus: true });
-                        }}>
-                        <SafeText style={[styles.buttonText, { color: '#000' }]}>{`账号密码登陆`}</SafeText>
-                    </TouchableOpacity>
-                    <Row style={styles.protocol}>
-                        <Text style={styles.bottomInfoText}>登录代表您已同意</Text>
-                        <Row>
-                            <TouchableOpacity onPress={() => navigation.navigate('UserProtocol')}>
-                                <Text style={[styles.bottomInfoText, { color: Theme.secondaryColor }]}>
-                                    《用户协议》
-                                </Text>
-                            </TouchableOpacity>
-                            <Text style={styles.bottomInfoText}>和</Text>
-                            <TouchableOpacity onPress={() => navigation.navigate('PrivacyPolicy')}>
-                                <Text style={[styles.bottomInfoText, { color: Theme.secondaryColor }]}>
-                                    《隐私政策》
-                                </Text>
-                            </TouchableOpacity>
-                        </Row>
-                    </Row>
+                <View style={styles.signIn}>
+                    <DebouncedPressable style={styles.signInButton} onPress={autoSignIn}>
+                        <Text style={styles.signInButtonText}>本机一键登录</Text>
+                    </DebouncedPressable>
+                    <DebouncedPressable
+                        style={[styles.signInButton, styles.numberBtn]}
+                        onPress={() => navigation.navigate('SendVerifyCode')}>
+                        <Text style={[styles.signInButtonText, { color: '#202020' }]}>手机号码登录</Text>
+                    </DebouncedPressable>
+                    <View style={styles.protocol}>
+                        <Text style={styles.protocolText}>
+                            登录代表您已同意
+                            <Text style={{ color: Theme.link }} onPress={() => navigation.navigate('UserProtocol')}>
+                                《用户协议》
+                            </Text>
+                            和
+                            <Text style={{ color: Theme.link }} onPress={() => navigation.navigate('PrivacyPolicy')}>
+                                《隐私政策》
+                            </Text>
+                        </Text>
+                    </View>
                 </View>
             </View>
-        </PageContainer>
+            <View style={styles.other}>
+                <DebouncedPressable style={styles.otherBtn} onPress={wxLogin}>
+                    <Image style={styles.otherIcon} source={require('@app/assets/images/share/share_wx.png')} />
+                </DebouncedPressable>
+                <DebouncedPressable style={styles.otherBtn} onPress={() => navigation.navigate('AccountLogin')}>
+                    <View style={styles.otherIcon}>
+                        <Iconfont name="wode_xuanzhong" size={font(26)} color="#fff" />
+                    </View>
+                </DebouncedPressable>
+            </View>
+        </View>
     );
-});
+}
+
+const shadowSetting = {
+    width: pixel(66),
+    height: pixel(66),
+    color: '#FE2C54',
+    border: pixel(3),
+    radius: pixel(10),
+    opacity: 0.6,
+    x: 1,
+    y: 2,
+};
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        height: appStore.viewportHeight + Device.bottomInset,
-        justifyContent: 'space-between',
         backgroundColor: '#fff',
+        paddingBottom: Device.bottomInset,
     },
-    registerCoverContainer: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-    },
-    registerCover: {
-        flex: 1,
+    right: {
+        paddingHorizontal: pixel(Theme.edgeDistance),
+        flexDirection: 'row',
+        alignSelf: 'stretch',
         justifyContent: 'center',
         alignItems: 'center',
-        width: '100%',
-        height: '100%',
-        backgroundColor: '#6661',
     },
-    header: {
-        position: 'absolute',
-        top: pixel(Device.statusBarHeight + Theme.edgeDistance),
-        left: pixel(Theme.edgeDistance),
-        right: pixel(Theme.edgeDistance),
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
+    rightText: {
+        color: '#202020',
+        fontSize: font(16),
     },
-    formContainer: {
-        backgroundColor: '#FFF',
-        paddingTop: pixel(Device.statusBarHeight + Theme.edgeDistance + 80),
-        paddingHorizontal: pixel(Theme.edgeDistance * 2),
-    },
-    logo: {
-        marginBottom: pixel(21),
-        width: pixel(71),
-        height: pixel(71),
-        resizeMode: 'contain',
-    },
-    fieldGroup: {
-        marginBottom: pixel(8),
-    },
-    inputWrap: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        borderRadius: pixel(4),
-        paddingRight: pixel(10),
-        borderColor: '#0003',
-        borderWidth: 0.5,
-    },
-    inputStyle: {
+    content: {
         flex: 1,
-        height: pixel(42),
-        fontSize: pixel(13),
-        paddingBottom: pixel(10),
-        paddingTop: pixel(10),
-        padding: pixel(10),
+        justifyContent: 'center',
     },
-    countdown: {
-        padding: pixel(5),
+    uuid: {
+        justifyContent: 'center',
+        alignItems: 'center',
     },
-    countdownText: {
-        fontSize: pixel(13),
-        color: Theme.subTextColor,
+    appLogo: {
+        width: pixel(66),
+        height: pixel(66),
     },
-    buttonStyle: {
-        marginTop: pixel(Theme.edgeDistance),
+    uuidText: {
+        marginTop: pixel(40),
+        fontSize: font(24),
+        fontWeight: 'bold',
+        color: '#202020',
+    },
+    uuidDescText: {
+        marginTop: pixel(10),
+        fontSize: font(13),
+        color: '#909090',
+    },
+    signIn: {
+        paddingHorizontal: percent(7),
+        marginVertical: pixel(60),
+    },
+    signInButton: {
         height: pixel(44),
         borderRadius: pixel(4),
-        backgroundColor: 'rgba(255,255,255,0.6)',
+        marginBottom: pixel(10),
+        alignItems: 'center',
         justifyContent: 'center',
-        alignItems: 'center',
+        backgroundColor: '#FE2C54',
     },
-    buttonText: {
-        fontSize: pixel(16),
+    numberBtn: {
+        borderWidth: pixel(1),
+        borderColor: '#f0f0f0',
+        backgroundColor: '#ffffff',
+    },
+    signInButtonText: {
+        fontSize: font(16),
         fontWeight: 'bold',
-        color: '#FFF',
-    },
-    boldText: {
-        fontSize: pixel(16),
-        fontWeight: 'bold',
-    },
-    grayText: {
-        fontSize: pixel(18),
-    },
-    linkText: {
-        fontSize: pixel(18),
-    },
-    groupFooter: {
-        marginTop: pixel(20),
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-    },
-    bottomInfoText: {
-        fontSize: pixel(13),
+        color: '#ffffff',
     },
     protocol: {
-        backgroundColor: '#FFF',
-        // + pixel(Theme.edgeDistance)
-        paddingBottom: Device.bottomInset,
-        alignItems: 'center',
+        marginTop: pixel(10),
+    },
+    protocolText: {
+        textAlign: 'center',
+        fontSize: font(13),
+        color: '#909090',
+        lineHeight: font(18),
+    },
+    other: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        paddingVertical: pixel(20),
+    },
+    otherBtn: {
+        paddingHorizontal: pixel(10),
+    },
+    otherIcon: {
+        width: pixel(44),
+        height: pixel(44),
+        borderRadius: pixel(22),
+        overflow: 'hidden',
         justifyContent: 'center',
-        marginTop: pixel(Theme.edgeDistance),
+        alignItems: 'center',
+        backgroundColor: '#3FA8FF',
     },
 });

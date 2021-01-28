@@ -8,7 +8,7 @@ const privateRoutes = {
     Chat: true,
     喜欢: true,
     找回密码: true,
-    获取验证码: true,
+    RetrievePassword: true,
     Feedback: true,
 };
 

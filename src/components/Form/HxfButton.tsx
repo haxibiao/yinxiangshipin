@@ -45,48 +45,39 @@ class HxfButton extends Component<Props, any> {
         };
     }
 
-    private renderIcon() {
-        const { theme, size, icon, loading } = this.props;
-        let Iconfont;
-        if (loading) {
-            Iconfont = <ActivityIndicator color={theme} size={size === 'small' ? size : 'large'} />;
-        }
-        if (icon) {
-            Iconfont = icon;
-        }
-        if (Iconfont) {
-            return (
-                <View style={iconWrapStyle[size]}>
-                    <Iconfont />
-                </View>
-            );
-        }
-        return null;
-    }
-
     public render() {
         const { gradient, style, buttonStyle, titleStyle, title, children, disabled, onPress } = this.buildProps();
-        let { colors } = this.props;
+        let { colors, loading } = this.props;
+        const disabledBtn = disabled || loading;
         if (gradient) {
             if (!Array.isArray(colors)) {
                 colors = [Theme.primaryColor, Theme.secondaryColor];
             }
             return (
-                <GradientView colors={disabled ? ['#787878', '#a4a4a4'] : colors} style={[styles.buttonWrap, style]}>
-                    <DebouncedPressable style={[{ flex: 1 }, styles.buttonWrap]} disabled={disabled} onPress={onPress}>
-                        {this.renderIcon()}
-                        {children || <SafeText style={titleStyle}>{title}</SafeText>}
+                <GradientView colors={disabledBtn ? ['#787878', '#a4a4a4'] : colors} style={[styles.buttonWrap, style]}>
+                    <DebouncedPressable
+                        style={[{ flex: 1 }, styles.buttonWrap]}
+                        disabled={disabledBtn}
+                        onPress={onPress}>
+                        {loading ? (
+                            <ActivityIndicator size={'small'} color="#fff" />
+                        ) : (
+                            children || <SafeText style={titleStyle}>{title}</SafeText>
+                        )}
                     </DebouncedPressable>
                 </GradientView>
             );
         }
         return (
             <DebouncedPressable
-                style={[styles.buttonWrap, buttonStyle, style, disabled && { backgroundColor: '#a8a8a8' }]}
-                disabled={disabled}
+                style={[styles.buttonWrap, buttonStyle, style, disabledBtn && { backgroundColor: '#a8a8a8' }]}
+                disabled={disabledBtn}
                 onPress={onPress}>
-                {this.renderIcon()}
-                {children || <SafeText style={titleStyle}>{title}</SafeText>}
+                {loading ? (
+                    <ActivityIndicator size={'small'} color="#fff" />
+                ) : (
+                    children || <SafeText style={titleStyle}>{title}</SafeText>
+                )}
             </DebouncedPressable>
         );
     }

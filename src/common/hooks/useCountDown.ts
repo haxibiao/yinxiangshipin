@@ -1,16 +1,15 @@
 import { useMemo, useState, useEffect } from 'react';
 
 interface Props {
-    expirationTime: number | string;
+    count: number | string;
 }
 
 export const useCountDown = (props: Props) => {
-    const { expirationTime } = props;
-    const [subTime, setSubTime] = useState(expirationTime);
-
+    const { count } = props;
+    const [subTime, setSubTime] = useState(count);
     useEffect(() => {
-        setSubTime(expirationTime);
-    }, [expirationTime]);
+        setSubTime(count);
+    }, [count]);
 
     useEffect(() => {
         const timer: any = setInterval(() => {
@@ -24,7 +23,7 @@ export const useCountDown = (props: Props) => {
         return () => {
             clearInterval(timer);
         };
-    }, [expirationTime]);
+    }, [count]);
 
     return useMemo(() => {
         let day: number | string = parseInt(String(subTime / 1000 / 60 / 60 / 24), 10);
@@ -41,9 +40,9 @@ export const useCountDown = (props: Props) => {
 };
 
 // export const useCountDown = (props: Props) => {
-//     const { expirationTime } = props;
+//     const { count } = props;
 //     const [subTime, setSubTime] = useState(0);
-//     const future = useMemo(() => new Date(expirationTime), [expirationTime]);
+//     const future = useMemo(() => new Date(count), [count]);
 
 //     useEffect(() => {
 //         const timer: number = setInterval(() => {

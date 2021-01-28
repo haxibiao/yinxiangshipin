@@ -7,10 +7,12 @@ import getMovieEdit from '../screens/creation/getMovieEdit';
 
 // login
 import LoginScreen from '../screens/login';
-import RetrievePasswordScreen from '../screens/login/RetrievePasswordScreen';
-import VerificationScreen from '../screens/login/VerificationScreen';
+import AccountLogin from '../screens/login/AccountLogin';
+import SendVerifyCode from '../screens/login/SendVerifyCode';
+import AuthCodeLogin from '../screens/login/AuthCodeLogin';
+import ResetPassword from '../screens/login/ResetPassword';
+import RetrievePassword from '../screens/login/RetrievePassword';
 import LoginHelpScreen from '../screens/login/loginHelp';
-import LoginSwitch from '../screens/login/LoginSwitch';
 
 // wallet
 import Wallet from '../screens/wallet';
@@ -100,8 +102,14 @@ export default {
     Login: {
         component: LoginScreen,
     },
-    LoginSwitch:{
-        component: LoginSwitch, 
+    AccountLogin: {
+        component: AccountLogin,
+    },
+    SendVerifyCode: {
+        component: SendVerifyCode,
+    },
+    AuthCodeLogin: {
+        component: AuthCodeLogin,
     },
     LoginHelp: {
         component: LoginHelpScreen,
@@ -118,7 +126,7 @@ export default {
     TagList: {
         component: TagListScreen,
     },
-    getMovie:{
+    getMovie: {
         component: getMovieEdit,
     },
     Wallet: {
@@ -227,11 +235,11 @@ export default {
     UserPosts: {
         component: UserPosts,
     },
-    RetrievePassword: {
-        component: RetrievePasswordScreen,
+    ResetPassword: {
+        component: ResetPassword,
     },
-    获取验证码: {
-        component: VerificationScreen,
+    RetrievePassword: {
+        component: RetrievePassword,
     },
     FavoriteCollection: {
         component: FavoriteCollection,
@@ -309,5 +317,4 @@ export default {
     SystemNotificationItem: {
         component: SystemNotificationItem,
     },
-    
 };

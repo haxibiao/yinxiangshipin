@@ -5,7 +5,7 @@ import { GQL, errorMessage } from '@src/apollo';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useMutation } from '@apollo/react-hooks';
 
-const RetrievePasswordScreen = (props: any) => {
+export default (props: any) => {
     const navigation = useNavigation();
     const route = useRoute();
     const phone = route?.params?.phone;
@@ -136,19 +136,17 @@ const RetrievePasswordScreen = (props: any) => {
     );
 };
 
-export default RetrievePasswordScreen;
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#FFF',
-        paddingHorizontal: pixel(25),
-        paddingTop: pixel(20),
+        paddingHorizontal: percent(7),
     },
     title: {
-        color: '#2b2b2b',
-        fontSize: font(20),
+        marginTop: pixel(20),
+        fontSize: font(24),
         fontWeight: 'bold',
+        color: '#202020',
     },
     textWrap: {
         borderBottomColor: '#f0f0f0',

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { StyleSheet, View, Image, Text, ScrollView, TextInput } from 'react-native';
-import { Iconfont, DebouncedPressable, NavBarHeader, Loading } from '@src/components';
-import { exceptionCapture } from '@src/common';
+import { StyleSheet, View, Image, Text, ScrollView, TextInput, ActivityIndicator } from 'react-native';
+import { Iconfont, SvgIcon, SvgPath, NavBarHeader, Loading, DebouncedPressable } from '@src/components';
+import { exceptionCapture, WeChatAuth, useAuthCode } from '@src/common';
 import { GQL, errorMessage, useMutation, useApolloClient } from '@src/apollo';
 import { observer, userStore, appStore } from '@src/store';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -10,34 +10,30 @@ export default function index() {
     const route = useRoute();
     const phone = route?.params?.phone;
     const navigation = useNavigation();
-    const [account, setAccount] = useState('');
-    const [password, setPassword] = useState('');
-    const disabledSignIn = !(account?.length > 1 && password?.length > 1);
-    const inputAccount = useCallback((val) => {
-        const number = val?.replace(/[^0-9]/gi, '') || '';
-        setAccount(number);
-    }, []);
-    const inputPassword = useCallback((val) => {
-        const pw = val?.trim() || '';
-        setPassword(pw);
+    const [verifyCode, setVerifyCode] = useState('');
+    const disabledSignIn = verifyCode.length < 4;
+    const inputVerifyCode = useCallback((val) => {
+        const number = val.replace(/[^0-9]/gi, '');
+        setVerifyCode(number);
     }, []);
 
-    const onSignIn = async () => {
-        function mutation() {
+    const { fetchAuthCode, countDown, loading } = useAuthCode();
+
+    const onSignIn = useCallback(async (phone: string, code: string) => {
+        function smsLogin() {
             return appStore.client.mutate({
-                mutation: GQL.signInMutation,
+                mutation: GQL.smsSignInMutation,
                 variables: {
-                    account,
-                    password,
-                    uuid: Device.UUID,
+                    phone,
+                    code,
                 },
             });
         }
         if (appStore.client) {
             Loading.show();
-            const [err, res] = await exceptionCapture(mutation);
+            const [err, res] = await exceptionCapture(smsLogin);
             Loading.hide();
-            const userData = res?.data?.signIn;
+            const userData = res?.data?.smsSignIn;
             if (userData) {
                 userStore.signIn(userData);
                 navigation.navigate('Main', null, navigation.navigate('Personage'));
@@ -47,7 +43,7 @@ export default function index() {
         } else {
             Toast.show({ content: '登录出错！', layout: 'top' });
         }
-    };
+    }, []);
 
     return (
         <View style={styles.container}>
@@ -60,55 +56,40 @@ export default function index() {
             />
             <View style={styles.content}>
                 <View style={styles.pageTop}>
-                    <Text style={styles.title}>账号密码登录</Text>
+                    <Text style={styles.title}>手机号码登录</Text>
                     <View style={styles.protocol}>
-                        <Text style={styles.grayText}>使用注册过的账号和密码登录</Text>
+                        <Text style={styles.grayText}>验证码已经通过短信发送至{phone}</Text>
                     </View>
                 </View>
                 <View>
                     <View style={styles.inputBox}>
                         <TextInput
                             style={styles.inputStyle}
-                            value={account}
-                            onChangeText={inputAccount}
-                            maxLength={11}
+                            value={verifyCode}
+                            onChangeText={inputVerifyCode}
+                            maxLength={6}
                             numberOfLines={1}
-                            placeholder="请输入账号"
+                            placeholder="请输入验证码"
                             keyboardType="numeric"
                         />
                         <DebouncedPressable
-                            style={[styles.closeBtn, !account && { opacity: 0 }]}
-                            disabled={!account}
-                            onPress={() => inputAccount()}>
-                            <Iconfont name="guanbi1" size={font(12)} color="#fff" />
-                        </DebouncedPressable>
-                    </View>
-                    <View style={styles.inputBox}>
-                        <TextInput
-                            style={styles.inputStyle}
-                            value={password}
-                            onChangeText={inputPassword}
-                            maxLength={16}
-                            numberOfLines={1}
-                            placeholder="请输入密码"
-                        />
-                        <DebouncedPressable
-                            style={[styles.closeBtn, !password && { opacity: 0 }]}
-                            disabled={!password}
-                            onPress={() => inputPassword()}>
-                            <Iconfont name="guanbi1" size={font(12)} color="#fff" />
+                            style={styles.inputLabel}
+                            disabled={loading || !!countDown}
+                            onPress={() => fetchAuthCode(phone)}>
+                            {loading ? (
+                                <ActivityIndicator size={'small'} color={Theme.primaryColor} />
+                            ) : (
+                                <Text style={[styles.grayText, !countDown && { color: Theme.primaryColor }]}>
+                                    {countDown || '重新发送'}
+                                </Text>
+                            )}
                         </DebouncedPressable>
                     </View>
                     <DebouncedPressable
                         style={[styles.signInButton, !disabledSignIn && styles.numberBtn]}
                         disabled={disabledSignIn}
-                        onPress={onSignIn}>
+                        onPress={() => onSignIn(phone, verifyCode)}>
                         <Text style={styles.signInButtonText}>登录</Text>
-                    </DebouncedPressable>
-                </View>
-                <View style={styles.tips}>
-                    <DebouncedPressable onPress={() => navigation.navigate('RetrievePassword')}>
-                        <Text style={styles.lightText}>忘记密码?</Text>
                     </DebouncedPressable>
                 </View>
             </View>
@@ -164,22 +145,28 @@ const styles = StyleSheet.create({
         fontSize: font(13),
         color: '#909090',
     },
+    lightText: {
+        fontSize: font(13),
+        color: Theme.link,
+    },
     inputBox: {
         marginBottom: pixel(10),
         flexDirection: 'row',
-        alignItems: 'center',
         height: pixel(44),
         paddingHorizontal: pixel(14),
         borderRadius: pixel(4),
         backgroundColor: '#f6f6f6',
     },
-    closeBtn: {
-        width: pixel(16),
-        height: pixel(16),
-        borderRadius: pixel(8),
-        backgroundColor: '#b2b2b2',
+    inputLabel: {
+        flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    labelBorder: {
+        width: Device.minimumPixel,
+        height: pixel(10),
+        marginLeft: pixel(10),
+        backgroundColor: '#b2b2b2',
     },
     inputStyle: {
         flex: 1,
@@ -187,8 +174,7 @@ const styles = StyleSheet.create({
         paddingVertical: pixel(10),
     },
     signInButton: {
-        marginTop: pixel(20),
-        marginBottom: pixel(10),
+        marginVertical: pixel(20),
         height: pixel(44),
         borderRadius: pixel(4),
         alignItems: 'center',
@@ -203,13 +189,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#ffffff',
     },
-    tips: {
+    other: {
         flexDirection: 'row',
-        justifyContent: 'flex-end',
-    },
-    lightText: {
-        paddingVertical: pixel(10),
-        fontSize: font(13),
-        color: Theme.link,
+        justifyContent: 'space-between',
     },
 });
