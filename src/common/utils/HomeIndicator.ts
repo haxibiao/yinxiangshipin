@@ -9,4 +9,4 @@ const setAutoHidden = (hidden: boolean) => {
         //leave empty for android and etc ..
     }
 };
-export { setAutoHidden };
+export default { setAutoHidden };

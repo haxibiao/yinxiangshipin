@@ -24,6 +24,7 @@ const navBarMenuColor = '#666666';
 const navBarSeparatorColor = '#F6F7F9';
 
 export default {
+    edgeDistance: 14,
     primaryColor,
     primaryColorRgb,
     secondaryColor,

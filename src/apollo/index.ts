@@ -3,7 +3,6 @@ import DeviceInfo from 'react-native-device-info';
 import NetInfo from '@react-native-community/netinfo';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import ApolloClient from 'apollo-boost';
-import Config from '@src/common/config';
 import { appStore } from '@src/store';
 
 export * from './apis';

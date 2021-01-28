@@ -8,7 +8,7 @@ interface Props {
     onFailed?: Function;
 }
 
-export function bindWeChat(props: Props) {
+export function bindWeChatWallet(props: Props) {
     const scope = 'snsapi_userinfo';
     const state = 'skit_wx_login';
     const { onSuccess, onFailed } = props;
@@ -16,11 +16,9 @@ export function bindWeChat(props: Props) {
     WeChat.isWXAppInstalled()
         .then((isInstalled: any) => {
             if (isInstalled) {
-                // 发送授权请求
                 WeChat.sendAuthRequest(scope, state)
                     .then((responseCode: any) => {
-                        // 返回code码，通过code获取access_token
-                        bindingWeChatWallet(responseCode.code, props);
+                        bindWallet(responseCode.code, props);
                     })
                     .catch((err) => {
                         onFailed && onFailed('登录授权发生错误');
@@ -34,7 +32,7 @@ export function bindWeChat(props: Props) {
         });
 }
 
-function bindingWeChatWallet(code: any, props: Props) {
+function bindWallet(code: any, props: Props) {
     const { onSuccess, onFailed } = props;
     notificationStore.toggleLoadingVisible();
     appStore.client

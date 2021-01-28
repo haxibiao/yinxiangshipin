@@ -3,9 +3,8 @@ import { Platform } from 'react-native';
 import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import CameraRoll from '@react-native-community/cameraroll';
 import RNFetchBlob from 'rn-fetch-blob';
-import { vod } from '@src/native';
 import { Loading } from '@src/components';
-import { fileHash } from '@src/common';
+import { fileHash, vod } from '@src/common';
 
 const { fs } = RNFetchBlob;
 const { dirs } = fs;

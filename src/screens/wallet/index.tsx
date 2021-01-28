@@ -14,7 +14,7 @@ import { useNavigation } from '@react-navigation/native';
 import { PageContainer, Iconfont, Row, HxfButton, SafeText } from '@src/components';
 import { observer, userStore, notificationStore } from '@src/store';
 import { GQL, useMutation, useQuery, errorMessage } from '@src/apollo';
-import { bindWeChat, syncGetter, useNavigationListener } from '@src/common';
+import { bindWeChatWallet, syncGetter, useNavigationListener } from '@src/common';
 
 const fakeAmountListData = [
     {
@@ -165,7 +165,7 @@ export default observer((props: any) => {
                 return navigation.navigate(userProfile.phone ? 'VerifyAliPay' : 'BindingAccount');
             },
             WECHAT() {
-                bindWeChat({
+                bindWeChatWallet({
                     onSuccess: (oauth_id) => {
                         userStore.me.wallet.platforms.wechat = oauth_id;
                     },

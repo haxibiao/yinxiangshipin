@@ -1,9 +1,9 @@
 import lodash from 'lodash';
 import * as helper from './helper';
 import * as scale from './scale';
-import device from './device';
 import config from './config';
-import theme from './styles';
+import device from './device';
+import theme from './theme';
 
 const Global = global || window || {};
 

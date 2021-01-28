@@ -28,7 +28,7 @@ class Toast extends Component<Props, State> {
     static defaultProps = {
         fadeInDuration: 300,
         fadeOutDuration: 400,
-        showDuration: 1200,
+        showDuration: 1800,
     };
 
     constructor(props: Props) {

@@ -1,20 +1,18 @@
 interface DeviceInfo {
     width: number;
     height: number;
-    homeIndicatorHeight: number; // 刘海屏iPhone底部的Indicator高度
-    OS: string;
-    isIos: boolean;
-    isAndroid: boolean;
-    systemVersion: string;
-    pixelRatio: number; // 屏幕分辨率
-    minimumPixel: number; // 最小线宽
-    navBarHeight: number; // 顶部导航高度
-    tabBarHeight: number; // 底部导航高度
-    phoneNumber: string;
+    topInset: number;
+    bottomInset: number;
+    leftInset: number;
+    rightInset: number;
+    navBarHeight: number;
+    tabBarHeight: number;
     UUID: string;
-    isLandscape: boolean;
-    statusBarHeight: number;
-    Brand: string;
+    OS: string;
+    isIOS: boolean;
+    isAndroid: boolean;
+    isFullScreenDevice: boolean;
+    minimumPixel: number;
 }
 
 interface AppConfig {

@@ -18,7 +18,7 @@ import LottieView from 'lottie-react-native';
 import Orientation from 'react-native-device-orientation';
 import { setFullscreenMode } from 'react-native-realfullscreen';
 import SystemSetting from 'react-native-system-setting';
-import { HomeIndicator } from '@src/native';
+import { HomeIndicator } from '@src/common';
 import { Iconfont, SvgIcon, SvgPath } from '@src/components';
 import { VolumeIndicator, BrightnessIndicator } from './SystemSettingIndicator';
 import Buffering from './Buffering';

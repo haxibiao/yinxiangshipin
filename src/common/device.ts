@@ -17,6 +17,7 @@ export default {
     rightInset,
     navBarHeight: 44,
     tabBarHeight: 50 + bottomInset,
+    UUID: DeviceInfo.getUniqueId(),
     OS: Platform.OS,
     isIOS: Platform.OS === 'ios',
     isAndroid: Platform.OS === 'android',

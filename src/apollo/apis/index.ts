@@ -1,4 +1,5 @@
 export { errorMessage } from './errorMessage';
+export { exceptionCapture } from './exceptionCapture';
 export { getTaskReward, getUserReward, getNewUserReward } from './getReward';
 export { useLikeMutation } from './useLikeMutation';
 export { useFollowMutation } from './useFollowMutation';

@@ -4,7 +4,7 @@ import { NavBarHeader, MediaUploader, Iconfont, SafeText } from '@src/components
 import { appStore, userStore, notificationStore } from '@src/store';
 import { useNavigation } from '@react-navigation/native';
 import { GQL, useMutation, errorMessage } from '@src/apollo';
-import { openImagePicker } from '@src/native';
+import { openImagePicker } from '@src/common';
 import Video from 'react-native-video';
 
 const mediaWidth = Device.width * 0.28;

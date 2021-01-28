@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Text, Image, ScrollView, TouchableOpacity } from 'react-native';
 import { Overlay } from 'teaset';
-import { Share } from '@src/native';
+import { Share } from '@src/common';
 import * as WeChat from 'react-native-wechat-lib';
 import ShareIOS from 'react-native-share';
 import viewShotUtil from './viewShotUtil';
