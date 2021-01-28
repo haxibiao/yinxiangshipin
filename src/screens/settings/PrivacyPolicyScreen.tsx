@@ -66,7 +66,7 @@ export default () => {
                     <View style={styles.fontWrap}>
                         <Text style={styles.title}>本《{Config.AppName}隐私政策》将帮助您了解以下内容</Text>
                         <Text style={tintFontStyle}>
-                            {`一、本《{Config.AppName}隐私政策》适用范围、相关词语涵义 \n二、我们如何收集和使用您的个人信息 \n三、我们如何使用 Cookie 和同类技术 \n四、 我们如何共享、转让、公开披露您的个人信息 \n五、您对个人信息享有的控制权 \n六、我们如何存储和保护您的个人信息 \n七、未成年人保护 \n八、本《{Config.AppName}隐私政策》的更新 \n九、如何联系我们 \n十、其他`}
+                            {`一、本《${Config.AppName}隐私政策》适用范围、相关词语涵义 \n二、我们如何收集和使用您的个人信息 \n三、我们如何使用 Cookie 和同类技术 \n四、 我们如何共享、转让、公开披露您的个人信息 \n五、您对个人信息享有的控制权 \n六、我们如何存储和保护您的个人信息 \n七、未成年人保护 \n八、本《${Config.AppName}隐私政策》的更新 \n九、如何联系我们 \n十、其他`}
                         </Text>
                     </View>
                     <View style={styles.fontWrap}>
@@ -518,6 +518,9 @@ export default () => {
                     </View>
                     <View style={styles.fontWrap}>
                         <Text style={styles.title}>（二）转让</Text>
+                        <Text style={tintFontStyle}>
+                            转让是指将个人信息控制权向其他公司、组织或个人转移的过程。原则上我们不会将您的个人信息转让，但以下情况除外：
+                        </Text>
                         <Text style={tintFontStyle}>1.您自行提出要求的；</Text>
                         <Text style={tintFontStyle}>2.事先已征得您的明确授权同意；</Text>
                         <Text style={tintFontStyle}>
