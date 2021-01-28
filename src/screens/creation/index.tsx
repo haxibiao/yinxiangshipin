@@ -21,16 +21,16 @@ import {
     UserAgreementOverlay,
     OverlayViewer,
 } from '@src/components';
+import { AutonomousModal } from '@src/components/modal';
 import { GQL, useMutation, errorMessage } from '@src/apollo';
 import { exceptionCapture } from '@src/common';
 import { shareClipboardLink } from '@src/content';
 import { useRoute, useNavigation } from '@react-navigation/native';
-import { ApolloProvider } from '@apollo/react-hooks';
 import { observer, userStore, appStore, adStore } from '@src/store';
 import { observable } from 'mobx';
 import { Overlay } from 'teaset';
 import Video from 'react-native-video';
-import SelectCollection, { CollectionItem } from '@src/screens/collection/components/SelectCollection';
+import SelectCollection, { CollectionItem } from './components/SelectCollection';
 import SharedVideoContent from './SharedVideoContent';
 
 const MediaItemWidth = (Device.width - pixel(60)) / 3;
@@ -228,41 +228,17 @@ export default (props: any) => {
     }, [tags]);
 
     // 选择合集
-    const overlayKey = useRef();
-
-    const closeCollection = useCallback(() => {
-        Overlay.hide(overlayKey.current);
-    }, []);
+    const [modalVisible, setModalVisible] = useState(false);
 
     const addCollection = useCallback((value) => {
         setCollections([value]);
-        closeCollection();
+        setModalVisible(false);
     }, []);
 
     const deleteCollection = useCallback(() => {
         setCollections([]);
-        closeCollection();
+        setModalVisible(false);
     }, []);
-
-    const userCollection = useMemo(() => {
-        return (
-            <ApolloProvider client={appStore.client}>
-                <SelectCollection onClose={closeCollection} onClick={addCollection} navigation={navigation} />
-            </ApolloProvider>
-        );
-    }, [appStore.client]);
-
-    const showCollection = useCallback(() => {
-        const Operation = (
-            <Overlay.PullView
-                style={{ flexDirection: 'column', justifyContent: 'flex-end' }}
-                containerStyle={{ backgroundColor: 'transparent' }}
-                animated={true}>
-                {userCollection}
-            </Overlay.PullView>
-        );
-        overlayKey.current = Overlay.show(Operation);
-    }, [userCollection]);
 
     useEffect(() => {
         if (!appStore.agreeCreatePostAgreement) {
@@ -369,7 +345,7 @@ export default (props: any) => {
                         style={styles.operation}
                         activeOpacity={1}
                         disabled={collections.length > 0}
-                        onPress={showCollection}>
+                        onPress={() => setModalVisible(true)}>
                         <View style={styles.operationLeft}>
                             <Image
                                 source={
@@ -396,6 +372,20 @@ export default (props: any) => {
                     )}
                 </View>
             </ScrollView>
+            <AutonomousModal
+                visible={modalVisible}
+                onToggleVisible={setModalVisible}
+                style={{ justifyContent: 'flex-end' }}>
+                {(visible, changeVisible) => {
+                    return (
+                        <SelectCollection
+                            onClose={() => setModalVisible(false)}
+                            onClick={addCollection}
+                            navigation={navigation}
+                        />
+                    );
+                }}
+            </AutonomousModal>
         </View>
     );
 };

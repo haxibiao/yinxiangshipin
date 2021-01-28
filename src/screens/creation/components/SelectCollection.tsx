@@ -9,7 +9,15 @@ import { GQL } from '@src/apollo';
 export default ({ onClose, onClick, navigation }) => {
     const renderItem = useCallback(
         ({ item }) => {
-            return <CollectionItem collection={item} navigation={navigation} onClick={onClick} btnName="添加" />;
+            return (
+                <CollectionItem
+                    collection={item}
+                    navigation={navigation}
+                    onClick={onClick}
+                    btnName="添加"
+                    onClose={onClose}
+                />
+            );
         },
         [navigation],
     );
@@ -59,9 +67,15 @@ export default ({ onClose, onClick, navigation }) => {
     );
 };
 
-export function CollectionItem({ style, collection, navigation, onClick, btnName }) {
+export function CollectionItem({ style, collection, navigation, onClick, onClose, btnName }) {
     return (
-        <TouchableWithoutFeedback onPress={() => navigation.navigate('CollectionDetail', { collection })}>
+        <TouchableWithoutFeedback
+            onPress={() => {
+                if (onClose instanceof Function) {
+                    onClose();
+                }
+                navigation.navigate('CollectionDetail', { collection });
+            }}>
             <View style={[styles.collectionItem, style]}>
                 <Image style={styles.collectionCover} source={{ uri: collection?.logo }} />
                 <View style={styles.collectionInfo}>
