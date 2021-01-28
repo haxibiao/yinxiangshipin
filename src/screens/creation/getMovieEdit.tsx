@@ -1,21 +1,21 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput } from 'react-native';
 import { NavBarHeader, MediaUploader, Avatar, Loading } from '@src/components';
 import { useRoute, useNavigation } from '@react-navigation/native';
-import { userStore } from '@src/store';
-import { observer } from 'mobx-react';
+import { observer, userStore, appStore, adStore } from '@src/store';
 import { exceptionCapture } from '@src/common';
+import { GQL, useMutation, errorMessage } from '@src/apollo';
+import { observable } from 'mobx';
 
 const getMovieEdit = observer(() => {
     const navigation = useNavigation();
     const route = useRoute();
     const movieTitle_first = route?.params?.keyword;
     const me = userStore.me;
-    const [movieTitle, setMovieTitle] = useState(`#` + movieTitle_first + `#`);
-
-    console.log('====================================');
-    console.log('route.params?.collection', route.params?.collection);
-    console.log('====================================');
+    const [movieTitle, setMovieTitle] = useState();
+    useEffect(() => {
+        setMovieTitle(`#` + movieTitle_first + `#`);
+    }, [movieTitle_first, setMovieTitle]);
 
     const [formData, setFormData] = useState({
         body: '',
@@ -29,12 +29,9 @@ const getMovieEdit = observer(() => {
                 setMovieTitle(value);
             } else {
                 setMovieTitle('');
-                setTimeout(() => {
-                    setMovieTitle('请输入片名~');
-                }, 5000);
             }
         },
-        [movieTitle],
+        [setMovieTitle],
     );
 
     const changeBody = useCallback((value) => {
@@ -60,7 +57,7 @@ const getMovieEdit = observer(() => {
     }, []);
 
     const isDisableButton = useMemo(() => {
-        if (formData.body && (formData.qcvod_fileid || formData.images.length > 0) && movieTitle != '请输入片名~') {
+        if (formData.body && (formData.qcvod_fileid || formData.images.length > 0) && movieTitle != '') {
             return false;
         }
         return true;
@@ -68,10 +65,8 @@ const getMovieEdit = observer(() => {
 
     const createPost = useCallback(async () => {
         Loading.show();
-        const [error, res] = await exceptionCapture(createPostContent);
-        console.log('====================================');
+        const [error, res] = await exceptionCapture(createSeekMovieMuattion);
         console.log('res', res);
-        console.log('====================================');
         Loading.hide();
         if (error) {
             Toast.show({
@@ -81,25 +76,22 @@ const getMovieEdit = observer(() => {
             Toast.show({
                 content: '发布成功',
             });
-            navigation.replace('PostDetail', {
-                post: observable(res?.data?.createPostContent),
-            });
+            // navigation.replace('PostDetail', {
+            //     post: observable(res?.data?.createSeekMovieMuattion),
+            // });
         }
 
-        function createPostContent() {
+        function createSeekMovieMuattion() {
             return appStore.client.mutate({
-                mutation: GQL.createPostContent,
+                mutation: GQL.createSeekMovieMuattion,
                 variables: {
-                    body: formData.body,
+                    name: movieTitle,
+                    description: formData.body,
                     images: formData.images,
-                    // share_link: shareLink.current,
-                    // qcvod_fileid: formData.qcvod_fileid,
-                    // tag_names: tags.map((c) => c.name),
-                    // collection_ids: collections.map((c) => c.id),
                 },
             });
         }
-    }, [formData]);
+    }, [formData, movieTitle]);
 
     return (
         <View>
@@ -121,6 +113,7 @@ const getMovieEdit = observer(() => {
                     value={movieTitle}
                     onChangeText={changeTitle}
                     underlineColorAndroid="transparent"
+                    placeholder="请赏赐电影或剧名"
                     maxLength={15}
                     style={{
                         height: pixel(35),
@@ -145,34 +138,11 @@ const getMovieEdit = observer(() => {
                         placeholderTextColor="#b2b2b2"
                     />
                     <View style={styles.mediaContainer}>
-                        {/* {sharedVideo?.id ? (
-                            <TouchableOpacity
-                                style={styles.videoWrap}
-                                activeOpacity={1}
-                                onPress={() => showVideo(sharedVideo?.path)}>
-                                <Image
-                                    style={styles.videoItem}
-                                    source={{
-                                        uri: sharedVideo?.cover,
-                                    }}
-                                />
-                                <View style={styles.playMark}>
-                                    <TouchableOpacity style={styles.deleteVideo} onPress={deleteVideo}>
-                                        <Iconfont name="guanbi1" size={pixel(12)} color="#fff" />
-                                    </TouchableOpacity>
-                                </View>
-                            </TouchableOpacity>
-                        ) : (
-                            <MediaUploader
-                                onResponse={uploadResponse}
-                                maxWidth={Device.width / 2}
-                                style={styles.mediaItem}
-                            />
-                        )} */}
                         <MediaUploader
                             onResponse={uploadResponse}
                             maxWidth={Device.width / 2}
                             style={styles.mediaItem}
+                            type="image"
                         />
                     </View>
                 </View>

@@ -13,6 +13,7 @@ import userPostsQuery from './userPostsQuery.graphql';
 import userVisitsQuery from './userVisitsQuery.graphql';
 import visitShareablebyUuid from './visitShareablebyUuid.graphql';
 import postWithMoviesQuery from './postWithMoviesQuery.graphql';
+import createSeekMovieMuattion from './createSeekMovieMuattion.graphql';
 
 export const post = {
     createPostContent,
@@ -29,4 +30,5 @@ export const post = {
     userVisitsQuery,
     visitShareablebyUuid,
     postWithMoviesQuery,
+    createSeekMovieMuattion,
 };
