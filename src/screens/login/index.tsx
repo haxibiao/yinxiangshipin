@@ -1,6 +1,6 @@
 import React, { Component, useState, useContext, useEffect, useCallback } from 'react';
 import { StyleSheet, View, Image, Text, ScrollView } from 'react-native';
-import { DebouncedPressable, Iconfont, NavBarHeader, Loading } from '@src/components';
+import { DebouncedPressable, Iconfont, NavBarHeader, Loading, HxfButton } from '@src/components';
 import { exceptionCapture, WeChatAuth } from '@src/common';
 import { GQL, errorMessage, useMutation, useApolloClient } from '@src/apollo';
 import { observer, userStore, appStore } from '@src/store';
@@ -87,9 +87,13 @@ export default function index() {
                     <Text style={styles.uuidDescText}>一键登录由本设备识别码关联账户</Text>
                 </View>
                 <View style={styles.signIn}>
-                    <DebouncedPressable style={styles.signInButton} onPress={autoSignIn}>
-                        <Text style={styles.signInButtonText}>本机一键登录</Text>
-                    </DebouncedPressable>
+                    <HxfButton
+                        title="本机一键登录"
+                        gradient={true}
+                        style={styles.signInButton}
+                        titleStyle={styles.signInButtonText}
+                        onPress={autoSignIn}
+                    />
                     <DebouncedPressable
                         style={[styles.signInButton, styles.numberBtn]}
                         onPress={() => navigation.navigate('SendVerifyCode')}>
@@ -110,9 +114,11 @@ export default function index() {
                 </View>
             </View>
             <View style={styles.other}>
-                <DebouncedPressable style={styles.otherBtn} onPress={wxLogin}>
-                    <Image style={styles.otherIcon} source={require('@app/assets/images/share/share_wx.png')} />
-                </DebouncedPressable>
+                {Device.isAndroid && (
+                    <DebouncedPressable style={styles.otherBtn} onPress={wxLogin}>
+                        <Image style={styles.otherIcon} source={require('@app/assets/images/share/share_wx.png')} />
+                    </DebouncedPressable>
+                )}
                 <DebouncedPressable style={styles.otherBtn} onPress={() => navigation.navigate('AccountLogin')}>
                     <View style={styles.otherIcon}>
                         <Iconfont name="wode_xuanzhong" size={font(26)} color="#fff" />

@@ -1,4 +1,5 @@
 // primary color
+// #FE2C54
 const primaryColor = '#FE1966';
 const primaryColorRgb = '254,25,102';
 // secondary color

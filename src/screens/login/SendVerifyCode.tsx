@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { StyleSheet, View, Image, Text, ScrollView, TextInput, ActivityIndicator } from 'react-native';
-import { Iconfont, DebouncedPressable, NavBarHeader, Loading } from '@src/components';
+import { Iconfont, DebouncedPressable, NavBarHeader, Loading, HxfButton } from '@src/components';
 import { exceptionCapture, WeChatAuth, useAuthCode } from '@src/common';
 import { GQL, errorMessage, useMutation, useApolloClient } from '@src/apollo';
 import { observer, userStore, appStore } from '@src/store';
@@ -123,22 +123,23 @@ export default function index() {
                         </DebouncedPressable>
                     </View>
                     <Text style={styles.grayText}>未注册的手机号通过验证后将会自动注册</Text>
-                    <DebouncedPressable
-                        style={[styles.signInButton, !disabledSignIn && styles.numberBtn]}
+                    <HxfButton
+                        title="获取验证码"
+                        gradient={true}
+                        style={styles.signInButton}
+                        titleStyle={styles.signInButtonText}
                         disabled={disabledSignIn}
-                        onPress={() => fetchAuthCode(phoneNumber)}>
-                        {loading ? (
-                            <ActivityIndicator size={'small'} color="#fff" />
-                        ) : (
-                            <Text style={styles.signInButtonText}>获取登录验证码</Text>
-                        )}
-                    </DebouncedPressable>
+                        loading={loading}
+                        onPress={() => fetchAuthCode(phoneNumber)}
+                    />
                     <View style={styles.other}>
+                        {Device.isAndroid && (
+                            <DebouncedPressable onPress={wxLogin}>
+                                <Text style={styles.lightText}>微信登录</Text>
+                            </DebouncedPressable>
+                        )}
                         <DebouncedPressable onPress={() => navigation.navigate('AccountLogin')}>
                             <Text style={styles.lightText}>密码登录</Text>
-                        </DebouncedPressable>
-                        <DebouncedPressable onPress={wxLogin}>
-                            <Text style={styles.lightText}>微信登录</Text>
                         </DebouncedPressable>
                     </View>
                 </View>
@@ -237,10 +238,6 @@ const styles = StyleSheet.create({
         borderRadius: pixel(4),
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#e4e4e4',
-    },
-    numberBtn: {
-        backgroundColor: '#FE2C54',
     },
     signInButtonText: {
         fontSize: font(16),

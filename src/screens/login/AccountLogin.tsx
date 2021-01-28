@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { StyleSheet, View, Image, Text, ScrollView, TextInput } from 'react-native';
-import { Iconfont, DebouncedPressable, NavBarHeader, Loading } from '@src/components';
+import { Iconfont, DebouncedPressable, NavBarHeader, Loading, HxfButton } from '@src/components';
 import { exceptionCapture } from '@src/common';
 import { GQL, errorMessage, useMutation, useApolloClient } from '@src/apollo';
 import { observer, userStore, appStore } from '@src/store';
@@ -99,12 +99,14 @@ export default function index() {
                             <Iconfont name="guanbi1" size={font(12)} color="#fff" />
                         </DebouncedPressable>
                     </View>
-                    <DebouncedPressable
-                        style={[styles.signInButton, !disabledSignIn && styles.numberBtn]}
+                    <HxfButton
+                        title="登录"
+                        gradient={true}
+                        style={styles.signInButton}
+                        titleStyle={styles.signInButtonText}
                         disabled={disabledSignIn}
-                        onPress={onSignIn}>
-                        <Text style={styles.signInButtonText}>登录</Text>
-                    </DebouncedPressable>
+                        onPress={onSignIn}
+                    />
                 </View>
                 <View style={styles.tips}>
                     <DebouncedPressable onPress={() => navigation.navigate('RetrievePassword')}>
@@ -194,9 +196,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#e4e4e4',
-    },
-    numberBtn: {
-        backgroundColor: '#FE2C54',
     },
     signInButtonText: {
         fontSize: font(16),
