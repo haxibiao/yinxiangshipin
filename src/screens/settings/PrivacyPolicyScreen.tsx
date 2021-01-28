@@ -10,7 +10,7 @@ export default () => {
         marginTop: 5,
     };
     return (
-        <View style={{ flex: 1, backgroundColor: Theme.backgroundColor }}>
+        <View style={{ flex: 1 }}>
             <NavBarHeader title={'隐私政策'} />
             <ScrollView
                 style={{
