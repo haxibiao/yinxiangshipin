@@ -6,13 +6,13 @@ import { observer } from 'mobx-react';
 import { userStore } from '@src/store';
 import { GQL, errorMessage, useFavoriteMutation } from '@src/apollo';
 import { QueryList } from '@src/content';
-import MovieList from './MovieList';
+import { ContentStatus } from '@src/content';
 
 export default function SearchedMovie({ keyword }) {
     const navigation = useNavigation();
 
     return (
-        <MovieList
+        <QueryList
             gqlDocument={GQL.searchMoviesQuery}
             dataOptionChain="searchMovie.data"
             keyword={keyword}
@@ -27,6 +27,22 @@ export default function SearchedMovie({ keyword }) {
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.container}
             ItemSeparatorComponent={() => <View style={styles.separator} />}
+            ListEmptyComponent={(status, refetch) => (
+                <View>
+                    <ContentStatus status={status.status} refetch={status.status === 'error' ? refetch : undefined} />
+                    {status.status == 'empty' && (
+                        <View style={{ width: Device.width, alignItems: 'center', justifyContent: 'center' }}>
+                            <TouchableOpacity onPress={() => getMovieHandle()}>
+                                <View style={styles.getMovieBottom}>
+                                    <Text style={{ color: '#fff', fontSize: font(15), fontWeight: 'bold' }}>
+                                        在线求片
+                                    </Text>
+                                </View>
+                            </TouchableOpacity>
+                        </View>
+                    )}
+                </View>
+            )}
         />
     );
 }
@@ -252,5 +268,13 @@ const styles = StyleSheet.create({
         height: pixel(16),
         resizeMode: 'cover',
         marginRight: pixel(2),
+    },
+    getMovieBottom: {
+        backgroundColor: '#F4606C',
+        width: Device.width - pixel(200),
+        height: (Device.width - pixel(200)) / 4,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: pixel(25),
     },
 });

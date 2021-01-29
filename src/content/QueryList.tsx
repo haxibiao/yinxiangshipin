@@ -169,12 +169,4 @@ const styles = StyleSheet.create({
         fontSize: font(13),
         color: '#b4b4b4',
     },
-    getMovieBottom: {
-        backgroundColor: '#F4606C',
-        width: Device.width - pixel(200),
-        height: (Device.width - pixel(200)) / 4,
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: pixel(25),
-    },
 });
