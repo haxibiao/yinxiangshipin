@@ -76,9 +76,7 @@ const getMovieEdit = observer(() => {
             Toast.show({
                 content: '发布成功',
             });
-            // navigation.replace('PostDetail', {
-            //     post: observable(res?.data?.createSeekMovieMuattion),
-            // });
+            navigation.goBack();
         }
 
         function createSeekMovieMuattion() {
