@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { observer } from 'mobx-react';
 
 export default observer((props: Props) => {
-    const { item, index, listData, nextPage, count, collection } = props;
+    const { style, item, index, listData, nextPage, count, collection } = props;
     const navigation = useNavigation();
 
     let cover;
@@ -30,7 +30,7 @@ export default observer((props: Props) => {
 
     return (
         <TouchableWithoutFeedback onPress={goToScreen} disabled={!collection}>
-            <View style={styles.videoItem}>
+            <View style={[styles.videoItem, style]}>
                 <Image style={styles.videoCover} source={{ uri: cover }} />
                 <View style={styles.content}>
                     <Text style={styles.contentText} numberOfLines={2}>
@@ -62,18 +62,18 @@ export default observer((props: Props) => {
 const styles = StyleSheet.create({
     videoItem: {
         flexDirection: 'row',
-        paddingHorizontal: pixel(Theme.edgeDistance),
+        borderRadius: pixel(4),
+        backgroundColor: '#ffffff',
+        overflow: 'hidden',
     },
     videoCover: {
         width: pixel(80),
         height: pixel(100),
-        marginRight: pixel(10),
-        borderRadius: pixel(4),
         backgroundColor: '#f0f0f0',
     },
     content: {
         flex: 1,
-        overflow: 'hidden',
+        paddingHorizontal: pixel(10),
         justifyContent: 'space-around',
     },
     contentText: {

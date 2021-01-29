@@ -110,6 +110,7 @@ export default observer(() => {
                 ListHeaderComponent={_renderHeader}
                 renderItem={({ item, index, data, page }) => (
                     <EpisodeItem
+                        style={{ marginHorizontal: pixel(Theme.edgeDistance) }}
                         item={item}
                         index={index}
                         collection={collection}
@@ -128,7 +129,7 @@ export default observer(() => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#f0f0f0',
     },
     navBarWrap: {
         position: 'absolute',
@@ -182,8 +183,6 @@ const styles = StyleSheet.create({
         paddingBottom: Device.bottomInset,
     },
     itemSeparator: {
-        marginVertical: pixel(Theme.edgeDistance),
-        height: StyleSheet.hairlineWidth,
-        backgroundColor: '#f0f0f0',
+        height: pixel(Theme.edgeDistance),
     },
 });

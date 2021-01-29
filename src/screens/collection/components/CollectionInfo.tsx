@@ -1,5 +1,5 @@
 import React, { useMemo, useCallback } from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { Iconfont, SafeText, DebouncedPressable, HxfButton } from '@src/components';
 import { count } from '@src/common';
 import { GQL, useFollowMutation } from '@src/apollo';
@@ -45,12 +45,12 @@ export default observer(({ style, collection, navigation }) => {
                         </SafeText>
                     </View>
                     {collection?.user && (
-                        <DebouncedPressable
+                        <TouchableOpacity
                             style={styles.userInfo}
                             onPress={() => navigation.navigate('User', { user: collection?.user })}>
                             <Image style={styles.userAvatar} source={{ uri: collection?.user?.avatar }} />
                             <SafeText style={styles.userName}>{`${collection?.user?.name}`}</SafeText>
-                        </DebouncedPressable>
+                        </TouchableOpacity>
                     )}
                 </View>
             </View>
