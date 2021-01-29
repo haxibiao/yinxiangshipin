@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     videoCover: {
         width: pixel(80),
         height: pixel(100),
-        backgroundColor: '#f0f0f0',
+        backgroundColor: '#b2b2b2',
     },
     content: {
         flex: 1,
