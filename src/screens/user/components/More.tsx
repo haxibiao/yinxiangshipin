@@ -8,6 +8,7 @@ import { GQL, useQuery } from '@src/apollo';
 import CollectionItem, { POSTER_WIDTH } from './CollectionItem';
 import MovieHistory from './MovieHistory';
 import MovieFollows from './MovieFollows';
+import MovieRequireRecord from './MovieRequireRecord';
 
 const SPACE = pixel(14);
 
@@ -115,6 +116,7 @@ export default observer(({ user, ...props }) => {
                 </ScrollView>
             </View>
             {isSelf ? <MovieHistory /> : <MovieFollows user={user} />}
+            {isSelf && <MovieRequireRecord user={user} />}
         </HScrollView>
     );
 });

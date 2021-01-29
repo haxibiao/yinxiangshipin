@@ -1,3 +1,5 @@
+#import "../movie/movieFragment.graphql"
+
 query mySeekMoviesQuery($user_id: Int!) {
     mySeekMovies(user_id: $user_id) {
         data {
@@ -12,8 +14,7 @@ query mySeekMoviesQuery($user_id: Int!) {
             }
             status
             movies {
-                id
-                name
+                ...movieFragment
             }
             name
             description
