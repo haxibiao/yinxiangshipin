@@ -230,7 +230,6 @@ const styles = StyleSheet.create({
     },
     movieInfo: {
         overflow: 'hidden',
-        marginBottom: pixel(30),
     },
     movieName: {
         fontSize: font(15),

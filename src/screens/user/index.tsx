@@ -2,6 +2,7 @@ import React, { useState, useMemo, useCallback, useRef, useEffect } from 'react'
 import { StyleSheet, View, Text, Pressable, Animated } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { BoxShadow } from 'react-native-shadow';
+import { useUnreadNotification } from '@src/common';
 import { Iconfont, Avatar, FocusAwareStatusBar, SvgIcon, SvgPath } from '@src/components';
 import { AutonomousModal } from '@src/components/modal';
 import { ScrollTabView } from '@app/src/components/ScrollHeadTabView';
@@ -84,6 +85,9 @@ export default observer(() => {
             </View>
         );
     }, []);
+
+    // 获取消息通知
+    useUnreadNotification(userStore.login);
 
     return (
         <View style={[styles.container, { paddingBottom: Device.tabBarHeight }]}>

@@ -27,6 +27,7 @@ const index = observer(({ keyword, navigation }) => {
 
 const styles = StyleSheet.create({
     contentContainer: {
+        flexGrow: 1,
         paddingBottom: Device.bottomInset,
     },
     listFooter: {
