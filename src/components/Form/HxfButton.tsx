@@ -24,7 +24,7 @@ class HxfButton extends Component<Props, any> {
     }
 
     public buildProps() {
-        const { theme, size, plain, ...others } = this.props;
+        let { theme, size, plain, gradient, colors, ...others } = this.props;
 
         let buttonStyle, titleStyle;
         if (plain) {
@@ -38,21 +38,33 @@ class HxfButton extends Component<Props, any> {
             buttonStyle = { ...buttonLayout[size], backgroundColor: theme };
             titleStyle = { ...buttonTitle[size], color: '#fff' };
         }
+        if (gradient && !Array.isArray(colors)) {
+            colors = [Theme.primaryColor, Theme.secondaryColor];
+        }
         return {
             buttonStyle,
             titleStyle,
+            gradient,
+            colors,
             ...others,
         };
     }
 
     public render() {
-        const { gradient, style, buttonStyle, titleStyle, title, children, disabled, onPress } = this.buildProps();
-        let { colors, loading } = this.props;
+        const {
+            gradient,
+            style,
+            buttonStyle,
+            titleStyle,
+            title,
+            children,
+            disabled,
+            colors,
+            loading,
+            onPress,
+        } = this.buildProps();
         const disabledBtn = disabled || loading;
         if (gradient) {
-            if (!Array.isArray(colors)) {
-                colors = [Theme.primaryColor, Theme.secondaryColor];
-            }
             return (
                 <GradientView colors={disabledBtn ? ['#787878', '#a4a4a4'] : colors} style={[styles.buttonWrap, style]}>
                     <DebouncedPressable

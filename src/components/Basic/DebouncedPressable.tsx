@@ -6,7 +6,7 @@ interface Props extends TouchableOpacityProps {
     delay?: number;
 }
 
-export function DebouncedPressable({ delay = 70, onPress, children, ...otherTouchableProps }: Props) {
+export function DebouncedPressable({ delay = 200, onPress, children, ...otherTouchableProps }: Props) {
     const debouncedPress = __.debounce(onPress, delay);
 
     return (
