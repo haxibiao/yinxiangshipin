@@ -136,10 +136,10 @@ export default function CreateCollection(props) {
                         textAlignVertical="top"
                         multiline
                         numberOfLines={4}
-                        maxLength={100}
+                        maxLength={200}
                         placeholder="请输入合集的简介"
                     />
-                    <Text style={styles.wordCount}>{formData.description.length}/100</Text>
+                    <Text style={styles.wordCount}>{formData.description.length}/200</Text>
                 </View>
                 <Text style={styles.labelTitle}>添加作品</Text>
                 <PostSelector changePostIds={setPostIds} navigation={navigation} />

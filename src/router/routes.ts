@@ -63,7 +63,7 @@ import CollectionDetailScreen from '../screens/collection/CollectionDetail';
 import EpisodeVideoListScreen from '../screens/collection/EpisodeVideoList';
 import CollectionVideoListScreen from '../screens/collection/VideoList';
 import PostsSelectScreen from '../screens/collection/PostsSelect';
-import EditCollectionScreen from '../screens/creation/EditCollection';
+import EditCollection from '../screens/collection/EditCollection';
 
 // notification
 import NotificationScreen from '../screens/notification';
@@ -257,7 +257,7 @@ export default {
         component: PostsSelectScreen,
     },
     EditCollection: {
-        component: EditCollectionScreen,
+        component: EditCollection,
     },
     CollectionDetail: {
         component: CollectionDetailScreen,

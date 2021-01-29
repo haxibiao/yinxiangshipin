@@ -1,25 +1,12 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { StyleSheet, Text, View, TouchableWithoutFeedback, Image, TouchableOpacity } from 'react-native';
-import { SafeText, Iconfont, Row } from '@src/components';
+import { Iconfont } from '@src/components';
 import { useNavigation } from '@react-navigation/native';
 import { observer } from 'mobx-react';
-interface Props {
-    item?: any;
-    index?: number;
-    listData?: any[];
-    nextPage?: number;
-    collection: any;
-    addPostPress: any;
-    videoData: any;
-}
-const EpisodeItem = observer((props: Props) => {
-    let { item, index, listData, nextPage, count, collection, addPostPress, videoData } = props;
+
+export default observer((props: Props) => {
+    const { item, index, listData, nextPage, count, collection } = props;
     const navigation = useNavigation();
-    // 创建合集 -> 选择作品页 -> isAddCollection判断能否添加当前作品
-    // isStash：添加作品时判断是否已在添加区，true则不可点击添加按钮
-    const isStash = videoData ? !!videoData.find((video) => video.post_id === item.id) : false;
-    // isAddCollection：是否已存在某个合集中 或 是否已在缓存区，true则不可点击添加按钮
-    const isAddCollection = item?.collections.length > 0 || isStash;
 
     let cover;
     if (item?.video?.id) {
@@ -27,8 +14,7 @@ const EpisodeItem = observer((props: Props) => {
     } else {
         cover = item?.images?.['0']?.url;
     }
-
-    const goToScreen = useCallback(() => {
+    const goToScreen = () => {
         if (item?.video?.id) {
             navigation.push('CollectionVideoList', {
                 collection,
@@ -40,73 +26,65 @@ const EpisodeItem = observer((props: Props) => {
         } else {
             navigation.push('PostDetail', { post: item });
         }
-    }, [props]);
+    };
 
     return (
         <TouchableWithoutFeedback onPress={goToScreen} disabled={!collection}>
-            <View style={styles.itemWrap}>
+            <View style={styles.videoItem}>
                 <Image style={styles.videoCover} source={{ uri: cover }} />
-                <View style={{ flex: 1, overflow: 'hidden', justifyContent: 'space-around' }}>
-                    <SafeText style={styles.contentText} numberOfLines={2}>
-                        {item?.current_episode && `第${item?.current_episode}集 ￨ `}
-                        {`${item?.content || item?.description}`}
-                    </SafeText>
-                    <Row>
-                        <SafeText style={[styles.metaText, { marginRight: pixel(15) }]}>
+                <View style={styles.content}>
+                    <Text style={styles.contentText} numberOfLines={2}>
+                        <Text style={{ color: '#2b2b2b' }}>
+                            {item?.current_episode && `第${item?.current_episode}集 `}
+                        </Text>
+                        {`《${item?.content || item?.description}》`}
+                    </Text>
+                    <View style={styles.metaInfo}>
+                        <Text style={[styles.metaText, { marginRight: pixel(15) }]}>
                             {Helper.moment(item?.video?.duration)}
-                        </SafeText>
+                        </Text>
                         <Iconfont
                             name={'xihuanfill'}
-                            size={font(14)}
-                            color={item.liked ? Theme.primaryColor : '#909090'}
+                            size={font(13)}
+                            color={item.liked ? Theme.primaryColor : '#b2b2b2'}
+                            style={{ marginTop: pixel(1) }}
                         />
-                        <SafeText style={[styles.metaText, { marginLeft: pixel(3) }]} numberOfLines={1}>
+                        <Text style={[styles.metaText, { marginLeft: pixel(3) }]} numberOfLines={1}>
                             {item.count_likes}
-                        </SafeText>
-                    </Row>
+                        </Text>
+                    </View>
                 </View>
-                {addPostPress && (
-                    <TouchableOpacity
-                        style={[styles.selectedBox, isAddCollection && { borderColor: '#666' }]}
-                        onPress={() => addPostPress(item)}
-                        disabled={isAddCollection}>
-                        <Iconfont name="iconfontadd" size={pixel(18)} color={isAddCollection ? '#666' : '#fff'} />
-                    </TouchableOpacity>
-                )}
             </View>
         </TouchableWithoutFeedback>
     );
 });
 
 const styles = StyleSheet.create({
-    itemWrap: {
-        width: Device.width,
+    videoItem: {
         flexDirection: 'row',
         paddingHorizontal: pixel(Theme.edgeDistance),
-        marginVertical: pixel(10),
     },
     videoCover: {
-        width: percent(19),
-        height: percent(18) * 1.4,
+        width: pixel(80),
+        height: pixel(100),
         marginRight: pixel(10),
-        borderRadius: pixel(2),
+        borderRadius: pixel(4),
+    },
+    content: {
+        flex: 1,
+        overflow: 'hidden',
+        justifyContent: 'space-around',
     },
     contentText: {
         fontSize: font(15),
-        color: '#fff',
+        color: '#505050',
+    },
+    metaInfo: {
+        flexDirection: 'row',
+        alignItems: 'center',
     },
     metaText: {
         fontSize: font(13),
-        color: '#909090',
-    },
-    selectedBox: {
-        padding: pixel(2),
-        alignSelf: 'center',
-        borderRadius: percent(50),
-        borderColor: '#fff',
-        borderWidth: pixel(1),
-        marginLeft: pixel(10),
+        color: '#b2b2b2',
     },
 });
-
-export default EpisodeItem;
