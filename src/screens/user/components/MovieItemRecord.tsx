@@ -34,7 +34,7 @@ export default function MovieItemRecord({ recordData, navigation }: recordProps)
             );
         })
     ) : recordData?.images ? (
-        <View style={{}}>
+        <View style={styles.itemWrap}>
             <ImageBackground
                 style={styles.movieCover}
                 i
