@@ -42,7 +42,7 @@ function CollectionItem({ collection, navigation }: CollectionProps) {
     }
 
     return (
-        <TouchableWithoutFeedback onPress={() => navigation.navigate('CollectionDetail', { collection })}>
+        <TouchableWithoutFeedback onPress={() => navigation.navigate('Collection', { collection })}>
             <View style={styles.collectionContent}>
                 <ImageBackground style={styles.collectionCover} i resizeMode="cover" source={{ uri: collection?.logo }}>
                     <LinearGradient

@@ -34,7 +34,7 @@ export default function CollectionItem({ collection, navigation }: CollectionPro
     }
 
     return (
-        <TouchableWithoutFeedback onPress={() => navigation.navigate('CollectionDetail', { collection })}>
+        <TouchableWithoutFeedback onPress={() => navigation.navigate('Collection', { collection })}>
             <View style={styles.collectionContent}>
                 <ImageBackground style={styles.collectionCover} i resizeMode="cover" source={{ uri: collection?.logo }}>
                     <LinearGradient

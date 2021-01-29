@@ -41,8 +41,9 @@ import EditUserData from '../screens/user/EditData';
 import UserPosts from '../screens/user/Posts';
 import FollowedUser from '../screens/user/Followed';
 import UserBlockScreen from '../screens/user/UserBlock';
-import FavoriteCollection from '../screens/user/FavoriteCollection';
 import FavoritePostList from '../screens/user/FavoritePostList';
+import FavoriteCollection from '../screens/user/FavoriteCollection';
+import ManageCollection from '../screens/user/ManageCollection';
 
 // comment
 import CommentScreen from '../screens/comment/CommentScreen';
@@ -56,10 +57,9 @@ import TagDetailScreen from '../screens/tag';
 import TagVideoListScreen from '../screens/tag/VideoList';
 
 // collection
-import CollectionScreen from '../screens/collection';
+import CollectionDetail from '../screens/collection';
 import RandomCollectionScreen from '../screens/collection/RandomList';
 import CreateCollectionScreen from '../screens/collection/CreateCollection';
-import CollectionDetailScreen from '../screens/collection/CollectionDetail';
 import EpisodeVideoListScreen from '../screens/collection/EpisodeVideoList';
 import CollectionVideoListScreen from '../screens/collection/VideoList';
 import PostsSelectScreen from '../screens/collection/PostsSelect';
@@ -244,6 +244,9 @@ export default {
     FavoriteCollection: {
         component: FavoriteCollection,
     },
+    ManageCollection: {
+        component: ManageCollection,
+    },
     FavoritePostList: {
         component: FavoritePostList,
     },
@@ -259,11 +262,8 @@ export default {
     EditCollection: {
         component: EditCollection,
     },
-    CollectionDetail: {
-        component: CollectionDetailScreen,
-    },
-    UserCollection: {
-        component: CollectionScreen,
+    Collection: {
+        component: CollectionDetail,
     },
     BindingAccount: {
         component: BindingAccount,

@@ -1,105 +1,189 @@
-import React, { useMemo, useCallback } from 'react';
-import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity } from 'react-native';
-import { Row, SafeText, NavBarHeader, StatusView, ListFooter, PageContainer, PullChooser } from '@src/components';
+import React, { useRef, useState, useCallback, useMemo } from 'react';
+import { StyleSheet, Text, View, Image, Animated } from 'react-native';
+import { observer, userStore, notificationStore } from '@src/store';
+import { FocusAwareStatusBar, Iconfont, DebouncedPressable } from '@src/components';
 import { useRoute, useNavigation } from '@react-navigation/native';
-import { GQL, useMutation } from '@src/apollo';
-import { useApolloClient } from '@apollo/react-hooks';
+import { GQL } from '@src/apollo';
 import { QueryList } from '@src/content';
-import { userStore } from '@app/src/store';
-import CollectionItem from './components/CollectionItem';
+import CollectionInfo from './components/CollectionInfo';
+import EpisodeItem from './components/EpisodeItem';
 
-export default function CollectionScreen() {
+const QUERY_COUNT = 10;
+const NAV_BAR_HEIGHT = pixel(Device.navBarHeight + Device.statusBarHeight);
+
+export default observer(() => {
     const navigation = useNavigation();
     const route = useRoute();
-    const client = useApolloClient();
-    const user_id = route?.params?.user?.id || userStore.me.id;
-    const isSelf = user_id === userStore.me.id;
-    const deleteCollectionMutation = useCallback(({ collection_id }) => {
-        client
-            .mutate({
-                mutation: GQL.deleteCollectionMutation,
-                variables: {
-                    id: collection_id,
-                },
-                refetchQueries: () => [
-                    {
-                        query: GQL.collectionsQuery,
-                        variables: {
-                            user_id: user_id,
-                        },
-                    },
-                    {
-                        query: GQL.followedCollectionsQuery,
-                        variables: {
-                            user_id: user_id,
-                            followed_type: 'collections',
-                        },
-                    },
-                ],
-            })
-            .then((result) => {
-                Toast.show({
-                    content: '删除成功',
-                });
-            })
-            .catch((error) => {
-                Toast.show({
-                    content: errorMessage(error) || '删除失败',
-                });
-            });
+    const collection = useMemo(() => route?.params?.collection, [route?.params]);
+
+    const searchHandle = useCallback(() => {
+        navigation.push('SearchVideo', { collection_id: collection?.id });
+    }, [collection]);
+    const onShare = useCallback(() => {
+        const description = `${collection.name}：${collection.description}`;
+        notificationStore.sendShareNotice({ target: { ...collection, description }, type: 'collection' });
+    }, [collection]);
+
+    const contentOffset = useRef(new Animated.Value(0)).current;
+    const onScroll = useMemo(() => {
+        return Animated.event([{ nativeEvent: { contentOffset: { y: contentOffset } } }], {
+            useNativeDriver: false,
+        });
+    }, []);
+    const navBarOpacity1 = contentOffset.interpolate({
+        inputRange: [0, NAV_BAR_HEIGHT, NAV_BAR_HEIGHT * 2],
+        outputRange: [1, 1, 0],
+    });
+    const navBarOpacity2 = contentOffset.interpolate({
+        inputRange: [0, NAV_BAR_HEIGHT, NAV_BAR_HEIGHT * 2],
+        outputRange: [0, 0, 1],
+    });
+    const _renderNavBar = useCallback((): React.ReactElement => {
+        return (
+            <Animated.View style={styles.navBarWrap}>
+                <Animated.View
+                    style={[
+                        styles.navBarContainer,
+                        { backgroundColor: 'transparent', borderBottomColor: 'transparent', opacity: navBarOpacity1 },
+                    ]}>
+                    <DebouncedPressable style={styles.navBarButton} onPress={() => navigation.goBack()}>
+                        <Iconfont name="fanhui" size={font(22)} color={'#fff'} />
+                    </DebouncedPressable>
+                    <View style={styles.navBarCenter}>
+                        <Text style={[styles.navBarTitle, { color: '#ffffff88' }]} numberOfLines={1}>
+                            合集
+                        </Text>
+                    </View>
+                    <View style={styles.navBarRight}>
+                        <DebouncedPressable style={styles.navBarButton} onPress={searchHandle}>
+                            <Iconfont name="fangdajing" size={font(22)} color={'#fff'} />
+                        </DebouncedPressable>
+                        <DebouncedPressable style={styles.navBarButton} onPress={onShare}>
+                            <Iconfont name="qita1" size={font(22)} color={'#fff'} />
+                        </DebouncedPressable>
+                    </View>
+                </Animated.View>
+                <Animated.View style={[styles.navBarContainer, { opacity: navBarOpacity2 }]}>
+                    <DebouncedPressable style={styles.navBarButton} onPress={() => navigation.goBack()}>
+                        <Iconfont name="fanhui" size={font(22)} color={'#2b2b2b'} />
+                    </DebouncedPressable>
+                    <View style={styles.navBarCenter}>
+                        <Text style={styles.navBarTitle} numberOfLines={1}>
+                            合集
+                        </Text>
+                    </View>
+                    <View style={styles.navBarRight}>
+                        <DebouncedPressable style={styles.navBarButton} onPress={searchHandle}>
+                            <Iconfont name="fangdajing" size={font(22)} color={'#2b2b2b'} />
+                        </DebouncedPressable>
+                        <DebouncedPressable style={styles.navBarButton} onPress={onShare}>
+                            <Iconfont name="qita1" size={font(22)} color={'#2b2b2b'} />
+                        </DebouncedPressable>
+                    </View>
+                </Animated.View>
+            </Animated.View>
+        );
     }, []);
 
-    const onLongPress = useCallback(
-        (id) => {
-            const operations = [];
-            if (isSelf) {
-                operations.push({
-                    title: '删除合集',
-                    onPress: () => deleteCollectionMutation({ collection_id: id }),
-                });
-            }
-            PullChooser.show(operations);
-        },
-        [isSelf],
-    );
+    const _renderHeader = useCallback(({ data }) => {
+        return (
+            <CollectionInfo style={styles.header} collection={data?.collection || collection} navigation={navigation} />
+        );
+    }, []);
 
     return (
-        <PageContainer
-            title={isSelf ? '我的合集' : 'TA的合集'}
-            rightView={
-                isSelf && (
-                    <TouchableOpacity onPress={() => navigation.navigate('CreateCollection')}>
-                        <Text style={{ fontSize: font(15), color: Theme.primaryColor }}>新建</Text>
-                    </TouchableOpacity>
-                )
-            }>
+        <View style={styles.container}>
+            <FocusAwareStatusBar barStyle="dark-content" />
             <QueryList
-                contentContainerStyle={styles.container}
-                gqlDocument={GQL.collectionsQuery}
-                dataOptionChain="collections.data"
-                paginateOptionChain="collections.paginatorInfo"
+                onScroll={onScroll}
+                gqlDocument={GQL.collectionPostsQuery}
+                dataOptionChain="collection.posts.data"
+                paginateOptionChain="collection.posts.paginatorInfo"
                 options={{
                     variables: {
-                        user_id: user_id,
+                        collection_id: collection.id,
+                        count: QUERY_COUNT,
                     },
                     fetchPolicy: 'network-only',
                 }}
-                renderItem={({ item, index }) => (
-                    <CollectionItem
+                contentContainerStyle={styles.contentContainer}
+                ListHeaderComponent={_renderHeader}
+                renderItem={({ item, index, data, page }) => (
+                    <EpisodeItem
                         item={item}
                         index={index}
-                        navigation={navigation}
-                        onLongPress={() => isSelf && onLongPress(item.id)}
+                        collection={collection}
+                        listData={data}
+                        nextPage={page}
+                        count={QUERY_COUNT}
                     />
                 )}
+                ItemSeparatorComponent={() => <View style={styles.itemSeparator} />}
             />
-        </PageContainer>
+            {_renderNavBar()}
+        </View>
     );
-}
+});
 
 const styles = StyleSheet.create({
     container: {
-        flexGrow: 1,
+        flex: 1,
         backgroundColor: '#fff',
+    },
+    navBarWrap: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+    },
+    navBarContainer: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        height: NAV_BAR_HEIGHT,
+        paddingTop: pixel(Device.statusBarHeight),
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        backgroundColor: '#ffffff',
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        borderBottomColor: '#f0f0f0',
+    },
+    navBarCenter: {
+        position: 'absolute',
+        top: pixel(Device.statusBarHeight),
+        bottom: 0,
+        left: pixel(100),
+        right: pixel(100),
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    navBarTitle: {
+        color: '#2b2b2b',
+        fontSize: font(17),
+    },
+    navBarRight: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginRight: pixel(4),
+    },
+    navBarButton: {
+        alignSelf: 'stretch',
+        justifyContent: 'center',
+        paddingHorizontal: pixel(10),
+    },
+    header: {
+        paddingTop: NAV_BAR_HEIGHT,
+        marginBottom: pixel(Theme.edgeDistance),
+    },
+    contentContainer: {
+        flexGrow: 1,
+        paddingBottom: Device.bottomInset,
+    },
+    itemSeparator: {
+        marginVertical: pixel(Theme.edgeDistance),
+        height: StyleSheet.hairlineWidth,
+        backgroundColor: '#f0f0f0',
     },
 });

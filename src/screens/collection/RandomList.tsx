@@ -6,7 +6,7 @@ import { QueryList } from '@src/content';
 import { GQL, useQuery } from '@src/apollo';
 import { observer, adStore } from '@src/store';
 import { ad } from 'react-native-ad';
-import CollectionItem from '../find/components/CollectionItem';
+import CollectionItem from './components/CollectionItem';
 
 const PADDING = pixel(14);
 const CONTENT_WIDTH = Device.width - PADDING * 2;
@@ -20,27 +20,15 @@ export default observer(() => {
         if (adStore.enableAd && index > 0 && index % 10 === 0) {
             return (
                 <>
-                    <View style={{ marginHorizontal: -PADDING, minHeight: LOGO_WIDTH }}>
+                    <View style={{ minHeight: LOGO_WIDTH }}>
                         <ad.Feed codeid={adStore.codeid_feed_image_three} adWidth={Device.width} />
                     </View>
                     <View style={styles.separator} />
-                    <CollectionItem
-                        collection={item}
-                        navigation={navigation}
-                        style={styles.collectionWrap}
-                        logoWidth={LOGO_WIDTH}
-                    />
+                    <CollectionItem style={styles.collectionWrap} collection={item} navigation={navigation} />
                 </>
             );
         }
-        return (
-            <CollectionItem
-                collection={item}
-                navigation={navigation}
-                style={styles.collectionWrap}
-                logoWidth={LOGO_WIDTH}
-            />
-        );
+        return <CollectionItem collection={item} navigation={navigation} style={styles.collectionWrap} />;
     }, []);
 
     return (
@@ -77,7 +65,6 @@ const styles = StyleSheet.create({
     },
     contentContainer: {
         flexGrow: 1,
-        paddingHorizontal: PADDING,
         paddingBottom: pixel(Device.bottomInset) + PADDING,
     },
     collectionWrap: {

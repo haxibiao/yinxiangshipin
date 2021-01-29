@@ -44,12 +44,14 @@ export default observer(({ style, collection, navigation }) => {
                                 : ``}
                         </SafeText>
                     </View>
-                    <DebouncedPressable
-                        style={styles.userInfo}
-                        onPress={() => navigation.navigate('User', { user: collection?.user })}>
-                        <Image style={styles.userAvatar} source={{ uri: collection?.user?.avatar }} />
-                        <SafeText style={styles.userName}>{`${collection?.user?.name}`}</SafeText>
-                    </DebouncedPressable>
+                    {collection?.user && (
+                        <DebouncedPressable
+                            style={styles.userInfo}
+                            onPress={() => navigation.navigate('User', { user: collection?.user })}>
+                            <Image style={styles.userAvatar} source={{ uri: collection?.user?.avatar }} />
+                            <SafeText style={styles.userName}>{`${collection?.user?.name}`}</SafeText>
+                        </DebouncedPressable>
+                    )}
                 </View>
             </View>
             <View>
@@ -133,6 +135,7 @@ const styles = StyleSheet.create({
         height: pixel(20),
         borderRadius: pixel(10),
         marginRight: pixel(8),
+        backgroundColor: '#f0f0f0',
     },
     userName: {
         color: '#ffffff',

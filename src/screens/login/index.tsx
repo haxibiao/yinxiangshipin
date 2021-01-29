@@ -83,7 +83,9 @@ export default function index() {
                     <BoxShadow setting={shadowSetting}>
                         <Image style={styles.appLogo} source={require('@app/assets/images/app_logo.png')} />
                     </BoxShadow>
-                    <Text style={styles.uuidText}>{Device.UUID}</Text>
+                    <Text style={styles.uuidText} numberOfLines={1}>
+                        {Device.UUID}
+                    </Text>
                     <Text style={styles.uuidDescText}>一键登录由本设备识别码关联账户</Text>
                 </View>
                 <View style={styles.signIn}>
@@ -159,6 +161,7 @@ const styles = StyleSheet.create({
     },
     content: {
         flex: 1,
+        paddingHorizontal: percent(7),
         justifyContent: 'center',
     },
     uuid: {
@@ -181,7 +184,6 @@ const styles = StyleSheet.create({
         color: '#909090',
     },
     signIn: {
-        paddingHorizontal: percent(7),
         marginVertical: pixel(60),
     },
     signInButton: {

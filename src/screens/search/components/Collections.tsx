@@ -20,7 +20,8 @@ const index = observer(({ keyword, navigation }) => {
                 },
                 fetchPolicy: 'network-only',
             }}
-            renderItem={({ item, index }) => <CollectionItem item={item} index={index} navigation={navigation} />}
+            renderItem={({ item, index }) => <CollectionItem collection={item} navigation={navigation} />}
+            ItemSeparatorComponent={() => <View style={styles.separator} />}
         />
     );
 });
@@ -30,17 +31,9 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         paddingBottom: Device.bottomInset,
     },
-    listFooter: {
-        borderTopWidth: pixel(1),
-        borderTopColor: '#f0f0f0',
-        paddingVertical: pixel(15),
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    listFooterText: {
-        fontSize: font(13),
-        color: Theme.subTextColor,
+    separator: {
+        height: pixel(1),
+        backgroundColor: '#f4f4f4',
     },
 });
 

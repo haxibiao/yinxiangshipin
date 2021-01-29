@@ -69,6 +69,7 @@ const styles = StyleSheet.create({
         height: pixel(100),
         marginRight: pixel(10),
         borderRadius: pixel(4),
+        backgroundColor: '#f0f0f0',
     },
     content: {
         flex: 1,

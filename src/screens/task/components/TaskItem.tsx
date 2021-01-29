@@ -333,11 +333,11 @@ function inReview() {
 }
 
 function nationalDayTask({ collection }) {
-    navigation.navigate('CollectionDetail', { collection });
+    navigation.navigate('Collection', { collection });
 }
 
 function midAutumnFestivalTask({ collection }) {
-    navigation.navigate('CollectionDetail', { collection });
+    navigation.navigate('Collection', { collection });
 }
 
 // 浏览合集的方法,目的主要在于增加提示

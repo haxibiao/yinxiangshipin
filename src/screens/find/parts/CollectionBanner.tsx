@@ -12,7 +12,7 @@ export default function CollectionBanner({ collection, banner }) {
         return <Placeholder />;
     }
     return (
-        <Pressable style={styles.topBanner} onPress={() => navigation.navigate('CollectionDetail', { collection })}>
+        <Pressable style={styles.topBanner} onPress={() => navigation.navigate('Collection', { collection })}>
             <Image style={styles.banner} source={banner} />
             <View style={styles.bannerContent}>
                 <Text style={styles.bannerTitle}>精选合集</Text>

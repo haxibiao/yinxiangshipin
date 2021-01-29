@@ -1,30 +1,50 @@
 import React, { useMemo, useCallback } from 'react';
-import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Image, Text, ImageBackground, TouchableOpacity, ViewStyle } from 'react-native';
 import { Iconfont, Row, SafeText } from '@src/components';
 import { count, moment } from '@src/common';
 
-export default ({ item, index, navigation, onLongPress }) => {
+interface Props {
+    style?: ViewStyle;
+    collection: any;
+    navigation: any;
+    logoWidth?: number;
+    onLongPress?: (c: any) => void;
+}
+
+export default ({ style, collection, navigation, logoWidth = pixel(80), onLongPress }: Props) => {
     return (
         <TouchableOpacity
-            style={styles.collectionItem}
-            onPress={() => navigation.navigate('CollectionDetail', { collection: item })}
-            onLongPress={onLongPress && onLongPress}>
-            <View style={styles.collectionLogo}>
-                <Image source={{ uri: item.logo }} style={styles.logoImg} />
-            </View>
-            <View style={{ flex: 1 }}>
-                <Row>
-                    <Image
-                        source={require('@app/assets/images/icons/ic_mine_collect.png')}
-                        style={styles.collectionIcon}
-                    />
-                    <SafeText style={{ fontSize: font(15), fontWeight: 'bold', color: '#000' }} numberOfLines={1}>
-                        {item.name}
+            style={[styles.collectionItem, style]}
+            activeOpacity={0.9}
+            onPress={() => navigation.navigate('Collection', { collection })}
+            onLongPress={() => {
+                if (onLongPress instanceof Function) {
+                    onLongPress(collection);
+                }
+            }}>
+            <ImageBackground
+                style={[styles.cover, { width: logoWidth, height: logoWidth }]}
+                source={{ uri: collection?.logo }}>
+                <ImageBackground
+                    style={styles.picLabel}
+                    source={require('@app/assets/images/movie/ic_movie_tag_pink.png')}>
+                    <Text style={styles.picLabelText} numberOfLines={1}>
+                        合集
+                    </Text>
+                </ImageBackground>
+            </ImageBackground>
+            <View style={styles.content}>
+                <View style={{ marginBottom: pixel(10) }}>
+                    <SafeText style={styles.name} numberOfLines={1}>
+                        {collection?.name}
                     </SafeText>
-                </Row>
-                <SafeText style={styles.collectionInfo} numberOfLines={1}>
-                    {`${count(Number(item?.count_views) + Number(item?.id))}次播放`}
-                    {item.updated_to_episode > 0 && `·更新至第${item.updated_to_episode}集`}
+                    <SafeText style={styles.description} numberOfLines={1}>
+                        {collection?.description}
+                    </SafeText>
+                </View>
+                <SafeText style={styles.mateText} numberOfLines={1}>
+                    {`${count(Number(collection?.count_views) + Number(collection?.id))}次播放`}
+                    {collection?.updated_to_episode > 0 && ` · 更新至第${collection?.updated_to_episode}集`}
                 </SafeText>
             </View>
         </TouchableOpacity>
@@ -34,35 +54,54 @@ export default ({ item, index, navigation, onLongPress }) => {
 const styles = StyleSheet.create({
     collectionItem: {
         flexDirection: 'row',
-        paddingHorizontal: pixel(12),
-        paddingVertical: pixel(12),
-        borderBottomWidth: StyleSheet.hairlineWidth,
-        borderColor: '#f0f0f0',
         alignItems: 'center',
+        padding: pixel(Theme.edgeDistance),
     },
-    collectionLogo: {
-        width: pixel(70),
-        height: pixel(70),
-        marginRight: pixel(10),
-        resizeMode: 'cover',
-        borderRadius: pixel(3),
+    cover: {
+        width: pixel(80),
+        height: pixel(80),
+        marginRight: pixel(12),
+        borderRadius: pixel(8),
+        borderWidth: StyleSheet.hairlineWidth,
+        borderColor: '#f0f0f0',
         backgroundColor: '#f0f0f0',
         overflow: 'hidden',
-    },
-    logoImg: {
-        ...StyleSheet.absoluteFillObject,
-        width: null,
-        height: null,
-    },
-    collectionIcon: {
-        width: pixel(14),
-        height: pixel(14),
         resizeMode: 'cover',
-        marginRight: pixel(3),
     },
-    collectionInfo: {
-        fontSize: font(13),
-        marginTop: pixel(10),
-        color: '#666',
+    picLabel: {
+        position: 'absolute',
+        top: 0,
+        right: 0,
+        width: (font(19) * 64) / 34,
+        height: font(19),
+        paddingHorizontal: pixel(5),
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    picLabelText: {
+        color: '#fff',
+        lineHeight: font(14),
+        fontSize: font(11),
+    },
+    content: {
+        flex: 1,
+        alignSelf: 'stretch',
+        justifyContent: 'space-between',
+    },
+    name: {
+        lineHeight: font(20),
+        fontSize: font(15),
+        fontWeight: 'bold',
+        color: '#000',
+    },
+    description: {
+        marginTop: pixel(4),
+        lineHeight: font(18),
+        fontSize: font(14),
+        color: '#b2b2b2',
+    },
+    mateText: {
+        fontSize: font(12),
+        color: '#b2b2b2',
     },
 });

@@ -5,7 +5,7 @@ import { observer } from '@src/store';
 import { GQL } from '@src/apollo';
 import { QueryList } from '@src/content';
 import VideoItem from './VideoItem';
-import EpisodeItem from './EpisodeItem';
+import EpisodeItem from '@src/screens/collection/components/EpisodeItem';
 
 // selectable:区分个人合集和公共合集入口
 export default observer(({ navigation, keyword, tag_id, user_id, collection_id }) => {
@@ -104,6 +104,7 @@ export default observer(({ navigation, keyword, tag_id, user_id, collection_id }
 const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
+        paddingTop: pixel(Theme.edgeDistance),
         paddingBottom: Device.bottomInset,
     },
     collectionInfo: {

@@ -42,7 +42,7 @@ export default observer(({ user, ...props }) => {
                     {userCollectionData?.length > 3 && (
                         <Pressable
                             style={styles.headRight}
-                            onPress={() => navigation.navigate('UserCollection', { user })}>
+                            onPress={() => navigation.navigate('ManageCollection', { user })}>
                             <Text style={styles.secAll}>查看全部</Text>
                             <Iconfont name="right" style={{ marginTop: font(1) }} size={font(12)} color={'#909090'} />
                         </Pressable>

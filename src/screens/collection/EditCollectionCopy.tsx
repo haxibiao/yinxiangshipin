@@ -59,7 +59,7 @@ const EditCollection = (props: any) => {
             Toast.show({
                 content: '保存成功',
             });
-            navigation.navigate('CollectionDetail', {
+            navigation.navigate('Collection', {
                 collection: Object.assign({}, collection, {
                     name: result?.name,
                     description: result?.description,

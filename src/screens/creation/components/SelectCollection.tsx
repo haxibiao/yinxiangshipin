@@ -74,7 +74,7 @@ export function CollectionItem({ style, collection, navigation, onClick, onClose
                 if (onClose instanceof Function) {
                     onClose();
                 }
-                navigation.navigate('CollectionDetail', { collection });
+                navigation.navigate('Collection', { collection });
             }}>
             <View style={[styles.collectionItem, style]}>
                 <Image style={styles.collectionCover} source={{ uri: collection?.logo }} />

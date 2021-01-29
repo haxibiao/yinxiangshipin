@@ -27,7 +27,7 @@ export default () => {
                     fetchPolicy: 'network-only',
                 }}
                 renderItem={({ item, index }) => (
-                    <CollectionItem item={item.collection} index={index} navigation={navigation} />
+                    <CollectionItem collection={item.collection} navigation={navigation} />
                 )}
                 ItemSeparatorComponent={() => <View style={styles.separator} />}
                 contentContainerStyle={styles.container}
